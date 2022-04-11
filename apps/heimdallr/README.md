@@ -1,3 +1,3 @@
-# Thor
+# Heimdallr
 
-Customer facing Dashboard
+Internal facing Dashboard

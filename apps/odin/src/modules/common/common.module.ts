@@ -1,12 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 
-import { DateScalar } from './scalars/date.scalar';
-
-@Module({
-  providers: [DateScalar],
-})
+@Module({})
 export class CommonModule implements NestModule {
-  configure(_consumer: MiddlewareConsumer) {
-    // consumer.apply(LoggerMiddleware).forRoutes('*');
-  }
+  configure(_consumer: MiddlewareConsumer) {}
 }
