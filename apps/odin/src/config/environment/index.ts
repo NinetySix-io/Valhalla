@@ -25,6 +25,9 @@ const schema = Yup.object({
   GOOGLE_CLIENT_ID: Yup.string(),
   TWITTER_CLIENT_SECRET: Yup.string(),
   TWITTER_CLIENT_ID: Yup.string(),
+  APPLE_CLIENT_ID: Yup.string(),
+  APPLE_TEAM_ID: Yup.string(),
+  APPLE_KEY_ID: Yup.string(),
 });
 
 export class Environment {
