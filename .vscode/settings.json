@@ -1,3 +1,11 @@
 {
-  "cSpell.words": ["nestjs", "pnpm", "turborepo"]
+  "cSpell.words": [
+    "metatype",
+    "middlewares",
+    "nestjs",
+    "pnpm",
+    "prebuild",
+    "turborepo",
+    "typeorm"
+  ]
 }
