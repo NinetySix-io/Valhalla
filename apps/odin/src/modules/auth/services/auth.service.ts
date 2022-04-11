@@ -1,108 +1,94 @@
 import * as bcrypt from 'bcryptjs';
 
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 
-import { Environment } from '@odin/config/environment';
+import { AuthProvider } from '@odin/data.models/user.auth.providers/schema';
+import { AuthResponse } from '../graphql/auth.response.type';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../models/user.interface';
+import { PasswordService } from './password.service';
+import { UserAuthProviderService } from './user.auth.provider.service';
+import { UserSchema } from '@odin/data.models/users/schema';
 import { UserService } from './user.service';
-import { UserSignupDto } from '../dto/user.signup';
-import { sign } from 'jsonwebtoken';
-
-export enum Provider {
-  FACEBOOK = 'facebook',
-  GITHUB = 'github',
-  GOOGLE = 'google',
-  LINKEDIN = 'linkedin',
-  MICROSOFT = 'microsoft',
-  TWITTER = 'twitter',
-  APPLE = 'apple',
-}
 
 @Injectable()
 export class AuthService {
-  private readonly JWT_SECRET_KEY = Environment.variables.JWT_SECRET;
-
   constructor(
-    private jwtService: JwtService,
-    private userService: UserService,
+    private readonly jwtService: JwtService,
+    private readonly userService: UserService,
+    private readonly passwordService: PasswordService,
+    private readonly authProviderService: UserAuthProviderService,
   ) {}
 
-  async validateOAuthLogin(
-    userProfile: any,
-    provider: Provider,
-  ): Promise<{ jwt: string; user: User }> {
-    try {
-      // find user in MongoDB and if not found then create it in the DB
-      let existingUser = await this.userService.findOne({
-        [provider]: userProfile.userId,
-      });
-      if (!existingUser) {
-        existingUser = await this.userService.create({
-          ...userProfile,
-          provider,
-          providers: [{ providerId: userProfile.userId, name: provider }],
-        });
-      }
-
-      const { userId, email, displayName, picture, providers, roles } =
-        existingUser;
-
-      const signingPayload = {
-        userId,
-        email,
-        displayName,
-        picture,
-        providers,
-        roles,
-      };
-      const jwt: string = sign(signingPayload, this.JWT_SECRET_KEY, {
-        expiresIn: 3600,
-      });
-      return { jwt, user: existingUser };
-    } catch (err) {
-      throw new InternalServerErrorException(
-        'validateOAuthLogin',
-        err['message'],
-      );
-    }
+  private signToken(user: UserSchema): AuthResponse {
+    return {
+      token: this.jwtService.sign({
+        user: user._id.toHexString(),
+      }),
+    };
   }
 
-  async validateUser(email: string, pass: string): Promise<User> {
-    const user = await this.userService.findOne({ email });
-    if (user && (await this.passwordsAreEqual(user.password, pass))) {
+  /**
+   * TODO: fix this
+   */
+  async validateOAuthLogin(
+    provider: AuthProvider,
+    payload: {
+      userId: string;
+      username?: string;
+      email: string;
+      displayName: string;
+      picture?: string;
+      raw: any;
+      accessToken: string;
+      refreshToken: string;
+    },
+  ) {
+    if (!payload.email) {
+      throw new BadRequestException('Unable to identify user');
+    }
+
+    const user = await this.userService.findOrCreate({
+      email: payload.email,
+      displayName: payload.displayName,
+      avatar: payload.picture,
+    });
+
+    await this.authProviderService.upsertProvider(user._id, provider, payload);
+    return {
+      user,
+      jwt: this.signToken(user),
+    };
+  }
+
+  async validateUser(userEmail: string, userPassword: string) {
+    const user = await this.userService.findByEmail(userEmail);
+    const password = await this.passwordService.findByUserId(user._id);
+    const passwordMatches = await this.passwordService.validate(
+      userPassword,
+      password.hashed,
+    );
+
+    if (passwordMatches) {
       return user;
     }
-    return null;
+
+    throw new UnauthorizedException();
   }
 
-  async login(user: User): Promise<{ token: string }> {
-    const { email, displayName, userId } = user;
-    return { token: this.jwtService.sign({ email, displayName, userId }) };
+  async login(email: string, password: string) {
+    const user = await this.validateUser(email, password);
+    return this.signToken(user);
   }
 
-  async signup(signupUser: UserSignupDto): Promise<{ token: string }> {
-    const password = await bcrypt.hash(signupUser.password, 10);
-    const createdUser = await this.userService.create({
-      ...signupUser,
-      password,
-    });
-    const { email, displayName, userId } = createdUser;
-    return { token: this.jwtService.sign({ email, displayName, userId }) };
-  }
-
-  async usernameAvailable(user: Partial<User>): Promise<boolean> {
-    if (!user || !user.email) {
-      return false;
-    }
-    const userFound = await this.userService.findOne({ email: user.email });
-    return !userFound;
-  }
-
-  private async passwordsAreEqual(
-    hashedPassword: string,
-    plainPassword: string,
-  ): Promise<boolean> {
-    return await bcrypt.compare(plainPassword, hashedPassword);
+  async signup(email: string, password: string) {
+    const displayName = email;
+    const newUser = await this.userService.create({ email, displayName });
+    const hashed = await bcrypt.hash(password, 10);
+    await this.passwordService.create({ user: newUser._id, hashed });
+    return this.signToken(newUser);
   }
 }

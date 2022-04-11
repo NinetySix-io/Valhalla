@@ -1,14 +1,9 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
-import { Provider } from './provider.type';
-
 @ObjectType()
 export class User {
   @Field(() => ID)
   readonly id: string;
-
-  @Field(() => ID)
-  readonly userId: string;
 
   @Field()
   readonly displayName: string;
@@ -17,32 +12,5 @@ export class User {
   readonly email: string;
 
   @Field({ nullable: true })
-  readonly picture: string;
-
-  @Field({ nullable: true })
-  readonly provider: string;
-
-  @Field(() => [Provider], { nullable: true })
-  readonly providers: Provider[];
-
-  @Field(() => [String])
-  readonly roles: string[];
-
-  @Field({ nullable: true })
-  readonly facebook?: string;
-
-  @Field({ nullable: true })
-  readonly github?: string;
-
-  @Field({ nullable: true })
-  readonly google?: string;
-
-  @Field({ nullable: true })
-  readonly linkedin?: string;
-
-  @Field({ nullable: true })
-  readonly live?: string;
-
-  @Field({ nullable: true })
-  readonly twitter?: string;
+  readonly avatar: string;
 }

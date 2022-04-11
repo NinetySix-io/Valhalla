@@ -1,81 +1,84 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import mongoose from 'mongoose';
-import { decode } from 'jsonwebtoken';
 
-import { User } from '../models/user.interface';
-import { UserSignupDto } from '../dto/user.signup';
+import { AuthProvider } from '@odin/data.models/user.auth.providers/schema';
+import { CreatePayload } from '@odin/data.models/_base/factory';
+import type { PartialBy } from '@odin/types/common';
+import { UserAuthProvidersModel } from '@odin/data.models/user.auth.providers';
+import { UserSchema } from '@odin/data.models/users/schema';
+import { UsersModel } from '@odin/data.models/users';
+import { decode } from 'jsonwebtoken';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel('User')
-    private readonly userModel: mongoose.Model<User>,
+    private readonly users: UsersModel,
+    private readonly authProviders: UserAuthProvidersModel,
   ) {}
 
-  async create(newUser: User | UserSignupDto): Promise<User> {
-    const ObjectId = mongoose.Types.ObjectId;
-    const roles = ['USER'];
-    const userCount = await this.count();
-    if (userCount === 0) {
-      roles.push('ADMIN'); // the very first user will automatically get the ADMIN role
-    }
-    const userId = newUser?.userId || new ObjectId().toHexString(); // copy over the same _id when userId isn't provided (by local signup users)
-    const createdUser = new this.userModel({
-      ...newUser,
-      roles,
-      userId,
+  async create(newUser: CreatePayload<UserSchema>) {
+    const user = await this.users.create(newUser);
+    return user.toJSON();
+  }
+
+  async findOrCreate(
+    user: PartialBy<
+      Pick<UserSchema, 'email' | 'avatar' | 'displayName'>,
+      'displayName' | 'avatar'
+    >,
+  ) {
+    const existing = await this.findByEmail(user.email);
+    return (
+      existing ??
+      this.create({
+        email: user.email,
+        displayName: user.displayName || user.email,
+        avatar: user.avatar,
+      })
+    );
+  }
+
+  async findById(id: string) {
+    const user = await this.users.findById(id).orFail(new NotFoundException());
+    return user.toJSON();
+  }
+
+  async findByEmail(email: string) {
+    const user = await this.users
+      .findOne({ email })
+      .orFail(new NotFoundException());
+
+    return user.toJSON();
+  }
+
+  async isUsernameAvailable(username: string) {
+    return this.users.exists({ email: username });
+  }
+
+  async linkAuthProvider(
+    user: UserSchema['_id'],
+    provider: AuthProvider,
+    token: string,
+  ): Promise<boolean> {
+    //TODO: wtf is in here?
+    const decodedToken = decode(token);
+    const result = await this.authProviders.updateOne(
+      { user, provider },
+      { $set: { accessToken: token } },
+      { upsert: true },
+    );
+
+    return result.modifiedCount > 0 || result.upsertedCount > 0;
+  }
+
+  async unlinkAuthProvider(
+    user: UserSchema['_id'],
+    provider: AuthProvider,
+  ): Promise<boolean> {
+    const result = await this.authProviders.deleteOne({
+      user,
+      provider,
     });
 
-    return await createdUser.save();
-  }
-
-  async count(): Promise<number> {
-    return await this.userModel.countDocuments().exec();
-  }
-
-  async findAll(): Promise<User[]> {
-    return await this.userModel.find().exec();
-  }
-
-  async findById(id: string): Promise<User> {
-    const user = await this.userModel?.findById(id).exec();
-    if (!user) {
-      throw new NotFoundException('Could not find user.');
-    }
-    return user;
-  }
-
-  async findOne(userProperty): Promise<User> {
-    return await this.userModel.findOne(userProperty).exec();
-  }
-
-  async link(userId: string, token: string, providerName: string) {
-    let result;
-    const decodedToken = decode(token) as User;
-    const user = await this.userModel.findOne({ userId });
-    console.log('link user2', user && decodedToken && providerName, user);
-    if (user && decodedToken && providerName) {
-      user[providerName] = decodedToken[userId];
-      user.providers.push({
-        providerId: decodedToken.userId,
-        name: providerName,
-      });
-      result = await user.save();
-    }
-    return result;
-  }
-
-  async unlink(userId: string, providerName: string) {
-    console.log('unlink userId', userId);
-    const result = await this.userModel.findOneAndUpdate(
-      { userId },
-      {
-        $unset: { [providerName]: true },
-        $pull: { providers: { name: providerName } },
-      },
-      { new: true },
-    );
-    return result;
+    return result.deletedCount > 0;
   }
 }

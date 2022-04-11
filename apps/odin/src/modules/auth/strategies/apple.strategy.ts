@@ -1,9 +1,9 @@
 // TODO: Integrate apple oauth
 // This file is not tested
 
-import { AuthService, Provider } from '../services/auth.service';
-
 import ApplePassport from 'passport-apple';
+import { AuthProvider } from '@odin/data.models/user.auth.providers/schema';
+import { AuthService } from '../services/auth.service';
 import { Environment } from '@odin/config/environment';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
@@ -25,8 +25,8 @@ export class AppleStrategy extends PassportStrategy(ApplePassport, 'apple') {
 
   async validate(
     _req: any,
-    _accessToken: string,
-    _refreshToken: string,
+    accessToken: string,
+    refreshToken: string,
     profile: any,
     done: VerifiedCallback,
   ) {
@@ -38,11 +38,14 @@ export class AppleStrategy extends PassportStrategy(ApplePassport, 'apple') {
         username: profile.userName || jsonProfile.userName,
         email: profile.email || jsonProfile.email,
         displayName: profile.displayName,
+        raw: jsonProfile,
+        accessToken,
+        refreshToken,
       };
 
       const oauthResponse = await this.authService.validateOAuthLogin(
+        AuthProvider.APPLE,
         userProfile,
-        Provider.APPLE,
       );
       done(null, {
         ...JSON.parse(JSON.stringify(oauthResponse.user)),

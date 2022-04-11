@@ -8,7 +8,7 @@ import { User } from './graphql/user.type';
 export class UsersResolver {
   constructor() {}
 
-  @Query(() => User)
+  @Query((returns) => User, { description: 'Get logged in user information' })
   @UseGuards(GraphqlPassportAuthGuard)
   whoAmI(@CurrentUser() user: User): User {
     return user;

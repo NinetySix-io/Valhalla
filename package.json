@@ -10,8 +10,14 @@
     "node": ">=14.0.0"
   },
   "scripts": {
-    "build": "turbo run build",
     "dev": "turbo run dev --no-cache --parallel --continue",
+    "dev:odin": "cd apps/odin && pnpm run dev",
+    "dev:thor": "cd apps/thor && pnpm run dev",
+    "dev:heimdallr": "cd apps/heimdallr && pnpm run dev",
+    "build": "turbo run build",
+    "build:odin": "cd apps/odin && pnpm run build",
+    "build:thor": "cd apps/thor && pnpm run build",
+    "build:heimdallr": "cd apps/heimdallr && pnpm run build",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules",

@@ -1,29 +1,21 @@
-import mongoose from 'mongoose';
+import { index, modelOptions, prop } from '@typegoose/typegoose';
 
-export const ProviderSchema = new mongoose.Schema({
-  providerId: String,
-  name: String,
-});
+import { BaseSchema } from '../_base/schema';
 
-export const UserSchema = new mongoose.Schema(
-  {
-    _id: { type: mongoose.Types.ObjectId },
-    password: String,
-    email: { type: String, lowercase: true },
-    displayName: String,
-    provider: String,
-    providers: [ProviderSchema],
-    roles: [String],
-    picture: String,
-    facebook: String,
-    foursquare: String,
-    google: String,
-    github: String,
-    linkedin: String,
-    live: String,
-    twitter: String,
+@modelOptions({
+  schemaOptions: {
+    collection: 'users',
   },
-  {
-    timestamps: true,
-  },
-);
+})
+@index({ email: 1 }, { collation: { locale: 'en', strength: 2 } })
+@index({ displayName: 1 }, { collation: { locale: 'en', strength: 2 } })
+export class UserSchema extends BaseSchema {
+  @prop({ lowercase: true })
+  email: string;
+
+  @prop()
+  displayName: string;
+
+  @prop()
+  avatar?: string;
+}

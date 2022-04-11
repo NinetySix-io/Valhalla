@@ -1,6 +1,7 @@
-import { AuthService, Provider } from '../services/auth.service';
 import { Injectable, Logger } from '@nestjs/common';
 
+import { AuthProvider } from '@odin/data.models/user.auth.providers/schema';
+import { AuthService } from '../services/auth.service';
 import { Environment } from '@odin/config/environment';
 import { FacebookService } from '../services/facebook.service';
 import { PassportStrategy } from '@nestjs/passport';
@@ -27,7 +28,7 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
   async validate(
     _req: any,
     accessToken: string,
-    _refreshToken: string,
+    refreshToken: string,
     profile: any,
     done: VerifiedCallback,
   ) {
@@ -43,12 +44,16 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
         email: profile.email || jsonProfile.email,
         displayName: profile.displayName,
         picture: (image && image.url) || profile.photos[0].value,
+        raw: jsonProfile,
+        accessToken,
+        refreshToken,
       };
 
       const oauthResponse = await this.authService.validateOAuthLogin(
+        AuthProvider.FACEBOOK,
         userProfile,
-        Provider.FACEBOOK,
       );
+
       done(null, {
         ...JSON.parse(JSON.stringify(oauthResponse.user)),
         jwt: oauthResponse.jwt,
