@@ -1,15 +1,13 @@
-import { Schema } from 'mongoose';
 import mongoose from 'mongoose';
 
-export const ProviderSchema = new Schema({
+export const ProviderSchema = new mongoose.Schema({
   providerId: String,
   name: String,
 });
 
-export const UserSchema = new Schema(
+export const UserSchema = new mongoose.Schema(
   {
     _id: { type: mongoose.Types.ObjectId },
-    userId: { type: String, unique: true },
     password: String,
     email: { type: String, lowercase: true },
     displayName: String,
