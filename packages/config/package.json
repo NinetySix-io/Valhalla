@@ -1,10 +1,10 @@
 {
   "name": "@valhalla/config",
   "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
+  "private": true,
   "files": [
-    "eslint-preset.js"
+    "eslint-preset.js",
+    "eslint-react.js"
   ],
   "dependencies": {
     "eslint": "^8.13.0",
