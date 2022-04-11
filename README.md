@@ -10,10 +10,23 @@ This is a monorepo on top of turborepo
 
 - Node 14+
 - pnpm
+- MongoDB
+
+#### Set up
 
 ```bash
 pnpm i
 ```
+
+### Environment
+
+Need to make a .env file for each apps
+
+- [Odin](./apps/odin/src/config/environment/index.ts)
+
+<br />
+<br />
+<hr />
 
 ### Development
 
