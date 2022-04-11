@@ -1,0 +1,16 @@
+{
+  "name": "@valhalla/react",
+  "version": "1.0.0",
+  "main": "./src/index.tsx",
+  "types": "./src/index.tsx",
+  "scripts": {
+    "lint": "eslint *.tsx"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.1",
+    "@types/react-dom": "^18.0.0",
+    "@valhalla/config": "workspace:*",
+    "@valhalla/tsconfig": "workspace:*",
+    "typescript": "^4.6.3"
+  }
+}

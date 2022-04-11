@@ -1,0 +1,27 @@
+{
+  "name": "@valhalla/utilities",
+  "version": "0.0.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "private": true,
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "test": "jest",
+    "dev": "tsc -w",
+    "build": "tsc",
+    "lint": "TIMING=1 eslint src --fix",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "devDependencies": {
+    "@valhalla/config": "workspace:*",
+    "@valhalla/tsconfig": "workspace:*",
+    "typescript": "^4.6.3"
+  },
+  "jest": {
+    "preset": "scripts/jest/node"
+  }
+}

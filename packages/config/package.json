@@ -1,5 +1,5 @@
 {
-  "name": "config",
+  "name": "@valhalla/config",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",

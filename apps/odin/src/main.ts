@@ -1,23 +1,53 @@
-import { Logger } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { Logger, ValidationPipe } from '@nestjs/common';
+
 import { AppModule } from '@odin/app.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { Environment } from '@odin/config/environment';
+import { LoggingInterceptor } from '@odin/interceptors/logging';
+import { NestFactory } from '@nestjs/core';
+import { TimeoutInterceptor } from '@odin/interceptors/timeout';
+import { bodyParser } from '@odin/middlewares/body.parser';
+import compression from 'compression';
+import { httpsSecurity } from '@odin/middlewares/helmet';
+import { rateLimit } from '@odin/middlewares/rate.limit';
+import { setupSwagger } from './swagger';
+import { voyager } from '@odin/middlewares/voyager';
 
 declare const module: any;
+
+const logger = new Logger();
+
 async function bootstrap() {
-  const logger = new Logger('EntryPoint');
-  const app = await NestFactory.create(AppModule);
+  Environment.initialize();
+  const PORT = Environment.variables.PORT || 5000;
+  const app = await NestFactory.create(AppModule, { logger });
+  setupSwagger(app, PORT);
 
-  const config = new DocumentBuilder()
-    .setTitle('Leaves Tracker')
-    .setDescription('Api Docs for leaves tracker')
-    .setVersion('1.0')
-    .build();
+  app.enableCors();
+  // MIDDLEWARES
+  app.getHttpAdapter();
+  app.use(compression());
+  app.use(httpsSecurity());
+  app.use(bodyParser());
+  app.use(rateLimit());
+  app.use('/voyager', voyager());
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
+  // INTERCEPTORS
+  app.useGlobalInterceptors(new LoggingInterceptor());
+  app.useGlobalInterceptors(new TimeoutInterceptor());
 
-  const PORT = 5000;
+  // NOTE: global nest setup
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      skipMissingProperties: false,
+      forbidUnknownValues: true,
+    }),
+  );
+
+  app.enableShutdownHooks();
+
   await app.listen(PORT);
 
   if (module.hot) {
@@ -25,6 +55,15 @@ async function bootstrap() {
     module.hot.dispose(() => app.close());
   }
 
-  logger.log(`Server running on http://localhost:${PORT}`);
+  return app;
 }
-bootstrap();
+
+bootstrap()
+  .then(async (app) => {
+    const url = await app.getUrl();
+    logger.log(`Server running on ${url}`);
+  })
+  .catch((error) => {
+    logger.error('Error starting server', error);
+    process.exit;
+  });
