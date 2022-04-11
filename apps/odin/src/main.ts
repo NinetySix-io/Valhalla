@@ -7,6 +7,7 @@ import { NestFactory } from '@nestjs/core';
 import { TimeoutInterceptor } from '@odin/interceptors/timeout';
 import { bodyParser } from '@odin/middlewares/body.parser';
 import compression from 'compression';
+import cookieParser from 'cookie-parser';
 import { httpsSecurity } from '@odin/middlewares/helmet';
 import { rateLimit } from '@odin/middlewares/rate.limit';
 import { setupSwagger } from './swagger';
@@ -29,6 +30,7 @@ async function bootstrap() {
   app.use(httpsSecurity());
   app.use(bodyParser());
   app.use(rateLimit());
+  app.use(cookieParser());
   app.use('/voyager', voyager());
 
   // INTERCEPTORS
