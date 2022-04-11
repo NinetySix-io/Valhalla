@@ -10,7 +10,7 @@
     "dist/**"
   ],
   "scripts": {
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "dev": "tsc -w",
     "build": "tsc",
     "lint": "TIMING=1 eslint src --fix",
@@ -19,9 +19,7 @@
   "devDependencies": {
     "@valhalla/config": "workspace:*",
     "@valhalla/tsconfig": "workspace:*",
+    "jest": "^27.5.1",
     "typescript": "^4.6.3"
-  },
-  "jest": {
-    "preset": "scripts/jest/node"
   }
 }

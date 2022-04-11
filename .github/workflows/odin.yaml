@@ -33,6 +33,10 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
 
+    defaults:
+      run:
+        working-directory: ./apps/odin
+
     steps:
       - name: Check out code
         uses: actions/checkout@v2
