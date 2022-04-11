@@ -1,9 +1,8 @@
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { ExtractJwt, Strategy, VerifiedCallback } from 'passport-jwt';
 
 import { Environment } from '@odin/config/environment';
+import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { VerifiedCallback } from 'passport-jwt';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
