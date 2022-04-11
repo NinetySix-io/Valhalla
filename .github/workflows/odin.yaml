@@ -31,7 +31,7 @@ jobs:
     #  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
 
     defaults:
       run:

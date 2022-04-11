@@ -16,6 +16,7 @@ export enum Provider {
   LINKEDIN = 'linkedin',
   MICROSOFT = 'microsoft',
   TWITTER = 'twitter',
+  APPLE = 'apple',
 }
 
 @Injectable()
@@ -46,6 +47,7 @@ export class AuthService {
 
       const { userId, email, displayName, picture, providers, roles } =
         existingUser;
+
       const signingPayload = {
         userId,
         email,
