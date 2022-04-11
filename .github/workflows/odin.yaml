@@ -60,7 +60,6 @@ jobs:
         uses: wearerequired/lint-action@v1
         with:
           eslint: true
-          prettier: true
 
       - name: Test
         run: pnpm run test
