@@ -1,6 +1,11 @@
 module.exports = {
   root: true,
-  ignorePatterns: ["*.js"],
+  overrides: [
+    {
+      files: ["*.ts", "*.tsx"],
+      excludedFiles: "*.js",
+    },
+  ],
   extends: ["next", "prettier"],
   settings: {
     next: {
