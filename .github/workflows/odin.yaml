@@ -63,7 +63,8 @@ jobs:
           prettier: true
 
       - name: Test
-        run: pnpm turbo run test
+        run: pnpm run test
 
       - name: Build
+        if: github.event_name == 'pull_request'
         uses: preactjs/compressed-size-action@v2
