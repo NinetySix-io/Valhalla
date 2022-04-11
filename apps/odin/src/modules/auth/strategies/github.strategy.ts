@@ -1,6 +1,7 @@
-import { AuthService, Provider } from '../services/auth.service';
 import { Injectable, Logger } from '@nestjs/common';
 
+import { AuthProvider } from '@odin/data.models/user.auth.providers/schema';
+import { AuthService } from '../services/auth.service';
 import { Environment } from '@odin/config/environment';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-github2';
@@ -21,8 +22,8 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
 
   async validate(
     req: any,
-    _accessToken: string,
-    _refreshToken: string,
+    accessToken: string,
+    refreshToken: string,
     profile: any,
     done: VerifiedCallback,
   ) {
@@ -38,11 +39,14 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
           (Array.isArray(profile.emails) && profile.emails[0].value),
         displayName: profile.displayName || jsonProfile.displayName,
         picture: `${jsonProfile.avatar_url}&size=200`,
+        raw: jsonProfile,
+        accessToken,
+        refreshToken,
       };
-      console.log('userProfile::', userProfile, ' - req::', req.headers);
+
       const oauthResponse = await this.authService.validateOAuthLogin(
+        AuthProvider.GITHUB,
         userProfile,
-        Provider.GITHUB,
       );
       done(null, {
         ...JSON.parse(JSON.stringify(oauthResponse.user)),

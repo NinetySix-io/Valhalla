@@ -1,6 +1,7 @@
-import { AuthService, Provider } from '../services/auth.service';
 import { Injectable, Logger } from '@nestjs/common';
 
+import { AuthProvider } from '@odin/data.models/user.auth.providers/schema';
+import { AuthService } from '../services/auth.service';
 import { Environment } from '@odin/config/environment';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-google-oauth20';
@@ -21,8 +22,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
   async validate(
     _req: any,
-    _accessToken: string,
-    _refreshToken: string,
+    accessToken: string,
+    refreshToken: string,
     profile: any,
     done: VerifiedCallback,
   ) {
@@ -37,11 +38,14 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         email: jsonProfile.email,
         displayName: profile.displayName,
         picture: jsonProfile.picture.replace('sz=50', 'sz=200'),
+        raw: jsonProfile,
+        refreshToken,
+        accessToken,
       };
 
       const oauthResponse = await this.authService.validateOAuthLogin(
+        AuthProvider.GOOGLE,
         userProfile,
-        Provider.GOOGLE,
       );
       done(null, {
         ...JSON.parse(JSON.stringify(oauthResponse.user)),

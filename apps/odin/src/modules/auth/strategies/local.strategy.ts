@@ -1,6 +1,11 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 
 import { AuthService } from '../services/auth.service';
+import { GqlExecutionContext } from '@nestjs/graphql';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 

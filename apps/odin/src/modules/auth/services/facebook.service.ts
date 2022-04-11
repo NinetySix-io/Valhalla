@@ -15,21 +15,21 @@ export class FacebookService {
     );
   }
 
+  get authUrl() {
+    return 'https://graph.facebook.com/v4.0/me/picture?redirect=false&type=large';
+  }
+
   getImage(token: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.oauth.get(
-        'https://graph.facebook.com/v4.0/me/picture?redirect=false&type=large',
-        token,
-        (err, results) => {
-          if (err) {
-            reject(err);
-          }
+      this.oauth.get(this.authUrl, token, (err, results) => {
+        if (err) {
+          reject(err);
+        }
 
-          const result = JSON.parse(results || {});
-          const data = (result && result.data) || {};
-          resolve(data);
-        },
-      );
+        const result = JSON.parse(results || {});
+        const data = (result && result.data) || {};
+        resolve(data);
+      });
     });
   }
 }

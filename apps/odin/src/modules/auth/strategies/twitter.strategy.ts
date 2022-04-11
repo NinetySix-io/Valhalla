@@ -1,6 +1,7 @@
-import { AuthService, Provider } from '../services/auth.service';
 import { Injectable, Logger } from '@nestjs/common';
 
+import { AuthProvider } from '@odin/data.models/user.auth.providers/schema';
+import { AuthService } from '../services/auth.service';
 import { Environment } from '@odin/config/environment';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-twitter-oauth2';
@@ -36,11 +37,14 @@ export class TwitterStrategy extends PassportStrategy(Strategy, 'twitter') {
         email: profile.email || jsonProfile.email,
         displayName: profile.displayName,
         picture: null,
+        raw: jsonProfile,
+        accessToken,
+        refreshToken,
       };
 
       const oauthResponse = await this.authService.validateOAuthLogin(
+        AuthProvider.TWITTER,
         userProfile,
-        Provider.TWITTER,
       );
       done(null, {
         ...JSON.parse(JSON.stringify(oauthResponse.user)),

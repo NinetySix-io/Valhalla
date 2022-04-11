@@ -1,13 +1,21 @@
 {
   "cSpell.words": [
+    "autopopulate",
+    "errmsg",
     "heimdallr",
     "metatype",
     "middlewares",
     "nestjs",
     "nextjs",
     "pnpm",
+    "preactjs",
     "prebuild",
     "turborepo",
-    "typeorm"
+    "typegoose",
+    "typeorm",
+    "upsert",
+    "upserted",
+    "virtuals",
+    "wearerequired"
   ]
 }
