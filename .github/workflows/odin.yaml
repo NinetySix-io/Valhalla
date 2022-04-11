@@ -8,11 +8,11 @@ on:
   push:
     branches: [main]
     paths:
-      - "apps/api/**"
+      - "apps/odin/**"
   pull_request:
     branches: [main]
     paths:
-      - "apps/api/**"
+      - "apps/odin/**"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -20,39 +20,46 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-    env:
-      DATABASE_URL: "postgresql://test:test@localhost:5432/pm"
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+  build:
+    name: Build and Test
+    timeout-minutes: 15
+    runs-on: ${{ matrix.os }}
+    # To use Remote Caching, uncomment the next lines and follow the steps below.
+    # env:
+    #  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+    #  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
     strategy:
       matrix:
-        node-version: [16.x]
+        os: [ubuntu-latest, macos-latest]
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.32.2
+
+      - name: Setup Node.js environment
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 16
+          cache: pnpm
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Install dependencies
+        run: pnpm install
 
-      - name: Cache node modules
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      - name: Lint
+        uses: wearerequired/lint-action@v1
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - run: yarn global add turbo
-      - run: npx nps prepare.ci.api
-      - run: npx nps build.ci.api
-      - run: npx nps test.ci.api
+          eslint: true
+          prettier: true
+
+      - name: Test
+        run: pnpm turbo run test
+
+      - name: Build
+        uses: preactjs/compressed-size-action@v2
