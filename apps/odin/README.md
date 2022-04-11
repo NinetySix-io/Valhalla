@@ -1,3 +1,3 @@
 # Odin
 
-Main server
+Customer facing server
