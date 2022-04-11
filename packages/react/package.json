@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "./src/index.tsx",
   "types": "./src/index.tsx",
+  "private": true,
   "scripts": {
-    "lint": "eslint *.tsx"
+    "lint": "eslint"
   },
   "devDependencies": {
     "@types/react": "^18.0.1",
@@ -12,5 +13,10 @@
     "@valhalla/config": "workspace:*",
     "@valhalla/tsconfig": "workspace:*",
     "typescript": "^4.6.3"
+  },
+  "dependencies": {
+    "next": "12.1.4",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   }
 }
