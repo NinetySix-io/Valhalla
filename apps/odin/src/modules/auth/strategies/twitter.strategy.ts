@@ -32,9 +32,8 @@ export class TwitterStrategy extends PassportStrategy(
     done: VerifiedCallback,
   ) {
     try {
-      Logger.log(`Twitter UserProfile`, 'Auth');
+      Logger.log(`Twitter UserProfile`, 'Auth', profile);
       const jsonProfile = (profile && profile._json) || {};
-      console.log(profile);
       const userProfile = {
         userId: profile.id || jsonProfile.id,
         twitter: profile.id || jsonProfile.id,
