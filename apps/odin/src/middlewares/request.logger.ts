@@ -13,14 +13,23 @@ export class RequestLoggerMiddleware implements NestMiddleware {
   ): void {
     const { ip, method, originalUrl: url } = request;
     const userAgent = request.get('user-agent') || '';
+    const isGET = method === 'GET';
 
     response.on('finish', () => {
       const { statusCode } = response;
       const contentLength = response.get('content-length');
 
-      this.logger.log(
-        `${method} ${url} Status[${statusCode}] Size[${contentLength}] IP[${ip}] - ${userAgent}`,
-      );
+      const parts = [
+        method,
+        url,
+        `Status[${statusCode}]`,
+        `Size[${isGET ? 0 : contentLength}]`,
+        `IP[${ip}]`,
+        '-',
+        userAgent,
+      ];
+
+      this.logger.log(parts.join(' '));
     });
 
     next();
