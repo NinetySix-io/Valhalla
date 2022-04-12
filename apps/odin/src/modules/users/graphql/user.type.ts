@@ -12,5 +12,5 @@ export class User {
   readonly email: string;
 
   @Field({ nullable: true })
-  readonly avatar: string;
+  readonly avatar?: string;
 }
