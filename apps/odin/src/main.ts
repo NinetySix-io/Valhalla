@@ -21,11 +21,11 @@ async function bootstrap() {
   Environment.initialize();
   const PORT = Environment.variables.PORT || 5000;
   const app = await NestFactory.create(AppModule, { logger });
-  setupSwagger(app, PORT);
 
   app.enableCors();
   // MIDDLEWARES
   app.getHttpAdapter();
+  app.use(setupSwagger(app, PORT));
   app.use(compression());
   app.use(httpsSecurity());
   app.use(bodyParser());
