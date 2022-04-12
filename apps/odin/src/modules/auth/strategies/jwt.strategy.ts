@@ -4,8 +4,9 @@ import { Environment } from '@odin/config/environment';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 
+export const JWT_PASSPORT = 'jwt' as const;
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+export class JwtStrategy extends PassportStrategy(Strategy, JWT_PASSPORT) {
   constructor(/*private readonly authService: AuthService*/) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

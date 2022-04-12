@@ -7,8 +7,13 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-twitter-oauth2';
 import { VerifiedCallback } from 'passport-jwt';
 
+export const TWITTER_PASSPORT = 'twitter' as const;
+
 @Injectable()
-export class TwitterStrategy extends PassportStrategy(Strategy, 'twitter') {
+export class TwitterStrategy extends PassportStrategy(
+  Strategy,
+  TWITTER_PASSPORT,
+) {
   constructor(private readonly authService: AuthService) {
     super({
       clientID: Environment.variables.TWITTER_CLIENT_ID,

@@ -10,8 +10,12 @@ import { PassportStrategy } from '@nestjs/passport';
 import { VerifiedCallback } from 'passport-jwt';
 import { tryNice } from 'try-nice';
 
+export const APPLE_PASSPORT = 'apple' as const;
 @Injectable()
-export class AppleStrategy extends PassportStrategy(ApplePassport, 'apple') {
+export class AppleStrategy extends PassportStrategy(
+  ApplePassport,
+  APPLE_PASSPORT,
+) {
   constructor(private readonly authService: AuthService) {
     super({
       clientID: Environment.variables.APPLE_CLIENT_ID,

@@ -1,12 +1,14 @@
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from '@odin/app.service';
 
+@ApiTags('Landing API')
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
-
   @Get()
-  async getHello(): Promise<{ message: string }> {
-    return await this.appService.getHello();
+  @ApiOperation({ summary: 'Get Application Heartbeat' })
+  getStatus() {
+    return {
+      status: 'ok',
+    };
   }
 }
