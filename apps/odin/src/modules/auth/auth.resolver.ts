@@ -11,6 +11,7 @@ import { UserRegisterInput } from './graphql/user.register.input';
 import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 import { UseGuards } from '@nestjs/common';
+import { UserSchema } from '@odin/data.models/users/schema';
 
 @Resolver()
 export class AuthResolver {
@@ -34,11 +35,11 @@ export class AuthResolver {
   })
   @UseGuards(GraphqlPassportAuthGuard)
   linkAuthProvider(
-    @CurrentUser() user: User,
+    @CurrentUser() userId: UserSchema['_id'],
     @Args('input') input: AuthProviderLinkInput,
   ) {
     return this.userService.linkAuthProvider(
-      new mongoose.Types.ObjectId(user.id),
+      userId,
       input.provider,
       input.token,
     );
@@ -49,12 +50,9 @@ export class AuthResolver {
   })
   @UseGuards(GraphqlPassportAuthGuard)
   unlinkAuthProvider(
-    @CurrentUser() user: User,
+    @CurrentUser() userId: UserSchema['_id'],
     @Args('input') input: AuthProviderUnlinkLinkInput,
   ) {
-    return this.userService.unlinkAuthProvider(
-      new mongoose.Types.ObjectId(user.id),
-      input.provider,
-    );
+    return this.userService.unlinkAuthProvider(userId, input.provider);
   }
 }

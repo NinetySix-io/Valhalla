@@ -1,7 +1,10 @@
+import { JWT_PASSPORT, JwtStrategy } from './strategies/jwt.strategy';
+
 import { AuthController } from './auth.controller';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './services/auth.service';
 import { Environment } from '@odin/config/environment';
+import { GraphqlPassportAuthGuard } from '@odin/guards/auth.guard';
 // import { FacebookService } from './services/facebook.service';
 // import { FacebookStrategy } from './strategies/facebook.strategy';
 // import { GithubStrategy } from './strategies/github.strategy';
@@ -20,6 +23,7 @@ import { UserPasswordsModel } from '@odin/data.models/user.passwords';
 import { UserSchema } from '@odin/data.models/users/schema';
 import { UserService } from './services/user.service';
 import { UsersModel } from '@odin/data.models/users';
+
 @Module({
   imports: [
     TypegooseModule.forFeature([
@@ -27,11 +31,6 @@ import { UsersModel } from '@odin/data.models/users';
       PasswordSchema,
       UserAuthProviderSchema,
     ]),
-    PassportModule.register({
-      defaultStrategy: 'jwt',
-      property: 'user',
-      session: false,
-    }),
     JwtModule.register({
       secret: Environment.variables.JWT_SECRET,
       signOptions: {
@@ -45,15 +44,22 @@ import { UsersModel } from '@odin/data.models/users';
     UsersModel,
     UserPasswordsModel,
     UserAuthProvidersModel,
+
     // FacebookService,
     // FacebookStrategy,
     // GithubStrategy,
     // GoogleStrategy,
     // TwitterStrategy,
+
+    /**
+     * This registers the jwt strategy
+     */
+    JwtStrategy,
     AuthService,
     UserService,
     PasswordService,
     UserAuthProviderService,
+    GraphqlPassportAuthGuard,
   ],
   exports: [AuthService, UserService, PasswordService, UserAuthProviderService],
 })
