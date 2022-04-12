@@ -16,7 +16,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, JWT_PASSPORT) {
   }
 
   async validate(payload: { user: string }) {
-    Logger.log(`JWT UserProfile`, 'Auth', payload);
     const userId = new mongoose.Types.ObjectId(payload.user);
     return {
       userId,
