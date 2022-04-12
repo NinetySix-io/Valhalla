@@ -8,8 +8,12 @@ import { Strategy } from 'passport-github2';
 import { VerifiedCallback } from 'passport-jwt';
 import { tryNice } from 'try-nice';
 
+export const GITHUB_PASSPORT = 'github' as const;
 @Injectable()
-export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
+export class GithubStrategy extends PassportStrategy(
+  Strategy,
+  GITHUB_PASSPORT,
+) {
   constructor(private readonly authService: AuthService) {
     super({
       clientID: Environment.variables.GITHUB_CLIENT_ID,

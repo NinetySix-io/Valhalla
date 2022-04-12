@@ -9,8 +9,12 @@ import { Strategy } from 'passport-facebook';
 import { VerifiedCallback } from 'passport-jwt';
 import { tryNice } from 'try-nice';
 
+export const FACEBOOK_PASSPORT = 'facebook' as const;
 @Injectable()
-export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
+export class FacebookStrategy extends PassportStrategy(
+  Strategy,
+  FACEBOOK_PASSPORT,
+) {
   constructor(
     private readonly authService: AuthService,
     private facebookService: FacebookService,

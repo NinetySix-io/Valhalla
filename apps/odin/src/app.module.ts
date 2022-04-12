@@ -2,7 +2,6 @@ import { MiddlewareConsumer, Module } from '@nestjs/common';
 
 import { ApolloDriver } from '@nestjs/apollo';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { Environment } from './config/environment';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -23,7 +22,6 @@ import { UsersModule } from '@odin/modules/users/user.module';
     UsersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer): void {

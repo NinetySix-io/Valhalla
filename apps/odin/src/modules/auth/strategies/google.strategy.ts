@@ -8,8 +8,12 @@ import { Strategy } from 'passport-google-oauth20';
 import { VerifiedCallback } from 'passport-jwt';
 import { tryNice } from 'try-nice';
 
+export const GOOGLE_PASSPORT = 'google' as const;
 @Injectable()
-export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
+export class GoogleStrategy extends PassportStrategy(
+  Strategy,
+  GOOGLE_PASSPORT,
+) {
   constructor(private readonly authService: AuthService) {
     super({
       clientID: Environment.variables.GOOGLE_CLIENT_ID,
