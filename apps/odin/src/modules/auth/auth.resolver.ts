@@ -20,7 +20,7 @@ export class AuthResolver {
   ) {}
 
   @Mutation((returns) => AuthResponse, { description: 'Log in' })
-  async login(@Args('input') input: UserLoginInput): Promise<AuthResponse> {
+  login(@Args('input') input: UserLoginInput): Promise<AuthResponse> {
     return this.authService.login(input.username, input.password);
   }
 
@@ -33,7 +33,7 @@ export class AuthResolver {
     description: 'Link an authentication provider',
   })
   @UseGuards(GraphqlPassportAuthGuard)
-  async linkAuthProvider(
+  linkAuthProvider(
     @CurrentUser() user: User,
     @Args('input') input: AuthProviderLinkInput,
   ) {
@@ -48,7 +48,7 @@ export class AuthResolver {
     description: 'Remove a linked authentication provider',
   })
   @UseGuards(GraphqlPassportAuthGuard)
-  async unlinkAuthProvider(
+  unlinkAuthProvider(
     @CurrentUser() user: User,
     @Args('input') input: AuthProviderUnlinkLinkInput,
   ) {
