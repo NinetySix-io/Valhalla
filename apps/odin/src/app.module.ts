@@ -7,7 +7,7 @@ import { Environment } from './config/environment';
 import { GraphQLModule } from '@nestjs/graphql';
 import { RequestLoggerMiddleware } from '@odin/middlewares/request.logger';
 import { TypegooseModule } from 'nestjs-typegoose';
-import { UsersModule } from '@odin/modules/users/user.module';
+import { UsersModule } from '@odin/modules/user/user.module';
 
 @Module({
   imports: [
@@ -17,6 +17,11 @@ import { UsersModule } from '@odin/modules/users/user.module';
       debug: Environment.isDev,
       autoSchemaFile: true,
       playground: true,
+      context: ({ req, res }) => ({ req, res }),
+      cors: {
+        origin: true,
+        credentials: true,
+      },
     }),
     AuthModule,
     UsersModule,

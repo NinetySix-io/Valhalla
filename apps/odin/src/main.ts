@@ -9,19 +9,22 @@ import { bodyParser } from '@odin/middlewares/body.parser';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import { httpsSecurity } from '@odin/middlewares/helmet';
+import mongoose from 'mongoose';
 import { rateLimit } from '@odin/middlewares/rate.limit';
 import { setupSwagger } from './swagger';
 import { voyager } from '@odin/middlewares/voyager';
 
+/* eslint-disable */
 declare const module: any;
 
 const logger = new Logger();
+const PORT = Environment.variables.PORT || 5000;
 
 async function bootstrap() {
   Environment.initialize();
-  const PORT = Environment.variables.PORT || 5000;
   const app = await NestFactory.create(AppModule, { logger });
 
+  app.getHttpAdapter().getInstance().disable('x-powered-by');
   app.enableCors();
   // MIDDLEWARES
   app.getHttpAdapter();
@@ -53,6 +56,7 @@ async function bootstrap() {
   await app.listen(PORT);
 
   if (module.hot) {
+    await mongoose.connection?.close();
     module.hot.accept();
     module.hot.dispose(() => app.close());
   }
@@ -61,9 +65,8 @@ async function bootstrap() {
 }
 
 bootstrap()
-  .then(async (app) => {
-    const url = await app.getUrl();
-    logger.log(`Server running on ${url}`);
+  .then(() => {
+    logger.log(`Server running on http://0.0.0.0:${PORT}`);
   })
   .catch((error) => {
     logger.error('Error starting server', error);

@@ -1,3 +1,4 @@
+/* eslint-disable */
 module.exports = {
   extends: ["../../packages/config/eslint-react"],
   rules: {

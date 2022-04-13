@@ -7,7 +7,7 @@ import { BaseSchema } from '../_base/schema';
     collection: 'users',
   },
 })
-@index({ email: 1 }, { collation: { locale: 'en', strength: 2 } })
+@index({ email: 1 }, { unique: true, collation: { locale: 'en', strength: 2 } })
 @index({ displayName: 1 }, { collation: { locale: 'en', strength: 2 } })
 export class UserSchema extends BaseSchema {
   @prop({ lowercase: true })

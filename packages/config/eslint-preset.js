@@ -1,3 +1,4 @@
+/* eslint-disable */
 module.exports = {
   root: true,
   overrides: [
@@ -6,14 +7,18 @@ module.exports = {
       excludedFiles: "*.js",
     },
   ],
-  extends: ["next", "prettier"],
+  parser: "@typescript-eslint/parser",
+  plugins: ["@typescript-eslint"],
+  extends: [
+    "prettier",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+  ],
   settings: {
     next: {
       rootDir: ["apps/*/", "packages/*/"],
     },
-  },
-  rules: {
-    "@next/next/no-html-link-for-pages": "off",
-    "react/jsx-key": "off",
   },
 };

@@ -2,10 +2,12 @@ import { ExecutionContext, Injectable } from '@nestjs/common';
 
 import { AuthGuard } from '@nestjs/passport';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { JWT_PASSPORT } from '@odin/modules/auth/strategies/jwt.strategy';
+import { REFRESH_TOKEN_PASSPORT } from '@odin/modules/auth/strategies/token.strategy';
 
 @Injectable()
-export class GraphqlPassportAuthGuard extends AuthGuard(JWT_PASSPORT) {
+export class GraphqlPassportAuthGuard extends AuthGuard(
+  REFRESH_TOKEN_PASSPORT,
+) {
   constructor() {
     super();
   }

@@ -8,13 +8,13 @@ import * as bcrypt from 'bcryptjs';
 export class UserPasswordsModel extends BaseFactory<UserPasswordSchema> {
   constructor(
     @InjectModel(UserPasswordSchema)
-    private readonly model: ModelType<UserPasswordSchema>,
+    model: ModelType<UserPasswordSchema>,
   ) {
     super(model);
   }
 
   findByUser(user: UserPasswordSchema['user']) {
-    return this._model.findOne({ user });
+    return this.findOne({ user });
   }
 
   async validatePassword(rawPassword: string, hashedPassword: string) {
@@ -23,6 +23,6 @@ export class UserPasswordsModel extends BaseFactory<UserPasswordSchema> {
 
   async createPassword(user: UserPasswordSchema['user'], password: string) {
     const hashed = await bcrypt.hash(password, 10);
-    return this.model.create({ user, hashed });
+    return this.create({ user, hashed });
   }
 }

@@ -3,25 +3,14 @@
   "baseBranch": "origin/main",
   "pipeline": {
     "build": {
-      "outputs": [
-        "dist/**",
-        ".next/**",
-        "public/dist/**"
-      ],
-      "dependsOn": [
-        "^build"
-      ]
+      "outputs": ["dist/**", ".next/**", "public/dist/**"],
+      "dependsOn": ["^build"]
     },
     "test": {
-      "outputs": [
-        "coverage/**"
-      ],
+      "outputs": ["coverage/**"],
       "dependsOn": []
     },
     "lint": {
-      "dependsOn": [
-        "^build"
-      ],
       "outputs": []
     },
     "dev": {

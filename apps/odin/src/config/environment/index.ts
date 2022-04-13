@@ -14,6 +14,8 @@ const schema = Yup.object({
   RATE_LIMIT_WINDOW: Yup.number().default(1000 * 60 * 60),
 
   // AUTH
+  COOKIE_IDENTIFIER: Yup.string().default('odin'),
+  REFRESH_EXPIRE_DAYS: Yup.number().default(10),
   JWT_SECRET: Yup.string().default('valhalla'),
   JWT_EXPIRES: Yup.string().default('7d'),
 

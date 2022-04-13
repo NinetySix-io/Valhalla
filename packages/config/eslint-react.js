@@ -1,11 +1,18 @@
+/* eslint-disable */
 module.exports = {
-  parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint"],
   settings: {
     react: {
       version: "detect",
     },
   },
+  overrides: [
+    {
+      files: ["*.ts", "*.tsx"],
+      excludedFiles: "*.js",
+    },
+  ],
+  parser: "@typescript-eslint/parser",
+  plugins: ["@typescript-eslint"],
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: "module",
@@ -13,9 +20,16 @@ module.exports = {
       jsx: true, // Allows for the parsing of JSX
     },
   },
+  settings: {
+    next: {
+      rootDir: ["apps/*/", "packages/*/"],
+    },
+  },
   extends: [
-    "eslint:recommended",
+    "next",
     "plugin:react/recommended",
+    "prettier",
+    "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
@@ -29,5 +43,7 @@ module.exports = {
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/member-delimiter-style": "off",
+    "@next/next/no-html-link-for-pages": "off",
+    "react/jsx-key": "off",
   },
 };
