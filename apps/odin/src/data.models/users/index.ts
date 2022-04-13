@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PartialBy } from '@odin/types/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { BaseFactory, ModelType } from '../_base/factory';
 import { UserSchema } from './schema';
@@ -7,8 +8,25 @@ import { UserSchema } from './schema';
 export class UsersModel extends BaseFactory<UserSchema> {
   constructor(
     @InjectModel(UserSchema)
-    private readonly model: ModelType<UserSchema>,
+    _userModel: ModelType<UserSchema>,
   ) {
-    super(model);
+    super(_userModel);
+  }
+
+  async findOrCreate(
+    user: PartialBy<
+      Pick<UserSchema, 'email' | 'avatar' | 'displayName'>,
+      'displayName' | 'avatar'
+    >,
+  ) {
+    const existing = await this.findOne({ email: user.email });
+    return (
+      existing ??
+      this.create({
+        email: user.email,
+        displayName: user.displayName || user.email,
+        avatar: user.avatar,
+      })
+    );
   }
 }

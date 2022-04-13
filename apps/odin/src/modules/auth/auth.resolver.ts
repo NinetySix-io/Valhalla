@@ -1,8 +1,8 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { UserSchema } from '@odin/data.models/users/schema';
 import { CurrentUser } from '@odin/decorators/current.user.decorator';
 import { GraphqlPassportAuthGuard } from '@odin/guards/auth.guard';
-import mongoose from 'mongoose';
-import { User } from '../users/graphql/user.type';
 import { AuthProviderLinkInput } from './graphql/auth.provider.link.input';
 import { AuthProviderUnlinkLinkInput } from './graphql/auth.provider.unlink.input';
 import { AuthResponse } from './graphql/auth.response.type';
@@ -10,8 +10,6 @@ import { UserLoginInput } from './graphql/user.login.input';
 import { UserRegisterInput } from './graphql/user.register.input';
 import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
-import { UseGuards } from '@nestjs/common';
-import { UserSchema } from '@odin/data.models/users/schema';
 
 @Resolver()
 export class AuthResolver {

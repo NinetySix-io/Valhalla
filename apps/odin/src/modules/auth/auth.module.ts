@@ -12,12 +12,10 @@ import { GraphqlPassportAuthGuard } from '@odin/guards/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
-import { PasswordSchema } from '@odin/data.models/user.passwords/schema';
-import { PasswordService } from './services/password.service';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { UserAuthProviderSchema } from '@odin/data.models/user.auth.providers/schema';
-import { UserAuthProviderService } from './services/user.auth.provider.service';
 import { UserAuthProvidersModel } from '@odin/data.models/user.auth.providers';
+import { UserPasswordSchema } from '@odin/data.models/user.passwords/schema';
 import { UserPasswordsModel } from '@odin/data.models/user.passwords';
 // import { TwitterStrategy } from './strategies/twitter.strategy';
 import { UserSchema } from '@odin/data.models/users/schema';
@@ -28,7 +26,7 @@ import { UsersModel } from '@odin/data.models/users';
   imports: [
     TypegooseModule.forFeature([
       UserSchema,
-      PasswordSchema,
+      UserPasswordSchema,
       UserAuthProviderSchema,
     ]),
     JwtModule.register({
@@ -57,10 +55,8 @@ import { UsersModel } from '@odin/data.models/users';
     JwtStrategy,
     AuthService,
     UserService,
-    PasswordService,
-    UserAuthProviderService,
     GraphqlPassportAuthGuard,
   ],
-  exports: [AuthService, UserService, PasswordService, UserAuthProviderService],
+  exports: [AuthService, UserService],
 })
 export class AuthModule {}

@@ -21,7 +21,7 @@ registerEnumType(AuthProvider, {
 
 @modelOptions({
   schemaOptions: {
-    collection: 'user-auth-providers',
+    collection: 'user.auth.providers',
   },
 })
 @index({ user: 1 })
