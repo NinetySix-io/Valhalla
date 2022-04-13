@@ -30,10 +30,6 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
     throw new InternalServerErrorException(err, err.errmsg);
   }
 
-  createModel(doc?: Partial<TModel>): TModel {
-    return new this._model(doc);
-  }
-
   findById(id: string | mongoose.Types.ObjectId) {
     return this._model.findById(id);
   }
