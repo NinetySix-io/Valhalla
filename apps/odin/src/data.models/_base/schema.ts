@@ -1,22 +1,13 @@
-import { Severity, modelOptions, prop } from '@typegoose/typegoose';
-
 import { Base } from '@typegoose/typegoose/lib/defaultClasses';
 import mongoose from 'mongoose';
+import { prop } from '@typegoose/typegoose';
 
-@modelOptions({
-  options: {
-    allowMixed: Severity.ALLOW,
-  },
-  schemaOptions: {
-    timestamps: true,
-  },
-})
 export abstract class BaseSchema {
   @prop()
-  createdAt: Date; // provided by schemaOptions.timestamps
+  createdAt: Date;
 
   @prop()
-  updatedAt: Date; // provided by schemaOptions.timestamps
+  updatedAt: Date;
 }
 
 export interface BaseSchema extends Base<mongoose.Types.ObjectId> {
