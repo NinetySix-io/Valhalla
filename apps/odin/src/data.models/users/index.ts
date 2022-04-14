@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PartialBy } from '@odin/types/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { BaseFactory, ModelType } from '../_base/factory';
@@ -8,9 +8,9 @@ import { UserSchema } from './schema';
 export class UsersModel extends BaseFactory<UserSchema> {
   constructor(
     @InjectModel(UserSchema)
-    _userModel: ModelType<UserSchema>,
+    model: ModelType<UserSchema>,
   ) {
-    super(_userModel);
+    super(model);
   }
 
   async findOrCreate(

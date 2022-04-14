@@ -10,7 +10,7 @@ import { User } from './graphql/user.type';
 export class UsersResolver {
   constructor(private readonly users: UsersModel) {}
 
-  @Query((returns) => User, { description: 'Get logged in user information' })
+  @Query(() => User, { description: 'Get logged in user information' })
   @UseGuards(GraphqlPassportAuthGuard)
   async whoAmI(@CurrentUser() userId: UserSchema['_id']): Promise<User> {
     const user = await this.users.findById(userId);

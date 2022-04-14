@@ -1,11 +1,12 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { UserSchema } from '@odin/data.models/users/schema';
 import { CurrentUser } from '@odin/decorators/current.user.decorator';
 import { GraphqlPassportAuthGuard } from '@odin/guards/auth.guard';
+import type { Request, Response } from 'express';
 import { AuthProviderLinkInput } from './graphql/auth.provider.link.input';
 import { AuthProviderUnlinkLinkInput } from './graphql/auth.provider.unlink.input';
-import { AuthResponse } from './graphql/auth.response.type';
+import { UserAuthResponse } from './graphql/user.auth.response.type';
 import { UserLoginInput } from './graphql/user.login.input';
 import { UserRegisterInput } from './graphql/user.register.input';
 import { AuthService } from './services/auth.service';
@@ -18,17 +19,41 @@ export class AuthResolver {
     private readonly userService: UserService,
   ) {}
 
-  @Mutation((returns) => AuthResponse, { description: 'Log in' })
-  login(@Args('input') input: UserLoginInput): Promise<AuthResponse> {
-    return this.authService.login(input.username, input.password);
+  @Mutation(() => UserAuthResponse, { description: 'Log in' })
+  async login(
+    @Args('input') input: UserLoginInput,
+    @Context('req') req: Request,
+  ): Promise<UserAuthResponse> {
+    const result = await this.authService.login(input.username, input.password);
+    this.authService.assignRefreshToken(req, result.token);
+    return result;
   }
 
-  @Mutation((returns) => AuthResponse, { description: 'Registration' })
-  register(@Args('input') input: UserRegisterInput): Promise<AuthResponse> {
-    return this.authService.signup(input.email, input.password);
+  @Mutation(() => UserAuthResponse, { description: 'Registration' })
+  async register(
+    @Args('input') input: UserRegisterInput,
+    @Context('req') request: Request,
+  ): Promise<UserAuthResponse> {
+    const result = await this.authService.signup(input.email, input.password);
+    this.authService.assignRefreshToken(request, result.token);
+    return result;
   }
 
-  @Mutation((returns) => Boolean, {
+  @Mutation(() => Boolean, { description: 'Logout' })
+  logout(@Context('req') request: Request) {
+    return this.authService.logout(request);
+  }
+
+  @Query(() => UserAuthResponse, { description: 'Get Current Access Token' })
+  @UseGuards(GraphqlPassportAuthGuard)
+  getAccessToken(@Context('res') response: Response): UserAuthResponse {
+    const accessToken = response.getHeader('Authorization') as string;
+    return {
+      token: accessToken,
+    };
+  }
+
+  @Mutation(() => Boolean, {
     description: 'Link an authentication provider',
   })
   @UseGuards(GraphqlPassportAuthGuard)
@@ -43,7 +68,7 @@ export class AuthResolver {
     );
   }
 
-  @Mutation((returns) => Boolean, {
+  @Mutation(() => Boolean, {
     description: 'Remove a linked authentication provider',
   })
   @UseGuards(GraphqlPassportAuthGuard)

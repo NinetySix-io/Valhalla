@@ -5,7 +5,7 @@ import { IsEnum } from 'class-validator';
 
 @InputType()
 export class AuthProviderUnlinkLinkInput {
-  @Field((type) => AuthProvider, {
+  @Field(() => AuthProvider, {
     description: 'Authentication provider',
   })
   @IsEnum(AuthProvider)
