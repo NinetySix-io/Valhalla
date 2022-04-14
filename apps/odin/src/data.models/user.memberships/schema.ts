@@ -11,20 +11,35 @@ export enum UserMembershipRole {
   MEMBER = 'MEMBER',
 }
 
+export enum UserMembershipGroupType {
+  ORGANIZATION = 'ORGANIZATION',
+  TEAM = 'TEAM',
+}
+
 registerEnumType(UserMembershipRole, {
   name: 'UserMembershipRole',
-  description: 'User Group Role',
+  description: 'User Membership Group Role',
+});
+
+registerEnumType(UserMembershipGroupType, {
+  name: 'UserMembershipGroupType',
+  description: 'User Membership Group Type',
 });
 
 @simpleModel('user.memberships')
 @expiryIndex({ expiresAt: 1 })
 @index({ user: 1, group: 1 }, { unique: true })
+@index({ user: 1, groupType: 1 })
+@index({ groupType: 1 })
 export class UserMembershipSchema extends BaseSchema {
   @prop({ ref: () => UserSchema })
   user: Ref<UserSchema>;
 
   @prop()
   group: mongoose.Types.ObjectId;
+
+  @prop({ enum: UserMembershipGroupType })
+  groupType: UserMembershipGroupType;
 
   @prop({ enum: UserMembershipRole })
   role: UserMembershipRole;

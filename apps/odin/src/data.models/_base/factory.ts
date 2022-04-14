@@ -34,8 +34,12 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
     return this._model.findById(id);
   }
 
-  findOne(filter: FilterQuery<DocumentType<TModel>>) {
+  findOne(filter?: FilterQuery<DocumentType<TModel>>) {
     return this._model.findOne(filter);
+  }
+
+  find(filter?: FilterQuery<DocumentType<TModel>>) {
+    return this._model.find(filter);
   }
 
   async create(item: CreatePayload<TModel>) {
@@ -54,7 +58,10 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
     );
   }
 
-  deleteOne(filter: FilterQuery<DocumentType<TModel>>, options?: QueryOptions) {
+  deleteOne(
+    filter?: FilterQuery<DocumentType<TModel>>,
+    options?: QueryOptions,
+  ) {
     return this._model.deleteOne(filter, options);
   }
 
@@ -71,7 +78,7 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
   }
 
   updateOne(
-    filter: FilterQuery<DocumentType<TModel>>,
+    filter: FilterQuery<DocumentType<TModel>> = {},
     updateQuery: UpdateQuery<DocumentType<TModel>>,
     options: QueryOptions & { upsert?: boolean } = {},
   ) {
@@ -91,7 +98,7 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
   }
 
   findOneAndUpdate(
-    filter: FilterQuery<DocumentType<TModel>>,
+    filter: FilterQuery<DocumentType<TModel>> = {},
     updateQuery: UpdateQuery<DocumentType<TModel>>,
     options: QueryOptions & { upsert?: boolean; new?: boolean } = {},
   ) {
