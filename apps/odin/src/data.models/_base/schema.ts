@@ -19,4 +19,7 @@ export abstract class BaseSchema {
   updatedAt: Date; // provided by schemaOptions.timestamps
 }
 
-export interface BaseSchema extends Base<mongoose.Types.ObjectId> {}
+export interface BaseSchema extends Base<mongoose.Types.ObjectId> {
+  createdAt: Date;
+  updatedAt: Date;
+}
