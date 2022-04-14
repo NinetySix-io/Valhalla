@@ -5,7 +5,7 @@ import { AuthProvider } from '@odin/data.models/user.auth.providers/schema';
 
 @InputType()
 export class AuthProviderLinkInput {
-  @Field((type) => AuthProvider, {
+  @Field(() => AuthProvider, {
     description: 'Authentication provider',
   })
   @IsEnum(AuthProvider)

@@ -63,6 +63,7 @@ importers:
       '@types/jest': 27.4.1
       '@types/node': ^17.0.23
       '@types/passport-apple': ^1.1.1
+      '@types/passport-jwt': ^3.0.6
       '@types/passport-local': ^1.0.34
       '@types/supertest': ^2.0.12
       '@typescript-eslint/eslint-plugin': ^5.18.0
@@ -76,6 +77,7 @@ importers:
       class-validator: ^0.13.2
       compression: ^1.7.4
       cookie-parser: ^1.4.6
+      dayjs: ^1.11.0
       dotenv: ^16.0.0
       eslint: ^8.13.0
       eslint-config-prettier: ^8.5.0
@@ -87,13 +89,13 @@ importers:
       helmet: ^5.0.2
       jest: ^27.5.1
       jsonwebtoken: ^8.5.1
-      moment: ^2.29.2
       mongodb: ^4.5.0
       mongoose: ^6.2.10
       nestjs-typegoose: ^7.1.38
       oauth: ^0.9.15
       passport: ^0.5.2
       passport-apple: ^2.0.1
+      passport-custom: ^1.1.1
       passport-facebook: ^3.0.0
       passport-github2: ^0.1.12
       passport-google-oauth20: ^2.0.0
@@ -142,6 +144,7 @@ importers:
       class-validator: 0.13.2
       compression: 1.7.4
       cookie-parser: 1.4.6
+      dayjs: 1.11.0
       dotenv: 16.0.0
       express: 4.17.3
       express-rate-limit: 6.3.0_express@4.17.3
@@ -149,13 +152,13 @@ importers:
       graphql-voyager: 1.0.0-rc.31_068caeff52aae0ddaff6ade42542f1a9
       helmet: 5.0.2
       jsonwebtoken: 8.5.1
-      moment: 2.29.2
       mongodb: 4.5.0
       mongoose: 6.2.10
       nestjs-typegoose: 7.1.38_9b1c50ad74b17860b23edc6020e4cf79
       oauth: 0.9.15
       passport: 0.5.2
       passport-apple: 2.0.1
+      passport-custom: 1.1.1
       passport-facebook: 3.0.0
       passport-github2: 0.1.12
       passport-google-oauth20: 2.0.0
@@ -178,6 +181,7 @@ importers:
       '@types/jest': 27.4.1
       '@types/node': 17.0.23
       '@types/passport-apple': 1.1.1
+      '@types/passport-jwt': 3.0.6
       '@types/passport-local': 1.0.34
       '@types/supertest': 2.0.12
       '@typescript-eslint/eslint-plugin': 5.18.0_0dd9be2ba5ed9805045f3fec8be848f5
@@ -233,6 +237,8 @@ importers:
 
   packages/config:
     specifiers:
+      '@typescript-eslint/eslint-plugin': ^5.18.0
+      '@typescript-eslint/parser': ^5.18.0
       eslint: ^8.13.0
       eslint-config-next: ^12.1.4
       eslint-config-prettier: ^8.5.0
@@ -250,6 +256,8 @@ importers:
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
     devDependencies:
+      '@typescript-eslint/eslint-plugin': 5.18.0_0dd9be2ba5ed9805045f3fec8be848f5
+      '@typescript-eslint/parser': 5.18.0_eslint@8.13.0+typescript@4.6.3
       typescript: 4.6.3
 
   packages/react:
@@ -1964,7 +1972,6 @@ packages:
     resolution: {integrity: sha512-4L8msWK31oXwdtC81RmRBAULd0ShnAHjBuKT9MRQpjP0piNrZdXyTRcKY9/UIfhGeKIT4PvF5amOOUbbT/9Wpg==}
     dependencies:
       '@types/node': 17.0.23
-    dev: false
 
   /@types/jss/9.5.8:
     resolution: {integrity: sha512-bBbHvjhm42UKki+wZpR89j73ykSXg99/bhuKuYYePtpma3ZAnmeGnl0WxXiZhPGsIfzKwCUkpPC0jlrVMBfRxA==}
@@ -2007,6 +2014,14 @@ packages:
       '@types/express': 4.17.13
       '@types/passport': 1.0.7
       '@types/passport-oauth2': 1.4.11
+    dev: true
+
+  /@types/passport-jwt/3.0.6:
+    resolution: {integrity: sha512-cmAAMIRTaEwpqxlrZyiEY9kdibk94gP5KTF8AT1Ra4rWNZYHNMreqhKUEeC5WJtuN5SJZjPQmV+XO2P5PlnvNQ==}
+    dependencies:
+      '@types/express': 4.17.13
+      '@types/jsonwebtoken': 8.5.4
+      '@types/passport-strategy': 0.2.35
     dev: true
 
   /@types/passport-local/1.0.34:
@@ -3394,6 +3409,10 @@ packages:
       whatwg-mimetype: 2.3.0
       whatwg-url: 8.7.0
     dev: true
+
+  /dayjs/1.11.0:
+    resolution: {integrity: sha512-JLC809s6Y948/FuCZPm5IX8rRhQwOiyMb2TfVVQEixG7P8Lm/gt5S7yoQZmC8x1UehI9Pb7sksEt4xx14m+7Ug==}
+    dev: false
 
   /debounce/1.2.1:
     resolution: {integrity: sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==}
@@ -6433,6 +6452,13 @@ packages:
     dependencies:
       jsonwebtoken: 8.5.1
       passport-oauth2: 1.6.1
+    dev: false
+
+  /passport-custom/1.1.1:
+    resolution: {integrity: sha512-/2m7jUGxmCYvoqenLB9UrmkCgPt64h8ZtV+UtuQklZ/Tn1NpKBeOorCYkB/8lMRoiZ5hUrCoMmDtxCS/d38mlg==}
+    engines: {node: '>= 0.10.0'}
+    dependencies:
+      passport-strategy: 1.0.0
     dev: false
 
   /passport-facebook/3.0.0:

@@ -67,3 +67,5 @@ jobs:
       - name: Build
         if: github.event_name == 'pull_request'
         uses: preactjs/compressed-size-action@v2
+        with:
+          build-script: "build:odin"

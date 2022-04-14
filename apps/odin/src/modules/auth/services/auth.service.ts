@@ -5,12 +5,15 @@ import {
 } from '@nestjs/common';
 
 import { AuthProvider } from '@odin/data.models/user.auth.providers/schema';
-import { AuthResponse } from '../graphql/auth.response.type';
-import { JwtService } from '@nestjs/jwt';
+import { Environment } from '@odin/config/environment';
+import { JwtService } from './jwt.service';
+import type { Request } from 'express';
 import { UserAuthProvidersModel } from '@odin/data.models/user.auth.providers';
+import { UserAuthResponse } from '../graphql/user.auth.response.type';
 import { UserPasswordsModel } from '@odin/data.models/user.passwords';
-import { UserSchema } from '@odin/data.models/users/schema';
+import { UserRefreshTokensModel } from '@odin/data.models/user.refresh.tokens';
 import { UsersModel } from '@odin/data.models/users';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class AuthService {
@@ -18,15 +21,19 @@ export class AuthService {
     private readonly passwords: UserPasswordsModel,
     private readonly users: UsersModel,
     private readonly authProviders: UserAuthProvidersModel,
+    private readonly refreshTokens: UserRefreshTokensModel,
     private readonly jwtService: JwtService,
   ) {}
 
-  private signToken(user: UserSchema): AuthResponse {
-    return {
-      token: this.jwtService.sign({
-        user: user._id.toHexString(),
-      }),
-    };
+  private get cookieId() {
+    return Environment.variables.COOKIE_IDENTIFIER;
+  }
+
+  assignRefreshToken(request: Request, token: string) {
+    request.res.cookie(this.cookieId, token, {
+      httpOnly: true,
+      secure: Environment.isProd,
+    });
   }
 
   /**
@@ -56,10 +63,11 @@ export class AuthService {
     });
 
     await this.authProviders.upsertProvider(user, provider, payload);
+    const jwt = this.jwtService.signToken(user);
 
     return {
       user,
-      jwt: this.signToken(user),
+      jwt,
     };
   }
 
@@ -78,15 +86,43 @@ export class AuthService {
     throw new UnauthorizedException();
   }
 
-  async login(email: string, password: string) {
-    const user = await this.validateUser(email, password);
-    return this.signToken(user);
+  async checkUsernameAvailability(userEmail: string) {
+    const exists = await this.users.exists({ email: userEmail });
+    if (exists) {
+      throw new BadRequestException('Email is taken');
+    }
   }
 
-  async signup(email: string, password: string) {
+  async logout(request: Request): Promise<Boolean> {
+    const refreshToken: string = request.cookies[this.cookieId];
+    if (!refreshToken || !mongoose.isObjectIdOrHexString(refreshToken)) {
+      return false;
+    }
+
+    const tokenId = new mongoose.Types.ObjectId(refreshToken);
+    await this.refreshTokens.deleteToken(tokenId);
+    return true;
+  }
+
+  async login(email: string, password: string): Promise<UserAuthResponse> {
+    const user = await this.validateUser(email, password);
+    const token = await this.refreshTokens.createToken(user);
+    return {
+      token: token.toHexString(),
+    };
+  }
+
+  async signup(email: string, password: string): Promise<UserAuthResponse> {
+    await this.checkUsernameAvailability(email);
     const displayName = email;
     const user = await this.users.create({ email, displayName });
-    await this.passwords.createPassword(user, password);
-    return this.signToken(user);
+    const [token] = await Promise.all([
+      this.refreshTokens.createToken(user),
+      this.passwords.createPassword(user, password),
+    ]);
+
+    return {
+      token: token.toHexString(),
+    };
   }
 }
