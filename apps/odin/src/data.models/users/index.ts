@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PartialBy } from '@odin/types/common';
+import type { PartialBy } from '@valhalla/utilities';
 import { InjectModel } from 'nestjs-typegoose';
 import { BaseFactory, ModelType } from '../_base/factory';
 import { UserSchema } from './schema';
