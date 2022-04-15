@@ -1,4 +1,5 @@
-import type { ArrayElement, SingleOrMany } from '@odin/types/common';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { ArrayElement, SingleOrMany } from '@valhalla/utilities';
 import type { Ref, RefType } from '@typegoose/typegoose/lib/types';
 
 import type { Types } from 'mongoose';

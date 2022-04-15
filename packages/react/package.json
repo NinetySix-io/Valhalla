@@ -1,8 +1,8 @@
 {
   "name": "@valhalla/react",
   "version": "1.0.0",
-  "main": "./src/index.tsx",
-  "types": "./src/index.tsx",
+  "main": "./src",
+  "types": "./src",
   "private": true,
   "scripts": {
     "lint": "eslint"
