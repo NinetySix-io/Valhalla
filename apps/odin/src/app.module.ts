@@ -5,9 +5,10 @@ import { AppController } from './app.controller';
 import { AuthModule } from './modules/auth/auth.module';
 import { Environment } from './config/environment';
 import { GraphQLModule } from '@nestjs/graphql';
+import { OrganizationModule } from '@odin/modules/organization/organization.module';
 import { RequestLoggerMiddleware } from '@odin/middlewares/request.logger';
 import { TypegooseModule } from 'nestjs-typegoose';
-import { UsersModule } from '@odin/modules/user/user.module';
+import { UserModule } from '@odin/modules/user/user.module';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { UsersModule } from '@odin/modules/user/user.module';
       },
     }),
     AuthModule,
-    UsersModule,
+    UserModule,
+    OrganizationModule,
   ],
   controllers: [AppController],
 })

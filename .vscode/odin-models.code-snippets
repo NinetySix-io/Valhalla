@@ -1,0 +1,39 @@
+{
+  "Model": {
+    "prefix": "omodel",
+    "description": "Data model constructor",
+    "body": [
+      "import { Injectable } from '@nestjs/common';",
+      "import { InjectModel } from 'nestjs-typegoose';",
+      "import { BaseFactory, ModelType } from '@odin/data.models/_base/factory';",
+      "import { $1Schema } from './schema';",
+      "",
+      "@Injectable()",
+      "export class $1sModel extends BaseFactory<$1Schema> {",
+      "\tconstructor(",
+      "\t\t@InjectModel($1Schema)",
+      "\t\tmodel: ModelType<$1Schema>,",
+      "\t) {",
+      "\t\tsuper(model);",
+      "\t}",
+      "}"
+    ]
+  },
+  "Schema": {
+    "prefix": "oschema",
+    "body": [
+      "import { modelOptions, prop } from '@typegoose/typegoose';",
+      "import { BaseSchema } from '@odin/data.models/_base/schema';",
+      "",
+      "@modelOptions({",
+      "\tschemaOptions: {",
+      "\t\tcollection: '$1',",
+      "\t\ttimestamps: true,",
+      "\t},",
+      "})",
+      "export class $2Schema extends BaseSchema {",
+      "\t$3",
+      "}"
+    ]
+  }
+}

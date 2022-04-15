@@ -1,16 +1,14 @@
-import { Ref, index, modelOptions, prop } from '@typegoose/typegoose';
+import { Ref, index, prop } from '@typegoose/typegoose';
 
 import { BaseSchema } from '@odin/data.models/_base/schema';
 import { UserSchema } from '@odin/data.models/users/schema';
+import { expiryIndex } from '../_base/decorators/expiry.index';
 import mongoose from 'mongoose';
+import { simpleModel } from '../_base/decorators/simple.model';
 
-@modelOptions({
-  schemaOptions: {
-    collection: 'user.refresh.tokens',
-  },
-})
+@simpleModel('user.refresh.tokens')
 @index({ user: 1 }, { unique: true })
-@index({ expiresAt: 1 }, { expireAfterSeconds: 0 })
+@expiryIndex({ expiresAt: 1 })
 export class UserRefreshTokenSchema extends BaseSchema {
   @prop({ ref: () => UserSchema })
   user: Ref<UserSchema>;

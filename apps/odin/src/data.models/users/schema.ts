@@ -1,14 +1,11 @@
-import { index, modelOptions, prop } from '@typegoose/typegoose';
+import { modelOptions, prop } from '@typegoose/typegoose';
 
 import { BaseSchema } from '../_base/schema';
+import { caseInsensitiveIndex } from '../_base/decorators/case.insensitive.index';
+import { simpleModel } from '../_base/decorators/simple.model';
 
-@modelOptions({
-  schemaOptions: {
-    collection: 'users',
-  },
-})
-@index({ email: 1 }, { unique: true, collation: { locale: 'en', strength: 2 } })
-@index({ displayName: 1 }, { collation: { locale: 'en', strength: 2 } })
+@simpleModel('users')
+@caseInsensitiveIndex({ email: 1 }, { unique: true })
 export class UserSchema extends BaseSchema {
   @prop({ lowercase: true })
   email: string;
