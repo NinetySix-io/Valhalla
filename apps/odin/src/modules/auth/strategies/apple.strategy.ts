@@ -4,7 +4,7 @@
 import ApplePassport from 'passport-apple';
 import { AuthProvider } from '@odin/data.models/user.auth.providers/schema';
 import { AuthService } from '../services/auth.service';
-import { Environment } from '@odin/config/environment';
+import { Environment } from '@odin/environment';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { VerifiedCallback } from 'passport-jwt';

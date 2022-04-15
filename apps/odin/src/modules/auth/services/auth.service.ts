@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 
 import { AuthProvider } from '@odin/data.models/user.auth.providers/schema';
-import { Environment } from '@odin/config/environment';
+import { Environment } from '@odin/environment';
 import { JwtService } from './jwt.service';
 import type { Request } from 'express';
 import { UserAuthProvidersModel } from '@odin/data.models/user.auth.providers';

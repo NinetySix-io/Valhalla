@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 
-import { Environment } from '@odin/config/environment';
+import { Environment } from '@odin/environment';
 import { isObjectId } from '@odin/lib/is.objectid';
 import mongoose from 'mongoose';
 

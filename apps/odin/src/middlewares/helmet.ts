@@ -1,4 +1,4 @@
-import { Environment } from '@odin/config/environment';
+import { Environment } from '@odin/environment';
 import helmet from 'helmet';
 
 export function httpsSecurity() {

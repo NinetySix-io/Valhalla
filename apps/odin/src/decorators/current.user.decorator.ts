@@ -7,6 +7,6 @@ export const CurrentUser = createParamDecorator(
   (_data: unknown, context: ExecutionContext) => {
     const ctx = GqlExecutionContext.create(context);
     const request: express.Request = ctx.getContext().req;
-    return request.user['userId'];
+    return request.user;
   },
 );

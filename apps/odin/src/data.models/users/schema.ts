@@ -1,7 +1,6 @@
-import { modelOptions, prop } from '@typegoose/typegoose';
-
 import { BaseSchema } from '../_base/schema';
 import { caseInsensitiveIndex } from '../_base/decorators/case.insensitive.index';
+import { prop } from '@typegoose/typegoose';
 import { simpleModel } from '../_base/decorators/simple.model';
 
 @simpleModel('users')

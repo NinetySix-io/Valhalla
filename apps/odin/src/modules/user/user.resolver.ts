@@ -21,7 +21,8 @@ export class UsersResolver {
   @UseGuards(GraphqlPassportAuthGuard)
   async whoAmI(@CurrentUser() userId: UserSchema['_id']): Promise<User> {
     const user = await this.users.findById(userId);
-    return user;
+    const result = user.toObject();
+    return result;
   }
 
   @Query(() => [Membership], {

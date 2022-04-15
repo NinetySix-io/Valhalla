@@ -1,7 +1,7 @@
 import { AuthController } from './auth.controller';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './services/auth.service';
-import { Environment } from '@odin/config/environment';
+import { Environment } from '@odin/environment';
 import { GraphqlPassportAuthGuard } from '@odin/guards/auth.guard';
 // import { FacebookService } from './services/facebook.service';
 // import { FacebookStrategy } from './strategies/facebook.strategy';
