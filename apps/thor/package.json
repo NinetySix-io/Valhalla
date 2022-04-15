@@ -13,19 +13,22 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@valhalla/react": "workspace:*",
+    "clsx": "^1.1.1",
     "next": "12.1.4",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "@valhalla/react": "workspace:*"
+    "react-dom": "^18.0.0"
   },
   "devDependencies": {
     "@types/node": "^17.0.23",
     "@types/react": "^18.0.1",
     "@types/react-dom": "^18.0.0",
     "@valhalla/config": "workspace:*",
+    "@valhalla/tsconfig": "workspace:*",
     "eslint": "^8.13.0",
     "next-transpile-modules": "^9.0.0",
-    "@valhalla/tsconfig": "workspace:*",
+    "sass": "^1.50.0",
+    "tailwindcss": "^3.0.24",
     "typescript": "^4.6.3"
   }
 }
