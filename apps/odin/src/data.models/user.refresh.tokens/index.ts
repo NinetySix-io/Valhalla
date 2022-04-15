@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Environment } from '@odin/config/environment';
+import { Environment } from '@odin/environment';
 import dayjs from 'dayjs';
 import mongoose from 'mongoose';
 import { InjectModel } from 'nestjs-typegoose';

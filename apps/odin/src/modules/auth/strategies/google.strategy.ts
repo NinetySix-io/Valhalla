@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { AuthProvider } from '@odin/data.models/user.auth.providers/schema';
 import { AuthService } from '../services/auth.service';
-import { Environment } from '@odin/config/environment';
+import { Environment } from '@odin/environment';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-google-oauth20';
 import { VerifiedCallback } from 'passport-jwt';

@@ -1,4 +1,4 @@
-import { Environment } from '@odin/config/environment';
+import { Environment } from '@odin/environment';
 import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
 
 export function voyager() {

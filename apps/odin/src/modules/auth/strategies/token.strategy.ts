@@ -1,6 +1,6 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 
-import { Environment } from '@odin/config/environment';
+import { Environment } from '@odin/environment';
 import { JwtService } from '../services/jwt.service';
 import { PassportStrategy } from '@nestjs/passport';
 import type { Request } from 'express';

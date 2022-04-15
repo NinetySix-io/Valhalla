@@ -3,7 +3,7 @@ import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ApolloDriver } from '@nestjs/apollo';
 import { AppController } from './app.controller';
 import { AuthModule } from './modules/auth/auth.module';
-import { Environment } from './config/environment';
+import { Environment } from './environment';
 import { GraphQLModule } from '@nestjs/graphql';
 import { OrganizationModule } from '@odin/modules/organization/organization.module';
 import { RequestLoggerMiddleware } from '@odin/middlewares/request.logger';

@@ -34,5 +34,5 @@ export class UserAuthProviderSchema extends BaseSchema {
   provider: AuthProvider;
 
   @prop()
-  raw: any;
+  raw: unknown;
 }

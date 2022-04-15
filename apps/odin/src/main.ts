@@ -1,7 +1,7 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 
 import { AppModule } from '@odin/app.module';
-import { Environment } from '@odin/config/environment';
+import { Environment } from '@odin/environment';
 import { LoggingInterceptor } from '@odin/interceptors/logging';
 import { NestFactory } from '@nestjs/core';
 import { TimeoutInterceptor } from '@odin/interceptors/timeout';

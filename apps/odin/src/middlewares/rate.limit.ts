@@ -1,4 +1,4 @@
-import { Environment } from '@odin/config/environment';
+import { Environment } from '@odin/environment';
 import expressRateLimit from 'express-rate-limit';
 
 export function rateLimit() {
