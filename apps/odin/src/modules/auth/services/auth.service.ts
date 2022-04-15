@@ -93,7 +93,7 @@ export class AuthService {
     }
   }
 
-  async logout(request: Request): Promise<Boolean> {
+  async logout(request: Request): Promise<boolean> {
     const refreshToken: string = request.cookies[this.cookieId];
     if (!refreshToken || !mongoose.isObjectIdOrHexString(refreshToken)) {
       return false;

@@ -1,11 +1,9 @@
+import { OrganizationSchema } from '@odin/data.models/organizations/schema';
 import { UserSchema } from '@odin/data.models/users/schema';
-import mongoose from 'mongoose';
 
-declare namespace Express {
-  export interface Request {
-    user: {
-      userId: UserSchema['_id'];
-      jwt?: string;
-    };
+declare module 'express' {
+  interface Request {
+    user: UserSchema['_id'];
+    organization?: OrganizationSchema['_id'];
   }
 }

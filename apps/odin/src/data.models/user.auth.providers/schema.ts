@@ -1,17 +1,16 @@
-import { Ref, index, modelOptions, prop } from '@typegoose/typegoose';
+import { Ref, index, prop } from '@typegoose/typegoose';
 
 import { BaseSchema } from '../_base/schema';
 import { UserSchema } from '../users/schema';
 import { registerEnumType } from '@nestjs/graphql';
+import { simpleModel } from '../_base/decorators/simple.model';
 
 export enum AuthProvider {
-  FACEBOOK = 'facebook',
-  GITHUB = 'github',
-  GOOGLE = 'google',
-  LINKEDIN = 'linkedin',
-  MICROSOFT = 'microsoft',
-  TWITTER = 'twitter',
-  APPLE = 'apple',
+  FACEBOOK = 'FACEBOOK',
+  GITHUB = 'GITHUB',
+  GOOGLE = 'GOOGLE',
+  TWITTER = 'TWITTER',
+  APPLE = 'APPLE',
 }
 
 registerEnumType(AuthProvider, {
@@ -19,12 +18,8 @@ registerEnumType(AuthProvider, {
   description: 'Available Auth Providers',
 });
 
-@modelOptions({
-  schemaOptions: {
-    collection: 'user.auth.providers',
-  },
-})
-@index({ user: 1 })
+@simpleModel('user.auth.providers')
+@index({ user: 1, provider: 1 }, { unique: true })
 export class UserAuthProviderSchema extends BaseSchema {
   @prop({ ref: () => UserSchema })
   user: Ref<UserSchema>;
