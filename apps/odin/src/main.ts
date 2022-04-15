@@ -10,6 +10,7 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import { httpsSecurity } from '@odin/middlewares/helmet';
 import mongoose from 'mongoose';
+import { organizationHeader } from './middlewares/organization.header';
 import { rateLimit } from '@odin/middlewares/rate.limit';
 import { setupSwagger } from './swagger';
 import { voyager } from '@odin/middlewares/voyager';
@@ -28,6 +29,7 @@ async function bootstrap() {
   app.enableCors();
   // MIDDLEWARES
   app.getHttpAdapter();
+  app.use(organizationHeader());
   app.use(setupSwagger(app, PORT));
   app.use(compression());
   app.use(httpsSecurity());

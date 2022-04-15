@@ -13,7 +13,6 @@ export enum UserMembershipRole {
 
 export enum UserMembershipGroupType {
   ORGANIZATION = 'ORGANIZATION',
-  TEAM = 'TEAM',
 }
 
 registerEnumType(UserMembershipRole, {

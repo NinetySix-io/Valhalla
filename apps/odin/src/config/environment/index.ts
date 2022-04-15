@@ -15,6 +15,7 @@ const schema = Yup.object({
 
   // AUTH
   COOKIE_IDENTIFIER: Yup.string().default('odin'),
+  ORGANIZATION_HEADER_IDENTIFIER: Yup.string().default('odin-org'),
   REFRESH_EXPIRE_DAYS: Yup.number().default(10),
   JWT_SECRET: Yup.string().default('valhalla'),
   JWT_EXPIRES: Yup.string().default('7d'),

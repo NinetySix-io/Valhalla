@@ -11,13 +11,10 @@ import { castRefId } from '@odin/lib/cast.ref.id';
 import mongoose from 'mongoose';
 import { tryNice } from 'try-nice';
 
-export const REFRESH_TOKEN_PASSPORT = 'token' as const;
+export const TOKEN_PASSPORT = 'token' as const;
 
 @Injectable()
-export class TokenStrategy extends PassportStrategy(
-  Strategy,
-  REFRESH_TOKEN_PASSPORT,
-) {
+export class TokenStrategy extends PassportStrategy(Strategy, TOKEN_PASSPORT) {
   private readonly logger = new Logger(TokenStrategy.name);
 
   constructor(
@@ -65,8 +62,8 @@ export class TokenStrategy extends PassportStrategy(
     throw new UnauthorizedException();
   }
 
-  async validate(request: Request): Promise<{ userId: UserSchema['_id'] }> {
-    const userId = await this.getUserFromRequest(request);
-    return { userId };
+  async validate(request: Request): Promise<UserSchema['_id']> {
+    const user = await this.getUserFromRequest(request);
+    return user;
   }
 }
