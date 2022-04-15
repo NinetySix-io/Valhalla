@@ -1,7 +1,9 @@
+import { Layout } from "@thor/layout";
+
 export default function Home() {
   return (
-    <div>
+    <Layout>
       <h1>Thor</h1>
-    </div>
+    </Layout>
   );
 }
