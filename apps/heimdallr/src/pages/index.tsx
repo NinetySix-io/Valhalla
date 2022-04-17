@@ -1,13 +1,13 @@
-import { Layout } from "@heimdallr/layout";
+import { Logo } from "@valhalla/react";
 import cx from "clsx";
 import styles from "../styles/home.module.css";
 
 export default function Home() {
   return (
-    <Layout>
-      <div className={cx(styles.container)}>
-        <h1>Heimdallr</h1>
+    <div className={cx(styles.container)}>
+      <div className={cx(styles.logoContainer)}>
+        <Logo className={cx(styles.logo)} />
       </div>
-    </Layout>
+    </div>
   );
 }
