@@ -1,0 +1,9 @@
+.container {
+  @apply flex;
+  @apply flex-col;
+
+  min-width: 100vw;
+  min-height: 100vh;
+  background-color: black;
+  padding: 10px;
+}
