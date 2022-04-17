@@ -11,12 +11,16 @@ import { TWITTER_PASSPORT } from './strategies/twitter.strategy';
 @ApiBearerAuth()
 @Controller('auth')
 export class AuthController {
-  constructor() {}
+  constructor() {
+    //TODO
+  }
 
   @Get('facebook')
   @UseGuards(AuthGuard(FACEBOOK_PASSPORT))
   @ApiOperation({ summary: 'Initiates the Facebook OAuth2 login flow' })
-  facebookLogin() {}
+  facebookLogin() {
+    //TODO
+  }
 
   @Get('facebook/callback')
   @UseGuards(AuthGuard(FACEBOOK_PASSPORT))
@@ -31,7 +35,9 @@ export class AuthController {
   @Get('github')
   @UseGuards(AuthGuard(GITHUB_PASSPORT))
   @ApiOperation({ summary: 'Initiates the GitHub OAuth2 login flow' })
-  githubLogin() {}
+  githubLogin() {
+    //TODO
+  }
 
   @Get('github/callback')
   @UseGuards(AuthGuard(GITHUB_PASSPORT))
@@ -43,7 +49,9 @@ export class AuthController {
   @Get('google')
   @UseGuards(AuthGuard(GOOGLE_PASSPORT))
   @ApiOperation({ summary: 'Initiates the Google OAuth2 login flow' })
-  googleLogin() {}
+  googleLogin() {
+    //TODO
+  }
 
   @Get('google/callback')
   @UseGuards(AuthGuard(GOOGLE_PASSPORT))
@@ -58,7 +66,9 @@ export class AuthController {
   @Get('twitter')
   @UseGuards(AuthGuard(TWITTER_PASSPORT))
   @ApiOperation({ summary: 'Initiates the Twitter OAuth2 login flow' })
-  twitterLogin() {}
+  twitterLogin() {
+    //TODO
+  }
 
   @Get('twitter/callback')
   @UseGuards(AuthGuard(TWITTER_PASSPORT))

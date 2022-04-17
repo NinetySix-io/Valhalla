@@ -13,7 +13,7 @@ export type ModelType<TModel extends BaseSchema> = ReturnModelType<
 
 export type CreatePayload<TModel extends BaseSchema> = Omit<
   TModel,
-  '_id' | 'createdAt' | 'updatedAt' | 'id'
+  '_id' | 'createdAt' | 'updatedAt' | 'id' | 'toPublic'
 >;
 
 export abstract class BaseFactory<TModel extends BaseSchema> {
