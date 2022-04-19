@@ -13,17 +13,18 @@ export class RequestLoggerMiddleware implements NestMiddleware {
   ): void {
     const { ip, method, originalUrl: url } = request;
     const userAgent = request.get('user-agent') || '';
-    const isGET = method === 'GET';
 
     response.on('finish', () => {
       const { statusCode } = response;
-      const contentLength = response.get('content-length');
+      const ReqContentLength = request.get('content-length') || 0;
+      const ResContentLength = response.get('content-length') || 0;
 
       const parts = [
         method,
         url,
         `Status[${statusCode}]`,
-        `Size[${isGET ? 0 : contentLength}]`,
+        `Req[${ReqContentLength}]`,
+        `Res[${ResContentLength}]`,
         `IP[${ip}]`,
         '-',
         userAgent,
