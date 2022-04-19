@@ -66,6 +66,7 @@ importers:
       '@nestjs/schedule': ^1.1.0
       '@nestjs/schematics': ^8.0.10
       '@nestjs/swagger': ^5.2.1
+      '@nestjs/terminus': ^8.0.6
       '@nestjs/testing': ^8.4.4
       '@prisma/client': ^3.12.0
       '@typegoose/typegoose': ^9.7.1
@@ -146,6 +147,7 @@ importers:
       '@nestjs/platform-express': 8.4.4_a78378ec5f3cecc3c353ed91b578f3e6
       '@nestjs/schedule': 1.1.0_8a3f4045e53a03a04c90c8adfa35dfce
       '@nestjs/swagger': 5.2.1_0d02518704b9480274bb3a5bf7280c33
+      '@nestjs/terminus': 8.0.6_241cb6a4085d63233d36725823a84b39
       '@prisma/client': 3.12.0
       '@typegoose/typegoose': 9.7.1_mongoose@6.2.10
       apollo-server-core: 3.6.7_graphql@16.3.0
@@ -1582,6 +1584,21 @@ packages:
     transitivePeerDependencies:
       - class-transformer
       - class-validator
+    dev: false
+
+  /@nestjs/terminus/8.0.6_241cb6a4085d63233d36725823a84b39:
+    resolution: {integrity: sha512-HevQNlJzIkiZ5S1Yb+ll4pwiqg8qB5M6G+2LD0hIkUHzWFvVdCAZDIhLhtwjjRGJ76dwC8BFE/YyUC/4reGAzQ==}
+    peerDependencies:
+      '@nestjs/common': 8.x
+      '@nestjs/core': 8.x
+      reflect-metadata: 0.1.x
+      rxjs: 7.x
+    dependencies:
+      '@nestjs/common': 8.4.4_5199533202e21c7185c9d97f881e2827
+      '@nestjs/core': 8.4.4_b63c269346792a9d57cfab86d23050d2
+      check-disk-space: 3.3.0
+      reflect-metadata: 0.1.13
+      rxjs: 7.5.5
     dev: false
 
   /@nestjs/testing/8.4.4_5ba9349f42f6f669a747311efc3e3761:
@@ -3149,6 +3166,11 @@ packages:
   /chardet/0.7.0:
     resolution: {integrity: sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==}
     dev: true
+
+  /check-disk-space/3.3.0:
+    resolution: {integrity: sha512-Hvr+Nr01xSSvuCpXvJ8oZ2iXjIu4XT3uHbw3g7F/Uiw6O5xk8c/Ot7ZGFDaTRDf2Bz8AdWA4DvpAgCJVKt8arw==}
+    engines: {node: '>=12'}
+    dev: false
 
   /chokidar/3.5.3:
     resolution: {integrity: sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw==}
