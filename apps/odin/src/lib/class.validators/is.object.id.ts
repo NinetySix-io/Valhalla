@@ -5,7 +5,8 @@ import mongoose from 'mongoose';
 export function IsObjectId(
   validationOptions?: ValidationOptions,
 ): PropertyDecorator {
-  return (object: object, propertyName: string | symbol) => {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  return (object: Object, propertyName: string | symbol) => {
     registerDecorator({
       name: 'isObjectId',
       target: object.constructor,

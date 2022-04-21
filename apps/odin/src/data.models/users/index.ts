@@ -15,7 +15,7 @@ export class UsersModel extends BaseFactory<UserSchema> {
 
   async findOrCreate(
     user: PartialBy<
-      Pick<UserSchema, 'email' | 'avatar' | 'displayName'>,
+      Pick<UserSchema, 'email' | 'avatar' | 'displayName' | 'createdBy'>,
       'displayName' | 'avatar'
     >,
   ) {
@@ -26,6 +26,8 @@ export class UsersModel extends BaseFactory<UserSchema> {
         email: user.email,
         displayName: user.displayName || user.email,
         avatar: user.avatar,
+        createdBy: user.createdBy,
+        updatedBy: user.createdBy,
       })
     );
   }

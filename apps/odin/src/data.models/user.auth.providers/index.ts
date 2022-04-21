@@ -17,7 +17,7 @@ export class UserAuthProvidersModel extends BaseFactory<UserAuthProviderSchema> 
     return await bcrypt.compare(rawPassword, hashedPassword);
   }
 
-  async upsertProvider(
+  upsertProvider(
     user: UserAuthProviderSchema['user'],
     provider: UserAuthProviderSchema['provider'],
     payload: Omit<CreatePayload<UserAuthProviderSchema>, 'user' | 'provider'>,

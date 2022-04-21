@@ -1,8 +1,7 @@
-import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserSchema } from '@odin/data.models/users/schema';
 import { CurrentUser } from '@odin/decorators/current.user.decorator';
-import { GraphqlPassportAuthGuard } from '@odin/guards/auth.guard';
+import { GqlGuard } from '@odin/guards/gql.passport.guard.decorator';
 import type { Request, Response } from 'express';
 import { AuthProviderLinkInput } from './graphql/auth.provider.link.input';
 import { AuthProviderUnlinkLinkInput } from './graphql/auth.provider.unlink.input';
@@ -45,7 +44,7 @@ export class AuthResolver {
   }
 
   @Query(() => UserAuthResponse, { description: 'Get Current Access Token' })
-  @UseGuards(GraphqlPassportAuthGuard)
+  @GqlGuard()
   getAccessToken(@Context('res') response: Response): UserAuthResponse {
     const accessToken = response.getHeader('Authorization') as string;
     return {
@@ -56,7 +55,7 @@ export class AuthResolver {
   @Mutation(() => Boolean, {
     description: 'Link an authentication provider',
   })
-  @UseGuards(GraphqlPassportAuthGuard)
+  @GqlGuard()
   linkAuthProvider(
     @CurrentUser() userId: UserSchema['_id'],
     @Args('input') input: AuthProviderLinkInput,
@@ -71,7 +70,7 @@ export class AuthResolver {
   @Mutation(() => Boolean, {
     description: 'Remove a linked authentication provider',
   })
-  @UseGuards(GraphqlPassportAuthGuard)
+  @GqlGuard()
   unlinkAuthProvider(
     @CurrentUser() userId: UserSchema['_id'],
     @Args('input') input: AuthProviderUnlinkLinkInput,
