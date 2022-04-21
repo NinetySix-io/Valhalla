@@ -50,7 +50,7 @@ export class MongoDBHealthIndicator extends HealthIndicator {
 
   async checkDatabase(): Promise<HealthIndicatorResult> {
     this.checkConnection();
-    await this.pingCheck;
+    await this.pingCheck();
     return this.getStatus(this.key, true);
   }
 }

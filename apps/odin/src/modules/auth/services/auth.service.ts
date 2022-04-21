@@ -47,9 +47,9 @@ export class AuthService {
       email: string;
       displayName: string;
       picture?: string;
-      raw: any;
       accessToken: string;
       refreshToken: string;
+      raw: unknown;
     },
   ) {
     if (!payload.email) {
