@@ -5,7 +5,7 @@ import { IsOptional } from '@odin/lib/class.validators/is.optional';
 
 @InputType()
 export class UpdateUserInput {
-  @Field()
+  @Field({ nullable: true })
   @IsEmail()
   @IsOptional()
   email?: string;

@@ -1,16 +1,14 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, PickType } from '@nestjs/graphql';
 
-import { IsEnum } from 'class-validator';
 import { IsObjectId } from '@odin/lib/class.validators/is.object.id';
-import { UserMembershipRole } from '@odin/data.models/user.memberships/schema';
+import { UserMembershipSchema } from '@odin/data.models/user.memberships/schema';
 
 @InputType()
-export class ChangeOrganizationRoleInput {
+export class ChangeOrganizationRoleInput extends PickType(
+  UserMembershipSchema,
+  ['role'] as const,
+) {
   @Field({ description: 'User ID' })
   @IsObjectId()
   user: string;
-
-  @Field(() => UserMembershipRole, { description: 'Organization Role' })
-  @IsEnum(UserMembershipRole)
-  role: UserMembershipRole;
 }
