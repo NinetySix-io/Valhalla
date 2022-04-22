@@ -1,7 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
-import { Field, registerEnumType } from '@nestjs/graphql';
+import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { IsDate, IsEnum } from 'class-validator';
-import type { Ref, mongoose } from '@typegoose/typegoose';
+import { Ref, mongoose } from '@typegoose/typegoose';
 import { index, prop } from '@typegoose/typegoose';
 
 import { BaseSchema } from '@odin/data.models/_base/schema';
@@ -29,6 +29,7 @@ registerEnumType(UserMembershipGroupType, {
   description: 'User Membership Group Type',
 });
 
+@ObjectType()
 @simpleModel('user.memberships')
 @expiryIndex({ expiresAt: 1 })
 @index({ user: 1, group: 1 }, { unique: true })
@@ -40,16 +41,19 @@ export class UserMembershipSchema extends BaseSchema {
   @prop({ ref: () => UserSchema })
   user: Ref<UserSchema>;
 
-  @Field({ description: 'Group that the user belongs to' })
+  @Field(() => String, {
+    description: 'Group that the user belongs to',
+  })
   @Expose()
   @prop()
   group: mongoose.Types.ObjectId;
 
   @Expose()
-  @Field({ description: 'Group type for the membership' })
-  @prop({ enum: UserMembershipGroupType })
-  @Field(() => UserMembershipGroupType)
+  @Field(() => UserMembershipGroupType, {
+    description: 'Group type for the membership',
+  })
   @IsEnum(UserMembershipGroupType)
+  @prop({ enum: UserMembershipGroupType })
   groupType: UserMembershipGroupType;
 
   @Expose()

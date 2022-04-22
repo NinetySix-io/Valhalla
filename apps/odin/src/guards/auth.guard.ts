@@ -1,5 +1,5 @@
 import { AuthGuard } from '@nestjs/passport';
-import type { ExecutionContext } from '@nestjs/common';
+import { ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { Injectable } from '@nestjs/common';
 import { TOKEN_PASSPORT } from '@odin/modules/auth/strategies/token.strategy';

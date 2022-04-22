@@ -1,13 +1,13 @@
 import { ApolloDriver } from '@nestjs/apollo';
-import type { ApolloDriverConfig } from '@nestjs/apollo';
+import { ApolloDriverConfig } from '@nestjs/apollo';
 import { AppController } from './app.controller';
 import { AuthModule } from './modules/auth/auth.module';
 import { Environment } from './environment';
-import type { GqlContext } from '@odin/types/gql.context';
+import { GqlContext } from '@odin/types/gql.context';
 import { GraphQLModule } from '@nestjs/graphql';
 import { GraphqlPassportAuthGuard } from '@odin/guards/auth.guard';
 import { HealthModule } from './modules/health/health.module';
-import type { MiddlewareConsumer } from '@nestjs/common';
+import { MiddlewareConsumer } from '@nestjs/common';
 import { Module } from '@nestjs/common';
 import { RequestLoggerMiddleware } from '@odin/middlewares/request.logger';
 import { TypegooseModule } from 'nestjs-typegoose';

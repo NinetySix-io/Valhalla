@@ -5,8 +5,7 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@odin/*": ["src/*"],
-      "@valhalla/*": ["../../packages/*"]
+      "@odin/*": ["src/*"]
     }
   }
 }

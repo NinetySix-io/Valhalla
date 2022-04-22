@@ -1,21 +1,19 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEmail, IsUrl } from 'class-validator';
-
-import { IsOptional } from '@odin/lib/class.validators/is.optional';
+import { IsEmail, IsOptional, MaxLength } from 'class-validator';
 
 @InputType()
 export class UpdateUserInput {
-  @Field({ nullable: true })
+  @Field()
   @IsEmail()
   @IsOptional()
-  email?: string;
+  email: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsOptional()
+  @MaxLength(20)
   displayName?: string;
 
-  @Field()
-  @IsUrl()
+  @Field({ nullable: true })
   @IsOptional()
   avatar?: string;
 }

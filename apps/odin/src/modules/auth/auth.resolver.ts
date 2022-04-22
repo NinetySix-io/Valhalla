@@ -2,7 +2,7 @@ import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserSchema } from '@odin/data.models/users/schema';
 import { CurrentUser } from '@odin/decorators/current.user.decorator';
 import { GqlGuard } from '@odin/guards/gql.passport.guard.decorator';
-import type { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { AuthProviderLinkInput } from './graphql/auth.provider.link.input';
 import { AuthProviderUnlinkLinkInput } from './graphql/auth.provider.unlink.input';
 import { UserAuthResponse } from './graphql/user.auth.response.type';

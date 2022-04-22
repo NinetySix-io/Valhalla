@@ -1,9 +1,9 @@
 import { Exclude, Expose } from 'class-transformer';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { IsEmail, IsPhoneNumber } from 'class-validator';
 
 import { BaseSchema } from '../_base/schema';
-import { IsEmail } from 'class-validator';
-import type { Ref } from '@typegoose/typegoose';
+import { Ref } from '@typegoose/typegoose';
 import { caseInsensitiveIndex } from '../_base/decorators/case.insensitive.index';
 import { prop } from '@typegoose/typegoose';
 import { simpleModel } from '../_base/decorators/simple.model';
@@ -30,6 +30,7 @@ export class UserSchema extends BaseSchema {
   @Expose()
   @Field({ nullable: true })
   @prop()
+  @IsPhoneNumber()
   phone?: string;
 
   @Expose()

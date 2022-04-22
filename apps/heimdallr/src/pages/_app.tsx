@@ -1,7 +1,7 @@
 import "../styles/global.css";
 import "../scripts/wdyr";
 
-import type { AppProps } from "next/app";
+import { AppProps } from "next/app";
 import { Layout } from "@heimdallr/layout";
 
 function App({ Component, pageProps }: AppProps) {
