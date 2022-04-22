@@ -1,7 +1,7 @@
-import { ExecutionContext, createParamDecorator } from '@nestjs/common';
-
+import type { ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import express from 'express';
+import { createParamDecorator } from '@nestjs/common';
+import type express from 'express';
 
 export const CurrentUser = createParamDecorator(
   (_data: unknown, context: ExecutionContext) => {

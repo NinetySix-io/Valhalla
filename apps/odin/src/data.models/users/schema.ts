@@ -1,22 +1,25 @@
 import { Exclude, Expose } from 'class-transformer';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Ref, prop } from '@typegoose/typegoose';
 
 import { BaseSchema } from '../_base/schema';
+import { IsEmail } from 'class-validator';
+import type { Ref } from '@typegoose/typegoose';
 import { caseInsensitiveIndex } from '../_base/decorators/case.insensitive.index';
+import { prop } from '@typegoose/typegoose';
 import { simpleModel } from '../_base/decorators/simple.model';
 
 @ObjectType()
 @simpleModel('users')
 @caseInsensitiveIndex({ email: 1 }, { unique: true })
 export class UserSchema extends BaseSchema {
-  @Field()
   @Expose()
+  @Field()
   @prop({ lowercase: true })
+  @IsEmail()
   email: string;
 
-  @Field({ nullable: true })
   @Expose()
+  @Field({ nullable: true })
   @prop()
   emailVerified?: boolean;
 
@@ -24,13 +27,13 @@ export class UserSchema extends BaseSchema {
   @prop()
   displayName: string;
 
-  @Field({ nullable: true })
   @Expose()
+  @Field({ nullable: true })
   @prop()
   phone?: string;
 
-  @Field({ nullable: true })
   @Expose()
+  @Field({ nullable: true })
   @prop()
   phoneVerified?: boolean;
 

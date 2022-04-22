@@ -1,8 +1,6 @@
-import {
-  IsOptional as IsOptionalValidator,
-  ValidateIf,
-  ValidationOptions,
-} from 'class-validator';
+import { IsOptional as IsOptionalValidator, ValidateIf } from 'class-validator';
+
+import type { ValidationOptions } from 'class-validator';
 
 /**
  * Checks if value is missing and if so, ignores all validators.

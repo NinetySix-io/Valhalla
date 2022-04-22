@@ -1,8 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import type { CanActivate, ExecutionContext } from '@nestjs/common';
 
+import { Injectable } from '@nestjs/common';
 import type { Request } from 'express';
 import { UserMembershipRole } from '@odin/data.models/user.memberships/schema';
-import { UserMembershipsModel } from '@odin/data.models/user.memberships';
+import type { UserMembershipsModel } from '@odin/data.models/user.memberships';
 
 @Injectable()
 export class OrganizationGuard implements CanActivate {

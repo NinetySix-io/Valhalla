@@ -1,8 +1,11 @@
 import { Exclude, Expose } from 'class-transformer';
 import { Field, registerEnumType } from '@nestjs/graphql';
-import { Ref, index, mongoose, prop } from '@typegoose/typegoose';
+import { IsDate, IsEnum } from 'class-validator';
+import type { Ref, mongoose } from '@typegoose/typegoose';
+import { index, prop } from '@typegoose/typegoose';
 
 import { BaseSchema } from '@odin/data.models/_base/schema';
+import { IsObjectId } from '@odin/lib/class.validators/is.object.id';
 import { UserSchema } from '../users/schema';
 import { expiryIndex } from '../_base/decorators/expiry.index';
 import { simpleModel } from '../_base/decorators/simple.model';
@@ -33,6 +36,7 @@ registerEnumType(UserMembershipGroupType, {
 @index({ groupType: 1 })
 export class UserMembershipSchema extends BaseSchema {
   @Exclude()
+  @IsObjectId()
   @prop({ ref: () => UserSchema })
   user: Ref<UserSchema>;
 
@@ -44,15 +48,19 @@ export class UserMembershipSchema extends BaseSchema {
   @Expose()
   @Field({ description: 'Group type for the membership' })
   @prop({ enum: UserMembershipGroupType })
+  @Field(() => UserMembershipGroupType)
+  @IsEnum(UserMembershipGroupType)
   groupType: UserMembershipGroupType;
 
-  @Field({ description: 'User role within group' })
   @Expose()
+  @Field(() => UserMembershipRole, { description: 'User role within group' })
+  @IsEnum(UserMembershipRole)
   @prop({ enum: UserMembershipRole })
   role: UserMembershipRole;
 
   @Field({ nullable: true })
   @Expose()
+  @IsDate()
   @prop()
   expiresAt?: Date;
 }

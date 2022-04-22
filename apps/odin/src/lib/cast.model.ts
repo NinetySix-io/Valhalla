@@ -1,4 +1,4 @@
-import { Ref, RefType } from '@typegoose/typegoose/lib/types';
+import type { Ref, RefType } from '@typegoose/typegoose/lib/types';
 
 /**
  * strictly unref model

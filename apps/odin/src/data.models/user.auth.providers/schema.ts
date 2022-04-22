@@ -1,8 +1,9 @@
 import { Exclude, Expose } from 'class-transformer';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { Ref, Severity, index, prop } from '@typegoose/typegoose';
+import { Severity, index, prop } from '@typegoose/typegoose';
 
 import { BaseSchema } from '../_base/schema';
+import type { Ref } from '@typegoose/typegoose';
 import { UserSchema } from '../users/schema';
 import { simpleModel } from '../_base/decorators/simple.model';
 
