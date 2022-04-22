@@ -2,7 +2,7 @@ import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { UserMembershipsModel } from '@odin/data.models/user.memberships';
 import { GqlGuard } from '@odin/guards/gql.passport.guard.decorator';
 import { OrganizationGuard } from '@odin/guards/organization.guard';
-import type { Request } from 'express';
+import { Request } from 'express';
 import { ChangeOrganizationRoleInput } from './graphql/change.organization.role.input';
 
 @Resolver()

@@ -7,7 +7,7 @@ import {
 import { AuthProvider } from '@odin/data.models/user.auth.providers/schema';
 import { Environment } from '@odin/environment';
 import { JwtService } from './jwt.service';
-import type { Request } from 'express';
+import { Request } from 'express';
 import { UserAuthProvidersModel } from '@odin/data.models/user.auth.providers';
 import { UserAuthResponse } from '../graphql/user.auth.response.type';
 import { UserPasswordsModel } from '@odin/data.models/user.passwords';

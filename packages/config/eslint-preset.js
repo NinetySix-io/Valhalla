@@ -21,7 +21,5 @@ module.exports = {
       rootDir: ["apps/*/", "packages/*/"],
     },
   },
-  rules: {
-    "@typescript-eslint/consistent-type-imports": "error",
-  },
+  rules: {},
 };

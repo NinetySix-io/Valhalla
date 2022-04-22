@@ -6,6 +6,10 @@ This is a monorepo on top of turborepo
 
 ### First time
 
+### Notes
+
+- Never do `import type`, this causes app to not work properly
+
 #### Prerequisite
 
 - Node 14+

@@ -1,7 +1,7 @@
-import type { IncomingMessage, ServerResponse } from 'http';
+import { IncomingMessage, ServerResponse } from 'http';
 import { json, urlencoded } from 'body-parser';
 
-import type { NextFunction } from 'express';
+import { NextFunction } from 'express';
 
 export function bodyParser() {
   return (req: IncomingMessage, res: ServerResponse, next: NextFunction) => {

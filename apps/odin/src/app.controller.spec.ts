@@ -1,6 +1,6 @@
 import { AppController } from '@odin/app.controller';
 import { Test } from '@nestjs/testing';
-import type { TestingModule } from '@nestjs/testing';
+import { TestingModule } from '@nestjs/testing';
 
 describe('AppController', () => {
   let appController: AppController;

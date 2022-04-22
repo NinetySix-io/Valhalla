@@ -2,7 +2,7 @@
 
 import { UseGuards, applyDecorators } from '@nestjs/common';
 
-import type { CanActivate } from '@nestjs/common';
+import { CanActivate } from '@nestjs/common';
 import { GraphqlPassportAuthGuard } from '@odin/guards/auth.guard';
 
 export const GqlGuard = (...extraGuards: (Function | CanActivate)[]) => {

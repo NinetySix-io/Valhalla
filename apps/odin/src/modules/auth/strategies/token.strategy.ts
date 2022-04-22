@@ -3,7 +3,7 @@ import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { Environment } from '@odin/environment';
 import { JwtService } from '../services/jwt.service';
 import { PassportStrategy } from '@nestjs/passport';
-import type { Request } from 'express';
+import { Request } from 'express';
 import { Strategy } from 'passport-custom';
 import { UserRefreshTokensModel } from '@odin/data.models/user.refresh.tokens';
 import { UserSchema } from '@odin/data.models/users/schema';

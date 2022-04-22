@@ -8,9 +8,7 @@ import { UpdateUserInput } from './graphql/update.user.input';
 
 @Resolver()
 export class UsersResolver {
-  constructor(
-    private readonly users: UsersModel, // @Inject(PUB_SUB) private readonly pubSub: PubSub,
-  ) {}
+  constructor(private readonly users: UsersModel) {}
 
   @Query(() => UserSchema, { description: 'Get logged in user information' })
   @GqlGuard()
