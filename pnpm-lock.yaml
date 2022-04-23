@@ -322,6 +322,9 @@ importers:
       '@valhalla/tsconfig': workspace:*
       jest: ^27.5.1
       typescript: ^4.6.3
+      yup: ^0.32.11
+    dependencies:
+      yup: 0.32.11
     devDependencies:
       '@valhalla/config': link:../config
       '@valhalla/tsconfig': link:../tsconfig

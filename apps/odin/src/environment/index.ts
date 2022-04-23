@@ -1,5 +1,7 @@
 import * as Yup from 'yup';
 
+//TODO: not sure why normal import is not working
+import { buildEnvironment } from '@valhalla/utilities/dist/env';
 import dotenv from 'dotenv';
 
 const schema = Yup.object({
@@ -33,40 +35,10 @@ const schema = Yup.object({
   APPLE_KEY_ID: Yup.string(),
 });
 
-export class Environment {
-  private static schema = schema;
-  private static _variables: ReturnType<typeof schema['validateSync']>;
-
-  static initialize() {
-    const vars = dotenv.config({ override: true }).parsed;
-    this._variables = this.schema.validateSync({
-      ...process.env,
-      ...vars,
-    });
-  }
-
-  static get variables() {
-    if (!this._variables) {
-      this.initialize();
-    }
-
-    return this._variables;
-  }
-
-  static get isProd() {
-    return this.variables.NODE_ENV === 'production';
-  }
-
-  static get isDev() {
-    return (
-      !this.variables.NODE_ENV || this.variables.NODE_ENV === 'development'
-    );
-  }
-
-  static get isTest() {
-    return this.variables.NODE_ENV === 'test';
-  }
-
+export class Environment extends buildEnvironment({
+  schema,
+  vars: dotenv.config({ override: true }).parsed,
+}) {
   static get serviceUrl() {
     let domain = this.variables.SERVICE_URL;
     if (this.isDev) {
