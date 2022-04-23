@@ -39,7 +39,10 @@ export class Environment {
 
   static initialize() {
     const vars = dotenv.config({ override: true }).parsed;
-    this._variables = this.schema.validateSync(vars);
+    this._variables = this.schema.validateSync({
+      ...process.env,
+      ...vars,
+    });
   }
 
   static get variables() {
