@@ -22,15 +22,13 @@
   "Schema": {
     "prefix": "oschema",
     "body": [
-      "import { modelOptions, prop } from '@typegoose/typegoose';",
+      "import { prop } from '@typegoose/typegoose';",
+      "import { simpleModel } from '../_base/decorators/simple.model';",
       "import { BaseSchema } from '@odin/data.models/_base/schema';",
+      "import { ObjectType } from '@nestjs/graphql';",
       "",
-      "@modelOptions({",
-      "\tschemaOptions: {",
-      "\t\tcollection: '$1',",
-      "\t\ttimestamps: true,",
-      "\t},",
-      "})",
+      "@ObjectType()",
+      "@simpleModel('$1')",
       "export class $2Schema extends BaseSchema {",
       "\t$3",
       "}"

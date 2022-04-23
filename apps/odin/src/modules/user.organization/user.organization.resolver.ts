@@ -1,6 +1,5 @@
-import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { OrganizationsModel } from '@odin/data.models/organizations';
-import { OrganizationSchema } from '@odin/data.models/organizations/schema';
 import { UserMembershipsModel } from '@odin/data.models/user.memberships';
 import {
   UserMembershipGroupType,
@@ -9,6 +8,7 @@ import {
 import { UserSchema } from '@odin/data.models/users/schema';
 import { CurrentUser } from '@odin/decorators/current.user.decorator';
 import { GqlGuard } from '@odin/guards/gql.passport.guard.decorator';
+import { UserMembershipType } from './graphql/user.memberships.type';
 
 @Resolver()
 export class UserOrganizationResolver {
@@ -18,19 +18,31 @@ export class UserOrganizationResolver {
   ) {}
 
   @GqlGuard()
-  @Query(() => [OrganizationSchema], {
+  @Query(() => [UserMembershipType], {
     description: 'Get organizations that the user belongs to',
   })
   async getUserOrganizationMemberships(
     @CurrentUser() userId: UserSchema['_id'],
-  ) {
-    const orgIdList = await this.memberships.findDistinctGroupByUser(userId);
+  ): Promise<UserMembershipType[]> {
+    const memberships = await this.memberships.find({ user: userId });
+    const membershipGroups = memberships.map((mem) => mem.group);
     const organizations = await this.organizations
       .find()
       .where('_id')
-      .in(orgIdList);
+      .in(membershipGroups);
 
-    return organizations.map((org) => org.toPublic());
+    return memberships.map((entry) => {
+      const entryId = entry.toObject().id;
+      const group = organizations.find((org) => org.toObject().id === entryId);
+      return {
+        groupType: entry.groupType,
+        role: entry.role,
+        group: {
+          name: group.name,
+          avatar: group.logo,
+        },
+      };
+    });
   }
 
   @Mutation(() => Boolean, { description: 'Create an organization' })

@@ -3,6 +3,7 @@ import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Severity, index, prop } from '@typegoose/typegoose';
 
 import { BaseSchema } from '../_base/schema';
+import { IsEnum } from 'class-validator';
 import { Ref } from '@typegoose/typegoose';
 import { UserSchema } from '../users/schema';
 import { simpleModel } from '../_base/decorators/simple.model';
@@ -36,8 +37,9 @@ export class UserAuthProviderSchema extends BaseSchema {
   @prop()
   refreshToken: string;
 
-  @Field({ description: 'Auth Provider connected to user account' })
   @Expose()
+  @IsEnum(AuthProvider)
+  @Field({ description: 'Auth Provider connected to user account' })
   @prop()
   provider: AuthProvider;
 

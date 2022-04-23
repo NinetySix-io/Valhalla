@@ -1,8 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { IsDate, IsEnum } from 'class-validator';
-import { Ref, mongoose } from '@typegoose/typegoose';
-import { index, prop } from '@typegoose/typegoose';
+import { Ref, index, mongoose, prop } from '@typegoose/typegoose';
 
 import { BaseSchema } from '@odin/data.models/_base/schema';
 import { IsObjectId } from '@odin/lib/class.validators/is.object.id';
@@ -13,6 +12,7 @@ import { simpleModel } from '../_base/decorators/simple.model';
 export enum UserMembershipRole {
   OWNER = 'OWNER',
   MEMBER = 'MEMBER',
+  ADMIN = 'ADMIN',
 }
 
 export enum UserMembershipGroupType {
@@ -21,12 +21,12 @@ export enum UserMembershipGroupType {
 
 registerEnumType(UserMembershipRole, {
   name: 'UserMembershipRole',
-  description: 'User Membership Group Role',
+  description: 'User Membership Role',
 });
 
 registerEnumType(UserMembershipGroupType, {
   name: 'UserMembershipGroupType',
-  description: 'User Membership Group Type',
+  description: 'User Memberships Group Type',
 });
 
 @ObjectType()
@@ -41,9 +41,7 @@ export class UserMembershipSchema extends BaseSchema {
   @prop({ ref: () => UserSchema })
   user: Ref<UserSchema>;
 
-  @Field(() => String, {
-    description: 'Group that the user belongs to',
-  })
+  @Field(() => String, { description: 'Group that the user belongs to' })
   @Expose()
   @prop()
   group: mongoose.Types.ObjectId;
@@ -53,13 +51,13 @@ export class UserMembershipSchema extends BaseSchema {
     description: 'Group type for the membership',
   })
   @IsEnum(UserMembershipGroupType)
-  @prop({ enum: UserMembershipGroupType })
+  @prop()
   groupType: UserMembershipGroupType;
 
   @Expose()
   @Field(() => UserMembershipRole, { description: 'User role within group' })
   @IsEnum(UserMembershipRole)
-  @prop({ enum: UserMembershipRole })
+  @prop()
   role: UserMembershipRole;
 
   @Field({ nullable: true })
