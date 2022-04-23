@@ -1,6 +1,5 @@
-import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { OrganizationsModel } from '@odin/data.models/organizations';
-import { OrganizationSchema } from '@odin/data.models/organizations/schema';
 import { UserMembershipsModel } from '@odin/data.models/user.memberships';
 import {
   UserMembershipGroupType,
