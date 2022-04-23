@@ -2,7 +2,7 @@ import "../styles/global.css";
 import "../scripts/wdyr";
 
 import { AppProps } from "next/app";
-import { Layout } from "@heimdallr/layout";
+import { Layout } from "@loki/layout";
 
 function App({ Component, pageProps }: AppProps) {
   return (

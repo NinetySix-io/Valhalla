@@ -1,3 +1,3 @@
-# Heimdallr
+# Loki
 
 Internal facing Dashboard
