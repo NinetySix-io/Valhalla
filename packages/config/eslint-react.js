@@ -38,7 +38,6 @@ module.exports = {
     "react/display-name": "off",
     "react/jsx-no-target-blank": "off",
     "react/prop-types": "off",
-    "@typescript-eslint/consistent-type-imports": "error",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-inferrable-types": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
