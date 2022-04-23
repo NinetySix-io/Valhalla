@@ -143,6 +143,9 @@ input AuthProviderUnlinkLinkInput {
 input ChangeOrganizationRoleInput {
   """User ID"""
   user: String!
+
+  """User role within group"""
+  role: UserMembershipRole!
 }
 
 input CreateSiteInput {
