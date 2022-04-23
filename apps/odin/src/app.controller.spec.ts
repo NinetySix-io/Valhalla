@@ -15,7 +15,7 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('Succeed', async () => {
+    it('Succeed', () => {
       expect(appController.getStatus()).toEqual({
         status: 'ok',
       });
