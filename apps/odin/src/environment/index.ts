@@ -55,7 +55,9 @@ export class Environment {
   }
 
   static get isDev() {
-    return this.variables.NODE_ENV === 'development';
+    return (
+      !this.variables.NODE_ENV || this.variables.NODE_ENV === 'development'
+    );
   }
 
   static get isTest() {
