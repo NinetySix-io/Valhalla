@@ -10,6 +10,7 @@ export class ChangeOrganizationRoleInput {
   @IsObjectId()
   user: string;
 
+  // TODO: When using `PickType` on an enum, it does not transfer
   @Field(() => UserMembershipRole, { description: 'User role within group' })
   @IsEnum(UserMembershipRole)
   role: UserMembershipRole;
