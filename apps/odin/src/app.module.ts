@@ -9,6 +9,7 @@ import { GraphqlPassportAuthGuard } from '@odin/guards/auth.guard';
 import { HealthModule } from './modules/health/health.module';
 import { MiddlewareConsumer } from '@nestjs/common';
 import { Module } from '@nestjs/common';
+import { ParamValidationPipe } from './pipes/param.validation';
 import { RequestLoggerMiddleware } from '@odin/middlewares/request.logger';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { UserAdminOrganizationModule } from './modules/user.admin.organization/user.admin.organization.module';
@@ -49,7 +50,7 @@ import { UserOrganizationModule } from './modules/user.organization/user.organiz
     UserAdminOrganizationModule,
   ],
   controllers: [AppController],
-  providers: [GraphqlPassportAuthGuard],
+  providers: [GraphqlPassportAuthGuard, ParamValidationPipe],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer): void {
