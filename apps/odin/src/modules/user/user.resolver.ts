@@ -3,6 +3,11 @@ import { UsersModel } from '@odin/data.models/users';
 import { UserSchema } from '@odin/data.models/users/schema';
 import { CurrentUser } from '@odin/decorators/current.user.decorator';
 import { GqlGuard } from '@odin/guards/gql.passport.guard.decorator';
+import { ParamValidationPipe } from '@odin/pipes/param.validation';
+import {
+  EmailParamValidation,
+  PhoneParamValidation,
+} from '@odin/pipes/param.validation/pre.build';
 
 @Resolver()
 export class UsersResolver {
@@ -19,7 +24,8 @@ export class UsersResolver {
   @GqlGuard()
   async updateUserEmail(
     @CurrentUser() userId: UserSchema['_id'],
-    @Args('email') email: string,
+    @Args('email', new ParamValidationPipe([EmailParamValidation]))
+    email: string,
   ): Promise<boolean> {
     await this.users.updateOne(
       { _id: userId, email: { $ne: email } },
@@ -33,7 +39,8 @@ export class UsersResolver {
   @GqlGuard()
   async updateUserPhone(
     @CurrentUser() userId: UserSchema['_id'],
-    @Args('phone') phone: string,
+    @Args('phone', new ParamValidationPipe([PhoneParamValidation]))
+    phone: string,
   ): Promise<boolean> {
     await this.users.updateOne(
       { _id: userId, phone: { $ne: phone } },
@@ -47,7 +54,8 @@ export class UsersResolver {
   @GqlGuard()
   async updateUserDisplayName(
     @CurrentUser() userId: UserSchema['_id'],
-    @Args('displayName') displayName: string,
+    @Args('displayName')
+    displayName: string,
   ): Promise<boolean> {
     await this.users.updateOne({ _id: userId }, { displayName });
     return true;

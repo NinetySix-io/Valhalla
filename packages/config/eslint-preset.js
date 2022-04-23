@@ -21,5 +21,7 @@ module.exports = {
       rootDir: ["apps/*/", "packages/*/"],
     },
   },
-  rules: {},
+  rules: {
+    "@typescript-eslint/ban-types": "off",
+  },
 };
