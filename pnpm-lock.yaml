@@ -10,7 +10,7 @@ importers:
       prettier: 2.6.2
       turbo: 1.2.1
 
-  apps/heimdallr:
+  apps/loki:
     specifiers:
       '@types/node': ^17.0.23
       '@types/react': ^18.0.1
