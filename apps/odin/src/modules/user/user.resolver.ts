@@ -3,8 +3,6 @@ import { UsersModel } from '@odin/data.models/users';
 import { UserSchema } from '@odin/data.models/users/schema';
 import { CurrentUser } from '@odin/decorators/current.user.decorator';
 import { GqlGuard } from '@odin/guards/gql.passport.guard.decorator';
-import { instanceToPlain } from 'class-transformer';
-import { UpdateUserInput } from './graphql/update.user.input';
 
 @Resolver()
 export class UsersResolver {
@@ -19,15 +17,39 @@ export class UsersResolver {
 
   @Mutation(() => Boolean)
   @GqlGuard()
-  async updateUser(
+  async updateUserEmail(
     @CurrentUser() userId: UserSchema['_id'],
-    @Args('input') input: UpdateUserInput,
+    @Args('email') email: string,
   ): Promise<boolean> {
-    const payload = instanceToPlain(input, {
-      exposeUnsetFields: false,
-    });
+    await this.users.updateOne(
+      { _id: userId, email: { $ne: email } },
+      { email, emailVerified: false },
+    );
 
-    await this.users.updateOne({ _id: userId }, { $set: payload });
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @GqlGuard()
+  async updateUserPhone(
+    @CurrentUser() userId: UserSchema['_id'],
+    @Args('phone') phone: string,
+  ): Promise<boolean> {
+    await this.users.updateOne(
+      { _id: userId, phone: { $ne: phone } },
+      { phone, phoneVerified: false },
+    );
+
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @GqlGuard()
+  async updateUserDisplayName(
+    @CurrentUser() userId: UserSchema['_id'],
+    @Args('displayName') displayName: string,
+  ): Promise<boolean> {
+    await this.users.updateOne({ _id: userId }, { displayName });
     return true;
   }
 }
