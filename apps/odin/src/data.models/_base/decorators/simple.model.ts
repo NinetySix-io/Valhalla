@@ -6,7 +6,7 @@ export function simpleModel(collection: string, options: ICustomOptions = {}) {
   return function (target): void {
     return modelOptions({
       options: {
-        allowMixed: Severity.ERROR,
+        allowMixed: Severity.WARN,
         ...options,
       },
       schemaOptions: {

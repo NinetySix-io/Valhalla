@@ -121,7 +121,6 @@ importers:
       react-dom: ^16
       reflect-metadata: ^0.1.13
       rimraf: ^3.0.2
-      run-script-webpack-plugin: ^0.0.11
       rxjs: ^7.5.5
       source-map-support: ^0.5.21
       supertest: ^6.2.2
@@ -134,7 +133,6 @@ importers:
       tsconfig-paths: ^3.14.1
       typescript: ^4.6.3
       webpack: ^5.72.0
-      webpack-node-externals: ^3.0.0
       yup: ^0.32.11
     dependencies:
       '@nestjs/apollo': 10.0.8_93ff50e52a338d538904e05ba70dfdb3
@@ -210,7 +208,6 @@ importers:
       prettier: 2.6.2
       react: 16.14.0
       react-dom: 16.14.0_react@16.14.0
-      run-script-webpack-plugin: 0.0.11
       source-map-support: 0.5.21
       supertest: 6.2.2
       ts-jest: 27.1.4_9985e1834e803358b7be1e6ce5ca0eea
@@ -220,7 +217,6 @@ importers:
       tsconfig-paths: 3.14.1
       typescript: 4.6.3
       webpack: 5.72.0
-      webpack-node-externals: 3.0.0
 
   apps/thor:
     specifiers:
@@ -7230,11 +7226,6 @@ packages:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
     dependencies:
       queue-microtask: 1.2.3
-
-  /run-script-webpack-plugin/0.0.11:
-    resolution: {integrity: sha512-QmuBhiqBPmhQLpO5vMBHVTAGyoPBnrCM5gQ3IzgieiImBXiBbXcIv4kysCT1gilFNFxQk22oKQfiIhWbT/zXCw==}
-    engines: {node: '>=12'}
-    dev: true
 
   /rxjs/6.6.7:
     resolution: {integrity: sha512-hTdwr+7yYNIT5n4AMYp85KA6yw2Va0FLa3Rguvbpa4W3I5xynaBZo41cM3XM+4Q6fRMj3sBYIR1VAmZMXYJvRQ==}
