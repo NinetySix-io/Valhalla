@@ -22,7 +22,6 @@ const logger = new Logger();
 const PORT = Environment.variables.PORT || 5000;
 
 async function bootstrap() {
-  Environment.initialize();
   const app = await NestFactory.create(AppModule, { logger });
 
   app.getHttpAdapter().getInstance().disable('x-powered-by');
