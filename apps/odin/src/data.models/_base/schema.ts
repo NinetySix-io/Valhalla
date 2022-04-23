@@ -11,18 +11,18 @@ export abstract class BaseSchema {
   @prop()
   _id: mongoose.Types.ObjectId;
 
-  @Field(() => ID)
+  @Field(() => ID, { description: 'Identifier of the entity' })
   @Expose()
   get id() {
     return this._id.toHexString();
   }
 
-  @Field()
+  @Field({ description: 'Date entity was created' })
   @Expose()
   @prop()
   createdAt: Date;
 
-  @Field()
+  @Field({ description: 'Date entity was updated' })
   @Expose()
   @prop()
   updatedAt: Date;

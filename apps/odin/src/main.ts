@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+
 import { Logger, ValidationPipe } from '@nestjs/common';
 
 import { AppModule } from '@odin/app.module';
@@ -9,14 +11,10 @@ import { bodyParser } from '@odin/middlewares/body.parser';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import { httpsSecurity } from '@odin/middlewares/helmet';
-import mongoose from 'mongoose';
 import { organizationHeader } from './middlewares/organization.header';
 import { rateLimit } from '@odin/middlewares/rate.limit';
 import { setupSwagger } from './swagger';
 import { voyager } from '@odin/middlewares/voyager';
-
-/* eslint-disable */
-declare const module: any;
 
 const logger = new Logger();
 const PORT = Environment.variables.PORT || 5000;
@@ -53,15 +51,7 @@ async function bootstrap() {
   );
 
   app.enableShutdownHooks();
-
   await app.listen(PORT);
-
-  if (module.hot) {
-    await mongoose.connection?.close();
-    module.hot.accept();
-    module.hot.dispose(() => app.close());
-  }
-
   return app;
 }
 
@@ -71,5 +61,5 @@ bootstrap()
   })
   .catch((error) => {
     logger.error('Error starting server', error);
-    process.exit;
+    process.exit();
   });
