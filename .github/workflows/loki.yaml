@@ -61,8 +61,8 @@ jobs:
         with:
           eslint: true
 
-      - name: Test
-        run: pnpm run test
+      # - name: Test
+      #   run: pnpm run test
 
       - name: Build
         if: github.event_name == 'pull_request'
