@@ -18,7 +18,8 @@
     "upserted",
     "virtuals",
     "wdyr",
-    "wearerequired"
+    "wearerequired",
+    "welldone"
   ],
   "editor.quickSuggestions": {
     "strings": true // forces VS Code to trigger completions when editing "string" content
