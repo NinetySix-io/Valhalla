@@ -1,4 +1,4 @@
-import { Layout } from "@thor/layout";
+import { Layout } from '@thor/layout';
 
 export default function Home() {
   return (

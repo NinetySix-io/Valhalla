@@ -1,4 +1,4 @@
-import { Logo } from "@valhalla/react";
+import { Logo } from '@valhalla/react';
 
 export default function Home() {
   return (
