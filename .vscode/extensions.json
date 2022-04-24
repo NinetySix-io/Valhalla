@@ -1,0 +1,17 @@
+{
+  "recommendations": [
+    "jdforsythe.add-new-line-to-files",
+    "eamodio.gitlens",
+    "dbaeumer.vscode-eslint",
+    "amatiasq.sort-imports",
+    "airyshift.spaces-inside-braces",
+    "esbenp.prettier-vscode",
+    "christian-kohler.npm-intellisense",
+    "codestream.codestream",
+    "silvenon.mdx",
+    "streetsidesoftware.code-spell-checker",
+    "stepsize.tech-debt-tracker",
+    "styled-components.vscode-styled-components",
+    "pflannery.vscode-versionlens"
+  ]
+}
