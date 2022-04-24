@@ -6,6 +6,14 @@
       "outputs": ["dist/**", ".next/**", "public/dist/**"],
       "dependsOn": ["^build"]
     },
+    "loki#build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**"]
+    },
+    "thor#build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**"]
+    },
     "test": {
       "outputs": ["coverage/**"],
       "dependsOn": []
@@ -19,5 +27,6 @@
     "clean": {
       "cache": false
     }
-  }
+  },
+  "globalDependencies": ["$GITHUB_TOKEN", "tsconfig.json"]
 }

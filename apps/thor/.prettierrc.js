@@ -1,1 +1,1 @@
-module.exports = require("../../packages/config/.prettierrc");
+module.exports = require('@valhalla/config/.prettierrc');

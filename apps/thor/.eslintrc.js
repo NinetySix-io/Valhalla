@@ -1,7 +1,7 @@
 /* eslint-disable */
 module.exports = {
-  extends: ["../../packages/config/eslint-react"],
+  extends: ['@valhalla/config/eslint-react'],
   rules: {
-    "react/react-in-jsx-scope": "off",
+    'react/react-in-jsx-scope': 'off',
   },
 };
