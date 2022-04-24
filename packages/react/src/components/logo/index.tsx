@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import type { ComponentProps } from "../types";
+import { ComponentProps } from "@packages/react/types";
 import Image from "next/image";
 import LogoAsset from "../../assets/logo.png";
 
