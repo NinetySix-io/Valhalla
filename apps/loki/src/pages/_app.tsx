@@ -1,13 +1,13 @@
-import "../scripts/wdyr";
+import '../scripts/wdyr';
 
-import { createEmotionCache, theme } from "@valhalla/react";
+import { createEmotionCache, theme } from '@valhalla/react';
 
-import { AppProps } from "next/app";
-import { CacheProvider } from "@emotion/react";
-import CssBaseline from "@mui/material/CssBaseline";
-import Head from "next/head";
-import { Layout } from "@loki/layout";
-import { ThemeProvider } from "@mui/material/styles";
+import { AppProps } from 'next/app';
+import { CacheProvider } from '@emotion/react';
+import CssBaseline from '@mui/material/CssBaseline';
+import Head from 'next/head';
+import { Layout } from '@loki/layout';
+import { ThemeProvider } from '@mui/material/styles';
 
 const clientSideEmotionCache = createEmotionCache();
 

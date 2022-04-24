@@ -1,9 +1,9 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { Box, Container, styled } from "@mui/material";
+import { Box, Container, styled } from '@mui/material';
 
-import { Footer } from "./footer";
-import { cProps } from "@valhalla/react";
+import { Footer } from './footer';
+import { cProps } from '@valhalla/react';
 
 type Props = cProps;
 

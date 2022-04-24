@@ -1,9 +1,9 @@
-import * as React from "react";
+import * as React from 'react';
 
-import Document, { Head, Html, Main, NextScript } from "next/document";
-import { createEmotionCache, theme } from "@valhalla/react";
+import Document, { Head, Html, Main, NextScript } from 'next/document';
+import { createEmotionCache, theme } from '@valhalla/react';
 
-import createEmotionServer from "@emotion/server/create-instance";
+import createEmotionServer from '@emotion/server/create-instance';
 
 export default class Doc extends Document {
   render() {
@@ -18,7 +18,7 @@ export default class Doc extends Document {
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
           {/* Inject MUI styles first to match with the prepend: true configuration. */}
-          {this.props["emotionStyleTags"]}
+          {this.props['emotionStyleTags']}
         </Head>
         <body>
           <Main />
@@ -76,7 +76,7 @@ Doc.getInitialProps = async (ctx) => {
   const emotionStyles = extractCriticalToChunks(initialProps.html);
   const emotionStyleTags = emotionStyles.styles.map((style) => (
     <style
-      data-emotion={`${style.key} ${style.ids.join(" ")}`}
+      data-emotion={`${style.key} ${style.ids.join(' ')}`}
       key={style.key}
       // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={{ __html: style.css }}
