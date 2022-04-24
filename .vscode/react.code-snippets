@@ -1,4 +1,9 @@
 {
+  "Import React": {
+    "prefix": "ir",
+    "description": "Import React",
+    "body": "import * as React from 'react';"
+  },
   "Functional Component": {
     "prefix": "fc",
     "description": "Functional Component Template",
