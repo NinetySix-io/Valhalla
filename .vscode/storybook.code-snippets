@@ -1,0 +1,21 @@
+{
+  "Storybook Component": {
+    "prefix": "sc",
+    "description": "Component template",
+    "body": [
+      "import * as React from 'react';",
+      "",
+      "import { ComponentMeta } from '@storybook/react';",
+      "import { $1 } from './index';",
+      "",
+      "type ComponentType = typeof $1;",
+
+      "const Meta: ComponentMeta<ComponentType> = {",
+      "\ttitle: 'Components/$1',",
+      "\tcomponent: $1,",
+      "};",
+      "",
+      "export default Meta;"
+    ]
+  }
+}
