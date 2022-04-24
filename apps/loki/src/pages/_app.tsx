@@ -1,4 +1,3 @@
-import "../styles/global.css";
 import "../scripts/wdyr";
 
 import { AppProps } from "next/app";

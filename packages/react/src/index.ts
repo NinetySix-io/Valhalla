@@ -1,1 +1,2 @@
-export * from "./logo";
+export * from "./components/logo";
+export * from "./types";
