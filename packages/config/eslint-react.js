@@ -35,15 +35,7 @@ module.exports = {
     "plugin:prettier/recommended",
   ],
   rules: {
-    "react/display-name": "off",
-    "react/jsx-no-target-blank": "off",
-    "react/prop-types": "off",
-    "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/no-inferrable-types": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/member-delimiter-style": "off",
     "@next/next/no-html-link-for-pages": "off",
-    "react/jsx-key": "off",
   },
 };
