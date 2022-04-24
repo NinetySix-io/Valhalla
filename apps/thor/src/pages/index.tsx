@@ -1,9 +1,29 @@
-import { Layout } from '@thor/layout';
+import { Box, Typography, styled } from '@mui/material';
+
+import { GetServerSideProps } from 'next';
+import Link from 'next/link';
+
+const Page = styled(Box)`
+  flex-grow: 1;
+`;
 
 export default function Home() {
   return (
-    <Layout>
-      <h1>Thor</h1>
-    </Layout>
+    <Page>
+      <Typography variant="h1">Thor</Typography>
+      <Link href="/login">
+        <a>Login</a>
+      </Link>
+    </Page>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    props: {},
+    redirect: {
+      permanent: false,
+      destination: '/login',
+    },
+  };
+};

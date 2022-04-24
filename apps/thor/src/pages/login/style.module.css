@@ -1,0 +1,10 @@
+.button {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 10px 30px;
+}
+
+.button svg {
+  margin-right: 10px;
+}

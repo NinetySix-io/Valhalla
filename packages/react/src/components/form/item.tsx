@@ -30,6 +30,7 @@ const Label = styled('label')`
 const Error = styled(Typography)`
   color: ${red[400]};
   font-size: small;
+  min-height: 30px;
 `;
 
 export const FormItem: React.FC<Props> = ({

@@ -1,7 +1,7 @@
 {
   "Storybook Component": {
     "prefix": "sc",
-    "description": "Component template",
+    "description": "Storybook component template",
     "body": [
       "import * as React from 'react';",
       "",
@@ -9,11 +9,39 @@
       "import { $1 } from './index';",
       "",
       "type ComponentType = typeof $1;",
-
+      "",
       "const Meta: ComponentMeta<ComponentType> = {",
       "\ttitle: 'Components/$1',",
       "\tcomponent: $1,",
       "};",
+      "",
+      "export default Meta;"
+    ]
+  },
+  "Storybook Component With Template": {
+    "prefix": "sct",
+    "description": "Storybook component template with template",
+    "body": [
+      "import * as React from 'react';",
+      "",
+      "import { ComponentMeta } from '@storybook/react';",
+      "import { $1 } from './index';",
+      "",
+      "type ComponentType = typeof $1;",
+      "type Props = React.ComponentProps<ComponentType>;",
+      "",
+      "const Meta: ComponentMeta<ComponentType> = {",
+      "\ttitle: 'Components/$1',",
+      "\tcomponent: $1,",
+      "};",
+      "",
+      "const Template = (props: Props) => <$1 {...props}/>",
+      "",
+      "export const $2 = Template.bind({})",
+      "",
+      "$2.args = {",
+      "",
+      "} as Props",
       "",
       "export default Meta;"
     ]
