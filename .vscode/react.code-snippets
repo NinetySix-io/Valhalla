@@ -1,0 +1,18 @@
+{
+  "Functional Component": {
+    "prefix": "fc",
+    "description": "Functional Component Template",
+    "body": [
+      "import * as React from 'react';",
+      "",
+      "import { cProps } from '@valhalla/react'",
+      "",
+      "type Props = cProps;",
+      "",
+      "export const $1: React.FC<Props> = () => {",
+      "\treturn <div></div>;",
+      "};",
+      ""
+    ]
+  }
+}
