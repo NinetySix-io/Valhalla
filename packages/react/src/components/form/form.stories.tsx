@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Container, Grid, TextField } from '@mui/material';
+import { Button, Container, Grid, TextField, Typography } from '@mui/material';
 
 import { ComponentMeta } from '@storybook/react';
 import { Form } from './index';
@@ -21,14 +21,17 @@ export const SampleForm: React.FC = () => {
 
   return (
     <Container maxWidth="sm">
-      <Grid container direction="column" spacing={2}>
+      <Grid container direction="column" spacing={1}>
+        <Grid item>
+          <Typography variant="h4">Sample Form</Typography>
+        </Grid>
         <Grid item>
           <Form form={form} onFinish={handleSubmit}>
             <Form.Item
               name="input"
               rules={[{ required: true, message: 'Required' }]}
             >
-              <TextField variant="filled" placeholder="Sample Input" />
+              <TextField variant="outlined" placeholder="Sample Input" />
             </Form.Item>
           </Form>
         </Grid>
