@@ -9,12 +9,12 @@ import { Button, Container, Grid, Typography, styled } from '@mui/material';
 
 import { BaseLayout } from '@thor/layout/base';
 import { FaUser } from 'react-icons/fa';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps } from '@valhalla/react';
 import NextLink from 'next/link';
 import { Page } from '@thor/types/next';
 import React from 'react';
 import cx from 'clsx';
-import styles from './style.module.css';
+import styles from './styles.module.css';
 
 const PageContainer = styled(Container)`
   flex-grow: 1;
@@ -100,7 +100,11 @@ const LoginPage: Page = () => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   return {
-    props: {},
+    props: {
+      SEO: {
+        title: 'Login',
+      },
+    },
   };
 };
 

@@ -6,7 +6,7 @@ import {
   Typography,
   styled,
 } from '@mui/material';
-import { EmailLoginForm, Logo } from '@valhalla/react';
+import { EmailLoginForm, GetServerSideProps, Logo } from '@valhalla/react';
 
 import { BaseLayout } from '@thor/layout/base';
 import { FaArrowLeft } from 'react-icons/fa';
@@ -75,5 +75,15 @@ const LoginEmailPage: Page = () => {
 };
 
 LoginEmailPage.Layout = BaseLayout;
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    props: {
+      SEO: {
+        title: 'Login with Email',
+      },
+    },
+  };
+};
 
 export default LoginEmailPage;

@@ -316,13 +316,15 @@ importers:
       '@storybook/addon-links': ^6.4.22
       '@storybook/react': ^6.4.22
       '@storybook/testing-library': 0.0.11
-      '@types/react': ^18.0.1
-      '@types/react-dom': ^18.0.0
+      '@types/react': ^18.0.6
+      '@types/react-dom': ^18.0.2
       '@valhalla/config': workspace:*
       '@valhalla/tsconfig': workspace:*
-      autoprefixer: ^10.4.4
+      '@valhalla/utilities': workspace:*
+      autoprefixer: ^10.4.5
       babel-loader: ^8.2.5
       next: 12.1.5
+      next-seo: ^5.4.0
       postcss: ^8.4.12
       rc-field-form: ^1.26.2
       react: ^18.0.0
@@ -335,6 +337,7 @@ importers:
       '@emotion/styled': 11.8.1_0f162aecff6af21058626542244d3733
       '@mui/material': 5.6.2_6a30a1b8e94d7c7ed70667bc3922d17f
       next: 12.1.5_cba0cb7a45c5be1acc73e969c348db7f
+      next-seo: 5.4.0_1cf2cc49e2c27648b440cc4e09213966
       rc-field-form: 1.26.2_react-dom@18.0.0+react@18.0.0
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
@@ -352,6 +355,7 @@ importers:
       '@types/react-dom': 18.0.2
       '@valhalla/config': link:../config
       '@valhalla/tsconfig': link:../tsconfig
+      '@valhalla/utilities': link:../utilities
       autoprefixer: 10.4.5_postcss@8.4.12
       babel-loader: 8.2.5_@babel+core@7.17.9
       postcss: 8.4.12

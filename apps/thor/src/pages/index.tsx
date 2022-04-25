@@ -1,6 +1,6 @@
 import { Box, Typography, styled } from '@mui/material';
 
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps } from '@valhalla/react';
 import Link from 'next/link';
 
 const Page = styled(Box)`
@@ -18,7 +18,12 @@ export default function Home() {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   return {
-    props: {},
+    props: {
+      SEO: {
+        title: 'SixtyNine',
+        description: 'The whole operation',
+      },
+    },
     redirect: {
       permanent: false,
       destination: '/login',
