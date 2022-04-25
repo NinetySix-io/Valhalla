@@ -12,21 +12,21 @@ export function buildEnvironment<
   vars: Record<string, string>;
 }) {
   return class Environment {
-    #variables: ReturnType<typeof props['schema']['validateSync']>;
+    variables: ReturnType<typeof props['schema']['validateSync']>;
 
     constructor() {
-      this.#variables = props.schema.validateSync({
+      this.variables = props.schema.validateSync({
         ...(typeof process === 'undefined' ? {} : process.env),
         ...props.vars,
       });
     }
 
-    static get #instance() {
+    static get instance() {
       return new Environment();
     }
 
     static get variables() {
-      return this.#instance.#variables;
+      return this.instance.variables;
     }
 
     static get isProd() {
