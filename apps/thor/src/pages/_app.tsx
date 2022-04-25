@@ -1,6 +1,12 @@
 import '../scripts/wdyr';
 
-import { AppProps, WithSEO, createEmotionCache, theme } from '@valhalla/react';
+import {
+  AppProps,
+  SiteFavicon,
+  WithSEO,
+  createEmotionCache,
+  theme,
+} from '@valhalla/react';
 
 import { CacheProvider } from '@emotion/react';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -19,6 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <CacheProvider value={clientSideEmotionCache}>
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <SiteFavicon />
       </Head>
       <NextSeo
         titleTemplate="%s | SixtyNine"

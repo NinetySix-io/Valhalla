@@ -1,6 +1,6 @@
 import '../scripts/wdyr';
 
-import { createEmotionCache, theme } from '@valhalla/react';
+import { SiteFavicon, createEmotionCache, theme } from '@valhalla/react';
 
 import { AppProps } from 'next/app';
 import { CacheProvider } from '@emotion/react';
@@ -16,6 +16,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <CacheProvider value={clientSideEmotionCache}>
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <SiteFavicon />
       </Head>
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
