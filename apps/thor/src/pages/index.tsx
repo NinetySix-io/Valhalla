@@ -11,9 +11,7 @@ export default function Home() {
   return (
     <Page>
       <Typography variant="h1">Thor</Typography>
-      <Link href="/login">
-        <a>Login</a>
-      </Link>
+      <Link href="/login">Login</Link>
     </Page>
   );
 }
