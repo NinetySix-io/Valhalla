@@ -20,7 +20,7 @@ const Body = styled(Box)`
   flex-grow: 1;
 `;
 
-export const Layout: React.FC<Props> = ({ children }) => {
+export const MainLayout: React.FC<Props> = ({ children }) => {
   return (
     <Wrapper fixed maxWidth="xl">
       <Body>{children}</Body>

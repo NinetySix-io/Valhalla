@@ -1,0 +1,23 @@
+generates:
+  ./src/graphql/odin/generated.gql.ts:
+    schema: ../odin/schema.gql
+    documents: 'src/graphql/odin/**/*.ts'
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+    config:
+      reactApolloVersion: 3
+      immutableTypes: true
+      namingConvention:
+        typeNames: change-case#pascalCase
+        enumValues: change-case#upperCase
+      scalars:
+        DateTime: Date
+        Date: Date
+        Time: Date
+        String: string
+      withHooks: true
+      useIndexSignature: true
+      withMutationFn: true
+      withRefetchFn: true

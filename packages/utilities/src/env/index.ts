@@ -9,7 +9,7 @@ export function buildEnvironment<
   TIn extends Maybe<TypeOfShape<TShape>> = TypeOfShape<TShape>,
 >(props: {
   schema: ObjectSchema<TShape, TContext, TIn>;
-  vars: Record<string, string>;
+  vars?: Record<string, string>;
 }) {
   return class Environment {
     variables: ReturnType<typeof props['schema']['validateSync']>;
@@ -17,7 +17,7 @@ export function buildEnvironment<
     constructor() {
       this.variables = props.schema.validateSync({
         ...(typeof process === 'undefined' ? {} : process.env),
-        ...props.vars,
+        ...(props?.vars ?? {}),
       });
     }
 

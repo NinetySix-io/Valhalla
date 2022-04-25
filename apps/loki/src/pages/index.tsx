@@ -1,5 +1,6 @@
 import { Grid, styled } from '@mui/material';
 
+import { GetServerSideProps } from '@valhalla/react';
 import { Logo } from '@valhalla/react';
 
 const Page = styled(Grid)`
@@ -16,3 +17,18 @@ export default function Home() {
     </Page>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    props: {
+      SEO: {
+        title: 'SixtyNine',
+        description: 'The whole operation',
+      },
+    },
+    redirect: {
+      permanent: false,
+      destination: '/login',
+    },
+  };
+};

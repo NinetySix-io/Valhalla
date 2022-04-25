@@ -12,6 +12,7 @@ import { BaseLayout } from '@thor/layout/base';
 import { FaArrowLeft } from 'react-icons/fa';
 import NextLink from 'next/link';
 import { Page } from '@thor/types/next';
+import { useLoginMutation } from '@thor/graphql/odin/generated.gql';
 
 const PageContainer = styled(Container)`
   flex-grow: 1;
@@ -27,8 +28,21 @@ type Payload = {
 };
 
 const LoginEmailPage: Page = () => {
-  const handleSubmit = (payload: Payload) => {
-    //TODO: add logic
+  const [login, { error, loading }] = useLoginMutation();
+
+  const handleSubmit = async (payload: Payload) => {
+    const result = await login({
+      variables: {
+        input: {
+          username: payload.email,
+          password: payload.password,
+        },
+      },
+    });
+
+    if (result?.data.login.token) {
+      alert('Logged In');
+    }
   };
 
   return (
@@ -57,7 +71,7 @@ const LoginEmailPage: Page = () => {
             Log In
           </Typography>
           <Box>
-            <EmailLoginForm onFinish={handleSubmit} />
+            <EmailLoginForm onFinish={handleSubmit} loading={loading} />
             <NextLink passHref href="/login">
               <Button
                 style={{ width: '100%' }}

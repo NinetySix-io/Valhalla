@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { Button, TextField } from '@mui/material';
-
 import { Form } from '../form';
+import { LoadingButton } from '@mui/lab';
+import { TextField } from '@mui/material';
 import { cProps } from '../../types';
 
 type Payload = {
@@ -12,9 +12,14 @@ type Payload = {
 
 type Props = cProps<{
   onFinish: (payload: Payload) => void;
+  loading?: boolean;
 }>;
 
-export const EmailLoginForm: React.FC<Props> = ({ onFinish, ...props }) => {
+export const EmailLoginForm: React.FC<Props> = ({
+  onFinish,
+  loading,
+  ...props
+}) => {
   const [form] = Form.useForm();
 
   const handleSubmit = (payload: Payload) => {
@@ -32,6 +37,7 @@ export const EmailLoginForm: React.FC<Props> = ({ onFinish, ...props }) => {
       >
         <TextField
           required
+          disabled={loading}
           variant="outlined"
           placeholder="Email Address"
           type="email"
@@ -45,6 +51,7 @@ export const EmailLoginForm: React.FC<Props> = ({ onFinish, ...props }) => {
       >
         <TextField
           required
+          disabled={loading}
           variant="outlined"
           placeholder="Password"
           type="password"
@@ -53,9 +60,14 @@ export const EmailLoginForm: React.FC<Props> = ({ onFinish, ...props }) => {
         />
       </Form.Item>
       <Form.Item>
-        <Button variant="contained" onClick={() => form.submit()}>
+        <LoadingButton
+          loading={loading}
+          variant="contained"
+          onClick={() => form.submit()}
+          loadingPosition="start"
+        >
           Submit
-        </Button>
+        </LoadingButton>
       </Form.Item>
     </Form>
   );
