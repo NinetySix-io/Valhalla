@@ -10,7 +10,7 @@ RUN npm install -g pnpm
 COPY ./pnpm-lock.yaml .
 RUN pnpm fetch
 COPY . .
-RUN pnpm install --frozen-lockfile --unsafe-perm
+RUN pnpm install -r
 
 EXPOSE 3001 3001
 EXPOSE 3002 3002

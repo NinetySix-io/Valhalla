@@ -11,7 +11,7 @@ import { ThemeProvider } from '@mui/material/styles';
 
 const clientSideEmotionCache = createEmotionCache();
 
-function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: AppProps) {
   return (
     <CacheProvider value={clientSideEmotionCache}>
       <Head>
@@ -27,5 +27,3 @@ function App({ Component, pageProps }: AppProps) {
     </CacheProvider>
   );
 }
-
-export default App;

@@ -5,15 +5,20 @@ import { red } from '@mui/material/colors';
 
 export const theme = responsiveFontSizes(
   createTheme({
+    components: {},
+    typography: {
+      h1: {
+        fontSize: 30,
+      },
+    },
     palette: {
       text: {
-        primary: '#fff',
-        // primary: string;
-        // secondary: string;
-        // disabled: string;
+        primary: '#000',
+        secondary: '#000',
+        disabled: '#ccc',
       },
       background: {
-        default: '#000',
+        default: '#fff',
         // paper
       },
       primary: {
@@ -35,5 +40,8 @@ export const theme = responsiveFontSizes(
 // prepend: true moves MUI styles to the top of the <head> so they're loaded first.
 // It allows developers to easily override MUI styles with other styling solutions, like CSS modules.
 export function createEmotionCache() {
-  return createCache({ key: 'css', prepend: true });
+  return createCache({
+    key: 'css',
+    prepend: true,
+  });
 }
