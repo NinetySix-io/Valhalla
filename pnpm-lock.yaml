@@ -308,6 +308,7 @@ importers:
       '@emotion/styled': ^11.8.1
       '@mui/material': ^5.6.2
       '@storybook/addon-actions': ^6.4.22
+      '@storybook/addon-console': ^1.2.3
       '@storybook/addon-essentials': ^6.4.22
       '@storybook/addon-interactions': ^6.4.22
       '@storybook/addon-links': ^6.4.22
@@ -339,6 +340,7 @@ importers:
     devDependencies:
       '@babel/core': 7.17.9
       '@storybook/addon-actions': 6.4.22_8fc472ebaf0018fcdf7cf55b2750c96e
+      '@storybook/addon-console': 1.2.3_@storybook+addon-actions@6.4.22
       '@storybook/addon-essentials': 6.4.22_f2b0a899fb1ae7a3d4e41dcb48c31805
       '@storybook/addon-interactions': 6.4.22_299709825a1c9b0a9a865a3fca4d58fc
       '@storybook/addon-links': 6.4.22_react-dom@18.0.0+react@18.0.0
@@ -3625,6 +3627,15 @@ packages:
       util-deprecate: 1.0.2
     transitivePeerDependencies:
       - '@types/react'
+    dev: true
+
+  /@storybook/addon-console/1.2.3_@storybook+addon-actions@6.4.22:
+    resolution: {integrity: sha512-w5uCUwECA28fdZWoa+A4e/RS9XzBStdd3TwwmpSM5m4fjURJI7Qr+uVq30UeRdgZRH1K7CdWzYUE6RxWXMdVyw==}
+    peerDependencies:
+      '@storybook/addon-actions': '*'
+    dependencies:
+      '@storybook/addon-actions': 6.4.22_8fc472ebaf0018fcdf7cf55b2750c96e
+      global: 4.4.0
     dev: true
 
   /@storybook/addon-controls/6.4.22_299709825a1c9b0a9a865a3fca4d58fc:

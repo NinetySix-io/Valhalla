@@ -28,7 +28,7 @@ type Payload = {
 
 const LoginEmailPage: Page = () => {
   const handleSubmit = (payload: Payload) => {
-    console.log(payload);
+    //TODO: add logic
   };
 
   return (
