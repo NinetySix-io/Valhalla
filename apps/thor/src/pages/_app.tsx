@@ -21,9 +21,11 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
       <NextSeo
+        titleTemplate="%s | SixtyNine"
         title={SEO?.title}
         description={SEO?.description}
-        titleTemplate="%s | SixtyNine"
+        noindex={SEO?.noIndex}
+        nofollow={SEO?.noFollow}
       />
       <ThemeProvider theme={theme}>
         <CssBaseline />

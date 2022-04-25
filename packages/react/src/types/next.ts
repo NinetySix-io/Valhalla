@@ -15,6 +15,8 @@ export type WithSEO<P> = P & {
   SEO?: {
     title?: string;
     description?: string;
+    noIndex?: boolean;
+    noFollow?: boolean;
   };
 };
 
