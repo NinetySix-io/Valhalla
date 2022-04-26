@@ -37,9 +37,9 @@ export const EmailLoginForm: React.FC<Props> = ({
       >
         <TextField
           required
+          label="Email Address"
           disabled={loading}
           variant="outlined"
-          placeholder="Email Address"
           type="email"
           autoComplete="email"
           autoCapitalize="off"
@@ -52,6 +52,7 @@ export const EmailLoginForm: React.FC<Props> = ({
         <TextField
           required
           disabled={loading}
+          label="Password"
           variant="outlined"
           placeholder="Password"
           type="password"
