@@ -28,7 +28,7 @@ type Payload = {
 };
 
 const LoginEmailPage: Page = () => {
-  const [login, { error, loading }] = useLoginMutation();
+  const [login, { loading }] = useLoginMutation();
 
   const handleSubmit = async (payload: Payload) => {
     const result = await login({

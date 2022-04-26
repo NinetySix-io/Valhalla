@@ -1,6 +1,7 @@
 /* eslint-disable */
 module.exports = {
-  extends: ['../../packages/config/eslint-react'],
+  root: true,
+  extends: ['../../packages/config/eslint-react.js'],
   rules: {
     'react/react-in-jsx-scope': 'off',
   },
