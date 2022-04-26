@@ -8,18 +8,18 @@ on:
   push:
     branches: [main]
     paths:
-      - "apps/odin/**"
+      - "apps/serv.odin/**"
   pull_request:
     branches: [main]
     paths:
-      - "apps/odin/**"
+      - "apps/serv.odin/**"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 defaults:
   run:
-    working-directory: apps/odin
+    working-directory: apps/serv.odin
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
