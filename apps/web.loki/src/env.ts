@@ -11,4 +11,8 @@ const schema = Yup.object({
 export class Environment extends buildEnvironment({
   schema,
   vars: publicRuntimeConfig(),
-}) {}
+}) {
+  get isServer() {
+    return typeof window === 'undefined';
+  }
+}

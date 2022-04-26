@@ -20,7 +20,6 @@ export const SiteFavicon: React.FC = () => {
         sizes="16x16"
         href="https://res.cloudinary.com/ninetysix-io/image/upload/v1650834210/NinetySix/Site/favicon-16x16_whljqj.png"
       />
-      <link rel="manifest" href="/site.webmanifest" />
       <link
         rel="mask-icon"
         href="https://res.cloudinary.com/ninetysix-io/image/upload/v1650834210/NinetySix/Site/safari-pinned-tab_udiyvz.svg"
@@ -30,6 +29,10 @@ export const SiteFavicon: React.FC = () => {
       <meta name="application-name" content="NinetySix" />
       <meta name="msapplication-TileColor" content="#000000" />
       <meta name="theme-color" content="#ffffff" />
+      <link
+        rel="manifest"
+        href="https://res.cloudinary.com/ninetysix-io/raw/upload/v1650834210/NinetySix/Site/site_dwepzp.webmanifest"
+      />
     </React.Fragment>
   );
 };

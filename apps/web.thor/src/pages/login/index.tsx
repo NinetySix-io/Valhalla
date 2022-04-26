@@ -31,7 +31,6 @@ const LoginPage: Page = () => {
         container
         spacing={2}
         display="flex"
-        direction="row"
         alignItems="center"
         justifyContent="center"
       >
@@ -40,7 +39,6 @@ const LoginPage: Page = () => {
           xs={12}
           md={6}
           display="flex"
-          direction="column"
           alignItems="center"
           justifyContent="center"
         >
@@ -109,4 +107,5 @@ export const getServerSideProps: GetServerSideProps = async () => {
 };
 
 LoginPage.Layout = BaseLayout;
+
 export default LoginPage;

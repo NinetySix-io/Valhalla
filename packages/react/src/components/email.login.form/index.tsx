@@ -36,7 +36,6 @@ export const EmailLoginForm: React.FC<Props> = ({
         ]}
       >
         <TextField
-          required
           label="Email Address"
           disabled={loading}
           variant="outlined"
@@ -50,7 +49,6 @@ export const EmailLoginForm: React.FC<Props> = ({
         rules={[{ required: true, message: 'Required' }]}
       >
         <TextField
-          required
           disabled={loading}
           label="Password"
           variant="outlined"
@@ -65,7 +63,6 @@ export const EmailLoginForm: React.FC<Props> = ({
           loading={loading}
           variant="contained"
           onClick={() => form.submit()}
-          loadingPosition="start"
         >
           Submit
         </LoadingButton>

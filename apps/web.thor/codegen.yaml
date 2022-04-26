@@ -1,6 +1,6 @@
 generates:
   ./src/graphql/odin/generated.gql.ts:
-    schema: ../odin/schema.gql
+    schema: ../serv.odin/schema.gql
     documents: 'src/graphql/odin/**/*.ts'
     plugins:
       - 'typescript'

@@ -13,6 +13,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import NextLink from 'next/link';
 import { Page } from '@web.thor/types/next';
 import { useLoginMutation } from '@web.thor/graphql/odin/generated.gql';
+import { withApollo } from '@web.thor/graphql/odin/with.apollo';
 
 const PageContainer = styled(Container)`
   flex-grow: 1;
@@ -51,7 +52,6 @@ const LoginEmailPage: Page = () => {
         container
         spacing={2}
         display="flex"
-        direction="row"
         alignItems="center"
         justifyContent="center"
       >
@@ -60,7 +60,6 @@ const LoginEmailPage: Page = () => {
           xs={12}
           md={6}
           display="flex"
-          direction="column"
           alignItems="center"
           justifyContent="center"
         >
@@ -100,4 +99,4 @@ export const getServerSideProps: GetServerSideProps = async () => {
   };
 };
 
-export default LoginEmailPage;
+export default withApollo(LoginEmailPage);

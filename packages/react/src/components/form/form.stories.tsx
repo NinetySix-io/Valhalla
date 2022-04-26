@@ -21,7 +21,7 @@ export const SampleForm: React.FC = () => {
 
   return (
     <Container maxWidth="sm">
-      <Grid container direction="column" spacing={1}>
+      <Grid container spacing={1}>
         <Grid item>
           <Typography variant="h4">Sample Form</Typography>
         </Grid>
