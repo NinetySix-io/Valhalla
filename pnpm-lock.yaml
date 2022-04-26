@@ -256,6 +256,7 @@ importers:
       '@graphql-codegen/typescript-resolvers': ^2.6.1
       '@mui/lab': ^5.0.0-alpha.79
       '@mui/material': ^5.6.3
+      '@next/bundle-analyzer': ^12.1.5
       '@types/node': ^17.0.27
       '@types/react': ^18.0.7
       '@types/react-dom': ^18.0.0
@@ -270,6 +271,7 @@ importers:
       graphql-tag: ^2.12.6
       nanoid: ^3.3.3
       next: 12.1.5
+      next-compose-plugins: ^2.2.1
       next-seo: ^5.4.0
       next-transpile-modules: ^9.0.0
       next-with-apollo: ^5.3.0
@@ -309,6 +311,7 @@ importers:
       '@graphql-codegen/typescript-operations': 2.3.5_graphql@16.4.0
       '@graphql-codegen/typescript-react-apollo': 3.2.11_3eb5f7f34097ec300b63b202a079cac3
       '@graphql-codegen/typescript-resolvers': 2.6.1_graphql@16.4.0
+      '@next/bundle-analyzer': 12.1.5
       '@types/node': 17.0.27
       '@types/react': 18.0.7
       '@types/react-dom': 18.0.0
@@ -316,6 +319,7 @@ importers:
       '@valhalla/tsconfig': link:../../packages/tsconfig
       '@welldone-software/why-did-you-render': 7.0.1_react@18.0.0
       eslint: 8.14.0
+      next-compose-plugins: 2.2.1
       next-transpile-modules: 9.0.0
       typescript: 4.6.3
 
@@ -3993,6 +3997,15 @@ packages:
       tslib: 2.3.1
     dev: true
 
+  /@next/bundle-analyzer/12.1.5:
+    resolution: {integrity: sha512-A9MkhWCPvSp1vl0Ox7IjJ/qpugDC5YAb40btGGIPPXHQtkal107Sf8dbay4fqw4Hekee5gdS0WUMfe1BaSur7w==}
+    dependencies:
+      webpack-bundle-analyzer: 4.3.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+    dev: true
+
   /@next/env/12.1.5:
     resolution: {integrity: sha512-+34yUJslfJi7Lyx6ELuN8nWcOzi27izfYnZIC1Dqv7kmmfiBVxgzR3BXhlvEMTKC2IRJhXVs2FkMY+buQe3k7Q==}
     dev: false
@@ -4198,6 +4211,10 @@ packages:
       schema-utils: 3.1.1
       source-map: 0.7.3
       webpack: 4.46.0
+    dev: true
+
+  /@polka/url/1.0.0-next.21:
+    resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
     dev: true
 
   /@popperjs/core/2.11.5:
@@ -9376,6 +9393,10 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
+  /duplexer/0.1.2:
+    resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==}
+    dev: true
+
   /duplexer2/0.1.4:
     resolution: {integrity: sha1-ixLauHjA1p4+eJEFFmKjL8a93ME=}
     dependencies:
@@ -11061,6 +11082,13 @@ packages:
     resolution: {integrity: sha512-tYDNcRvKCcfHREZYje3v33NSrSD/ZpbWWdPtBtUUuXx9NCo/2QDxYzNqCnMvfsrnbwRpEHMovVrPu/ERoLrIRg==}
     engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
     dev: false
+
+  /gzip-size/6.0.0:
+    resolution: {integrity: sha512-ax7ZYomf6jqPTQ4+XCpUGyXKHk5WweS+e05MBO4/y3WJ5RkmPXNKvX+bx1behVILVwr6JSQvZAku021CHPXG3Q==}
+    engines: {node: '>=10'}
+    dependencies:
+      duplexer: 0.1.2
+    dev: true
 
   /handlebars/4.7.7:
     resolution: {integrity: sha512-aAcXm5OAfE/8IXkcZvCepKU3VzW1/39Fb5ZuqMtgI/hT8X2YgoMvBY5dLhq/cpOvw7Lk1nK/UF71aLG/ZnVYRA==}
@@ -13818,6 +13846,11 @@ packages:
       - supports-color
     dev: false
 
+  /mrmime/1.0.0:
+    resolution: {integrity: sha512-a70zx7zFfVO7XpnQ2IX1Myh9yY4UYvfld/dikWRnsXxbyvMcfz+u6UfgNAtH+k2QqtJuzVpv6eLTx1G2+WKZbQ==}
+    engines: {node: '>=10'}
+    dev: true
+
   /ms/2.0.0:
     resolution: {integrity: sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=}
 
@@ -13918,6 +13951,10 @@ packages:
       mongoose: 6.3.1
       reflect-metadata: 0.1.13
     dev: false
+
+  /next-compose-plugins/2.2.1:
+    resolution: {integrity: sha512-OjJ+fV15FXO2uQXQagLD4C0abYErBjyjE0I0FHpOEIB8upw0hg1ldFP6cqHTJBH1cZqy96OeR3u1dJ+Ez2D4Bg==}
+    dev: true
 
   /next-seo/5.4.0_1cf2cc49e2c27648b440cc4e09213966:
     resolution: {integrity: sha512-R9DhajPwJnR/lsF2hZ8cN8uqr5CVITsRrCG1AF5+ufcaybKYOvnH8sH9MaH4/hpkps3PQ9H71S7J7SPYixAYzQ==}
@@ -14338,6 +14375,11 @@ packages:
     dependencies:
       is-docker: 2.2.1
       is-wsl: 2.2.0
+    dev: true
+
+  /opener/1.5.2:
+    resolution: {integrity: sha512-ur5UIdyw5Y7yEj9wLzhqXiy6GZ3Mwx0yGI+5sMn2r0N0v3cKJvUmFH5yPP+WXh9e0xfyzyJX95D8l088DNFj7A==}
+    hasBin: true
     dev: true
 
   /optimism/0.16.1:
@@ -16324,6 +16366,15 @@ packages:
     resolution: {integrity: sha1-HdrOSYF5j5O9gzlzgD2A1S6TrWo=}
     dev: true
 
+  /sirv/1.0.19:
+    resolution: {integrity: sha512-JuLThK3TnZG1TAKDwNIqNq6QA2afLOCcm+iE8D1Kj3GA40pSPsxQjjJl0J8X3tsR7T+CP1GavpzLwYkgVLWrZQ==}
+    engines: {node: '>= 10'}
+    dependencies:
+      '@polka/url': 1.0.0-next.21
+      mrmime: 1.0.0
+      totalist: 1.1.0
+    dev: true
+
   /sisteransi/1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
     dev: true
@@ -17205,6 +17256,11 @@ packages:
   /toposort/2.0.2:
     resolution: {integrity: sha1-riF2gXXRVZ1IvvNUILL0li8JwzA=}
     dev: false
+
+  /totalist/1.1.0:
+    resolution: {integrity: sha512-gduQwd1rOdDMGxFG1gEvhV88Oirdo2p+KjoYFU7k2g+i7n6AFFbDQ5kMPUsW0pNbfQsB/cwXvT1i4Bue0s9g5g==}
+    engines: {node: '>=6'}
+    dev: true
 
   /tr46/0.0.3:
     resolution: {integrity: sha1-gYT9NH2snNwYWZLzpmIuFLnZq2o=}
@@ -18114,6 +18170,25 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
+  /webpack-bundle-analyzer/4.3.0:
+    resolution: {integrity: sha512-J3TPm54bPARx6QG8z4cKBszahnUglcv70+N+8gUqv2I5KOFHJbzBiLx+pAp606so0X004fxM7hqRu10MLjJifA==}
+    engines: {node: '>= 10.13.0'}
+    hasBin: true
+    dependencies:
+      acorn: 8.7.0
+      acorn-walk: 8.2.0
+      chalk: 4.1.2
+      commander: 6.2.1
+      gzip-size: 6.0.0
+      lodash: 4.17.21
+      opener: 1.5.2
+      sirv: 1.0.19
+      ws: 7.5.7
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+    dev: true
+
   /webpack-dev-middleware/3.7.3_webpack@4.46.0:
     resolution: {integrity: sha512-djelc/zGiz9nZj/U7PTBi2ViorGJXEWo/3ltkPbDyxCXhhEXkW0ce99falaok4TPj+AsxLiXJR0EBOb0zh9fKQ==}
     engines: {node: '>= 6'}
@@ -18436,7 +18511,6 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
-    dev: false
 
   /ws/8.5.0:
     resolution: {integrity: sha512-BWX0SWVgLPzYwF8lTzEy1egjhS4S4OEAHfsO8o65WOVsrnSRGaSiUaa9e0ggGlkMTtBlmOpEXiie9RUcBO86qg==}

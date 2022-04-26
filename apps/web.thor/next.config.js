@@ -1,7 +1,12 @@
-/* eslint-disable */
-const withTM = require('next-transpile-modules')(['@valhalla/react']);
+/* eslint-disable @typescript-eslint/no-var-requires */
 
-module.exports = withTM({
+const withTM = require('next-transpile-modules')(['@valhalla/react']);
+const withPlugins = require('next-compose-plugins');
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+module.exports = withPlugins([withTM, withBundleAnalyzer], {
   reactStrictMode: true,
   swcMinify: true,
   images: {
