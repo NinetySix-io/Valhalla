@@ -5,10 +5,10 @@ name: thor-ci
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [main]
-    paths:
-      - "apps/web.thor/**"
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - "apps/web.thor/**"
   pull_request:
     branches: [main]
     paths:

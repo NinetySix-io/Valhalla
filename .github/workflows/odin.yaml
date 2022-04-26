@@ -5,10 +5,10 @@ name: odin-ci
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [main]
-    paths:
-      - "apps/serv.odin/**"
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - "apps/serv.odin/**"
   pull_request:
     branches: [main]
     paths:
