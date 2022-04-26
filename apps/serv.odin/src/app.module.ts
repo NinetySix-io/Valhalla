@@ -23,28 +23,29 @@ import { UserOrganizationModule } from './modules/user.organization/user.organiz
         uri: Environment.variables.DATABASE_URL,
       }),
     }),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      installSubscriptionHandlers: true,
-      autoSchemaFile: 'schema.gql',
-      driver: ApolloDriver,
-      debug: Environment.isDev,
-      cors: Environment.isDev ? { credentials: true } : false,
-      playground: Environment.isDev
-        ? { settings: { 'request.credentials': 'include' } }
-        : false,
-
-      // pass the original req and res object into the graphql context,
-      // get context with decorator `@Context() { req, res, payload, connection }: GqlContext`
-      // req, res used in http/query&mutations, connection used in webSockets/subscriptions
-      context: ({ req, res, payload, connection }: GqlContext) => ({
-        req,
-        res,
-        payload,
-        connection,
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
+      useFactory: async () => ({
+        installSubscriptionHandlers: true,
+        autoSchemaFile: 'schema.gql',
+        driver: ApolloDriver,
+        debug: Environment.isDev,
+        cors: Environment.isDev ? { credentials: true } : false,
+        playground: {
+          endpoint: '/graphql',
+          settings: {
+            'request.credentials': 'include',
+          },
+        },
+        context: ({ req, res, payload, connection }: GqlContext) => ({
+          req,
+          res,
+          payload,
+          connection,
+        }),
+        // subscriptions: {
+        //   'graphql-ws': true,
+        // },
       }),
-      // subscriptions: {
-      //   'graphql-ws': true,
-      // },
     }),
     // PubSubModule,
     AuthModule,
