@@ -5,7 +5,7 @@
     "body": [
       "import { Injectable } from '@nestjs/common';",
       "import { InjectModel } from 'nestjs-typegoose';",
-      "import { BaseFactory, ModelType } from '@odin/data.models/_base/factory';",
+      "import { BaseFactory, ModelType } from '@serv.odin/data.models/_base/factory';",
       "import { $1Schema } from './schema';",
       "",
       "@Injectable()",
@@ -24,7 +24,7 @@
     "body": [
       "import { prop } from '@typegoose/typegoose';",
       "import { simpleModel } from '../_base/decorators/simple.model';",
-      "import { BaseSchema } from '@odin/data.models/_base/schema';",
+      "import { BaseSchema } from '@serv.odin/data.models/_base/schema';",
       "import { ObjectType } from '@nestjs/graphql';",
       "",
       "@ObjectType()",
