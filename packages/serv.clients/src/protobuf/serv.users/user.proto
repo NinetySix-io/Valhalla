@@ -1,0 +1,178 @@
+syntax = "proto3";
+
+package io.valhalla.serv.users;
+
+service UsersService {
+    rpc Register(RegisterRequest) returns (RegisterResponse) {}
+    rpc FindUser(ReadRequest) returns (ReadResponse) {}
+    rpc VerifyEmail(VerifyUserRequest) returns (VerifyUserResponse) {}
+    rpc VerifyActivationLink(VerifyActivationLinkRequest) returns (VerifyActivationLinkResponse) {}
+    rpc SendVerificationCode(SendVerificationCodeRequest) returns (SendVerificationCodeResponse) {}
+    rpc UpdateUser(UpdateRequest) returns (UpdateResponse) {}
+    rpc ForgotPassword(ForgotPasswordRequest) returns (ForgotPasswordResponse) {}
+    rpc UpdatePassword(UpdatePasswordRequest) returns (UpdatePasswordResponse) {}
+    rpc Login(LoginRequest) returns (LoginResponse) {}
+    rpc Logout(LogoutRequest) returns (LogoutResponse) {}
+}
+
+message PasswordStruct {
+    string hashed = 1;
+}
+
+
+message EmailObject {
+    string id = 1;
+    string value = 2;
+    string verificationCode = 3;
+    bool isVerified = 4;
+    bool isPrimary = 5;
+    string createdAt = 6;
+    string updatedAt = 7;
+}
+
+message PhoneObject {
+    string id = 1;
+    string value = 2;
+    string verificationCode = 3;
+    bool isVerified = 4;
+    bool isPrimary = 5;
+    string createdAt = 6;
+    string updatedAt = 7;
+}
+
+message User {
+    string id = 1;
+    string displayName = 2;
+    string firstName = 3;
+    string lastName = 4;
+    string createdAt = 5;
+    string updatedAt = 6;
+    repeated EmailObject emails = 7;
+    repeated PhoneObject phones = 8;
+}
+
+
+message Session {
+    string id = 1;
+    string userId = 2;
+    int32 created = 4;
+    int32 expires = 5;
+}
+
+message RegisterRequest {
+    string displayName = 1;
+    string password = 2;
+    string email = 3;
+    string phone = 4;
+    string firstName = 5;
+    string lastName = 6;
+}
+
+message RegisterResponse {
+    string activationLink = 1;
+}
+
+message DeleteRequest {
+    string id = 1;
+}
+
+message DeleteResponse {
+    bool success = 1;
+}
+
+message ReadRequest {
+    string query = 5;
+}
+
+message ReadResponse {
+    User user = 1;
+}
+
+message UpdateRequest {
+    string userId = 1;
+    string displayName = 2;
+    string firstName = 3;
+    string lastName = 4;
+}
+
+message UpdateResponse {
+    User user = 1;
+}
+
+message UpdatePasswordRequest {
+    string userId = 1;
+    string oldPassword = 2;
+    string newPassword = 3;
+    string confirmPassword = 4;
+}
+
+message UpdatePasswordResponse {
+    bool success = 1;
+}
+
+message ForgotPasswordRequest {
+    string email = 1;
+}
+
+message ForgotPasswordResponse {
+    bool success = 1;
+}
+
+message SearchRequest {
+    string phone = 1;
+    string email = 2;
+    int32 limit = 3;
+    int32 offset = 4;
+}
+
+message SearchResponse {
+    repeated User users = 1;
+}
+
+message LoginTypeParams {
+    string password = 3;
+    string username = 4;
+}
+
+message LoginRequest {
+    LoginTypeParams params = 2;
+}
+
+message LoginResponse {
+    Session session = 1;
+    User user = 2;
+}
+
+message LogoutRequest {
+    string sessionId = 1;
+}
+
+message LogoutResponse {
+    bool success = 1;
+}
+
+message VerifyUserRequest {
+    string email = 1;
+    string verificationCode = 2;
+}
+
+message VerifyUserResponse {
+    bool success = 1;
+}
+
+message VerifyActivationLinkRequest {
+    string token = 1;
+}
+
+message VerifyActivationLinkResponse {
+    string email = 1;
+    string verificationCode = 2;
+}
+
+message SendVerificationCodeRequest {
+    string email = 1;
+}
+
+message SendVerificationCodeResponse {
+    bool success = 1;
+}

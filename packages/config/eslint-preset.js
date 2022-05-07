@@ -1,27 +1,27 @@
-/* eslint-disable */
 module.exports = {
   root: true,
   overrides: [
     {
-      files: ["*.ts", "*.tsx"],
-      excludedFiles: "*.js",
+      files: ['*.ts', '*.tsx'],
+      excludedFiles: '*.js',
     },
   ],
-  parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint"],
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint'],
   extends: [
-    "prettier",
-    "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
+    'prettier',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
   ],
   settings: {
     next: {
-      rootDir: ["apps/*/", "packages/*/"],
+      rootDir: ['apps/*/', 'packages/*/'],
     },
   },
   rules: {
-    "@typescript-eslint/ban-types": "off",
+    '@typescript-eslint/ban-types': 'off',
   },
+  ignorePatterns: ['**/*.js'],
 };

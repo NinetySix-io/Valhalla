@@ -11,23 +11,22 @@
   },
   "scripts": {
     "dev": "turbo run dev --no-cache --parallel --continue",
-    "dev:serv.odin": "npm run dev -- --scope=serv.odin",
-    "dev:web.thor": "npm run dev -- --scope=web.thor",
-    "dev:web.loki": "npm run dev -- --scope=web.loki",
-    "build": "turbo run build",
-    "build:serv.odin": "turbo run build --scope=serv.odin --include-dependencies --no-deps",
-    "build:web.thor": "turbo run build --scope=web.thor --include-dependencies --no-deps",
-    "build:web.loki": "turbo run build --scope=web.loki --include-dependencies --no-deps",
-    "deploy:web.thor": "vercel deploy ./apps/web.thor --prod",
-    "deploy:web.loki": "vercel deploy ./apps/web.loki --prod",
+    "ext:services": "sh scripts/run.ext.services.sh",
+    "build": "turbo run build --include-dependencies --no-deps",
+    "build:packages": "turbo run build --filter=./packages/*",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "copy:entities": "node scripts/copy.entities",
+    "copy:clients": "node scripts/copy.clients",
+    "copy": "npm run copy:entities && npm run copy:clients"
   },
   "devDependencies": {
+    "@types/node": "^17.0.33",
+    "minimist": "^1.2.6",
     "prettier": "^2.6.2",
-    "turbo": "^1.2.8",
-    "vercel": "^24.2.0"
+    "turbo": "^1.2.9",
+    "vercel": "^24.2.2"
   }
 }

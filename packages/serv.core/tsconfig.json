@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "target": "ESNext",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "declaration": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "preserveSymlinks": true
+  },
+  "extends": "../tsconfig/base.json",
+  "exclude": ["dist", "build", "node_modules", ".eslintrc.js"],
+  "include": ["src/*"]
+}

@@ -1,2 +1,1 @@
-/* eslint-disable */
-module.exports = require("./eslint-preset");
+module.exports = require('./eslint-preset');

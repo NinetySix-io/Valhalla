@@ -1,0 +1,62 @@
+version: "3.9"
+services:
+  # eventstore:
+  #   container_name: eventstore-node
+  #   ports:
+  #     - "2113:2113"
+  #     - "1113:1113"
+  #   image: eventstore/eventstore:release-5.0.8
+  #   labels:
+  #     kompose.service.type: nodeport
+  #     kompose.service.expose: "true"
+  #     kompose.image-pull-policy: "Always"
+
+  consul:
+    container_name: consul
+    ports:
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:53/udp"
+    image: consul:latest
+    command:
+      [
+        "agent",
+        "-server",
+        "-log-level",
+        "debug",
+        "-bootstrap",
+        "-ui",
+        "-client",
+        "0.0.0.0",
+      ]
+    labels:
+      kompose.service.type: nodeport
+      kompose.service.expose: "true"
+      kompose.image-pull-policy: "Always"
+    volumes:
+      - consul_data_container:/consul/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data_container:/data/db
+
+  redis:
+    container_name: redis
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data_container:/data
+
+volumes:
+  mongodb_data_container:
+  redis_data_container:
+  consul_data_container:

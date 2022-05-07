@@ -1,4 +1,3 @@
-/* eslint-disable */
 module.exports = {
   settings: {
     react: {
