@@ -6,7 +6,7 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { UpdateRequest, UpdateResponse } from '@serv.users/protobuf/user';
+import { UpdateRequest, UpdateResponse } from '@serv.users/protobuf/users';
 
 import { RpcHandler } from '@valhalla/serv.core';
 import { UserTransformer } from '@serv.users/entities/users/transformer';
@@ -53,11 +53,11 @@ export class UpdateAccountHandler
       throw new Error('User not found');
     }
 
-    this.eventBus.publish(new UserUpdatedEvent(user));
-    const response = new UserTransformer(user).proto;
+    const userProto = new UserTransformer(user).proto;
+    this.eventBus.publish(new UserUpdatedEvent(userProto));
 
     return {
-      user: response,
+      user: userProto,
     };
   }
 }

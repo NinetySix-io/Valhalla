@@ -7,11 +7,12 @@ import {
 import {
   SendVerificationCodeRequest,
   SendVerificationCodeResponse,
-} from '@serv.users/protobuf/user';
+} from '@serv.users/protobuf/users';
 
 import { EmailVerificationSentEvent } from '../events/email.verification.sent.event';
 import { JwtService } from '@nestjs/jwt';
 import { RpcHandler } from '@valhalla/serv.core';
+import { UserTransformer } from '@serv.users/entities/users/transformer';
 import { UsersModel } from '@serv.users/entities/users';
 import { generateVerificationCode } from '@serv.users/lib/generate.verification.code';
 
@@ -48,6 +49,8 @@ export class SendAccountEmailVerificationHandler
     if (email.isVerified) {
       throw new Error('Email is already verified');
     }
+
+    const userProto = new UserTransformer(user).proto;
     const verificationCode = generateVerificationCode(6);
     const activationLink = this.jwtService.sign({
       userId: user.id,
@@ -56,7 +59,9 @@ export class SendAccountEmailVerificationHandler
 
     email.verificationCode = verificationCode;
     user.save();
-    this.eventBus.publish(new EmailVerificationSentEvent(user, activationLink));
+    this.eventBus.publish(
+      new EmailVerificationSentEvent(userProto, activationLink),
+    );
 
     return {
       success: true,

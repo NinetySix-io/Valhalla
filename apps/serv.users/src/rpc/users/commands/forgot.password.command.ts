@@ -7,13 +7,14 @@ import {
 import {
   ForgotPasswordRequest,
   ForgotPasswordResponse,
-} from '@serv.users/protobuf/user';
+} from '@serv.users/protobuf/users';
 
-import { Environment } from '@serv.users/environment';
+import { BootConfigService } from '@serv.users/services/boot.config.service';
 import { ForgotPasswordSentEvent } from '../events/forgot.password.sent.event';
 import { JwtService } from '@nestjs/jwt';
 import { RpcHandler } from '@valhalla/serv.core';
 import { UserSchema } from '@serv.users/entities/users/schema';
+import { UserTransformer } from '@serv.users/entities/users/transformer';
 import { UsersModel } from '@serv.users/entities/users';
 
 export class ForgotAccountPasswordCommand implements ICommand {
@@ -30,12 +31,13 @@ export class ForgotAccountPasswordHandler
     private readonly users: UsersModel,
     private readonly eventBus: EventBus,
     private readonly jwtService: JwtService,
+    private readonly bootConfig: BootConfigService,
   ) {}
 
   private getSignedJwtCode(user: UserSchema) {
     return this.jwtService.sign(
       { userId: user.id },
-      { expiresIn: Environment.variables.PASSWORD_FORGOT_EXPIRES },
+      { expiresIn: this.bootConfig.passwordExpires },
     );
   }
 
@@ -48,7 +50,9 @@ export class ForgotAccountPasswordHandler
     }
 
     const jwtCode = this.getSignedJwtCode(user);
-    this.eventBus.publish(new ForgotPasswordSentEvent(user, jwtCode));
+    const userProto = new UserTransformer(user).proto;
+
+    this.eventBus.publish(new ForgotPasswordSentEvent(userProto, jwtCode));
 
     return {
       success: true,

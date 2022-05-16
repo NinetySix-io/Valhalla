@@ -1,9 +1,9 @@
 import { IEvent } from '@nestjs/cqrs';
-import { UserSchema } from '@serv.users/entities/users/schema';
+import { User } from '@serv.users/protobuf/users';
 
 export class EmailVerifiedEvent implements IEvent {
   constructor(
-    public readonly data: UserSchema & {
+    public readonly data: User & {
       emailVerified: string;
     },
   ) {}

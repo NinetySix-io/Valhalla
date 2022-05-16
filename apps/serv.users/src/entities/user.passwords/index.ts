@@ -4,18 +4,19 @@ import { InjectModel } from 'nestjs-typegoose';
 import { UserPasswordSchema } from './schema';
 import * as bcrypt from 'bcryptjs';
 import { UserSchema } from '../users/schema';
-import { Environment } from '@serv.users/environment';
+import { BootConfigService } from '@serv.users/services/boot.config.service';
 
 @Injectable()
 export class UserPasswordsModel extends BaseFactory<UserPasswordSchema> {
   constructor(
     @InjectModel(UserPasswordSchema) model: ModelType<UserPasswordSchema>,
+    private readonly bootConfig: BootConfigService,
   ) {
     super(model);
   }
 
   private get hashRound() {
-    return Environment.variables.PASSWORD_HASH_ROUNDS;
+    return this.bootConfig.passwordHashRounds;
   }
 
   validatePassword(

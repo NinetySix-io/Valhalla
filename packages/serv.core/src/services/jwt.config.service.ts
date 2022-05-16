@@ -8,13 +8,8 @@ export class JwtConfigService implements JwtOptionsFactory {
   constructor(@InjectConfig() private readonly config: ConsulConfig) {}
 
   createJwtOptions(): Promise<JwtModuleOptions> | JwtModuleOptions {
-    const key = 'app.auth.jwtSettings';
-    const jwtConstants = this.config.get<JwtModuleOptions>(key);
-    return {
-      secret: jwtConstants.secret,
-      signOptions: {
-        expiresIn: '40000s',
-      },
-    };
+    const key = 'app.auth.jwt';
+    const jwtConfig = this.config.get<JwtModuleOptions>(key);
+    return jwtConfig;
   }
 }

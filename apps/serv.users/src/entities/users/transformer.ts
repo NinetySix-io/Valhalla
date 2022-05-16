@@ -1,4 +1,4 @@
-import { User as UserProto } from '@serv.users/protobuf/user';
+import { User as UserProto } from '@serv.users/protobuf/users';
 import { UserSchema } from './schema';
 
 export class UserTransformer {
@@ -11,8 +11,9 @@ export class UserTransformer {
   get proto(): UserProto {
     return {
       id: this.user.id,
+      displayName: this.user.displayName,
       firstName: this.user.firstName,
-      lastName: this.user.latName,
+      lastName: this.user.lastName,
       createdAt: this.user.createdAt.toString(),
       updatedAt: this.user.updatedAt.toString(),
       emails: this.user.emails.map((email) => ({

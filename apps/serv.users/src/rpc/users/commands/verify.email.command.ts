@@ -7,8 +7,9 @@ import {
 
 import { EmailVerifiedEvent } from '../events/email.verified.event';
 import { RpcHandler } from '@valhalla/serv.core';
+import { UserTransformer } from '@serv.users/entities/users/transformer';
 import { UsersModel } from '@serv.users/entities/users';
-import { VerifyAccountResponse } from '@serv.users/protobuf/user';
+import { VerifyUserResponse } from '@serv.users/protobuf/users';
 
 export class VerifyAccountEmailCommand implements ICommand {
   constructor(public readonly code: string, public readonly email: string) {}
@@ -17,7 +18,7 @@ export class VerifyAccountEmailCommand implements ICommand {
 @CommandHandler(VerifyAccountEmailCommand)
 @RpcHandler()
 export class VerifyAccountEmailHandler
-  implements ICommandHandler<VerifyAccountEmailCommand, VerifyAccountResponse>
+  implements ICommandHandler<VerifyAccountEmailCommand, VerifyUserResponse>
 {
   constructor(
     private readonly users: UsersModel,
@@ -26,7 +27,7 @@ export class VerifyAccountEmailHandler
 
   async execute(
     command: VerifyAccountEmailCommand,
-  ): Promise<VerifyAccountResponse> {
+  ): Promise<VerifyUserResponse> {
     const user = await this.users.findByUsername(command.email);
     const verifiedEmail = user?.emails.find(
       (email) => email.verificationCode === command.code,
@@ -42,7 +43,7 @@ export class VerifyAccountEmailHandler
     await user.save();
     this.eventBus.publish(
       new EmailVerifiedEvent({
-        ...user,
+        ...new UserTransformer(user).proto,
         emailVerified: verifiedEmail.value,
       }),
     );

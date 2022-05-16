@@ -4,7 +4,7 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { LoginRequest, LoginResponse } from '@serv.users/protobuf/user';
+import { LoginRequest, LoginResponse } from '@serv.users/protobuf/users';
 
 import { RpcHandler } from '@valhalla/serv.core';
 import { UserLoggedInEvent } from '../events/user.logged.in.event';
@@ -49,10 +49,11 @@ export class LoginAccountHandler
       throw this.LoginError;
     }
 
-    this.eventBus.publish(new UserLoggedInEvent(user));
+    const userProto = new UserTransformer(user).proto;
+    this.eventBus.publish(new UserLoggedInEvent(userProto));
 
     return {
-      user: new UserTransformer(user).proto,
+      user: userProto,
       session: undefined,
     };
   }

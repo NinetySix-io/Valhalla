@@ -42,9 +42,9 @@ export class UserSchema extends BaseSchema {
   @prop()
   lastName: string;
 
-  @prop({ _id: true })
+  @prop({ _id: true, type: [UserEmailSchema] })
   emails: UserEmailSchema[];
 
-  @prop({ _id: true })
+  @prop({ _id: true, type: [UserPhoneSchema] })
   phones: UserPhoneSchema[];
 }

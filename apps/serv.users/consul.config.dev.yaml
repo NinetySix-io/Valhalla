@@ -1,7 +1,14 @@
-users:
+tenant-billing:
   port: 9900
   database:
-    name: 'serv-users'
+    name: 'serv-tenants'
+
+app:
+  auth:
+    jwt:
+      secret: dev
+      signOptions:
+        expiresIn: 4h
 
 database:
   mongodb:

@@ -7,11 +7,12 @@ import {
 import {
   UpdatePasswordRequest,
   UpdatePasswordResponse,
-} from '@serv.users/protobuf/user';
+} from '@serv.users/protobuf/users';
 
 import { RpcHandler } from '@valhalla/serv.core';
 import { UserPasswordUpdatedEvent } from '../events/user.password.updated.event';
 import { UserPasswordsModel } from '@serv.users/entities/user.passwords';
+import { UserTransformer } from '@serv.users/entities/users/transformer';
 import { UsersModel } from '@serv.users/entities/users';
 import mongoose from 'mongoose';
 
@@ -55,7 +56,9 @@ export class UpdateAccountPasswordHandler
 
     const user = await this.users.findById(userId);
     await this.passwords.updatePassword(userId, command.cmd.newPassword);
-    await this.eventBus.publish(new UserPasswordUpdatedEvent(user));
+    await this.eventBus.publish(
+      new UserPasswordUpdatedEvent(new UserTransformer(user).proto),
+    );
 
     return {
       success: true,

@@ -247,6 +247,7 @@ importers:
   apps/serv.users:
     specifiers:
       '@grpc/grpc-js': ^1.6.7
+      '@nestcloud2/boot': ^0.7.20
       '@nestcloud2/core': ^0.8.1
       '@nestjs/cli': ^8.2.5
       '@nestjs/common': ^8.4.4
@@ -257,6 +258,7 @@ importers:
       '@nestjs/microservices': ^8.4.4
       '@nestjs/platform-fastify': ^8.4.4
       '@nestjs/schematics': ^8.0.11
+      '@nestjs/terminus': ^8.0.6
       '@nestjs/testing': ^8.4.4
       '@typegoose/typegoose': ^9.8.1
       '@valhalla/serv.core': workspace:*
@@ -282,6 +284,7 @@ importers:
       yup: ^0.32.11
     dependencies:
       '@grpc/grpc-js': 1.6.7
+      '@nestcloud2/boot': 0.7.20
       '@nestcloud2/core': 0.8.1
       '@nestjs/common': 8.4.4_gbcl3cpy3jz4yxcebmwox6bgie
       '@nestjs/core': 8.4.4_vekplu76vkbvw5hmxu5qy7inke
@@ -290,6 +293,7 @@ importers:
       '@nestjs/jwt': 8.0.0_@nestjs+common@8.4.4
       '@nestjs/microservices': 8.4.4_nbd2pw27er5kdtqxb5j3oksqom
       '@nestjs/platform-fastify': 8.4.4_u6bxr3c7htwmhq2t5wi3k6ht4y
+      '@nestjs/terminus': 8.0.6_eqolnjailvrsgpjwojmchkclhe
       '@typegoose/typegoose': 9.8.1_mongoose@6.3.3
       '@valhalla/serv.core': link:../../packages/serv.core
       '@valhalla/utilities': link:../../packages/utilities
@@ -4117,7 +4121,7 @@ packages:
     peerDependencies:
       '@nestjs/common': ^6.0.0 || ^7.0.0 || ^8.0.0
     dependencies:
-      '@nestjs/common': 8.4.4_rxx7b6fpen2t3jswcc6pxmbpyy
+      '@nestjs/common': 8.4.4_gbcl3cpy3jz4yxcebmwox6bgie
       '@types/jsonwebtoken': 8.5.4
       jsonwebtoken: 8.5.1
     dev: false

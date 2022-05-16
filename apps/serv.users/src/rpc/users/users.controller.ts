@@ -21,24 +21,24 @@ import {
   VerifyActivationLinkResponse,
   VerifyUserRequest,
   VerifyUserResponse,
-} from '@serv.users/protobuf/user';
+} from '@serv.users/protobuf/users';
 import { GrpcMethod, RpcException } from '@nestjs/microservices';
 
 import { Controller } from '@nestjs/common';
-import { ForgotAccountPasswordCommand } from '@serv.users/cqrs/commands/forgot.password.command';
+import { ForgotAccountPasswordCommand } from '@serv.users/rpc/users/commands/forgot.password.command';
 import { JwtService } from '@nestjs/jwt';
-import { LoginAccountCommand } from '@serv.users/cqrs/commands/login.command';
+import { LoginAccountCommand } from '@serv.users/rpc/users/commands/login.command';
 import { Metadata } from '@grpc/grpc-js';
 import { Observable } from 'rxjs';
-import { RegisterAccountCommand } from '@serv.users/cqrs/commands/register.command';
-import { SendAccountEmailVerificationCommand } from '@serv.users/cqrs/commands/send.email.verification.command';
+import { RegisterAccountCommand } from '@serv.users/rpc/users/commands/register.command';
+import { SendAccountEmailVerificationCommand } from '@serv.users/rpc/users/commands/send.email.verification.command';
 import { TransformMethodError } from '@valhalla/serv.core';
-import { UpdateAccountCommand } from '@serv.users/cqrs/commands/update.command';
-import { UpdateAccountPasswordCommand } from '@serv.users/cqrs/commands/update.password.command';
-import { VerifyAccountEmailCommand } from '@serv.users/cqrs/commands/verify.email.command';
+import { UpdateAccountCommand } from '@serv.users/rpc/users/commands/update.command';
+import { UpdateAccountPasswordCommand } from '@serv.users/rpc/users/commands/update.password.command';
+import { VerifyAccountEmailCommand } from '@serv.users/rpc/users/commands/verify.email.command';
 
 @Controller('accounts')
-export class AccountController implements UsersServiceController {
+export class RpcUsersController implements UsersServiceController {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
@@ -70,7 +70,6 @@ export class AccountController implements UsersServiceController {
   @GrpcMethod(USERS_SERVICE_NAME)
   findUser(request: ReadRequest, metadata?: Metadata): Promise<ReadResponse> {
     throw new Error('Function not yet implements');
-    return {} as any;
   }
 
   @GrpcMethod(USERS_SERVICE_NAME)
