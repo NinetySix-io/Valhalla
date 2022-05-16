@@ -14,6 +14,8 @@
     "ext:services": "sh scripts/run.ext.services.sh",
     "build": "turbo run build --include-dependencies --no-deps",
     "build:packages": "turbo run build --filter=./packages/*",
+    "build:web.thor": "turbo run build --scope=web.thor --include-dependencies --no-deps",
+    "build:web.loki": "turbo run build --scope=web.loki --include-dependencies --no-deps",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules",

@@ -68,4 +68,4 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: preactjs/compressed-size-action@v2
         with:
-          build-script: "build --scope=web.thor"
+          build-script: "build:thor"
