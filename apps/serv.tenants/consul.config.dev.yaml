@@ -1,7 +1,7 @@
 users:
   port: 9900
   database:
-    name: 'serv-users'
+    name: 'serv-tenants'
 
 database:
   mongodb:

@@ -1,7 +1,7 @@
 tenant-billing:
   port: 9900
   database:
-    name: 'serv-tenants'
+    name: 'serv-users'
 
 app:
   auth:
