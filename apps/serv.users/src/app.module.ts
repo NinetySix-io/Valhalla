@@ -1,4 +1,4 @@
-import { CoreModule, ServiceRegistryModule } from '@valhalla/serv.core/src';
+import { CoreModule, ServiceRegistryModule } from '@valhalla/serv.core';
 
 import { AccountModule } from './modules/accounts/account.module';
 import { Module } from '@nestjs/common';

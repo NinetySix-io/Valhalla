@@ -9,7 +9,7 @@ import {
   UpdatePasswordResponse,
 } from '@serv.users/protobuf/user';
 
-import { RpcHandler } from '@valhalla/serv.core/src';
+import { RpcHandler } from '@valhalla/serv.core';
 import { UserPasswordUpdatedEvent } from '../events/user.password.updated.event';
 import { UserPasswordsModel } from '@serv.users/entities/user.passwords';
 import { UsersModel } from '@serv.users/entities/users';

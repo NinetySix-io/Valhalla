@@ -4,7 +4,7 @@ import {
 } from '@serv.tenants/protobuf/tenants';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
-import { LoggerService } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 
 export class GetTenantQuery implements IQuery {
   constructor(public readonly request: GetTenantRequest) {}
@@ -14,10 +14,11 @@ export class GetTenantQuery implements IQuery {
 export class GetTenantHandler
   implements IQueryHandler<GetTenantQuery, GetTenantResponse>
 {
-  constructor(private readonly logger: LoggerService) {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  constructor() {}
 
   async execute(command: GetTenantQuery): Promise<GetTenantResponse> {
-    this.logger.debug(command);
+    Logger.debug(command);
     throw new Error('Not implemented');
   }
 }

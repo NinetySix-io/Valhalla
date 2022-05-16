@@ -6,7 +6,7 @@ import {
 } from '@nestjs/cqrs';
 
 import { EmailVerifiedEvent } from '../events/email.verified.event';
-import { RpcHandler } from '@valhalla/serv.core/src';
+import { RpcHandler } from '@valhalla/serv.core';
 import { UsersModel } from '@serv.users/entities/users';
 import { VerifyAccountResponse } from '@serv.users/protobuf/user';
 

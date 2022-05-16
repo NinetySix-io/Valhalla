@@ -7,7 +7,7 @@ import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { AccessTokenTransformer } from '@serv.iam/entities/access.tokens/transformer';
 import { AccessTokensModel } from '@serv.iam/entities/access.tokens';
 import { RpcException } from '@nestjs/microservices';
-import { RpcHandler } from '@valhalla/serv.core/src';
+import { RpcHandler } from '@valhalla/serv.core';
 
 export class FindAccessQuery implements IQuery {
   constructor(public readonly input: FindAccessRequest) {}

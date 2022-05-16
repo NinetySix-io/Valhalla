@@ -27,7 +27,7 @@ import { Metadata } from '@grpc/grpc-js';
 import { Observable } from 'rxjs';
 
 @Controller()
-export class TenantsController implements TenantsServiceController {
+export class RpcTenantsController implements TenantsServiceController {
   createTenant(
     request: CreateTenantRequest,
     metadata?: Metadata,

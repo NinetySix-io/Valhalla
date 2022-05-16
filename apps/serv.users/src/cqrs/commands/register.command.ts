@@ -7,7 +7,7 @@ import {
 import { RegisterRequest, RegisterResponse } from '@serv.users/protobuf/user';
 
 import { JwtService } from '@nestjs/jwt';
-import { RpcHandler } from '@valhalla/serv.core/src';
+import { RpcHandler } from '@valhalla/serv.core';
 import { UserRegisteredEvent } from '../events/user.registered.event';
 import { UserSchema } from '@serv.users/entities/users/schema';
 import { UsersModel } from '@serv.users/entities/users';

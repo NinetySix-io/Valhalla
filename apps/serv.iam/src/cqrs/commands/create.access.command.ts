@@ -14,7 +14,7 @@ import { AccessTokenTransformer } from '@serv.iam/entities/access.tokens/transfo
 import { AccessTokensModel } from '@serv.iam/entities/access.tokens';
 import { NestCasbinService } from 'nestjs-casbin';
 import { RpcException } from '@nestjs/microservices';
-import { RpcHandler } from '@valhalla/serv.core/src';
+import { RpcHandler } from '@valhalla/serv.core';
 import { ServUsers } from '@valhalla/entities';
 import dayjs from 'dayjs';
 import mongoose from 'mongoose';

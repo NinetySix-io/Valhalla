@@ -11,7 +11,7 @@ import {
 
 import { EmailVerificationSentEvent } from '../events/email.verification.sent.event';
 import { JwtService } from '@nestjs/jwt';
-import { RpcHandler } from '@valhalla/serv.core/src';
+import { RpcHandler } from '@valhalla/serv.core';
 import { UsersModel } from '@serv.users/entities/users';
 import { generateVerificationCode } from '@serv.users/lib/generate.verification.code';
 

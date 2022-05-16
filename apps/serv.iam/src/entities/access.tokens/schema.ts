@@ -1,7 +1,7 @@
 import { BaseSchema } from '@valhalla/serv.core';
 import { Exclude } from 'class-transformer';
 import { ObjectType } from '@nestjs/graphql';
-import { SimpleModel } from '@valhalla/serv.core/src';
+import { SimpleModel } from '@valhalla/serv.core';
 import mongoose from 'mongoose';
 import { prop } from '@typegoose/typegoose';
 

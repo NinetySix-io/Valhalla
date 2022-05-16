@@ -13,7 +13,7 @@ import { AccessTokenDeletedEvent } from '../events/access.token.deleted.event';
 import { AccessTokenTransformer } from '@serv.iam/entities/access.tokens/transformer';
 import { AccessTokensModel } from '@serv.iam/entities/access.tokens';
 import { NestCasbinService } from 'nestjs-casbin';
-import { RpcHandler } from '@valhalla/serv.core/src';
+import { RpcHandler } from '@valhalla/serv.core';
 
 export class DeleteAccessCommand implements ICommand {
   constructor(

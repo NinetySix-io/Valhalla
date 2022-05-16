@@ -8,7 +8,7 @@ import {
 } from '@nestjs/cqrs';
 import { UpdateRequest, UpdateResponse } from '@serv.users/protobuf/user';
 
-import { RpcHandler } from '@valhalla/serv.core/src';
+import { RpcHandler } from '@valhalla/serv.core';
 import { UserTransformer } from '@serv.users/entities/users/transformer';
 import { UserUpdatedEvent } from '../events/user.updated.event';
 import { UsersModel } from '@serv.users/entities/users';

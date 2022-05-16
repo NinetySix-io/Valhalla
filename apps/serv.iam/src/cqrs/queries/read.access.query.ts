@@ -8,7 +8,7 @@ import {
 
 import { AccessTokenTransformer } from '@serv.iam/entities/access.tokens/transformer';
 import { AccessTokensModel } from '@serv.iam/entities/access.tokens';
-import { RpcHandler } from '@valhalla/serv.core/src';
+import { RpcHandler } from '@valhalla/serv.core';
 
 export class ReadAccessQuery implements IQuery {
   constructor(public readonly input: ReadAccessRequest) {}

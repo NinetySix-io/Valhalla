@@ -5,7 +5,7 @@ import * as _m0 from 'protobufjs/minimal';
 import { Observable } from 'rxjs';
 import { Metadata } from '@grpc/grpc-js';
 
-export const protobufPackage = 'io.valhalla.serv.tenants';
+export const protobufPackage = 'serv.tenants';
 
 export enum InvitationStatus {
   PENDING = 0,
@@ -134,7 +134,7 @@ export interface AcceptMemberInvitationResponse {
   member: TenantMember | undefined;
 }
 
-export const IO_VALHALLA_SERV_TENANTS_PACKAGE_NAME = 'io.valhalla.serv.tenants';
+export const SERV_TENANTS_PACKAGE_NAME = 'serv.tenants';
 
 export interface TenantsServiceClient {
   /** Tenants */

@@ -172,6 +172,7 @@ importers:
   apps/serv.tenants:
     specifiers:
       '@grpc/grpc-js': ^1.6.7
+      '@nestcloud2/boot': ^0.7.20
       '@nestcloud2/core': ^0.8.1
       '@nestjs/cli': ^8.2.5
       '@nestjs/common': ^8.4.4
@@ -181,6 +182,7 @@ importers:
       '@nestjs/microservices': ^8.4.4
       '@nestjs/platform-fastify': ^8.4.4
       '@nestjs/schematics': ^8.0.11
+      '@nestjs/terminus': ^8.0.6
       '@nestjs/testing': ^8.4.4
       '@typegoose/typegoose': ^9.8.1
       '@valhalla/entities': workspace:*
@@ -192,6 +194,7 @@ importers:
       dayjs: ^1.11.2
       dotenv: ^16.0.1
       graphql: ^16.5.0
+      long: ^5.2.0
       mongodb: ^4.6.0
       mongoose: ^6.3.3
       nestjs-casbin: ^2.0.8
@@ -205,6 +208,7 @@ importers:
       yup: ^0.32.11
     dependencies:
       '@grpc/grpc-js': 1.6.7
+      '@nestcloud2/boot': 0.7.20
       '@nestcloud2/core': 0.8.1
       '@nestjs/common': 8.4.4_gbcl3cpy3jz4yxcebmwox6bgie
       '@nestjs/core': 8.4.4_vekplu76vkbvw5hmxu5qy7inke
@@ -212,6 +216,7 @@ importers:
       '@nestjs/graphql': 10.0.11_asu6azgkee26agj2bahv43qgqu
       '@nestjs/microservices': 8.4.4_nbd2pw27er5kdtqxb5j3oksqom
       '@nestjs/platform-fastify': 8.4.4_u6bxr3c7htwmhq2t5wi3k6ht4y
+      '@nestjs/terminus': 8.0.6_eqolnjailvrsgpjwojmchkclhe
       '@typegoose/typegoose': 9.8.1_mongoose@6.3.3
       '@valhalla/entities': link:../../packages/entities
       '@valhalla/serv.core': link:../../packages/serv.core
@@ -222,6 +227,7 @@ importers:
       dayjs: 1.11.2
       dotenv: 16.0.1
       graphql: 16.5.0
+      long: 5.2.0
       mongodb: 4.6.0
       mongoose: 6.3.3
       nestjs-casbin: 2.0.8_@nestjs+common@8.4.4

@@ -1,4 +1,4 @@
-import { BaseSchema, ExpiryIndex, SimpleModel } from '@valhalla/serv.core/src';
+import { BaseSchema, ExpiryIndex, SimpleModel } from '@valhalla/serv.core';
 
 import mongoose from 'mongoose';
 import { prop } from '@typegoose/typegoose';

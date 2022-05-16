@@ -9,7 +9,7 @@ import {
   UpdateMemberResponse,
 } from '@serv.tenants/protobuf/tenants';
 
-import { LoggerService } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { RpcHandler } from '@valhalla/serv.core';
 
 export class UpdateMemberCommand implements ICommand {
@@ -21,13 +21,10 @@ export class UpdateMemberCommand implements ICommand {
 export class UpdateMemberHandler
   implements ICommandHandler<UpdateMemberCommand, UpdateMemberResponse>
 {
-  constructor(
-    private readonly eventBus: EventBus,
-    private readonly logger: LoggerService,
-  ) {}
+  constructor(private readonly eventBus: EventBus) {}
 
   async execute(command: UpdateMemberCommand): Promise<UpdateMemberResponse> {
-    this.logger.debug(command.input);
+    Logger.debug(command.input);
     throw new Error('Not implemented');
   }
 }

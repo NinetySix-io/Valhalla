@@ -22,7 +22,7 @@ import { GrpcMethod } from '@nestjs/microservices';
 import { HasRightsQuery } from '@serv.iam/cqrs/queries/has.rights.query';
 import { Metadata } from '@grpc/grpc-js';
 import { ReadAccessQuery } from '@serv.iam/cqrs/queries/read.access.query';
-import { getIdentityFromCtx } from '@valhalla/serv.core/src';
+import { getIdentityFromCtx } from '@valhalla/serv.core';
 
 @Controller('webhook')
 export class AccessController implements IamServiceController {

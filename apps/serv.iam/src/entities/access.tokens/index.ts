@@ -1,4 +1,4 @@
-import { BaseFactory, ModelType } from '@valhalla/serv.core/src';
+import { BaseFactory, ModelType } from '@valhalla/serv.core';
 import { AccessTokenSchema } from './schema';
 import { InjectModel } from 'nestjs-typegoose';
 import { Injectable } from '@nestjs/common';

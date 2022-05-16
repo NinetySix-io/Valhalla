@@ -32,7 +32,7 @@ import { Metadata } from '@grpc/grpc-js';
 import { Observable } from 'rxjs';
 import { RegisterAccountCommand } from '@serv.users/cqrs/commands/register.command';
 import { SendAccountEmailVerificationCommand } from '@serv.users/cqrs/commands/send.email.verification.command';
-import { TransformMethodError } from '@valhalla/serv.core/src';
+import { TransformMethodError } from '@valhalla/serv.core';
 import { UpdateAccountCommand } from '@serv.users/cqrs/commands/update.command';
 import { UpdateAccountPasswordCommand } from '@serv.users/cqrs/commands/update.password.command';
 import { VerifyAccountEmailCommand } from '@serv.users/cqrs/commands/verify.email.command';

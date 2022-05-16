@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseFactory, ModelType } from '@valhalla/serv.core/src';
+import { BaseFactory, ModelType } from '@valhalla/serv.core';
 import { InjectModel } from 'nestjs-typegoose';
 import { UserPasswordSchema } from './schema';
 import * as bcrypt from 'bcryptjs';
