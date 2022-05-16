@@ -11,7 +11,8 @@
   },
   "scripts": {
     "dev": "turbo run dev --no-cache --parallel --continue",
-    "ext:services": "sh scripts/run.ext.services.sh",
+    "ext:services": "sh ./scripts/run.ext.services.sh",
+    "ext:services:down": "sh ./scripts/shutdown.ext.services.sh",
     "build": "turbo run build --include-dependencies --no-deps",
     "build:packages": "turbo run build --filter=./packages/*",
     "build:web.thor": "turbo run build --scope=web.thor --include-dependencies --no-deps",
