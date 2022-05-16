@@ -8,7 +8,6 @@ export class ServCoreSetup {
   package: string;
   hostname = '0.0.0.0';
   logger = Logger;
-  withGrpc: boolean;
 
   constructor(
     app: INestApplication,
@@ -16,12 +15,10 @@ export class ServCoreSetup {
       protoPath: ServCoreSetup['protoPath'];
       grpcPackage: ServCoreSetup['package'];
       hostName?: ServCoreSetup['hostname'];
-      withGrpc?: ServCoreSetup['withGrpc'];
     },
   ) {
     this.app = app;
     this.protoPath = options.protoPath;
-    this.withGrpc = options.withGrpc ?? true;
     this.package = options.grpcPackage;
     this.hostname = options?.hostName ?? this.hostname;
   }
@@ -34,13 +31,21 @@ export class ServCoreSetup {
     return this.boot.get('service.port');
   }
 
+  private get gRpcPort(): number {
+    return this.boot.get('grpc.port');
+  }
+
+  private get gRpcUrl(): string {
+    return `${this.hostname}:${this.gRpcPort}`;
+  }
+
   /**
    * It starts the microservice and the REST server
    */
   async setup(): Promise<void> {
-    if (this.withGrpc) {
+    if (this.gRpcPort) {
       const options: GrpcOptions['options'] = {
-        url: this.hostname + ':' + (this.servicePort + 100),
+        url: this.gRpcUrl,
         protoPath: this.protoPath,
         package: this.package,
       };

@@ -17,7 +17,6 @@ export async function bootstrapApplication(
   AppModule: { new (): unknown },
   options: {
     hostName?: ServCoreSetup['hostname'];
-    withGrpc?: boolean;
     protoPath: ServCoreSetup['protoPath'];
     grpcPackage: ServCoreSetup['package'];
   },
