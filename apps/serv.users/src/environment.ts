@@ -1,0 +1,30 @@
+import * as Yup from 'yup';
+
+import { buildEnvironment } from '@valhalla/utilities';
+import dotenv from 'dotenv';
+
+const schema = Yup.object({
+  // BASIC
+  SERVICE_URL: Yup.string(),
+  PORT: Yup.number().default(5002),
+  NODE_ENV: Yup.string().default('development'),
+  DATABASE_URL: Yup.string().required(),
+
+  // AUTH
+  PASSWORD_FORGOT_EXPIRES: Yup.string().default('1h'),
+  PASSWORD_HASH_ROUNDS: Yup.number().default(10),
+});
+
+export class Environment extends buildEnvironment({
+  schema,
+  vars: dotenv.config({ override: true }).parsed,
+}) {
+  static get serviceUrl() {
+    let domain = this.variables.SERVICE_URL;
+    if (this.isDev) {
+      domain = `http://localhost:${this.variables.PORT}`;
+    }
+
+    return domain;
+  }
+}

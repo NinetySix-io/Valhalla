@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-import { buildEnvironment } from '@valhalla/utilities/dist/env';
+import { buildEnvironment } from '@valhalla/utilities';
 import getConfig from 'next/config';
 
 const { publicRuntimeConfig } = getConfig();

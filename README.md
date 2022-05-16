@@ -15,6 +15,8 @@ This is a monorepo on top of turborepo
 - Node 14+
 - pnpm
 - MongoDB
+- Protobuf
+  - `brew install protobuff`
 
 #### Set up
 

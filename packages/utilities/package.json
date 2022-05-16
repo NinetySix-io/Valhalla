@@ -1,8 +1,8 @@
 {
   "name": "@valhalla/utilities",
   "version": "0.0.0",
-  "main": "./src",
-  "types": "./src",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "sideEffects": false,
   "private": true,
   "files": [
@@ -12,16 +12,16 @@
     "test": "jest --passWithNoTests",
     "dev": "tsc -w",
     "build": "tsc",
-    "lint": "eslint src/**/*.ts",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+    "lint": "eslint src/**/*.ts"
   },
   "devDependencies": {
     "@valhalla/config": "workspace:*",
     "@valhalla/tsconfig": "workspace:*",
-    "jest": "^28.0.0",
-    "typescript": "^4.6.3"
+    "jest": "^28.1.0",
+    "typescript": "^4.6.4"
   },
   "dependencies": {
+    "slugify": "^1.6.5",
     "yup": "^0.32.11"
   }
 }

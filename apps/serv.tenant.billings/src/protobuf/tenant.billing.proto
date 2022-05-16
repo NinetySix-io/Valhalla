@@ -1,0 +1,243 @@
+syntax = "proto3";
+
+package serv.tenant.billings;
+
+service TenantBillingsService {
+    rpc CreateTenantPlan(CreateTenantPlanRequest) returns (CreateTenantPlanResponse) {}
+    rpc UpdateTenantPlan(UpdateTenantPlanRequest) returns (UpdateTenantPlanResponse) {}
+    rpc DeleteTenantPlan(DeleteTenantPlanRequest) returns (DeleteTenantPlanResponse) {}
+    rpc GetTenantPlan(GetTenantPlanRequest) returns (GetTenantPlanResponse) {}
+    rpc CreateTenantSubscription(CreateTenantSubscriptionRequest) returns (CreateTenantSubscriptionResponse) {}
+    rpc DeleteTenantSubscription(DeleteTenantSubscriptionRequest) returns (DeleteTenantSubscriptionResponse) {}
+    rpc UpdateTenantSubscription(UpdateTenantSubscriptionRequest) returns (UpdateTenantSubscriptionResponse) {}
+    rpc GetTenantSubscription(GetTenantSubscriptionRequest) returns (GetTenantSubscriptionResponse) {}
+    rpc GetTenantInvoice(GetTenantInvoiceRequest) returns (GetTenantInvoiceResponse) {}
+}
+
+enum PlanPriceInterval {
+    MONTH  = 0;
+    YEAR   = 1;
+    WEEK   = 2;
+    DAY    = 3;
+}
+
+enum InvoiceStatus {
+    DRAFT  = 0;
+    OPEN  = 1;
+    PAID  = 2;
+    UNCOLLECTIBLE  = 3;
+    VOID  = 4;
+}
+
+enum SubscriptionStatus {
+    ACTIVE = 0;
+    ALL = 1;
+    CANCELED = 2;
+    INCOMPLETE = 3;
+    INCOMPLETE_EXPIRED = 4;
+    PAST_DUE = 5;
+    TRIALING = 6;
+    UNPAID = 7;
+}
+
+message TenantSubscription {
+    string id = 1;
+    string tenantId = 2;
+    string status = 3;
+    string createdAt = 6;
+    string updatedAt = 7;
+    string collectionMethod = 8;
+    string currentPeriodStart = 9;
+    string currentPeriodEnd = 10;
+    string endedAt = 11;
+    string canceledAt = 12;
+    string latestInvoiceId = 13;
+    string startDate = 14;
+    string trialStart = 15;
+    string trialEnd = 16;
+    string customerEmail = 17;
+    string customerName = 18;
+}
+
+message Address {
+    string id = 1;
+    string country = 2;
+    string state = 3;
+    string city = 4;
+    string postalCode = 5;
+    string line = 6;
+    string line2 = 7;
+}
+
+message Price {
+    string name = 1;
+    string currency = 2;
+    string id = 3;
+    int32 trialDays = 4;
+    float amount = 5;
+}
+
+message Feature {
+    string name = 1;
+    string normalizedName = 2;
+    string description = 3;
+    int32 min = 4;
+    int32 max = 5;
+    bool active = 6;
+    bool full = 7;
+    string unit = 8;
+}
+
+message Plan {
+    string id = 1;
+    string normalizedName = 2;
+    Price price = 3;
+    repeated Feature features = 4;
+    bool active = 5;
+    bool free = 6;
+    string createdAt = 7;
+    string updatedAt = 8;
+    string name = 9;
+}
+
+message Invoice {
+    string id = 1;
+    string accountCountry = 2;
+    string accountName = 3;
+    float amountDue = 4;
+    float amountPaid = 5;
+    float amountRemaining = 6;
+    string billingReason = 7;
+    string currency = 8;
+    string customerEmail = 9;
+    string customerName = 10;
+    string description = 11;
+    string dueDate = 12;
+    float endingBalance = 13;
+    string hostedInvoiceUrl = 14;
+    string invoicePdf = 15;
+    string number = 16;
+    bool paid = 17;
+    string receiptNumber = 18;
+    float startingBalance = 19;
+    string statementDescriptor = 20;
+    string status = 21;
+    int32 subtotal = 22;
+    float tax = 23;
+    float taxPercent = 24;
+    float total = 25;
+    string createdAt = 26;
+    string updatedAt = 27;
+}
+
+message CreatePriceRequest {
+    float price = 1;
+    string currency = 2;
+    string id = 3;
+    string nickname = 4;
+    int32 trialDays = 5;
+    int32 intervalCount = 6;
+    string interval = 7;
+}
+
+message CreateTenantPlanRequest {
+    string name = 1;
+    string description = 2;
+    repeated CreatePriceRequest prices = 3;
+    repeated Feature features = 4;
+    bool active = 5;
+    bool free = 6;
+}
+
+message UpdateTenantPlanRequest {
+    string tenantId = 1;
+    string name = 2;
+    string description = 3;
+    repeated CreatePriceRequest prices = 4;
+    repeated Feature features = 5;
+    bool active = 6;
+    bool free = 7;
+}
+
+message CreateTenantPlanResponse {
+    Plan plan = 1;
+}
+
+message UpdateTenantPlanResponse {
+    Plan plan = 1;
+}
+
+message GetTenantPlanRequest {
+    string tenantId = 1;
+}
+
+message GetTenantPlanResponse {
+    Plan plan = 1;
+}
+
+message GetTenantInvoiceRequest {
+    string tenantId = 1;
+    string invoiceId = 2;
+}
+
+message GetTenantInvoiceResponse {
+    Invoice invoice = 1;
+}
+
+message CreateTenantSubscriptionRequest {
+    string customerId = 1;
+    string tenantId = 2;
+    string planId = 3;
+    string couponId = 4;
+}
+
+message CreateTenantSubscriptionResponse {
+    TenantSubscription subscription = 1;
+}
+
+message UpdateTenantSubscriptionRequest {
+    string customerId = 1;
+    string tenantId = 2;
+    string planId = 3;
+    string couponId = 4;
+}
+
+message UpdateTenantSubscriptionResponse {
+    TenantSubscription subscription = 1;
+}
+
+message DeleteTenantSubscriptionRequest {
+    string tenantId = 1;
+}
+
+message DeleteTenantPlanRequest {
+    string planId = 1;
+}
+
+message DeleteTenantPlanResponse {
+    bool success = 1 ;
+}
+
+message DeleteTenantSubscriptionResponse {
+    TenantSubscription subscription = 1;
+}
+
+message GetTenantSubscriptionRequest {
+    string subscriptionId = 1;
+    string tenantId = 2;
+}
+
+message GetTenantSubscriptionResponse {
+    TenantSubscription subscription = 1;
+}
+
+message Message {
+    string say = 1;
+}
+
+message Event {
+    string id = 1;
+    int32 timestamp = 2;
+    string message = 3;
+    string topic = 4;
+}

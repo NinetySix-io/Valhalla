@@ -1,0 +1,144 @@
+syntax = "proto3";
+
+package io.valhalla.serv.tenants;
+
+service TenantsService {
+    // Tenants
+    rpc CreateTenant(CreateTenantRequest) returns (CreateTenantResponse) {}
+    rpc GetTenant(GetTenantRequest) returns (GetTenantResponse) {}
+    rpc UpdateTenant(UpdateTenantRequest) returns (UpdateTenantResponse) {}
+    rpc DeleteTenant(DeleteTenantRequest) returns (DeleteTenantResponse) {}
+    rpc TenantAvailable(TenantAvailableRequest) returns (TenantAvailableResponse) {}
+
+    // Members
+    rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse) {}
+    rpc AcceptMemberInvitation(AcceptMemberInvitationRequest) returns (AcceptMemberInvitationResponse) {}
+    rpc UpdateMember(UpdateMemberRequest) returns (UpdateMemberResponse) {}
+    rpc DeleteMember(DeleteMemberRequest) returns (DeleteMemberResponse) {}
+    rpc GetMember(GetMemberRequest) returns (GetMemberResponse) {}
+}
+
+message Tenant {
+    string id = 1;
+    string slug = 2;
+    string name = 3;
+    string createdBy = 4;
+    string createdAt = 5;
+    string updatedAt = 6;
+}
+
+message UpdateTenantPayload {
+    string name = 3;
+}
+
+enum InvitationStatus {
+    PENDING = 0;
+    ACCEPTED = 1;
+    REJECTED = 2;
+}
+
+enum TenantRole {
+    OWNER = 0;
+    ADMIN = 1;
+    DEVELOPER = 2;
+    MEMBER = 3;
+    GUESS = 4;
+}
+
+message TenantMember {
+    string id = 1;
+    string user = 2;
+    string tenant = 3;
+    string invitedBy = 4;
+    string status = 5;
+    string role = 6;
+    string createdAt = 7;
+    string updatedAt = 8;
+}
+
+message CreateTenantRequest {
+    string name = 1;
+}
+
+message CreateTenantResponse {
+    Tenant tenant = 1;
+}
+
+message TenantAvailableRequest {
+    string name = 1;
+}
+
+message TenantAvailableResponse {
+    bool available = 1;
+}
+
+message DeleteTenantRequest {
+    string tenantId = 1;
+}
+
+message DeleteTenantResponse {
+    Tenant tenant = 1;
+}
+
+message GetTenantRequest {
+    string tenantId = 1;
+}
+
+message GetTenantResponse {
+    Tenant tenant = 1;
+}
+
+message UpdateTenantRequest {
+    string id = 1;
+    UpdateTenantPayload data = 2;
+}
+
+message UpdateTenantResponse {
+    Tenant tenant = 1;
+}
+
+// Tenant Members
+message InviteMemberRequest {
+    string email = 2;
+    string userId = 3;
+    string role = 6;
+}
+
+message InviteMemberResponse {
+    TenantMember member = 1;
+}
+
+message DeleteMemberRequest {
+    string id = 1;
+}
+
+message DeleteMemberResponse {
+    TenantMember member = 1;
+}
+
+message GetMemberRequest {
+    string tenantId = 1;
+    string memberId = 2;
+}
+
+message GetMemberResponse {
+    TenantMember member = 1;
+}
+
+message UpdateMemberRequest {
+    string id = 1;
+    string status = 2;
+    string role = 3;
+}
+
+message UpdateMemberResponse {
+    TenantMember member = 1;
+}
+
+message AcceptMemberInvitationRequest {
+    string token = 1;
+}
+
+message AcceptMemberInvitationResponse {
+    TenantMember member = 1;
+}
