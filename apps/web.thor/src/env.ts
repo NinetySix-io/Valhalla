@@ -1,10 +1,9 @@
 import * as Yup from 'yup';
 
 import { buildEnvironment } from '@valhalla/utilities';
+import getConfig from 'next/config';
 
-// import getConfig from 'next/config';
-
-// const { publicRuntimeConfig } = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 const schema = Yup.object({
   SERVER: Yup.string().default('http://localhost:3002'),
@@ -12,7 +11,7 @@ const schema = Yup.object({
 
 export class Environment extends buildEnvironment({
   schema,
-  // vars: publicRuntimeConfig,
+  vars: publicRuntimeConfig,
 }) {
   static get isServer() {
     return typeof window === 'undefined';
