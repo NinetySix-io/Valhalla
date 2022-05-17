@@ -7,7 +7,7 @@ import {
 import {
   UpdateTenantRequest,
   UpdateTenantResponse,
-} from '@serv.tenants/protobuf/tenants';
+} from '@app/protobuf/tenants';
 
 import { Logger } from '@nestjs/common';
 import { RpcHandler } from '@valhalla/serv.core';

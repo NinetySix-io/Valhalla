@@ -7,11 +7,11 @@ import {
 import {
   DeleteTenantSubscriptionRequest,
   DeleteTenantSubscriptionResponse,
-} from '@serv.tenant.billings/protobuf/tenant.billing';
+} from '@app/protobuf/tenant.billing';
 
 import { Logger } from '@nestjs/common';
 import { RpcHandler } from '@valhalla/serv.core';
-import { TenantSubscriptionsModel } from '@serv.tenant.billings/entities/tenant.subscriptions';
+import { TenantSubscriptionsModel } from '@app/entities/tenant.subscriptions';
 
 export class DeleteTenantSubscriptionCommand implements ICommand {
   constructor(public readonly input: DeleteTenantSubscriptionRequest) {}

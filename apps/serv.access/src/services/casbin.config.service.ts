@@ -1,7 +1,7 @@
 import { InjectConfig } from '@nestcloud2/config';
 import { EtcdConfig } from '@nestcloud2/config/config.etcd';
 import { Injectable } from '@nestjs/common';
-import { aclPath } from '@serv.access/constants';
+import { aclPath } from '@app/constants';
 import { MongoAdapter } from '../lib/casbin.mongodb.adapter';
 import {
   NestCasbinModuleOptions,

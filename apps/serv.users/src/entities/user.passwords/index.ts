@@ -4,7 +4,7 @@ import { InjectModel } from 'nestjs-typegoose';
 import { UserPasswordSchema } from './schema';
 import * as bcrypt from 'bcryptjs';
 import { UserSchema } from '../users/schema';
-import { BootConfigService } from '@serv.users/services/boot.config.service';
+import { BootConfigService } from '@app/services/boot.config.service';
 
 @Injectable()
 export class UserPasswordsModel extends BaseFactory<UserPasswordSchema> {

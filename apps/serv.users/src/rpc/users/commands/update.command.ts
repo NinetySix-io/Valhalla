@@ -6,12 +6,12 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { UpdateRequest, UpdateResponse } from '@serv.users/protobuf/users';
+import { UpdateRequest, UpdateResponse } from '@app/protobuf/users';
 
 import { RpcHandler } from '@valhalla/serv.core';
-import { UserTransformer } from '@serv.users/entities/users/transformer';
+import { UserTransformer } from '@app/entities/users/transformer';
 import { UserUpdatedEvent } from '../events/user.updated.event';
-import { UsersModel } from '@serv.users/entities/users';
+import { UsersModel } from '@app/entities/users';
 
 export class UpdateAccountCommand implements ICommand {
   constructor(

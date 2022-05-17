@@ -7,11 +7,11 @@ import {
 import {
   UpdateTenantPlanRequest,
   UpdateTenantPlanResponse,
-} from '@serv.tenant.billings/protobuf/tenant.billing';
+} from '@app/protobuf/tenant.billing';
 
 import { Logger } from '@nestjs/common';
 import { RpcHandler } from '@valhalla/serv.core';
-import { TenantPlansModel } from '@serv.tenant.billings/entities/tenant.plans';
+import { TenantPlansModel } from '@app/entities/tenant.plans';
 
 export class UpdateTenantPlanCommand implements ICommand {
   constructor(

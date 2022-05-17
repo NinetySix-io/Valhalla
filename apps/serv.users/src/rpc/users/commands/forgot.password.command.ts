@@ -7,15 +7,15 @@ import {
 import {
   ForgotPasswordRequest,
   ForgotPasswordResponse,
-} from '@serv.users/protobuf/users';
+} from '@app/protobuf/users';
 
-import { BootConfigService } from '@serv.users/services/boot.config.service';
+import { BootConfigService } from '@app/services/boot.config.service';
 import { ForgotPasswordSentEvent } from '../events/forgot.password.sent.event';
 import { JwtService } from '@nestjs/jwt';
 import { RpcHandler } from '@valhalla/serv.core';
-import { UserSchema } from '@serv.users/entities/users/schema';
-import { UserTransformer } from '@serv.users/entities/users/transformer';
-import { UsersModel } from '@serv.users/entities/users';
+import { UserSchema } from '@app/entities/users/schema';
+import { UserTransformer } from '@app/entities/users/transformer';
+import { UsersModel } from '@app/entities/users';
 
 export class ForgotAccountPasswordCommand implements ICommand {
   constructor(public readonly cmd: Partial<ForgotPasswordRequest>) {}

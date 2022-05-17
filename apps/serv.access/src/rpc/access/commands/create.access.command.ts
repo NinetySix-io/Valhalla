@@ -7,11 +7,11 @@ import {
 import {
   CreateAccessRequest,
   CreateAccessResponse,
-} from '@serv.access/protobuf/access';
+} from '@app/protobuf/access';
 
 import { AccessTokenCreatedEvent } from '../events/access.token.created.event';
-import { AccessTokenTransformer } from '@serv.access/entities/access.tokens/transformer';
-import { AccessTokensModel } from '@serv.access/entities/access.tokens';
+import { AccessTokenTransformer } from '@app/entities/access.tokens/transformer';
+import { AccessTokensModel } from '@app/entities/access.tokens';
 import { NestCasbinService } from 'nestjs-casbin';
 import { RpcException } from '@nestjs/microservices';
 import { RpcHandler } from '@valhalla/serv.core';

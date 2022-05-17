@@ -1,9 +1,6 @@
 import { CacheStore, CACHE_MANAGER, Inject } from '@nestjs/common';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import {
-  HasRightsRequest,
-  HasRightsResponse,
-} from '@serv.access/protobuf/access';
+import { HasRightsRequest, HasRightsResponse } from '@app/protobuf/access';
 import { RpcHandler } from '@valhalla/serv.core';
 import { isNil } from '@valhalla/utilities';
 import { NestCasbinService } from 'nestjs-casbin';

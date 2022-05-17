@@ -11,7 +11,7 @@ import {
 import { CacheProvider } from '@emotion/react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Head from 'next/head';
-import { MainLayout } from '@web.thor/layout/main';
+import { MainLayout } from '@app/layout/main';
 import { NextSeo } from 'next-seo';
 import { ThemeProvider } from '@mui/material/styles';
 

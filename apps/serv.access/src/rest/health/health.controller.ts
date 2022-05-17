@@ -1,3 +1,4 @@
+import { ACCESS_SERVICE_NAME, protobufPackage } from '@app/protobuf/access';
 import { Controller, Get } from '@nestjs/common';
 import {
   GRPCHealthIndicator,
@@ -5,14 +6,10 @@ import {
   HealthCheckService,
   HealthIndicatorFunction,
 } from '@nestjs/terminus';
-import {
-  ACCESS_SERVICE_NAME,
-  protobufPackage,
-} from '@serv.access/protobuf/access';
 
-import { BootConfigService } from '@serv.access/services/boot.config.service';
+import { BootConfigService } from '@app/services/boot.config.service';
 import { GrpcOptions } from '@nestjs/microservices';
-import { protoPath } from '@serv.access/constants';
+import { protoPath } from '@app/constants';
 
 @Controller('health')
 export class RestHealthController {

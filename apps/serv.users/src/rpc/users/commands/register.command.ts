@@ -4,16 +4,16 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { RegisterRequest, RegisterResponse } from '@serv.users/protobuf/users';
+import { RegisterRequest, RegisterResponse } from '@app/protobuf/users';
 
-import { BootConfigService } from '@serv.users/services/boot.config.service';
+import { BootConfigService } from '@app/services/boot.config.service';
 import { JwtService } from '@nestjs/jwt';
 import { RpcHandler } from '@valhalla/serv.core';
 import { UserRegisteredEvent } from '../events/user.registered.event';
-import { UserSchema } from '@serv.users/entities/users/schema';
-import { UserTransformer } from '@serv.users/entities/users/transformer';
-import { UsersModel } from '@serv.users/entities/users';
-import { generateVerificationCode } from '@serv.users/lib/generate.verification.code';
+import { UserSchema } from '@app/entities/users/schema';
+import { UserTransformer } from '@app/entities/users/transformer';
+import { UsersModel } from '@app/entities/users';
+import { generateVerificationCode } from '@app/lib/generate.verification.code';
 
 export class RegisterAccountCommand implements ICommand {
   constructor(public readonly cmd: RegisterRequest) {}

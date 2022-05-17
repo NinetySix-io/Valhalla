@@ -20,20 +20,20 @@ import {
   UpdateTenantPlanResponse,
   UpdateTenantSubscriptionRequest,
   UpdateTenantSubscriptionResponse,
-} from '@serv.tenant.billings/protobuf/tenant.billing';
+} from '@app/protobuf/tenant.billing';
 
 import { Controller } from '@nestjs/common';
-import { CreateTenantPlanCommand } from '@serv.tenant.billings/rpc/tenant.billing/commands/create.tenant.plan.command';
-import { CreateTenantSubscriptionCommand } from '@serv.tenant.billings/rpc/tenant.billing/commands/create.tenant.subscription.command';
-import { DeleteTenantPlanCommand } from '@serv.tenant.billings/rpc/tenant.billing/commands/delete.tenant.plan.command';
-import { DeleteTenantSubscriptionCommand } from '@serv.tenant.billings/rpc/tenant.billing/commands/delete.tenant.subscription.command';
-import { GetTenantInvoiceQuery } from '@serv.tenant.billings/rpc/tenant.billing/queries/get.tenant.invoice.query';
-import { GetTenantPlanQuery } from '@serv.tenant.billings/rpc/tenant.billing/queries/get.tenant.plan.query';
-import { GetTenantSubscriptionQuery } from '@serv.tenant.billings/rpc/tenant.billing/queries/get.tenant.subscription.query';
+import { CreateTenantPlanCommand } from '@app/rpc/tenant.billing/commands/create.tenant.plan.command';
+import { CreateTenantSubscriptionCommand } from '@app/rpc/tenant.billing/commands/create.tenant.subscription.command';
+import { DeleteTenantPlanCommand } from '@app/rpc/tenant.billing/commands/delete.tenant.plan.command';
+import { DeleteTenantSubscriptionCommand } from '@app/rpc/tenant.billing/commands/delete.tenant.subscription.command';
+import { GetTenantInvoiceQuery } from '@app/rpc/tenant.billing/queries/get.tenant.invoice.query';
+import { GetTenantPlanQuery } from '@app/rpc/tenant.billing/queries/get.tenant.plan.query';
+import { GetTenantSubscriptionQuery } from '@app/rpc/tenant.billing/queries/get.tenant.subscription.query';
 import { GrpcMethod } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
-import { UpdateTenantPlanCommand } from '@serv.tenant.billings/rpc/tenant.billing/commands/update.tenant.plan.command';
-import { UpdateTenantSubscriptionCommand } from '@serv.tenant.billings/rpc/tenant.billing/commands/update.tenant.subscription.command';
+import { UpdateTenantPlanCommand } from '@app/rpc/tenant.billing/commands/update.tenant.plan.command';
+import { UpdateTenantSubscriptionCommand } from '@app/rpc/tenant.billing/commands/update.tenant.subscription.command';
 
 @Controller()
 export class RpcTenantBillingsController

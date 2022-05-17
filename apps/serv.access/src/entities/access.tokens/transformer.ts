@@ -1,4 +1,4 @@
-import { Access } from '@serv.access/protobuf/access';
+import { Access } from '@app/protobuf/access';
 import { AccessTokenSchema } from './schema';
 
 export class AccessTokenTransformer {

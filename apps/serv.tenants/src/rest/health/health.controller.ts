@@ -5,14 +5,11 @@ import {
   HealthCheckService,
   HealthIndicatorFunction,
 } from '@nestjs/terminus';
-import {
-  TENANTS_SERVICE_NAME,
-  protobufPackage,
-} from '@serv.tenants/protobuf/tenants';
+import { TENANTS_SERVICE_NAME, protobufPackage } from '@app/protobuf/tenants';
 
-import { BootConfigService } from '@serv.tenants/services/boot.config.service';
+import { BootConfigService } from '@app/services/boot.config.service';
 import { GrpcOptions } from '@nestjs/microservices';
-import { protoPath } from '@serv.tenants/constants';
+import { protoPath } from '@app/constants';
 
 @Controller('health')
 export class RestHealthController {

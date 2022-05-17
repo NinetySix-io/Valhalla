@@ -7,11 +7,11 @@ import {
 import {
   DeleteTenantPlanRequest,
   DeleteTenantPlanResponse,
-} from '@serv.tenant.billings/protobuf/tenant.billing';
+} from '@app/protobuf/tenant.billing';
 
 import { Logger } from '@nestjs/common';
 import { RpcHandler } from '@valhalla/serv.core';
-import { TenantPlansModel } from '@serv.tenant.billings/entities/tenant.plans';
+import { TenantPlansModel } from '@app/entities/tenant.plans';
 
 export class DeleteTenantPlanCommand implements ICommand {
   constructor(public readonly input: DeleteTenantPlanRequest) {}

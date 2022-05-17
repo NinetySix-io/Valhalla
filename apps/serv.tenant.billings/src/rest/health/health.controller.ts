@@ -8,11 +8,11 @@ import {
 import {
   TENANT_BILLINGS_SERVICE_NAME,
   protobufPackage,
-} from '@serv.tenant.billings/protobuf/tenant.billing';
+} from '@app/protobuf/tenant.billing';
 
-import { BootConfigService } from '@serv.tenant.billings/services/boot.config.service';
+import { BootConfigService } from '@app/services/boot.config.service';
 import { GrpcOptions } from '@nestjs/microservices';
-import { protoPath } from '@serv.tenant.billings/constants';
+import { protoPath } from '@app/constants';
 
 @Controller('health')
 export class RestHealthController {

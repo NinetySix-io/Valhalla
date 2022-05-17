@@ -8,12 +8,12 @@ import {
 } from '@mui/material';
 import { EmailLoginForm, GetServerSideProps, Logo } from '@valhalla/react';
 
-import { BaseLayout } from '@web.thor/layout/base';
+import { BaseLayout } from '@app/layout/base';
 import { FaArrowLeft } from 'react-icons/fa';
 import NextLink from 'next/link';
-import { Page } from '@web.thor/types/next';
-import { useLoginMutation } from '@web.thor/graphql/odin/generated.gql';
-import { withApollo } from '@web.thor/graphql/odin/with.apollo';
+import { Page } from '@app/types/next';
+import { useLoginMutation } from '@app/graphql/odin/generated.gql';
+import { withApollo } from '@app/graphql/odin/with.apollo';
 
 const PageContainer = styled(Container)`
   flex-grow: 1;

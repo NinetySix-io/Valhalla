@@ -42,7 +42,7 @@
       "import {",
       "\t$1Request,",
       "\t$1Response,",
-      "} from '@serv.$2/protobuf/$2';",
+      "} from '@app/protobuf/$2';",
       "",
       "import { LoggerService } from '@nestjs/common';",
       "import { RpcHandler } from '@valhalla/serv.core';",

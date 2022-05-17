@@ -7,14 +7,14 @@ import {
 import {
   SendVerificationCodeRequest,
   SendVerificationCodeResponse,
-} from '@serv.users/protobuf/users';
+} from '@app/protobuf/users';
 
 import { EmailVerificationSentEvent } from '../events/email.verification.sent.event';
 import { JwtService } from '@nestjs/jwt';
 import { RpcHandler } from '@valhalla/serv.core';
-import { UserTransformer } from '@serv.users/entities/users/transformer';
-import { UsersModel } from '@serv.users/entities/users';
-import { generateVerificationCode } from '@serv.users/lib/generate.verification.code';
+import { UserTransformer } from '@app/entities/users/transformer';
+import { UsersModel } from '@app/entities/users';
+import { generateVerificationCode } from '@app/lib/generate.verification.code';
 
 export class SendAccountEmailVerificationCommand implements ICommand {
   constructor(public readonly input: SendVerificationCodeRequest) {}

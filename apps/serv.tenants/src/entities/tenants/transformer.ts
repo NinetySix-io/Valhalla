@@ -1,4 +1,4 @@
-import { Tenant as TenantProto } from '@serv.tenants/protobuf/tenants';
+import { Tenant as TenantProto } from '@app/protobuf/tenants';
 import { TenantSchema } from './schema';
 
 export class TenantTransformer {

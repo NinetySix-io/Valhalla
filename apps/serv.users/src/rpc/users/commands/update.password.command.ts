@@ -7,13 +7,13 @@ import {
 import {
   UpdatePasswordRequest,
   UpdatePasswordResponse,
-} from '@serv.users/protobuf/users';
+} from '@app/protobuf/users';
 
 import { RpcHandler } from '@valhalla/serv.core';
 import { UserPasswordUpdatedEvent } from '../events/user.password.updated.event';
-import { UserPasswordsModel } from '@serv.users/entities/user.passwords';
-import { UserTransformer } from '@serv.users/entities/users/transformer';
-import { UsersModel } from '@serv.users/entities/users';
+import { UserPasswordsModel } from '@app/entities/user.passwords';
+import { UserTransformer } from '@app/entities/users/transformer';
+import { UsersModel } from '@app/entities/users';
 import mongoose from 'mongoose';
 
 export class UpdateAccountPasswordCommand implements ICommand {

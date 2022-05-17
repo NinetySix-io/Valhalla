@@ -21,21 +21,21 @@ import {
   VerifyActivationLinkResponse,
   VerifyUserRequest,
   VerifyUserResponse,
-} from '@serv.users/protobuf/users';
+} from '@app/protobuf/users';
 import { GrpcMethod, RpcException } from '@nestjs/microservices';
 
 import { Controller } from '@nestjs/common';
-import { ForgotAccountPasswordCommand } from '@serv.users/rpc/users/commands/forgot.password.command';
+import { ForgotAccountPasswordCommand } from '@app/rpc/users/commands/forgot.password.command';
 import { JwtService } from '@nestjs/jwt';
-import { LoginAccountCommand } from '@serv.users/rpc/users/commands/login.command';
+import { LoginAccountCommand } from '@app/rpc/users/commands/login.command';
 import { Metadata } from '@grpc/grpc-js';
 import { Observable } from 'rxjs';
-import { RegisterAccountCommand } from '@serv.users/rpc/users/commands/register.command';
-import { SendAccountEmailVerificationCommand } from '@serv.users/rpc/users/commands/send.email.verification.command';
+import { RegisterAccountCommand } from '@app/rpc/users/commands/register.command';
+import { SendAccountEmailVerificationCommand } from '@app/rpc/users/commands/send.email.verification.command';
 import { TransformMethodError } from '@valhalla/serv.core';
-import { UpdateAccountCommand } from '@serv.users/rpc/users/commands/update.command';
-import { UpdateAccountPasswordCommand } from '@serv.users/rpc/users/commands/update.password.command';
-import { VerifyAccountEmailCommand } from '@serv.users/rpc/users/commands/verify.email.command';
+import { UpdateAccountCommand } from '@app/rpc/users/commands/update.command';
+import { UpdateAccountPasswordCommand } from '@app/rpc/users/commands/update.password.command';
+import { VerifyAccountEmailCommand } from '@app/rpc/users/commands/verify.email.command';
 
 @Controller()
 export class RpcUsersController implements UsersServiceController {

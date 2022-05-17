@@ -1,11 +1,8 @@
-import {
-  FindAccessRequest,
-  FindAccessResponse,
-} from '@serv.access/protobuf/access';
+import { FindAccessRequest, FindAccessResponse } from '@app/protobuf/access';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
-import { AccessTokenTransformer } from '@serv.access/entities/access.tokens/transformer';
-import { AccessTokensModel } from '@serv.access/entities/access.tokens';
+import { AccessTokenTransformer } from '@app/entities/access.tokens/transformer';
+import { AccessTokensModel } from '@app/entities/access.tokens';
 import { RpcException } from '@nestjs/microservices';
 import { RpcHandler } from '@valhalla/serv.core';
 

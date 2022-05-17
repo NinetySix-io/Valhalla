@@ -1,7 +1,4 @@
-import {
-  GetMemberRequest,
-  GetMemberResponse,
-} from '@serv.tenants/protobuf/tenants';
+import { GetMemberRequest, GetMemberResponse } from '@app/protobuf/tenants';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { Logger } from '@nestjs/common';

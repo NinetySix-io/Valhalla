@@ -1,5 +1,6 @@
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
+  ACCESS_SERVICE_NAME,
+  AccessServiceController,
   CreateAccessRequest,
   CreateAccessResponse,
   DeleteAccessRequest,
@@ -8,20 +9,19 @@ import {
   FindAccessResponse,
   HasRightsRequest,
   HasRightsResponse,
-  ACCESS_SERVICE_NAME,
-  AccessServiceController,
   ReadAccessRequest,
   ReadAccessResponse,
-} from '@serv.access/protobuf/access';
+} from '@app/protobuf/access';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { Controller } from '@nestjs/common';
-import { CreateAccessCommand } from '@serv.access/rpc/access/commands/create.access.command';
-import { DeleteAccessCommand } from '@serv.access/rpc/access/commands/delete.access.command';
-import { FindAccessQuery } from '@serv.access/rpc/access/queries/find.access.query';
+import { CreateAccessCommand } from '@app/rpc/access/commands/create.access.command';
+import { DeleteAccessCommand } from '@app/rpc/access/commands/delete.access.command';
+import { FindAccessQuery } from '@app/rpc/access/queries/find.access.query';
 import { GrpcMethod } from '@nestjs/microservices';
-import { HasRightsQuery } from '@serv.access/rpc/access/queries/has.rights.query';
+import { HasRightsQuery } from '@app/rpc/access/queries/has.rights.query';
 import { Metadata } from '@grpc/grpc-js';
-import { ReadAccessQuery } from '@serv.access/rpc/access/queries/read.access.query';
+import { ReadAccessQuery } from '@app/rpc/access/queries/read.access.query';
 import { getIdentityFromCtx } from '@valhalla/serv.core';
 
 @Controller()

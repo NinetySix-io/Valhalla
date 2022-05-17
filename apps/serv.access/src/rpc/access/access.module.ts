@@ -1,13 +1,13 @@
+import { AccessTokenSchema } from '@app/entities/access.tokens/schema';
+import { AccessTokensModel } from '@app/entities/access.tokens';
+import { CreateAccessHandler } from '@app/rpc/access/commands/create.access.command';
+import { DeleteAccessHandler } from '@app/rpc/access/commands/delete.access.command';
+import { FindAccessHandler } from '@app/rpc/access/queries/find.access.query';
+import { HasRightsHandler } from '@app/rpc/access/queries/has.rights.query';
 import { Module } from '@nestjs/common';
-import { AccessTokensModel } from '@serv.access/entities/access.tokens';
-import { AccessTokenSchema } from '@serv.access/entities/access.tokens/schema';
-import { CreateAccessHandler } from '@serv.access/rpc/access/commands/create.access.command';
-import { DeleteAccessHandler } from '@serv.access/rpc/access/commands/delete.access.command';
-import { FindAccessHandler } from '@serv.access/rpc/access/queries/find.access.query';
-import { HasRightsHandler } from '@serv.access/rpc/access/queries/has.rights.query';
-import { ReadAccessHandler } from '@serv.access/rpc/access/queries/read.access.query';
-import { TypegooseModule } from 'nestjs-typegoose';
+import { ReadAccessHandler } from '@app/rpc/access/queries/read.access.query';
 import { RpcAccessController } from './access.controller';
+import { TypegooseModule } from 'nestjs-typegoose';
 
 @Module({
   imports: [TypegooseModule.forFeature([AccessTokenSchema])],

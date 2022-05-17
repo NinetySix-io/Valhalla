@@ -6,12 +6,12 @@ import {
   split,
 } from '@apollo/client';
 
-import { Environment } from '@web.thor/env';
+import { Environment } from '@app/env';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { nanoid } from 'nanoid';
 import nextWithApollo from 'next-with-apollo';
-import { withLayout } from '@web.thor/middlewares/with.layout';
+import { withLayout } from '@app/middlewares/with.layout';
 
 export const withApollo = nextWithApollo(
   ({ initialState, headers, ...rest }) => {

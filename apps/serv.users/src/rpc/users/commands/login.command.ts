@@ -4,13 +4,13 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { LoginRequest, LoginResponse } from '@serv.users/protobuf/users';
+import { LoginRequest, LoginResponse } from '@app/protobuf/users';
 
 import { RpcHandler } from '@valhalla/serv.core';
 import { UserLoggedInEvent } from '../events/user.logged.in.event';
-import { UserPasswordsModel } from '@serv.users/entities/user.passwords';
-import { UserTransformer } from '@serv.users/entities/users/transformer';
-import { UsersModel } from '@serv.users/entities/users';
+import { UserPasswordsModel } from '@app/entities/user.passwords';
+import { UserTransformer } from '@app/entities/users/transformer';
+import { UsersModel } from '@app/entities/users';
 
 export class LoginAccountCommand implements ICommand {
   constructor(public readonly cmd: LoginRequest) {}

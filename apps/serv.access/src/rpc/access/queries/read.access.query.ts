@@ -1,13 +1,10 @@
 import * as yup from 'yup';
 
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import {
-  ReadAccessRequest,
-  ReadAccessResponse,
-} from '@serv.access/protobuf/access';
+import { ReadAccessRequest, ReadAccessResponse } from '@app/protobuf/access';
 
-import { AccessTokenTransformer } from '@serv.access/entities/access.tokens/transformer';
-import { AccessTokensModel } from '@serv.access/entities/access.tokens';
+import { AccessTokenTransformer } from '@app/entities/access.tokens/transformer';
+import { AccessTokensModel } from '@app/entities/access.tokens';
 import { RpcHandler } from '@valhalla/serv.core';
 
 export class ReadAccessQuery implements IQuery {

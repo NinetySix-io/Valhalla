@@ -7,11 +7,11 @@ import {
 } from '@valhalla/react';
 import { Button, Container, Grid, Typography, styled } from '@mui/material';
 
-import { BaseLayout } from '@web.thor/layout/base';
+import { BaseLayout } from '@app/layout/base';
 import { FaUser } from 'react-icons/fa';
 import { GetServerSideProps } from '@valhalla/react';
 import NextLink from 'next/link';
-import { Page } from '@web.thor/types/next';
+import { Page } from '@app/types/next';
 import React from 'react';
 import cx from 'clsx';
 import styles from './styles.module.css';

@@ -7,11 +7,11 @@ import {
 import {
   DeleteAccessRequest,
   DeleteAccessResponse,
-} from '@serv.access/protobuf/access';
+} from '@app/protobuf/access';
 
 import { AccessTokenDeletedEvent } from '../events/access.token.deleted.event';
-import { AccessTokenTransformer } from '@serv.access/entities/access.tokens/transformer';
-import { AccessTokensModel } from '@serv.access/entities/access.tokens';
+import { AccessTokenTransformer } from '@app/entities/access.tokens/transformer';
+import { AccessTokensModel } from '@app/entities/access.tokens';
 import { NestCasbinService } from 'nestjs-casbin';
 import { RpcHandler } from '@valhalla/serv.core';
 import { ServTenants } from '@valhalla/entities';

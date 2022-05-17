@@ -12,10 +12,10 @@ import { ApolloProvider } from '@apollo/client';
 import { CacheProvider } from '@emotion/react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Head from 'next/head';
-import { MainLayout } from '@web.loki/layout/main';
+import { MainLayout } from '@app/layout/main';
 import { NextSeo } from 'next-seo';
 import { ThemeProvider } from '@mui/material/styles';
-import { odinClient } from '@web.loki/graphql/odin/client';
+import { odinClient } from '@app/graphql/odin/client';
 
 const clientSideEmotionCache = createEmotionCache();
 

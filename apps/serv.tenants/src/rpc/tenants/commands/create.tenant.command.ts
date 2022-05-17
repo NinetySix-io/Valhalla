@@ -7,21 +7,21 @@ import {
 import {
   CreateTenantRequest,
   CreateTenantResponse,
-} from '@serv.tenants/protobuf/tenants';
+} from '@app/protobuf/tenants';
 import {
   TenantMemberRole,
   TenantMemberStatus,
-} from '@serv.tenants/entities/tenant.members/schema';
+} from '@app/entities/tenant.members/schema';
 
 import { RpcHandler } from '@valhalla/serv.core';
 import { ServUsers } from '@valhalla/entities';
 import { TenantCreatedEvent } from '../events/tenant.created.event';
 import { TenantMemberCreatedEvent } from '../events/tenant.member.created.event';
-import { TenantMemberTransformer } from '@serv.tenants/entities/tenant.members/transformer';
-import { TenantMembersModel } from '@serv.tenants/entities/tenant.members';
-import { TenantPlan } from '@serv.tenants/entities/tenants/schema';
-import { TenantTransformer } from '@serv.tenants/entities/tenants/transformer';
-import { TenantsModel } from '@serv.tenants/entities/tenants';
+import { TenantMemberTransformer } from '@app/entities/tenant.members/transformer';
+import { TenantMembersModel } from '@app/entities/tenant.members';
+import { TenantPlan } from '@app/entities/tenants/schema';
+import { TenantTransformer } from '@app/entities/tenants/transformer';
+import { TenantsModel } from '@app/entities/tenants';
 import mongoose from 'mongoose';
 import { slugify } from '@valhalla/utilities';
 

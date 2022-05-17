@@ -1,4 +1,4 @@
-import { TenantMember as TenantMemberProto } from '@serv.tenants/protobuf/tenants';
+import { TenantMember as TenantMemberProto } from '@app/protobuf/tenants';
 import { TenantMemberSchema } from './schema';
 
 export class TenantMemberTransformer {
