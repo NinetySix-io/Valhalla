@@ -2,7 +2,7 @@ service:
   discoveryHost: host.docker.internal
   name: serv.users
   port: 3005
-  tags: ['v1.0.0', 'microservice']
+  tags: ['v1.0.0', 'microservice', 'serv', 'grpc', 'rest']
   maxRetry: 5
   retryInterval: 5000
   healthCheck:

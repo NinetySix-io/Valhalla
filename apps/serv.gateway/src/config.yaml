@@ -2,7 +2,7 @@ service:
   discoveryHost: host.docker.internal
   name: serv.gateway
   port: 3002
-  tags: ['v1.0.0', 'microservice', 'api-gateway', 'gateway']
+  tags: ['v1.0.0', 'microservice', 'api-gateway', 'rest', 'graphql']
   healthCheck:
     protocol: http
     timeout: 1s

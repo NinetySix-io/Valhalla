@@ -2,7 +2,7 @@ service:
   discoveryHost: host.docker.internal
   name: serv.tenant.billings
   port: 3003
-  tags: ['v1.0.0', 'microservice']
+  tags: ['v1.0.0', 'microservice', 'serv', 'grpc', 'rest']
   healthCheck:
     protocol: http
     timeout: 1s
