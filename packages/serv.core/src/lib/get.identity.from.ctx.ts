@@ -3,7 +3,6 @@ import { ServTenants, ServUsers } from '@valhalla/entities';
 import { Metadata } from '@grpc/grpc-js';
 
 /**
- * TODO: fix type
  * @param meta
  * @returns
  */
@@ -16,7 +15,7 @@ export function getIdentityFromCtx(meta: Metadata) {
 
   let user: ServUsers.User | null = null;
   let tenant: ServTenants.Tenant | null = null;
-  let tenantInfo: unknown = null;
+  let tenantInfo: { tenantId: string } | null = null;
   let inApp = false;
 
   if (tempUser && typeof tempUser === 'string') {

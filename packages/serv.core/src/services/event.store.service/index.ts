@@ -7,6 +7,8 @@ import { EtcdConfig } from '@nestcloud2/config/config.etcd';
 import { Injectable } from '@nestjs/common';
 import { ConsulDatabaseConfig } from './types';
 
+export * from './types';
+
 @Injectable()
 export class EventStoreConfigService implements EventStoreOptionsFactory {
   constructor(@InjectConfig() private readonly config: EtcdConfig) {}

@@ -1,8 +1,3 @@
-tenant-billing:
-  port: 9900
-  database:
-    name: 'serv-users'
-
 app:
   auth:
     jwt:

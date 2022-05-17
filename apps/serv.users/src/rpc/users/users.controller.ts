@@ -37,7 +37,7 @@ import { UpdateAccountCommand } from '@serv.users/rpc/users/commands/update.comm
 import { UpdateAccountPasswordCommand } from '@serv.users/rpc/users/commands/update.password.command';
 import { VerifyAccountEmailCommand } from '@serv.users/rpc/users/commands/verify.email.command';
 
-@Controller('accounts')
+@Controller()
 export class RpcUsersController implements UsersServiceController {
   constructor(
     private readonly commandBus: CommandBus,

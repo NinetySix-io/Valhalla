@@ -1,0 +1,38 @@
+service:
+  discoveryHost: host.docker.internal
+  name: serv.access
+  port: 3001
+  tags: ['v1.0.0', 'microservice']
+  healthCheck:
+    protocol: http
+    timeout: 1s
+    interval: 10s
+    route: /health
+  maxRetry: 5
+  retryInterval: 5000
+
+grpc:
+  port: 3011
+
+consul:
+  host: localhost
+  port: 8500
+
+loadbalance:
+  ruleCls: RandomRule
+
+config:
+  name: valhalla/config/${{ service.name }}
+
+redis:
+  host: localhost
+  port: 6379
+  password: ''
+
+logger:
+  level: info
+  transports:
+    - transport: console
+      colorize: true
+      datePattern: YYYY-MM-DD h:mm:ss
+      label: ${{ service.name }}
