@@ -4,6 +4,8 @@ import { protoPath } from './constants';
 import { protobufPackage } from './protobuf/users';
 
 bootstrapApplication(AppModule, {
-  protoPath,
-  grpcPackage: protobufPackage,
+  grpc: {
+    protoPath,
+    package: protobufPackage,
+  },
 });

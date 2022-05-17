@@ -10,6 +10,8 @@ dotenv.config({
 });
 
 bootstrapApplication(AppModule, {
-  grpcPackage: protobufPackage,
-  protoPath,
+  grpc: {
+    protoPath,
+    package: protobufPackage,
+  },
 });

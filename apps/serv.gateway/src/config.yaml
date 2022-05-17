@@ -1,0 +1,30 @@
+service:
+  discoveryHost: host.docker.internal
+  name: serv.gateway
+  port: 3002
+  tags: ['v1.0.0', 'microservice', 'api-gateway', 'gateway']
+  healthCheck:
+    protocol: http
+    timeout: 1s
+    interval: 10s
+    route: /health
+  maxRetry: 5
+  retryInterval: 5000
+
+consul:
+  host: localhost
+  port: 8500
+
+loadbalance:
+  ruleCls: RandomRule
+
+config:
+  name: valhalla/config/${{ service.name }}
+
+logger:
+  level: info
+  transports:
+    - transport: console
+      colorize: true
+      datePattern: YYYY-MM-DD h:mm:ss
+      label: ${{ service.name }}

@@ -15,10 +15,9 @@ import { ServCoreSetup } from './setup';
  */
 export async function bootstrapApplication(
   AppModule: { new (): unknown },
-  options: {
+  options?: {
+    grpc?: ServCoreSetup['grpc'];
     hostName?: ServCoreSetup['hostname'];
-    protoPath: ServCoreSetup['protoPath'];
-    grpcPackage: ServCoreSetup['package'];
   },
 ) {
   const adapter = new FastifyAdapter();

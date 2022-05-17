@@ -4,33 +4,45 @@ import { INestApplication, Logger } from '@nestjs/common';
 
 export class ServCoreSetup {
   app: INestApplication;
-  protoPath: string | string[];
-  package: string;
   hostname = '0.0.0.0';
   logger = Logger;
+  hasMicroservices = false;
+  grpc?: {
+    protoPath: string | string[];
+    package: string;
+  };
 
   constructor(
     app: INestApplication,
-    options: {
-      protoPath: ServCoreSetup['protoPath'];
-      grpcPackage: ServCoreSetup['package'];
+    options?: {
+      grpc?: ServCoreSetup['grpc'];
       hostName?: ServCoreSetup['hostname'];
     },
   ) {
     this.app = app;
-    this.protoPath = options.protoPath;
-    this.package = options.grpcPackage;
+    this.grpc = options?.grpc;
     this.hostname = options?.hostName ?? this.hostname;
   }
-
+  /**
+   * It returns the `IBoot` instance that was registered with the `App` instance
+   * @returns The boot object.
+   */
   private get boot() {
     return this.app.get<IBoot>(BOOT);
   }
 
+  /**
+   * It returns the value of the service.port property from the bootstrap configuration
+   * @returns The port number of the service.
+   */
   private get servicePort(): number {
     return this.boot.get('service.port');
   }
 
+  /**
+   * It returns the value of the grpc.port property from the bootstrap file.
+   * @returns The value of the property 'grpc.port' in the boot object.
+   */
   private get gRpcPort(): number {
     return this.boot.get('grpc.port');
   }
@@ -40,28 +52,39 @@ export class ServCoreSetup {
   }
 
   /**
-   * It starts the microservice and the REST server
+   * It connects the gRPC server to the NestJS application
    */
-  async setup(): Promise<void> {
-    if (this.gRpcPort) {
-      const options: GrpcOptions['options'] = {
-        url: this.gRpcUrl,
-        protoPath: this.protoPath,
-        package: this.package,
-      };
-
-      this.logger.debug('gRPG', options);
-      this.app.connectMicroservice<GrpcOptions>({
-        transport: Transport.GRPC,
-        options,
-      });
+  private connectRpcServer(): void {
+    if (!this.gRpcPort || !this.grpc) {
+      return;
     }
 
-    await this.app.startAllMicroservices();
+    this.hasMicroservices = true;
+    const options: GrpcOptions['options'] = {
+      url: this.gRpcUrl,
+      protoPath: this.grpc.protoPath,
+      package: this.grpc.package,
+    };
+
+    this.logger.debug('gRPG', this.gRpcUrl);
+    this.app.connectMicroservice<GrpcOptions>({
+      transport: Transport.GRPC,
+      options,
+    });
+  }
+
+  /**
+   * The function `setup()` is an asynchronous function that connects to the RPC server, starts all
+   * microservices, and listens on the service port
+   */
+  async setup(): Promise<void> {
+    this.connectRpcServer();
+    if (this.hasMicroservices) {
+      await this.app.startAllMicroservices();
+    }
+
     await this.app.listen(this.servicePort);
     const url = await this.app.getUrl();
-    this.logger.debug('REST started', {
-      url,
-    });
+    this.logger.debug('REST started', url);
   }
 }
