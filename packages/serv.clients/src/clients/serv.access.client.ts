@@ -1,9 +1,9 @@
 import { GrpcClient, RpcClient, Service } from '@nestcloud2/grpc';
 import {
-  IAM_SERVICE_NAME,
-  IamServiceClient,
+  ACCESS_SERVICE_NAME,
+  AccessServiceClient,
   protobufPackage,
-} from '../protobuf/serv.iam';
+} from '../protobuf/serv.access';
 
 import { Injectable } from '@nestjs/common';
 import path from 'path';
@@ -11,23 +11,23 @@ import path from 'path';
 const protoPath = path.resolve(
   __dirname,
   '../protobuf',
-  'serv.iam',
-  'iam.proto',
+  'serv.access',
+  'access.proto',
 );
 
 @Injectable()
-export class IamRpcClientService {
+export class AccessRpcClientService {
   @RpcClient({
     package: protobufPackage,
-    service: IAM_SERVICE_NAME,
+    service: ACCESS_SERVICE_NAME,
     protoPath,
   })
   public readonly client: GrpcClient;
 
-  @Service(IAM_SERVICE_NAME, {
+  @Service(ACCESS_SERVICE_NAME, {
     package: protobufPackage,
     service: protobufPackage,
     protoPath,
   })
-  public svc: IamServiceClient;
+  public svc: AccessServiceClient;
 }

@@ -3,6 +3,11 @@ import { AnyObject, ObjectShape, TypeOfShape } from 'yup/lib/object';
 import { Maybe } from 'yup/lib/types';
 import { ObjectSchema } from 'yup/lib';
 
+export * from './is.dev';
+export * from './is.prod';
+export * from './is.staging';
+export * from './is.test';
+
 /**
  * It takes an object schema and returns a class that has a static `variables` property that is the
  * result of validating the environment variables against the schema

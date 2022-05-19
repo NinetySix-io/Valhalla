@@ -7,7 +7,7 @@ import {
 import {
   DeleteMemberRequest,
   DeleteMemberResponse,
-} from '@app/protobuf/tenants';
+} from '@app/rpc/protobuf/tenants';
 
 import { Logger } from '@nestjs/common';
 import { RpcHandler } from '@valhalla/serv.core';

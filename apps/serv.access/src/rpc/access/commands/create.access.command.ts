@@ -1,3 +1,5 @@
+import {} from '@valhalla/serv.clients';
+
 import {
   CommandHandler,
   EventBus,
@@ -7,7 +9,7 @@ import {
 import {
   CreateAccessRequest,
   CreateAccessResponse,
-} from '@app/protobuf/access';
+} from '@app/rpc/protobuf/access';
 
 import { AccessTokenCreatedEvent } from '../events/access.token.created.event';
 import { AccessTokenTransformer } from '@app/entities/access.tokens/transformer';
@@ -15,14 +17,13 @@ import { AccessTokensModel } from '@app/entities/access.tokens';
 import { NestCasbinService } from 'nestjs-casbin';
 import { RpcException } from '@nestjs/microservices';
 import { RpcHandler } from '@valhalla/serv.core';
-import { ServUsers } from '@valhalla/entities';
 import dayjs from 'dayjs';
 import mongoose from 'mongoose';
 
 export class CreateAccessCommand implements ICommand {
   constructor(
     public readonly cmd: CreateAccessRequest,
-    public readonly user: ServUsers.User,
+    public readonly user: any, //TODO
   ) {}
 }
 

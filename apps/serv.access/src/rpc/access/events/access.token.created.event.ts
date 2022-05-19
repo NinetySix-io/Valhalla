@@ -1,4 +1,4 @@
-import { Access } from '@app/protobuf/access';
+import { Access } from '@app/rpc/protobuf/access';
 import { IEvent } from '@nestjs/cqrs';
 
 export class AccessTokenCreatedEvent implements IEvent {

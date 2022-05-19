@@ -7,7 +7,7 @@ import {
 import {
   CreateTenantSubscriptionRequest,
   CreateTenantSubscriptionResponse,
-} from '@app/protobuf/tenant.billing';
+} from '@app/rpc/protobuf/tenant.billing';
 
 import { Logger } from '@nestjs/common';
 import { RpcHandler } from '@valhalla/serv.core';

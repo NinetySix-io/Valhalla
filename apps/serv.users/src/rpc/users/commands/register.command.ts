@@ -4,7 +4,7 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { RegisterRequest, RegisterResponse } from '@app/protobuf/users';
+import { RegisterRequest, RegisterResponse } from '@app/rpc/protobuf/users';
 
 import { BootConfigService } from '@app/services/boot.config.service';
 import { JwtService } from '@nestjs/jwt';

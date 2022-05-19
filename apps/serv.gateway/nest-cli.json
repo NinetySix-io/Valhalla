@@ -2,7 +2,7 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "assets": ["config.yaml", ".env"],
+    "assets": ["config.yaml", ".env", "**/fallback.graphql"],
     "watchAssets": true
   }
 }

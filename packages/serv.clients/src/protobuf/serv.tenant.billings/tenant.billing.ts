@@ -5,7 +5,7 @@ import * as _m0 from 'protobufjs/minimal';
 import { Observable } from 'rxjs';
 import { Metadata } from '@grpc/grpc-js';
 
-export const protobufPackage = 'io.valhalla.serv.tenant.billings';
+export const protobufPackage = 'serv.tenant.billings';
 
 export enum PlanPriceInterval {
   MONTH = 0,
@@ -238,8 +238,7 @@ export interface Event {
   topic: string;
 }
 
-export const IO_VALHALLA_SERV_TENANT_BILLINGS_PACKAGE_NAME =
-  'io.valhalla.serv.tenant.billings';
+export const SERV_TENANT_BILLINGS_PACKAGE_NAME = 'serv.tenant.billings';
 
 export interface TenantBillingsServiceClient {
   createTenantPlan(

@@ -1,4 +1,4 @@
-import { ServTenants, ServUsers } from '@valhalla/entities';
+import {} from '@valhalla/serv.clients';
 
 import { Metadata } from '@grpc/grpc-js';
 
@@ -13,8 +13,8 @@ export function getIdentityFromCtx(meta: Metadata) {
   const tempTenantInfo = gMap['x-tenant-info'];
   const tempTenant = gMap?.tenant;
 
-  let user: ServUsers.User | null = null;
-  let tenant: ServTenants.Tenant | null = null;
+  let user: any | null = null; //TODO
+  let tenant: any | null = null; //TODO
   let tenantInfo: { tenantId: string } | null = null;
   let inApp = false;
 

@@ -9,7 +9,7 @@ import { EmailVerifiedEvent } from '../events/email.verified.event';
 import { RpcHandler } from '@valhalla/serv.core';
 import { UserTransformer } from '@app/entities/users/transformer';
 import { UsersModel } from '@app/entities/users';
-import { VerifyUserResponse } from '@app/protobuf/users';
+import { VerifyUserResponse } from '@app/rpc/protobuf/users';
 
 export class VerifyAccountEmailCommand implements ICommand {
   constructor(public readonly code: string, public readonly email: string) {}

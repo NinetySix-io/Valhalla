@@ -1,3 +1,5 @@
+import {} from '@valhalla/serv.clients';
+
 import {
   CommandHandler,
   EventBus,
@@ -7,19 +9,18 @@ import {
 import {
   DeleteAccessRequest,
   DeleteAccessResponse,
-} from '@app/protobuf/access';
+} from '@app/rpc/protobuf/access';
 
 import { AccessTokenDeletedEvent } from '../events/access.token.deleted.event';
 import { AccessTokenTransformer } from '@app/entities/access.tokens/transformer';
 import { AccessTokensModel } from '@app/entities/access.tokens';
 import { NestCasbinService } from 'nestjs-casbin';
 import { RpcHandler } from '@valhalla/serv.core';
-import { ServTenants } from '@valhalla/entities';
 
 export class DeleteAccessCommand implements ICommand {
   constructor(
     public readonly cmd: DeleteAccessRequest,
-    public readonly tenantId: ServTenants.Tenant['id'],
+    public readonly tenantId: string, //TODO
   ) {}
 }
 

@@ -1,1 +1,1 @@
-export * from './tenant.billing'
+export * from './tenant.billing';

@@ -7,7 +7,7 @@ import {
 import {
   UpdatePasswordRequest,
   UpdatePasswordResponse,
-} from '@app/protobuf/users';
+} from '@app/rpc/protobuf/users';
 
 import { RpcHandler } from '@valhalla/serv.core';
 import { UserPasswordUpdatedEvent } from '../events/user.password.updated.event';

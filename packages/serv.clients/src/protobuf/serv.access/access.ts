@@ -5,7 +5,7 @@ import * as _m0 from 'protobufjs/minimal';
 import { Observable } from 'rxjs';
 import { Metadata } from '@grpc/grpc-js';
 
-export const protobufPackage = 'io.valhalla.serv.iam';
+export const protobufPackage = 'serv.access';
 
 export interface Access {
   id: string;
@@ -67,9 +67,9 @@ export interface HasRightsResponse {
   hasAccess: boolean;
 }
 
-export const IO_VALHALLA_SERV_IAM_PACKAGE_NAME = 'io.valhalla.serv.iam';
+export const SERV_ACCESS_PACKAGE_NAME = 'serv.access';
 
-export interface IamServiceClient {
+export interface AccessServiceClient {
   createAccess(
     request: CreateAccessRequest,
     metadata?: Metadata,
@@ -96,7 +96,7 @@ export interface IamServiceClient {
   ): Observable<HasRightsResponse>;
 }
 
-export interface IamServiceController {
+export interface AccessServiceController {
   createAccess(
     request: CreateAccessRequest,
     metadata?: Metadata,
@@ -138,7 +138,7 @@ export interface IamServiceController {
     | HasRightsResponse;
 }
 
-export function IamServiceControllerMethods() {
+export function AccessServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = [
       'createAccess',
@@ -152,7 +152,7 @@ export function IamServiceControllerMethods() {
         constructor.prototype,
         method,
       );
-      GrpcMethod('IamService', method)(
+      GrpcMethod('AccessService', method)(
         constructor.prototype[method],
         method,
         descriptor,
@@ -164,7 +164,7 @@ export function IamServiceControllerMethods() {
         constructor.prototype,
         method,
       );
-      GrpcStreamMethod('IamService', method)(
+      GrpcStreamMethod('AccessService', method)(
         constructor.prototype[method],
         method,
         descriptor,
@@ -173,7 +173,7 @@ export function IamServiceControllerMethods() {
   };
 }
 
-export const IAM_SERVICE_NAME = 'IamService';
+export const ACCESS_SERVICE_NAME = 'AccessService';
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

@@ -22,7 +22,6 @@
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "copy:entities": "node scripts/copy.entities",
     "copy:clients": "node scripts/copy.clients",
     "copy": "npm run copy:entities && npm run copy:clients"
   },

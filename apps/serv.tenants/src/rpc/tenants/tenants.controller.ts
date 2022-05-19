@@ -20,7 +20,7 @@ import {
   UpdateMemberResponse,
   UpdateTenantRequest,
   UpdateTenantResponse,
-} from '@app/protobuf/tenants';
+} from '@app/rpc/protobuf/tenants';
 
 import { Controller } from '@nestjs/common';
 import { Metadata } from '@grpc/grpc-js';

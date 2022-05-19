@@ -5,7 +5,7 @@ import {
   HealthCheckService,
   HealthIndicatorFunction,
 } from '@nestjs/terminus';
-import { USERS_SERVICE_NAME, protobufPackage } from '@app/protobuf/users';
+import { USERS_SERVICE_NAME, protobufPackage } from '@app/rpc/protobuf/users';
 
 import { BootConfigService } from '@app/services/boot.config.service';
 import { GrpcOptions } from '@nestjs/microservices';

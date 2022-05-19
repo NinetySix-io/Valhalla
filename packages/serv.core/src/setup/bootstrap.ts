@@ -6,6 +6,7 @@ import {
 import { NestCloud } from '@nestcloud2/core';
 import { NestFactory } from '@nestjs/core';
 import { ServCoreSetup } from './setup';
+import { loadDotEnv } from '../lib';
 
 /**
  * It creates a NestJS application, sets up the ServCore module, and returns the application
@@ -20,6 +21,8 @@ export async function bootstrapApplication(
     hostName?: ServCoreSetup['hostname'];
   },
 ) {
+  loadDotEnv();
+
   const adapter = new FastifyAdapter();
   const factory = await NestFactory.create<NestFastifyApplication>(
     AppModule,

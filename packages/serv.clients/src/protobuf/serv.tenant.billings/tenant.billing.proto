@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package io.valhalla.serv.tenant.billings;
+package serv.tenant.billings;
 
 service TenantBillingsService {
     rpc CreateTenantPlan(CreateTenantPlanRequest) returns (CreateTenantPlanResponse) {}

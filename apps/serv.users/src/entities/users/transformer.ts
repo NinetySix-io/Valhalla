@@ -1,4 +1,4 @@
-import { User as UserProto } from '@app/protobuf/users';
+import { User as UserProto } from '@app/rpc/protobuf/users';
 import { UserSchema } from './schema';
 
 export class UserTransformer {

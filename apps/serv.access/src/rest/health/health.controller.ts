@@ -1,4 +1,4 @@
-import { ACCESS_SERVICE_NAME, protobufPackage } from '@app/protobuf/access';
+import { ACCESS_SERVICE_NAME, protobufPackage } from '@app/rpc/protobuf/access';
 import { Controller, Get } from '@nestjs/common';
 import {
   GRPCHealthIndicator,

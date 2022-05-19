@@ -5,7 +5,10 @@ import {
   HealthCheckService,
   HealthIndicatorFunction,
 } from '@nestjs/terminus';
-import { TENANTS_SERVICE_NAME, protobufPackage } from '@app/protobuf/tenants';
+import {
+  TENANTS_SERVICE_NAME,
+  protobufPackage,
+} from '@app/rpc/protobuf/tenants';
 
 import { BootConfigService } from '@app/services/boot.config.service';
 import { GrpcOptions } from '@nestjs/microservices';

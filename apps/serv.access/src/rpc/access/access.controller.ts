@@ -11,7 +11,7 @@ import {
   HasRightsResponse,
   ReadAccessRequest,
   ReadAccessResponse,
-} from '@app/protobuf/access';
+} from '@app/rpc/protobuf/access';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { Controller } from '@nestjs/common';

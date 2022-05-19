@@ -7,7 +7,7 @@ import {
 import {
   ForgotPasswordRequest,
   ForgotPasswordResponse,
-} from '@app/protobuf/users';
+} from '@app/rpc/protobuf/users';
 
 import { BootConfigService } from '@app/services/boot.config.service';
 import { ForgotPasswordSentEvent } from '../events/forgot.password.sent.event';

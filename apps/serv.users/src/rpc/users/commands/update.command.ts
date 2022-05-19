@@ -6,7 +6,7 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { UpdateRequest, UpdateResponse } from '@app/protobuf/users';
+import { UpdateRequest, UpdateResponse } from '@app/rpc/protobuf/users';
 
 import { RpcHandler } from '@valhalla/serv.core';
 import { UserTransformer } from '@app/entities/users/transformer';

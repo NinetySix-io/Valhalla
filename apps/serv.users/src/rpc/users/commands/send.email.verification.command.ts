@@ -7,7 +7,7 @@ import {
 import {
   SendVerificationCodeRequest,
   SendVerificationCodeResponse,
-} from '@app/protobuf/users';
+} from '@app/rpc/protobuf/users';
 
 import { EmailVerificationSentEvent } from '../events/email.verification.sent.event';
 import { JwtService } from '@nestjs/jwt';

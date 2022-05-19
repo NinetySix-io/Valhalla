@@ -1,7 +1,10 @@
 import * as yup from 'yup';
 
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { ReadAccessRequest, ReadAccessResponse } from '@app/protobuf/access';
+import {
+  ReadAccessRequest,
+  ReadAccessResponse,
+} from '@app/rpc/protobuf/access';
 
 import { AccessTokenTransformer } from '@app/entities/access.tokens/transformer';
 import { AccessTokensModel } from '@app/entities/access.tokens';

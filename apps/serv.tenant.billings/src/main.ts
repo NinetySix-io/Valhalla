@@ -1,13 +1,7 @@
 import { AppModule } from './app.module';
 import { bootstrapApplication } from '@valhalla/serv.core';
-import dotenv from 'dotenv';
-import path from 'path';
 import { protoPath } from './constants';
-import { protobufPackage } from './protobuf/tenant.billing';
-
-dotenv.config({
-  path: path.resolve(__dirname, '.env'),
-});
+import { protobufPackage } from './rpc/protobuf/tenant.billing';
 
 bootstrapApplication(AppModule, {
   grpc: {

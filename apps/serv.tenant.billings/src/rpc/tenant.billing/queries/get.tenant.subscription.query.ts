@@ -1,7 +1,7 @@
 import {
   GetTenantSubscriptionRequest,
   GetTenantSubscriptionResponse,
-} from '@app/protobuf/tenant.billing';
+} from '@app/rpc/protobuf/tenant.billing';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { Logger } from '@nestjs/common';

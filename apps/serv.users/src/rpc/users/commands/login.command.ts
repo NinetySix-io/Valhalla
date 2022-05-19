@@ -4,7 +4,7 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { LoginRequest, LoginResponse } from '@app/protobuf/users';
+import { LoginRequest, LoginResponse } from '@app/rpc/protobuf/users';
 
 import { RpcHandler } from '@valhalla/serv.core';
 import { UserLoggedInEvent } from '../events/user.logged.in.event';

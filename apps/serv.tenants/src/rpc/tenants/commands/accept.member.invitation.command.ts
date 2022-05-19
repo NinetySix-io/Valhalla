@@ -1,7 +1,7 @@
 import {
   AcceptMemberInvitationRequest,
   AcceptMemberInvitationResponse,
-} from '@app/protobuf/tenants';
+} from '@app/rpc/protobuf/tenants';
 import {
   CommandHandler,
   EventBus,

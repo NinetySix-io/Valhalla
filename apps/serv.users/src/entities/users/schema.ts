@@ -1,6 +1,10 @@
 import { BaseSchema, SimpleModel } from '@valhalla/serv.core';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { modelOptions, prop } from '@typegoose/typegoose';
 
+import { Expose } from 'class-transformer';
+
+@ObjectType()
 @modelOptions({ schemaOptions: { timestamps: true } })
 export class UserEmailSchema extends BaseSchema {
   @prop()
@@ -16,6 +20,7 @@ export class UserEmailSchema extends BaseSchema {
   verificationCode?: string;
 }
 
+@ObjectType()
 @modelOptions({ schemaOptions: { timestamps: true } })
 export class UserPhoneSchema extends BaseSchema {
   @prop()
@@ -31,20 +36,31 @@ export class UserPhoneSchema extends BaseSchema {
   verificationCode?: string;
 }
 
+@ObjectType()
 @SimpleModel('users')
 export class UserSchema extends BaseSchema {
   @prop()
+  @Expose()
+  @Field()
   displayName: string;
 
   @prop()
+  @Expose()
+  @Field()
   firstName: string;
 
   @prop()
+  @Expose()
+  @Field()
   lastName: string;
 
   @prop({ _id: true, type: [UserEmailSchema] })
+  @Expose()
+  @Field(() => [UserEmailSchema])
   emails: UserEmailSchema[];
 
   @prop({ _id: true, type: [UserPhoneSchema] })
+  @Expose()
+  @Field(() => [UserPhoneSchema])
   phones: UserPhoneSchema[];
 }

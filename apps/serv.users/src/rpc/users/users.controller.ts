@@ -21,7 +21,7 @@ import {
   VerifyActivationLinkResponse,
   VerifyUserRequest,
   VerifyUserResponse,
-} from '@app/protobuf/users';
+} from '@app/rpc/protobuf/users';
 import { GrpcMethod, RpcException } from '@nestjs/microservices';
 
 import { Controller } from '@nestjs/common';

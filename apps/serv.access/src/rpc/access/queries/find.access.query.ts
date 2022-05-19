@@ -1,4 +1,7 @@
-import { FindAccessRequest, FindAccessResponse } from '@app/protobuf/access';
+import {
+  FindAccessRequest,
+  FindAccessResponse,
+} from '@app/rpc/protobuf/access';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { AccessTokenTransformer } from '@app/entities/access.tokens/transformer';

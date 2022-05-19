@@ -1,3 +1,5 @@
+import {} from '@valhalla/serv.clients';
+
 import {
   CommandHandler,
   EventBus,
@@ -7,14 +9,13 @@ import {
 import {
   CreateTenantRequest,
   CreateTenantResponse,
-} from '@app/protobuf/tenants';
+} from '@app/rpc/protobuf/tenants';
 import {
   TenantMemberRole,
   TenantMemberStatus,
 } from '@app/entities/tenant.members/schema';
 
 import { RpcHandler } from '@valhalla/serv.core';
-import { ServUsers } from '@valhalla/entities';
 import { TenantCreatedEvent } from '../events/tenant.created.event';
 import { TenantMemberCreatedEvent } from '../events/tenant.member.created.event';
 import { TenantMemberTransformer } from '@app/entities/tenant.members/transformer';
@@ -28,7 +29,7 @@ import { slugify } from '@valhalla/utilities';
 export class CreateTenantCommand implements ICommand {
   constructor(
     public readonly input: CreateTenantRequest,
-    public readonly user: ServUsers.User,
+    public readonly user: any, //TODO
   ) {}
 }
 

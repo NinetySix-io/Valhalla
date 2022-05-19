@@ -35,7 +35,7 @@
     "@nestjs/platform-fastify": "^8.4.4",
     "@nestjs/terminus": "^8.0.6",
     "@typegoose/typegoose": "^9.8.1",
-    "@valhalla/entities": "workspace:*",
+    "@valhalla/serv.clients": "workspace:*",
     "@valhalla/serv.core": "workspace:*",
     "@valhalla/utilities": "workspace:*",
     "casbin": "^5.15.1",

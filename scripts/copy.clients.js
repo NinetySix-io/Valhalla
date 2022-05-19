@@ -17,7 +17,7 @@ function writeClientFile(servApp) {
   const startCase = capitalize(toCamelCase(stripped));
 
   const template = `
-import { GrpcClient, RpcClient, Service } from '@nestcloud/grpc';
+import { GrpcClient, RpcClient, Service } from '@nestcloud2/grpc';
 import {
   ${allCaps}_SERVICE_NAME,
   ${startCase}ServiceClient,
@@ -67,17 +67,23 @@ function run() {
   const clientsIndex = [];
   const servApps = getServiceFiles();
 
+  if (fs.existsSync(protobufTarget)) {
+    console.warn("Removing", protobufTarget);
+    fs.rmdirSync(protobufTarget, { recursive: true });
+  }
+
   if (fs.existsSync(clientTarget)) {
     console.warn("Removing", clientTarget);
     fs.rmdirSync(clientTarget, { recursive: true });
   }
 
+  fs.mkdirSync(protobufTarget);
   fs.mkdirSync(clientTarget);
-  console.info("Created", clientTarget);
+  console.info("Created", [clientTarget, protobufTarget]);
 
   for (const servApp of servApps) {
     const servLoc = path.resolve(appsLocation, servApp);
-    const servAppProtoDir = path.resolve(servLoc, "src", "protobuf");
+    const servAppProtoDir = path.resolve(servLoc, "src", "rpc", "protobuf");
     if (!fs.existsSync(servAppProtoDir)) {
       continue;
     }
@@ -107,10 +113,13 @@ function run() {
 
       if (item.endsWith(".ts")) {
         const extIndex = item.indexOf(".ts");
-        servProtoIndex.push(`export * from './${item.substring(0, extIndex)}'`);
+        servProtoIndex.push(
+          `export * from './${item.substring(0, extIndex)}';`
+        );
       }
     }
 
+    servProtoIndex.push("");
     writeClientFile(servApp);
 
     fs.writeFileSync(
@@ -119,12 +128,14 @@ function run() {
       { encoding: "utf-8" }
     );
 
-    clientsIndex.push(`export * from './${servApp}.client'`);
-
+    clientsIndex.push(`export * from './${servApp}.client';`);
     protoBufIndex.push(
-      `export * as ${capitalize(toCamelCase(servApp))} from './${servApp}'`
+      `export * as ${capitalize(toCamelCase(servApp))} from './${servApp}';`
     );
   }
+
+  clientsIndex.push("");
+  protoBufIndex.push("");
 
   fs.writeFileSync(
     path.resolve(protobufTarget, "index.ts"),
