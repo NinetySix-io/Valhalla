@@ -1,5 +1,3 @@
-//
-
 import { DocumentType, ReturnModelType } from '@typegoose/typegoose';
 import mongoose, { FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
 
@@ -33,20 +31,46 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
     throw new InternalServerErrorException(err, err.errmsg);
   }
 
+  /**
+   * Find a document by its id.
+   * @param {string | mongoose.Types.ObjectId} id - string | mongoose.Types.ObjectId
+   * @returns The model is being returned.
+   */
   findById(id: string | mongoose.Types.ObjectId) {
     return this._model.findById(id);
   }
 
+  /**
+   * It returns a promise that resolves to a single document from the database
+   * @param filter - FilterQuery<DocumentType<TModel>>
+   * @returns A promise that resolves to a single document.
+   */
   findOne(filter: FilterQuery<DocumentType<TModel>>) {
     return this._model.findOne(filter);
   }
 
+  /**
+   * It returns a promise that resolves to an array of documents that match the filter
+   * @param filter - FilterQuery<DocumentType<TModel>>
+   * @returns A promise that resolves to an array of documents.
+   */
   find(filter: FilterQuery<DocumentType<TModel>>) {
     return this._model.find(filter);
   }
 
+  /**
+   * It creates a new document in the database using the `_model` property of the class
+   * @param item - CreatePayload<TModel>
+   * @returns The creation of the item.
+   */
   async create(item: CreatePayload<TModel>) {
-    const [creation, error] = await tryNice(() => this._model.create(item));
+    const [creation, error] = await tryNice(() =>
+      this._model.create({
+        _id: new mongoose.Types.ObjectId(),
+        ...item,
+      }),
+    );
+
     if (error) {
       BaseFactory.throwMongoError(error);
     }
@@ -54,6 +78,12 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
     return creation;
   }
 
+  /**
+   * It finds a document by its id and deletes it
+   * @param {string} id - The id of the document you want to delete.
+   * @param {QueryOptions} [options] - QueryOptions
+   * @returns The deleted document.
+   */
   deleteById(id: string, options?: QueryOptions) {
     return this._model.findByIdAndDelete(
       new mongoose.Schema.Types.ObjectId(id),
@@ -61,6 +91,12 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
     );
   }
 
+  /**
+   * It deletes one document from the database.
+   * @param filter - FilterQuery<DocumentType<TModel>>
+   * @param [options] - QueryOptions<DocumentType<TModel>>
+   * @returns The result of the delete query
+   */
   deleteOne(
     filter: FilterQuery<DocumentType<TModel>>,
     options?: QueryOptions<DocumentType<TModel>>,
@@ -68,6 +104,13 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
     return this._model.deleteOne(filter, options);
   }
 
+  /**
+   * It updates a document in the database.
+   * @param {string} id - The id of the document you want to update.
+   * @param updateQuery - UpdateQuery<DocumentType<TModel>>
+   * @param options - QueryOptions<DocumentType<TModel>> & { upsert?: boolean } = {}
+   * @returns The return result of the update query
+   */
   updateById(
     id: string,
     updateQuery: UpdateQuery<DocumentType<TModel>>,
@@ -80,6 +123,13 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
     );
   }
 
+  /**
+   * It updates one document in the database.
+   * @param filter - FilterQuery<DocumentType<TModel>> = {}
+   * @param updateQuery - UpdateQuery<DocumentType<TModel>>
+   * @param options - QueryOptions<DocumentType<TModel>> & { upsert?: boolean } = {},
+   * @returns The return result of the update query
+   */
   updateOne(
     filter: FilterQuery<DocumentType<TModel>> = {},
     updateQuery: UpdateQuery<DocumentType<TModel>>,
@@ -88,6 +138,13 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
     return this._model.updateOne(filter, updateQuery, options);
   }
 
+  /**
+   * It finds a document by its id and updates it with the updateQuery
+   * @param {string} id - The id of the document you want to update.
+   * @param updateQuery - This is the query that will be used to update the document.
+   * @param options - QueryOptions<DocumentType<TModel>> & {
+   * @returns A promise that resolves to the updated document.
+   */
   async findByIdAndUpdate(
     id: string,
     updateQuery: UpdateQuery<DocumentType<TModel>>,
@@ -103,6 +160,13 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
     );
   }
 
+  /**
+   * It updates a document in the database.
+   * @param filter - FilterQuery<DocumentType<TModel>> = {}
+   * @param updateQuery - This is the query that will be used to update the document.
+   * @param options - {
+   * @returns A promise that resolves to the document that was updated.
+   */
   findOneAndUpdate(
     filter: FilterQuery<DocumentType<TModel>> = {},
     updateQuery: UpdateQuery<DocumentType<TModel>>,
@@ -114,6 +178,13 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
     return this._model.findOneAndUpdate(filter, updateQuery, options);
   }
 
+  /**
+   * It finds a document by its id and deletes it
+   * @param {string | mongoose.Types.ObjectId} id - The id of the document you want to delete.
+   * @param [options] - QueryOptions<DocumentType<TModel>>
+   * @returns A promise that resolves to the deleted document.
+   */
+
   findByIdAndDelete(
     id: string | mongoose.Types.ObjectId,
     options?: QueryOptions<DocumentType<TModel>>,
@@ -121,6 +192,12 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
     return this._model.findByIdAndDelete(id, options);
   }
 
+  /**
+   * It finds one document and deletes it
+   * @param filter - This is the filter that you want to use to find the document.
+   * @param [options] - QueryOptions<DocumentType<TModel>>
+   * @returns A promise that resolves to the deleted document.
+   */
   findOneAndDelete(
     filter: FilterQuery<DocumentType<TModel>>,
     options?: QueryOptions<DocumentType<TModel>>,
@@ -128,11 +205,21 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
     return this._model.findOneAndDelete(filter, options);
   }
 
+  /**
+   * It counts the number of documents in the database.
+   * @param filter - FilterQuery<DocumentType<TModel>> = {}
+   * @returns The count of the documents in the collection.
+   */
   async count(filter: FilterQuery<DocumentType<TModel>> = {}): Promise<number> {
     const [count] = await tryNice(() => this._model.count(filter));
     return count || 0;
   }
 
+  /**
+   * It returns a boolean value that indicates whether or not a document exists in the database
+   * @param filter - FilterQuery<DocumentType<TModel>> = {}
+   * @returns A boolean value.
+   */
   async exists(
     filter: FilterQuery<DocumentType<TModel>> = {},
   ): Promise<boolean> {
