@@ -41,6 +41,7 @@ export class HttpExceptionFilter
     const responseStatus = DefaultError.getStatus();
     const responseMsg = DefaultError.getResponse();
     Logger.error('Unexpected Error', exception);
+    console.error(exception);
     return response.status(responseStatus).send(responseMsg);
   }
 }
