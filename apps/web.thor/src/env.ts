@@ -1,13 +1,16 @@
-import * as Yup from 'yup';
+import { SStruct, buildEnvironment } from '@valhalla/utilities';
 
-import { buildEnvironment } from '@valhalla/utilities';
 import getConfig from 'next/config';
 
 const { publicRuntimeConfig } = getConfig();
 
-const schema = Yup.object({
-  SERVER: Yup.string().default('http://localhost:3002'),
-});
+const schema = SStruct.create(
+  publicRuntimeConfig,
+  SStruct.object({
+    SERVER: SStruct.defaulted(SStruct.string(), 'http://localhost:3002'),
+    NODE_ENV: SStruct.optional(SStruct.string()),
+  }),
+);
 
 export class Environment extends buildEnvironment({
   schema,

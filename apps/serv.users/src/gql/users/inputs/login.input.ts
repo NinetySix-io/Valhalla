@@ -6,9 +6,9 @@ export class UserLoginInput {
   @Field({ description: 'Email address or phone number' })
   @IsEmail()
   @IsNotEmpty()
-  readonly username: string;
+  readonly username!: string;
 
   @Field({ description: 'Password' })
   @IsNotEmpty()
-  readonly password: string;
+  readonly password!: string;
 }

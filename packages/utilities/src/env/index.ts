@@ -1,8 +1,3 @@
-import { AnyObject, ObjectShape, TypeOfShape } from 'yup/lib/object';
-
-import { Maybe } from 'yup/lib/types';
-import { ObjectSchema } from 'yup/lib';
-
 export * from './is.dev';
 export * from './is.prod';
 export * from './is.staging';
@@ -14,22 +9,15 @@ export * from './is.test';
  * @param props - {
  * @returns A class that has a static method called instance that returns a new instance of the class.
  */
-export function buildEnvironment<
-  TShape extends ObjectShape,
-  TContext extends AnyObject = AnyObject,
-  TIn extends Maybe<TypeOfShape<TShape>> = TypeOfShape<TShape>,
->(props: {
-  schema: ObjectSchema<TShape, TContext, TIn>;
+export function buildEnvironment<T extends { NODE_ENV?: string }>(props: {
+  schema?: T;
   vars?: Record<string, string>;
 }) {
   return class Environment {
-    variables: ReturnType<typeof props['schema']['validateSync']>;
+    variables: T;
 
     constructor() {
-      this.variables = props.schema.validateSync({
-        ...(typeof process === 'undefined' ? {} : process.env),
-        ...(props?.vars ?? {}),
-      });
+      this.variables = Object.assign({}, process.env, props.vars) as any;
     }
 
     /**

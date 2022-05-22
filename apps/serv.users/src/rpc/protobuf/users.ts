@@ -14,7 +14,7 @@ export interface PasswordStruct {
 export interface EmailObject {
   id: string;
   value: string;
-  verificationCode: string;
+  verificationCode?: string | undefined;
   isVerified: boolean;
   isPrimary: boolean;
   createdAt: string;
@@ -24,7 +24,7 @@ export interface EmailObject {
 export interface PhoneObject {
   id: string;
   value: string;
-  verificationCode: string;
+  verificationCode?: string | undefined;
   isVerified: boolean;
   isPrimary: boolean;
   createdAt: string;
@@ -71,14 +71,6 @@ export interface DeleteResponse {
   success: boolean;
 }
 
-export interface ReadRequest {
-  query: string;
-}
-
-export interface ReadResponse {
-  user: User | undefined;
-}
-
 export interface UpdateRequest {
   userId: string;
   displayName: string;
@@ -120,18 +112,14 @@ export interface SearchResponse {
   users: User[];
 }
 
-export interface LoginTypeParams {
-  password: string;
-  username: string;
-}
-
-export interface LoginRequest {
-  params: LoginTypeParams | undefined;
-}
-
 export interface LoginResponse {
   session: Session | undefined;
   user: User | undefined;
+}
+
+export interface LoginRequest {
+  password: string;
+  username: string;
 }
 
 export interface LogoutRequest {
@@ -168,6 +156,12 @@ export interface SendVerificationCodeResponse {
   success: boolean;
 }
 
+export interface FindUserRequest {
+  userId?: string | undefined;
+  email?: string | undefined;
+  phone?: string | undefined;
+}
+
 export const IO_VALHALLA_SERV_USERS_PACKAGE_NAME = 'io.valhalla.serv.users';
 
 export interface UsersServiceClient {
@@ -176,7 +170,7 @@ export interface UsersServiceClient {
     metadata?: Metadata,
   ): Observable<RegisterResponse>;
 
-  findUser(request: ReadRequest, metadata?: Metadata): Observable<ReadResponse>;
+  findUser(request: FindUserRequest, metadata?: Metadata): Observable<User>;
 
   verifyEmail(
     request: VerifyUserRequest,
@@ -226,9 +220,9 @@ export interface UsersServiceController {
     | RegisterResponse;
 
   findUser(
-    request: ReadRequest,
+    request: FindUserRequest,
     metadata?: Metadata,
-  ): Promise<ReadResponse> | Observable<ReadResponse> | ReadResponse;
+  ): Promise<User> | Observable<User> | User;
 
   verifyEmail(
     request: VerifyUserRequest,

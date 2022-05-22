@@ -54,20 +54,20 @@ export class EventStore
   implements IEventPublisher, OnModuleDestroy, OnModuleInit, IMessageSource
 {
   private logger = new Logger(this.constructor.name);
-  private eventStore: EventStoreBroker;
+  private eventStore!: EventStoreBroker;
   private store?: IAdapterStore;
-  private eventHandlers: IEventConstructors;
-  private subject$: Subject<IEvent>;
+  private eventHandlers!: IEventConstructors;
+  private subject$!: Subject<IEvent>;
   private readonly featureStream?: string;
   private catchupSubscriptions: Array<Promise<ExtendedCatchUpSubscription>> =
     [];
-  private catchupSubscriptionsCount: number;
+  private catchupSubscriptionsCount!: number;
 
   private persistentSubscriptions: ExtendedPersistentSubscription[] = [];
-  private persistentSubscriptionsCount: number;
+  private persistentSubscriptionsCount!: number;
 
   private volatileSubscriptions: ExtendedVolatileSubscription[] = [];
-  private volatileSubscriptionsCount: number;
+  private volatileSubscriptionsCount!: number;
 
   constructor(
     @Inject(ProvidersConstants.EVENT_STORE_PROVIDER) eventStore: any,
@@ -317,11 +317,13 @@ export class EventStore
       this.subject$.next(this.eventHandlers[event.eventType](...data));
       if (
         this.store &&
-        _subscription.constructor.name === 'EventStoreStreamCatchUpSubscription'
+        _subscription.constructor.name ===
+          'EventStoreStreamCatchUpSubscription' &&
+        payload?.event
       ) {
         await this.store.write(
           this.store.storeKey,
-          payload?.event?.eventNumber.toInt(),
+          payload.event.eventNumber.toInt(),
         );
       }
     } else {

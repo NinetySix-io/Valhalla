@@ -7,10 +7,10 @@ import { prop } from '@typegoose/typegoose';
 @ExpiryIndex({ expiredAt: 1 })
 export class UserPasswordSchema extends BaseSchema {
   @prop()
-  user: mongoose.Types.ObjectId;
+  user!: mongoose.Types.ObjectId;
 
   @prop()
-  hashed: string;
+  hashed!: string;
 
   @prop()
   expiredAt?: Date;

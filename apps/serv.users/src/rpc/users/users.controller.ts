@@ -1,12 +1,11 @@
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
+  FindUserRequest,
   ForgotPasswordRequest,
   ForgotPasswordResponse,
   LoginRequest,
   LoginResponse,
   LogoutResponse,
-  ReadRequest,
-  ReadResponse,
   RegisterRequest,
   RegisterResponse,
   SendVerificationCodeRequest,
@@ -16,6 +15,7 @@ import {
   UpdatePasswordResponse,
   UpdateRequest,
   UpdateResponse,
+  User,
   UsersServiceController,
   VerifyActivationLinkRequest,
   VerifyActivationLinkResponse,
@@ -25,10 +25,10 @@ import {
 import { GrpcMethod, RpcException } from '@nestjs/microservices';
 
 import { Controller } from '@nestjs/common';
+import { FindUserQuery } from './queries/find.user.query';
 import { ForgotAccountPasswordCommand } from '@app/rpc/users/commands/forgot.password.command';
 import { JwtService } from '@nestjs/jwt';
 import { LoginAccountCommand } from '@app/rpc/users/commands/login.command';
-import { Metadata } from '@grpc/grpc-js';
 import { Observable } from 'rxjs';
 import { RegisterAccountCommand } from '@app/rpc/users/commands/register.command';
 import { SendAccountEmailVerificationCommand } from '@app/rpc/users/commands/send.email.verification.command';
@@ -66,10 +66,9 @@ export class RpcUsersController implements UsersServiceController {
     };
   }
 
-  //TODO: fix this
   @GrpcMethod(USERS_SERVICE_NAME)
-  findUser(request: ReadRequest, metadata?: Metadata): Promise<ReadResponse> {
-    throw new Error('Function not yet implements');
+  findUser(request: FindUserRequest): Promise<User> {
+    return this.queryBus.execute(new FindUserQuery(request));
   }
 
   @GrpcMethod(USERS_SERVICE_NAME)

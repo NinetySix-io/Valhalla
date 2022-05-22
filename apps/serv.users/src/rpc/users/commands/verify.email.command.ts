@@ -38,7 +38,7 @@ export class VerifyAccountEmailHandler
     }
 
     verifiedEmail.isVerified = true;
-    verifiedEmail.verificationCode = null;
+    verifiedEmail.verificationCode = undefined;
 
     await user.save();
     this.eventBus.publish(

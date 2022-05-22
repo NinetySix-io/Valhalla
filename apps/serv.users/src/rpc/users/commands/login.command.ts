@@ -32,14 +32,17 @@ export class LoginAccountHandler
   }
 
   async execute(command: LoginAccountCommand): Promise<LoginResponse> {
-    const { username, password } = command.cmd.params;
+    const { username, password } = command.cmd;
     const user = await this.users.findByUsername(username);
 
     if (!user) {
       throw this.LoginError;
     }
 
-    const userPassword = await this.userPasswords.findOne({ user: user._id });
+    const userPassword = await this.userPasswords
+      .findOne({ user: user._id })
+      .orFail();
+
     const isValid = await this.userPasswords.validatePassword(
       password,
       userPassword.hashed,

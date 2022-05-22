@@ -1,5 +1,3 @@
-import * as yup from 'yup';
-
 import {
   CommandHandler,
   EventBus,
@@ -9,9 +7,11 @@ import {
 import { UpdateRequest, UpdateResponse } from '@app/rpc/protobuf/users';
 
 import { RpcHandler } from '@valhalla/serv.core';
+import { SStruct } from '@valhalla/utilities';
 import { UserTransformer } from '@app/entities/users/transformer';
 import { UserUpdatedEvent } from '../events/user.updated.event';
 import { UsersModel } from '@app/entities/users';
+import { isEmpty } from 'class-validator';
 
 export class UpdateAccountCommand implements ICommand {
   constructor(
@@ -30,19 +30,23 @@ export class UpdateAccountHandler
     private readonly eventBus: EventBus,
   ) {}
 
-  async execute(command: UpdateAccountCommand): Promise<UpdateResponse> {
-    const payload = await yup
-      .object()
-      .shape({
-        displayName: yup.string(),
-        firstName: yup.string(),
-        lastName: yup.string().nullable(true),
-      })
-      .validate(command.data, {
-        strict: true,
-        stripUnknown: true,
-      });
+  private validateRequest(data: Partial<UpdateRequest>) {
+    const schema: SStruct.Describe<typeof data> = SStruct.object({
+      displayName: SStruct.optional(SStruct.string()),
+      firstName: SStruct.optional(SStruct.string()),
+      lastName: SStruct.optional(SStruct.string()),
+    });
 
+    const payload = SStruct.create(data, schema);
+    if (isEmpty(payload)) {
+      throw new Error('Must specified at least 1 property');
+    }
+
+    return payload;
+  }
+
+  async execute(command: UpdateAccountCommand): Promise<UpdateResponse> {
+    const payload = this.validateRequest(command.data);
     const user = await this.users.findOneAndUpdate(
       { _id: command.userId },
       payload,

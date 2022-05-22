@@ -17,7 +17,7 @@ export class UserRegisterInput extends PickType(UserSchema, [
   @Field({ description: 'Email Address' })
   @IsEmail()
   @IsNotEmpty()
-  readonly email: string;
+  readonly email!: string;
 
   @Field({ description: 'Phone Number', nullable: true })
   @IsOptional()
@@ -26,5 +26,5 @@ export class UserRegisterInput extends PickType(UserSchema, [
 
   @Field({ description: 'password' })
   @IsNotEmpty()
-  readonly password: string;
+  readonly password!: string;
 }

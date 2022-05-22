@@ -8,13 +8,13 @@ import { Expose } from 'class-transformer';
 @modelOptions({ schemaOptions: { timestamps: true } })
 export class UserEmailSchema extends BaseSchema {
   @prop()
-  value: string;
+  value!: string;
 
   @prop()
-  isPrimary?: boolean;
+  isPrimary!: boolean;
 
   @prop()
-  isVerified?: boolean;
+  isVerified!: boolean;
 
   @prop()
   verificationCode?: string;
@@ -24,13 +24,13 @@ export class UserEmailSchema extends BaseSchema {
 @modelOptions({ schemaOptions: { timestamps: true } })
 export class UserPhoneSchema extends BaseSchema {
   @prop()
-  value: string;
+  value!: string;
 
   @prop()
-  isPrimary?: boolean;
+  isPrimary!: boolean;
 
   @prop()
-  isVerified?: boolean;
+  isVerified!: boolean;
 
   @prop()
   verificationCode?: string;
@@ -42,7 +42,7 @@ export class UserSchema extends BaseSchema {
   @prop()
   @Expose()
   @Field({ description: 'User Display Name' })
-  displayName: string;
+  displayName!: string;
 
   @prop()
   @Expose()
@@ -57,10 +57,10 @@ export class UserSchema extends BaseSchema {
   @prop({ _id: true, type: [UserEmailSchema] })
   @Expose()
   @Field(() => [UserEmailSchema])
-  emails: UserEmailSchema[];
+  emails!: UserEmailSchema[];
 
   @prop({ _id: true, type: [UserPhoneSchema] })
   @Expose()
   @Field(() => [UserPhoneSchema])
-  phones: UserPhoneSchema[];
+  phones!: UserPhoneSchema[];
 }

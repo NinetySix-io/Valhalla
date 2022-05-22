@@ -4,7 +4,7 @@ package io.valhalla.serv.users;
 
 service UsersService {
     rpc Register(RegisterRequest) returns (RegisterResponse) {}
-    rpc FindUser(ReadRequest) returns (ReadResponse) {}
+    rpc FindUser(FindUserRequest) returns (User) {}
     rpc VerifyEmail(VerifyUserRequest) returns (VerifyUserResponse) {}
     rpc VerifyActivationLink(VerifyActivationLinkRequest) returns (VerifyActivationLinkResponse) {}
     rpc SendVerificationCode(SendVerificationCodeRequest) returns (SendVerificationCodeResponse) {}
@@ -19,11 +19,10 @@ message PasswordStruct {
     string hashed = 1;
 }
 
-
 message EmailObject {
     string id = 1;
     string value = 2;
-    string verificationCode = 3;
+    optional string verificationCode = 3;
     bool isVerified = 4;
     bool isPrimary = 5;
     string createdAt = 6;
@@ -33,7 +32,7 @@ message EmailObject {
 message PhoneObject {
     string id = 1;
     string value = 2;
-    string verificationCode = 3;
+    optional string verificationCode = 3;
     bool isVerified = 4;
     bool isPrimary = 5;
     string createdAt = 6;
@@ -81,14 +80,6 @@ message DeleteResponse {
     bool success = 1;
 }
 
-message ReadRequest {
-    string query = 5;
-}
-
-message ReadResponse {
-    User user = 1;
-}
-
 message UpdateRequest {
     string userId = 1;
     string displayName = 2;
@@ -130,18 +121,15 @@ message SearchResponse {
     repeated User users = 1;
 }
 
-message LoginTypeParams {
-    string password = 3;
-    string username = 4;
-}
-
-message LoginRequest {
-    LoginTypeParams params = 2;
-}
 
 message LoginResponse {
     Session session = 1;
     User user = 2;
+}
+
+message LoginRequest {
+    string password = 1;
+    string username = 2;
 }
 
 message LogoutRequest {
@@ -176,4 +164,10 @@ message SendVerificationCodeRequest {
 
 message SendVerificationCodeResponse {
     bool success = 1;
+}
+
+message FindUserRequest {
+  optional string userId = 1;
+  optional string email = 2;
+  optional string phone = 3;
 }

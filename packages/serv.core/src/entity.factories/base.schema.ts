@@ -11,17 +11,17 @@ import { prop } from '@typegoose/typegoose';
 export abstract class BaseSchema {
   @Exclude()
   @prop({ type: mongoose.Schema.Types.ObjectId })
-  _id: mongoose.Types.ObjectId;
+  _id!: mongoose.Types.ObjectId;
 
   @prop({ type: Date })
   @Field(() => Date, { description: 'Date entity was created' })
   @Expose()
-  createdAt: Date;
+  createdAt!: Date;
 
   @prop({ type: Date })
   @Field(() => Date, { description: 'Date entity was updated' })
   @Expose()
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @Field(() => ID, { description: 'Identifier of the entity' })
   @Directive('@external')

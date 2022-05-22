@@ -17,7 +17,7 @@ import { UsersModel } from '@app/entities/users';
 import mongoose from 'mongoose';
 
 export class UpdateAccountPasswordCommand implements ICommand {
-  constructor(public readonly cmd: Partial<UpdatePasswordRequest>) {}
+  constructor(public readonly cmd: UpdatePasswordRequest) {}
 }
 
 @CommandHandler(UpdateAccountPasswordCommand)
@@ -54,7 +54,7 @@ export class UpdateAccountPasswordHandler
       throw new Error('Incorrect current password entered!');
     }
 
-    const user = await this.users.findById(userId);
+    const user = await this.users.findById(userId).orFail();
     await this.passwords.updatePassword(userId, command.cmd.newPassword);
     await this.eventBus.publish(
       new UserPasswordUpdatedEvent(new UserTransformer(user).proto),

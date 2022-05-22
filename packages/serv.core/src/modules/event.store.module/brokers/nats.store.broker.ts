@@ -12,10 +12,10 @@ import assert from 'assert';
  */
 export class NatsEventStoreBroker {
   private logger: Logger = new Logger(this.constructor.name);
-  private client: Stan;
-  private clientId: string;
-  public isConnected: boolean;
-  type: BrokerTypes;
+  private client!: Stan;
+  private clientId!: string;
+  public isConnected!: boolean;
+  public type!: BrokerTypes;
 
   constructor() {
     this.type = 'nats';

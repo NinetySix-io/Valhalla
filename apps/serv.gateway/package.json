@@ -46,8 +46,7 @@
     "lodash.keyby": "^4.6.0",
     "long": "^5.2.0",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.5.5",
-    "yup": "^0.32.11"
+    "rxjs": "^7.5.5"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.2.5",

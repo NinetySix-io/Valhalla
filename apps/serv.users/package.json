@@ -21,12 +21,13 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json --runInBand",
     "test:ci": "jest --ci --runInBand",
-    "proto:generate": "protoc --ts_proto_out=. ./src/rpc/**/*.proto --ts_proto_opt=nestJs=true,esModuleInterop=true,addGrpcMetadata=true,returnObservable=false"
+    "proto:generate": "protoc --ts_proto_out=. ./src/rpc/**/*.proto --ts_proto_opt=nestJs=true --ts_proto_opt=esModuleInterop=true --ts_proto_opt=addGrpcMetadata=true --ts_proto_opt=returnObservable=false"
   },
   "dependencies": {
     "@apollo/subgraph": "^2.0.2",
     "@grpc/grpc-js": "^1.6.7",
     "@nestcloud2/boot": "^0.7.20",
+    "@nestcloud2/common": "^0.8.2",
     "@nestcloud2/core": "^0.8.1",
     "@nestjs/apollo": "^10.0.11",
     "@nestjs/common": "^8.4.4",
@@ -40,6 +41,8 @@
     "@typegoose/typegoose": "^9.8.1",
     "@valhalla/serv.core": "workspace:*",
     "@valhalla/utilities": "workspace:*",
+    "apollo-server-core": "^3.7.0",
+    "apollo-server-fastify": "^3.7.0",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
@@ -53,7 +56,7 @@
     "protobufjs": "^6.11.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.5.5",
-    "yup": "^0.32.11"
+    "zod": "^3.17.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.2.5",

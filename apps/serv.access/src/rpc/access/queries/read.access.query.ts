@@ -1,5 +1,3 @@
-import * as yup from 'yup';
-
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import {
   ReadAccessRequest,
@@ -9,6 +7,7 @@ import {
 import { AccessTokenTransformer } from '@app/entities/access.tokens/transformer';
 import { AccessTokensModel } from '@app/entities/access.tokens';
 import { RpcHandler } from '@valhalla/serv.core';
+import { SStruct } from '@valhalla/utilities';
 
 export class ReadAccessQuery implements IQuery {
   constructor(public readonly input: ReadAccessRequest) {}
@@ -21,25 +20,23 @@ export class ReadAccessHandler
 {
   constructor(private accessTokens: AccessTokensModel) {}
 
-  async execute(query: ReadAccessQuery): Promise<ReadAccessResponse> {
-    const payload = await yup
-      .object()
-      .shape({
-        id: yup.string().required(),
-        tenantId: yup.string().required(),
-      })
-      .validateSync(query.input);
-
-    const token = await this.accessTokens.findOne({
-      _id: payload.id,
-      tenantId: payload.tenantId,
+  private validateRequest(request: ReadAccessRequest) {
+    const schema: SStruct.Describe<ReadAccessRequest> = SStruct.object({
+      id: SStruct.string(),
+      tenantId: SStruct.string(),
     });
 
-    if (!token) {
-      throw new Error('Access token not found');
-    }
+    return SStruct.create(request, schema);
+  }
+
+  async execute(query: ReadAccessQuery): Promise<ReadAccessResponse> {
+    const payload = this.validateRequest(query.input);
+    const token = await this.accessTokens
+      .findOne({ _id: payload.id, tenantId: payload.tenantId })
+      .orFail(() => new Error('Access token not found'));
 
     const accessToken = new AccessTokenTransformer(token).proto;
+
     return {
       accessToken,
     };

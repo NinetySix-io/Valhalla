@@ -3,14 +3,14 @@ import { Field, ObjectType } from '@nestjs/graphql';
 @ObjectType()
 export class SessionResponse {
   @Field({ description: 'Session Id' })
-  id: string;
+  id!: string;
 
   @Field({ description: 'User ID' })
-  userId: string;
+  userId!: string;
 
   @Field({ description: 'Created Time' })
-  created: number;
+  created!: number;
 
   @Field({ description: 'Expiry Time' })
-  expires: number;
+  expires!: number;
 }

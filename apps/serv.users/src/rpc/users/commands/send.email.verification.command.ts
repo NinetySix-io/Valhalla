@@ -46,18 +46,20 @@ export class SendAccountEmailVerificationHandler
     }
 
     const email = user.emails.find((e) => e.value === command.input.email);
-    if (email.isVerified) {
-      throw new Error('Email is already verified');
+
+    if (!email) {
+      throw new Error('Email not found!');
+    } else if (email.isVerified) {
+      throw new Error('Email is already verified!');
     }
 
     const userProto = new UserTransformer(user).proto;
-    const verificationCode = generateVerificationCode(6);
+    email.verificationCode = generateVerificationCode(6);
     const activationLink = this.jwtService.sign({
       userId: user.id,
-      verificationCode,
+      verificationCode: email.verificationCode,
     });
 
-    email.verificationCode = verificationCode;
     user.save();
     this.eventBus.publish(
       new EmailVerificationSentEvent(userProto, activationLink),

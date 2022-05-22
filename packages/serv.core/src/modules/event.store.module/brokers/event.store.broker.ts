@@ -17,9 +17,9 @@ import assert from 'assert';
  */
 export class EventStoreBroker {
   private logger: Logger = new Logger(this.constructor.name);
-  private client: EventStoreNodeConnection;
-  public isConnected: boolean;
-  type: BrokerTypes;
+  private client!: EventStoreNodeConnection;
+  public isConnected!: boolean;
+  public type!: BrokerTypes;
 
   constructor() {
     this.type = 'event-store';

@@ -8,6 +8,7 @@
     "declaration": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
+    "strictNullChecks": true,
     "strictPropertyInitialization": false,
     "preserveSymlinks": true
   },

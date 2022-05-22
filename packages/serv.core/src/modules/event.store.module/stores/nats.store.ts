@@ -38,16 +38,16 @@ export class NatsEventStore
   implements IEventPublisher, OnModuleDestroy, OnModuleInit, IMessageSource
 {
   private logger = new Logger(this.constructor.name);
-  private eventStore: NatsEventStoreBroker;
-  private eventHandlers: IEventConstructors;
-  private subject$: Subject<IEvent>;
+  private eventStore!: NatsEventStoreBroker;
+  private eventHandlers!: IEventConstructors;
+  private subject$!: Subject<IEvent>;
   private readonly featureStream?: string;
 
   private persistentSubscriptions: ExtendedNatsPersistentSubscription[] = [];
-  private persistentSubscriptionsCount: number;
+  private persistentSubscriptionsCount!: number;
 
   private volatileSubscriptions: ExtendedNatsVolatileSubscription[] = [];
-  private volatileSubscriptionsCount: number;
+  private volatileSubscriptionsCount!: number;
 
   constructor(
     @Inject(ProvidersConstants.EVENT_STORE_PROVIDER) eventStore: any,

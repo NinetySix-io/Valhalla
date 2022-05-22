@@ -1,5 +1,8 @@
+import { UserSchema } from '@app/entities/users/schema';
+import { FindUserRequest, User } from '@app/rpc/protobuf/users';
 import { RpcUsersController } from '@app/rpc/users/users.controller';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Context } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserLoginInput } from './inputs/login.input';
 import { UserRegisterInput } from './inputs/register.input';
 import { UserLoginResponse } from './responses/user.login.response';
@@ -10,7 +13,7 @@ export class GqlUserResolver {
   constructor(private readonly rpcClient: RpcUsersController) {}
 
   @Mutation(() => UserRegisterResponse, { description: 'User Registration' })
-  async userRegister(
+  async registerUser(
     @Args('input') input: UserRegisterInput,
   ): Promise<UserRegisterResponse> {
     const result = await this.rpcClient.register(input);
@@ -18,13 +21,26 @@ export class GqlUserResolver {
   }
 
   @Mutation(() => UserLoginResponse, { description: 'User Login' })
-  async userLogin(
+  async loginUser(
     @Args('input') input: UserLoginInput,
   ): Promise<UserLoginResponse> {
-    const result = await this.rpcClient.login({ params: input });
+    const result = await this.rpcClient.login(input);
+
+    if (!result.session || !result.user) {
+      throw new Error('Unable to login');
+    }
+
     return {
       session: result.session,
       userId: result.user.id,
     };
+  }
+
+  @Query(() => UserSchema, {
+    description: 'Get current logged in user information',
+  })
+  async userrofile(@Context() context: any): Promise<User> {
+    const user = await this.rpcClient.findUser({});
+    return user;
   }
 }

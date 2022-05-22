@@ -4,7 +4,6 @@ import mongoose, { FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
 import { AnyParamConstructor } from '@typegoose/typegoose/lib/types';
 import { BaseSchema } from './base.schema';
 import { InternalServerErrorException } from '@nestjs/common';
-import { MongoError } from 'mongodb';
 import { OmitRecursively } from '@valhalla/utilities';
 import { tryNice } from 'try-nice';
 
@@ -22,13 +21,6 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
 
   protected constructor(model: ModelType<TModel>) {
     this._model = model;
-  }
-
-  /**
-   * TODO: move this to an error class
-   */
-  protected static throwMongoError(err: MongoError): void {
-    throw new InternalServerErrorException(err, err.errmsg);
   }
 
   /**
@@ -72,7 +64,11 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
     );
 
     if (error) {
-      BaseFactory.throwMongoError(error);
+      throw new InternalServerErrorException(error, error.errmsg);
+    } else if (creation === undefined) {
+      throw new InternalServerErrorException(
+        new Error('Unable to create document'),
+      );
     }
 
     return creation;
