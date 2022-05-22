@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BaseFactory, CreatePayload, ModelType } from '@valhalla/serv.core';
+import { compact, PartialBy } from '@valhalla/utilities';
 import { InjectModel } from 'nestjs-typegoose';
 import { UserSchema } from './schema';
 
@@ -18,17 +19,21 @@ export class UsersModel extends BaseFactory<UserSchema> {
    * @returns A promise that resolves to a UserSchema
    */
   createUser(
-    user: CreatePayload<
-      Omit<UserSchema, 'emails' | 'phones'> & {
-        email: string;
-        phone: string;
-      }
+    user: PartialBy<
+      CreatePayload<
+        Omit<UserSchema, 'emails' | 'phones'> & {
+          email: string;
+          phone: string;
+        }
+      >,
+      'displayName' | 'phone'
     >,
   ) {
+    const displayName = user.displayName || user.firstName || user.email;
     return this.create({
       firstName: user.firstName,
       lastName: user.lastName,
-      displayName: user.displayName ?? user.firstName,
+      displayName,
       emails: [
         {
           value: user.email,
@@ -36,13 +41,13 @@ export class UsersModel extends BaseFactory<UserSchema> {
           isVerified: false,
         },
       ],
-      phones: [
-        {
+      phones: compact([
+        user.phone && {
           value: user.phone,
           isPrimary: true,
           isVerified: false,
         },
-      ],
+      ]),
     });
   }
 

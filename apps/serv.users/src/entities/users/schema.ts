@@ -41,18 +41,18 @@ export class UserPhoneSchema extends BaseSchema {
 export class UserSchema extends BaseSchema {
   @prop()
   @Expose()
-  @Field()
+  @Field({ description: 'User Display Name' })
   displayName: string;
 
   @prop()
   @Expose()
-  @Field()
-  firstName: string;
+  @Field({ description: 'First Name' })
+  firstName?: string;
 
   @prop()
   @Expose()
-  @Field()
-  lastName: string;
+  @Field({ description: 'Last Name' })
+  lastName?: string;
 
   @prop({ _id: true, type: [UserEmailSchema] })
   @Expose()

@@ -33,9 +33,9 @@ export interface PhoneObject {
 
 export interface User {
   id: string;
-  displayName: string;
-  firstName: string;
-  lastName: string;
+  displayName?: string | undefined;
+  firstName?: string | undefined;
+  lastName?: string | undefined;
   createdAt: string;
   updatedAt: string;
   emails: EmailObject[];
@@ -50,16 +50,17 @@ export interface Session {
 }
 
 export interface RegisterRequest {
-  displayName: string;
+  displayName?: string | undefined;
   password: string;
   email: string;
-  phone: string;
-  firstName: string;
-  lastName: string;
+  phone?: string | undefined;
+  firstName?: string | undefined;
+  lastName?: string | undefined;
 }
 
 export interface RegisterResponse {
   activationLink: string;
+  userId: string;
 }
 
 export interface DeleteRequest {

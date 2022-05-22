@@ -766,16 +766,20 @@ importers:
 
   packages/utilities:
     specifiers:
+      '@types/lodash.compact': ^3.0.7
       '@valhalla/config': workspace:*
       '@valhalla/tsconfig': workspace:*
       jest: ^28.1.0
+      lodash.compact: ^3.0.1
       slugify: ^1.6.5
       typescript: ^4.6.4
       yup: ^0.32.11
     dependencies:
+      lodash.compact: 3.0.1
       slugify: 1.6.5
       yup: 0.32.11
     devDependencies:
+      '@types/lodash.compact': 3.0.7
       '@valhalla/config': link:../config
       '@valhalla/tsconfig': link:../tsconfig
       jest: 28.1.0
@@ -6713,6 +6717,12 @@ packages:
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
     dependencies:
       '@types/node': 17.0.35
+
+  /@types/lodash.compact/3.0.7:
+    resolution: {integrity: sha512-yHP+S4QY9C/OLWc+Ei7A1rdwGcBgwFOaW20eZU8qA42dNRwUWnGltDAmKg5ICVGrgJKTokv0gsz1dsQl1gKA2w==}
+    dependencies:
+      '@types/lodash': 4.14.182
+    dev: true
 
   /@types/lodash.keyby/4.6.7:
     resolution: {integrity: sha512-3qSHbbxLfXlARIKsaijZPb/5ZHDajv1vRg7OlAOuBNwN29PESS3sEOPfG1s2kzSuZnKtxtXZd1lvGj5JasN91w==}
@@ -13983,6 +13993,10 @@ packages:
 
   /lodash.clonedeep/4.5.0:
     resolution: {integrity: sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=}
+    dev: false
+
+  /lodash.compact/3.0.1:
+    resolution: {integrity: sha1-VAzjg3dFl1gHRx4WtKK6IeclbKU=}
     dev: false
 
   /lodash.debounce/4.0.8:

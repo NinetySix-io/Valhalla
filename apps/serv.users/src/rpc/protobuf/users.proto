@@ -42,9 +42,9 @@ message PhoneObject {
 
 message User {
     string id = 1;
-    string displayName = 2;
-    string firstName = 3;
-    string lastName = 4;
+    optional string displayName = 2;
+    optional string firstName = 3;
+    optional string lastName = 4;
     string createdAt = 5;
     string updatedAt = 6;
     repeated EmailObject emails = 7;
@@ -60,16 +60,17 @@ message Session {
 }
 
 message RegisterRequest {
-    string displayName = 1;
+    optional string displayName = 1;
     string password = 2;
     string email = 3;
-    string phone = 4;
-    string firstName = 5;
-    string lastName = 6;
+    optional string phone = 4;
+    optional string firstName = 5;
+    optional string lastName = 6;
 }
 
 message RegisterResponse {
     string activationLink = 1;
+    string userId = 2;
 }
 
 message DeleteRequest {

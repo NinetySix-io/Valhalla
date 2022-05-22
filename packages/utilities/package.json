@@ -2,7 +2,7 @@
   "name": "@valhalla/utilities",
   "version": "0.0.0",
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "./src",
   "sideEffects": false,
   "private": true,
   "files": [
@@ -14,12 +14,14 @@
     "lint": "eslint src/**/*.ts"
   },
   "devDependencies": {
+    "@types/lodash.compact": "^3.0.7",
     "@valhalla/config": "workspace:*",
     "@valhalla/tsconfig": "workspace:*",
     "jest": "^28.1.0",
     "typescript": "^4.6.4"
   },
   "dependencies": {
+    "lodash.compact": "^3.0.1",
     "slugify": "^1.6.5",
     "yup": "^0.32.11"
   }

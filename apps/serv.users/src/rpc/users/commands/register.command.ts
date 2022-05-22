@@ -41,7 +41,7 @@ export class RegisterAccountHandler
   async execute(command: RegisterAccountCommand): Promise<RegisterResponse> {
     const [emailExists, phoneExists] = await Promise.all([
       this.users.emailExists(command.cmd.email),
-      this.users.phoneExists(command.cmd.phone),
+      command.cmd.phone && this.users.phoneExists(command.cmd.phone),
     ]);
 
     // TODO: logic for phone verification if
@@ -64,6 +64,7 @@ export class RegisterAccountHandler
 
     return {
       activationLink,
+      userId: user.id,
     };
   }
 }

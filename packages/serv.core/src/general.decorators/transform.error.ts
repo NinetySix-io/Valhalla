@@ -15,7 +15,8 @@ type Options = {
  * ExtensibleError is a type that represents a constructor function that takes an optional string
  * parameter and returns an Error object.
  */
-type ExtensibleError = { new (message?: string): Error };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ExtensibleError = { new (...params: any[]): Error };
 
 /**
  * `_handleError` is a function that takes an error, an extensible error, and an optional options
@@ -33,7 +34,9 @@ function _handleError<E extends ExtensibleError>(
   const shouldThrow = options?.condition?.(CaughtError) ?? true;
 
   if (shouldThrow) {
-    throw new IntendedError(CaughtError.message);
+    const intendedError = new IntendedError(CaughtError.message);
+    intendedError.stack = CaughtError.stack;
+    throw intendedError;
   } else {
     throw CaughtError;
   }

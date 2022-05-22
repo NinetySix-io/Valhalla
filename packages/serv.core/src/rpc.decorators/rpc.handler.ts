@@ -6,6 +6,6 @@ import { TransformClassError } from '../general.decorators';
  */
 export function RpcHandler(): ClassDecorator {
   return (target) => {
-    TransformClassError(RpcException as never)(target);
+    TransformClassError(RpcException)(target);
   };
 }

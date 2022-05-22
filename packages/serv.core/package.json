@@ -2,8 +2,8 @@
   "name": "@valhalla/serv.core",
   "version": "1.0.0",
   "main": "./dist/index.js",
-  "sideEffects": false,
   "types": "./src",
+  "sideEffects": false,
   "files": [
     "dist/**"
   ],

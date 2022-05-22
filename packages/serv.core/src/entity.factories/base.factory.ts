@@ -224,6 +224,6 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
     filter: FilterQuery<DocumentType<TModel>> = {},
   ): Promise<boolean> {
     const count = await this._model.findOne(filter).countDocuments();
-    return count > 1;
+    return count > 0;
   }
 }
