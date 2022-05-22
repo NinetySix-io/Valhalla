@@ -123,7 +123,7 @@ message SearchResponse {
 
 
 message LoginResponse {
-    Session session = 1;
+    optional Session session = 1;
     User user = 2;
 }
 

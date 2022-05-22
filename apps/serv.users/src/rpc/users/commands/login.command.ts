@@ -6,6 +6,7 @@ import {
 } from '@nestjs/cqrs';
 import { LoginRequest, LoginResponse } from '@app/rpc/protobuf/users';
 
+import { Logger } from '@nestjs/common';
 import { RpcHandler } from '@valhalla/serv.core';
 import { UserLoggedInEvent } from '../events/user.logged.in.event';
 import { UserPasswordsModel } from '@app/entities/user.passwords';
@@ -21,6 +22,8 @@ export class LoginAccountCommand implements ICommand {
 export class LoginAccountHandler
   implements ICommandHandler<LoginAccountCommand, LoginResponse>
 {
+  private readonly logger = new Logger(LoginAccountHandler.name);
+
   constructor(
     private readonly users: UsersModel,
     private readonly userPasswords: UserPasswordsModel,
@@ -36,6 +39,7 @@ export class LoginAccountHandler
     const user = await this.users.findByUsername(username);
 
     if (!user) {
+      this.logger.debug('User not found!', username);
       throw this.LoginError;
     }
 
@@ -49,11 +53,13 @@ export class LoginAccountHandler
     );
 
     if (!isValid) {
+      this.logger.debug('User password mismatch!');
       throw this.LoginError;
     }
 
     const userProto = new UserTransformer(user).proto;
-    this.eventBus.publish(new UserLoggedInEvent(userProto));
+    const event = new UserLoggedInEvent(userProto);
+    this.eventBus.publish(event);
 
     return {
       user: userProto,

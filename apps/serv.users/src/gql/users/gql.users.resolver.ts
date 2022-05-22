@@ -24,7 +24,7 @@ export class GqlUserResolver {
     @Args('input') input: UserLoginInput,
   ): Promise<UserLoginResponse> {
     const result = await this.rpcClient.login(input);
-    if (!result.session || !result.user) {
+    if (!result.user) {
       throw new Error('Unable to login');
     }
 
@@ -38,6 +38,7 @@ export class GqlUserResolver {
     description: 'Get current logged in user information',
   })
   async userProfile(@Context() context: any): Promise<User> {
+    console.debug({ context });
     const user = await this.rpcClient.findUser({});
     return user;
   }

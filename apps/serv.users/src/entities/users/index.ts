@@ -61,16 +61,12 @@ export class UsersModel extends BaseFactory<UserSchema> {
     return this.findOne({
       $or: [
         {
-          emails: {
-            value: username.trim(),
-            isPrimary: true,
-          },
+          'emails.value': username.trim(),
+          'emails.isPrimary': true,
         },
         {
-          phones: {
-            value: username.trim(),
-            isPrimary: true,
-          },
+          'phones.value': username.trim(),
+          'phones.isPrimary': true,
         },
       ],
     });

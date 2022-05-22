@@ -113,7 +113,7 @@ export interface SearchResponse {
 }
 
 export interface LoginResponse {
-  session: Session | undefined;
+  session?: Session | undefined;
   user: User | undefined;
 }
 
