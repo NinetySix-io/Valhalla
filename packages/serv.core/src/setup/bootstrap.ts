@@ -6,6 +6,7 @@ import {
 import { NestCloud } from '@nestcloud2/core';
 import { NestFactory } from '@nestjs/core';
 import { ServCoreSetup } from './setup';
+import { ValidationPipe } from '@nestjs/common';
 import { loadDotEnv } from '../lib';
 
 /**
@@ -32,6 +33,7 @@ export async function bootstrapApplication(
 
   const app = NestCloud.create(factory);
   const servCore = new ServCoreSetup(app, options);
+  app.useGlobalPipes(new ValidationPipe());
 
   process.on('SIGINT', async () => {
     setTimeout(() => process.exit(1), 5000);

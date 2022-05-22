@@ -1,8 +1,7 @@
 import { UserSchema } from '@app/entities/users/schema';
-import { FindUserRequest, User } from '@app/rpc/protobuf/users';
+import { User } from '@app/rpc/protobuf/users';
 import { RpcUsersController } from '@app/rpc/users/users.controller';
-import { Context } from '@nestjs/graphql';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserLoginInput } from './inputs/login.input';
 import { UserRegisterInput } from './inputs/register.input';
 import { UserLoginResponse } from './responses/user.login.response';
@@ -25,7 +24,6 @@ export class GqlUserResolver {
     @Args('input') input: UserLoginInput,
   ): Promise<UserLoginResponse> {
     const result = await this.rpcClient.login(input);
-
     if (!result.session || !result.user) {
       throw new Error('Unable to login');
     }
@@ -39,7 +37,7 @@ export class GqlUserResolver {
   @Query(() => UserSchema, {
     description: 'Get current logged in user information',
   })
-  async userrofile(@Context() context: any): Promise<User> {
+  async userProfile(@Context() context: any): Promise<User> {
     const user = await this.rpcClient.findUser({});
     return user;
   }
