@@ -9,6 +9,7 @@ import { RegisterRequest, RegisterResponse } from '@app/rpc/protobuf/users';
 import { BootConfigService } from '@app/services/boot.config.service';
 import { JwtService } from '@nestjs/jwt';
 import { RpcHandler } from '@valhalla/serv.core';
+import { UserPasswordsModel } from '@app/entities/user.passwords';
 import { UserRegisteredEvent } from '../events/user.registered.event';
 import { UserSchema } from '@app/entities/users/schema';
 import { UserTransformer } from '@app/entities/users/transformer';
@@ -26,6 +27,7 @@ export class RegisterAccountHandler
 {
   constructor(
     private readonly users: UsersModel,
+    private readonly passwords: UserPasswordsModel,
     private readonly eventBus: EventBus,
     private readonly jwtService: JwtService,
     private readonly bootConfig: BootConfigService,
@@ -53,14 +55,14 @@ export class RegisterAccountHandler
     }
 
     const user = await this.users.createUser(command.cmd);
+    await this.passwords.createPassword(user._id, command.cmd.password);
     const userProto = new UserTransformer(user).proto;
     const verificationCode = generateVerificationCode(6);
     const activationLink = this.getSignedJwtCode(user, verificationCode);
+    const event = new UserRegisteredEvent(userProto, activationLink, 'local');
     user.emails[0].verificationCode = verificationCode;
     user.save();
-    this.eventBus.publish(
-      new UserRegisteredEvent(userProto, activationLink, 'local'),
-    );
+    this.eventBus.publish(event);
 
     return {
       activationLink,
