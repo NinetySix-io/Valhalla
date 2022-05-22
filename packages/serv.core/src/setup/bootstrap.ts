@@ -19,6 +19,7 @@ export async function bootstrapApplication(
   options?: {
     grpc?: ServCoreSetup['grpc'];
     hostName?: ServCoreSetup['hostname'];
+    preSetup?: (app: NestFastifyApplication) => void | Promise<void>;
   },
 ) {
   loadDotEnv();
@@ -44,7 +45,7 @@ export async function bootstrapApplication(
     process.exit(0);
   });
 
-  app.enableShutdownHooks();
+  await options?.preSetup?.(app);
   await servCore.setup();
   return app;
 }

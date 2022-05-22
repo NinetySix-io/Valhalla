@@ -6,9 +6,9 @@ import { UserRegisterInput } from './inputs/register.input';
 export class GqlUserResolver {
   constructor(private readonly rpcClient: RpcUsersController) {}
 
-  @Mutation(() => Boolean, { description: 'Register User' })
+  @Mutation(() => String, { description: 'Register User' })
   async userRegister(@Args('input') input: UserRegisterInput) {
-    await this.rpcClient.register({
+    const response = await this.rpcClient.register({
       firstName: 'test',
       lastName: 'test',
       displayName: input.email,
@@ -17,7 +17,7 @@ export class GqlUserResolver {
       phone: '',
     });
 
-    return true;
+    return response.activationLink;
   }
 
   @Query(() => String, { description: 'Get user by id' })

@@ -1,7 +1,7 @@
-import { BaseFactory, CreatePayload, ModelType } from '@valhalla/serv.core';
-import { UserSchema } from './schema';
-import { InjectModel } from 'nestjs-typegoose';
 import { Injectable } from '@nestjs/common';
+import { BaseFactory, CreatePayload, ModelType } from '@valhalla/serv.core';
+import { InjectModel } from 'nestjs-typegoose';
+import { UserSchema } from './schema';
 
 @Injectable()
 export class UsersModel extends BaseFactory<UserSchema> {
@@ -77,11 +77,7 @@ export class UsersModel extends BaseFactory<UserSchema> {
    * @returns A boolean value.
    */
   phoneExists(phone: string) {
-    return this.exists({
-      phones: {
-        value: phone.trim(),
-      },
-    });
+    return this.exists({ 'phones.value': phone.trim() });
   }
 
   /**
@@ -90,10 +86,6 @@ export class UsersModel extends BaseFactory<UserSchema> {
    * @returns A boolean value.
    */
   emailExists(email: string) {
-    return this.exists({
-      email: {
-        value: email.trim(),
-      },
-    });
+    return this.exists({ 'emails.value': email.trim() });
   }
 }

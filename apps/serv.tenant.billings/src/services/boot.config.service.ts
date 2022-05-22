@@ -1,16 +1,21 @@
-import { BootValue } from '@nestcloud2/boot';
+import { Boot, InjectBoot } from '@nestcloud2/boot';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class BootConfigService {
-  @BootValue('service.port')
-  public readonly port: number;
+  constructor(@InjectBoot() private readonly boot: Boot) {}
 
-  @BootValue('grpc.port')
-  public readonly gRpcPort: number;
+  get port(): number {
+    return this.boot.get('service.port');
+  }
 
-  @BootValue('service.discoveryHost')
-  public readonly _host: string;
+  get gRpcPort(): number {
+    return this.boot.get('grpc.port');
+  }
+
+  private get _host(): string {
+    return this.boot.get('service.discoveryHost');
+  }
 
   public get host(): string {
     if (process.env.NODE_ENV !== 'production') {

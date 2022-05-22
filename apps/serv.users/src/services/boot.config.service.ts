@@ -1,25 +1,33 @@
-import { BootValue } from '@nestcloud2/boot';
+import { Boot, InjectBoot } from '@nestcloud2/boot';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class BootConfigService {
-  @BootValue('service.port')
-  public readonly port: number;
+  constructor(@InjectBoot() private readonly boot: Boot) {}
 
-  @BootValue('grpc.port')
-  public readonly gRpcPort: number;
+  get port(): number {
+    return this.boot.get('service.port');
+  }
 
-  @BootValue('app.passwordExpires', '1h')
-  public readonly passwordExpires: string;
+  get gRpcPort(): number {
+    return this.boot.get('grpc.port');
+  }
 
-  @BootValue('app.jwtExpires', '1h')
-  public readonly jwtExpires: string;
+  get passwordExpires(): string {
+    return this.boot.get('app.passwordExpires', '1h');
+  }
 
-  @BootValue('app.passwordHashRound')
-  public readonly passwordHashRounds: number;
+  get jwtExpires(): string {
+    return this.boot.get('app.jwtExpires', '1h');
+  }
 
-  @BootValue('service.discoveryHost')
-  public readonly _host: string;
+  get passwordHashRounds(): number {
+    return this.boot.get('app.passwordHashRound', 10);
+  }
+
+  private get _host(): string {
+    return this.boot.get('service.discoveryHost');
+  }
 
   public get host(): string {
     if (process.env.NODE_ENV !== 'production') {

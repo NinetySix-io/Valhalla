@@ -4,12 +4,10 @@ import {
 } from '@nestjs/apollo';
 import {
   CoreModule,
-  HttpExceptionFilter,
   MongoConfigService,
   ServiceRegistryModule,
 } from '@valhalla/serv.core';
 
-import { APP_FILTER } from '@nestjs/core';
 import { BootModule } from '@nestcloud2/boot';
 import { GqlModules } from '@app/gql';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -42,13 +40,6 @@ import { isDev } from '@valhalla/utilities';
     ...RpcModules,
     ...RestModules,
     ...GqlModules,
-  ],
-  controllers: [],
-  providers: [
-    {
-      provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
-    },
   ],
 })
 export class AppModule {}

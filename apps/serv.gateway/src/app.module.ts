@@ -1,11 +1,6 @@
 import { BOOT, CONSUL } from '@nestcloud2/common';
-import {
-  CoreModule,
-  HttpExceptionFilter,
-  ServiceRegistryModule,
-} from '@valhalla/serv.core';
+import { CoreModule, ServiceRegistryModule } from '@valhalla/serv.core';
 
-import { APP_FILTER } from '@nestjs/core';
 import { ApolloGatewayDriver } from '@nestjs/apollo';
 import { ApolloGatewaySetupProvider } from './services/gql.gateway.setup/gql.gateway.setup.module';
 import { BootModule } from '@nestcloud2/boot';
@@ -30,12 +25,6 @@ import { configFilePath } from './constants';
       useClass: ApolloGatewaySetupProvider,
     }),
     RestHealthModule,
-  ],
-  providers: [
-    {
-      provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
-    },
   ],
 })
 export class AppModule {}

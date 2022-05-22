@@ -9,4 +9,3 @@ export * from './entity.factories';
 export * from './entity.decorators';
 export * from './rpc.decorators';
 export * from './general.decorators';
-export * from './filters';
