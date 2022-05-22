@@ -1,4 +1,5 @@
 import { BootConfigService } from '@app/services/boot.config.service';
+import { FindUserHandler } from './queries/find.user.query';
 import { ForgotAccountPasswordHandler } from '@app/rpc/users/commands/forgot.password.command';
 import { JwtConfigService } from '@valhalla/serv.core';
 import { JwtModule } from '@nestjs/jwt';
@@ -29,6 +30,7 @@ import { VerifyAccountEmailHandler } from '@app/rpc/users/commands/verify.email.
     UserPasswordsModel,
 
     // HANDLERS
+    FindUserHandler,
     ForgotAccountPasswordHandler,
     LoginAccountHandler,
     RegisterAccountHandler,

@@ -87,4 +87,21 @@ export class ServCoreSetup {
     const url = await this.app.getUrl();
     this.logger.debug('REST started', url);
   }
+
+  /**
+   * When the process is terminated, the app will close and the process will exit
+   */
+  handleProcessTerminate() {
+    process.on('SIGINT', async () => {
+      setTimeout(() => process.exit(1), 5000);
+      await this.app.close();
+      process.exit(0);
+    });
+
+    process.on('SIGTERM', async () => {
+      setTimeout(() => process.exit(1), 5000);
+      await this.app.close();
+      process.exit(0);
+    });
+  }
 }

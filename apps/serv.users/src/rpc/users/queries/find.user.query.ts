@@ -32,7 +32,7 @@ export class FindUserHandler implements IQueryHandler<FindUserQuery, User> {
       throw new Error('Must specify at least 1 parameter');
     }
 
-    const filter: FilterQuery<UserSchema> = new Query();
+    const filter: FilterQuery<UserSchema> = {};
 
     if (request.userId) {
       filter._id = new mongoose.Types.ObjectId(request.userId);

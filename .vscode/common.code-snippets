@@ -1,0 +1,7 @@
+{
+  "Import": {
+    "prefix": "im",
+    "description": "Import module",
+    "body": "import { $2 } from '$1';"
+  }
+}

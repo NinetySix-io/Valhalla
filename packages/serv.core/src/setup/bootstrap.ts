@@ -33,19 +33,9 @@ export async function bootstrapApplication(
 
   const app = NestCloud.create(factory);
   const servCore = new ServCoreSetup(app, options);
+
+  servCore.handleProcessTerminate();
   app.useGlobalPipes(new ValidationPipe());
-
-  process.on('SIGINT', async () => {
-    setTimeout(() => process.exit(1), 5000);
-    await app.close();
-    process.exit(0);
-  });
-
-  process.on('SIGTERM', async () => {
-    setTimeout(() => process.exit(1), 5000);
-    await app.close();
-    process.exit(0);
-  });
 
   await options?.preSetup?.(app);
   await servCore.setup();

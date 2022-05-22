@@ -31,8 +31,8 @@ export class UsersModel extends BaseFactory<UserSchema> {
   ) {
     const displayName = user.displayName || user.firstName || user.email;
     return this.create({
-      firstName: user.firstName,
-      lastName: user.lastName,
+      firstName: user.firstName ?? '',
+      lastName: user.lastName ?? '',
       displayName,
       emails: [
         {
