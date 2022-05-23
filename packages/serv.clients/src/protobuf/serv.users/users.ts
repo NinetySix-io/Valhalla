@@ -5,7 +5,7 @@ import * as _m0 from 'protobufjs/minimal';
 import { Observable } from 'rxjs';
 import { Metadata } from '@grpc/grpc-js';
 
-export const protobufPackage = 'io.valhalla.serv.users';
+export const protobufPackage = 'serv.users';
 
 export interface PasswordStruct {
   hashed: string;
@@ -14,7 +14,7 @@ export interface PasswordStruct {
 export interface EmailObject {
   id: string;
   value: string;
-  verificationCode: string;
+  verificationCode?: string | undefined;
   isVerified: boolean;
   isPrimary: boolean;
   createdAt: string;
@@ -24,7 +24,7 @@ export interface EmailObject {
 export interface PhoneObject {
   id: string;
   value: string;
-  verificationCode: string;
+  verificationCode?: string | undefined;
   isVerified: boolean;
   isPrimary: boolean;
   createdAt: string;
@@ -33,33 +33,27 @@ export interface PhoneObject {
 
 export interface User {
   id: string;
-  displayName: string;
-  firstName: string;
-  lastName: string;
+  displayName?: string | undefined;
+  firstName?: string | undefined;
+  lastName?: string | undefined;
   createdAt: string;
   updatedAt: string;
   emails: EmailObject[];
   phones: PhoneObject[];
 }
 
-export interface Session {
-  id: string;
-  userId: string;
-  created: number;
-  expires: number;
-}
-
 export interface RegisterRequest {
-  displayName: string;
+  displayName?: string | undefined;
   password: string;
   email: string;
-  phone: string;
-  firstName: string;
-  lastName: string;
+  phone?: string | undefined;
+  firstName?: string | undefined;
+  lastName?: string | undefined;
 }
 
 export interface RegisterResponse {
   activationLink: string;
+  userId: string;
 }
 
 export interface DeleteRequest {
@@ -68,14 +62,6 @@ export interface DeleteRequest {
 
 export interface DeleteResponse {
   success: boolean;
-}
-
-export interface ReadRequest {
-  query: string;
-}
-
-export interface ReadResponse {
-  user: User | undefined;
 }
 
 export interface UpdateRequest {
@@ -119,22 +105,19 @@ export interface SearchResponse {
   users: User[];
 }
 
-export interface LoginTypeParams {
+export interface LoginResponse {
+  user: User | undefined;
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface LoginRequest {
   password: string;
   username: string;
 }
 
-export interface LoginRequest {
-  params: LoginTypeParams | undefined;
-}
-
-export interface LoginResponse {
-  session: Session | undefined;
-  user: User | undefined;
-}
-
 export interface LogoutRequest {
-  sessionId: string;
+  refreshToken?: string | undefined;
 }
 
 export interface LogoutResponse {
@@ -167,7 +150,13 @@ export interface SendVerificationCodeResponse {
   success: boolean;
 }
 
-export const IO_VALHALLA_SERV_USERS_PACKAGE_NAME = 'io.valhalla.serv.users';
+export interface FindUserRequest {
+  userId?: string | undefined;
+  email?: string | undefined;
+  phone?: string | undefined;
+}
+
+export const SERV_USERS_PACKAGE_NAME = 'serv.users';
 
 export interface UsersServiceClient {
   register(
@@ -175,7 +164,7 @@ export interface UsersServiceClient {
     metadata?: Metadata,
   ): Observable<RegisterResponse>;
 
-  findUser(request: ReadRequest, metadata?: Metadata): Observable<ReadResponse>;
+  findUser(request: FindUserRequest, metadata?: Metadata): Observable<User>;
 
   verifyEmail(
     request: VerifyUserRequest,
@@ -225,9 +214,9 @@ export interface UsersServiceController {
     | RegisterResponse;
 
   findUser(
-    request: ReadRequest,
+    request: FindUserRequest,
     metadata?: Metadata,
-  ): Promise<ReadResponse> | Observable<ReadResponse> | ReadResponse;
+  ): Promise<User> | Observable<User> | User;
 
   verifyEmail(
     request: VerifyUserRequest,

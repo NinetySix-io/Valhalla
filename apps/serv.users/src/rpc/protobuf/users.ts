@@ -5,7 +5,7 @@ import * as _m0 from 'protobufjs/minimal';
 import { Observable } from 'rxjs';
 import { Metadata } from '@grpc/grpc-js';
 
-export const protobufPackage = 'io.valhalla.serv.users';
+export const protobufPackage = 'serv.users';
 
 export interface PasswordStruct {
   hashed: string;
@@ -40,13 +40,6 @@ export interface User {
   updatedAt: string;
   emails: EmailObject[];
   phones: PhoneObject[];
-}
-
-export interface Session {
-  id: string;
-  userId: string;
-  created: number;
-  expires: number;
 }
 
 export interface RegisterRequest {
@@ -113,8 +106,9 @@ export interface SearchResponse {
 }
 
 export interface LoginResponse {
-  session?: Session | undefined;
   user: User | undefined;
+  accessToken: string;
+  refreshToken: string;
 }
 
 export interface LoginRequest {
@@ -123,7 +117,7 @@ export interface LoginRequest {
 }
 
 export interface LogoutRequest {
-  sessionId: string;
+  refreshToken?: string | undefined;
 }
 
 export interface LogoutResponse {
@@ -162,7 +156,7 @@ export interface FindUserRequest {
   phone?: string | undefined;
 }
 
-export const IO_VALHALLA_SERV_USERS_PACKAGE_NAME = 'io.valhalla.serv.users';
+export const SERV_USERS_PACKAGE_NAME = 'serv.users';
 
 export interface UsersServiceClient {
   register(

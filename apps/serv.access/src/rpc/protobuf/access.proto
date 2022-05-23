@@ -4,6 +4,7 @@ package serv.access;
 
 service AccessService {
     rpc CreateAccess(CreateAccessRequest) returns (CreateAccessResponse) {}
+    rpc ReadAccess(ReadAccessRequest) returns (ReadAccessResponse) {}
     rpc DeleteRefreshToken(DeleteRefreshTokenRequest) returns (DeleteRefreshTokenResponse) {}
     rpc RenewAccessToken(RenewAccessTokenRequest) returns (RenewAccessTokenResponse) {}
     rpc DecodeAccessToken(DecodeAccessTokenRequest) returns (DecodeAccessTokenResponse) {}
@@ -40,4 +41,12 @@ message RenewAccessTokenRequest {
 
 message RenewAccessTokenResponse {
     string accessToken = 1;
+}
+
+message ReadAccessRequest {
+    string refreshToken = 1;
+}
+
+message ReadAccessResponse {
+    string userId = 1;
 }

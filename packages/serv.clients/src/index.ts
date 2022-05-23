@@ -1,1 +1,2 @@
-export * from './clients/serv.tenant.billings.client';
+export * from './clients';
+export * from './protobuf';

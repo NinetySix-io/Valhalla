@@ -4,68 +4,49 @@ package serv.access;
 
 service AccessService {
     rpc CreateAccess(CreateAccessRequest) returns (CreateAccessResponse) {}
-    rpc DeleteAccess(DeleteAccessRequest) returns (DeleteAccessResponse) {}
     rpc ReadAccess(ReadAccessRequest) returns (ReadAccessResponse) {}
-    rpc FindAccess(FindAccessRequest) returns (FindAccessResponse) {}
-    rpc HasRights(HasRightsRequest) returns (HasRightsResponse) {}
-}
-
-message Access {
-    string id = 1;
-    string token = 2;
-    string tenantId = 3;
-    repeated string scopes = 4;
-    string name = 5;
-    string createdAt = 8;
-    string updatedAt = 9;
-    bool active = 10;
-    string createdBy = 11;
+    rpc DeleteRefreshToken(DeleteRefreshTokenRequest) returns (DeleteRefreshTokenResponse) {}
+    rpc RenewAccessToken(RenewAccessTokenRequest) returns (RenewAccessTokenResponse) {}
+    rpc DecodeAccessToken(DecodeAccessTokenRequest) returns (DecodeAccessTokenResponse) {}
 }
 
 message CreateAccessRequest {
-    string tenantId = 1;
-    repeated string scopes = 2;
-    string name = 3;
-    string expiresAt = 4;
+    string userId = 1;
 }
 
 message CreateAccessResponse {
-    Access accessToken = 1;
+    string refreshToken = 1;
+    string accessToken = 2;
 }
 
-message DeleteAccessRequest {
-    string id = 1;
-    string tenantId = 2;
+message DeleteRefreshTokenRequest {
+    string refreshToken = 1;
 }
 
-message DeleteAccessResponse {
-    Access accessToken = 1;
+message DeleteRefreshTokenResponse {
+    bool success = 1;
+}
+
+message DecodeAccessTokenRequest {
+    string accessToken = 1;
+}
+
+message DecodeAccessTokenResponse {
+    string userId = 1;
+}
+
+message RenewAccessTokenRequest {
+    string refreshToken = 1;
+}
+
+message RenewAccessTokenResponse {
+    string accessToken = 1;
 }
 
 message ReadAccessRequest {
-    string id = 1;
-    string tenantId = 2;
+    string refreshToken = 1;
 }
 
 message ReadAccessResponse {
-    Access accessToken = 1;
-}
-
-message FindAccessRequest {
-    string filter = 1;
-    string tenantId = 2;
-}
-
-message FindAccessResponse {
-    repeated Access accessTokens = 1;
-}
-
-message HasRightsRequest {
-    string token = 1;
-    string scope = 2;
-    string tenantId = 3;
-}
-
-message HasRightsResponse {
-    bool hasAccess = 1;
+    string userId = 1;
 }

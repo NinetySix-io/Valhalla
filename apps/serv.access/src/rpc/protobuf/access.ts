@@ -40,6 +40,14 @@ export interface RenewAccessTokenResponse {
   accessToken: string;
 }
 
+export interface ReadAccessRequest {
+  refreshToken: string;
+}
+
+export interface ReadAccessResponse {
+  userId: string;
+}
+
 export const SERV_ACCESS_PACKAGE_NAME = 'serv.access';
 
 export interface AccessServiceClient {
@@ -47,6 +55,11 @@ export interface AccessServiceClient {
     request: CreateAccessRequest,
     metadata?: Metadata,
   ): Observable<CreateAccessResponse>;
+
+  readAccess(
+    request: ReadAccessRequest,
+    metadata?: Metadata,
+  ): Observable<ReadAccessResponse>;
 
   deleteRefreshToken(
     request: DeleteRefreshTokenRequest,
@@ -72,6 +85,14 @@ export interface AccessServiceController {
     | Promise<CreateAccessResponse>
     | Observable<CreateAccessResponse>
     | CreateAccessResponse;
+
+  readAccess(
+    request: ReadAccessRequest,
+    metadata?: Metadata,
+  ):
+    | Promise<ReadAccessResponse>
+    | Observable<ReadAccessResponse>
+    | ReadAccessResponse;
 
   deleteRefreshToken(
     request: DeleteRefreshTokenRequest,
@@ -102,6 +123,7 @@ export function AccessServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = [
       'createAccess',
+      'readAccess',
       'deleteRefreshToken',
       'renewAccessToken',
       'decodeAccessToken',

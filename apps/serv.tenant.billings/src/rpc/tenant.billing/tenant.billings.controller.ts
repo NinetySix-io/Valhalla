@@ -30,12 +30,13 @@ import { DeleteTenantSubscriptionCommand } from '@app/rpc/tenant.billing/command
 import { GetTenantInvoiceQuery } from '@app/rpc/tenant.billing/queries/get.tenant.invoice.query';
 import { GetTenantPlanQuery } from '@app/rpc/tenant.billing/queries/get.tenant.plan.query';
 import { GetTenantSubscriptionQuery } from '@app/rpc/tenant.billing/queries/get.tenant.subscription.query';
-import { GrpcMethod } from '@nestjs/microservices';
+import { GrpcClass } from '@valhalla/serv.core/src';
 import { Observable } from 'rxjs';
 import { UpdateTenantPlanCommand } from '@app/rpc/tenant.billing/commands/update.tenant.plan.command';
 import { UpdateTenantSubscriptionCommand } from '@app/rpc/tenant.billing/commands/update.tenant.subscription.command';
 
 @Controller()
+@GrpcClass(TENANT_BILLINGS_SERVICE_NAME)
 export class RpcTenantBillingsController
   implements TenantBillingsServiceController
 {
@@ -44,7 +45,6 @@ export class RpcTenantBillingsController
     private readonly queryBus: QueryBus,
   ) {}
 
-  @GrpcMethod(TENANT_BILLINGS_SERVICE_NAME)
   deleteTenantPlan(
     request: DeleteTenantPlanRequest,
   ):
@@ -54,7 +54,6 @@ export class RpcTenantBillingsController
     return this.commandBus.execute(new DeleteTenantPlanCommand(request));
   }
 
-  @GrpcMethod(TENANT_BILLINGS_SERVICE_NAME)
   getTenantPlan(
     request: GetTenantPlanRequest,
   ):
@@ -64,7 +63,6 @@ export class RpcTenantBillingsController
     return this.queryBus.execute(new GetTenantPlanQuery(request));
   }
 
-  @GrpcMethod(TENANT_BILLINGS_SERVICE_NAME)
   createTenantSubscription(
     request: CreateTenantSubscriptionRequest,
   ):
@@ -76,7 +74,6 @@ export class RpcTenantBillingsController
     );
   }
 
-  @GrpcMethod(TENANT_BILLINGS_SERVICE_NAME)
   deleteTenantSubscription(
     request: DeleteTenantSubscriptionRequest,
   ):
@@ -88,7 +85,6 @@ export class RpcTenantBillingsController
     );
   }
 
-  @GrpcMethod(TENANT_BILLINGS_SERVICE_NAME)
   updateTenantSubscription(
     request: UpdateTenantSubscriptionRequest,
   ):
@@ -100,7 +96,6 @@ export class RpcTenantBillingsController
     );
   }
 
-  @GrpcMethod(TENANT_BILLINGS_SERVICE_NAME)
   getTenantSubscription(
     request: GetTenantSubscriptionRequest,
   ):
@@ -110,7 +105,6 @@ export class RpcTenantBillingsController
     return this.queryBus.execute(new GetTenantSubscriptionQuery(request));
   }
 
-  @GrpcMethod(TENANT_BILLINGS_SERVICE_NAME)
   getTenantInvoice(
     request: GetTenantInvoiceRequest,
   ):
@@ -120,7 +114,6 @@ export class RpcTenantBillingsController
     return this.queryBus.execute(new GetTenantInvoiceQuery(request));
   }
 
-  @GrpcMethod(TENANT_BILLINGS_SERVICE_NAME)
   createTenantPlan(
     request: CreateTenantPlanRequest,
   ):
@@ -130,7 +123,6 @@ export class RpcTenantBillingsController
     return this.commandBus.execute(new CreateTenantPlanCommand(request));
   }
 
-  @GrpcMethod(TENANT_BILLINGS_SERVICE_NAME)
   updateTenantPlan(
     request: UpdateTenantPlanRequest,
   ):

@@ -65,6 +65,7 @@ function run() {
    */
   const protoBufIndex = [];
   const clientsIndex = [];
+  const entryIndex = [];
   const servApps = getServiceFiles();
 
   if (fs.existsSync(protobufTarget)) {
@@ -137,6 +138,10 @@ function run() {
   clientsIndex.push("");
   protoBufIndex.push("");
 
+  entryIndex.push("export * from './clients';");
+  entryIndex.push("export * from './protobuf';");
+  entryIndex.push("");
+
   fs.writeFileSync(
     path.resolve(protobufTarget, "index.ts"),
     protoBufIndex.join("\n"),
@@ -146,6 +151,12 @@ function run() {
   fs.writeFileSync(
     path.resolve(clientTarget, "index.ts"),
     clientsIndex.join("\n"),
+    { encoding: "utf-8" }
+  );
+
+  fs.writeFileSync(
+    path.resolve(destination, "index.ts"),
+    entryIndex.join("\n"),
     { encoding: "utf-8" }
   );
 }

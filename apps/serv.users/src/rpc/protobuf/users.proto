@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package io.valhalla.serv.users;
+package serv.users;
 
 service UsersService {
     rpc Register(RegisterRequest) returns (RegisterResponse) {}
@@ -48,14 +48,6 @@ message User {
     string updatedAt = 6;
     repeated EmailObject emails = 7;
     repeated PhoneObject phones = 8;
-}
-
-
-message Session {
-    string id = 1;
-    string userId = 2;
-    int32 created = 4;
-    int32 expires = 5;
 }
 
 message RegisterRequest {
@@ -123,8 +115,9 @@ message SearchResponse {
 
 
 message LoginResponse {
-    optional Session session = 1;
-    User user = 2;
+    User user = 1;
+    string accessToken = 2;
+    string refreshToken = 3;
 }
 
 message LoginRequest {
@@ -133,7 +126,7 @@ message LoginRequest {
 }
 
 message LogoutRequest {
-    string sessionId = 1;
+    optional string refreshToken = 1;
 }
 
 message LogoutResponse {

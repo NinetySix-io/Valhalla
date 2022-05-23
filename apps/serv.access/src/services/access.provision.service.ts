@@ -27,6 +27,16 @@ export class AccessProvisionService {
   ) {}
 
   /**
+   * Find a refresh token by its value
+   * @param {string} refreshToken - The refresh token that was sent to the client.
+   * @returns The refresh token
+   */
+  async findRefreshToken(refreshToken: string) {
+    const data = await this.refreshTokens.findById(refreshToken);
+    return data;
+  }
+
+  /**
    * It deletes the refresh token from the database
    * @param {string} refreshToken - The refresh token to revoke.
    * @returns The content of the refresh token.

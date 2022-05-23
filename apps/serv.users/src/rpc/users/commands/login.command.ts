@@ -1,3 +1,5 @@
+import * as rxjs from 'rxjs';
+
 import {
   CommandHandler,
   EventBus,
@@ -6,6 +8,7 @@ import {
 } from '@nestjs/cqrs';
 import { LoginRequest, LoginResponse } from '@app/rpc/protobuf/users';
 
+import { AccessRpcClientService } from '@valhalla/serv.clients';
 import { Logger } from '@nestjs/common';
 import { RpcHandler } from '@valhalla/serv.core';
 import { UserLoggedInEvent } from '../events/user.logged.in.event';
@@ -28,6 +31,7 @@ export class LoginAccountHandler
     private readonly users: UsersModel,
     private readonly userPasswords: UserPasswordsModel,
     private readonly eventBus: EventBus,
+    private readonly accessRpcClient: AccessRpcClientService,
   ) {}
 
   private get LoginError() {
@@ -58,12 +62,19 @@ export class LoginAccountHandler
     }
 
     const userProto = new UserTransformer(user).proto;
-    const event = new UserLoggedInEvent(userProto);
+    const tokens = await rxjs.firstValueFrom(
+      this.accessRpcClient.svc.createAccess({
+        userId: user.id,
+      }),
+    );
+
+    const event = new UserLoggedInEvent(userProto, tokens);
     this.eventBus.publish(event);
 
     return {
       user: userProto,
-      session: undefined,
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
     };
   }
 }

@@ -21,7 +21,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json --runInBand",
     "test:ci": "jest --ci --runInBand",
-    "proto:generate": "protoc --ts_proto_out=. ./src/rpc/**/*.proto --ts_proto_opt=nestJs=true --ts_proto_opt=esModuleInterop=true --ts_proto_opt=addGrpcMetadata=true --ts_proto_opt=returnObservable=false"
+    "proto:generate": "protoc --ts_proto_out=. ./src/rpc/**/*.proto --ts_proto_opt=nestJs=true,addGrpcMetadata=true,outputEncodeMethods=false,outputJsonMethods=false,outputClientImpl=false,esModuleInterop=true"
   },
   "dependencies": {
     "@apollo/subgraph": "^2.0.2",
@@ -39,6 +39,7 @@
     "@nestjs/platform-fastify": "^8.4.4",
     "@nestjs/terminus": "^8.0.6",
     "@typegoose/typegoose": "^9.8.1",
+    "@valhalla/serv.clients": "workspace:*",
     "@valhalla/serv.core": "workspace:*",
     "@valhalla/utilities": "workspace:*",
     "apollo-server-core": "^3.7.0",
@@ -48,6 +49,7 @@
     "class-validator": "^0.13.2",
     "dayjs": "^1.11.2",
     "dotenv": "^16.0.1",
+    "fastify": "^3.29.0",
     "graphql": "^16.5.0",
     "long": "^5.2.0",
     "mongodb": "^4.6.0",
