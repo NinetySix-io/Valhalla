@@ -3,6 +3,8 @@ import {
   AccessServiceController,
   CreateAccessRequest,
   CreateAccessResponse,
+  DecodeAccessTokenRequest,
+  DecodeAccessTokenResponse,
   DeleteAccessRequest,
   DeleteAccessResponse,
   FindAccessRequest,
@@ -11,16 +13,19 @@ import {
   HasRightsResponse,
   ReadAccessRequest,
   ReadAccessResponse,
+  RenewAccessTokenRequest,
+  RenewAccessTokenResponse,
 } from '@app/rpc/protobuf/access';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { Controller } from '@nestjs/common';
 import { CreateAccessCommand } from '@app/rpc/access/commands/create.access.command';
-import { DeleteAccessCommand } from '@app/rpc/access/commands/delete.access.command';
+import { DeleteAccessCommand } from '@app/rpc/access/commands/delete.refresh.token.command';
 import { FindAccessQuery } from '@app/rpc/access/queries/find.access.query';
 import { GrpcMethod } from '@nestjs/microservices';
 import { HasRightsQuery } from '@app/rpc/access/queries/has.rights.query';
 import { Metadata } from '@grpc/grpc-js';
+import { Observable } from 'rxjs';
 import { ReadAccessQuery } from '@app/rpc/access/queries/read.access.query';
 import { getIdentityFromCtx } from '@valhalla/serv.core';
 
@@ -30,6 +35,24 @@ export class RpcAccessController implements AccessServiceController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
+  renewAccessToken(
+    request: RenewAccessTokenRequest,
+    metadata?: Metadata,
+  ):
+    | RenewAccessTokenResponse
+    | Promise<RenewAccessTokenResponse>
+    | Observable<RenewAccessTokenResponse> {
+    throw new Error('Method not implemented.');
+  }
+  decodeAccessToken(
+    request: DecodeAccessTokenRequest,
+    metadata?: Metadata,
+  ):
+    | DecodeAccessTokenResponse
+    | Promise<DecodeAccessTokenResponse>
+    | Observable<DecodeAccessTokenResponse> {
+    throw new Error('Method not implemented.');
+  }
 
   @GrpcMethod(ACCESS_SERVICE_NAME)
   async createAccess(

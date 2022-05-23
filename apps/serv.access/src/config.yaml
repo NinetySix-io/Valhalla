@@ -11,6 +11,12 @@ service:
   maxRetry: 5
   retryInterval: 5000
 
+app:
+  auth:
+    jwt:
+      secret: rawr
+      expires: 15m
+
 grpc:
   port: 3011
 

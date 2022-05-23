@@ -7,64 +7,37 @@ import { Metadata } from '@grpc/grpc-js';
 
 export const protobufPackage = 'serv.access';
 
-export interface Access {
-  id: string;
-  token: string;
-  tenantId: string;
-  scopes: string[];
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-  active: boolean;
-  createdBy: string;
-}
-
 export interface CreateAccessRequest {
-  tenantId: string;
-  scopes: string[];
-  name: string;
-  expiresAt: string;
+  userId: string;
 }
 
 export interface CreateAccessResponse {
-  accessToken: Access | undefined;
+  refreshToken: string;
+  accessToken: string;
 }
 
-export interface DeleteAccessRequest {
-  id: string;
-  tenantId: string;
+export interface DeleteRefreshTokenRequest {
+  refreshToken: string;
 }
 
-export interface DeleteAccessResponse {
-  accessToken: Access | undefined;
+export interface DeleteRefreshTokenResponse {
+  success: boolean;
 }
 
-export interface ReadAccessRequest {
-  id: string;
-  tenantId: string;
+export interface DecodeAccessTokenRequest {
+  accessToken: string;
 }
 
-export interface ReadAccessResponse {
-  accessToken: Access | undefined;
+export interface DecodeAccessTokenResponse {
+  userId: string;
 }
 
-export interface FindAccessRequest {
-  filter: string;
-  tenantId: string;
+export interface RenewAccessTokenRequest {
+  refreshToken: string;
 }
 
-export interface FindAccessResponse {
-  accessTokens: Access[];
-}
-
-export interface HasRightsRequest {
-  token: string;
-  scope: string;
-  tenantId: string;
-}
-
-export interface HasRightsResponse {
-  hasAccess: boolean;
+export interface RenewAccessTokenResponse {
+  accessToken: string;
 }
 
 export const SERV_ACCESS_PACKAGE_NAME = 'serv.access';
@@ -75,25 +48,20 @@ export interface AccessServiceClient {
     metadata?: Metadata,
   ): Observable<CreateAccessResponse>;
 
-  deleteAccess(
-    request: DeleteAccessRequest,
+  deleteRefreshToken(
+    request: DeleteRefreshTokenRequest,
     metadata?: Metadata,
-  ): Observable<DeleteAccessResponse>;
+  ): Observable<DeleteRefreshTokenResponse>;
 
-  readAccess(
-    request: ReadAccessRequest,
+  renewAccessToken(
+    request: RenewAccessTokenRequest,
     metadata?: Metadata,
-  ): Observable<ReadAccessResponse>;
+  ): Observable<RenewAccessTokenResponse>;
 
-  findAccess(
-    request: FindAccessRequest,
+  decodeAccessToken(
+    request: DecodeAccessTokenRequest,
     metadata?: Metadata,
-  ): Observable<FindAccessResponse>;
-
-  hasRights(
-    request: HasRightsRequest,
-    metadata?: Metadata,
-  ): Observable<HasRightsResponse>;
+  ): Observable<DecodeAccessTokenResponse>;
 }
 
 export interface AccessServiceController {
@@ -105,47 +73,38 @@ export interface AccessServiceController {
     | Observable<CreateAccessResponse>
     | CreateAccessResponse;
 
-  deleteAccess(
-    request: DeleteAccessRequest,
+  deleteRefreshToken(
+    request: DeleteRefreshTokenRequest,
     metadata?: Metadata,
   ):
-    | Promise<DeleteAccessResponse>
-    | Observable<DeleteAccessResponse>
-    | DeleteAccessResponse;
+    | Promise<DeleteRefreshTokenResponse>
+    | Observable<DeleteRefreshTokenResponse>
+    | DeleteRefreshTokenResponse;
 
-  readAccess(
-    request: ReadAccessRequest,
+  renewAccessToken(
+    request: RenewAccessTokenRequest,
     metadata?: Metadata,
   ):
-    | Promise<ReadAccessResponse>
-    | Observable<ReadAccessResponse>
-    | ReadAccessResponse;
+    | Promise<RenewAccessTokenResponse>
+    | Observable<RenewAccessTokenResponse>
+    | RenewAccessTokenResponse;
 
-  findAccess(
-    request: FindAccessRequest,
+  decodeAccessToken(
+    request: DecodeAccessTokenRequest,
     metadata?: Metadata,
   ):
-    | Promise<FindAccessResponse>
-    | Observable<FindAccessResponse>
-    | FindAccessResponse;
-
-  hasRights(
-    request: HasRightsRequest,
-    metadata?: Metadata,
-  ):
-    | Promise<HasRightsResponse>
-    | Observable<HasRightsResponse>
-    | HasRightsResponse;
+    | Promise<DecodeAccessTokenResponse>
+    | Observable<DecodeAccessTokenResponse>
+    | DecodeAccessTokenResponse;
 }
 
 export function AccessServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = [
       'createAccess',
-      'deleteAccess',
-      'readAccess',
-      'findAccess',
-      'hasRights',
+      'deleteRefreshToken',
+      'renewAccessToken',
+      'decodeAccessToken',
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(
