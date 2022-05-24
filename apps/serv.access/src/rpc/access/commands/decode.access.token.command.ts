@@ -23,7 +23,7 @@ export class DecodeAccessTokenHandler
     command: DecodeAccessTokenCommand,
   ): Promise<DecodeAccessTokenResponse> {
     const accessToken = command.input.accessToken;
-    const data = await this.provision.decodeAccessToken(accessToken);
+    const data = this.provision.decodeAccessToken(accessToken);
     return data;
   }
 }

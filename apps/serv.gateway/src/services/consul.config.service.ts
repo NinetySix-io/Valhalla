@@ -19,7 +19,7 @@ export class ConsulConfigService implements OnModuleInit {
    * It watches the list of services in Consul, and when it changes, it updates the list of services in
    * the application
    */
-  async syncServices() {
+  syncServices() {
     this.logger.debug('Start syncing consul services');
     this.consul.watchServiceList((services) => {
       this.logger.debug('Consul services sync');

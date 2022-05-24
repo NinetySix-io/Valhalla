@@ -8,7 +8,6 @@ import {
   ServiceRegistryModule,
 } from '@valhalla/serv.core';
 
-import { AccessRpcClientService } from '@valhalla/serv.clients';
 import { BootModule } from '@nestcloud2/boot';
 import { GqlModules } from '@app/gql';
 import { GraphQLModule } from '@nestjs/graphql';

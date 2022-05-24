@@ -5,8 +5,8 @@ import { index } from '@typegoose/typegoose';
 export function CaseInsensitiveIndex(
   fields: Partial<Record<string, string | 1 | -1>>,
   options: Omit<IndexOptions<BeAnObject>, 'collation'> = {},
-) {
-  return function (target: any): void {
+): ClassDecorator {
+  return function (target) {
     return index(fields, {
       ...options,
       collation: {

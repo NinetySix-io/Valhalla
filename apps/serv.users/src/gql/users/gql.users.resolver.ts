@@ -36,7 +36,7 @@ export class GqlUserResolver {
   @Query(() => UserSchema, {
     description: 'Get current logged in user information',
   })
-  async userProfile(@Context() context: any): Promise<User> {
+  async userProfile(@Context() context: unknown): Promise<User> {
     console.debug({ context });
     const user = await this.rpcClient.findUser({});
     return user;

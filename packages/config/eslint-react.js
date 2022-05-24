@@ -3,6 +3,9 @@ module.exports = {
     react: {
       version: 'detect',
     },
+    next: {
+      rootDir: ['apps/*/', 'packages/*/'],
+    },
   },
   overrides: [
     {
@@ -17,11 +20,6 @@ module.exports = {
     sourceType: 'module',
     ecmaFeatures: {
       jsx: true, // Allows for the parsing of JSX
-    },
-  },
-  settings: {
-    next: {
-      rootDir: ['apps/*/', 'packages/*/'],
     },
   },
   extends: [

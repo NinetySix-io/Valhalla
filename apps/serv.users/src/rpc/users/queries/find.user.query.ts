@@ -1,7 +1,7 @@
 import { FindUserRequest, User } from '@app/rpc/protobuf/users';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { SStruct, isEmpty } from '@valhalla/utilities';
-import mongoose, { FilterQuery, Query } from 'mongoose';
+import mongoose, { FilterQuery } from 'mongoose';
 
 import { RpcHandler } from '@valhalla/serv.core';
 import { UserSchema } from '@app/entities/users/schema';

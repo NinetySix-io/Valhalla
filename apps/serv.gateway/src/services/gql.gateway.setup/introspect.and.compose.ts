@@ -167,8 +167,8 @@ export class IntrospectAndCompose implements SupergraphManager {
 
   private logUpdateFailure(e: Error) {
     this.config.logger?.error(
-      'IntrospectAndCompose failed to update supergraph with the following error: ' +
-        e,
+      'IntrospectAndCompose failed to update supergraph with the following error',
+      e,
     );
   }
 }

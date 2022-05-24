@@ -5,8 +5,8 @@ import { index } from '@typegoose/typegoose';
 export function ExpiryIndex(
   fields: Partial<Record<string, string | 1 | -1>>,
   options: Omit<IndexOptions<BeAnObject>, 'expireAfterSeconds'> = {},
-) {
-  return function (target: any): void {
+): ClassDecorator {
+  return function (target) {
     return index(fields, {
       ...options,
       expireAfterSeconds: 0,

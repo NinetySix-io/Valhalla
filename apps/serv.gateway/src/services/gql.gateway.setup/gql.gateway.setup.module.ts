@@ -13,9 +13,9 @@ export class ApolloGatewaySetupProvider
 {
   private composer: IntrospectAndCompose;
 
-  onSubgraphUpdated(): void {
+  async onSubgraphUpdated() {
     if (this.composer) {
-      this.composer.rebuildSupergraphSdl();
+      await this.composer.rebuildSupergraphSdl();
     }
   }
 
