@@ -23,7 +23,7 @@ export class RestHealthController {
   ) {}
 
   private get grpcUrl(): string {
-    return `${this.bootConfig.host}:${this.bootConfig.gRpcPort}`;
+    return `${this.bootConfig.host}:${this.bootConfig.port}`;
   }
 
   /**

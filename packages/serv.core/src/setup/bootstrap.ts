@@ -19,7 +19,6 @@ export async function bootstrapApplication(
   AppModule: { new (): unknown },
   options?: {
     grpc?: ServCoreSetup['grpc'];
-    hostName?: ServCoreSetup['hostname'];
     preSetup?: (app: NestFastifyApplication) => void | Promise<void>;
   },
 ) {

@@ -16,9 +16,6 @@ app:
       secret: rawr
       expires: 15m
 
-grpc:
-  port: 3011
-
 consul:
   host: localhost
   port: 8500

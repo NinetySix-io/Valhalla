@@ -1,72 +1,45 @@
-import { BOOT, IBoot } from '@nestcloud2/common';
 import { GrpcOptions, Transport } from '@nestjs/microservices';
 import { INestApplication, Logger } from '@nestjs/common';
 
+import { BOOT } from '@nestcloud2/common';
+import { Boot } from '@nestcloud2/boot';
+import { ServAppConfigService } from '../services';
+import { isEmpty } from 'class-validator';
+import { isNil } from '@valhalla/utilities';
+
 export class ServCoreSetup {
   app: INestApplication;
-  hostname = '0.0.0.0';
   logger = Logger;
-  hasMicroservices = false;
-  grpc?: {
-    protoPath: string | string[];
-    package: string;
-  };
+  microServices: Partial<{ [key in 'grpc']: true }> = {};
+  grpc?: GrpcOptions['options'];
+  config: ServAppConfigService;
 
   constructor(
     app: INestApplication,
-    options?: {
-      grpc?: ServCoreSetup['grpc'];
-      hostName?: ServCoreSetup['hostname'];
-    },
+    options?: { grpc?: ServCoreSetup['grpc'] },
   ) {
     this.app = app;
     this.grpc = options?.grpc;
-    this.hostname = options?.hostName ?? this.hostname;
-  }
-  /**
-   * It returns the `IBoot` instance that was registered with the `App` instance
-   * @returns The boot object.
-   */
-  private get boot() {
-    return this.app.get<IBoot>(BOOT);
-  }
-
-  /**
-   * It returns the value of the service.port property from the bootstrap configuration
-   * @returns The port number of the service.
-   */
-  private get servicePort(): number {
-    return this.boot.get('service.port');
-  }
-
-  /**
-   * It returns the value of the grpc.port property from the bootstrap file.
-   * @returns The value of the property 'grpc.port' in the boot object.
-   */
-  private get gRpcPort(): number {
-    return this.boot.get('grpc.port');
-  }
-
-  private get gRpcUrl(): string {
-    return `${this.hostname}:${this.gRpcPort}`;
+    this.config = new ServAppConfigService(this.app.get<Boot>(BOOT));
   }
 
   /**
    * It connects the gRPC server to the NestJS application
    */
   private connectRpcServer(): void {
-    if (!this.gRpcPort || !this.grpc) {
+    if (isNil(this.grpc)) {
       return;
     }
 
-    this.hasMicroservices = true;
+    this.microServices.grpc = true;
     const options: GrpcOptions['options'] = {
-      url: this.gRpcUrl,
-      protoPath: this.grpc.protoPath,
-      package: this.grpc.package,
+      url: this.config.gRpcUrl,
+      ...this.grpc,
     };
 
-    this.logger.debug('gRPG', this.gRpcUrl);
+    /**
+     * If {option.url} is not provided, its default to 5000
+     */
     this.app.connectMicroservice<GrpcOptions>({
       transport: Transport.GRPC,
       options,
@@ -79,13 +52,18 @@ export class ServCoreSetup {
    */
   async setup(): Promise<void> {
     this.connectRpcServer();
-    if (this.hasMicroservices) {
+    if (!isEmpty(this.microServices)) {
       await this.app.startAllMicroservices();
     }
 
-    await this.app.listen(this.servicePort);
+    await this.app.listen(this.config.port);
     const url = await this.app.getUrl();
+
     this.logger.debug('REST started', url);
+    this.microServices.grpc &&
+      this.logger.debug('gRPC started', this.config.gRpcUrl);
+    this.config.hasGraphql &&
+      this.logger.debug('GRAPHQL started', url + '/graphql');
   }
 
   /**

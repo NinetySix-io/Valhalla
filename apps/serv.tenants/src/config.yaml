@@ -10,9 +10,6 @@ service:
   maxRetry: 5
   retryInterval: 5000
 
-grpc:
-  port: 3014
-
 consul:
   host: localhost
   port: 8500

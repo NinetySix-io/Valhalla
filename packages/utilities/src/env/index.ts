@@ -1,6 +1,5 @@
 export * from './is.dev';
 export * from './is.prod';
-export * from './is.staging';
 export * from './is.test';
 
 /**
