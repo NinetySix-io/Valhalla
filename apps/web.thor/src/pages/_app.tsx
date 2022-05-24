@@ -27,13 +27,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <SiteFavicon />
       </Head>
-      <NextSeo
-        titleTemplate="%s | NinetySix"
-        title={SEO?.title}
-        description={SEO?.description}
-        noindex={SEO?.noIndex ?? true}
-        nofollow={SEO?.noFollow ?? true}
-      />
+      <NextSeo titleTemplate="%s | NinetySix" {...(SEO ?? {})} />
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Layout>

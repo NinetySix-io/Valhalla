@@ -4,7 +4,7 @@ import getConfig from 'next/config';
 
 const { publicRuntimeConfig } = getConfig();
 const schema = SStruct.create(
-  publicRuntimeConfig,
+  publicRuntimeConfig ?? {},
   SStruct.object({
     SERVER: SStruct.defaulted(SStruct.string(), 'http://localhost:3002'),
     NODE_ENV: SStruct.optional(SStruct.string()),

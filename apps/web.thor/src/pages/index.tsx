@@ -7,7 +7,7 @@ const Page = styled(Box)`
   flex-grow: 1;
 `;
 
-export default function Home() {
+export default function HomePage() {
   return (
     <Page>
       <Typography variant="h1">Thor</Typography>
@@ -20,7 +20,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       SEO: {
-        title: 'SixtyNine',
+        title: 'NinetySix',
+        titleTemplate: '%s',
         description: 'The whole operation',
       },
     },

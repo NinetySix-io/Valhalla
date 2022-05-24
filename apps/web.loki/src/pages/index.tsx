@@ -7,7 +7,7 @@ const Page = styled(Grid)`
   flex-grow: 1;
 `;
 
-export default function Home() {
+export default function HomePage() {
   return (
     <Page container>
       <Grid item>
@@ -22,13 +22,10 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       SEO: {
-        title: 'SixtyNine',
+        title: 'NinetySix',
         description: 'The whole operation',
+        titleTemplate: '%s',
       },
-    },
-    redirect: {
-      permanent: false,
-      destination: '/login',
     },
   };
 };

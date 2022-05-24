@@ -8,16 +8,12 @@ import {
 
 import { AppPropsType } from 'next/dist/shared/lib/utils';
 import { BasicObject } from '@valhalla/utilities';
+import { NextSeoProps } from 'next-seo';
 import { ParsedUrlQuery } from 'querystring';
 import { Router } from 'next/router';
 
 export type WithSEO<P> = P & {
-  SEO?: {
-    title?: string;
-    description?: string;
-    noIndex?: boolean;
-    noFollow?: boolean;
-  };
+  SEO?: NextSeoProps;
 };
 
 export type GetServerSideProps<
