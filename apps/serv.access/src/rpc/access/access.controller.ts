@@ -30,6 +30,7 @@ export class RpcAccessController implements AccessServiceController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
+
   readAccess(
     request: ReadAccessRequest,
   ):

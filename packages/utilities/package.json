@@ -10,10 +10,11 @@
   ],
   "scripts": {
     "test": "jest --passWithNoTests",
-    "build": "tsc",
+    "build": "nest build",
     "lint": "eslint src/**/*.ts"
   },
   "devDependencies": {
+    "@nestjs/cli": "^8.2.5",
     "@types/lodash.compact": "^3.0.7",
     "@types/lodash.isempty": "^4.4.7",
     "@valhalla/config": "workspace:*",

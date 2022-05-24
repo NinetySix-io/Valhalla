@@ -1,13 +1,12 @@
 service:
-  discoveryHost: host.docker.internal
+  discoveryHost: localhost
   name: serv.gateway
   port: 3002
   tags: ['v1.0.0', 'microservice', 'api-gateway', 'rest', 'graphql']
   healthCheck:
-    protocol: http
     timeout: 1s
     interval: 10s
-    route: /health
+    tcp: host.docker.internal:${{ service.port }}
   maxRetry: 5
   retryInterval: 5000
 

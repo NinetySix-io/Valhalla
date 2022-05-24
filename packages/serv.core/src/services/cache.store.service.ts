@@ -1,5 +1,5 @@
 import { InjectConfig } from '@nestcloud2/config';
-import { EtcdConfig } from '@nestcloud2/config/config.etcd';
+import { ConsulConfig } from '@nestcloud2/config/config.consul';
 import {
   CacheModuleOptions,
   CacheOptionsFactory,
@@ -10,7 +10,7 @@ import redisStore from 'cache-manager-redis-store';
 
 @Injectable()
 export class CacheStoreConfigService implements CacheOptionsFactory {
-  constructor(@InjectConfig() private readonly config: EtcdConfig) {}
+  constructor(@InjectConfig() private readonly config: ConsulConfig) {}
 
   createCacheOptions(): Promise<CacheModuleOptions> | CacheModuleOptions {
     const database = this.config.get<RedisClientOptions>('database.redis');

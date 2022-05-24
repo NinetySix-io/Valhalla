@@ -29,7 +29,6 @@ export class GqlUserResolver {
     }
 
     return {
-      session: result.session,
       userId: result.user.id,
     };
   }

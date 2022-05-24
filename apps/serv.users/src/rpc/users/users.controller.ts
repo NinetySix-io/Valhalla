@@ -23,17 +23,16 @@ import {
   VerifyUserRequest,
   VerifyUserResponse,
 } from '@app/rpc/protobuf/users';
-import { GrpcClass, TransformMethodError } from '@valhalla/serv.core';
 
 import { Controller } from '@nestjs/common';
 import { FindUserQuery } from './queries/find.user.query';
 import { ForgotAccountPasswordCommand } from '@app/rpc/users/commands/forgot.password.command';
+import { GrpcClass } from '@valhalla/serv.core';
 import { JwtService } from '@nestjs/jwt';
 import { LoginAccountCommand } from '@app/rpc/users/commands/login.command';
 import { LogoutCommand } from './commands/logout.command';
 import { Observable } from 'rxjs';
 import { RegisterAccountCommand } from '@app/rpc/users/commands/register.command';
-import { RpcException } from '@nestjs/microservices';
 import { SendAccountEmailVerificationCommand } from '@app/rpc/users/commands/send.email.verification.command';
 import { UpdateAccountCommand } from '@app/rpc/users/commands/update.command';
 import { UpdateAccountPasswordCommand } from '@app/rpc/users/commands/update.password.command';
@@ -83,7 +82,6 @@ export class RpcUsersController implements UsersServiceController {
     );
   }
 
-  @TransformMethodError(RpcException)
   async verifyActivationLink(
     request: VerifyActivationLinkRequest,
   ): Promise<VerifyActivationLinkResponse> {

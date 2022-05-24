@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import { isEmpty } from '@valhalla/utilities';
 import path from 'path';
 
 /**
@@ -11,7 +12,7 @@ export function loadDotEnv() {
     const envPath = path.resolve(require.main?.path ?? '', '.env');
     const config = dotenv.config({ path: envPath });
 
-    if (config?.parsed) {
+    if (!isEmpty(config?.parsed)) {
       console.debug('Loaded .env', JSON.stringify(config.parsed, null, 2));
     }
   }

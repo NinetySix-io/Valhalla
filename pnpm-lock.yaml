@@ -7,18 +7,19 @@ importers:
       '@types/node': ^17.0.33
       minimist: ^1.2.6
       prettier: ^2.6.2
+      ts-proto: ^1.112.1
       turbo: ^1.2.9
       vercel: ^24.2.2
     devDependencies:
       '@types/node': 17.0.35
       minimist: 1.2.6
       prettier: 2.6.2
+      ts-proto: 1.112.2
       turbo: 1.2.11
       vercel: 24.2.4
 
   apps/serv.access:
     specifiers:
-      '@grpc/grpc-js': ^1.6.7
       '@nestcloud2/boot': ^0.7.20
       '@nestcloud2/common': ^0.8.2
       '@nestcloud2/config': ^0.7.20
@@ -60,7 +61,6 @@ importers:
       ts-proto: ^1.112.1
       typescript: ^4.6.4
     dependencies:
-      '@grpc/grpc-js': 1.6.7
       '@nestcloud2/boot': 0.7.20
       '@nestcloud2/common': 0.8.2
       '@nestcloud2/config': 0.7.20
@@ -71,7 +71,7 @@ importers:
       '@nestjs/cqrs': 8.0.4_texnrsp5xgvn4t37qwxymg6msa
       '@nestjs/graphql': 10.0.12_vrejyiotovouko42edxwcgomii
       '@nestjs/jwt': 8.0.1_@nestjs+common@8.4.5
-      '@nestjs/microservices': 8.4.5_n6ipknmc4mapviy4fs32trgqn4
+      '@nestjs/microservices': 8.4.5_texnrsp5xgvn4t37qwxymg6msa
       '@nestjs/platform-fastify': 8.4.5_ydewkhgqdrhc2o62hf5fyq4ami
       '@nestjs/terminus': 8.0.6_texnrsp5xgvn4t37qwxymg6msa
       '@typegoose/typegoose': 9.8.1_mongoose@6.3.4
@@ -172,7 +172,6 @@ importers:
 
   apps/serv.tenant.billings:
     specifiers:
-      '@grpc/grpc-js': ^1.6.7
       '@nestcloud2/boot': ^0.7.20
       '@nestcloud2/config': ^0.7.20
       '@nestcloud2/core': ^0.8.1
@@ -208,7 +207,6 @@ importers:
       ts-proto: ^1.112.1
       typescript: ^4.6.4
     dependencies:
-      '@grpc/grpc-js': 1.6.7
       '@nestcloud2/boot': 0.7.20
       '@nestcloud2/config': 0.7.20
       '@nestcloud2/core': 0.8.1
@@ -216,7 +214,7 @@ importers:
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
       '@nestjs/cqrs': 8.0.4_texnrsp5xgvn4t37qwxymg6msa
       '@nestjs/graphql': 10.0.12_vrejyiotovouko42edxwcgomii
-      '@nestjs/microservices': 8.4.5_n6ipknmc4mapviy4fs32trgqn4
+      '@nestjs/microservices': 8.4.5_texnrsp5xgvn4t37qwxymg6msa
       '@nestjs/platform-fastify': 8.4.5_ydewkhgqdrhc2o62hf5fyq4ami
       '@nestjs/terminus': 8.0.6_texnrsp5xgvn4t37qwxymg6msa
       '@typegoose/typegoose': 9.8.1_mongoose@6.3.4
@@ -247,7 +245,6 @@ importers:
 
   apps/serv.tenants:
     specifiers:
-      '@grpc/grpc-js': ^1.6.7
       '@nestcloud2/boot': ^0.7.20
       '@nestcloud2/core': ^0.8.1
       '@nestjs/cli': ^8.2.5
@@ -282,14 +279,13 @@ importers:
       ts-proto: ^1.112.1
       typescript: ^4.6.4
     dependencies:
-      '@grpc/grpc-js': 1.6.7
       '@nestcloud2/boot': 0.7.20
       '@nestcloud2/core': 0.8.1
       '@nestjs/common': 8.4.5_gbcl3cpy3jz4yxcebmwox6bgie
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
       '@nestjs/cqrs': 8.0.4_texnrsp5xgvn4t37qwxymg6msa
       '@nestjs/graphql': 10.0.12_vrejyiotovouko42edxwcgomii
-      '@nestjs/microservices': 8.4.5_n6ipknmc4mapviy4fs32trgqn4
+      '@nestjs/microservices': 8.4.5_texnrsp5xgvn4t37qwxymg6msa
       '@nestjs/platform-fastify': 8.4.5_ydewkhgqdrhc2o62hf5fyq4ami
       '@nestjs/terminus': 8.0.6_texnrsp5xgvn4t37qwxymg6msa
       '@typegoose/typegoose': 9.8.1_mongoose@6.3.4
@@ -321,9 +317,9 @@ importers:
   apps/serv.users:
     specifiers:
       '@apollo/subgraph': ^2.0.2
-      '@grpc/grpc-js': ^1.6.7
       '@nestcloud2/boot': ^0.7.20
       '@nestcloud2/common': ^0.8.2
+      '@nestcloud2/config': ^0.7.20
       '@nestcloud2/core': ^0.8.1
       '@nestjs/apollo': ^10.0.11
       '@nestjs/cli': ^8.2.5
@@ -363,9 +359,9 @@ importers:
       zod: ^3.17.0
     dependencies:
       '@apollo/subgraph': 2.0.3_graphql@16.5.0
-      '@grpc/grpc-js': 1.6.7
       '@nestcloud2/boot': 0.7.20
       '@nestcloud2/common': 0.8.2
+      '@nestcloud2/config': 0.7.20
       '@nestcloud2/core': 0.8.1
       '@nestjs/apollo': 10.0.12_jxov5o27ekxkmwqqlncpgw3uhy
       '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
@@ -373,7 +369,7 @@ importers:
       '@nestjs/cqrs': 8.0.4_texnrsp5xgvn4t37qwxymg6msa
       '@nestjs/graphql': 10.0.12_vuyk5k6orockavgjownqen5mea
       '@nestjs/jwt': 8.0.1_@nestjs+common@8.4.5
-      '@nestjs/microservices': 8.4.5_n6ipknmc4mapviy4fs32trgqn4
+      '@nestjs/microservices': 8.4.5_texnrsp5xgvn4t37qwxymg6msa
       '@nestjs/platform-fastify': 8.4.5_ydewkhgqdrhc2o62hf5fyq4ami
       '@nestjs/terminus': 8.0.6_texnrsp5xgvn4t37qwxymg6msa
       '@typegoose/typegoose': 9.8.1_mongoose@6.3.4
@@ -637,8 +633,8 @@ importers:
 
   packages/serv.clients:
     specifiers:
-      '@grpc/grpc-js': ^1.6.7
       '@nestcloud2/grpc': ^0.7.20
+      '@nestjs/cli': ^8.2.5
       '@nestjs/common': ^8.4.4
       '@nestjs/core': ^8.4.4
       '@nestjs/microservices': ^8.4.4
@@ -648,21 +644,20 @@ importers:
       rxjs: ^7.5.5
       typescript: ^4.6.4
     dependencies:
-      '@grpc/grpc-js': 1.6.7
       '@nestcloud2/grpc': 0.7.20
       '@nestjs/common': 8.4.5_47vcjb2de6lyibr6g4enoa5lyu
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
-      '@nestjs/microservices': 8.4.5_n6ipknmc4mapviy4fs32trgqn4
+      '@nestjs/microservices': 8.4.5_texnrsp5xgvn4t37qwxymg6msa
       long: 5.2.0
       protobufjs: 6.11.3
       reflect-metadata: 0.1.13
       rxjs: 7.5.5
     devDependencies:
+      '@nestjs/cli': 8.2.6
       typescript: 4.6.4
 
   packages/serv.core:
     specifiers:
-      '@grpc/grpc-js': ^1.6.7
       '@grpc/proto-loader': ^0.6.12
       '@nestcloud2/boot': ^0.7.20
       '@nestcloud2/common': ^0.8.2
@@ -674,6 +669,7 @@ importers:
       '@nestcloud2/logger': ^0.7.20
       '@nestcloud2/schedule': ^0.7.21
       '@nestcloud2/service': ^0.8.0
+      '@nestjs/cli': ^8.2.5
       '@nestjs/common': ^8.4.4
       '@nestjs/core': ^8.4.4
       '@nestjs/cqrs': ^8.0.4
@@ -695,7 +691,6 @@ importers:
       class-validator: ^0.13.2
       consul: ^0.34.1
       dotenv: ^16.0.1
-      etcd3: ^1.1.0
       fastify: ^3.29.0
       graphql: ^16.4.0
       long: ^5.2.0
@@ -712,7 +707,6 @@ importers:
       typescript: ^4.6.4
       uuid: ^8.3.2
     dependencies:
-      '@grpc/grpc-js': 1.6.7
       '@grpc/proto-loader': 0.6.12
       '@nestcloud2/boot': 0.7.20
       '@nestcloud2/common': 0.8.2
@@ -729,7 +723,7 @@ importers:
       '@nestjs/cqrs': 8.0.4_texnrsp5xgvn4t37qwxymg6msa
       '@nestjs/graphql': 10.0.12_iy6u76hoqvufprty4jddleudwi
       '@nestjs/jwt': 8.0.1_@nestjs+common@8.4.5
-      '@nestjs/microservices': 8.4.5_b6h7tjtr2ifyykpauphrdbkkby
+      '@nestjs/microservices': 8.4.5_b7jxm3cja7c5pwbvpxkrm3dkiq
       '@nestjs/platform-fastify': 8.4.5_ydewkhgqdrhc2o62hf5fyq4ami
       '@redis/client': 1.1.0
       '@typegoose/typegoose': 9.8.1_mongoose@6.3.4
@@ -743,7 +737,6 @@ importers:
       class-validator: 0.13.2
       consul: 0.34.1
       dotenv: 16.0.1
-      etcd3: 1.1.0
       fastify: 3.29.0
       graphql: 16.5.0
       long: 5.2.0
@@ -759,6 +752,7 @@ importers:
       try-nice: 4.0.4
       uuid: 8.3.2
     devDependencies:
+      '@nestjs/cli': 8.2.6
       '@types/cache-manager-redis-store': 2.0.1
       '@types/uuid': 8.3.4
       typescript: 4.6.4
@@ -768,6 +762,7 @@ importers:
 
   packages/utilities:
     specifiers:
+      '@nestjs/cli': ^8.2.5
       '@types/lodash.compact': ^3.0.7
       '@types/lodash.isempty': ^4.4.7
       '@valhalla/config': workspace:*
@@ -784,6 +779,7 @@ importers:
       slugify: 1.6.5
       superstruct: 0.15.4
     devDependencies:
+      '@nestjs/cli': 8.2.6
       '@types/lodash.compact': 3.0.7
       '@types/lodash.isempty': 4.4.7
       '@valhalla/config': link:../config
@@ -793,7 +789,6 @@ importers:
 
   templates/serv.app:
     specifiers:
-      '@grpc/grpc-js': ^1.6.7
       '@nestcloud2/boot': ^0.7.20
       '@nestcloud2/core': ^0.8.1
       '@nestjs/cli': ^8.2.5
@@ -821,14 +816,13 @@ importers:
       ts-proto: ^1.112.1
       typescript: ^4.6.4
     dependencies:
-      '@grpc/grpc-js': 1.6.7
       '@nestcloud2/boot': 0.7.20
       '@nestcloud2/core': 0.8.1
       '@nestjs/common': 8.4.5_gbcl3cpy3jz4yxcebmwox6bgie
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
       '@nestjs/cqrs': 8.0.4_texnrsp5xgvn4t37qwxymg6msa
       '@nestjs/graphql': 10.0.12_vrejyiotovouko42edxwcgomii
-      '@nestjs/microservices': 8.4.5_n6ipknmc4mapviy4fs32trgqn4
+      '@nestjs/microservices': 8.4.5_texnrsp5xgvn4t37qwxymg6msa
       '@nestjs/platform-fastify': 8.4.5_ydewkhgqdrhc2o62hf5fyq4ami
       '@nestjs/terminus': 8.0.6_texnrsp5xgvn4t37qwxymg6msa
       '@valhalla/serv.clients': link:../../packages/serv.clients
@@ -4485,8 +4479,8 @@ packages:
       '@nestjs/websockets':
         optional: true
     dependencies:
-      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
-      '@nestjs/microservices': 8.4.5_n6ipknmc4mapviy4fs32trgqn4
+      '@nestjs/common': 8.4.5_47vcjb2de6lyibr6g4enoa5lyu
+      '@nestjs/microservices': 8.4.5_texnrsp5xgvn4t37qwxymg6msa
       '@nuxtjs/opencollective': 0.3.2
       fast-safe-stringify: 2.1.1
       iterare: 1.2.1
@@ -4508,7 +4502,7 @@ packages:
       reflect-metadata: 0.1.13
       rxjs: ^7.2.0
     dependencies:
-      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
+      '@nestjs/common': 8.4.5_37tgzg5iwyrf23cqcmjxlmljgu
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
       reflect-metadata: 0.1.13
       rxjs: 7.5.5
@@ -4681,7 +4675,7 @@ packages:
     peerDependencies:
       '@nestjs/common': ^6.0.0 || ^7.0.0 || ^8.0.0
     dependencies:
-      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
+      '@nestjs/common': 8.4.5_37tgzg5iwyrf23cqcmjxlmljgu
       '@types/jsonwebtoken': 8.5.8
       jsonwebtoken: 8.5.1
     dev: false
@@ -4699,7 +4693,7 @@ packages:
       class-validator:
         optional: true
     dependencies:
-      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
+      '@nestjs/common': 8.4.5_37tgzg5iwyrf23cqcmjxlmljgu
       class-transformer: 0.5.1
       class-validator: 0.13.2
       reflect-metadata: 0.1.13
@@ -4740,7 +4734,7 @@ packages:
       reflect-metadata: 0.1.13
     dev: false
 
-  /@nestjs/microservices/8.4.5_b6h7tjtr2ifyykpauphrdbkkby:
+  /@nestjs/microservices/8.4.5_b7jxm3cja7c5pwbvpxkrm3dkiq:
     resolution: {integrity: sha512-WiHCRT50V7J++sfTNzk4fKfxaaqbJ06W9LsXjdLEkWX0mx3KPAjbMV1G8FR/6kahOA9D3BttwMlNpm1VHikmrw==}
     peerDependencies:
       '@grpc/grpc-js': '*'
@@ -4776,59 +4770,12 @@ packages:
       redis:
         optional: true
     dependencies:
-      '@grpc/grpc-js': 1.6.7
       '@nestjs/common': 8.4.5_37tgzg5iwyrf23cqcmjxlmljgu
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
       cache-manager: 3.6.3
       iterare: 1.2.1
       json-socket: 0.3.0
       redis: 4.1.0
-      reflect-metadata: 0.1.13
-      rxjs: 7.5.5
-      tslib: 2.4.0
-    dev: false
-
-  /@nestjs/microservices/8.4.5_n6ipknmc4mapviy4fs32trgqn4:
-    resolution: {integrity: sha512-WiHCRT50V7J++sfTNzk4fKfxaaqbJ06W9LsXjdLEkWX0mx3KPAjbMV1G8FR/6kahOA9D3BttwMlNpm1VHikmrw==}
-    peerDependencies:
-      '@grpc/grpc-js': '*'
-      '@nestjs/common': ^8.0.0
-      '@nestjs/core': ^8.0.0
-      '@nestjs/websockets': ^8.0.0
-      amqp-connection-manager: '*'
-      amqplib: '*'
-      cache-manager: '*'
-      kafkajs: '*'
-      mqtt: '*'
-      nats: '*'
-      redis: '*'
-      reflect-metadata: ^0.1.12
-      rxjs: ^7.1.0
-    peerDependenciesMeta:
-      '@grpc/grpc-js':
-        optional: true
-      '@nestjs/websockets':
-        optional: true
-      amqp-connection-manager:
-        optional: true
-      amqplib:
-        optional: true
-      cache-manager:
-        optional: true
-      kafkajs:
-        optional: true
-      mqtt:
-        optional: true
-      nats:
-        optional: true
-      redis:
-        optional: true
-    dependencies:
-      '@grpc/grpc-js': 1.6.7
-      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
-      '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
-      iterare: 1.2.1
-      json-socket: 0.3.0
       reflect-metadata: 0.1.13
       rxjs: 7.5.5
       tslib: 2.4.0
@@ -4885,7 +4832,7 @@ packages:
       '@nestjs/common': ^8.0.0
       '@nestjs/core': ^8.0.0
     dependencies:
-      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
+      '@nestjs/common': 8.4.5_37tgzg5iwyrf23cqcmjxlmljgu
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
       fastify: 3.29.0
       fastify-cors: 6.1.0
@@ -4950,7 +4897,7 @@ packages:
       reflect-metadata: 0.1.x
       rxjs: 7.x
     dependencies:
-      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
+      '@nestjs/common': 8.4.5_gbcl3cpy3jz4yxcebmwox6bgie
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
       check-disk-space: 3.3.0
       reflect-metadata: 0.1.13
@@ -4971,9 +4918,9 @@ packages:
         optional: true
     dependencies:
       optional: 0.1.4
-      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
+      '@nestjs/common': 8.4.5_gbcl3cpy3jz4yxcebmwox6bgie
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
-      '@nestjs/microservices': 8.4.5_n6ipknmc4mapviy4fs32trgqn4
+      '@nestjs/microservices': 8.4.5_texnrsp5xgvn4t37qwxymg6msa
       tslib: 2.4.0
     dev: true
 
@@ -5486,7 +5433,7 @@ packages:
       '@storybook/core-events': 6.5.4
       '@storybook/csf': 0.0.2--canary.4566f4d.1
       '@storybook/docs-tools': 6.5.4_ef5jwxihqo6n7gxfmzogljlgcm
-      '@storybook/mdx1-csf': 0.0.1-canary.1.867dcd5.0_@babel+core@7.18.0
+      '@storybook/mdx1-csf': 0.0.1-canary.1.eed86d7.0_@babel+core@7.18.0
       '@storybook/node-logger': 6.5.4
       '@storybook/postinstall': 6.5.4
       '@storybook/preview-web': 6.5.4_ef5jwxihqo6n7gxfmzogljlgcm
@@ -6246,7 +6193,7 @@ packages:
       '@babel/traverse': 7.18.0
       '@babel/types': 7.18.0
       '@storybook/csf': 0.0.2--canary.4566f4d.1
-      '@storybook/mdx1-csf': 0.0.1-canary.1.867dcd5.0_@babel+core@7.18.0
+      '@storybook/mdx1-csf': 0.0.1-canary.1.eed86d7.0_@babel+core@7.18.0
       core-js: 3.22.6
       fs-extra: 9.1.0
       global: 4.4.0
@@ -6349,8 +6296,8 @@ packages:
       - webpack-command
     dev: true
 
-  /@storybook/mdx1-csf/0.0.1-canary.1.867dcd5.0_@babel+core@7.18.0:
-    resolution: {integrity: sha512-VnlE825M9SpjyJCPLCXbo+RbvqllsqXqRDCouzHKSpCE3Q79KR7MMURBsJo/vrTG1zeNG68Z4TZrLAu6IoyYaA==}
+  /@storybook/mdx1-csf/0.0.1-canary.1.eed86d7.0_@babel+core@7.18.0:
+    resolution: {integrity: sha512-KOoTWeseRyJYU5qzEWahgNRhRLgHzPrWx4jIiK4oI9MmNx81cD0B0o24Gq04Iyt89X4jTk+VPHc5REJO1Gs99Q==}
     dependencies:
       '@babel/generator': 7.18.0
       '@babel/parser': 7.18.0
@@ -14937,7 +14884,7 @@ packages:
       '@typegoose/typegoose': ^6.2.1 || ^7.0.0
       mongoose: ^5.10.6
     dependencies:
-      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
+      '@nestjs/common': 8.4.5_37tgzg5iwyrf23cqcmjxlmljgu
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
       '@typegoose/typegoose': 9.8.1_mongoose@6.3.4
       is-class: 0.0.9

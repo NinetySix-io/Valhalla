@@ -1,11 +1,8 @@
 /* eslint-disable */
-import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
-import Long from 'long';
-import * as _m0 from 'protobufjs/minimal';
-import { Observable } from 'rxjs';
-import { Metadata } from '@grpc/grpc-js';
+import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
+import { Observable } from "rxjs";
 
-export const protobufPackage = 'serv.users';
+export const protobufPackage = "serv.users";
 
 export interface PasswordStruct {
   hashed: string;
@@ -156,167 +153,134 @@ export interface FindUserRequest {
   phone?: string | undefined;
 }
 
-export const SERV_USERS_PACKAGE_NAME = 'serv.users';
+export const SERV_USERS_PACKAGE_NAME = "serv.users";
 
 export interface UsersServiceClient {
-  register(
-    request: RegisterRequest,
-    metadata?: Metadata,
-  ): Observable<RegisterResponse>;
+  register(request: RegisterRequest): Observable<RegisterResponse>;
 
-  findUser(request: FindUserRequest, metadata?: Metadata): Observable<User>;
+  findUser(request: FindUserRequest): Observable<User>;
 
-  verifyEmail(
-    request: VerifyUserRequest,
-    metadata?: Metadata,
-  ): Observable<VerifyUserResponse>;
+  verifyEmail(request: VerifyUserRequest): Observable<VerifyUserResponse>;
 
   verifyActivationLink(
-    request: VerifyActivationLinkRequest,
-    metadata?: Metadata,
+    request: VerifyActivationLinkRequest
   ): Observable<VerifyActivationLinkResponse>;
 
   sendVerificationCode(
-    request: SendVerificationCodeRequest,
-    metadata?: Metadata,
+    request: SendVerificationCodeRequest
   ): Observable<SendVerificationCodeResponse>;
 
-  updateUser(
-    request: UpdateRequest,
-    metadata?: Metadata,
-  ): Observable<UpdateResponse>;
+  updateUser(request: UpdateRequest): Observable<UpdateResponse>;
 
   forgotPassword(
-    request: ForgotPasswordRequest,
-    metadata?: Metadata,
+    request: ForgotPasswordRequest
   ): Observable<ForgotPasswordResponse>;
 
   updatePassword(
-    request: UpdatePasswordRequest,
-    metadata?: Metadata,
+    request: UpdatePasswordRequest
   ): Observable<UpdatePasswordResponse>;
 
-  login(request: LoginRequest, metadata?: Metadata): Observable<LoginResponse>;
+  login(request: LoginRequest): Observable<LoginResponse>;
 
-  logout(
-    request: LogoutRequest,
-    metadata?: Metadata,
-  ): Observable<LogoutResponse>;
+  logout(request: LogoutRequest): Observable<LogoutResponse>;
 }
 
 export interface UsersServiceController {
   register(
-    request: RegisterRequest,
-    metadata?: Metadata,
+    request: RegisterRequest
   ):
     | Promise<RegisterResponse>
     | Observable<RegisterResponse>
     | RegisterResponse;
 
-  findUser(
-    request: FindUserRequest,
-    metadata?: Metadata,
-  ): Promise<User> | Observable<User> | User;
+  findUser(request: FindUserRequest): Promise<User> | Observable<User> | User;
 
   verifyEmail(
-    request: VerifyUserRequest,
-    metadata?: Metadata,
+    request: VerifyUserRequest
   ):
     | Promise<VerifyUserResponse>
     | Observable<VerifyUserResponse>
     | VerifyUserResponse;
 
   verifyActivationLink(
-    request: VerifyActivationLinkRequest,
-    metadata?: Metadata,
+    request: VerifyActivationLinkRequest
   ):
     | Promise<VerifyActivationLinkResponse>
     | Observable<VerifyActivationLinkResponse>
     | VerifyActivationLinkResponse;
 
   sendVerificationCode(
-    request: SendVerificationCodeRequest,
-    metadata?: Metadata,
+    request: SendVerificationCodeRequest
   ):
     | Promise<SendVerificationCodeResponse>
     | Observable<SendVerificationCodeResponse>
     | SendVerificationCodeResponse;
 
   updateUser(
-    request: UpdateRequest,
-    metadata?: Metadata,
+    request: UpdateRequest
   ): Promise<UpdateResponse> | Observable<UpdateResponse> | UpdateResponse;
 
   forgotPassword(
-    request: ForgotPasswordRequest,
-    metadata?: Metadata,
+    request: ForgotPasswordRequest
   ):
     | Promise<ForgotPasswordResponse>
     | Observable<ForgotPasswordResponse>
     | ForgotPasswordResponse;
 
   updatePassword(
-    request: UpdatePasswordRequest,
-    metadata?: Metadata,
+    request: UpdatePasswordRequest
   ):
     | Promise<UpdatePasswordResponse>
     | Observable<UpdatePasswordResponse>
     | UpdatePasswordResponse;
 
   login(
-    request: LoginRequest,
-    metadata?: Metadata,
+    request: LoginRequest
   ): Promise<LoginResponse> | Observable<LoginResponse> | LoginResponse;
 
   logout(
-    request: LogoutRequest,
-    metadata?: Metadata,
+    request: LogoutRequest
   ): Promise<LogoutResponse> | Observable<LogoutResponse> | LogoutResponse;
 }
 
 export function UsersServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = [
-      'register',
-      'findUser',
-      'verifyEmail',
-      'verifyActivationLink',
-      'sendVerificationCode',
-      'updateUser',
-      'forgotPassword',
-      'updatePassword',
-      'login',
-      'logout',
+      "register",
+      "findUser",
+      "verifyEmail",
+      "verifyActivationLink",
+      "sendVerificationCode",
+      "updateUser",
+      "forgotPassword",
+      "updatePassword",
+      "login",
+      "logout",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(
         constructor.prototype,
-        method,
+        method
       );
-      GrpcMethod('UsersService', method)(
+      GrpcMethod("UsersService", method)(
         constructor.prototype[method],
         method,
-        descriptor,
+        descriptor
       );
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(
         constructor.prototype,
-        method,
+        method
       );
-      GrpcStreamMethod('UsersService', method)(
+      GrpcStreamMethod("UsersService", method)(
         constructor.prototype[method],
         method,
-        descriptor,
+        descriptor
       );
     }
   };
 }
 
-export const USERS_SERVICE_NAME = 'UsersService';
-
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
+export const USERS_SERVICE_NAME = "UsersService";

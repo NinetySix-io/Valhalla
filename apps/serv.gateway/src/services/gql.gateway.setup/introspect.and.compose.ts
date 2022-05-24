@@ -72,7 +72,6 @@ export class IntrospectAndCompose implements SupergraphManager {
           ? this.config.subgraphs()
           : this.config.subgraphs;
 
-      this.logger.debug(`Building ${subgraphs.length} Subgraphs`);
       this.subgraphs = subgraphs.map((subgraph) => ({
         ...subgraph,
         dataSource: getDataSource(subgraph),

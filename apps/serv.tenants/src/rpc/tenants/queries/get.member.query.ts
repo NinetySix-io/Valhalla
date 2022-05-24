@@ -11,9 +11,6 @@ export class GetMemberQuery implements IQuery {
 export class GetMemberHandler
   implements IQueryHandler<GetMemberQuery, GetMemberResponse>
 {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor() {}
-
   async execute(command: GetMemberQuery): Promise<GetMemberResponse> {
     Logger.debug(command);
     throw new Error('Not implemented');

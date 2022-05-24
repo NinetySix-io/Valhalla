@@ -1,11 +1,8 @@
 /* eslint-disable */
-import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
-import Long from 'long';
-import * as _m0 from 'protobufjs/minimal';
-import { Observable } from 'rxjs';
-import { Metadata } from '@grpc/grpc-js';
+import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
+import { Observable } from "rxjs";
 
-export const protobufPackage = 'serv.access';
+export const protobufPackage = "serv.access";
 
 export interface CreateAccessRequest {
   userId: string;
@@ -48,71 +45,57 @@ export interface ReadAccessResponse {
   userId: string;
 }
 
-export const SERV_ACCESS_PACKAGE_NAME = 'serv.access';
+export const SERV_ACCESS_PACKAGE_NAME = "serv.access";
 
 export interface AccessServiceClient {
-  createAccess(
-    request: CreateAccessRequest,
-    metadata?: Metadata,
-  ): Observable<CreateAccessResponse>;
+  createAccess(request: CreateAccessRequest): Observable<CreateAccessResponse>;
 
-  readAccess(
-    request: ReadAccessRequest,
-    metadata?: Metadata,
-  ): Observable<ReadAccessResponse>;
+  readAccess(request: ReadAccessRequest): Observable<ReadAccessResponse>;
 
   deleteRefreshToken(
-    request: DeleteRefreshTokenRequest,
-    metadata?: Metadata,
+    request: DeleteRefreshTokenRequest
   ): Observable<DeleteRefreshTokenResponse>;
 
   renewAccessToken(
-    request: RenewAccessTokenRequest,
-    metadata?: Metadata,
+    request: RenewAccessTokenRequest
   ): Observable<RenewAccessTokenResponse>;
 
   decodeAccessToken(
-    request: DecodeAccessTokenRequest,
-    metadata?: Metadata,
+    request: DecodeAccessTokenRequest
   ): Observable<DecodeAccessTokenResponse>;
 }
 
 export interface AccessServiceController {
   createAccess(
-    request: CreateAccessRequest,
-    metadata?: Metadata,
+    request: CreateAccessRequest
   ):
     | Promise<CreateAccessResponse>
     | Observable<CreateAccessResponse>
     | CreateAccessResponse;
 
   readAccess(
-    request: ReadAccessRequest,
-    metadata?: Metadata,
+    request: ReadAccessRequest
   ):
     | Promise<ReadAccessResponse>
     | Observable<ReadAccessResponse>
     | ReadAccessResponse;
 
   deleteRefreshToken(
-    request: DeleteRefreshTokenRequest,
-    metadata?: Metadata,
+    request: DeleteRefreshTokenRequest
   ):
     | Promise<DeleteRefreshTokenResponse>
     | Observable<DeleteRefreshTokenResponse>
     | DeleteRefreshTokenResponse;
 
   renewAccessToken(
-    request: RenewAccessTokenRequest,
-    metadata?: Metadata,
+    request: RenewAccessTokenRequest
   ):
     | Promise<RenewAccessTokenResponse>
     | Observable<RenewAccessTokenResponse>
     | RenewAccessTokenResponse;
 
   decodeAccessToken(
-    request: DecodeAccessTokenRequest,
-    metadata?: Metadata,
+    request: DecodeAccessTokenRequest
   ):
     | Promise<DecodeAccessTokenResponse>
     | Observable<DecodeAccessTokenResponse>
@@ -122,41 +105,36 @@ export interface AccessServiceController {
 export function AccessServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = [
-      'createAccess',
-      'readAccess',
-      'deleteRefreshToken',
-      'renewAccessToken',
-      'decodeAccessToken',
+      "createAccess",
+      "readAccess",
+      "deleteRefreshToken",
+      "renewAccessToken",
+      "decodeAccessToken",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(
         constructor.prototype,
-        method,
+        method
       );
-      GrpcMethod('AccessService', method)(
+      GrpcMethod("AccessService", method)(
         constructor.prototype[method],
         method,
-        descriptor,
+        descriptor
       );
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(
         constructor.prototype,
-        method,
+        method
       );
-      GrpcStreamMethod('AccessService', method)(
+      GrpcStreamMethod("AccessService", method)(
         constructor.prototype[method],
         method,
-        descriptor,
+        descriptor
       );
     }
   };
 }
 
-export const ACCESS_SERVICE_NAME = 'AccessService';
-
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
+export const ACCESS_SERVICE_NAME = "AccessService";

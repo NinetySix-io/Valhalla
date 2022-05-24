@@ -26,9 +26,7 @@ export abstract class SubgraphsProvider implements OnModuleInit {
     isDev() ? CronExpression.EVERY_30_SECONDS : CronTime.every(10).minutes(),
   )
   private syncServices() {
-    this.logger.debug('Sync consul services');
     const services = this.consul.getServiceNames();
-    this.logger.debug({ services });
     this.buildSubgraphs(services);
   }
 
@@ -68,7 +66,11 @@ export abstract class SubgraphsProvider implements OnModuleInit {
       const nodes = this.consul.getServiceServers(service);
       const assignedNode = nodes[0];
 
-      if (this.boot.get('service.name') === service || !assignedNode?.service) {
+      if (
+        this.boot.get('service.name') === service ||
+        !assignedNode?.service ||
+        !assignedNode.tags?.includes('graphql')
+      ) {
         continue;
       }
 
@@ -94,8 +96,6 @@ export abstract class SubgraphsProvider implements OnModuleInit {
 
     hasRemoval && this.logger.warn('Subgraphs removed', removedGraphs);
     hasAddition && this.logger.warn('Subgraphs added', newGraphConfigs);
-    this.logger.debug(`${this._subgraphs.length} Subgraphs Registered`);
-
     if (hasAddition || hasRemoval) {
       this.logger.debug('Subgraphs update detected');
       this.onSubgraphUpdated();

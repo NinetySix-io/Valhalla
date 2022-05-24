@@ -18,16 +18,16 @@ const protoPath = path.resolve(
 @Injectable()
 export class TenantBillingsRpcClientService {
   @RpcClient({
+    service: protobufPackage,
     package: protobufPackage,
-    service: TENANT_BILLINGS_SERVICE_NAME,
     protoPath,
   })
-  public readonly client: GrpcClient;
+  public readonly client!: GrpcClient;
 
   @Service(TENANT_BILLINGS_SERVICE_NAME, {
-    package: protobufPackage,
     service: protobufPackage,
+    package: protobufPackage,
     protoPath,
   })
-  public svc: TenantBillingsServiceClient;
+  public svc!: TenantBillingsServiceClient;
 }

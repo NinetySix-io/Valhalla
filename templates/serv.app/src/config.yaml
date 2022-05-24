@@ -1,5 +1,5 @@
 service:
-  discoveryHost: host.docker.internal
+  discoveryHost: localhost
   name: serv.template.app
   port: 3004
   tags: ['v1.0.0', 'microservice', 'serv', 'grpc', 'rest']

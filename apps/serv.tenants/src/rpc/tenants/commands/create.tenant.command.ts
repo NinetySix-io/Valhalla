@@ -23,13 +23,14 @@ import { TenantMembersModel } from '@app/entities/tenant.members';
 import { TenantPlan } from '@app/entities/tenants/schema';
 import { TenantTransformer } from '@app/entities/tenants/transformer';
 import { TenantsModel } from '@app/entities/tenants';
+import { User } from '@valhalla/serv.clients/src/protobuf/serv.users';
 import mongoose from 'mongoose';
 import { slugify } from '@valhalla/utilities';
 
 export class CreateTenantCommand implements ICommand {
   constructor(
     public readonly input: CreateTenantRequest,
-    public readonly user: any, //TODO
+    public readonly user?: User,
   ) {}
 }
 
@@ -45,7 +46,7 @@ export class CreateTenantHandler
   ) {}
 
   async execute(command: CreateTenantCommand): Promise<CreateTenantResponse> {
-    if (!command.user?._id) {
+    if (!command.user?.id) {
       throw new Error('User is not defined');
     } else if (command.input.name) {
       throw new Error('Tenant name is not defined');

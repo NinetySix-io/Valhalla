@@ -1,15 +1,14 @@
 service:
-  discoveryHost: host.docker.internal
+  discoveryHost: localhost
   name: serv.users
   port: 3005
-  tags: ['v1.0.0', 'microservice', 'serv', 'grpc', 'rest']
+  tags: ['v1.0.0', 'microservice', 'serv', 'grpc', 'rest', 'graphql']
   maxRetry: 5
   retryInterval: 5000
   healthCheck:
-    protocol: http
     timeout: 1s
     interval: 10s
-    route: /health
+    tcp: host.docker.internal:${{ service.port }}
 
 app:
   passwordExpires: 1h

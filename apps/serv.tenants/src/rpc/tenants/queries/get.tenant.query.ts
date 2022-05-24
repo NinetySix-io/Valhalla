@@ -11,9 +11,6 @@ export class GetTenantQuery implements IQuery {
 export class GetTenantHandler
   implements IQueryHandler<GetTenantQuery, GetTenantResponse>
 {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor() {}
-
   async execute(command: GetTenantQuery): Promise<GetTenantResponse> {
     Logger.debug(command);
     throw new Error('Not implemented');

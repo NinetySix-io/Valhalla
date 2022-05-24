@@ -1,18 +1,17 @@
 service:
-  discoveryHost: host.docker.internal
+  discoveryHost: localhost
   name: serv.access
   port: 3001
   tags: ['v1.0.0', 'microservice', 'serv', 'grpc', 'rest']
   healthCheck:
-    protocol: http
     timeout: 1s
     interval: 10s
-    route: /health
+    tcp: host.docker.internal:${{ service.port }}
   maxRetry: 5
   retryInterval: 5000
 
 app:
-  auth:
+  refreshToken:
     jwt:
       secret: rawr
       expires: 15m

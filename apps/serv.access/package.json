@@ -21,10 +21,9 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json --runInBand",
     "test:ci": "jest --ci --runInBand",
-    "proto:generate": "protoc --ts_proto_out=. ./src/rpc/**/*.proto --ts_proto_opt=nestJs=true --ts_proto_opt=esModuleInterop=true --ts_proto_opt=addGrpcMetadata=true --ts_proto_opt=returnObservable=false"
+    "proto:generate": "node ../../scripts/generate.proto"
   },
   "dependencies": {
-    "@grpc/grpc-js": "^1.6.7",
     "@nestcloud2/boot": "^0.7.20",
     "@nestcloud2/common": "^0.8.2",
     "@nestcloud2/config": "^0.7.20",

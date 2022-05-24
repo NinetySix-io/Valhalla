@@ -1,0 +1,6 @@
+{
+  "type": "library",
+  "entryFile": "index",
+  "sourceRoot": "src",
+  "compilerOptions": {}
+}

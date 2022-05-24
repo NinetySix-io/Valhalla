@@ -18,16 +18,16 @@ const protoPath = path.resolve(
 @Injectable()
 export class AccessRpcClientService {
   @RpcClient({
+    service: protobufPackage,
     package: protobufPackage,
-    service: ACCESS_SERVICE_NAME,
     protoPath,
   })
-  public readonly client: GrpcClient;
+  public readonly client!: GrpcClient;
 
   @Service(ACCESS_SERVICE_NAME, {
-    package: protobufPackage,
     service: protobufPackage,
+    package: protobufPackage,
     protoPath,
   })
-  public svc: AccessServiceClient;
+  public svc!: AccessServiceClient;
 }

@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
 import { InjectConfig } from '@nestcloud2/config';
-import { EtcdConfig } from '@nestcloud2/config/config.etcd';
+import { ConsulConfig } from '@nestcloud2/config/config.consul';
+import { Injectable } from '@nestjs/common';
 import {
   TypegooseModuleOptions,
   TypegooseOptionsFactory,
@@ -8,7 +8,7 @@ import {
 
 @Injectable()
 export class MongoConfigService implements TypegooseOptionsFactory {
-  constructor(@InjectConfig() private readonly config: EtcdConfig) {}
+  constructor(@InjectConfig() private readonly config: ConsulConfig) {}
 
   private get configKey() {
     return 'database.mongodb';

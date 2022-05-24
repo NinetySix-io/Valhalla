@@ -1,11 +1,8 @@
 /* eslint-disable */
-import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
-import Long from 'long';
-import * as _m0 from 'protobufjs/minimal';
-import { Observable } from 'rxjs';
-import { Metadata } from '@grpc/grpc-js';
+import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
+import { Observable } from "rxjs";
 
-export const protobufPackage = 'serv.tenant.billings';
+export const protobufPackage = "serv.tenant.billings";
 
 export enum PlanPriceInterval {
   MONTH = 0,
@@ -238,123 +235,105 @@ export interface Event {
   topic: string;
 }
 
-export const SERV_TENANT_BILLINGS_PACKAGE_NAME = 'serv.tenant.billings';
+export const SERV_TENANT_BILLINGS_PACKAGE_NAME = "serv.tenant.billings";
 
 export interface TenantBillingsServiceClient {
   createTenantPlan(
-    request: CreateTenantPlanRequest,
-    metadata?: Metadata,
+    request: CreateTenantPlanRequest
   ): Observable<CreateTenantPlanResponse>;
 
   updateTenantPlan(
-    request: UpdateTenantPlanRequest,
-    metadata?: Metadata,
+    request: UpdateTenantPlanRequest
   ): Observable<UpdateTenantPlanResponse>;
 
   deleteTenantPlan(
-    request: DeleteTenantPlanRequest,
-    metadata?: Metadata,
+    request: DeleteTenantPlanRequest
   ): Observable<DeleteTenantPlanResponse>;
 
   getTenantPlan(
-    request: GetTenantPlanRequest,
-    metadata?: Metadata,
+    request: GetTenantPlanRequest
   ): Observable<GetTenantPlanResponse>;
 
   createTenantSubscription(
-    request: CreateTenantSubscriptionRequest,
-    metadata?: Metadata,
+    request: CreateTenantSubscriptionRequest
   ): Observable<CreateTenantSubscriptionResponse>;
 
   deleteTenantSubscription(
-    request: DeleteTenantSubscriptionRequest,
-    metadata?: Metadata,
+    request: DeleteTenantSubscriptionRequest
   ): Observable<DeleteTenantSubscriptionResponse>;
 
   updateTenantSubscription(
-    request: UpdateTenantSubscriptionRequest,
-    metadata?: Metadata,
+    request: UpdateTenantSubscriptionRequest
   ): Observable<UpdateTenantSubscriptionResponse>;
 
   getTenantSubscription(
-    request: GetTenantSubscriptionRequest,
-    metadata?: Metadata,
+    request: GetTenantSubscriptionRequest
   ): Observable<GetTenantSubscriptionResponse>;
 
   getTenantInvoice(
-    request: GetTenantInvoiceRequest,
-    metadata?: Metadata,
+    request: GetTenantInvoiceRequest
   ): Observable<GetTenantInvoiceResponse>;
 }
 
 export interface TenantBillingsServiceController {
   createTenantPlan(
-    request: CreateTenantPlanRequest,
-    metadata?: Metadata,
+    request: CreateTenantPlanRequest
   ):
     | Promise<CreateTenantPlanResponse>
     | Observable<CreateTenantPlanResponse>
     | CreateTenantPlanResponse;
 
   updateTenantPlan(
-    request: UpdateTenantPlanRequest,
-    metadata?: Metadata,
+    request: UpdateTenantPlanRequest
   ):
     | Promise<UpdateTenantPlanResponse>
     | Observable<UpdateTenantPlanResponse>
     | UpdateTenantPlanResponse;
 
   deleteTenantPlan(
-    request: DeleteTenantPlanRequest,
-    metadata?: Metadata,
+    request: DeleteTenantPlanRequest
   ):
     | Promise<DeleteTenantPlanResponse>
     | Observable<DeleteTenantPlanResponse>
     | DeleteTenantPlanResponse;
 
   getTenantPlan(
-    request: GetTenantPlanRequest,
-    metadata?: Metadata,
+    request: GetTenantPlanRequest
   ):
     | Promise<GetTenantPlanResponse>
     | Observable<GetTenantPlanResponse>
     | GetTenantPlanResponse;
 
   createTenantSubscription(
-    request: CreateTenantSubscriptionRequest,
-    metadata?: Metadata,
+    request: CreateTenantSubscriptionRequest
   ):
     | Promise<CreateTenantSubscriptionResponse>
     | Observable<CreateTenantSubscriptionResponse>
     | CreateTenantSubscriptionResponse;
 
   deleteTenantSubscription(
-    request: DeleteTenantSubscriptionRequest,
-    metadata?: Metadata,
+    request: DeleteTenantSubscriptionRequest
   ):
     | Promise<DeleteTenantSubscriptionResponse>
     | Observable<DeleteTenantSubscriptionResponse>
     | DeleteTenantSubscriptionResponse;
 
   updateTenantSubscription(
-    request: UpdateTenantSubscriptionRequest,
-    metadata?: Metadata,
+    request: UpdateTenantSubscriptionRequest
   ):
     | Promise<UpdateTenantSubscriptionResponse>
     | Observable<UpdateTenantSubscriptionResponse>
     | UpdateTenantSubscriptionResponse;
 
   getTenantSubscription(
-    request: GetTenantSubscriptionRequest,
-    metadata?: Metadata,
+    request: GetTenantSubscriptionRequest
   ):
     | Promise<GetTenantSubscriptionResponse>
     | Observable<GetTenantSubscriptionResponse>
     | GetTenantSubscriptionResponse;
 
   getTenantInvoice(
-    request: GetTenantInvoiceRequest,
-    metadata?: Metadata,
+    request: GetTenantInvoiceRequest
   ):
     | Promise<GetTenantInvoiceResponse>
     | Observable<GetTenantInvoiceResponse>
@@ -364,45 +343,40 @@ export interface TenantBillingsServiceController {
 export function TenantBillingsServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = [
-      'createTenantPlan',
-      'updateTenantPlan',
-      'deleteTenantPlan',
-      'getTenantPlan',
-      'createTenantSubscription',
-      'deleteTenantSubscription',
-      'updateTenantSubscription',
-      'getTenantSubscription',
-      'getTenantInvoice',
+      "createTenantPlan",
+      "updateTenantPlan",
+      "deleteTenantPlan",
+      "getTenantPlan",
+      "createTenantSubscription",
+      "deleteTenantSubscription",
+      "updateTenantSubscription",
+      "getTenantSubscription",
+      "getTenantInvoice",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(
         constructor.prototype,
-        method,
+        method
       );
-      GrpcMethod('TenantBillingsService', method)(
+      GrpcMethod("TenantBillingsService", method)(
         constructor.prototype[method],
         method,
-        descriptor,
+        descriptor
       );
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(
         constructor.prototype,
-        method,
+        method
       );
-      GrpcStreamMethod('TenantBillingsService', method)(
+      GrpcStreamMethod("TenantBillingsService", method)(
         constructor.prototype[method],
         method,
-        descriptor,
+        descriptor
       );
     }
   };
 }
 
-export const TENANT_BILLINGS_SERVICE_NAME = 'TenantBillingsService';
-
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
+export const TENANT_BILLINGS_SERVICE_NAME = "TenantBillingsService";

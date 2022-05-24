@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { JwtOptionsFactory, JwtModuleOptions } from '@nestjs/jwt';
 import { InjectConfig } from '@nestcloud2/config';
-import { JwtModuleOptions, JwtOptionsFactory } from '@nestjs/jwt';
 import { ConsulConfig } from '@nestcloud2/config/config.consul';
 
 @Injectable()

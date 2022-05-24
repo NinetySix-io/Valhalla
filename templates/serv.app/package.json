@@ -24,7 +24,6 @@
     "proto:generate": "protoc --ts_proto_out=. ./src/**/*.proto --ts_proto_opt=nestJs=true --ts_proto_opt=esModuleInterop=true --ts_proto_opt=addGrpcMetadata=true --ts_proto_opt=returnObservable=false"
   },
   "dependencies": {
-    "@grpc/grpc-js": "^1.6.7",
     "@nestcloud2/boot": "^0.7.20",
     "@nestcloud2/core": "^0.8.1",
     "@nestjs/common": "^8.4.4",

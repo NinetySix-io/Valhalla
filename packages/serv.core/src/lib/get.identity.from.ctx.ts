@@ -1,12 +1,10 @@
-import {} from '@valhalla/serv.clients';
-
-import { Metadata } from '@grpc/grpc-js';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /**
  * @param meta
  * @returns
  */
-export function getIdentityFromCtx(meta: Metadata) {
+export function getIdentityFromCtx(meta: any) {
   const gMap = meta.getMap();
   const tempUser = gMap.user;
   const tempInApp = gMap.inapp;

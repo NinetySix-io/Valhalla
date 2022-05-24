@@ -8,10 +8,8 @@ import {
   ServiceRegistryModule,
 } from '@valhalla/serv.core';
 
-import { APP_FILTER } from '@nestjs/core';
 import { BootModule } from '@nestcloud2/boot';
 import { CasbinConfigService } from './services/casbin.config.service';
-import { GqlModules } from './gql';
 import { GraphQLModule } from '@nestjs/graphql';
 import { Module } from '@nestjs/common';
 import { NestCasbinModule } from 'nestjs-casbin';
@@ -42,7 +40,6 @@ import { isDev } from '@valhalla/utilities';
     }),
     ...RestModules,
     ...RpcModules,
-    ...GqlModules,
   ],
   controllers: [],
 })

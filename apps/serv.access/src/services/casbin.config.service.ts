@@ -1,16 +1,16 @@
-import { InjectConfig } from '@nestcloud2/config';
-import { EtcdConfig } from '@nestcloud2/config/config.etcd';
-import { Injectable } from '@nestjs/common';
 import { aclPath } from '@app/constants';
-import { MongoAdapter } from '../lib/casbin.mongodb.adapter';
+import { InjectConfig } from '@nestcloud2/config';
+import { ConsulConfig } from '@nestcloud2/config/config.consul';
+import { Injectable } from '@nestjs/common';
 import {
   NestCasbinModuleOptions,
   NestCasbinOptionsFactory,
 } from 'nestjs-casbin';
+import { MongoAdapter } from '../lib/casbin.mongodb.adapter';
 
 @Injectable()
 export class CasbinConfigService implements NestCasbinOptionsFactory {
-  constructor(@InjectConfig() private readonly config: EtcdConfig) {}
+  constructor(@InjectConfig() private readonly config: ConsulConfig) {}
 
   private get configKey() {
     return 'database.mongodb.uri';

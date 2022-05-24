@@ -1,8 +1,8 @@
 import {
   CommandHandler,
   EventBus,
-  ICommand,
   ICommandHandler,
+  IQuery,
 } from '@nestjs/cqrs';
 import {
   TenantAvailableRequest,
@@ -12,21 +12,19 @@ import {
 import { Logger } from '@nestjs/common';
 import { RpcHandler } from '@valhalla/serv.core';
 
-export class TenantAvailableCommand implements ICommand {
+export class TenantAvailableQuery implements IQuery {
   constructor(public readonly input: TenantAvailableRequest) {}
 }
 
-@CommandHandler(TenantAvailableCommand)
+@CommandHandler(TenantAvailableQuery)
 @RpcHandler()
 export class TenantAvailableHandler
-  implements ICommandHandler<TenantAvailableCommand, TenantAvailableResponse>
+  implements ICommandHandler<TenantAvailableQuery, TenantAvailableResponse>
 {
   constructor(private readonly eventBus: EventBus) {}
 
-  async execute(
-    command: TenantAvailableCommand,
-  ): Promise<TenantAvailableResponse> {
-    Logger.debug(command.input);
+  async execute(query: TenantAvailableQuery): Promise<TenantAvailableResponse> {
+    Logger.debug(query.input);
     throw new Error('Not implemented');
   }
 }

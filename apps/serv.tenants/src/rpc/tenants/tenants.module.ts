@@ -7,7 +7,7 @@ import { GetTenantHandler } from '@app/rpc/tenants/queries/get.tenant.query';
 import { InviteMemberHandler } from '@app/rpc/tenants/commands/invite.member.command';
 import { Module } from '@nestjs/common';
 import { RpcTenantsController } from './tenants.controller';
-import { TenantAvailableHandler } from '@app/rpc/tenants/commands/tenant.available.command';
+import { TenantAvailableHandler } from '@app/rpc/tenants/queries/tenant.available.query';
 import { TenantMemberSchema } from '@app/entities/tenant.members/schema';
 import { TenantMembersModel } from '@app/entities/tenant.members';
 import { TenantSchema } from '@app/entities/tenants/schema';

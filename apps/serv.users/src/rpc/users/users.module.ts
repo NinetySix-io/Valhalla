@@ -1,7 +1,8 @@
+import { AccessRpcClientService } from '@valhalla/serv.clients';
 import { BootConfigService } from '@app/services/boot.config.service';
 import { FindUserHandler } from './queries/find.user.query';
 import { ForgotAccountPasswordHandler } from '@app/rpc/users/commands/forgot.password.command';
-import { JwtConfigService } from '@valhalla/serv.core';
+import { JwtConfigService } from '@app/services/jwt.config.service';
 import { JwtModule } from '@nestjs/jwt';
 import { LoginAccountHandler } from '@app/rpc/users/commands/login.command';
 import { Module } from '@nestjs/common';
@@ -19,10 +20,11 @@ import { VerifyAccountEmailHandler } from '@app/rpc/users/commands/verify.email.
 
 @Module({
   imports: [
-    JwtModule.registerAsync({ useClass: JwtConfigService }),
     TypegooseModule.forFeature([UserSchema, UserPasswordSchema]),
+    JwtModule.registerAsync({ useClass: JwtConfigService }),
   ],
   providers: [
+    AccessRpcClientService,
     BootConfigService,
 
     // DATABASE MODELS

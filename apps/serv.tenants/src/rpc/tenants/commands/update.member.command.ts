@@ -1,9 +1,4 @@
-import {
-  CommandHandler,
-  EventBus,
-  ICommand,
-  ICommandHandler,
-} from '@nestjs/cqrs';
+import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
 import {
   UpdateMemberRequest,
   UpdateMemberResponse,
@@ -21,8 +16,6 @@ export class UpdateMemberCommand implements ICommand {
 export class UpdateMemberHandler
   implements ICommandHandler<UpdateMemberCommand, UpdateMemberResponse>
 {
-  constructor(private readonly eventBus: EventBus) {}
-
   async execute(command: UpdateMemberCommand): Promise<UpdateMemberResponse> {
     Logger.debug(command.input);
     throw new Error('Not implemented');

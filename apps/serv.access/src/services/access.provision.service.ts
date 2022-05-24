@@ -1,23 +1,15 @@
-import { JwtModule, JwtService } from '@nestjs/jwt';
-import { Logger, Module } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
-import { JwtConfigService } from '@valhalla/serv.core/src';
+import { JwtService } from '@nestjs/jwt';
 import { RefreshTokenSchema } from '@app/entities/refresh.tokens/schema';
 import { RefreshTokensModel } from '@app/entities/refresh.tokens';
-import { TypegooseModule } from 'nestjs-typegoose';
 import mongoose from 'mongoose';
 
 type TokenContent = {
   userId: RefreshTokenSchema['user'];
 };
 
-@Module({
-  imports: [
-    JwtModule.registerAsync({ useClass: JwtConfigService }),
-    TypegooseModule.forFeature([RefreshTokenSchema]),
-  ],
-  providers: [RefreshTokensModel],
-})
+@Injectable()
 export class AccessProvisionService {
   private readonly logger = new Logger(AccessProvisionService.name);
 

@@ -1,5 +1,5 @@
 import { GqlUserResolver } from './gql.users.resolver';
-import { JwtConfigService } from '@valhalla/serv.core';
+import { JwtConfigService } from '@app/services/jwt.config.service';
 import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { RpcUsersController } from '@app/rpc/users/users.controller';

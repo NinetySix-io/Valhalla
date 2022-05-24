@@ -1,11 +1,8 @@
 /* eslint-disable */
-import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
-import Long from 'long';
-import * as _m0 from 'protobufjs/minimal';
-import { Observable } from 'rxjs';
-import { Metadata } from '@grpc/grpc-js';
+import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
+import { Observable } from "rxjs";
 
-export const protobufPackage = 'serv.tenants';
+export const protobufPackage = "serv.tenants";
 
 export enum InvitationStatus {
   PENDING = 0,
@@ -134,102 +131,71 @@ export interface AcceptMemberInvitationResponse {
   member: TenantMember | undefined;
 }
 
-export const SERV_TENANTS_PACKAGE_NAME = 'serv.tenants';
+export const SERV_TENANTS_PACKAGE_NAME = "serv.tenants";
 
 export interface TenantsServiceClient {
   /** Tenants */
 
-  createTenant(
-    request: CreateTenantRequest,
-    metadata?: Metadata,
-  ): Observable<CreateTenantResponse>;
+  createTenant(request: CreateTenantRequest): Observable<CreateTenantResponse>;
 
-  getTenant(
-    request: GetTenantRequest,
-    metadata?: Metadata,
-  ): Observable<GetTenantResponse>;
+  getTenant(request: GetTenantRequest): Observable<GetTenantResponse>;
 
-  updateTenant(
-    request: UpdateTenantRequest,
-    metadata?: Metadata,
-  ): Observable<UpdateTenantResponse>;
+  updateTenant(request: UpdateTenantRequest): Observable<UpdateTenantResponse>;
 
-  deleteTenant(
-    request: DeleteTenantRequest,
-    metadata?: Metadata,
-  ): Observable<DeleteTenantResponse>;
+  deleteTenant(request: DeleteTenantRequest): Observable<DeleteTenantResponse>;
 
   tenantAvailable(
-    request: TenantAvailableRequest,
-    metadata?: Metadata,
+    request: TenantAvailableRequest
   ): Observable<TenantAvailableResponse>;
 
   /** Members */
 
-  inviteMember(
-    request: InviteMemberRequest,
-    metadata?: Metadata,
-  ): Observable<InviteMemberResponse>;
+  inviteMember(request: InviteMemberRequest): Observable<InviteMemberResponse>;
 
   acceptMemberInvitation(
-    request: AcceptMemberInvitationRequest,
-    metadata?: Metadata,
+    request: AcceptMemberInvitationRequest
   ): Observable<AcceptMemberInvitationResponse>;
 
-  updateMember(
-    request: UpdateMemberRequest,
-    metadata?: Metadata,
-  ): Observable<UpdateMemberResponse>;
+  updateMember(request: UpdateMemberRequest): Observable<UpdateMemberResponse>;
 
-  deleteMember(
-    request: DeleteMemberRequest,
-    metadata?: Metadata,
-  ): Observable<DeleteMemberResponse>;
+  deleteMember(request: DeleteMemberRequest): Observable<DeleteMemberResponse>;
 
-  getMember(
-    request: GetMemberRequest,
-    metadata?: Metadata,
-  ): Observable<GetMemberResponse>;
+  getMember(request: GetMemberRequest): Observable<GetMemberResponse>;
 }
 
 export interface TenantsServiceController {
   /** Tenants */
 
   createTenant(
-    request: CreateTenantRequest,
-    metadata?: Metadata,
+    request: CreateTenantRequest
   ):
     | Promise<CreateTenantResponse>
     | Observable<CreateTenantResponse>
     | CreateTenantResponse;
 
   getTenant(
-    request: GetTenantRequest,
-    metadata?: Metadata,
+    request: GetTenantRequest
   ):
     | Promise<GetTenantResponse>
     | Observable<GetTenantResponse>
     | GetTenantResponse;
 
   updateTenant(
-    request: UpdateTenantRequest,
-    metadata?: Metadata,
+    request: UpdateTenantRequest
   ):
     | Promise<UpdateTenantResponse>
     | Observable<UpdateTenantResponse>
     | UpdateTenantResponse;
 
   deleteTenant(
-    request: DeleteTenantRequest,
-    metadata?: Metadata,
+    request: DeleteTenantRequest
   ):
     | Promise<DeleteTenantResponse>
     | Observable<DeleteTenantResponse>
     | DeleteTenantResponse;
 
   tenantAvailable(
-    request: TenantAvailableRequest,
-    metadata?: Metadata,
+    request: TenantAvailableRequest
   ):
     | Promise<TenantAvailableResponse>
     | Observable<TenantAvailableResponse>
@@ -238,40 +204,35 @@ export interface TenantsServiceController {
   /** Members */
 
   inviteMember(
-    request: InviteMemberRequest,
-    metadata?: Metadata,
+    request: InviteMemberRequest
   ):
     | Promise<InviteMemberResponse>
     | Observable<InviteMemberResponse>
     | InviteMemberResponse;
 
   acceptMemberInvitation(
-    request: AcceptMemberInvitationRequest,
-    metadata?: Metadata,
+    request: AcceptMemberInvitationRequest
   ):
     | Promise<AcceptMemberInvitationResponse>
     | Observable<AcceptMemberInvitationResponse>
     | AcceptMemberInvitationResponse;
 
   updateMember(
-    request: UpdateMemberRequest,
-    metadata?: Metadata,
+    request: UpdateMemberRequest
   ):
     | Promise<UpdateMemberResponse>
     | Observable<UpdateMemberResponse>
     | UpdateMemberResponse;
 
   deleteMember(
-    request: DeleteMemberRequest,
-    metadata?: Metadata,
+    request: DeleteMemberRequest
   ):
     | Promise<DeleteMemberResponse>
     | Observable<DeleteMemberResponse>
     | DeleteMemberResponse;
 
   getMember(
-    request: GetMemberRequest,
-    metadata?: Metadata,
+    request: GetMemberRequest
   ):
     | Promise<GetMemberResponse>
     | Observable<GetMemberResponse>
@@ -281,46 +242,41 @@ export interface TenantsServiceController {
 export function TenantsServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = [
-      'createTenant',
-      'getTenant',
-      'updateTenant',
-      'deleteTenant',
-      'tenantAvailable',
-      'inviteMember',
-      'acceptMemberInvitation',
-      'updateMember',
-      'deleteMember',
-      'getMember',
+      "createTenant",
+      "getTenant",
+      "updateTenant",
+      "deleteTenant",
+      "tenantAvailable",
+      "inviteMember",
+      "acceptMemberInvitation",
+      "updateMember",
+      "deleteMember",
+      "getMember",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(
         constructor.prototype,
-        method,
+        method
       );
-      GrpcMethod('TenantsService', method)(
+      GrpcMethod("TenantsService", method)(
         constructor.prototype[method],
         method,
-        descriptor,
+        descriptor
       );
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(
         constructor.prototype,
-        method,
+        method
       );
-      GrpcStreamMethod('TenantsService', method)(
+      GrpcStreamMethod("TenantsService", method)(
         constructor.prototype[method],
         method,
-        descriptor,
+        descriptor
       );
     }
   };
 }
 
-export const TENANTS_SERVICE_NAME = 'TenantsService';
-
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
+export const TENANTS_SERVICE_NAME = "TenantsService";

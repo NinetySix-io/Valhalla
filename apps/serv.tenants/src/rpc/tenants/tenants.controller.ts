@@ -21,101 +21,115 @@ import {
   UpdateTenantRequest,
   UpdateTenantResponse,
 } from '@app/rpc/protobuf/tenants';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
+import { AcceptMemberInvitationCommand } from './commands/accept.member.invitation.command';
 import { Controller } from '@nestjs/common';
-import { Metadata } from '@grpc/grpc-js';
+import { CreateTenantCommand } from './commands/create.tenant.command';
+import { DeleteMemberCommand } from './commands/delete.member.command';
+import { DeleteTenantCommand } from './commands/delete.tenant.command';
+import { GetMemberQuery } from './queries/get.member.query';
+import { GetTenantQuery } from './queries/get.tenant.query';
+import { InviteMemberCommand } from './commands/invite.member.command';
 import { Observable } from 'rxjs';
+import { TenantAvailableQuery } from './queries/tenant.available.query';
+import { UpdateMemberCommand } from './commands/update.member.command';
+import { UpdateTenantCommand } from './commands/update.tenant.command';
 
 @Controller()
 export class RpcTenantsController implements TenantsServiceController {
+  constructor(
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
+  ) {}
+
   createTenant(
     request: CreateTenantRequest,
-    metadata?: Metadata,
   ):
     | CreateTenantResponse
     | Promise<CreateTenantResponse>
     | Observable<CreateTenantResponse> {
-    throw new Error('Method not implemented.');
+    return this.commandBus.execute(new CreateTenantCommand(request));
   }
+
   getTenant(
     request: GetTenantRequest,
-    metadata?: Metadata,
   ):
     | GetTenantResponse
     | Promise<GetTenantResponse>
     | Observable<GetTenantResponse> {
-    throw new Error('Method not implemented.');
+    return this.queryBus.execute(new GetTenantQuery(request));
   }
+
   updateTenant(
     request: UpdateTenantRequest,
-    metadata?: Metadata,
   ):
     | UpdateTenantResponse
     | Promise<UpdateTenantResponse>
     | Observable<UpdateTenantResponse> {
-    throw new Error('Method not implemented.');
+    return this.commandBus.execute(new UpdateTenantCommand(request));
   }
+
   deleteTenant(
     request: DeleteTenantRequest,
-    metadata?: Metadata,
   ):
     | DeleteTenantResponse
     | Promise<DeleteTenantResponse>
     | Observable<DeleteTenantResponse> {
-    throw new Error('Method not implemented.');
+    return this.commandBus.execute(new DeleteTenantCommand(request));
   }
+
   tenantAvailable(
     request: TenantAvailableRequest,
-    metadata?: Metadata,
   ):
     | TenantAvailableResponse
     | Promise<TenantAvailableResponse>
     | Observable<TenantAvailableResponse> {
-    throw new Error('Method not implemented.');
+    return this.queryBus.execute(new TenantAvailableQuery(request));
   }
+
   inviteMember(
     request: InviteMemberRequest,
-    metadata?: Metadata,
   ):
     | InviteMemberResponse
     | Promise<InviteMemberResponse>
     | Observable<InviteMemberResponse> {
-    throw new Error('Method not implemented.');
+    return this.commandBus.execute(new InviteMemberCommand(request));
   }
+
   acceptMemberInvitation(
     request: AcceptMemberInvitationRequest,
-    metadata?: Metadata,
   ):
     | AcceptMemberInvitationResponse
     | Promise<AcceptMemberInvitationResponse>
     | Observable<AcceptMemberInvitationResponse> {
-    throw new Error('Method not implemented.');
+    return this.commandBus.execute(new AcceptMemberInvitationCommand(request));
   }
+
   updateMember(
     request: UpdateMemberRequest,
-    metadata?: Metadata,
   ):
     | UpdateMemberResponse
     | Promise<UpdateMemberResponse>
     | Observable<UpdateMemberResponse> {
-    throw new Error('Method not implemented.');
+    return this.commandBus.execute(new UpdateMemberCommand(request));
   }
+
   deleteMember(
     request: DeleteMemberRequest,
-    metadata?: Metadata,
   ):
     | DeleteMemberResponse
     | Promise<DeleteMemberResponse>
     | Observable<DeleteMemberResponse> {
-    throw new Error('Method not implemented.');
+    return this.commandBus.execute(new DeleteMemberCommand(request));
   }
+
   getMember(
     request: GetMemberRequest,
-    metadata?: Metadata,
   ):
     | GetMemberResponse
     | Promise<GetMemberResponse>
     | Observable<GetMemberResponse> {
-    throw new Error('Method not implemented.');
+    return this.queryBus.execute(new GetMemberQuery(request));
   }
 }
