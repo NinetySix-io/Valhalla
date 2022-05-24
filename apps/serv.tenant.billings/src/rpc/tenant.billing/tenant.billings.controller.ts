@@ -30,7 +30,7 @@ import { DeleteTenantSubscriptionCommand } from '@app/rpc/tenant.billing/command
 import { GetTenantInvoiceQuery } from '@app/rpc/tenant.billing/queries/get.tenant.invoice.query';
 import { GetTenantPlanQuery } from '@app/rpc/tenant.billing/queries/get.tenant.plan.query';
 import { GetTenantSubscriptionQuery } from '@app/rpc/tenant.billing/queries/get.tenant.subscription.query';
-import { GrpcClass } from '@valhalla/serv.core/src';
+import { GrpcClass } from '@valhalla/serv.core';
 import { Observable } from 'rxjs';
 import { UpdateTenantPlanCommand } from '@app/rpc/tenant.billing/commands/update.tenant.plan.command';
 import { UpdateTenantSubscriptionCommand } from '@app/rpc/tenant.billing/commands/update.tenant.subscription.command';

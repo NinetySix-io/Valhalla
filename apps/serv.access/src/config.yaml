@@ -14,7 +14,11 @@ app:
   refreshToken:
     jwt:
       secret: rawr
-      expires: 15m
+      signOptions:
+        expiresIn: 15m
+
+mongodb:
+  uri: mongodb://localhost:27017/valhalla
 
 consul:
   host: localhost

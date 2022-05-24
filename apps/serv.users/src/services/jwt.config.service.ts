@@ -1,15 +1,17 @@
+import { Boot, InjectBoot } from '@nestcloud2/boot';
 import { Injectable } from '@nestjs/common';
-import { JwtOptionsFactory, JwtModuleOptions } from '@nestjs/jwt';
-import { InjectConfig } from '@nestcloud2/config';
-import { ConsulConfig } from '@nestcloud2/config/config.consul';
+import { JwtModuleOptions, JwtOptionsFactory } from '@nestjs/jwt';
 
 @Injectable()
 export class JwtConfigService implements JwtOptionsFactory {
-  constructor(@InjectConfig() private readonly config: ConsulConfig) {}
+  constructor(@InjectBoot() private readonly boot: Boot) {}
 
   createJwtOptions(): Promise<JwtModuleOptions> | JwtModuleOptions {
-    const key = 'app.auth.jwt';
-    const jwtConfig = this.config.get<JwtModuleOptions>(key);
-    return jwtConfig;
+    const expires = this.boot.get<string>('app.jwtExpires');
+    return {
+      signOptions: {
+        expiresIn: expires,
+      },
+    };
   }
 }

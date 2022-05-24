@@ -49,14 +49,18 @@ export class AccessProvisionService {
     refreshToken: string;
     accessToken: string;
   }> {
-    this.logger.debug('Creating access token');
     const token = await this.refreshTokens.create({ user: content.userId });
     const refreshToken = token.id;
-    const accessToken = this.jwtService.sign(token);
+    const accessToken = this.jwtService.sign(content);
+
     this.logger.warn(
       `Access Token[${accessToken}] created from Refresh Token[${refreshToken}]`,
     );
-    return { refreshToken, accessToken };
+
+    return {
+      refreshToken,
+      accessToken,
+    };
   }
 
   /**

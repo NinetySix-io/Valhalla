@@ -1,5 +1,4 @@
-import { InjectConfig } from '@nestcloud2/config';
-import { ConsulConfig } from '@nestcloud2/config/config.consul';
+import { Boot, InjectBoot } from '@nestcloud2/boot';
 import { Injectable } from '@nestjs/common';
 import {
   TypegooseModuleOptions,
@@ -8,15 +7,15 @@ import {
 
 @Injectable()
 export class MongoConfigService implements TypegooseOptionsFactory {
-  constructor(@InjectConfig() private readonly config: ConsulConfig) {}
+  constructor(@InjectBoot() private readonly boot: Boot) {}
 
   private get configKey() {
-    return 'database.mongodb';
+    return 'mongodb';
   }
 
   createTypegooseOptions(): TypegooseModuleOptions {
     type ConfigType = { uri: string };
-    const config = this.config.get<ConfigType>(this.configKey);
+    const config = this.boot.get<ConfigType>(this.configKey);
     return {
       uri: config.uri,
     };

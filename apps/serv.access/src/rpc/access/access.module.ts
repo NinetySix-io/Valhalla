@@ -15,9 +15,7 @@ import { TypegooseModule } from 'nestjs-typegoose';
 @Module({
   imports: [
     TypegooseModule.forFeature([RefreshTokenSchema]),
-    JwtModule.registerAsync({
-      useClass: RefreshJwtConfigService,
-    }),
+    JwtModule.registerAsync({ useClass: RefreshJwtConfigService }),
   ],
   controllers: [RpcAccessController],
   providers: [

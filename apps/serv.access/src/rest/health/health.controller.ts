@@ -19,10 +19,6 @@ export class RestHealthController {
     private readonly bootConfig: BootConfigService,
   ) {}
 
-  private get grpcUrl(): string {
-    return `${this.bootConfig.host}:${this.bootConfig.port}`;
-  }
-
   /**
    * It returns a function that checks the health of the gRPC service
    * @returns A function that returns a promise that resolves to a HealthIndicatorResult
@@ -38,7 +34,7 @@ export class RestHealthController {
           healthServiceCheck: async () => ({ status: 1 }),
           protoPath,
           timeout: 2000,
-          url: this.grpcUrl,
+          url: this.bootConfig.gRpcUrl,
         },
       );
   }

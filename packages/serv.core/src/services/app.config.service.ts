@@ -6,6 +6,11 @@ import { Injectable } from '@nestjs/common';
 export class ServAppConfigService {
   constructor(@InjectBoot() protected readonly boot: Boot) {}
 
+  static calculateRestPort(port: number) {
+    //TODO: Dirty but works for now
+    return port + 10;
+  }
+
   /**
    * The function returns the value of the `service.discoveryHost` key from the `boot` object
    * @returns The hostname of the service discovery server.
@@ -19,7 +24,7 @@ export class ServAppConfigService {
    * property in the config.yaml file
    * @returns The port number of the service.
    */
-  get port(): number {
+  private get port(): number {
     return Number(process.env.PORT) || this.boot.get('service.port');
   }
 
@@ -31,8 +36,12 @@ export class ServAppConfigService {
     return this.boot.get('service.tags');
   }
 
-  private get grpcPort(): number {
-    return this.port + 10;
+  get grpcPort(): number {
+    return this.port;
+  }
+
+  get restPort(): number {
+    return ServAppConfigService.calculateRestPort(this.port);
   }
 
   /**
