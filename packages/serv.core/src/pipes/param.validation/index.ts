@@ -22,7 +22,7 @@ export class ParamValidationPipe<T> implements PipeTransform<T> {
     this.validators = validators ?? [];
     this.exceptionFactory = (type: ErrorHttpStatusCode, error) => {
       const HttpError = HttpErrorByCode[type];
-      new HttpError(error);
+      return new HttpError(error);
     };
   }
 

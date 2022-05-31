@@ -22,7 +22,9 @@ export type GetServerSideProps<
   D extends PreviewData = PreviewData,
 > = (
   context: GetServerSidePropsContext<Q, D>,
-) => Promise<GetServerSidePropsResult<WithSEO<P>>>;
+) =>
+  | Promise<GetServerSidePropsResult<WithSEO<P>>>
+  | GetServerSidePropsResult<WithSEO<P>>;
 
 export type GetStaticProps<
   P extends BasicObject = BasicObject,

@@ -18,7 +18,7 @@ export default function HomePage() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = () => {
   return {
     props: {
       SEO: {

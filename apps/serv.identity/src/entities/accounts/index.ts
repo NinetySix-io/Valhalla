@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BaseFactory, CreatePayload, ModelType } from '@valhalla/serv.core';
 import { compact, PartialBy } from '@valhalla/utilities';
-import mongoose from 'mongoose';
 import { InjectModel } from 'nestjs-typegoose';
 import { AccountSchema } from './schema';
 

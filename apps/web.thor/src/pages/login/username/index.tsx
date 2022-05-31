@@ -89,7 +89,7 @@ const LoginEmailPage: Page = () => {
 
 LoginEmailPage.Layout = BaseLayout;
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = () => {
   return {
     props: {
       SEO: {

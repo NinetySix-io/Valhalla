@@ -1,7 +1,7 @@
+import { Logger } from '@nestjs/common';
 import dotenv from 'dotenv';
 import { isEmpty } from '@valhalla/utilities';
 import path from 'path';
-
 /**
  * It loads the .env file from the root of the project, if it exists
  */
@@ -13,7 +13,10 @@ export function loadDotEnv() {
     const config = dotenv.config({ path: envPath });
 
     if (!isEmpty(config?.parsed)) {
-      console.debug('Loaded .env', JSON.stringify(config.parsed, null, 2));
+      new Logger(loadDotEnv.name).debug(
+        'Loaded .env',
+        JSON.stringify(config.parsed, null, 2),
+      );
     }
   }
 }

@@ -35,7 +35,7 @@ export class ForgotAccountPasswordHandler
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private async generatePasswordRecoveryLink(_account: AccountSchema) {
-    return 'TODO';
+    return await Promise.resolve('TODO');
   }
 
   async execute(

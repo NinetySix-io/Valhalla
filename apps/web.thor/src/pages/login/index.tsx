@@ -96,7 +96,7 @@ const LoginPage: Page = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = () => {
   return {
     props: {
       SEO: {

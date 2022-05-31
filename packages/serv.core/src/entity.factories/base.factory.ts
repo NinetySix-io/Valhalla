@@ -154,7 +154,7 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
    * @param options - QueryOptions<DocumentType<TModel>> & {
    * @returns A promise that resolves to the updated document.
    */
-  async findByIdAndUpdate(
+  findByIdAndUpdate(
     id: string,
     updateQuery: UpdateQuery<DocumentType<TModel>>,
     options: QueryOptions<DocumentType<TModel>> & {

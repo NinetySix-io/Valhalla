@@ -45,7 +45,7 @@ export class SendAccountEmailVerificationHandler
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     email: ArrayElement<AccountSchema['emails']>,
   ): Promise<string> {
-    return 'TODO';
+    return await Promise.resolve('TODO');
   }
 
   async execute(

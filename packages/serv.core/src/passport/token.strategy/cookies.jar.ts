@@ -89,7 +89,7 @@ export class CookiesJar {
         throw new TypeError('maxAge is must be a finite number');
       }
 
-      cookieParts.push(`Max-Age=${options.maxAge.toString}`);
+      cookieParts.push(`Max-Age=${options.maxAge.toString()}`);
     } else if ('expires' in options && options.expires) {
       cookieParts.push(`Expires=${options.expires.toUTCString()}`);
     }

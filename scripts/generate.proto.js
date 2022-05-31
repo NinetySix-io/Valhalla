@@ -55,12 +55,12 @@ promiseExec("pwd").then(async (output) => {
       apps.isFromApps
         ? "./src/rpc/**/*.proto"
         : `./apps/${app}/src/rpc/**/*.proto`,
-      `--ts_proto_opt=` + opt,
+      `--ts_proto_opt=${opt}`,
     ];
 
     const result = await promiseExec(cmd.join(" "));
     result.stderr
       ? console.error(result.stderr)
-      : console.warn("Proto definition file generated for " + app);
+      : console.warn(`Proto definition file generated for ${app}`);
   }
 });

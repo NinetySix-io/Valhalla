@@ -6,7 +6,6 @@ import { ConsulService } from '@nestcloud2/service/service.consul';
 import { Logger, OnModuleInit } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ServAppConfigService } from '@valhalla/serv.core';
-import https from 'https';
 import { isDev } from '@valhalla/utilities';
 import CronTime from 'cron-time-generator';
 import keyBy from 'lodash.keyby';
@@ -39,20 +38,6 @@ export abstract class SubgraphsProvider implements OnModuleInit {
    */
   abstract onSubgraphUpdated(): void;
 
-  private async validateService(host: string, port: number, path?: string) {
-    return new Promise<boolean>((resolve) => {
-      https.request(
-        {
-          method: 'HEAD',
-          host,
-          port,
-          path: path ?? '/',
-        },
-        (result) => resolve(result.statusCode && result.statusCode < 300),
-      );
-    });
-  }
-
   /**
    * If the service address is the same as the devHost, then we'll use the address 'http://0.0.0.0'
    * instead
@@ -60,7 +45,7 @@ export abstract class SubgraphsProvider implements OnModuleInit {
    * from the service.json file.
    * @returns The service domain is being returned.
    */
-  private async resolveServiceDomain(service: IServiceServer): Promise<string> {
+  private resolveServiceDomain(service: IServiceServer): string {
     const address = isDev() ? 'http://0.0.0.0' : service.address;
     const servicePort = Number(service.port);
     const listeningPort = ServAppConfigService.calculateRestPort(servicePort);
@@ -72,7 +57,7 @@ export abstract class SubgraphsProvider implements OnModuleInit {
    * @param {string[]} serviceNames - The list of services that you want to build subgraphs for.
    * @returns The subgraphs are being returned.
    */
-  private async buildSubgraphs(serviceNames: string[]) {
+  private async buildSubgraphs(serviceNames: string[]): Promise<void> {
     const currentSubgraphMap = keyBy(
       this._subgraphs ?? [],
       (graph) => graph.name,
@@ -96,7 +81,7 @@ export abstract class SubgraphsProvider implements OnModuleInit {
 
       const graphName = assignedNode.service;
       const isInCurrent = currentSubgraphMap[assignedNode.service];
-      const graphUrl = await this.resolveServiceDomain(assignedNode);
+      const graphUrl = this.resolveServiceDomain(assignedNode);
 
       nextSubgraphsMap[graphName] = true;
       nextSubgraphs.push({ name: graphName, url: graphUrl });
@@ -120,8 +105,6 @@ export abstract class SubgraphsProvider implements OnModuleInit {
       this.logger.debug('Subgraphs update detected');
       this.onSubgraphUpdated();
     }
-
-    return this._subgraphs;
   }
 
   /**

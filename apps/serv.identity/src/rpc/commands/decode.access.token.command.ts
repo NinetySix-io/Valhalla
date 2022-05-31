@@ -15,9 +15,9 @@ export class DecodeAccessTokenHandler
 {
   constructor(private readonly provision: AccessProvisionService) {}
 
-  async execute(command: DecodeAccessTokenCommand): Promise<Account> {
+  execute(command: DecodeAccessTokenCommand): Promise<Account> {
     const accessToken = command.input.accessToken;
     const data = this.provision.decodeAccessToken(accessToken);
-    return data;
+    return Promise.resolve(data);
   }
 }

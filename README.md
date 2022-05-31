@@ -2,6 +2,17 @@
 
 This is a monorepo on top of turborepo
 
+<br />
+
+---
+
+## [![DeepSource](https://deepsource.io/gh/NinetySix-io/Valhalla.svg/?label=active+issues&show_trend=true&token=jA7-DpUbdnf-SZGnpAl2ibgy)](https://deepsource.io/gh/NinetySix-io/Valhalla/?ref=repository-badge)
+
+---
+
+<br />
+<br />
+
 ## Set up
 
 ### First time

@@ -24,8 +24,13 @@ export class GqlAuthResolver {
     const result = await resolveRpcRequest(
       this.rpcClient.accountRegister(input),
     );
+
+    if (!result.account) {
+      throw new Error('Unable to register!');
+    }
+
     return {
-      accountId: result.account!.id,
+      accountId: result.account.id,
     };
   }
 
@@ -40,8 +45,12 @@ export class GqlAuthResolver {
     auth.setRefreshToken(result.refreshToken);
     auth.setAccessToken(result.accessToken);
 
+    if (!result.account) {
+      throw new Error('Unable to register!');
+    }
+
     return {
-      accountId: result.account!.id,
+      accountId: result.account.id,
       accessToken: result.accessToken,
     };
   }

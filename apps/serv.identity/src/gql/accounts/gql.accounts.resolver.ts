@@ -10,7 +10,7 @@ export class GqlUserResolver {
     description: 'Get current logged in user information',
   })
   @UseGuards(GqlAuthGuard)
-  async account(@CurrentAccount() account: Account): Promise<Account> {
+  account(@CurrentAccount() account: Account): Account {
     return account;
   }
 }

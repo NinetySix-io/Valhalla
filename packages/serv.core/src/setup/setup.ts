@@ -5,6 +5,7 @@ import { BOOT } from '@nestcloud2/common';
 import { Boot } from '@nestcloud2/boot';
 import { ServAppConfigService } from '../services';
 import { isEmpty } from 'class-validator';
+import { isNil } from '@valhalla/utilities/src';
 
 export class ServCoreSetup {
   app: INestApplication;
@@ -26,14 +27,14 @@ export class ServCoreSetup {
    * It connects the gRPC server to the NestJS application
    */
   private connectRpcServer(): void {
-    if (isEmpty(this.grpc)) {
+    if (isNil(this.grpc)) {
       return;
     }
 
     this.microServices.grpc = true;
     const options: GrpcOptions['options'] = {
+      ...this.grpc,
       url: this.config.gRpcUrl,
-      ...(this.grpc as GrpcOptions['options']),
     };
 
     this.logger.debug('With gRPC', options);

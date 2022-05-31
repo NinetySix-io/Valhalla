@@ -35,7 +35,7 @@ export class TokensStrategy
       throw new UnauthorizedException('Access token is not a string!');
     }
 
-    const [result, error] = await tryNice(async () =>
+    const [result, error] = await tryNice(() =>
       resolveRpcRequest(
         this.identityClient.svc.decodeAccessToken({
           accessToken,

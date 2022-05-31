@@ -31,7 +31,7 @@ export class RestHealthController {
         {
           package: protobufPackage,
           healthServiceName: IDENTITY_SERVICE_NAME,
-          healthServiceCheck: async () => ({ status: 1 }),
+          healthServiceCheck: () => Promise.resolve({ status: 1 }),
           protoPath,
           timeout: 2000,
           url: this.bootConfig.gRpcUrl,
