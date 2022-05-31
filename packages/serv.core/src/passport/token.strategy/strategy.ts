@@ -35,6 +35,10 @@ export class TokensStrategy
       throw new UnauthorizedException('Access token is not a string!');
     }
 
+    if (!this.identityClient.svc) {
+      throw new Error('Identity service is not online!');
+    }
+
     const [result, error] = await tryNice(() =>
       resolveRpcRequest(
         this.identityClient.svc.decodeAccessToken({
