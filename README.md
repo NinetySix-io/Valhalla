@@ -6,7 +6,11 @@ This is a monorepo on top of turborepo
 
 ---
 
-## [![DeepSource](https://deepsource.io/gh/NinetySix-io/Valhalla.svg/?label=active+issues&show_trend=true&token=jA7-DpUbdnf-SZGnpAl2ibgy)](https://deepsource.io/gh/NinetySix-io/Valhalla/?ref=repository-badge)
+[![DeepSource](https://deepsource.io/gh/NinetySix-io/Valhalla.svg/?label=active+issues&show_trend=true&token=jA7-DpUbdnf-SZGnpAl2ibgy)](https://deepsource.io/gh/NinetySix-io/Valhalla/?ref=repository-badge)
+
+[![loki-ci](https://github.com/NinetySix-io/Valhalla/actions/workflows/loki.yaml/badge.svg?branch=main)](https://github.com/NinetySix-io/Valhalla/actions/workflows/loki.yaml)
+
+[![thor-ci](https://github.com/NinetySix-io/Valhalla/actions/workflows/thor.yaml/badge.svg?branch=main)](https://github.com/NinetySix-io/Valhalla/actions/workflows/thor.yaml)
 
 ---
 
