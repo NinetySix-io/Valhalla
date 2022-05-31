@@ -1,8 +1,5 @@
 import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
-import {
-  DeleteMemberRequest,
-  DeleteMemberResponse,
-} from '@app/rpc/protobuf/tenants';
+import { DeleteMemberRequest, DeleteMemberResponse } from '@app/rpc/protobuf';
 
 import { Logger } from '@nestjs/common';
 import { RpcHandler } from '@valhalla/serv.core';

@@ -8,7 +8,7 @@ import { prop } from '@typegoose/typegoose';
 @ObjectType({ isAbstract: true })
 @Directive('@extends')
 @Directive('@key(fields: "id")')
-export abstract class BaseSchema {
+export class BaseSchema {
   @Exclude()
   @prop({ type: mongoose.Schema.Types.ObjectId })
   _id!: mongoose.Types.ObjectId;

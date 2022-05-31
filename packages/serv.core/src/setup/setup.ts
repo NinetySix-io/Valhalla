@@ -59,13 +59,12 @@ export class ServCoreSetup {
     }
 
     await this.app.listen(this.config.restPort);
-    const url = await this.app.getUrl();
 
-    this.logger.debug('REST started', url);
+    this.logger.debug('REST started', this.config.restUrl);
     this.microServices.grpc &&
       this.logger.debug('gRPC started', this.config.gRpcUrl);
     this.config.hasGraphql &&
-      this.logger.debug('GRAPHQL started', url + '/graphql');
+      this.logger.debug('GRAPHQL started', this.config.restUrl + '/graphql');
   }
 
   /**

@@ -24,18 +24,24 @@ import {
   protobufPackage,
 } from '../protobuf/${servApp}';
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import path from 'path';
 
 const protoPath = path.resolve(
   __dirname,
   '../protobuf',
   '${servApp}',
-  '${stripped}.proto',
+  'index.proto',
 );
 
 @Injectable()
-export class ${startCase}RpcClientService {
+export class ${startCase}RpcClientService implements OnModuleInit {
+  private readonly logger = new Logger(${startCase}RpcClientService.name);
+
+  onModuleInit() {
+    this.logger.debug('Rpc Client Initialized');
+  }
+
   @RpcClient({
     service: protobufPackage,
     package: protobufPackage,
@@ -64,7 +70,15 @@ function run() {
    * @type {string[]}
    */
   const protoBufIndex = [];
+
+  /**
+   * @type {string[]}
+   */
   const clientsIndex = [];
+
+  /**
+   * @type {string[]}
+   */
   const entryIndex = [];
   const servApps = getServiceFiles();
 
@@ -89,10 +103,6 @@ function run() {
       continue;
     }
 
-    /**
-     * @type {string[]}
-     */
-    const servProtoIndex = [];
     const protobufList = fs.readdirSync(servAppProtoDir);
     const servProtoDir = path.resolve(protobufTarget, servApp);
 
@@ -111,23 +121,9 @@ function run() {
 
       console.info("Created", servApp, item);
       fs.writeFileSync(itemPath, content, { encoding: "utf-8" });
-
-      if (item.endsWith(".ts")) {
-        const extIndex = item.indexOf(".ts");
-        servProtoIndex.push(
-          `export * from './${item.substring(0, extIndex)}';`
-        );
-      }
     }
 
-    servProtoIndex.push("");
     writeClientFile(servApp);
-
-    fs.writeFileSync(
-      path.resolve(servProtoDir, "index.ts"),
-      servProtoIndex.join("\n"),
-      { encoding: "utf-8" }
-    );
 
     clientsIndex.push(`export * from './${servApp}.client';`);
     protoBufIndex.push(

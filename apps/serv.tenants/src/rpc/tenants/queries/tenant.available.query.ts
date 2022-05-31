@@ -7,7 +7,7 @@ import {
 import {
   TenantAvailableRequest,
   TenantAvailableResponse,
-} from '@app/rpc/protobuf/tenants';
+} from '@app/rpc/protobuf';
 
 import { Logger } from '@nestjs/common';
 import { RpcHandler } from '@valhalla/serv.core';

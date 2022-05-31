@@ -10,3 +10,5 @@ export * from './entity.decorators';
 export * from './rpc.decorators';
 export * from './general.decorators';
 export * from './pipes';
+export * from './passport';
+export * from './gql.decorators';

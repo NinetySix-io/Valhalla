@@ -1,8 +1,5 @@
 import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
-import {
-  UpdateMemberRequest,
-  UpdateMemberResponse,
-} from '@app/rpc/protobuf/tenants';
+import { UpdateMemberRequest, UpdateMemberResponse } from '@app/rpc/protobuf';
 
 import { Logger } from '@nestjs/common';
 import { RpcHandler } from '@valhalla/serv.core';

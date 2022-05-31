@@ -1,7 +1,7 @@
 import {
   AcceptMemberInvitationRequest,
   AcceptMemberInvitationResponse,
-} from '@app/rpc/protobuf/tenants';
+} from '@app/rpc/protobuf';
 import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
 
 import { Logger } from '@nestjs/common';

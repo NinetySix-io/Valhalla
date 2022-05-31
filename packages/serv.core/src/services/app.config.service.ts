@@ -53,6 +53,14 @@ export class ServAppConfigService {
   }
 
   /**
+   * It returns the rest url
+   * @returns The restUrl property is being returned.
+   */
+  get restUrl(): string {
+    return `${this.host}:${this.restPort}`;
+  }
+
+  /**
    * It checks if the tags array includes the string 'graphql'
    * @returns A boolean value.
    */

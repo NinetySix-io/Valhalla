@@ -20,7 +20,7 @@ import {
   UpdateMemberResponse,
   UpdateTenantRequest,
   UpdateTenantResponse,
-} from '@app/rpc/protobuf/tenants';
+} from '@app/rpc/protobuf';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { AcceptMemberInvitationCommand } from './commands/accept.member.invitation.command';

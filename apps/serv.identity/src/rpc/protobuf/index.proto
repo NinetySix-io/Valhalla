@@ -1,0 +1,164 @@
+syntax = "proto3";
+
+package serv.identity;
+
+service IdentityService {
+    rpc AccountRegister(AccountRegisterRequest) returns (AccountRegisterResponse) {}
+    rpc AccountLogin(AccountLoginRequest) returns (AccountLoginResponse) {}
+    rpc AccountLogout(AccountLogoutRequest) returns (AccountLogoutResponse) {}
+    rpc FindAccount(FindAccountRequest) returns (Account) {}
+    rpc VerifyAccountEmail(VerifyAccountEmailRequest) returns (VerifyAccountEmailResponse) {}
+    rpc SendAccountEmailVerificationCode(SendAccountVerificationCodeRequest) returns (SendAccountVerificationCodeResponse) {}
+    rpc UpdateAccount(UpdateAccountRequest) returns (UpdateAccountResponse) {}
+    rpc ForgotAccountPassword(ForgotPasswordRequest) returns (ForgotPasswordResponse) {}
+    rpc UpdateAccountPassword(UpdatePasswordRequest) returns (UpdatePasswordResponse) {}
+
+    rpc CreateAccess(Account) returns (CreateAccessResponse) {}
+    rpc DeleteRefreshToken(DeleteRefreshTokenRequest) returns (DeleteRefreshTokenResponse) {}
+    rpc ProvisionAccessToken(ProvisionAccessTokenRequest) returns (ProvisionAccessTokenResponse) {}
+    rpc DecodeAccessToken(DecodeAccessTokenRequest) returns (Account) {}
+}
+
+message EmailObject {
+    string value = 2;
+    optional string verificationCode = 3;
+    bool isVerified = 4;
+    bool isPrimary = 5;
+    string createdAt = 6;
+    string updatedAt = 7;
+}
+
+message PhoneObject {
+    string value = 2;
+    optional string verificationCode = 3;
+    bool isVerified = 4;
+    bool isPrimary = 5;
+    string createdAt = 6;
+    string updatedAt = 7;
+}
+
+message Account {
+    string id = 1;
+    optional string displayName = 2;
+    optional string firstName = 3;
+    optional string lastName = 4;
+    string createdAt = 5;
+    string updatedAt = 6;
+    repeated EmailObject emails = 7;
+    repeated PhoneObject phones = 8;
+}
+
+message AccountRegisterRequest {
+    optional string displayName = 1;
+    string password = 2;
+    string email = 3;
+    optional string phone = 4;
+    optional string firstName = 5;
+    optional string lastName = 6;
+}
+
+message AccountRegisterResponse {
+    Account account = 1;
+}
+
+message DeleteResponse {
+    bool success = 1;
+}
+
+message UpdateAccountRequest {
+    string accountId = 1;
+    string displayName = 2;
+    string firstName = 3;
+    string lastName = 4;
+}
+
+message UpdateAccountResponse {
+    Account updatedAccount = 1;
+}
+
+message UpdatePasswordRequest {
+    string accountId = 1;
+    string oldPassword = 2;
+    string newPassword = 3;
+    string confirmPassword = 4;
+}
+
+message UpdatePasswordResponse {
+    bool success = 1;
+}
+
+message ForgotPasswordRequest {
+    string email = 1;
+}
+
+message ForgotPasswordResponse {
+    string recoveryUrl = 1;
+}
+
+message AccountLoginResponse {
+    Account account = 1;
+    string accessToken = 2;
+    string refreshToken = 3;
+}
+
+message AccountLoginRequest {
+    string password = 1;
+    string username = 2;
+}
+
+message AccountLogoutRequest {
+    optional string refreshToken = 1;
+}
+
+message AccountLogoutResponse {
+    bool success = 1;
+}
+
+message VerifyAccountEmailRequest {
+    string email = 1;
+    string verificationCode = 2;
+}
+
+message VerifyAccountEmailResponse {
+    bool success = 1;
+}
+
+message SendAccountVerificationCodeRequest {
+    string email = 1;
+}
+
+message SendAccountVerificationCodeResponse {
+    string code = 1;
+}
+
+message FindAccountRequest {
+  optional string accountId = 1;
+  optional string email = 2;
+  optional string phone = 3;
+}
+
+message CreateAccessResponse {
+    string refreshToken = 1;
+    string accessToken = 2;
+}
+
+message DeleteRefreshTokenRequest {
+    string refreshToken = 1;
+}
+
+message DeleteRefreshTokenResponse {
+    bool success = 1;
+}
+
+message DecodeAccessTokenRequest {
+    string accessToken = 1;
+}
+
+
+message ProvisionAccessTokenRequest {
+    string refreshToken = 1;
+}
+
+message ProvisionAccessTokenResponse {
+    string accessToken = 1;
+}

@@ -101,6 +101,19 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
   }
 
   /**
+   * It deletes all documents from the database that match the filter
+   * @param filter - FilterQuery<DocumentType<TModel>>
+   * @param [options] - QueryOptions<DocumentType<TModel>>
+   * @returns The result of the deleteMany method.
+   */
+  deleteMany(
+    filter: FilterQuery<DocumentType<TModel>>,
+    options?: QueryOptions<DocumentType<TModel>>,
+  ) {
+    return this._model.deleteMany(filter, options);
+  }
+
+  /**
    * It updates a document in the database.
    * @param {string} id - The id of the document you want to update.
    * @param updateQuery - UpdateQuery<DocumentType<TModel>>

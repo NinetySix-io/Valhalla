@@ -3,7 +3,7 @@ import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import {
   GetTenantInvoiceRequest,
   GetTenantInvoiceResponse,
-} from '@app/rpc/protobuf/tenant.billing';
+} from '@app/rpc/protobuf';
 
 export class GetTenantInvoiceQuery implements IQuery {
   constructor(public readonly request: GetTenantInvoiceRequest) {}

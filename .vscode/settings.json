@@ -12,7 +12,7 @@
     "Cqrs",
     "errmsg",
     "Eventstore",
-    "Fastify",
+    "fastify",
     "inapp",
     "josephg",
     "juicycleff",

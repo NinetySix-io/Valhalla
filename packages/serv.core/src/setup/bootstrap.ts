@@ -7,6 +7,7 @@ import { NestCloud } from '@nestcloud2/core';
 import { NestFactory } from '@nestjs/core';
 import { ServCoreSetup } from './setup';
 import { ValidationPipe } from '@nestjs/common';
+import fastifyCookie from '@fastify/cookie';
 import { loadDotEnv } from '../lib';
 
 /**
@@ -36,6 +37,7 @@ export async function bootstrapApplication(
   servCore.handleProcessTerminate();
   app.useGlobalPipes(new ValidationPipe());
 
+  await app.register(fastifyCookie);
   await options?.preSetup?.(app);
   await servCore.setup();
   return app;

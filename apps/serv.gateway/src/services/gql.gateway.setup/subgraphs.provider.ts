@@ -11,6 +11,10 @@ import { isDev } from '@valhalla/utilities';
 import CronTime from 'cron-time-generator';
 import keyBy from 'lodash.keyby';
 
+const syncInterval = isDev()
+  ? CronExpression.EVERY_10_SECONDS
+  : CronTime.every(10).minutes();
+
 export abstract class SubgraphsProvider implements OnModuleInit {
   private logger = new Logger(SubgraphsProvider.name);
   private _subgraphs: ServiceEndpointDefinition[];
@@ -24,9 +28,7 @@ export abstract class SubgraphsProvider implements OnModuleInit {
     this.syncServices();
   }
 
-  @Cron(
-    isDev() ? CronExpression.EVERY_30_SECONDS : CronTime.every(10).minutes(),
-  )
+  @Cron(syncInterval)
   private syncServices() {
     const services = this.consul.getServiceNames();
     this.buildSubgraphs(services);

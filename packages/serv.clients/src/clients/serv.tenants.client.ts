@@ -5,18 +5,24 @@ import {
   protobufPackage,
 } from '../protobuf/serv.tenants';
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import path from 'path';
 
 const protoPath = path.resolve(
   __dirname,
   '../protobuf',
   'serv.tenants',
-  'tenants.proto',
+  'index.proto',
 );
 
 @Injectable()
-export class TenantsRpcClientService {
+export class TenantsRpcClientService implements OnModuleInit {
+  private readonly logger = new Logger(TenantsRpcClientService.name);
+
+  onModuleInit() {
+    this.logger.debug('Rpc Client Initialized');
+  }
+
   @RpcClient({
     service: protobufPackage,
     package: protobufPackage,

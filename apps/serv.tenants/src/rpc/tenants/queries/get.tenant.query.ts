@@ -1,4 +1,4 @@
-import { GetTenantRequest, GetTenantResponse } from '@app/rpc/protobuf/tenants';
+import { GetTenantRequest, GetTenantResponse } from '@app/rpc/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { Logger } from '@nestjs/common';

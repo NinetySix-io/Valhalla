@@ -22,6 +22,7 @@ module.exports = {
   },
   rules: {
     '@typescript-eslint/ban-types': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
   },
   ignorePatterns: ['**/*.js'],
 };

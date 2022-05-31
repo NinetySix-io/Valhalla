@@ -20,7 +20,7 @@ import {
   UpdateTenantPlanResponse,
   UpdateTenantSubscriptionRequest,
   UpdateTenantSubscriptionResponse,
-} from '@app/rpc/protobuf/tenant.billing';
+} from '@app/rpc/protobuf';
 
 import { Controller } from '@nestjs/common';
 import { CreateTenantPlanCommand } from '@app/rpc/tenant.billing/commands/create.tenant.plan.command';

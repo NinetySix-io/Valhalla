@@ -8,7 +8,7 @@ import {
 import {
   TENANT_BILLINGS_SERVICE_NAME,
   protobufPackage,
-} from '@app/rpc/protobuf/tenant.billing';
+} from '@app/rpc/protobuf';
 
 import { BootConfigService } from '@app/services/boot.config.service';
 import { GrpcOptions } from '@nestjs/microservices';

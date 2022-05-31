@@ -6,10 +6,7 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import {
-  CreateTenantRequest,
-  CreateTenantResponse,
-} from '@app/rpc/protobuf/tenants';
+import { CreateTenantRequest, CreateTenantResponse } from '@app/rpc/protobuf';
 import {
   TenantMemberRole,
   TenantMemberStatus,
