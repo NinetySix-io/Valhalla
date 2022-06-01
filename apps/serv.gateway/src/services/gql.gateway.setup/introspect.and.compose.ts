@@ -1,7 +1,4 @@
-import {
-  Service,
-  loadServicesFromRemoteEndpoint,
-} from '@apollo/gateway/dist/supergraphManagers/IntrospectAndCompose/loadServicesFromRemoteEndpoint';
+import { Service, loadServicesFromRemoteEndpoint } from './load.services';
 import {
   ServiceDefinitionUpdate,
   SupergraphSdlHookOptions,
@@ -55,6 +52,11 @@ export class IntrospectAndCompose implements SupergraphManager {
     this.state = { phase: 'initialized' };
   }
 
+  /**
+   * It initializes the state of the hook, and returns a function that can be used to clean up the hook
+   * @param {SupergraphSdlHookOptions}  - `update`: a function that takes a string and returns a
+   * promise that resolves to a string. This function is used to update the supergraph's schema.
+   */
   public async initialize({
     update,
     getDataSource,
@@ -104,6 +106,10 @@ export class IntrospectAndCompose implements SupergraphManager {
     };
   }
 
+  /**
+   * It takes a list of subgraphs, fetches their SDLs, and then creates a supergraph SDL from them
+   * @returns The supergraph SDL
+   */
   private async updateSupergraphSdl() {
     this.logger.debug('Update Supergraph SDL');
     this.buildSubgraph();
@@ -114,8 +120,6 @@ export class IntrospectAndCompose implements SupergraphManager {
 
     const result = await loadServicesFromRemoteEndpoint({
       serviceList: this.subgraphs,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       getServiceIntrospectionHeaders: async (service) => {
         return typeof this.config.introspectionHeaders === 'function'
           ? await this.config.introspectionHeaders(service)
@@ -124,18 +128,58 @@ export class IntrospectAndCompose implements SupergraphManager {
       serviceSdlCache: this.serviceSdlCache,
     });
 
+    if (!result.serviceDefinitions?.length) {
+      return this.fallbackSupergraphSdl;
+    }
+
     if (!result.isNewSchema) {
       return null;
     }
 
-    const supergraphSdl = this.createSupergraphFromSubgraphList(
+    const validSubgraphs = this.filterInvalidSubgraphs(
       result.serviceDefinitions,
     );
+
+    if (!validSubgraphs.length) {
+      return this.fallbackSupergraphSdl;
+    }
+
+    const supergraphSdl = this.createSupergraphFromSubgraphList(validSubgraphs);
     // the healthCheck fn is only assigned if it's enabled in the config
     await this.healthCheck?.(supergraphSdl);
     return supergraphSdl;
   }
 
+  /**
+   * It takes a list of subgraphs, and returns a list of subgraphs that are valid
+   * @param subgraphs - ServiceDefinitionUpdate['serviceDefinitions']
+   * @returns An array of service definitions.
+   */
+  private filterInvalidSubgraphs(
+    subgraphs: ServiceDefinitionUpdate['serviceDefinitions'],
+  ) {
+    const result: ServiceDefinitionUpdate['serviceDefinitions'] = [];
+
+    for (const subgraph of subgraphs) {
+      const composition = composeServices([subgraph]);
+      if (!composition.errors) {
+        result.push(subgraph);
+      } else {
+        console.warn(
+          `Unable to register subgraph: ${subgraph.name}`,
+          composition.errors.map((e) => e.message),
+        );
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * It takes a list of subgraphs and returns a supergraph
+   * @param subgraphs - ServiceDefinitionUpdate['serviceDefinitions']
+   * @returns The supergraphSdl is being returned.
+   */
   private createSupergraphFromSubgraphList(
     subgraphs: ServiceDefinitionUpdate['serviceDefinitions'],
   ) {
@@ -153,6 +197,9 @@ export class IntrospectAndCompose implements SupergraphManager {
     }
   }
 
+  /**
+   * It tries to update the supergraph SDL, and if it succeeds, it calls the update function
+   */
   async rebuildSupergraphSdl() {
     try {
       Logger.debug('Rebuild Supergraph SDL');

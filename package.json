@@ -11,6 +11,7 @@
   },
   "scripts": {
     "dev": "turbo run dev --no-cache --parallel --continue",
+    "dev:all": "npm run dev --filter=./apps/*",
     "dev:serv": "npm run dev --filter=./apps/serv.*",
     "ext:services": "sh ./scripts/run.ext.services.sh",
     "ext:services:down": "sh ./scripts/shutdown.ext.services.sh",

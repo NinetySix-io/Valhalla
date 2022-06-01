@@ -58,6 +58,7 @@ export abstract class SubgraphsProvider implements OnModuleInit {
    * @returns The subgraphs are being returned.
    */
   private async buildSubgraphs(serviceNames: string[]): Promise<void> {
+    this.logger.debug('Building Subgraphs');
     const currentSubgraphMap = keyBy(
       this._subgraphs ?? [],
       (graph) => graph.name,
@@ -101,10 +102,7 @@ export abstract class SubgraphsProvider implements OnModuleInit {
 
     hasRemoval && this.logger.warn('Subgraphs removed', removedGraphs);
     hasAddition && this.logger.warn('Subgraphs added', newGraphConfigs);
-    if (hasAddition || hasRemoval) {
-      this.logger.debug('Subgraphs update detected');
-      this.onSubgraphUpdated();
-    }
+    this.onSubgraphUpdated();
   }
 
   /**

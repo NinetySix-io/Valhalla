@@ -1,5 +1,3 @@
-import {} from '@valhalla/serv.clients';
-
 import {
   CommandHandler,
   EventBus,
@@ -13,6 +11,7 @@ import {
 } from '@app/entities/tenant.members/schema';
 
 import { RpcHandler } from '@valhalla/serv.core';
+import { ServIdentity } from '@valhalla/serv.clients';
 import { TenantCreatedEvent } from '../events/tenant.created.event';
 import { TenantMemberCreatedEvent } from '../events/tenant.member.created.event';
 import { TenantMemberTransformer } from '@app/entities/tenant.members/transformer';
@@ -20,14 +19,13 @@ import { TenantMembersModel } from '@app/entities/tenant.members';
 import { TenantPlan } from '@app/entities/tenants/schema';
 import { TenantTransformer } from '@app/entities/tenants/transformer';
 import { TenantsModel } from '@app/entities/tenants';
-import { User } from '@valhalla/serv.clients/src/protobuf/serv.users';
 import mongoose from 'mongoose';
 import { slugify } from '@valhalla/utilities';
 
 export class CreateTenantCommand implements ICommand {
   constructor(
     public readonly input: CreateTenantRequest,
-    public readonly user?: User,
+    public readonly user?: ServIdentity.Account,
   ) {}
 }
 
