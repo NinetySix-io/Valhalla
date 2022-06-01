@@ -50,7 +50,7 @@ import { isDev } from '@valhalla/utilities';
 @GrpcClass(IDENTITY_SERVICE_NAME)
 @LogClassMethods({
   when: isDev(),
-  onTrigger: (fnName) => Logger.debug(fnName),
+  onTrigger: (fnName) => Logger.debug(`gRPC: ${fnName}`),
 })
 export class gRpcController implements IdentityServiceController {
   constructor(
