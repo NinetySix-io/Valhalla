@@ -1,5 +1,5 @@
 import { AccountSchema } from './schema';
-import { Account as Proto } from '@app/rpc/protobuf';
+import { Account as Proto } from '@app/protobuf';
 
 export class AccountTransformer {
   entity: AccountSchema;

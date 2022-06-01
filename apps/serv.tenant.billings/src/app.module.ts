@@ -4,12 +4,12 @@ import {
   ServiceRegistryModule,
 } from '@valhalla/serv.core';
 
+import { ApiModule } from './api/api.module';
 import { BootModule } from '@nestcloud2/boot';
 import { Module } from '@nestjs/common';
-import { RestHealthModule } from './rest/health/health.module';
-import { RpcTenantBillingsModule } from './rpc/tenant.billing/tenant.billings.module';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { configFilePath } from './constants';
+import { gRpcModule } from './grpc/grpc.module';
 
 @Module({
   imports: [
@@ -17,8 +17,8 @@ import { configFilePath } from './constants';
     ServiceRegistryModule,
     BootModule.forRoot({ filePath: configFilePath }),
     TypegooseModule.forRootAsync({ useClass: MongoConfigService }),
-    RpcTenantBillingsModule,
-    RestHealthModule,
+    gRpcModule,
+    ApiModule,
   ],
 })
 export class AppModule {}

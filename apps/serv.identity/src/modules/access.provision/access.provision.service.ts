@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import { Account } from '@app/rpc/protobuf';
+import { Account } from '@app/protobuf';
 import { AccountTransformer } from '@app/entities/accounts/transformer';
 import { AccountsModel } from '@app/entities/accounts';
 import { BootConfigService } from '@app/services/boot.config.service';

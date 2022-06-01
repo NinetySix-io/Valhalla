@@ -1,4 +1,4 @@
-import { Tenant as TenantProto } from '@app/rpc/protobuf';
+import { Tenant as TenantProto } from '@app/protobuf';
 import { TenantSchema } from './schema';
 
 export class TenantTransformer {
