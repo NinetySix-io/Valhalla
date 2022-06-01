@@ -4,8 +4,8 @@ import {
   IdentityServiceClient,
   protobufPackage,
 } from '../protobuf/serv.identity';
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 
+import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import path from 'path';
 
 const protoPath = path.resolve(

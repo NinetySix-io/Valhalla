@@ -4,5 +4,5 @@
  * @returns {boolean}
  */
 export function isNil(target: unknown): target is undefined | null {
-  return target !== undefined && target !== null;
+  return target === undefined || target === null;
 }

@@ -5,7 +5,8 @@
     "module": "commonjs",
     "outDir": "./dist",
     "rootDir": "./src",
-    "declaration": true
+    "declaration": true,
+    "esModuleInterop": true
   },
   "extends": "../tsconfig/base.json",
   "include": ["src/*"],

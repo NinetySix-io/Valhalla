@@ -36,7 +36,7 @@ export class ServCoreSetup {
       url: this.config.gRpcUrl,
     };
 
-    this.logger.debug('With gRPC', options);
+    this.logger.debug('With gRPC');
 
     /**
      * If {option.url} is not provided, its default to 5000

@@ -98,7 +98,7 @@ function run() {
 
   for (const servApp of servApps) {
     const servLoc = path.resolve(appsLocation, servApp);
-    const servAppProtoDir = path.resolve(servLoc, "src", "rpc", "protobuf");
+    const servAppProtoDir = path.resolve(servLoc, "src", "protobuf");
     if (!fs.existsSync(servAppProtoDir)) {
       continue;
     }

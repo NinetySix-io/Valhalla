@@ -8,7 +8,7 @@ service:
   healthCheck:
     timeout: 1s
     interval: 10s
-    tcp: host.docker.internal:${{ service.port }}
+    tcp: host.docker.internal:3015
 
 app:
   passwordExpires: 1h

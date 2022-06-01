@@ -47,11 +47,11 @@ export class TokensStrategy
       ),
     );
 
-    if (error || !result) {
-      if (error) {
-        this.logger.error(error);
-      }
-
+    if (error) {
+      console.error(error);
+      throw new UnauthorizedException('Token is not valid or expired!');
+    } else if (!result) {
+      console.error('Unable to decode token', result);
       throw new UnauthorizedException('Token is not valid or expired!');
     }
 
