@@ -11,7 +11,6 @@ import { AccountLoggedInEvent } from '../events/account.logged.in.event';
 import { AccountTransformer } from '@app/entities/accounts/transformer';
 import { AccountsModel } from '@app/entities/accounts';
 import { CreateAccessCommand } from './create.access.command';
-import { Logger } from '@nestjs/common';
 import { PasswordsModel } from '@app/entities/passwords';
 import { RpcHandler } from '@valhalla/serv.core';
 
@@ -24,8 +23,6 @@ export class AccountLoginCommand implements ICommand {
 export class AccountLoginHandler
   implements ICommandHandler<AccountLoginCommand, AccountLoginResponse>
 {
-  private readonly logger = new Logger(AccountLoginHandler.name);
-
   constructor(
     private readonly accounts: AccountsModel,
     private readonly passwords: PasswordsModel,

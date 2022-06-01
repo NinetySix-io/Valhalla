@@ -27,26 +27,31 @@ import {
   VerifyAccountEmailResponse,
 } from '@app/protobuf';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { Controller, Logger } from '@nestjs/common';
+import { GrpcClass, LogClassMethods } from '@valhalla/serv.core';
 
 import { AccountLoginCommand } from '@app/cqrs/commands/account.login.command';
 import { AccountLogoutCommand } from '@app/cqrs/commands/account.logout.command';
 import { AccountRegisterCommand } from '@app/cqrs/commands/account.register.command';
-import { Controller } from '@nestjs/common';
 import { CreateAccessCommand } from '@app/cqrs/commands/create.access.command';
 import { DecodeAccessTokenCommand } from '@app/cqrs/commands/decode.access.token.command';
 import { DeleteRefreshTokenCommand } from '@app/cqrs/commands/delete.refresh.token.command';
 import { FindAccountQuery } from '@app/cqrs/queries/find.account.query';
 import { ForgotAccountPasswordCommand } from '@app/cqrs/commands/forgot.account.password.command';
-import { GrpcClass } from '@valhalla/serv.core';
 import { Observable } from 'rxjs';
 import { ProvisionAccessTokenCommand } from '@app/cqrs/commands/provision.access.token.command';
 import { SendAccountEmailVerificationCommand } from '@app/cqrs/commands/send.account.email.verification.command';
 import { UpdateAccountCommand } from '@app/cqrs/commands/update.account.command';
 import { UpdateAccountPasswordCommand } from '@app/cqrs/commands/update.account.password.command';
 import { VerifyAccountEmailCommand } from '@app/cqrs/commands/verify.account.email.command';
+import { isDev } from '@valhalla/utilities';
 
 @Controller()
 @GrpcClass(IDENTITY_SERVICE_NAME)
+@LogClassMethods({
+  when: isDev(),
+  onTrigger: (fnName) => Logger.debug(fnName),
+})
 export class gRpcController implements IdentityServiceController {
   constructor(
     private readonly commandBus: CommandBus,
