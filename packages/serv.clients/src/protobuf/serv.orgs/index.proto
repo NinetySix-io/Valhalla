@@ -1,0 +1,144 @@
+syntax = "proto3";
+
+package serv.orgs;
+
+service OrgsService {
+    // Orgs
+    rpc CreateOrg(CreateOrgRequest) returns (CreateOrgResponse) {}
+    rpc GetOrg(GetOrgRequest) returns (GetOrgResponse) {}
+    rpc UpdateOrg(UpdateOrgRequest) returns (UpdateOrgResponse) {}
+    rpc DeleteOrg(DeleteOrgRequest) returns (DeleteOrgResponse) {}
+    rpc OrgAvailable(OrgAvailableRequest) returns (OrgAvailableResponse) {}
+
+    // OrgMembers
+    rpc InviteOrgMember(InviteOrgMemberRequest) returns (InviteOrgMemberResponse) {}
+    rpc AcceptOrgMemberInvitation(AcceptOrgMemberInvitationRequest) returns (AcceptOrgMemberInvitationResponse) {}
+    rpc UpdateOrgMember(UpdateOrgMemberRequest) returns (UpdateOrgMemberResponse) {}
+    rpc DeleteOrgMember(DeleteOrgMemberRequest) returns (DeleteOrgMemberResponse) {}
+    rpc GetOrgMember(GetOrgMemberRequest) returns (GetOrgMemberResponse) {}
+}
+
+message Organization {
+    string id = 1;
+    string slug = 2;
+    string name = 3;
+    string createdBy = 4;
+    string createdAt = 5;
+    string updatedAt = 6;
+}
+
+message UpdateOrgPayload {
+    string name = 3;
+}
+
+enum InvitationStatus {
+    PENDING = 0;
+    ACCEPTED = 1;
+    REJECTED = 2;
+}
+
+enum OrgRole {
+    OWNER = 0;
+    ADMIN = 1;
+    DEVELOPER = 2;
+    MEMBER = 3;
+    GUESS = 4;
+}
+
+message OrgMember {
+    string id = 1;
+    string user = 2;
+    string organization = 3;
+    string invitedBy = 4;
+    string status = 5;
+    string role = 6;
+    string createdAt = 7;
+    string updatedAt = 8;
+}
+
+message CreateOrgRequest {
+    string name = 1;
+}
+
+message CreateOrgResponse {
+    Organization Organization = 1;
+}
+
+message OrgAvailableRequest {
+    string name = 1;
+}
+
+message OrgAvailableResponse {
+    bool available = 1;
+}
+
+message DeleteOrgRequest {
+    string OrgId = 1;
+}
+
+message DeleteOrgResponse {
+    Organization Organization = 1;
+}
+
+message GetOrgRequest {
+    string OrgId = 1;
+}
+
+message GetOrgResponse {
+    Organization Organization = 1;
+}
+
+message UpdateOrgRequest {
+    string id = 1;
+    UpdateOrgPayload data = 2;
+}
+
+message UpdateOrgResponse {
+    Organization Organization = 1;
+}
+
+// Org OrgMembers
+message InviteOrgMemberRequest {
+    string email = 2;
+    string userId = 3;
+    string role = 6;
+}
+
+message InviteOrgMemberResponse {
+    OrgMember OrgMember = 1;
+}
+
+message DeleteOrgMemberRequest {
+    string id = 1;
+}
+
+message DeleteOrgMemberResponse {
+    OrgMember OrgMember = 1;
+}
+
+message GetOrgMemberRequest {
+    string OrgId = 1;
+    string OrgMemberId = 2;
+}
+
+message GetOrgMemberResponse {
+    OrgMember OrgMember = 1;
+}
+
+message UpdateOrgMemberRequest {
+    string id = 1;
+    string status = 2;
+    string role = 3;
+}
+
+message UpdateOrgMemberResponse {
+    OrgMember OrgMember = 1;
+}
+
+message AcceptOrgMemberInvitationRequest {
+    string token = 1;
+}
+
+message AcceptOrgMemberInvitationResponse {
+    OrgMember OrgMember = 1;
+}

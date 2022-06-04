@@ -8,8 +8,8 @@ export function getIdentityFromCtx(meta: any) {
   const gMap = meta.getMap();
   const tempUser = gMap.user;
   const tempInApp = gMap.inapp;
-  const tempTenantInfo = gMap['x-tenant-info'];
-  const tempTenant = gMap?.tenant;
+  const tempOrgInfo = gMap['x-tenant-info'];
+  const tempOrg = gMap?.tenant;
 
   let user: any | null = null; //TODO
   let tenant: any | null = null; //TODO
@@ -24,12 +24,12 @@ export function getIdentityFromCtx(meta: any) {
     inApp = Boolean(inApp);
   }
 
-  if (tempTenant && typeof tempTenant === 'string') {
-    tenant = JSON.parse(tempTenant);
+  if (tempOrg && typeof tempOrg === 'string') {
+    tenant = JSON.parse(tempOrg);
   }
 
-  if (tempTenantInfo && typeof tempTenantInfo === 'string') {
-    tenantInfo = JSON.parse(tempTenantInfo);
+  if (tempOrgInfo && typeof tempOrgInfo === 'string') {
+    tenantInfo = JSON.parse(tempOrgInfo);
   }
 
   return {

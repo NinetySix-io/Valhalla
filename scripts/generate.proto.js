@@ -36,7 +36,7 @@ promiseExec("pwd").then(async (output) => {
   const apps = getApps(output.stdout);
 
   for await (const app of apps.apps) {
-    const rpcPath = path.resolve(appsPath, app, "src", "rpc", "protobuf");
+    const rpcPath = path.resolve(appsPath, app, "src", "protobuf");
     if (!fs.existsSync(path.resolve(rpcPath))) {
       continue;
     }
@@ -52,9 +52,7 @@ promiseExec("pwd").then(async (output) => {
     const cmd = [
       "protoc",
       "--ts_proto_out=.",
-      apps.isFromApps
-        ? "./src/rpc/**/*.proto"
-        : `./apps/${app}/src/rpc/**/*.proto`,
+      apps.isFromApps ? "./src/rpc/**/*.proto" : `./apps/${app}/src/**/*.proto`,
       `--ts_proto_opt=${opt}`,
     ];
 
