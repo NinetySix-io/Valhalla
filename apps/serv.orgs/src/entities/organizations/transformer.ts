@@ -1,10 +1,11 @@
-import { Organization as OrgProto } from '@app/protobuf';
-import { OrgSchema } from './schema';
+import { Organization as OrgProto, OrgStatus } from '@app/protobuf';
 
-export class OrgTransformer {
-  private entity: OrgSchema;
+import { OrganizationSchema } from './schema';
 
-  constructor(entity: OrgSchema) {
+export class OrganizationTransformer {
+  private entity: OrganizationSchema;
+
+  constructor(entity: OrganizationSchema) {
     this.entity = entity;
   }
 
@@ -16,6 +17,9 @@ export class OrgTransformer {
       createdAt: this.entity.createdAt.toString(),
       updatedAt: this.entity.updatedAt.toString(),
       createdBy: this.entity.createdBy.toHexString(),
+      updateBy: this.entity.updatedBy.toHexString(),
+      logoUrl: this.entity.logoUrl,
+      status: OrgStatus[this.entity.status],
     };
   }
 }

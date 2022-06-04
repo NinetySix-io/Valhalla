@@ -1,4 +1,4 @@
-import { OrgMember as OrgMemberProto } from '@app/protobuf';
+import { Member as MemberProto } from '@app/protobuf';
 import { OrgMemberSchema } from './schema';
 
 export class OrgMemberTransformer {
@@ -8,7 +8,7 @@ export class OrgMemberTransformer {
     this.entity = entity;
   }
 
-  get proto(): OrgMemberProto {
+  get proto(): MemberProto {
     return {
       id: this.entity.id,
       organization: this.entity.organization.toHexString(),
@@ -18,6 +18,8 @@ export class OrgMemberTransformer {
       status: this.entity.status,
       createdAt: this.entity.createdAt.toString(),
       updatedAt: this.entity.updatedAt.toString(),
+      updatedBy: this.entity.updatedBy.toString(),
+      profileImageUrl: this.entity.profileImageUrl,
     };
   }
 }

@@ -1,6 +1,6 @@
 import { IEvent } from '@nestjs/cqrs';
-import { OrgMember } from '@app/protobuf';
+import { Member } from '@app/protobuf';
 
-export class OrgMemberCreatedEvent implements IEvent {
-  constructor(public readonly member: OrgMember) {}
+export class OrganizationMemberCreatedEvent implements IEvent {
+  constructor(public readonly member: Member) {}
 }

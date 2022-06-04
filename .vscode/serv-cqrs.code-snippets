@@ -5,7 +5,7 @@
     "body": [
       "import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';",
       "import { Logger } from '@nestjs/common';",
-      "import { $1Response, $1Request } from '@app/rpc/protobuff/$2';",
+      "import { $1Response, $1Request } from '@app/protobuf';",
       "",
       "export class $1Query implements IQuery {",
       "\tconstructor(public readonly request: $1Request) {}",
@@ -40,13 +40,13 @@
       "import {",
       "\t$1Request,",
       "\t$1Response,",
-      "} from '@app/rpc/protobuf/$2';",
+      "} from '@app/protobuf';",
       "",
       "import { Logger } from '@nestjs/common';",
       "import { RpcHandler } from '@valhalla/serv.core';",
       "",
       "export class $1Command implements ICommand {",
-      "\tconstructor(public readonly input: $1Request) {}",
+      "\tconstructor(public readonly request: $1Request) {}",
       "}",
       "",
       "@CommandHandler($1Command)",
@@ -67,6 +67,18 @@
       "\t}",
       "}",
       ""
+    ]
+  },
+  "Event Impl": {
+    "prefix": "cEvent",
+    "description": "CQRS Event",
+    "body": [
+      "import { IEvent } from '@nestjs/cqrs';",
+      "import { $1 } from '@app/protobuf';",
+      "",
+      "export class $2Event implements IEvent {",
+      "\tconstructor(public readonly data: $1) {}",
+      "}"
     ]
   }
 }

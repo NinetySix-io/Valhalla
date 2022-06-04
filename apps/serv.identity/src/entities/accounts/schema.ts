@@ -69,11 +69,15 @@ export class AccountSchema extends BaseSchema {
 
   @prop({ type: [AccountEmailSchema], _id: true })
   @Expose()
-  @Field(() => [AccountEmailSchema])
+  @Field(() => [AccountEmailSchema], {
+    description: 'Associated email addresses',
+  })
   emails!: AccountEmailSchema[];
 
   @prop({ type: [AccountPhoneSchema], _id: true })
   @Expose()
-  @Field(() => [AccountPhoneSchema])
+  @Field(() => [AccountPhoneSchema], {
+    description: 'Associated phone numbers',
+  })
   phones!: AccountPhoneSchema[];
 }

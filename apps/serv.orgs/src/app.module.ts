@@ -1,5 +1,6 @@
 import {
   CoreModule,
+  GqlModule,
   MongoConfigService,
   ServiceRegistryModule,
 } from '@valhalla/serv.core';
@@ -15,6 +16,7 @@ import { gRpcModule } from './grpc/grpc.module';
   imports: [
     CoreModule,
     ServiceRegistryModule,
+    GqlModule,
     BootModule.forRoot({ filePath: configFilePath }),
     TypegooseModule.forRootAsync({ useClass: MongoConfigService }),
     gRpcModule,
