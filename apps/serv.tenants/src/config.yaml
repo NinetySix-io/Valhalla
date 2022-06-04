@@ -1,7 +1,7 @@
 service:
   discoveryHost: localhost
   name: serv.tenants
-  port: 3004
+  port: 3003
   tags: ['v1.0.0', 'microservice', 'serv', 'grpc', 'rest', 'graphql']
   healthCheck:
     timeout: 1s

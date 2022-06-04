@@ -1,14 +1,14 @@
 service:
   discoveryHost: localhost
   name: serv.identity
-  port: 3005
+  port: 3001
   tags: ['v1.0.0', 'microservice', 'serv', 'grpc', 'rest', 'graphql']
   maxRetry: 5
   retryInterval: 5000
   healthCheck:
     timeout: 1s
     interval: 10s
-    tcp: host.docker.internal:3015
+    tcp: host.docker.internal:3011
 
 app:
   passwordExpires: 1h
