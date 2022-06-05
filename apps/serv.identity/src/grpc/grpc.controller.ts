@@ -9,6 +9,8 @@ import {
   IdentityServiceController,
   LoginWithEmailRequest,
   LoginWithEmailResponse,
+  LoginWithPhoneRequest,
+  LoginWithPhoneResponse,
   LogoutRequest,
   LogoutResponse,
   ProvisionAccessTokenRequest,
@@ -16,11 +18,14 @@ import {
   RegisterRequest,
   RegisterResponse,
   SendEmailVerificationRequest,
-  SendEmailVerificationResponse,
+  SendPhoneVerificationRequest,
   UpdateAccountRequest,
   UpdateAccountResponse,
-  VerifyAccountEmailRequest,
-  VerifyAccountEmailResponse,
+  Verification,
+  VerifyEmailRequest,
+  VerifyEmailResponse,
+  VerifyPhoneRequest,
+  VerifyPhoneResponse,
 } from '@app/protobuf';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Controller, Logger } from '@nestjs/common';
@@ -31,13 +36,16 @@ import { DecodeAccessTokenCommand } from '@app/cqrs/commands/decode.access.token
 import { DeleteRefreshTokenCommand } from '@app/cqrs/commands/delete.refresh.token.command';
 import { FindAccountQuery } from '@app/cqrs/queries/find.account.query';
 import { LoginWithEmailCommand } from '@app/cqrs/commands/login.with.email.command';
+import { LoginWithPhoneCommand } from '@app/cqrs/commands/login.with.phone.command';
 import { LogoutCommand } from '@app/cqrs/commands/logout.command';
 import { Observable } from 'rxjs';
 import { ProvisionAccessTokenCommand } from '@app/cqrs/commands/provision.access.token.command';
 import { RegisterCommand } from '@app/cqrs/commands/register.command';
 import { SendEmailVerificationCommand } from '@app/cqrs/commands/send.email.verification.command';
+import { SendPhoneVerificationCommand } from '@app/cqrs/commands/send.phone.verification.command';
 import { UpdateAccountCommand } from '@app/cqrs/commands/update.account.command';
-import { VerifyAccountEmailCommand } from '@app/cqrs/commands/verify.account.email.command';
+import { VerifyEmailCommand } from '@app/cqrs/commands/verify.email.command';
+import { VerifyPhoneCommand } from '@app/cqrs/commands/verify.phone.command';
 import { isDev } from '@valhalla/utilities';
 
 @Controller()
@@ -51,12 +59,38 @@ export class gRpcController implements IdentityServiceController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
+  loginWithPhone(
+    request: LoginWithPhoneRequest,
+  ):
+    | LoginWithPhoneResponse
+    | Promise<LoginWithPhoneResponse>
+    | Observable<LoginWithPhoneResponse> {
+    return this.commandBus.execute(new LoginWithPhoneCommand(request));
+  }
+  verifyEmail(
+    request: VerifyEmailRequest,
+  ):
+    | VerifyEmailResponse
+    | Promise<VerifyEmailResponse>
+    | Observable<VerifyEmailResponse> {
+    return this.commandBus.execute(new VerifyEmailCommand(request));
+  }
+  verifyPhone(
+    request: VerifyPhoneRequest,
+  ):
+    | VerifyPhoneResponse
+    | Promise<VerifyPhoneResponse>
+    | Observable<VerifyPhoneResponse> {
+    return this.commandBus.execute(new VerifyPhoneCommand(request));
+  }
+  sendPhoneVerification(
+    request: SendPhoneVerificationRequest,
+  ): Verification | Promise<Verification> | Observable<Verification> {
+    return this.commandBus.execute(new SendPhoneVerificationCommand(request));
+  }
   sendEmailVerification(
     request: SendEmailVerificationRequest,
-  ):
-    | SendEmailVerificationResponse
-    | Promise<SendEmailVerificationResponse>
-    | Observable<SendEmailVerificationResponse> {
+  ): Verification | Promise<Verification> | Observable<Verification> {
     return this.commandBus.execute(new SendEmailVerificationCommand(request));
   }
   register(
@@ -106,14 +140,6 @@ export class gRpcController implements IdentityServiceController {
     request: FindAccountRequest,
   ): Account | Promise<Account> | Observable<Account> {
     return this.queryBus.execute(new FindAccountQuery(request));
-  }
-  verifyAccountEmail(
-    request: VerifyAccountEmailRequest,
-  ):
-    | VerifyAccountEmailResponse
-    | Promise<VerifyAccountEmailResponse>
-    | Observable<VerifyAccountEmailResponse> {
-    return this.commandBus.execute(new VerifyAccountEmailCommand(request));
   }
 
   updateAccount(

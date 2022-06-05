@@ -4,49 +4,43 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import {
-  VerifyAccountEmailRequest,
-  VerifyAccountEmailResponse,
-} from '@app/protobuf';
+import { VerifyPhoneRequest, VerifyPhoneResponse } from '@app/protobuf';
 
 import { AccountTransformer } from '@app/entities/accounts/transformer';
 import { AccountsModel } from '@app/entities/accounts';
-import { EmailVerifiedEvent } from '../events/email.verified.event';
+import { PhoneVerifiedEvent } from '../events/phone.verified.event';
 import { RpcHandler } from '@valhalla/serv.core';
 import { VerificationsModel } from '@app/entities/verifications';
 
-export class VerifyAccountEmailCommand implements ICommand {
-  constructor(readonly request: VerifyAccountEmailRequest) {}
+export class VerifyPhoneCommand implements ICommand {
+  constructor(public readonly request: VerifyPhoneRequest) {}
 }
 
-@CommandHandler(VerifyAccountEmailCommand)
+@CommandHandler(VerifyPhoneCommand)
 @RpcHandler()
-export class VerifyAccountEmailHandler
-  implements
-    ICommandHandler<VerifyAccountEmailCommand, VerifyAccountEmailResponse>
+export class VerifyPhoneHandler
+  implements ICommandHandler<VerifyPhoneCommand, VerifyPhoneResponse>
 {
   constructor(
+    private readonly eventBus: EventBus,
     private readonly accounts: AccountsModel,
     private readonly verifications: VerificationsModel,
-    private readonly eventBus: EventBus,
   ) {}
 
-  async execute(
-    command: VerifyAccountEmailCommand,
-  ): Promise<VerifyAccountEmailResponse> {
-    const { email, verificationCode, accountId } = command.request;
+  async execute(command: VerifyPhoneCommand): Promise<VerifyPhoneResponse> {
+    const { phone, verificationCode, accountId } = command.request;
 
     const account = await this.accounts
       .findById(accountId)
       .orFail(() => new Error('Account not found!'));
 
-    const accountEmail = account.emails.find((item) => item.value === email);
-    if (!accountEmail) {
-      throw new Error('Email is not associated with this account!');
+    const accountPhone = account.phones.find((item) => item.value === phone);
+    if (!accountPhone) {
+      throw new Error('Phone number is not associated with this account!');
     }
 
     const verification = await this.verifications
-      .findById(accountEmail.verification)
+      .findById(accountPhone.verification)
       .orFail(() => new Error('Verification not found!'));
 
     const isValid = await this.verifications.validateCode(
@@ -58,14 +52,14 @@ export class VerifyAccountEmailHandler
       throw new Error('Verification code does not match!');
     }
 
-    accountEmail.isVerified = true;
-    accountEmail.verifiedDate = new Date();
+    accountPhone.isVerified = true;
+    accountPhone.verifiedDate = new Date();
     await account.save();
 
     this.eventBus.publish(
-      new EmailVerifiedEvent({
+      new PhoneVerifiedEvent({
         ...new AccountTransformer(account).proto,
-        emailVerified: accountEmail.value,
+        phoneVerified: accountPhone.value,
       }),
     );
 

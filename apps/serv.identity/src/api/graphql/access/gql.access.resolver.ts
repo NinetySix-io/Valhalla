@@ -1,16 +1,18 @@
+import { gRpcController } from '@app/grpc/grpc.controller';
+import { BadRequestException } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
   Auth,
   AuthManager,
   RefreshToken,
   resolveRpcRequest,
 } from '@valhalla/serv.core';
-import { gRpcController } from '@app/grpc/grpc.controller';
-import { BadRequestException } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { AccountLoginInput } from './inputs/login.input';
+import { LoginWithEmailInput } from './inputs/login.with.email.input';
+import { LoginWithPhoneInput } from './inputs/login.with.phone.input';
 import { AccountRegisterInput } from './inputs/register.input';
 import { AccountLoginResponse } from './responses/login.response';
 import { AccountRegisterResponse } from './responses/register.response';
+
 @Resolver()
 export class GqlAuthResolver {
   constructor(private readonly rpcClient: gRpcController) {}
@@ -21,10 +23,7 @@ export class GqlAuthResolver {
   async registerAccount(
     @Args('input') input: AccountRegisterInput,
   ): Promise<AccountRegisterResponse> {
-    const result = await resolveRpcRequest(
-      this.rpcClient.accountRegister(input),
-    );
-
+    const result = await resolveRpcRequest(this.rpcClient.register(input));
     if (!result.account) {
       throw new Error('Unable to register!');
     }
@@ -35,19 +34,46 @@ export class GqlAuthResolver {
   }
 
   @Mutation(() => AccountLoginResponse, {
-    description: 'Login to account',
+    description: 'Login to account with email address',
   })
-  async loginToAccount(
-    @Args('input') input: AccountLoginInput,
+  async loginWithEmail(
+    @Args('input') input: LoginWithEmailInput,
     @Auth() auth: AuthManager,
   ): Promise<AccountLoginResponse> {
-    const result = await resolveRpcRequest(this.rpcClient.accountLogin(input));
+    const result = await resolveRpcRequest(
+      this.rpcClient.loginWithEmail(input),
+    );
+
+    if (!result.account) {
+      throw new Error('Unable to login!');
+    }
+
     auth.setRefreshToken(result.refreshToken);
     auth.setAccessToken(result.accessToken);
 
+    return {
+      accountId: result.account.id,
+      accessToken: result.accessToken,
+    };
+  }
+
+  @Mutation(() => AccountLoginResponse, {
+    description: 'Login to account with phone number',
+  })
+  async loginWithPhone(
+    @Args('input') input: LoginWithPhoneInput,
+    @Auth() auth: AuthManager,
+  ): Promise<AccountLoginResponse> {
+    const result = await resolveRpcRequest(
+      this.rpcClient.loginWithPhone(input),
+    );
+
     if (!result.account) {
-      throw new Error('Unable to register!');
+      throw new Error('Unable to login!');
     }
+
+    auth.setRefreshToken(result.refreshToken);
+    auth.setAccessToken(result.accessToken);
 
     return {
       accountId: result.account.id,

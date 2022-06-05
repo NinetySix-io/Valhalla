@@ -4,6 +4,18 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "serv.orgs";
 
+export enum OrgPlan {
+  FREE = 0,
+  UNRECOGNIZED = -1,
+}
+
+export enum OrgStatus {
+  ACTIVE = 0,
+  INACTIVE = 1,
+  SUSPENDED = 2,
+  UNRECOGNIZED = -1,
+}
+
 export enum InvitationStatus {
   PENDING = 0,
   ACCEPTED = 1,
@@ -20,20 +32,39 @@ export enum OrgRole {
   UNRECOGNIZED = -1,
 }
 
+export interface GetUserMembershipsRequest {
+  userId: string;
+}
+
+export interface GetUserMembershipsResponse {
+  organizations: Organization[];
+}
+
 export interface Organization {
   id: string;
   slug: string;
   name: string;
   createdBy: string;
   createdAt: string;
+  updateBy: string;
   updatedAt: string;
+  logoUrl: string;
+  status: OrgStatus;
 }
 
-export interface UpdateOrgPayload {
-  name: string;
+export interface UpdateOrgLogoRequest {
+  imageUrl: string;
+  orgId: string;
+  requestedUserId: string;
 }
 
-export interface OrgMember {
+export interface UpdateOrgPlanRequest {
+  plan: OrgPlan;
+  orgId: string;
+  requestedUserId: string;
+}
+
+export interface Member {
   id: string;
   user: string;
   organization: string;
@@ -42,202 +73,141 @@ export interface OrgMember {
   role: string;
   createdAt: string;
   updatedAt: string;
+  updatedBy: string;
+  profileImageUrl: string;
 }
 
 export interface CreateOrgRequest {
   name: string;
+  requestedUserId: string;
+  plan: OrgPlan;
 }
 
-export interface CreateOrgResponse {
-  Organization: Organization | undefined;
+export interface ArchiveOrgRequest {
+  orgId: string;
+  requestedUserId: string;
 }
 
-export interface OrgAvailableRequest {
-  name: string;
-}
-
-export interface OrgAvailableResponse {
-  available: boolean;
-}
-
-export interface DeleteOrgRequest {
-  OrgId: string;
-}
-
-export interface DeleteOrgResponse {
-  Organization: Organization | undefined;
+export interface RestoreOrgRequest {
+  orgId: string;
+  requestedUserId: string;
 }
 
 export interface GetOrgRequest {
-  OrgId: string;
+  orgId: string;
 }
 
-export interface GetOrgResponse {
-  Organization: Organization | undefined;
-}
-
-export interface UpdateOrgRequest {
-  id: string;
-  data: UpdateOrgPayload | undefined;
-}
-
-export interface UpdateOrgResponse {
-  Organization: Organization | undefined;
-}
-
-/** Org OrgMembers */
-export interface InviteOrgMemberRequest {
+export interface InviteMemberRequest {
   email: string;
   userId: string;
   role: string;
 }
 
-export interface InviteOrgMemberResponse {
-  OrgMember: OrgMember | undefined;
+export interface InviteMemberResponse {
+  member: Member | undefined;
 }
 
-export interface DeleteOrgMemberRequest {
-  id: string;
+export interface MarkDeleteMemberRequest {
+  orgId: string;
+  memberId: string;
+  requestedUserId: string;
 }
 
-export interface DeleteOrgMemberResponse {
-  OrgMember: OrgMember | undefined;
+export interface MarkDeleteMemberResponse {
+  member: Member | undefined;
 }
 
-export interface GetOrgMemberRequest {
-  OrgId: string;
-  OrgMemberId: string;
+export interface GetMemberRequest {
+  orgId: string;
+  userId: string;
 }
 
-export interface GetOrgMemberResponse {
-  OrgMember: OrgMember | undefined;
-}
-
-export interface UpdateOrgMemberRequest {
-  id: string;
-  status: string;
-  role: string;
-}
-
-export interface UpdateOrgMemberResponse {
-  OrgMember: OrgMember | undefined;
-}
-
-export interface AcceptOrgMemberInvitationRequest {
+export interface AcceptMemberInvitationRequest {
   token: string;
 }
 
-export interface AcceptOrgMemberInvitationResponse {
-  OrgMember: OrgMember | undefined;
+export interface AcceptMemberInvitationResponse {
+  member: Member | undefined;
 }
 
 export const SERV_ORGS_PACKAGE_NAME = "serv.orgs";
 
 export interface OrgsServiceClient {
-  /** Orgs */
+  createOrg(request: CreateOrgRequest): Observable<Organization>;
 
-  createOrg(request: CreateOrgRequest): Observable<CreateOrgResponse>;
+  getOrg(request: GetOrgRequest): Observable<Organization>;
 
-  getOrg(request: GetOrgRequest): Observable<GetOrgResponse>;
+  archiveOrg(request: ArchiveOrgRequest): Observable<Organization>;
 
-  updateOrg(request: UpdateOrgRequest): Observable<UpdateOrgResponse>;
+  restoreOrg(request: RestoreOrgRequest): Observable<Organization>;
 
-  deleteOrg(request: DeleteOrgRequest): Observable<DeleteOrgResponse>;
+  updateOrgPlan(request: UpdateOrgPlanRequest): Observable<Organization>;
 
-  orgAvailable(request: OrgAvailableRequest): Observable<OrgAvailableResponse>;
+  updateOrgLogo(request: UpdateOrgLogoRequest): Observable<Organization>;
 
-  /** OrgMembers */
+  /**
+   * rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse) {}
+   * rpc AcceptMemberInvitation(AcceptMemberInvitationRequest) returns (AcceptMemberInvitationResponse) {}
+   */
 
-  inviteOrgMember(
-    request: InviteOrgMemberRequest
-  ): Observable<InviteOrgMemberResponse>;
+  markDeleteMember(
+    request: MarkDeleteMemberRequest
+  ): Observable<MarkDeleteMemberResponse>;
 
-  acceptOrgMemberInvitation(
-    request: AcceptOrgMemberInvitationRequest
-  ): Observable<AcceptOrgMemberInvitationResponse>;
+  getMember(request: GetMemberRequest): Observable<Member>;
 
-  updateOrgMember(
-    request: UpdateOrgMemberRequest
-  ): Observable<UpdateOrgMemberResponse>;
-
-  deleteOrgMember(
-    request: DeleteOrgMemberRequest
-  ): Observable<DeleteOrgMemberResponse>;
-
-  getOrgMember(request: GetOrgMemberRequest): Observable<GetOrgMemberResponse>;
+  getUserMemberships(
+    request: GetUserMembershipsRequest
+  ): Observable<GetUserMembershipsResponse>;
 }
 
 export interface OrgsServiceController {
-  /** Orgs */
-
   createOrg(
     request: CreateOrgRequest
-  ):
-    | Promise<CreateOrgResponse>
-    | Observable<CreateOrgResponse>
-    | CreateOrgResponse;
+  ): Promise<Organization> | Observable<Organization> | Organization;
 
   getOrg(
     request: GetOrgRequest
-  ): Promise<GetOrgResponse> | Observable<GetOrgResponse> | GetOrgResponse;
+  ): Promise<Organization> | Observable<Organization> | Organization;
 
-  updateOrg(
-    request: UpdateOrgRequest
+  archiveOrg(
+    request: ArchiveOrgRequest
+  ): Promise<Organization> | Observable<Organization> | Organization;
+
+  restoreOrg(
+    request: RestoreOrgRequest
+  ): Promise<Organization> | Observable<Organization> | Organization;
+
+  updateOrgPlan(
+    request: UpdateOrgPlanRequest
+  ): Promise<Organization> | Observable<Organization> | Organization;
+
+  updateOrgLogo(
+    request: UpdateOrgLogoRequest
+  ): Promise<Organization> | Observable<Organization> | Organization;
+
+  /**
+   * rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse) {}
+   * rpc AcceptMemberInvitation(AcceptMemberInvitationRequest) returns (AcceptMemberInvitationResponse) {}
+   */
+
+  markDeleteMember(
+    request: MarkDeleteMemberRequest
   ):
-    | Promise<UpdateOrgResponse>
-    | Observable<UpdateOrgResponse>
-    | UpdateOrgResponse;
+    | Promise<MarkDeleteMemberResponse>
+    | Observable<MarkDeleteMemberResponse>
+    | MarkDeleteMemberResponse;
 
-  deleteOrg(
-    request: DeleteOrgRequest
+  getMember(
+    request: GetMemberRequest
+  ): Promise<Member> | Observable<Member> | Member;
+
+  getUserMemberships(
+    request: GetUserMembershipsRequest
   ):
-    | Promise<DeleteOrgResponse>
-    | Observable<DeleteOrgResponse>
-    | DeleteOrgResponse;
-
-  orgAvailable(
-    request: OrgAvailableRequest
-  ):
-    | Promise<OrgAvailableResponse>
-    | Observable<OrgAvailableResponse>
-    | OrgAvailableResponse;
-
-  /** OrgMembers */
-
-  inviteOrgMember(
-    request: InviteOrgMemberRequest
-  ):
-    | Promise<InviteOrgMemberResponse>
-    | Observable<InviteOrgMemberResponse>
-    | InviteOrgMemberResponse;
-
-  acceptOrgMemberInvitation(
-    request: AcceptOrgMemberInvitationRequest
-  ):
-    | Promise<AcceptOrgMemberInvitationResponse>
-    | Observable<AcceptOrgMemberInvitationResponse>
-    | AcceptOrgMemberInvitationResponse;
-
-  updateOrgMember(
-    request: UpdateOrgMemberRequest
-  ):
-    | Promise<UpdateOrgMemberResponse>
-    | Observable<UpdateOrgMemberResponse>
-    | UpdateOrgMemberResponse;
-
-  deleteOrgMember(
-    request: DeleteOrgMemberRequest
-  ):
-    | Promise<DeleteOrgMemberResponse>
-    | Observable<DeleteOrgMemberResponse>
-    | DeleteOrgMemberResponse;
-
-  getOrgMember(
-    request: GetOrgMemberRequest
-  ):
-    | Promise<GetOrgMemberResponse>
-    | Observable<GetOrgMemberResponse>
-    | GetOrgMemberResponse;
+    | Promise<GetUserMembershipsResponse>
+    | Observable<GetUserMembershipsResponse>
+    | GetUserMembershipsResponse;
 }
 
 export function OrgsServiceControllerMethods() {
@@ -245,14 +215,13 @@ export function OrgsServiceControllerMethods() {
     const grpcMethods: string[] = [
       "createOrg",
       "getOrg",
-      "updateOrg",
-      "deleteOrg",
-      "orgAvailable",
-      "inviteOrgMember",
-      "acceptOrgMemberInvitation",
-      "updateOrgMember",
-      "deleteOrgMember",
-      "getOrgMember",
+      "archiveOrg",
+      "restoreOrg",
+      "updateOrgPlan",
+      "updateOrgLogo",
+      "markDeleteMember",
+      "getMember",
+      "getUserMemberships",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(

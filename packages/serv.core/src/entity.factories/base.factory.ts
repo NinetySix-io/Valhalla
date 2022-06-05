@@ -148,6 +148,21 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
   }
 
   /**
+   * It updates many documents in the database.
+   * @param filter - FilterQuery<DocumentType<TModel>> = {}
+   * @param updateQuery - UpdateQuery<DocumentType<TModel>>
+   * @param options - QueryOptions<DocumentType<TModel>> & { upsert?: boolean } = {},
+   * @returns The return type of the updateMany method of the model.
+   */
+  updateMany(
+    filter: FilterQuery<DocumentType<TModel>> = {},
+    updateQuery: UpdateQuery<DocumentType<TModel>>,
+    options: QueryOptions<DocumentType<TModel>> & { upsert?: boolean } = {},
+  ): ReturnType<BaseFactory<TModel>['_model']['updateMany']> {
+    return this._model.updateMany(filter, updateQuery, options);
+  }
+
+  /**
    * It finds a document by its id and updates it with the updateQuery
    * @param {string} id - The id of the document you want to update.
    * @param updateQuery - This is the query that will be used to update the document.

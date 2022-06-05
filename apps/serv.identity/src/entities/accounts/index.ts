@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseFactory, CreatePayload, ModelType } from '@valhalla/serv.core';
-import { compact, PartialBy } from '@valhalla/utilities';
+import { BaseFactory, ModelType } from '@valhalla/serv.core';
 import { InjectModel } from 'nestjs-typegoose';
 import { AccountSchema } from './schema';
 
@@ -14,79 +13,142 @@ export class AccountsModel extends BaseFactory<AccountSchema> {
   }
 
   /**
-   * It creates a user with the given firstName, lastName, displayName, email, and phone
-   * @param user
-   * @returns A promise that resolves to a AccountSchema
+   * Delete all unverified emails that are not primary emails
+   *
+   * @param {string} email - The email address to delete.
+   * @returns A promise that resolves to the number of documents that were updated.
    */
-  createAccount(
-    user: PartialBy<
-      CreatePayload<
-        Omit<AccountSchema, 'emails' | 'phones'> & {
-          email: string;
-          phone: string;
-        }
-      >,
-      'displayName' | 'phone'
-    >,
-  ) {
-    const displayName = user.displayName || user.firstName || user.email;
-    return this.create({
-      firstName: user.firstName ?? '',
-      lastName: user.lastName ?? '',
-      displayName,
-      emails: [
-        {
-          value: user.email,
-          isPrimary: true,
-          isVerified: false,
+  deleteAllUnverifiedEmails(email: string) {
+    return this.updateMany(
+      {
+        emails: {
+          $elemMath: {
+            value: email,
+            isVerified: false,
+            isPrimary: false,
+          },
         },
-      ],
-      phones: compact([
-        user.phone && {
-          value: user.phone,
-          isPrimary: true,
-          isVerified: false,
+      },
+      {
+        $pull: {
+          emails: {
+            value: email,
+            isVerified: false,
+            isPrimary: false,
+          },
         },
-      ]),
-    });
+      },
+    );
   }
 
   /**
-   * It finds a user by username, where username is either the primary email or the primary phone
-   * number
-   * @param {string} username - The username to search for.
-   * @returns A promise that resolves to a user object.
+   * It deletes all unverified phones that are not primary phones
+   * @param {string} phone - string - the phone number to be deleted
+   * @returns A promise that resolves to the number of documents that were updated.
    */
-  findByUsername(username: string) {
+  deleteAllUnverifiedPhone(phone: string) {
+    return this.updateMany(
+      {
+        phones: {
+          $elemMath: {
+            value: phone,
+            isVerified: false,
+            isPrimary: false,
+          },
+        },
+      },
+      {
+        $pull: {
+          phones: {
+            value: phone,
+            isVerified: false,
+            isPrimary: false,
+          },
+        },
+      },
+    );
+  }
+
+  /**
+   * It finds a user by email, but only if the email is either the primary email or a verified email
+   * @param {string} email - The email address to search for.
+   * @returns A promise that resolves to a user document.
+   */
+  findByValidEmail(email: string) {
     return this.findOne({
       $or: [
         {
-          'emails.value': username.trim(),
-          'emails.isPrimary': true,
+          'email.value': email,
+          isPrimary: true,
         },
         {
-          'phones.value': username.trim(),
-          'phones.isPrimary': true,
+          'email.value': email,
+          isVerified: true,
         },
       ],
     });
   }
 
   /**
-   * Check if a user exists with the given phone number.
-   * @param {string} phone - The phone number to check for.
-   * @returns A boolean value.
+   * It finds a user by phone number, but only if the phone number is either the primary phone number
+   * or a verified phone number
+   * @param {string} phone - The phone number to search for.
+   * @returns A promise that resolves to a user document.
    */
-  phoneExists(phone: string) {
-    return this.exists({ 'phones.value': phone.trim() });
+  findByValidPhone(phone: string) {
+    return this.findOne({
+      $or: [
+        {
+          'phone.value': phone,
+          isPrimary: true,
+        },
+        {
+          'phone.value': phone,
+          isVerified: true,
+        },
+      ],
+    });
   }
 
   /**
-   * It returns true if the email exists in the database
-   * @param {string} email - string - the email address to check
+   * It checks if a phone number is already taken by another user
+   * @param {string} phone - string - the phone number to check
+   * @returns A boolean value
+   */
+  isPhoneTaken(phone: string) {
+    const trimmed = phone.trim();
+    return this.exists({
+      $or: [
+        {
+          'phones.value': trimmed,
+          isVerified: true,
+        },
+        {
+          'phones.value': trimmed,
+          isPrimary: true,
+        },
+      ],
+    });
+  }
+
+  /**
+   * It checks if the email is already taken by another user
+   * @param {string} email - The email address to check.
    * @returns A boolean value.
    */
-  emailExists(email: string) {
-    return this.exists({ 'emails.value': email.trim() });
+  isEmailTaken(email: string) {
+    const trimmed = email.trim();
+    return this.exists({
+      $or: [
+        {
+          'emails.value': trimmed,
+          isVerified: true,
+        },
+        {
+          'emails.value': trimmed,
+          isPrimary: true,
+        },
+      ],
+    });
   }
 }

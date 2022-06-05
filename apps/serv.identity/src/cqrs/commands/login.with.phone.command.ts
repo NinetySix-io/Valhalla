@@ -7,37 +7,38 @@ import {
 } from '@nestjs/cqrs';
 import {
   CreateAccessResponse,
-  LoginWithEmailRequest,
-  LoginWithEmailResponse,
+  LoginWithPhoneRequest,
+  LoginWithPhoneResponse,
 } from '@app/protobuf';
 
 import { AccountLoggedInEvent } from '../events/account.logged.in.event';
 import { AccountTransformer } from '@app/entities/accounts/transformer';
 import { AccountsModel } from '@app/entities/accounts';
 import { CreateAccessCommand } from './create.access.command';
+import { Logger } from '@nestjs/common';
 import { RpcHandler } from '@valhalla/serv.core';
 import { VerificationsModel } from '@app/entities/verifications';
 
-export class LoginWithEmailCommand implements ICommand {
-  constructor(public readonly cmd: LoginWithEmailRequest) {}
+export class LoginWithPhoneCommand implements ICommand {
+  constructor(public readonly request: LoginWithPhoneRequest) {}
 }
 
-@CommandHandler(LoginWithEmailCommand)
+@CommandHandler(LoginWithPhoneCommand)
 @RpcHandler()
-export class LoginWithEmailHandler
-  implements ICommandHandler<LoginWithEmailCommand, LoginWithEmailResponse>
+export class LoginWithPhoneHandler
+  implements ICommandHandler<LoginWithPhoneCommand, LoginWithPhoneResponse>
 {
   constructor(
-    private readonly accounts: AccountsModel,
-    private readonly verifications: VerificationsModel,
     private readonly eventBus: EventBus,
     private readonly commandBus: CommandBus,
+    private readonly accounts: AccountsModel,
+    private readonly verifications: VerificationsModel,
   ) {}
 
   async execute(
-    command: LoginWithEmailCommand,
-  ): Promise<LoginWithEmailResponse> {
-    const { verificationCode, verificationId, email } = command.cmd;
+    command: LoginWithPhoneCommand,
+  ): Promise<LoginWithPhoneResponse> {
+    const { verificationCode, verificationId, phone } = command.request;
     const verification = await this.verifications
       .findById(verificationId)
       .orFail(() => new Error('Verification not found!'));
@@ -52,7 +53,7 @@ export class LoginWithEmailHandler
     }
 
     const account = await this.accounts
-      .findByValidEmail(email)
+      .findByValidPhone(phone)
       .orFail(() => new Error('Account not found!'));
 
     const accountProto = new AccountTransformer(account).proto;

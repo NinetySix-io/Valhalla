@@ -10,7 +10,7 @@ export class VerificationTransformer extends VerificationSchema {
   get proto(): Proto {
     return {
       id: this.id,
-      owner: this.owner.toHexString(),
+      owner: this.owner?.toHexString(),
       expiresAt: this.expiresAt.toString(),
     };
   }

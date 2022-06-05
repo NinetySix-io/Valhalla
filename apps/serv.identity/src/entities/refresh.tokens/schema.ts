@@ -4,7 +4,7 @@ import { index, prop } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
 
 @SimpleModel('refresh-tokens')
-@index({ user: 1 })
+@index({ account: 1 })
 @ExpiryIndex({ expiresAt: 1 })
 export class RefreshTokenSchema extends BaseSchema {
   @prop()

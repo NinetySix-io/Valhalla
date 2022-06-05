@@ -29,7 +29,7 @@ class AccountEmailSchema extends OmitType(BaseSchema, ['_id', 'id']) {
 
   @prop()
   @Exclude()
-  @Field({ description: 'Verification ID' })
+  @Field(() => String, { description: 'Verification ID' })
   verification!: mongoose.Types.ObjectId;
 }
 
@@ -43,12 +43,12 @@ class AccountPhoneSchema extends OmitType(BaseSchema, ['_id', 'id']) {
 
   @prop()
   @Expose()
-  @Field({ description: 'Whether email address is primary' })
+  @Field({ description: 'Whether phone number is primary' })
   isPrimary!: boolean;
 
   @prop()
   @Expose()
-  @Field({ description: 'Whether email address is verified' })
+  @Field({ description: 'Whether phone number is verified' })
   isVerified!: boolean;
 
   @prop()
@@ -58,7 +58,7 @@ class AccountPhoneSchema extends OmitType(BaseSchema, ['_id', 'id']) {
 
   @prop()
   @Exclude()
-  @Field({ description: 'Verification ID' })
+  @Field(() => String, { description: 'Verification ID' })
   verification!: mongoose.Types.ObjectId;
 }
 

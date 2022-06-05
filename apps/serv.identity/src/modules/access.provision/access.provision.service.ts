@@ -50,9 +50,10 @@ export class AccessProvisionService {
     refreshToken: string;
     accessToken: string;
   }> {
-    await this.refreshTokens.deleteMany({ user: account.id });
+    const accountId = new mongoose.Types.ObjectId(account.id);
+    await this.refreshTokens.deleteMany({ account: accountId });
     const token = await this.refreshTokens.create({
-      account: account.id,
+      account: accountId,
       expiresAt: this.bootConfig.refreshTokenExpiry,
     });
 

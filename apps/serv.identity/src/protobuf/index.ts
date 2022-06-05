@@ -4,17 +4,39 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "serv.identity";
 
-export interface SendEmailVerificationRequest {
+export interface VerifyPhoneRequest {
+  phone: string;
+  verificationCode: string;
   accountId: string;
 }
 
-export interface SendEmailVerificationResponse {
-  verification: Verification | undefined;
+export interface VerifyPhoneResponse {
+  verificationId: string;
+}
+
+export interface LoginWithPhoneRequest {
+  phone: string;
+  verificationCode: string;
+  verificationId: string;
+}
+
+export interface LoginWithPhoneResponse {
+  account: Account | undefined;
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface SendEmailVerificationRequest {
+  email: string;
+}
+
+export interface SendPhoneVerificationRequest {
+  phone: string;
 }
 
 export interface Verification {
   id: string;
-  owner: string;
+  owner?: string | undefined;
   expiresAt: string;
 }
 
@@ -85,8 +107,8 @@ export interface LoginWithEmailResponse {
 }
 
 export interface LoginWithEmailRequest {
+  email: string;
   verificationCode: string;
-  username: string;
   verificationId: string;
 }
 
@@ -98,13 +120,13 @@ export interface LogoutResponse {
   success: boolean;
 }
 
-export interface VerifyAccountEmailRequest {
+export interface VerifyEmailRequest {
   email: string;
   verificationCode: string;
   accountId: string;
 }
 
-export interface VerifyAccountEmailResponse {
+export interface VerifyEmailResponse {
   verificationId: string;
 }
 
@@ -146,19 +168,27 @@ export interface IdentityServiceClient {
 
   sendEmailVerification(
     request: SendEmailVerificationRequest
-  ): Observable<SendEmailVerificationResponse>;
+  ): Observable<Verification>;
+
+  sendPhoneVerification(
+    request: SendPhoneVerificationRequest
+  ): Observable<Verification>;
 
   loginWithEmail(
     request: LoginWithEmailRequest
   ): Observable<LoginWithEmailResponse>;
 
+  loginWithPhone(
+    request: LoginWithPhoneRequest
+  ): Observable<LoginWithPhoneResponse>;
+
   logout(request: LogoutRequest): Observable<LogoutResponse>;
 
-  findAccount(request: FindAccountRequest): Observable<Account>;
+  verifyEmail(request: VerifyEmailRequest): Observable<VerifyEmailResponse>;
 
-  verifyAccountEmail(
-    request: VerifyAccountEmailRequest
-  ): Observable<VerifyAccountEmailResponse>;
+  verifyPhone(request: VerifyPhoneRequest): Observable<VerifyPhoneResponse>;
+
+  findAccount(request: FindAccountRequest): Observable<Account>;
 
   updateAccount(
     request: UpdateAccountRequest
@@ -187,10 +217,11 @@ export interface IdentityServiceController {
 
   sendEmailVerification(
     request: SendEmailVerificationRequest
-  ):
-    | Promise<SendEmailVerificationResponse>
-    | Observable<SendEmailVerificationResponse>
-    | SendEmailVerificationResponse;
+  ): Promise<Verification> | Observable<Verification> | Verification;
+
+  sendPhoneVerification(
+    request: SendPhoneVerificationRequest
+  ): Promise<Verification> | Observable<Verification> | Verification;
 
   loginWithEmail(
     request: LoginWithEmailRequest
@@ -199,20 +230,34 @@ export interface IdentityServiceController {
     | Observable<LoginWithEmailResponse>
     | LoginWithEmailResponse;
 
+  loginWithPhone(
+    request: LoginWithPhoneRequest
+  ):
+    | Promise<LoginWithPhoneResponse>
+    | Observable<LoginWithPhoneResponse>
+    | LoginWithPhoneResponse;
+
   logout(
     request: LogoutRequest
   ): Promise<LogoutResponse> | Observable<LogoutResponse> | LogoutResponse;
 
+  verifyEmail(
+    request: VerifyEmailRequest
+  ):
+    | Promise<VerifyEmailResponse>
+    | Observable<VerifyEmailResponse>
+    | VerifyEmailResponse;
+
+  verifyPhone(
+    request: VerifyPhoneRequest
+  ):
+    | Promise<VerifyPhoneResponse>
+    | Observable<VerifyPhoneResponse>
+    | VerifyPhoneResponse;
+
   findAccount(
     request: FindAccountRequest
   ): Promise<Account> | Observable<Account> | Account;
-
-  verifyAccountEmail(
-    request: VerifyAccountEmailRequest
-  ):
-    | Promise<VerifyAccountEmailResponse>
-    | Observable<VerifyAccountEmailResponse>
-    | VerifyAccountEmailResponse;
 
   updateAccount(
     request: UpdateAccountRequest
@@ -252,10 +297,13 @@ export function IdentityServiceControllerMethods() {
     const grpcMethods: string[] = [
       "register",
       "sendEmailVerification",
+      "sendPhoneVerification",
       "loginWithEmail",
+      "loginWithPhone",
       "logout",
+      "verifyEmail",
+      "verifyPhone",
       "findAccount",
-      "verifyAccountEmail",
       "updateAccount",
       "createAccess",
       "deleteRefreshToken",

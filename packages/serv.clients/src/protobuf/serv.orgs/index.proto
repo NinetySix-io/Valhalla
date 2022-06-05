@@ -3,19 +3,26 @@ syntax = "proto3";
 package serv.orgs;
 
 service OrgsService {
-    // Orgs
-    rpc CreateOrg(CreateOrgRequest) returns (CreateOrgResponse) {}
-    rpc GetOrg(GetOrgRequest) returns (GetOrgResponse) {}
-    rpc UpdateOrg(UpdateOrgRequest) returns (UpdateOrgResponse) {}
-    rpc DeleteOrg(DeleteOrgRequest) returns (DeleteOrgResponse) {}
-    rpc OrgAvailable(OrgAvailableRequest) returns (OrgAvailableResponse) {}
+    rpc CreateOrg(CreateOrgRequest) returns (Organization) {}
+    rpc GetOrg(GetOrgRequest) returns (Organization) {}
+    rpc ArchiveOrg(ArchiveOrgRequest) returns (Organization) {}
+    rpc RestoreOrg(RestoreOrgRequest) returns (Organization) {}
+    rpc UpdateOrgPlan(UpdateOrgPlanRequest) returns(Organization) {}
+    rpc UpdateOrgLogo(UpdateOrgLogoRequest) returns(Organization) {}
 
-    // OrgMembers
-    rpc InviteOrgMember(InviteOrgMemberRequest) returns (InviteOrgMemberResponse) {}
-    rpc AcceptOrgMemberInvitation(AcceptOrgMemberInvitationRequest) returns (AcceptOrgMemberInvitationResponse) {}
-    rpc UpdateOrgMember(UpdateOrgMemberRequest) returns (UpdateOrgMemberResponse) {}
-    rpc DeleteOrgMember(DeleteOrgMemberRequest) returns (DeleteOrgMemberResponse) {}
-    rpc GetOrgMember(GetOrgMemberRequest) returns (GetOrgMemberResponse) {}
+    // rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse) {}
+    // rpc AcceptMemberInvitation(AcceptMemberInvitationRequest) returns (AcceptMemberInvitationResponse) {}
+    rpc MarkDeleteMember(MarkDeleteMemberRequest) returns (MarkDeleteMemberResponse) {}
+    rpc GetMember(GetMemberRequest) returns (Member) {}
+    rpc GetUserMemberships(GetUserMembershipsRequest) returns (GetUserMembershipsResponse) {}
+}
+
+message GetUserMembershipsRequest {
+    string userId = 1;
+}
+
+message GetUserMembershipsResponse {
+    repeated Organization organizations = 1;
 }
 
 message Organization {
@@ -24,11 +31,20 @@ message Organization {
     string name = 3;
     string createdBy = 4;
     string createdAt = 5;
-    string updatedAt = 6;
+    string updateBy = 6;
+    string updatedAt = 7;
+    string logoUrl = 8;
+    OrgStatus status = 9;
 }
 
-message UpdateOrgPayload {
-    string name = 3;
+enum OrgPlan {
+    FREE = 0;
+}
+
+enum OrgStatus {
+    ACTIVE = 0;
+    INACTIVE = 1;
+    SUSPENDED = 2;
 }
 
 enum InvitationStatus {
@@ -45,7 +61,19 @@ enum OrgRole {
     GUESS = 4;
 }
 
-message OrgMember {
+message UpdateOrgLogoRequest {
+    string imageUrl = 1;
+    string orgId = 2;
+    string requestedUserId = 3;
+}
+
+message UpdateOrgPlanRequest {
+    OrgPlan plan = 1;
+    string orgId = 2;
+    string requestedUserId = 3;
+}
+
+message Member {
     string id = 1;
     string user = 2;
     string organization = 3;
@@ -54,91 +82,60 @@ message OrgMember {
     string role = 6;
     string createdAt = 7;
     string updatedAt = 8;
+    string updatedBy = 9;
+    string profileImageUrl = 10;
 }
 
 message CreateOrgRequest {
     string name = 1;
+    string requestedUserId = 2;
+    OrgPlan plan = 3;
+
 }
 
-message CreateOrgResponse {
-    Organization Organization = 1;
+message ArchiveOrgRequest {
+    string orgId = 1;
+    string requestedUserId = 2;
 }
 
-message OrgAvailableRequest {
-    string name = 1;
-}
-
-message OrgAvailableResponse {
-    bool available = 1;
-}
-
-message DeleteOrgRequest {
-    string OrgId = 1;
-}
-
-message DeleteOrgResponse {
-    Organization Organization = 1;
+message RestoreOrgRequest {
+    string orgId = 1;
+    string requestedUserId = 2;
 }
 
 message GetOrgRequest {
-    string OrgId = 1;
+    string orgId = 1;
 }
 
-message GetOrgResponse {
-    Organization Organization = 1;
-}
-
-message UpdateOrgRequest {
-    string id = 1;
-    UpdateOrgPayload data = 2;
-}
-
-message UpdateOrgResponse {
-    Organization Organization = 1;
-}
-
-// Org OrgMembers
-message InviteOrgMemberRequest {
+message InviteMemberRequest {
     string email = 2;
     string userId = 3;
     string role = 6;
 }
 
-message InviteOrgMemberResponse {
-    OrgMember OrgMember = 1;
+message InviteMemberResponse {
+    Member member = 1;
 }
 
-message DeleteOrgMemberRequest {
-    string id = 1;
+message MarkDeleteMemberRequest {
+    string orgId = 1;
+    string memberId = 2;
+    string requestedUserId = 3;
 }
 
-message DeleteOrgMemberResponse {
-    OrgMember OrgMember = 1;
+message MarkDeleteMemberResponse {
+    Member member = 1;
 }
 
-message GetOrgMemberRequest {
-    string OrgId = 1;
-    string OrgMemberId = 2;
+message GetMemberRequest {
+    string orgId = 1;
+    string userId = 2;
 }
 
-message GetOrgMemberResponse {
-    OrgMember OrgMember = 1;
-}
-
-message UpdateOrgMemberRequest {
-    string id = 1;
-    string status = 2;
-    string role = 3;
-}
-
-message UpdateOrgMemberResponse {
-    OrgMember OrgMember = 1;
-}
-
-message AcceptOrgMemberInvitationRequest {
+message AcceptMemberInvitationRequest {
     string token = 1;
 }
 
-message AcceptOrgMemberInvitationResponse {
-    OrgMember OrgMember = 1;
+message AcceptMemberInvitationResponse {
+    Member member = 1;
 }

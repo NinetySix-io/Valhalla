@@ -4,12 +4,16 @@ package serv.identity;
 
 service IdentityService {
     rpc Register(RegisterRequest) returns (RegisterResponse) {}
-    rpc SendEmailVerification(SendEmailVerificationRequest) returns (SendEmailVerificationResponse) {}
+    rpc SendEmailVerification(SendEmailVerificationRequest) returns (Verification) {}
+    rpc SendPhoneVerification(SendPhoneVerificationRequest) returns (Verification) {}
     rpc LoginWithEmail(LoginWithEmailRequest) returns (LoginWithEmailResponse) {}
+    rpc LoginWithPhone(LoginWithPhoneRequest) returns (LoginWithPhoneResponse) {}
     rpc Logout(LogoutRequest) returns (LogoutResponse) {}
 
+    rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse) {}
+    rpc VerifyPhone(VerifyPhoneRequest) returns (VerifyPhoneResponse) {}
+
     rpc FindAccount(FindAccountRequest) returns (Account) {}
-    rpc VerifyAccountEmail(VerifyAccountEmailRequest) returns (VerifyAccountEmailResponse) {}
     rpc UpdateAccount(UpdateAccountRequest) returns (UpdateAccountResponse) {}
 
     rpc CreateAccess(Account) returns (CreateAccessResponse) {}
@@ -18,17 +22,39 @@ service IdentityService {
     rpc DecodeAccessToken(DecodeAccessTokenRequest) returns (Account) {}
 }
 
-message SendEmailVerificationRequest {
-    string accountId = 1;
+message VerifyPhoneRequest {
+    string phone = 1;
+    string verificationCode = 2;
+    string accountId = 3;
 }
 
-message SendEmailVerificationResponse {
-    Verification verification = 1;
+message VerifyPhoneResponse {
+    string verificationId = 1;
+}
+
+message LoginWithPhoneRequest {
+    string phone = 1;
+    string verificationCode = 2;
+    string verificationId = 3;
+}
+
+message LoginWithPhoneResponse {
+    Account account = 1;
+    string accessToken = 2;
+    string refreshToken = 3;
+}
+
+message SendEmailVerificationRequest {
+    string email = 1;
+}
+
+message SendPhoneVerificationRequest {
+    string phone = 1;
 }
 
 message Verification {
     string id = 1;
-    string owner = 2;
+    optional string owner = 2;
     string expiresAt = 3;
 }
 
@@ -99,8 +125,8 @@ message LoginWithEmailResponse {
 }
 
 message LoginWithEmailRequest {
-    string verificationCode = 1;
-    string username = 2;
+    string email = 1;
+    string verificationCode = 2;
     string verificationId = 3;
 }
 
@@ -112,13 +138,13 @@ message LogoutResponse {
     bool success = 1;
 }
 
-message VerifyAccountEmailRequest {
+message VerifyEmailRequest {
     string email = 1;
     string verificationCode = 2;
     string accountId = 3;
 }
 
-message VerifyAccountEmailResponse {
+message VerifyEmailResponse {
     string verificationId = 1;
 }
 

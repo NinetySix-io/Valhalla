@@ -33,15 +33,20 @@ export class VerificationsModel extends BaseFactory<VerificationSchema> {
    * @returns A new verification code
    */
   async generate(
-    owner: VerificationSchema['owner'],
     expiresAt: Date = dayjs().add(10, 'minutes').toDate(),
+    owner?: VerificationSchema['owner'],
   ) {
     const code = this.config.verificationCode;
     const hashed = await bcrypt.hash(code);
-    return this.create({
+    const verification = await this.create({
       owner,
       hashed,
       expiresAt,
     });
+
+    return {
+      code,
+      verification,
+    };
   }
 }

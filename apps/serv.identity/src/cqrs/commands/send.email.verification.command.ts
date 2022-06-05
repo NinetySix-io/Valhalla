@@ -4,14 +4,12 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import {
-  SendEmailVerificationRequest,
-  SendEmailVerificationResponse,
-} from '@app/protobuf';
+import { SendEmailVerificationRequest, Verification } from '@app/protobuf';
 
+import { EmailVerificationCreatedEvent } from '../events/email.verification.created.event';
 import { EmailVerificationSentEvent } from '../events/email.verification.sent.event';
+import { Logger } from '@nestjs/common';
 import { RpcHandler } from '@valhalla/serv.core';
-import { VerificationCreatedEvent } from '../events/verification.created.event';
 import { VerificationTransformer } from '@app/entities/verifications/transformer';
 import { VerificationsModel } from '@app/entities/verifications';
 import mongoose from 'mongoose';
@@ -23,32 +21,28 @@ export class SendEmailVerificationCommand implements ICommand {
 @CommandHandler(SendEmailVerificationCommand)
 @RpcHandler()
 export class SendEmailVerificationHandler
-  implements
-    ICommandHandler<
-      SendEmailVerificationCommand,
-      SendEmailVerificationResponse
-    >
+  implements ICommandHandler<SendEmailVerificationCommand, Verification>
 {
   constructor(
     private readonly eventBus: EventBus,
     private readonly verifications: VerificationsModel,
   ) {}
 
-  async execute(
-    command: SendEmailVerificationCommand,
-  ): Promise<SendEmailVerificationResponse> {
-    const accountId = new mongoose.Types.ObjectId(command.request.accountId);
-    const verification = await this.verifications.generate(accountId);
-
+  async execute(command: SendEmailVerificationCommand): Promise<Verification> {
+    const email = command.request.email;
+    const { verification, code } = await this.verifications.generate();
     const serialized = new VerificationTransformer(verification).proto;
 
-    this.eventBus.publishAll([
-      new EmailVerificationSentEvent(verification.id),
-      new VerificationCreatedEvent(verification.id),
-    ]);
+    this.eventBus.publish(
+      new EmailVerificationCreatedEvent({
+        email,
+        code,
+        expiresAt: verification.expiresAt,
+        owner: verification.owner?.toHexString(),
+        verificationId: verification.id,
+      }),
+    );
 
-    return {
-      verification: serialized,
-    };
+    return serialized;
   }
 }

@@ -4,18 +4,58 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "serv.identity";
 
-export interface EmailObject {
+export interface VerifyPhoneRequest {
+  phone: string;
+  verificationCode: string;
+  accountId: string;
+}
+
+export interface VerifyPhoneResponse {
+  verificationId: string;
+}
+
+export interface LoginWithPhoneRequest {
+  phone: string;
+  verificationCode: string;
+  verificationId: string;
+}
+
+export interface LoginWithPhoneResponse {
+  account: Account | undefined;
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface SendEmailVerificationRequest {
+  email: string;
+}
+
+export interface SendPhoneVerificationRequest {
+  phone: string;
+}
+
+export interface Verification {
+  id: string;
+  owner: string;
+  expiresAt: string;
+}
+
+export interface RefreshToken {
+  id: string;
+  expiresAt: string;
+  account: string;
+}
+
+export interface Email {
   value: string;
-  verificationCode?: string | undefined;
   isVerified: boolean;
   isPrimary: boolean;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface PhoneObject {
+export interface Phone {
   value: string;
-  verificationCode?: string | undefined;
   isVerified: boolean;
   isPrimary: boolean;
   createdAt: string;
@@ -29,20 +69,19 @@ export interface Account {
   lastName?: string | undefined;
   createdAt: string;
   updatedAt: string;
-  emails: EmailObject[];
-  phones: PhoneObject[];
+  emails: Email[];
+  phones: Phone[];
 }
 
-export interface AccountRegisterRequest {
+export interface RegisterRequest {
   displayName?: string | undefined;
-  password: string;
   email: string;
   phone?: string | undefined;
   firstName?: string | undefined;
   lastName?: string | undefined;
 }
 
-export interface AccountRegisterResponse {
+export interface RegisterResponse {
   account: Account | undefined;
 }
 
@@ -52,68 +91,43 @@ export interface DeleteResponse {
 
 export interface UpdateAccountRequest {
   accountId: string;
-  displayName: string;
-  firstName: string;
-  lastName: string;
+  displayName?: string | undefined;
+  firstName?: string | undefined;
+  lastName?: string | undefined;
 }
 
 export interface UpdateAccountResponse {
   updatedAccount: Account | undefined;
 }
 
-export interface UpdatePasswordRequest {
-  accountId: string;
-  oldPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}
-
-export interface UpdatePasswordResponse {
-  success: boolean;
-}
-
-export interface ForgotPasswordRequest {
-  email: string;
-}
-
-export interface ForgotPasswordResponse {
-  recoveryUrl: string;
-}
-
-export interface AccountLoginResponse {
+export interface LoginWithEmailResponse {
   account: Account | undefined;
   accessToken: string;
   refreshToken: string;
 }
 
-export interface AccountLoginRequest {
-  password: string;
-  username: string;
+export interface LoginWithEmailRequest {
+  email: string;
+  verificationCode: string;
+  verificationId: string;
 }
 
-export interface AccountLogoutRequest {
+export interface LogoutRequest {
   refreshToken?: string | undefined;
 }
 
-export interface AccountLogoutResponse {
+export interface LogoutResponse {
   success: boolean;
 }
 
-export interface VerifyAccountEmailRequest {
+export interface VerifyEmailRequest {
   email: string;
   verificationCode: string;
+  accountId: string;
 }
 
-export interface VerifyAccountEmailResponse {
-  success: boolean;
-}
-
-export interface SendAccountVerificationCodeRequest {
-  email: string;
-}
-
-export interface SendAccountVerificationCodeResponse {
-  code: string;
+export interface VerifyEmailResponse {
+  verificationId: string;
 }
 
 export interface FindAccountRequest {
@@ -150,37 +164,35 @@ export interface ProvisionAccessTokenResponse {
 export const SERV_IDENTITY_PACKAGE_NAME = "serv.identity";
 
 export interface IdentityServiceClient {
-  accountRegister(
-    request: AccountRegisterRequest
-  ): Observable<AccountRegisterResponse>;
+  register(request: RegisterRequest): Observable<RegisterResponse>;
 
-  accountLogin(request: AccountLoginRequest): Observable<AccountLoginResponse>;
+  sendEmailVerification(
+    request: SendEmailVerificationRequest
+  ): Observable<Verification>;
 
-  accountLogout(
-    request: AccountLogoutRequest
-  ): Observable<AccountLogoutResponse>;
+  sendPhoneVerification(
+    request: SendPhoneVerificationRequest
+  ): Observable<Verification>;
+
+  loginWithEmail(
+    request: LoginWithEmailRequest
+  ): Observable<LoginWithEmailResponse>;
+
+  loginWithPhone(
+    request: LoginWithPhoneRequest
+  ): Observable<LoginWithPhoneResponse>;
+
+  logout(request: LogoutRequest): Observable<LogoutResponse>;
+
+  verifyEmail(request: VerifyEmailRequest): Observable<VerifyEmailResponse>;
+
+  verifyPhone(request: VerifyPhoneRequest): Observable<VerifyPhoneResponse>;
 
   findAccount(request: FindAccountRequest): Observable<Account>;
-
-  verifyAccountEmail(
-    request: VerifyAccountEmailRequest
-  ): Observable<VerifyAccountEmailResponse>;
-
-  sendAccountEmailVerificationCode(
-    request: SendAccountVerificationCodeRequest
-  ): Observable<SendAccountVerificationCodeResponse>;
 
   updateAccount(
     request: UpdateAccountRequest
   ): Observable<UpdateAccountResponse>;
-
-  forgotAccountPassword(
-    request: ForgotPasswordRequest
-  ): Observable<ForgotPasswordResponse>;
-
-  updateAccountPassword(
-    request: UpdatePasswordRequest
-  ): Observable<UpdatePasswordResponse>;
 
   createAccess(request: Account): Observable<CreateAccessResponse>;
 
@@ -196,44 +208,56 @@ export interface IdentityServiceClient {
 }
 
 export interface IdentityServiceController {
-  accountRegister(
-    request: AccountRegisterRequest
+  register(
+    request: RegisterRequest
   ):
-    | Promise<AccountRegisterResponse>
-    | Observable<AccountRegisterResponse>
-    | AccountRegisterResponse;
+    | Promise<RegisterResponse>
+    | Observable<RegisterResponse>
+    | RegisterResponse;
 
-  accountLogin(
-    request: AccountLoginRequest
-  ):
-    | Promise<AccountLoginResponse>
-    | Observable<AccountLoginResponse>
-    | AccountLoginResponse;
+  sendEmailVerification(
+    request: SendEmailVerificationRequest
+  ): Promise<Verification> | Observable<Verification> | Verification;
 
-  accountLogout(
-    request: AccountLogoutRequest
+  sendPhoneVerification(
+    request: SendPhoneVerificationRequest
+  ): Promise<Verification> | Observable<Verification> | Verification;
+
+  loginWithEmail(
+    request: LoginWithEmailRequest
   ):
-    | Promise<AccountLogoutResponse>
-    | Observable<AccountLogoutResponse>
-    | AccountLogoutResponse;
+    | Promise<LoginWithEmailResponse>
+    | Observable<LoginWithEmailResponse>
+    | LoginWithEmailResponse;
+
+  loginWithPhone(
+    request: LoginWithPhoneRequest
+  ):
+    | Promise<LoginWithPhoneResponse>
+    | Observable<LoginWithPhoneResponse>
+    | LoginWithPhoneResponse;
+
+  logout(
+    request: LogoutRequest
+  ): Promise<LogoutResponse> | Observable<LogoutResponse> | LogoutResponse;
+
+  verifyEmail(
+    request: VerifyEmailRequest
+  ):
+    | Promise<VerifyEmailResponse>
+    | Observable<VerifyEmailResponse>
+    | VerifyEmailResponse;
+
+  verifyPhone(
+    request: VerifyPhoneRequest
+  ):
+    | Promise<VerifyPhoneResponse>
+    | Observable<VerifyPhoneResponse>
+    | VerifyPhoneResponse;
 
   findAccount(
     request: FindAccountRequest
   ): Promise<Account> | Observable<Account> | Account;
-
-  verifyAccountEmail(
-    request: VerifyAccountEmailRequest
-  ):
-    | Promise<VerifyAccountEmailResponse>
-    | Observable<VerifyAccountEmailResponse>
-    | VerifyAccountEmailResponse;
-
-  sendAccountEmailVerificationCode(
-    request: SendAccountVerificationCodeRequest
-  ):
-    | Promise<SendAccountVerificationCodeResponse>
-    | Observable<SendAccountVerificationCodeResponse>
-    | SendAccountVerificationCodeResponse;
 
   updateAccount(
     request: UpdateAccountRequest
@@ -241,20 +265,6 @@ export interface IdentityServiceController {
     | Promise<UpdateAccountResponse>
     | Observable<UpdateAccountResponse>
     | UpdateAccountResponse;
-
-  forgotAccountPassword(
-    request: ForgotPasswordRequest
-  ):
-    | Promise<ForgotPasswordResponse>
-    | Observable<ForgotPasswordResponse>
-    | ForgotPasswordResponse;
-
-  updateAccountPassword(
-    request: UpdatePasswordRequest
-  ):
-    | Promise<UpdatePasswordResponse>
-    | Observable<UpdatePasswordResponse>
-    | UpdatePasswordResponse;
 
   createAccess(
     request: Account
@@ -285,15 +295,16 @@ export interface IdentityServiceController {
 export function IdentityServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = [
-      "accountRegister",
-      "accountLogin",
-      "accountLogout",
+      "register",
+      "sendEmailVerification",
+      "sendPhoneVerification",
+      "loginWithEmail",
+      "loginWithPhone",
+      "logout",
+      "verifyEmail",
+      "verifyPhone",
       "findAccount",
-      "verifyAccountEmail",
-      "sendAccountEmailVerificationCode",
       "updateAccount",
-      "forgotAccountPassword",
-      "updateAccountPassword",
       "createAccess",
       "deleteRefreshToken",
       "provisionAccessToken",

@@ -26,12 +26,14 @@ export class CreateAccessHandler
 
   async execute(command: CreateAccessCommand): Promise<CreateAccessResponse> {
     const tokenData = await this.provision.createAccessToken(command.input);
-    const event = new AccessTokenCreatedEvent(
-      tokenData.refreshToken,
-      tokenData.accessToken,
+
+    this.eventBus.publish(
+      new AccessTokenCreatedEvent(
+        tokenData.refreshToken,
+        tokenData.accessToken,
+      ),
     );
 
-    this.eventBus.publish(event);
     return tokenData;
   }
 }
