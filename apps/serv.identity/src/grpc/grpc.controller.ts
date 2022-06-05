@@ -4,6 +4,7 @@ import {
   AddPhoneToAccountRequest,
   CreateAccessResponse,
   DecodeAccessTokenRequest,
+  DecodeAccessTokenResponse,
   DeleteRefreshTokenRequest,
   DeleteRefreshTokenResponse,
   FindAccountRequest,
@@ -160,7 +161,10 @@ export class gRpcController implements IdentityServiceController {
   }
   decodeAccessToken(
     request: DecodeAccessTokenRequest,
-  ): Account | Promise<Account> | Observable<Account> {
+  ):
+    | DecodeAccessTokenResponse
+    | Promise<DecodeAccessTokenResponse>
+    | Observable<DecodeAccessTokenResponse> {
     return this.commandBus.execute(new DecodeAccessTokenCommand(request));
   }
 

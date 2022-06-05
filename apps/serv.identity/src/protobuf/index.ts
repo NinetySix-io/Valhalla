@@ -4,6 +4,11 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "serv.identity";
 
+export interface DecodeAccessTokenResponse {
+  account: Account | undefined;
+  expiresAt: string;
+}
+
 export interface AddEmailToAccountRequest {
   accountId: string;
   email: string;
@@ -44,6 +49,7 @@ export interface LoginWithPhoneResponse {
   account: Account | undefined;
   accessToken: string;
   refreshToken: string;
+  accessTokenExpiresAt: string;
 }
 
 export interface SendEmailVerificationRequest {
@@ -124,6 +130,7 @@ export interface LoginWithEmailResponse {
   account: Account | undefined;
   accessToken: string;
   refreshToken: string;
+  accessTokenExpiresAt: string;
 }
 
 export interface LoginWithEmailRequest {
@@ -159,6 +166,7 @@ export interface FindAccountRequest {
 export interface CreateAccessResponse {
   refreshToken: string;
   accessToken: string;
+  accessTokenExpiresAt: string;
 }
 
 export interface DeleteRefreshTokenRequest {
@@ -179,6 +187,7 @@ export interface ProvisionAccessTokenRequest {
 
 export interface ProvisionAccessTokenResponse {
   accessToken: string;
+  accessTokenExpiresAt: string;
 }
 
 export const SERV_IDENTITY_PACKAGE_NAME = "serv.identity";
@@ -236,7 +245,9 @@ export interface IdentityServiceClient {
     request: ProvisionAccessTokenRequest
   ): Observable<ProvisionAccessTokenResponse>;
 
-  decodeAccessToken(request: DecodeAccessTokenRequest): Observable<Account>;
+  decodeAccessToken(
+    request: DecodeAccessTokenRequest
+  ): Observable<DecodeAccessTokenResponse>;
 }
 
 export interface IdentityServiceController {
@@ -337,7 +348,10 @@ export interface IdentityServiceController {
 
   decodeAccessToken(
     request: DecodeAccessTokenRequest
-  ): Promise<Account> | Observable<Account> | Account;
+  ):
+    | Promise<DecodeAccessTokenResponse>
+    | Observable<DecodeAccessTokenResponse>
+    | DecodeAccessTokenResponse;
 }
 
 export function IdentityServiceControllerMethods() {

@@ -6,9 +6,10 @@ import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 
 import { AuthManager } from './auth.manager';
 import { FastifyRequest } from 'fastify';
-import { Logger } from 'mongodb';
+import { Logger } from '@nestjs/common';
 import { resolveRpcRequest } from '../../lib/resolve.rpc.request';
 import { tryNice } from 'try-nice';
+import dayjs from 'dayjs';
 
 const TokenStrategyKey = 'token-strategy' as const;
 
@@ -27,7 +28,10 @@ export class TokensStrategy
     super();
   }
 
-  async validate(request: FastifyRequest): Promise<ServIdentity.Account> {
+  async validate(request: FastifyRequest): Promise<{
+    account: ServIdentity.Account;
+    expiresAt: Date;
+  }> {
     const accessToken = AuthManager.getAccessTokenFromRequest(request);
     if (!accessToken) {
       throw new UnauthorizedException('Access token not provided!');
@@ -50,11 +54,14 @@ export class TokensStrategy
     if (error) {
       this.logger.error(error);
       throw new UnauthorizedException('Token is not valid or expired!');
-    } else if (!result) {
+    } else if (!result || !result.account) {
       this.logger.error('Unable to decode token', result);
       throw new UnauthorizedException('Token is not valid or expired!');
     }
 
-    return result;
+    return {
+      account: result.account,
+      expiresAt: dayjs(result.expiresAt).toDate(),
+    };
   }
 }

@@ -7,4 +7,7 @@ export class LoginResponse {
 
   @Field({ description: 'Access token' })
   accessToken!: string;
+
+  @Field({ description: 'Access token expiry date' })
+  accessTokenExpiresAt!: string;
 }

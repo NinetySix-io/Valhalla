@@ -35,11 +35,9 @@ export class ProvisionAccessTokenHandler
     const accessToken = await this.provision.renewAccessToken(refreshToken);
 
     this.eventBus.publish(
-      new AccessTokenRenewedEvent(refreshToken, accessToken),
+      new AccessTokenRenewedEvent(refreshToken, accessToken.accessToken),
     );
 
-    return {
-      accessToken,
-    };
+    return accessToken;
   }
 }

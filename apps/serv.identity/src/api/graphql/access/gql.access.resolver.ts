@@ -54,6 +54,7 @@ export class GqlAuthResolver {
     return {
       accountId: result.account.id,
       accessToken: result.accessToken,
+      accessTokenExpiresAt: result.accessTokenExpiresAt,
     };
   }
 
@@ -78,6 +79,7 @@ export class GqlAuthResolver {
     return {
       accountId: result.account.id,
       accessToken: result.accessToken,
+      accessTokenExpiresAt: result.accessTokenExpiresAt,
     };
   }
 

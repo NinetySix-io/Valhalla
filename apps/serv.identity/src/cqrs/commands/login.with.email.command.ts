@@ -66,6 +66,7 @@ export class LoginWithEmailHandler
       account: accountProto,
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
+      accessTokenExpiresAt: tokens.accessTokenExpiresAt,
     };
   }
 }
