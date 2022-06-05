@@ -62,7 +62,7 @@
       "\tasync execute(",
       "\t\tcommand: $1Command,",
       "\t): Promise<$1Response> {",
-      "\t\tthis.logger.debug(command.input);",
+      "\t\tthis.logger.debug(command.request);",
       "\t\tthrow new Error('Not implemented');",
       "\t}",
       "}",

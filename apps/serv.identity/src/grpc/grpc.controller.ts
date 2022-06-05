@@ -1,28 +1,24 @@
 import {
   Account,
-  AccountLoginRequest,
-  AccountLoginResponse,
-  AccountLogoutRequest,
-  AccountLogoutResponse,
-  AccountRegisterRequest,
-  AccountRegisterResponse,
   CreateAccessResponse,
   DecodeAccessTokenRequest,
   DeleteRefreshTokenRequest,
   DeleteRefreshTokenResponse,
   FindAccountRequest,
-  ForgotPasswordRequest,
-  ForgotPasswordResponse,
   IDENTITY_SERVICE_NAME,
   IdentityServiceController,
+  LoginWithEmailRequest,
+  LoginWithEmailResponse,
+  LogoutRequest,
+  LogoutResponse,
   ProvisionAccessTokenRequest,
   ProvisionAccessTokenResponse,
-  SendAccountVerificationCodeRequest,
-  SendAccountVerificationCodeResponse,
+  RegisterRequest,
+  RegisterResponse,
+  SendEmailVerificationRequest,
+  SendEmailVerificationResponse,
   UpdateAccountRequest,
   UpdateAccountResponse,
-  UpdatePasswordRequest,
-  UpdatePasswordResponse,
   VerifyAccountEmailRequest,
   VerifyAccountEmailResponse,
 } from '@app/protobuf';
@@ -30,19 +26,17 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Controller, Logger } from '@nestjs/common';
 import { GrpcClass, LogClassMethods } from '@valhalla/serv.core';
 
-import { AccountLoginCommand } from '@app/cqrs/commands/account.login.command';
-import { AccountLogoutCommand } from '@app/cqrs/commands/account.logout.command';
-import { AccountRegisterCommand } from '@app/cqrs/commands/account.register.command';
 import { CreateAccessCommand } from '@app/cqrs/commands/create.access.command';
 import { DecodeAccessTokenCommand } from '@app/cqrs/commands/decode.access.token.command';
 import { DeleteRefreshTokenCommand } from '@app/cqrs/commands/delete.refresh.token.command';
 import { FindAccountQuery } from '@app/cqrs/queries/find.account.query';
-import { ForgotAccountPasswordCommand } from '@app/cqrs/commands/forgot.account.password.command';
+import { LoginWithEmailCommand } from '@app/cqrs/commands/login.with.email.command';
+import { LogoutCommand } from '@app/cqrs/commands/logout.command';
 import { Observable } from 'rxjs';
 import { ProvisionAccessTokenCommand } from '@app/cqrs/commands/provision.access.token.command';
-import { SendAccountEmailVerificationCommand } from '@app/cqrs/commands/send.account.email.verification.command';
+import { RegisterCommand } from '@app/cqrs/commands/register.command';
+import { SendEmailVerificationCommand } from '@app/cqrs/commands/send.email.verification.command';
 import { UpdateAccountCommand } from '@app/cqrs/commands/update.account.command';
-import { UpdateAccountPasswordCommand } from '@app/cqrs/commands/update.account.password.command';
 import { VerifyAccountEmailCommand } from '@app/cqrs/commands/verify.account.email.command';
 import { isDev } from '@valhalla/utilities';
 
@@ -57,6 +51,35 @@ export class gRpcController implements IdentityServiceController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
+  sendEmailVerification(
+    request: SendEmailVerificationRequest,
+  ):
+    | SendEmailVerificationResponse
+    | Promise<SendEmailVerificationResponse>
+    | Observable<SendEmailVerificationResponse> {
+    return this.commandBus.execute(new SendEmailVerificationCommand(request));
+  }
+  register(
+    request: RegisterRequest,
+  ):
+    | RegisterResponse
+    | Promise<RegisterResponse>
+    | Observable<RegisterResponse> {
+    return this.commandBus.execute(new RegisterCommand(request));
+  }
+  loginWithEmail(
+    request: LoginWithEmailRequest,
+  ):
+    | LoginWithEmailResponse
+    | Promise<LoginWithEmailResponse>
+    | Observable<LoginWithEmailResponse> {
+    return this.commandBus.execute(new LoginWithEmailCommand(request));
+  }
+  logout(
+    request: LogoutRequest,
+  ): LogoutResponse | Promise<LogoutResponse> | Observable<LogoutResponse> {
+    return this.commandBus.execute(new LogoutCommand(request));
+  }
   createAccess(
     request: Account,
   ):
@@ -78,30 +101,7 @@ export class gRpcController implements IdentityServiceController {
   ): Account | Promise<Account> | Observable<Account> {
     return this.commandBus.execute(new DecodeAccessTokenCommand(request));
   }
-  accountRegister(
-    request: AccountRegisterRequest,
-  ):
-    | AccountRegisterResponse
-    | Promise<AccountRegisterResponse>
-    | Observable<AccountRegisterResponse> {
-    return this.commandBus.execute(new AccountRegisterCommand(request));
-  }
-  accountLogin(
-    request: AccountLoginRequest,
-  ):
-    | AccountLoginResponse
-    | Promise<AccountLoginResponse>
-    | Observable<AccountLoginResponse> {
-    return this.commandBus.execute(new AccountLoginCommand(request));
-  }
-  accountLogout(
-    request: AccountLogoutRequest,
-  ):
-    | AccountLogoutResponse
-    | Promise<AccountLogoutResponse>
-    | Observable<AccountLogoutResponse> {
-    return this.commandBus.execute(new AccountLogoutCommand(request));
-  }
+
   findAccount(
     request: FindAccountRequest,
   ): Account | Promise<Account> | Observable<Account> {
@@ -113,45 +113,16 @@ export class gRpcController implements IdentityServiceController {
     | VerifyAccountEmailResponse
     | Promise<VerifyAccountEmailResponse>
     | Observable<VerifyAccountEmailResponse> {
-    return this.commandBus.execute(
-      new VerifyAccountEmailCommand(request.verificationCode, request.email),
-    );
+    return this.commandBus.execute(new VerifyAccountEmailCommand(request));
   }
-  sendAccountEmailVerificationCode(
-    request: SendAccountVerificationCodeRequest,
-  ):
-    | SendAccountVerificationCodeResponse
-    | Promise<SendAccountVerificationCodeResponse>
-    | Observable<SendAccountVerificationCodeResponse> {
-    return this.commandBus.execute(
-      new SendAccountEmailVerificationCommand(request),
-    );
-  }
+
   updateAccount(
     request: UpdateAccountRequest,
   ):
     | UpdateAccountResponse
     | Promise<UpdateAccountResponse>
     | Observable<UpdateAccountResponse> {
-    return this.commandBus.execute(
-      new UpdateAccountCommand(request.accountId, request),
-    );
-  }
-  forgotAccountPassword(
-    request: ForgotPasswordRequest,
-  ):
-    | ForgotPasswordResponse
-    | Promise<ForgotPasswordResponse>
-    | Observable<ForgotPasswordResponse> {
-    return this.commandBus.execute(new ForgotAccountPasswordCommand(request));
-  }
-  updateAccountPassword(
-    request: UpdatePasswordRequest,
-  ):
-    | UpdatePasswordResponse
-    | Promise<UpdatePasswordResponse>
-    | Observable<UpdatePasswordResponse> {
-    return this.commandBus.execute(new UpdateAccountPasswordCommand(request));
+    return this.commandBus.execute(new UpdateAccountCommand(request));
   }
   provisionAccessToken(
     request: ProvisionAccessTokenRequest,
@@ -160,23 +131,5 @@ export class gRpcController implements IdentityServiceController {
     | Promise<ProvisionAccessTokenResponse>
     | Observable<ProvisionAccessTokenResponse> {
     return this.commandBus.execute(new ProvisionAccessTokenCommand(request));
-  }
-
-  forgotPassword(
-    request: ForgotPasswordRequest,
-  ):
-    | ForgotPasswordResponse
-    | Promise<ForgotPasswordResponse>
-    | Observable<ForgotPasswordResponse> {
-    return this.commandBus.execute(new ForgotAccountPasswordCommand(request));
-  }
-
-  updatePassword(
-    request: UpdatePasswordRequest,
-  ):
-    | UpdatePasswordResponse
-    | Promise<UpdatePasswordResponse>
-    | Observable<UpdatePasswordResponse> {
-    return this.commandBus.execute(new UpdateAccountPasswordCommand(request));
   }
 }

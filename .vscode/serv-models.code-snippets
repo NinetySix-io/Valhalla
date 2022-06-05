@@ -30,5 +30,28 @@
       "\t$3",
       "}"
     ]
+  },
+  "Transformer": {
+    "prefix": "transformer",
+    "description": "Entity transformer",
+    "body": [
+      "import { $1Schema } from './schema';",
+      "import { $1 as Proto } from '@app/protobuf';",
+      "",
+      "export class $1Transformer extends $1Schema {",
+      "",
+      "\tconstructor(entity: $1Schema) {",
+      "\t\tsuper()",
+      "\t\tObject.assign(this, entity)",
+      "\t}",
+      "",
+      "\tget proto(): Proto {",
+      "\t\treturn {",
+      "\t\t\t$2",
+      "\t\t};",
+      "\t}",
+      "}",
+      ""
+    ]
   }
 }

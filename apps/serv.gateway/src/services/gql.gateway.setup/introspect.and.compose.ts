@@ -111,7 +111,6 @@ export class IntrospectAndCompose implements SupergraphManager {
    * @returns The supergraph SDL
    */
   private async updateSupergraphSdl() {
-    this.logger.debug('Update Supergraph SDL');
     this.buildSubgraph();
 
     if (!this.subgraphs?.length) {
@@ -202,7 +201,6 @@ export class IntrospectAndCompose implements SupergraphManager {
    */
   async rebuildSupergraphSdl() {
     try {
-      Logger.debug('Rebuild Supergraph SDL');
       const maybeNewSupergraphSdl = await this.updateSupergraphSdl();
       if (maybeNewSupergraphSdl) {
         this.update?.(maybeNewSupergraphSdl);

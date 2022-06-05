@@ -14,10 +14,7 @@ import { SStruct } from '@valhalla/utilities';
 import { isEmpty } from 'class-validator';
 
 export class UpdateAccountCommand implements ICommand {
-  constructor(
-    public readonly userId: string,
-    public readonly data: Partial<UpdateAccountRequest>,
-  ) {}
+  constructor(public readonly request: UpdateAccountRequest) {}
 }
 
 @CommandHandler(UpdateAccountCommand)
@@ -46,16 +43,11 @@ export class UpdateAccountHandler
   }
 
   async execute(command: UpdateAccountCommand): Promise<UpdateAccountResponse> {
-    const payload = this.validateRequest(command.data);
-    const user = await this.accounts.findOneAndUpdate(
-      { _id: command.userId },
-      payload,
-      { new: true },
-    );
-
-    if (!user) {
-      throw new Error('User not found');
-    }
+    const { accountId, ...rest } = command.request;
+    const payload = this.validateRequest(rest);
+    const user = await this.accounts
+      .findOneAndUpdate({ _id: accountId }, payload, { new: true })
+      .orFail(() => new Error('User not found'));
 
     const userProto = new AccountTransformer(user).proto;
     this.eventBus.publish(new AccountUpdatedEvent(userProto));

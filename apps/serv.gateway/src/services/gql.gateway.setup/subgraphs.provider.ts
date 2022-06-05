@@ -58,7 +58,6 @@ export abstract class SubgraphsProvider implements OnModuleInit {
    * @returns The subgraphs are being returned.
    */
   private async buildSubgraphs(serviceNames: string[]): Promise<void> {
-    this.logger.debug('Building Subgraphs');
     const currentSubgraphMap = keyBy(
       this._subgraphs ?? [],
       (graph) => graph.name,

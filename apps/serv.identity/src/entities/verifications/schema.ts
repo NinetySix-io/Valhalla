@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 @SimpleModel('passwords')
 @ExpiryIndex({ expiredAt: 1 })
 @index({ owner: 1 })
-export class PasswordSchema extends BaseSchema {
+export class VerificationSchema extends BaseSchema {
   @prop()
   owner!: mongoose.Types.ObjectId;
 
@@ -14,5 +14,5 @@ export class PasswordSchema extends BaseSchema {
   hashed!: string;
 
   @prop()
-  expiredAt?: Date;
+  expiresAt!: Date;
 }

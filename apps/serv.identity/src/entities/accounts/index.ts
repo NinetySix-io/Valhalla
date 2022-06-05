@@ -16,7 +16,7 @@ export class AccountsModel extends BaseFactory<AccountSchema> {
   /**
    * It creates a user with the given firstName, lastName, displayName, email, and phone
    * @param user
-   * @returns A promise that resolves to a Accountschema
+   * @returns A promise that resolves to a AccountSchema
    */
   createAccount(
     user: PartialBy<

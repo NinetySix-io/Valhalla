@@ -3,6 +3,8 @@ import { Exclude, Expose } from 'class-transformer';
 import { Field, ObjectType, OmitType } from '@nestjs/graphql';
 import { modelOptions, prop } from '@typegoose/typegoose';
 
+import mongoose from 'mongoose';
+
 @ObjectType()
 @modelOptions({ schemaOptions: { timestamps: true, _id: true } })
 class AccountEmailSchema extends OmitType(BaseSchema, ['_id', 'id']) {
@@ -22,8 +24,13 @@ class AccountEmailSchema extends OmitType(BaseSchema, ['_id', 'id']) {
 
   @prop()
   @Expose()
+  @Field({ description: 'Verification date' })
+  verifiedDate?: Date;
+
+  @prop()
   @Exclude()
-  verificationCode?: string;
+  @Field({ description: 'Verification ID' })
+  verification!: mongoose.Types.ObjectId;
 }
 
 @ObjectType()
@@ -45,8 +52,14 @@ class AccountPhoneSchema extends OmitType(BaseSchema, ['_id', 'id']) {
   isVerified!: boolean;
 
   @prop()
+  @Expose()
+  @Field({ description: 'Verification date' })
+  verifiedDate?: Date;
+
+  @prop()
   @Exclude()
-  verificationCode?: string;
+  @Field({ description: 'Verification ID' })
+  verification!: mongoose.Types.ObjectId;
 }
 
 @ObjectType()

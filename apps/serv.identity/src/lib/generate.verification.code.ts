@@ -1,9 +1,20 @@
+import { isDev } from '@valhalla/utilities';
+
+function generateDevCode(length: number) {
+  return ''.padEnd(length, '0');
+}
+
 /**
  * It generates a random verification code of a given length
+ *
  * @param {number} length - The length of the verification code.
  * @param {VerificationCodeGeneratorOption} options - VerificationCodeGeneratorOption
  */
 export function generateVerificationCode(length: number) {
+  if (isDev()) {
+    return generateDevCode(length);
+  }
+
   if (isNaN(length)) {
     throw new TypeError('Length must be a number');
   } else if (length < 1) {
