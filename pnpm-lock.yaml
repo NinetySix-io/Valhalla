@@ -117,6 +117,7 @@ importers:
       '@nestjs/terminus': ^8.0.6
       '@nestjs/testing': ^8.4.4
       '@typegoose/typegoose': ^9.8.1
+      '@types/bcryptjs': ^2.4.2
       '@types/cookie-signature': ^1.0.4
       '@types/ms': ^0.7.31
       '@valhalla/serv.clients': workspace:*
@@ -197,6 +198,7 @@ importers:
       '@nestjs/cli': 8.2.6
       '@nestjs/schematics': 8.0.11_typescript@4.6.4
       '@nestjs/testing': 8.4.5_ehd66zdmgkbcgzlt7w2liosqpa
+      '@types/bcryptjs': 2.4.2
       '@types/cookie-signature': 1.0.4
       '@types/ms': 0.7.31
       rimraf: 3.0.2
@@ -4369,7 +4371,7 @@ packages:
       '@nestjs/websockets':
         optional: true
     dependencies:
-      '@nestjs/common': 8.4.5_47vcjb2de6lyibr6g4enoa5lyu
+      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
       '@nestjs/microservices': 8.4.5_texnrsp5xgvn4t37qwxymg6msa
       '@nuxtjs/opencollective': 0.3.2
       fast-safe-stringify: 2.1.1
@@ -4392,7 +4394,7 @@ packages:
       reflect-metadata: 0.1.13
       rxjs: ^7.2.0
     dependencies:
-      '@nestjs/common': 8.4.5_37tgzg5iwyrf23cqcmjxlmljgu
+      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
       reflect-metadata: 0.1.13
       rxjs: 7.5.5
@@ -4565,7 +4567,7 @@ packages:
     peerDependencies:
       '@nestjs/common': ^6.0.0 || ^7.0.0 || ^8.0.0
     dependencies:
-      '@nestjs/common': 8.4.5_37tgzg5iwyrf23cqcmjxlmljgu
+      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
       '@types/jsonwebtoken': 8.5.8
       jsonwebtoken: 8.5.1
     dev: false
@@ -4583,7 +4585,7 @@ packages:
       class-validator:
         optional: true
     dependencies:
-      '@nestjs/common': 8.4.5_37tgzg5iwyrf23cqcmjxlmljgu
+      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
       class-transformer: 0.5.1
       class-validator: 0.13.2
       reflect-metadata: 0.1.13
@@ -4707,7 +4709,7 @@ packages:
       redis:
         optional: true
     dependencies:
-      '@nestjs/common': 8.4.5_47vcjb2de6lyibr6g4enoa5lyu
+      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
       iterare: 1.2.1
       json-socket: 0.3.0
@@ -4722,7 +4724,7 @@ packages:
       '@nestjs/common': ^6.0.0 || ^7.0.0 || ^8.0.0
       passport: ^0.4.0 || ^0.5.0
     dependencies:
-      '@nestjs/common': 8.4.5_37tgzg5iwyrf23cqcmjxlmljgu
+      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
       passport: 0.6.0
     dev: false
 
@@ -4732,7 +4734,7 @@ packages:
       '@nestjs/common': ^8.0.0
       '@nestjs/core': ^8.0.0
     dependencies:
-      '@nestjs/common': 8.4.5_37tgzg5iwyrf23cqcmjxlmljgu
+      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
       fastify: 3.29.0
       fastify-cors: 6.1.0
@@ -4797,7 +4799,7 @@ packages:
       reflect-metadata: 0.1.x
       rxjs: 7.x
     dependencies:
-      '@nestjs/common': 8.4.5_47vcjb2de6lyibr6g4enoa5lyu
+      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
       check-disk-space: 3.3.0
       reflect-metadata: 0.1.13
@@ -4818,7 +4820,7 @@ packages:
         optional: true
     dependencies:
       optional: 0.1.4
-      '@nestjs/common': 8.4.5_47vcjb2de6lyibr6g4enoa5lyu
+      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
       '@nestjs/microservices': 8.4.5_texnrsp5xgvn4t37qwxymg6msa
       tslib: 2.4.0
@@ -6590,6 +6592,10 @@ packages:
     resolution: {integrity: sha512-kVzjari1s2YVi77D3w1yuvohV2idweYXMCDzqBiVNN63TcDWrIlTVOYpqVrvbbyOE/IyzBoTKF0fdnLPEORFxA==}
     dependencies:
       '@babel/types': 7.18.0
+    dev: true
+
+  /@types/bcryptjs/2.4.2:
+    resolution: {integrity: sha512-LiMQ6EOPob/4yUL66SZzu6Yh77cbzJFYll+ZfaPiPPFswtIlA/Fs1MzdKYA7JApHU49zQTbJGX3PDmCpIdDBRQ==}
     dev: true
 
   /@types/cache-manager-redis-store/2.0.1:
@@ -14827,7 +14833,7 @@ packages:
       '@typegoose/typegoose': ^6.2.1 || ^7.0.0
       mongoose: ^5.10.6
     dependencies:
-      '@nestjs/common': 8.4.5_37tgzg5iwyrf23cqcmjxlmljgu
+      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
       '@typegoose/typegoose': 9.8.1_mongoose@6.3.4
       is-class: 0.0.9

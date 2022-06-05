@@ -36,9 +36,9 @@ export class GetUserMembershipsHandler
       };
     }
 
-    const organizations = await this.organizations
-      .find({ _id: organizationIDs })
-      .lean();
+    const organizations = await this.organizations.find({
+      _id: organizationIDs,
+    });
 
     return {
       organizations: organizations.map(

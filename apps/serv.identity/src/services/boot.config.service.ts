@@ -10,8 +10,8 @@ export class BootConfigService extends ServAppConfigService {
     return this.boot.get('app.passwordExpires', '1h');
   }
 
-  get passwordHashRounds(): number {
-    return this.boot.get('app.passwordHashRound', 10);
+  get verificationSalt(): number {
+    return this.boot.get('app.verificationCode.salt', 10);
   }
 
   get refreshTokenExpiry(): Date {

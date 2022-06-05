@@ -42,7 +42,7 @@
       "",
       "\tconstructor(entity: $1Schema) {",
       "\t\tsuper()",
-      "\t\tObject.assign(this, entity)",
+      "\t\tObject.assign(this, entity.toObject({ virtuals: false }))",
       "\t}",
       "",
       "\tget proto(): Proto {",

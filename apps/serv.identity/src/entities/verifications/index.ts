@@ -37,7 +37,8 @@ export class VerificationsModel extends BaseFactory<VerificationSchema> {
     owner?: VerificationSchema['owner'],
   ) {
     const code = this.config.verificationCode;
-    const hashed = await bcrypt.hash(code);
+    const salt = this.config.verificationSalt;
+    const hashed = await bcrypt.hash(code, salt);
     const verification = await this.create({
       owner,
       hashed,

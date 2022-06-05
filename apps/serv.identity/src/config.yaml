@@ -11,10 +11,9 @@ service:
     tcp: host.docker.internal:3011
 
 app:
-  passwordExpires: 1h
-  passwordHashRound: 10
   verificationCode:
     length: 6
+    salt: 10
   refreshToken:
     expiresIn: 1y
   accessToken:

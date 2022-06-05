@@ -85,7 +85,6 @@ export class RegisterHandler
 
   async execute(command: RegisterCommand): Promise<RegisterResponse> {
     const { email, phone, firstName, lastName, displayName } = command.request;
-
     await Promise.all([
       this.validateEmail(email),
       phone ? this.validatePhone(phone) : true,
