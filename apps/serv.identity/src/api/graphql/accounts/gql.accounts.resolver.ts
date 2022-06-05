@@ -13,6 +13,7 @@ import { Query, Resolver } from '@nestjs/graphql';
 import { Args } from '@nestjs/graphql';
 import { gRpcController } from '@app/grpc/grpc.controller';
 import { Mutation } from '@nestjs/graphql';
+import { UpdateAccountInput } from './inputs/update.account.input';
 
 @Resolver()
 export class GqlAccountResolver {
@@ -24,6 +25,24 @@ export class GqlAccountResolver {
   })
   account(@CurrentAccount() account: Account): Account {
     return account;
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Boolean, { description: 'Update account' })
+  async updateAccount(
+    @CurrentAccount() account: Account,
+    @Args('input') input: UpdateAccountInput,
+  ) {
+    await resolveRpcRequest(
+      this.rpcClient.updateAccount({
+        accountId: account.id,
+        displayName: input.displayName,
+        firstName: input.firstName,
+        lastName: input.lastName,
+      }),
+    );
+
+    return true;
   }
 
   @UseGuards(GqlAuthGuard)
