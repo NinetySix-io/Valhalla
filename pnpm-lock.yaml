@@ -51,6 +51,7 @@ importers:
       consul: ^0.34.1
       cron-time-generator: ^1.3.0
       dotenv: ^16.0.1
+      fastify: ^3.29.0
       graphql: ^16.5.0
       lodash.keyby: ^4.6.0
       long: ^5.2.0
@@ -81,6 +82,7 @@ importers:
       apollo-server-types: 3.6.0_graphql@16.5.0
       consul: 0.34.1
       cron-time-generator: 1.3.0
+      fastify: 3.29.0
       graphql: 16.5.0
       lodash.keyby: 4.6.0
       long: 5.2.0
@@ -4371,7 +4373,7 @@ packages:
       '@nestjs/websockets':
         optional: true
     dependencies:
-      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
+      '@nestjs/common': 8.4.5_47vcjb2de6lyibr6g4enoa5lyu
       '@nestjs/microservices': 8.4.5_texnrsp5xgvn4t37qwxymg6msa
       '@nuxtjs/opencollective': 0.3.2
       fast-safe-stringify: 2.1.1
@@ -4394,7 +4396,7 @@ packages:
       reflect-metadata: 0.1.13
       rxjs: ^7.2.0
     dependencies:
-      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
+      '@nestjs/common': 8.4.5_47vcjb2de6lyibr6g4enoa5lyu
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
       reflect-metadata: 0.1.13
       rxjs: 7.5.5
@@ -4709,7 +4711,7 @@ packages:
       redis:
         optional: true
     dependencies:
-      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
+      '@nestjs/common': 8.4.5_47vcjb2de6lyibr6g4enoa5lyu
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
       iterare: 1.2.1
       json-socket: 0.3.0
@@ -4799,7 +4801,7 @@ packages:
       reflect-metadata: 0.1.x
       rxjs: 7.x
     dependencies:
-      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
+      '@nestjs/common': 8.4.5_47vcjb2de6lyibr6g4enoa5lyu
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
       check-disk-space: 3.3.0
       reflect-metadata: 0.1.13
@@ -4820,7 +4822,7 @@ packages:
         optional: true
     dependencies:
       optional: 0.1.4
-      '@nestjs/common': 8.4.5_kgmvgmqc4iohdboj3f7yqhrie4
+      '@nestjs/common': 8.4.5_47vcjb2de6lyibr6g4enoa5lyu
       '@nestjs/core': 8.4.5_wtolqzbjarpkolu5b64knlciju
       '@nestjs/microservices': 8.4.5_texnrsp5xgvn4t37qwxymg6msa
       tslib: 2.4.0

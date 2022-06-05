@@ -21,7 +21,7 @@ export class FindAccountHandler
 
   private validateRequest(request: FindAccountRequest) {
     const query: SStruct.Describe<FindAccountRequest> = SStruct.object({
-      userId: SStruct.optional(SStruct.string()),
+      accountId: SStruct.optional(SStruct.string()),
       phone: SStruct.optional(SStruct.string()),
       email: SStruct.optional(SStruct.string()),
     });

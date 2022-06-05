@@ -20,11 +20,23 @@ export class GqlAccountResolver {
   constructor(private readonly rpcClient: gRpcController) {}
 
   @UseGuards(GqlAuthGuard)
+  @Query(() => AccountSchema, { description: 'Get current session user' })
+  session(@CurrentAccount() account: Account): Account {
+    return account;
+  }
+
+  @UseGuards(GqlAuthGuard)
   @Query(() => AccountSchema, {
     description: 'Get current logged in user information',
   })
-  account(@CurrentAccount() account: Account): Account {
-    return account;
+  async account(@CurrentAccount() account: Account): Promise<Account> {
+    const response = await resolveRpcRequest(
+      this.rpcClient.findAccount({
+        accountId: account.id,
+      }),
+    );
+
+    return response;
   }
 
   @UseGuards(GqlAuthGuard)
