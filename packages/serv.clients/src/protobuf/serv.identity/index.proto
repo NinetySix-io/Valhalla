@@ -15,11 +15,35 @@ service IdentityService {
 
     rpc FindAccount(FindAccountRequest) returns (Account) {}
     rpc UpdateAccount(UpdateAccountRequest) returns (UpdateAccountResponse) {}
+    rpc AddEmailToAccount(AddEmailToAccountRequest) returns (Account) {}
+    rpc AddPhoneToAccount(AddPhoneToAccountRequest) returns (Account) {}
+    rpc RemoveEmailFromAccount(RemoveEmailFromAccountRequest) returns (Account) {}
+    rpc RemovePhoneFromAccount(RemovePhoneFromAccountRequest) returns (Account) {}
 
     rpc CreateAccess(Account) returns (CreateAccessResponse) {}
     rpc DeleteRefreshToken(DeleteRefreshTokenRequest) returns (DeleteRefreshTokenResponse) {}
     rpc ProvisionAccessToken(ProvisionAccessTokenRequest) returns (ProvisionAccessTokenResponse) {}
     rpc DecodeAccessToken(DecodeAccessTokenRequest) returns (Account) {}
+}
+
+message AddEmailToAccountRequest {
+    string accountId = 1;
+    string email = 2;
+}
+
+message AddPhoneToAccountRequest {
+    string accountId = 1;
+    string phone = 2;
+}
+
+message RemoveEmailFromAccountRequest {
+    string accountId = 1;
+    string email = 2;
+}
+
+message RemovePhoneFromAccountRequest {
+    string accountId = 1;
+    string phone = 2;
 }
 
 message VerifyPhoneRequest {
@@ -54,7 +78,7 @@ message SendPhoneVerificationRequest {
 
 message Verification {
     string id = 1;
-    string owner = 2;
+    optional string owner = 2;
     string expiresAt = 3;
 }
 

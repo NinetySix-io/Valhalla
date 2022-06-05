@@ -1,5 +1,7 @@
 import {
   Account,
+  AddEmailToAccountRequest,
+  AddPhoneToAccountRequest,
   CreateAccessResponse,
   DecodeAccessTokenRequest,
   DeleteRefreshTokenRequest,
@@ -17,6 +19,8 @@ import {
   ProvisionAccessTokenResponse,
   RegisterRequest,
   RegisterResponse,
+  RemoveEmailFromAccountRequest,
+  RemovePhoneFromAccountRequest,
   SendEmailVerificationRequest,
   SendPhoneVerificationRequest,
   UpdateAccountRequest,
@@ -31,6 +35,8 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Controller, Logger } from '@nestjs/common';
 import { GrpcClass, LogClassMethods } from '@valhalla/serv.core';
 
+import { AddEmailToAccountCommand } from '@app/cqrs/commands/add.email.to.account.command';
+import { AddPhoneToAccountCommand } from '@app/cqrs/commands/add.phone.to.account.command';
 import { CreateAccessCommand } from '@app/cqrs/commands/create.access.command';
 import { DecodeAccessTokenCommand } from '@app/cqrs/commands/decode.access.token.command';
 import { DeleteRefreshTokenCommand } from '@app/cqrs/commands/delete.refresh.token.command';
@@ -41,6 +47,8 @@ import { LogoutCommand } from '@app/cqrs/commands/logout.command';
 import { Observable } from 'rxjs';
 import { ProvisionAccessTokenCommand } from '@app/cqrs/commands/provision.access.token.command';
 import { RegisterCommand } from '@app/cqrs/commands/register.command';
+import { RemoveEmailFromAccountCommand } from '@app/cqrs/commands/remove.email.from.account.command';
+import { RemovePhoneFromAccountCommand } from '@app/cqrs/commands/remove.phone.from.account.command';
 import { SendEmailVerificationCommand } from '@app/cqrs/commands/send.email.verification.command';
 import { SendPhoneVerificationCommand } from '@app/cqrs/commands/send.phone.verification.command';
 import { UpdateAccountCommand } from '@app/cqrs/commands/update.account.command';
@@ -59,6 +67,26 @@ export class gRpcController implements IdentityServiceController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
+  addEmailToAccount(
+    request: AddEmailToAccountRequest,
+  ): Account | Promise<Account> | Observable<Account> {
+    return this.commandBus.execute(new AddEmailToAccountCommand(request));
+  }
+  addPhoneToAccount(
+    request: AddPhoneToAccountRequest,
+  ): Account | Promise<Account> | Observable<Account> {
+    return this.commandBus.execute(new AddPhoneToAccountCommand(request));
+  }
+  removeEmailFromAccount(
+    request: RemoveEmailFromAccountRequest,
+  ): Account | Promise<Account> | Observable<Account> {
+    return this.commandBus.execute(new RemoveEmailFromAccountCommand(request));
+  }
+  removePhoneFromAccount(
+    request: RemovePhoneFromAccountRequest,
+  ): Account | Promise<Account> | Observable<Account> {
+    return this.commandBus.execute(new RemovePhoneFromAccountCommand(request));
+  }
   loginWithPhone(
     request: LoginWithPhoneRequest,
   ):

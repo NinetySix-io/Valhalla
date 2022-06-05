@@ -4,6 +4,26 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "serv.identity";
 
+export interface AddEmailToAccountRequest {
+  accountId: string;
+  email: string;
+}
+
+export interface AddPhoneToAccountRequest {
+  accountId: string;
+  phone: string;
+}
+
+export interface RemoveEmailFromAccountRequest {
+  accountId: string;
+  email: string;
+}
+
+export interface RemovePhoneFromAccountRequest {
+  accountId: string;
+  phone: string;
+}
+
 export interface VerifyPhoneRequest {
   phone: string;
   verificationCode: string;
@@ -36,7 +56,7 @@ export interface SendPhoneVerificationRequest {
 
 export interface Verification {
   id: string;
-  owner: string;
+  owner?: string | undefined;
   expiresAt: string;
 }
 
@@ -194,6 +214,18 @@ export interface IdentityServiceClient {
     request: UpdateAccountRequest
   ): Observable<UpdateAccountResponse>;
 
+  addEmailToAccount(request: AddEmailToAccountRequest): Observable<Account>;
+
+  addPhoneToAccount(request: AddPhoneToAccountRequest): Observable<Account>;
+
+  removeEmailFromAccount(
+    request: RemoveEmailFromAccountRequest
+  ): Observable<Account>;
+
+  removePhoneFromAccount(
+    request: RemovePhoneFromAccountRequest
+  ): Observable<Account>;
+
   createAccess(request: Account): Observable<CreateAccessResponse>;
 
   deleteRefreshToken(
@@ -266,6 +298,22 @@ export interface IdentityServiceController {
     | Observable<UpdateAccountResponse>
     | UpdateAccountResponse;
 
+  addEmailToAccount(
+    request: AddEmailToAccountRequest
+  ): Promise<Account> | Observable<Account> | Account;
+
+  addPhoneToAccount(
+    request: AddPhoneToAccountRequest
+  ): Promise<Account> | Observable<Account> | Account;
+
+  removeEmailFromAccount(
+    request: RemoveEmailFromAccountRequest
+  ): Promise<Account> | Observable<Account> | Account;
+
+  removePhoneFromAccount(
+    request: RemovePhoneFromAccountRequest
+  ): Promise<Account> | Observable<Account> | Account;
+
   createAccess(
     request: Account
   ):
@@ -305,6 +353,10 @@ export function IdentityServiceControllerMethods() {
       "verifyPhone",
       "findAccount",
       "updateAccount",
+      "addEmailToAccount",
+      "addPhoneToAccount",
+      "removeEmailFromAccount",
+      "removePhoneFromAccount",
       "createAccess",
       "deleteRefreshToken",
       "provisionAccessToken",

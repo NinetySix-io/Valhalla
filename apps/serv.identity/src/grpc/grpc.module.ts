@@ -1,6 +1,8 @@
 import { AccessProvisionModule } from '@app/modules/access.provision/access.provision.module';
 import { AccountSchema } from '@app/entities/accounts/schema';
 import { AccountsModel } from '@app/entities/accounts';
+import { AddEmailToAccountHandler } from '@app/cqrs/commands/add.email.to.account.command';
+import { AddPhoneToAccountHandler } from '@app/cqrs/commands/add.phone.to.account.command';
 import { BootConfigService } from '@app/services/boot.config.service';
 import { CreateAccessHandler } from '@app/cqrs/commands/create.access.command';
 import { DecodeAccessTokenHandler } from '@app/cqrs/commands/decode.access.token.command';
@@ -16,7 +18,10 @@ import { ProvisionAccessTokenHandler } from '@app/cqrs/commands/provision.access
 import { RefreshTokenSchema } from '@app/entities/refresh.tokens/schema';
 import { RefreshTokensModel } from '@app/entities/refresh.tokens';
 import { RegisterHandler } from '@app/cqrs/commands/register.command';
+import { RemoveEmailFromAccountHandler } from '@app/cqrs/commands/remove.email.from.account.command';
+import { RemovePhoneFromAccountHandler } from '@app/cqrs/commands/remove.phone.from.account.command';
 import { SendEmailVerificationHandler } from '@app/cqrs/commands/send.email.verification.command';
+import { SendPhoneVerificationHandler } from '@app/cqrs/commands/send.phone.verification.command';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { UpdateAccountHandler } from '@app/cqrs/commands/update.account.command';
 import { VerificationSchema } from '@app/entities/verifications/schema';
@@ -41,6 +46,8 @@ import { gRpcController } from './grpc.controller';
     VerificationsModel,
     RefreshTokensModel,
 
+    AddEmailToAccountHandler,
+    AddPhoneToAccountHandler,
     CreateAccessHandler,
     DecodeAccessTokenHandler,
     DeleteRefreshTokenHandler,
@@ -49,7 +56,10 @@ import { gRpcController } from './grpc.controller';
     LogoutHandler,
     ProvisionAccessTokenHandler,
     RegisterHandler,
+    RemoveEmailFromAccountHandler,
+    RemovePhoneFromAccountHandler,
     SendEmailVerificationHandler,
+    SendPhoneVerificationHandler,
     UpdateAccountHandler,
     VerifyEmailHandler,
     VerifyPhoneHandler,
