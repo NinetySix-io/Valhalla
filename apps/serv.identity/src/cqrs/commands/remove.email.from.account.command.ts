@@ -30,7 +30,7 @@ export class RemoveEmailFromAccountHandler
       .findById(command.request.accountId)
       .orFail(() => new Error('Account not found!'));
 
-    let originalLen = account.emails.length;
+    const originalLen = account.emails.length;
     account.emails = account.emails.filter(
       (email) => !email.isPrimary && email.value !== command.request.email,
     );

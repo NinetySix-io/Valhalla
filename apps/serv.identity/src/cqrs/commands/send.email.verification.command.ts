@@ -7,12 +7,9 @@ import {
 import { SendEmailVerificationRequest, Verification } from '@app/protobuf';
 
 import { EmailVerificationCreatedEvent } from '../events/email.verification.created.event';
-import { EmailVerificationSentEvent } from '../events/email.verification.sent.event';
-import { Logger } from '@nestjs/common';
 import { RpcHandler } from '@valhalla/serv.core';
 import { VerificationTransformer } from '@app/entities/verifications/transformer';
 import { VerificationsModel } from '@app/entities/verifications';
-import mongoose from 'mongoose';
 
 export class SendEmailVerificationCommand implements ICommand {
   constructor(public readonly request: SendEmailVerificationRequest) {}

@@ -11,7 +11,9 @@ export class PhoneVerifiedSaga {
   constructor(private readonly accounts: AccountsModel) {}
 
   @Saga()
-  onEvent(events$: rx.Observable<any>): rx.Observable<Promise<null>> {
+  onEvent(
+    events$: rx.Observable<PhoneVerifiedEvent>,
+  ): rx.Observable<Promise<null>> {
     return events$.pipe(
       ofType(PhoneVerifiedEvent),
       rx.delay(500),

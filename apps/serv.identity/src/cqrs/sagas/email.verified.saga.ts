@@ -11,7 +11,9 @@ export class EmailVerifiedSaga {
   constructor(private readonly accounts: AccountsModel) {}
 
   @Saga()
-  onEvent(events$: rx.Observable<any>): rx.Observable<Promise<null>> {
+  onEvent(
+    events$: rx.Observable<EmailVerifiedEvent>,
+  ): rx.Observable<Promise<null>> {
     return events$.pipe(
       ofType(EmailVerifiedEvent),
       rx.delay(500),

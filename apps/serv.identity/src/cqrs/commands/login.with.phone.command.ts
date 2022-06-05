@@ -15,7 +15,6 @@ import { AccountLoggedInEvent } from '../events/account.logged.in.event';
 import { AccountTransformer } from '@app/entities/accounts/transformer';
 import { AccountsModel } from '@app/entities/accounts';
 import { CreateAccessCommand } from './create.access.command';
-import { Logger } from '@nestjs/common';
 import { RpcHandler } from '@valhalla/serv.core';
 import { VerificationsModel } from '@app/entities/verifications';
 

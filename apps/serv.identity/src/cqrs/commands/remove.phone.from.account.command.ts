@@ -30,7 +30,7 @@ export class RemovePhoneFromAccountHandler
       .findById(command.request.accountId)
       .orFail(() => new Error('Account not found!'));
 
-    let originalLen = account.emails.length;
+    const originalLen = account.emails.length;
     account.phones = account.emails.filter(
       (phone) => !phone.isPrimary && phone.value !== command.request.phone,
     );
