@@ -66,36 +66,33 @@ export abstract class SubgraphsProvider implements OnModuleInit {
     const newGraphConfigs: string[] = [];
     const nextSubgraphs: ServiceEndpointDefinition[] = [];
     const nextSubgraphsMap: { [key: string]: boolean } = {};
+    const currentGraphNames = Object.keys(currentSubgraphMap);
 
-    for await (const service of serviceNames) {
+    for (const service of serviceNames) {
       const nodes = this.consul.getServiceServers(service);
-      const assignedNode = nodes[0];
+      const isGateway = this.boot.get('service.name') === service;
+      const hasGql = nodes[0].tags?.includes('graphql');
+      const serviceName = nodes[0]?.service;
+      const isInCurrent = currentSubgraphMap[serviceName];
 
-      if (
-        this.boot.get('service.name') === service ||
-        !assignedNode?.service ||
-        !assignedNode.tags?.includes('graphql')
-      ) {
+      if (isGateway || !serviceName || !hasGql) {
         continue;
       }
 
-      const graphName = assignedNode.service;
-      const isInCurrent = currentSubgraphMap[assignedNode.service];
-      const graphUrl = this.resolveServiceDomain(assignedNode);
+      !isInCurrent && newGraphConfigs.push(serviceName);
+      nextSubgraphsMap[serviceName] = true;
 
-      nextSubgraphsMap[graphName] = true;
-      nextSubgraphs.push({ name: graphName, url: graphUrl });
-
-      if (!isInCurrent) {
-        newGraphConfigs.push(assignedNode.service);
+      for (const node of nodes) {
+        const graphUrl = this.resolveServiceDomain(node);
+        nextSubgraphs.push({
+          name: serviceName,
+          url: graphUrl,
+        });
       }
     }
 
-    const removedGraphs = Object.keys(currentSubgraphMap).filter(
-      (graphName) => !nextSubgraphsMap[graphName],
-    );
-
     this._subgraphs = nextSubgraphs;
+    const removedGraphs = currentGraphNames.filter((g) => !nextSubgraphsMap[g]);
     const hasRemoval = removedGraphs.length > 0;
     const hasAddition = newGraphConfigs.length > 0;
 
