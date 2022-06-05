@@ -164,7 +164,7 @@ export class IntrospectAndCompose implements SupergraphManager {
       if (!composition.errors) {
         result.push(subgraph);
       } else {
-        console.warn(
+        this.logger.warn(
           `Unable to register subgraph: ${subgraph.name}`,
           composition.errors.map((e) => e.message),
         );

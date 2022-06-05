@@ -82,10 +82,7 @@ export async function loadServicesFromRemoteEndpoint({
       });
     } catch (e) {
       const error = e as Error;
-      const errorMessage =
-        `Couldn't load service definitions for "${name}" at ${url}` +
-        (error && error.message ? ': ' + error.message || e : '');
-
+      const errorMessage = `Couldn't load service definitions for "${name}" at ${url}: ${error?.message}`;
       logger.warn(errorMessage);
       continue;
     }

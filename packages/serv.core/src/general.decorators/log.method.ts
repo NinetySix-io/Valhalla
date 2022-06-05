@@ -1,6 +1,9 @@
+import { Logger } from '@nestjs/common';
+
 export type LogMethodOption = {
   when: boolean | (() => boolean);
   onTrigger?: (fnName: string, args: unknown[]) => void;
+  logger?: Logger;
 };
 
 /**
@@ -9,12 +12,15 @@ export type LogMethodOption = {
  * @param {LogMethodOption} [option] - LogMethodOption
  * @returns A method decorator.
  */
-export function LogMethod(option?: LogMethodOption): MethodDecorator {
-  return (_, key, descriptor) => {
+export function LogMethod(option?: LogMethodOption) {
+  const logger = option?.logger ?? new Logger(LogMethod.name);
+  return (
+    _: unknown,
+    key: string | Symbol,
+    descriptor: TypedPropertyDescriptor<Function>,
+  ) => {
     const originalMethod = descriptor.value as unknown as Function;
-
-    // @ts-ignore
-    descriptor.value = function (...args: any[]) {
+    descriptor.value = function (...args: unknown[]) {
       const result = originalMethod.apply(this, args);
       const shouldLog =
         (typeof option?.when === 'boolean' ? option.when : option?.when?.()) ??
@@ -23,7 +29,7 @@ export function LogMethod(option?: LogMethodOption): MethodDecorator {
       if (shouldLog && typeof key === 'string') {
         option?.onTrigger
           ? option.onTrigger(key, args)
-          : console.debug(key + '(' + args.join(', ') + ')');
+          : logger.debug(key + '(' + args.join(', ') + ')');
       }
 
       return result;

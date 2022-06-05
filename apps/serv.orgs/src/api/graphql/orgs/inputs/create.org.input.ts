@@ -1,4 +1,4 @@
-import { Field, InputType, PickType } from '@nestjs/graphql';
+import { InputType, PickType } from '@nestjs/graphql';
 
 import { OrganizationSchema } from '@app/entities/organizations/schema';
 
