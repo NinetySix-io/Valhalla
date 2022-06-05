@@ -9,20 +9,20 @@ import {
 } from '@valhalla/serv.core';
 import { LoginWithEmailInput } from './inputs/login.with.email.input';
 import { LoginWithPhoneInput } from './inputs/login.with.phone.input';
-import { AccountRegisterInput } from './inputs/register.input';
-import { AccountLoginResponse } from './responses/login.response';
-import { AccountRegisterResponse } from './responses/register.response';
+import { RegisterInput } from './inputs/register.input';
+import { LoginResponse } from './responses/login.response';
+import { RegisterResponse } from './responses/register.response';
 
 @Resolver()
 export class GqlAuthResolver {
   constructor(private readonly rpcClient: gRpcController) {}
 
-  @Mutation(() => AccountRegisterResponse, {
+  @Mutation(() => RegisterResponse, {
     description: 'Register user account',
   })
   async registerAccount(
-    @Args('input') input: AccountRegisterInput,
-  ): Promise<AccountRegisterResponse> {
+    @Args('input') input: RegisterInput,
+  ): Promise<RegisterResponse> {
     const result = await resolveRpcRequest(this.rpcClient.register(input));
     if (!result.account) {
       throw new Error('Unable to register!');
@@ -33,13 +33,13 @@ export class GqlAuthResolver {
     };
   }
 
-  @Mutation(() => AccountLoginResponse, {
+  @Mutation(() => LoginResponse, {
     description: 'Login to account with email address',
   })
   async loginWithEmail(
     @Args('input') input: LoginWithEmailInput,
     @Auth() auth: AuthManager,
-  ): Promise<AccountLoginResponse> {
+  ): Promise<LoginResponse> {
     const result = await resolveRpcRequest(
       this.rpcClient.loginWithEmail(input),
     );
@@ -57,13 +57,13 @@ export class GqlAuthResolver {
     };
   }
 
-  @Mutation(() => AccountLoginResponse, {
+  @Mutation(() => LoginResponse, {
     description: 'Login to account with phone number',
   })
   async loginWithPhone(
     @Args('input') input: LoginWithPhoneInput,
     @Auth() auth: AuthManager,
-  ): Promise<AccountLoginResponse> {
+  ): Promise<LoginResponse> {
     const result = await resolveRpcRequest(
       this.rpcClient.loginWithPhone(input),
     );
