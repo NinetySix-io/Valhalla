@@ -40,7 +40,12 @@ export class ApolloGatewaySetupProvider
           },
         },
         debug: isDev(),
-        cors: true,
+        cors: isDev()
+          ? {
+              origin: true,
+              credentials: true,
+            }
+          : true,
       },
       gateway: {
         supergraphSdl: this.composer,

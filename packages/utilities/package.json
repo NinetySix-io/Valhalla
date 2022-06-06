@@ -16,15 +16,26 @@
   "devDependencies": {
     "@nestjs/cli": "^8.2.5",
     "@types/lodash.compact": "^3.0.7",
+    "@types/lodash.debounce": "^4.0.7",
     "@types/lodash.isempty": "^4.4.7",
+    "@types/lodash.omit": "^4.5.7",
+    "@types/lodash.pick": "^4.4.7",
+    "@types/lodash.throttle": "^4.1.7",
     "@valhalla/config": "workspace:*",
     "@valhalla/tsconfig": "workspace:*",
+    "add": "^2.0.6",
     "jest": "^28.1.0",
+    "pnpm": "^7.1.9",
     "typescript": "^4.6.4"
   },
   "dependencies": {
+    "class-validator": "^0.13.2",
     "lodash.compact": "^3.0.1",
+    "lodash.debounce": "^4.0.8",
     "lodash.isempty": "^4.4.0",
+    "lodash.omit": "^4.5.0",
+    "lodash.pick": "^4.4.0",
+    "lodash.throttle": "^4.1.1",
     "slugify": "^1.6.5",
     "superstruct": "^0.15.4"
   }

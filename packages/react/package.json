@@ -35,12 +35,16 @@
     "@emotion/styled": "^11.8.1",
     "@mui/lab": "5.0.0-alpha.81",
     "@mui/material": "^5.7.0",
+    "@react-hook/async": "^3.1.1",
+    "@react-hook/change": "^1.0.0",
+    "@react-hook/debounce": "^4.0.0",
     "next": "12.1.6",
     "next-seo": "^5.4.0",
     "rc-field-form": "^1.26.4",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-icons": "^4.3.1",
-    "require-from-string": "^2.0.2"
+    "require-from-string": "^2.0.2",
+    "use-deep-compare-effect": "^1.8.1"
   }
 }

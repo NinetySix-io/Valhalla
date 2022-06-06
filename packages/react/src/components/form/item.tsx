@@ -1,16 +1,28 @@
 import * as React from 'react';
 
 import { Box, Typography, styled } from '@mui/material';
+import { FormInstance, Meta } from 'rc-field-form/es/interface';
 
 import { Field } from 'rc-field-form';
 import { FieldProps } from 'rc-field-form/es/Field';
 import { red } from '@mui/material/colors';
 
-type Props = FieldProps & {
+type Props<T, P> = Omit<FieldProps, 'children'> & {
   label?: React.ReactNode;
   style?: React.CSSProperties;
   className?: string;
   id?: string;
+  noStyle?: boolean;
+  children?:
+    | ((
+        form: FormInstance<P>,
+        meta: Meta,
+        control: {
+          value?: T;
+          onChange?: (...params: unknown[]) => void;
+        },
+      ) => React.ReactElement | undefined | null)
+    | React.ReactElement;
 };
 
 const Container = styled(Box)`
@@ -33,25 +45,32 @@ const Error = styled(Typography)`
   min-height: 30px;
 `;
 
-export const FormItem: React.FC<Props> = ({
+export function FormItem<T, P = unknown>({
   label,
   name,
   style,
   className,
   id,
   children,
+  noStyle,
   ...props
-}) => {
+}: Props<T, P>) {
   return (
     <Field name={name} {...props}>
       {(control, meta, form) => {
+        if (!children) {
+          return;
+        }
+
         const error = meta.errors?.[0];
         const childNode =
           typeof children === 'function'
-            ? children(control, meta, form)
-            : React.cloneElement(children as React.ReactElement, {
-                ...control,
-              });
+            ? children(form, meta, control)
+            : React.cloneElement(children, control);
+
+        if (noStyle) {
+          return childNode;
+        }
 
         return (
           <Container style={style} className={className} id={id}>
@@ -65,4 +84,4 @@ export const FormItem: React.FC<Props> = ({
       }}
     </Field>
   );
-};
+}

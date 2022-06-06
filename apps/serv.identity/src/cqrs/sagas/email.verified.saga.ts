@@ -13,13 +13,12 @@ export class EmailVerifiedSaga {
   @Saga()
   onEvent(
     events$: rx.Observable<EmailVerifiedEvent>,
-  ): rx.Observable<Promise<null>> {
+  ): rx.Observable<Promise<void>> {
     return events$.pipe(
       ofType(EmailVerifiedEvent),
       rx.delay(500),
       rx.map(async (event) => {
         await this.accounts.deleteAllUnverifiedEmails(event.data.emailVerified);
-        return null;
       }),
     );
   }

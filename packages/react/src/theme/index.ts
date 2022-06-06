@@ -8,7 +8,7 @@ export const theme = responsiveFontSizes(
     components: {},
     typography: {
       h1: {
-        fontSize: 30,
+        fontSize: 40,
       },
     },
     palette: {

@@ -8,10 +8,7 @@ export * from './is.test';
  * @param props - {
  * @returns A class that has a static method called instance that returns a new instance of the class.
  */
-export function buildEnvironment<T>(props: {
-  schema?: T;
-  vars?: Record<string, string>;
-}) {
+export function buildEnvironment<T extends object>(schema: T) {
   return class Environment {
     variables: T & { NODE_ENV?: string };
 
@@ -19,7 +16,7 @@ export function buildEnvironment<T>(props: {
       this.variables = Object.assign(
         {},
         process.env,
-        props.vars,
+        schema,
       ) as typeof Environment['variables'];
     }
 

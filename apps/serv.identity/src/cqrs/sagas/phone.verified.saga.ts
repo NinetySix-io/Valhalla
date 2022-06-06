@@ -13,13 +13,12 @@ export class PhoneVerifiedSaga {
   @Saga()
   onEvent(
     events$: rx.Observable<PhoneVerifiedEvent>,
-  ): rx.Observable<Promise<null>> {
+  ): rx.Observable<Promise<void>> {
     return events$.pipe(
       ofType(PhoneVerifiedEvent),
       rx.delay(500),
       rx.map(async (event) => {
         await this.accounts.deleteAllUnverifiedPhone(event.data.phoneVerified);
-        return null;
       }),
     );
   }

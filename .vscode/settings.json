@@ -31,6 +31,7 @@
     "ptype",
     "serv",
     "supergraph",
+    "superstruct",
     "turborepo",
     "typegoose",
     "typeorm",

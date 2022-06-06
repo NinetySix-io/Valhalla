@@ -2,6 +2,7 @@ import { Box, Typography, styled } from '@mui/material';
 
 import { GetServerSideProps } from '@valhalla/react';
 import Link from 'next/link';
+import { PAGES } from '@app/PAGES_CONSTANTS';
 
 const Page = styled(Box)`
   flex-grow: 1;
@@ -27,7 +28,7 @@ export const getServerSideProps: GetServerSideProps = () => {
     },
     redirect: {
       permanent: false,
-      destination: '/login',
+      destination: PAGES.GET_STARTED,
     },
   };
 };

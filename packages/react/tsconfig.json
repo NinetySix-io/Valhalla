@@ -3,6 +3,7 @@
   "include": ["**/*.ts"],
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {
+    "lib": ["DOM"],
     "baseUrl": "./",
     "paths": {
       "@packages/react/*": ["src/*"]

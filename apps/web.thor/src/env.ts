@@ -1,21 +1,15 @@
 import { SStruct, buildEnvironment } from '@valhalla/utilities';
 
-import getConfig from 'next/config';
-
-const { publicRuntimeConfig } = getConfig();
-
 const schema = SStruct.create(
-  publicRuntimeConfig ?? {},
+  {
+    SERVER: process.env.SERVER,
+  },
   SStruct.object({
-    SERVER: SStruct.defaulted(SStruct.string(), 'http://localhost:3010'),
-    NODE_ENV: SStruct.defaulted(SStruct.string(), 'development'),
+    SERVER: SStruct.string(),
   }),
 );
 
-export class Environment extends buildEnvironment({
-  schema,
-  vars: publicRuntimeConfig,
-}) {
+export class Environment extends buildEnvironment(schema) {
   static get isServer() {
     return typeof window === 'undefined';
   }
