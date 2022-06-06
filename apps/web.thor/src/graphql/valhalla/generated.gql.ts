@@ -137,6 +137,8 @@ export type Mutation = {
   readonly sendPhoneVerificationCode: Scalars['String'];
   /** Update account */
   readonly updateAccount: Scalars['Boolean'];
+  /** Validate verification code */
+  readonly validateVerificationCode: Scalars['Boolean'];
 };
 
 
@@ -202,6 +204,12 @@ export type MutationSendPhoneVerificationCodeArgs = {
 
 export type MutationUpdateAccountArgs = {
   input: UpdateAccountInput;
+};
+
+
+export type MutationValidateVerificationCodeArgs = {
+  verificationCode: Scalars['String'];
+  verificationId: Scalars['String'];
 };
 
 /** Subscription plan */
@@ -368,6 +376,14 @@ export type SendVerificationToPhoneMutationVariables = Exact<{
 
 
 export type SendVerificationToPhoneMutation = { readonly __typename?: 'Mutation', readonly sendPhoneVerificationCode: string };
+
+export type ValidateVerificationCodeMutationVariables = Exact<{
+  verificationId: Scalars['String'];
+  verificationCode: Scalars['String'];
+}>;
+
+
+export type ValidateVerificationCodeMutation = { readonly __typename?: 'Mutation', readonly validateVerificationCode: boolean };
 
 export type GetAccessTokenQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -821,6 +837,41 @@ export function useSendVerificationToPhoneMutation(baseOptions?: Apollo.Mutation
 export type SendVerificationToPhoneMutationHookResult = ReturnType<typeof useSendVerificationToPhoneMutation>;
 export type SendVerificationToPhoneMutationResult = Apollo.MutationResult<SendVerificationToPhoneMutation>;
 export type SendVerificationToPhoneMutationOptions = Apollo.BaseMutationOptions<SendVerificationToPhoneMutation, SendVerificationToPhoneMutationVariables>;
+export const ValidateVerificationCodeDocument = gql`
+    mutation validateVerificationCode($verificationId: String!, $verificationCode: String!) {
+  validateVerificationCode(
+    verificationId: $verificationId
+    verificationCode: $verificationCode
+  )
+}
+    `;
+export type ValidateVerificationCodeMutationFn = Apollo.MutationFunction<ValidateVerificationCodeMutation, ValidateVerificationCodeMutationVariables>;
+
+/**
+ * __useValidateVerificationCodeMutation__
+ *
+ * To run a mutation, you first call `useValidateVerificationCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useValidateVerificationCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [validateVerificationCodeMutation, { data, loading, error }] = useValidateVerificationCodeMutation({
+ *   variables: {
+ *      verificationId: // value for 'verificationId'
+ *      verificationCode: // value for 'verificationCode'
+ *   },
+ * });
+ */
+export function useValidateVerificationCodeMutation(baseOptions?: Apollo.MutationHookOptions<ValidateVerificationCodeMutation, ValidateVerificationCodeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ValidateVerificationCodeMutation, ValidateVerificationCodeMutationVariables>(ValidateVerificationCodeDocument, options);
+      }
+export type ValidateVerificationCodeMutationHookResult = ReturnType<typeof useValidateVerificationCodeMutation>;
+export type ValidateVerificationCodeMutationResult = Apollo.MutationResult<ValidateVerificationCodeMutation>;
+export type ValidateVerificationCodeMutationOptions = Apollo.BaseMutationOptions<ValidateVerificationCodeMutation, ValidateVerificationCodeMutationVariables>;
 export const GetAccessTokenDocument = gql`
     query getAccessToken {
   accessToken

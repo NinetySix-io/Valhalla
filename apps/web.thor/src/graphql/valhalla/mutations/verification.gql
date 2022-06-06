@@ -5,3 +5,13 @@ mutation sendVerificationToEmail($email: String!) {
 mutation sendVerificationToPhone($phone: String!) {
   sendPhoneVerificationCode(phone: $phone)
 }
+
+mutation validateVerificationCode(
+  $verificationId: String!
+  $verificationCode: String!
+) {
+  validateVerificationCode(
+    verificationId: $verificationId
+    verificationCode: $verificationCode
+  )
+}
