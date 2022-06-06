@@ -4,6 +4,15 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "serv.identity";
 
+export interface ValidateVerificationRequest {
+  verificationId: string;
+  verificationCode: string;
+}
+
+export interface ValidateVerificationResponse {
+  isValid: boolean;
+}
+
 export interface DecodeAccessTokenResponse {
   account: Account | undefined;
   expiresAt: string;
@@ -251,6 +260,10 @@ export interface IdentityServiceClient {
   decodeAccessToken(
     request: DecodeAccessTokenRequest
   ): Observable<DecodeAccessTokenResponse>;
+
+  validateVerification(
+    request: ValidateVerificationRequest
+  ): Observable<ValidateVerificationResponse>;
 }
 
 export interface IdentityServiceController {
@@ -355,6 +368,13 @@ export interface IdentityServiceController {
     | Promise<DecodeAccessTokenResponse>
     | Observable<DecodeAccessTokenResponse>
     | DecodeAccessTokenResponse;
+
+  validateVerification(
+    request: ValidateVerificationRequest
+  ):
+    | Promise<ValidateVerificationResponse>
+    | Observable<ValidateVerificationResponse>
+    | ValidateVerificationResponse;
 }
 
 export function IdentityServiceControllerMethods() {
@@ -378,6 +398,7 @@ export function IdentityServiceControllerMethods() {
       "deleteRefreshToken",
       "provisionAccessToken",
       "decodeAccessToken",
+      "validateVerification",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(

@@ -7,21 +7,18 @@ import {
 import { AccessProvisionService } from '@app/modules/access.provision/access.provision.service';
 import { RpcHandler } from '@valhalla/serv.core';
 
-export class DecodeAccessTokenCommand implements ICommand {
+export class DecodeAccessTokenQuery implements ICommand {
   constructor(public readonly input: DecodeAccessTokenRequest) {}
 }
 
-@CommandHandler(DecodeAccessTokenCommand)
+@CommandHandler(DecodeAccessTokenQuery)
 @RpcHandler()
 export class DecodeAccessTokenHandler
-  implements
-    ICommandHandler<DecodeAccessTokenCommand, DecodeAccessTokenResponse>
+  implements ICommandHandler<DecodeAccessTokenQuery, DecodeAccessTokenResponse>
 {
   constructor(private readonly provision: AccessProvisionService) {}
 
-  execute(
-    command: DecodeAccessTokenCommand,
-  ): Promise<DecodeAccessTokenResponse> {
+  execute(command: DecodeAccessTokenQuery): Promise<DecodeAccessTokenResponse> {
     const accessToken = command.input.accessToken;
     const data = this.provision.decodeAccessToken(accessToken);
     return Promise.resolve(data);

@@ -5,7 +5,7 @@ import { AddEmailToAccountHandler } from '@app/cqrs/commands/add.email.to.accoun
 import { AddPhoneToAccountHandler } from '@app/cqrs/commands/add.phone.to.account.command';
 import { BootConfigService } from '@app/services/boot.config.service';
 import { CreateAccessHandler } from '@app/cqrs/commands/create.access.command';
-import { DecodeAccessTokenHandler } from '@app/cqrs/commands/decode.access.token.command';
+import { DecodeAccessTokenHandler } from '@app/cqrs/queries/decode.access.token.query';
 import { DeleteRefreshTokenHandler } from '@app/cqrs/commands/delete.refresh.token.command';
 import { EmailVerifiedSaga } from '@app/cqrs/sagas/email.verified.saga';
 import { FindAccountHandler } from '@app/cqrs/queries/find.account.query';

@@ -2,6 +2,7 @@ import { gRpcController } from '@app/grpc/grpc.controller';
 import { Args, Resolver, Mutation } from '@nestjs/graphql';
 import {
   EmailParamValidation,
+  EmptyStringValidation,
   ParamValidationPipe,
   PhoneParamValidation,
   resolveRpcRequest,
@@ -41,5 +42,24 @@ export class GqlVerificationResolver {
     );
 
     return result.id;
+  }
+
+  @Mutation(() => Boolean, {
+    description: 'Validate verification code',
+  })
+  async validateVerificationCode(
+    @Args('verificationId', new ParamValidationPipe([EmptyStringValidation]))
+    verificationId: string,
+    @Args('verificationCode', new ParamValidationPipe([EmptyStringValidation]))
+    verificationCode: string,
+  ) {
+    const result = await resolveRpcRequest(
+      this.rpcClient.validateVerification({
+        verificationCode,
+        verificationId,
+      }),
+    );
+
+    return result.isValid;
   }
 }

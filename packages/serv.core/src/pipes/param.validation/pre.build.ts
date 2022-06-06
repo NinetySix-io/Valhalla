@@ -1,4 +1,4 @@
-import { isEmail, isPhoneNumber } from 'class-validator';
+import { isEmail, isEmpty, isPhoneNumber } from 'class-validator';
 
 import { ValidatorOption } from './types';
 
@@ -10,4 +10,9 @@ export const EmailParamValidation: ValidatorOption = {
 export const PhoneParamValidation: ValidatorOption = {
   validate: isPhoneNumber,
   errorMessage: 'Invalid phone number provided',
+};
+
+export const EmptyStringValidation: ValidatorOption = {
+  validate: isEmpty,
+  errorMessage: 'Field must be a non-empty string',
 };

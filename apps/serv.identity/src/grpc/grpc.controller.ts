@@ -26,6 +26,8 @@ import {
   SendPhoneVerificationRequest,
   UpdateAccountRequest,
   UpdateAccountResponse,
+  ValidateVerificationRequest,
+  ValidateVerificationResponse,
   Verification,
   VerifyEmailRequest,
   VerifyEmailResponse,
@@ -39,7 +41,7 @@ import { GrpcClass, LogClassMethods } from '@valhalla/serv.core';
 import { AddEmailToAccountCommand } from '@app/cqrs/commands/add.email.to.account.command';
 import { AddPhoneToAccountCommand } from '@app/cqrs/commands/add.phone.to.account.command';
 import { CreateAccessCommand } from '@app/cqrs/commands/create.access.command';
-import { DecodeAccessTokenCommand } from '@app/cqrs/commands/decode.access.token.command';
+import { DecodeAccessTokenQuery } from '@app/cqrs/queries/decode.access.token.query';
 import { DeleteRefreshTokenCommand } from '@app/cqrs/commands/delete.refresh.token.command';
 import { FindAccountQuery } from '@app/cqrs/queries/find.account.query';
 import { LoginWithEmailCommand } from '@app/cqrs/commands/login.with.email.command';
@@ -53,6 +55,7 @@ import { RemovePhoneFromAccountCommand } from '@app/cqrs/commands/remove.phone.f
 import { SendEmailVerificationCommand } from '@app/cqrs/commands/send.email.verification.command';
 import { SendPhoneVerificationCommand } from '@app/cqrs/commands/send.phone.verification.command';
 import { UpdateAccountCommand } from '@app/cqrs/commands/update.account.command';
+import { ValidateVerificationQuery } from '@app/cqrs/queries/validate.verification.query';
 import { VerifyEmailCommand } from '@app/cqrs/commands/verify.email.command';
 import { VerifyPhoneCommand } from '@app/cqrs/commands/verify.phone.command';
 import { isDev } from '@valhalla/utilities';
@@ -68,6 +71,14 @@ export class gRpcController implements IdentityServiceController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
+  validateVerification(
+    request: ValidateVerificationRequest,
+  ):
+    | ValidateVerificationResponse
+    | Promise<ValidateVerificationResponse>
+    | Observable<ValidateVerificationResponse> {
+    return this.queryBus.execute(new ValidateVerificationQuery(request));
+  }
   addEmailToAccount(
     request: AddEmailToAccountRequest,
   ): Account | Promise<Account> | Observable<Account> {
@@ -165,7 +176,7 @@ export class gRpcController implements IdentityServiceController {
     | DecodeAccessTokenResponse
     | Promise<DecodeAccessTokenResponse>
     | Observable<DecodeAccessTokenResponse> {
-    return this.commandBus.execute(new DecodeAccessTokenCommand(request));
+    return this.queryBus.execute(new DecodeAccessTokenQuery(request));
   }
 
   findAccount(
