@@ -1,0 +1,7 @@
+mutation sendVerificationToEmail($email: String!) {
+  sendEmailVerificationCode(email: $email)
+}
+
+mutation sendVerificationToPhone($phone: String!) {
+  sendPhoneVerificationCode(phone: $phone)
+}

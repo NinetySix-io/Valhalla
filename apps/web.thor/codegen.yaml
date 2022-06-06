@@ -1,12 +1,13 @@
 generates:
-  ./src/graphql/odin/generated.gql.ts:
-    schema: ../serv.odin/schema.gql
-    documents: 'src/graphql/odin/**/*.ts'
+  ./src/graphql/valhalla/generated.gql.ts:
+    schema: http://localhost:3010/graphql
+    documents: 'src/graphql/valhalla/**/*.gql'
     plugins:
       - 'typescript'
       - 'typescript-operations'
       - 'typescript-react-apollo'
     config:
+      federation: true
       reactApolloVersion: 3
       immutableTypes: true
       namingConvention:

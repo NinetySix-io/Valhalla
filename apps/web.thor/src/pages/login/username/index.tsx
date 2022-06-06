@@ -13,7 +13,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import NextLink from 'next/link';
 import { Page } from '@app/types/next';
 import { useLoginMutation } from '@app/graphql/odin/generated.gql';
-import { withApollo } from '@app/graphql/odin/with.apollo';
+import { withApollo } from '@app/graphql/with.apollo';
 
 const PageContainer = styled(Container)`
   flex-grow: 1;

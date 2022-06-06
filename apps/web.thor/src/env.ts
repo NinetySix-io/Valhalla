@@ -7,8 +7,8 @@ const { publicRuntimeConfig } = getConfig();
 const schema = SStruct.create(
   publicRuntimeConfig ?? {},
   SStruct.object({
-    SERVER: SStruct.defaulted(SStruct.string(), 'http://localhost:3002'),
-    NODE_ENV: SStruct.optional(SStruct.string()),
+    SERVER: SStruct.defaulted(SStruct.string(), 'http://localhost:3010'),
+    NODE_ENV: SStruct.defaulted(SStruct.string(), 'development'),
   }),
 );
 
