@@ -6,7 +6,7 @@ mutation sendVerificationToPhone($phone: String!) {
   sendPhoneVerificationCode(phone: $phone)
 }
 
-mutation validateVerificationCode(
+query validateVerificationCode(
   $verificationId: String!
   $verificationCode: String!
 ) {

@@ -137,8 +137,6 @@ export type Mutation = {
   readonly sendPhoneVerificationCode: Scalars['String'];
   /** Update account */
   readonly updateAccount: Scalars['Boolean'];
-  /** Validate verification code */
-  readonly validateVerificationCode: Scalars['Boolean'];
 };
 
 
@@ -206,12 +204,6 @@ export type MutationUpdateAccountArgs = {
   input: UpdateAccountInput;
 };
 
-
-export type MutationValidateVerificationCodeArgs = {
-  verificationCode: Scalars['String'];
-  verificationId: Scalars['String'];
-};
-
 /** Subscription plan */
 export enum OrganizationPlan {
   FREE = 'FREE'
@@ -251,6 +243,14 @@ export type Query = {
   readonly organizations: ReadonlyArray<OrganizationSchema>;
   /** Get current session user */
   readonly session: AccountSchema;
+  /** Validate verification code */
+  readonly validateVerificationCode: Scalars['Boolean'];
+};
+
+
+export type QueryValidateVerificationCodeArgs = {
+  verificationCode: Scalars['String'];
+  verificationId: Scalars['String'];
 };
 
 export type RegisterInput = {
@@ -377,13 +377,13 @@ export type SendVerificationToPhoneMutationVariables = Exact<{
 
 export type SendVerificationToPhoneMutation = { readonly __typename?: 'Mutation', readonly sendPhoneVerificationCode: string };
 
-export type ValidateVerificationCodeMutationVariables = Exact<{
+export type ValidateVerificationCodeQueryVariables = Exact<{
   verificationId: Scalars['String'];
   verificationCode: Scalars['String'];
 }>;
 
 
-export type ValidateVerificationCodeMutation = { readonly __typename?: 'Mutation', readonly validateVerificationCode: boolean };
+export type ValidateVerificationCodeQuery = { readonly __typename?: 'Query', readonly validateVerificationCode: boolean };
 
 export type GetAccessTokenQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -838,40 +838,45 @@ export type SendVerificationToPhoneMutationHookResult = ReturnType<typeof useSen
 export type SendVerificationToPhoneMutationResult = Apollo.MutationResult<SendVerificationToPhoneMutation>;
 export type SendVerificationToPhoneMutationOptions = Apollo.BaseMutationOptions<SendVerificationToPhoneMutation, SendVerificationToPhoneMutationVariables>;
 export const ValidateVerificationCodeDocument = gql`
-    mutation validateVerificationCode($verificationId: String!, $verificationCode: String!) {
+    query validateVerificationCode($verificationId: String!, $verificationCode: String!) {
   validateVerificationCode(
     verificationId: $verificationId
     verificationCode: $verificationCode
   )
 }
     `;
-export type ValidateVerificationCodeMutationFn = Apollo.MutationFunction<ValidateVerificationCodeMutation, ValidateVerificationCodeMutationVariables>;
 
 /**
- * __useValidateVerificationCodeMutation__
+ * __useValidateVerificationCodeQuery__
  *
- * To run a mutation, you first call `useValidateVerificationCodeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useValidateVerificationCodeMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
+ * To run a query within a React component, call `useValidateVerificationCodeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useValidateVerificationCodeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const [validateVerificationCodeMutation, { data, loading, error }] = useValidateVerificationCodeMutation({
+ * const { data, loading, error } = useValidateVerificationCodeQuery({
  *   variables: {
  *      verificationId: // value for 'verificationId'
  *      verificationCode: // value for 'verificationCode'
  *   },
  * });
  */
-export function useValidateVerificationCodeMutation(baseOptions?: Apollo.MutationHookOptions<ValidateVerificationCodeMutation, ValidateVerificationCodeMutationVariables>) {
+export function useValidateVerificationCodeQuery(baseOptions: Apollo.QueryHookOptions<ValidateVerificationCodeQuery, ValidateVerificationCodeQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ValidateVerificationCodeMutation, ValidateVerificationCodeMutationVariables>(ValidateVerificationCodeDocument, options);
+        return Apollo.useQuery<ValidateVerificationCodeQuery, ValidateVerificationCodeQueryVariables>(ValidateVerificationCodeDocument, options);
       }
-export type ValidateVerificationCodeMutationHookResult = ReturnType<typeof useValidateVerificationCodeMutation>;
-export type ValidateVerificationCodeMutationResult = Apollo.MutationResult<ValidateVerificationCodeMutation>;
-export type ValidateVerificationCodeMutationOptions = Apollo.BaseMutationOptions<ValidateVerificationCodeMutation, ValidateVerificationCodeMutationVariables>;
+export function useValidateVerificationCodeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ValidateVerificationCodeQuery, ValidateVerificationCodeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ValidateVerificationCodeQuery, ValidateVerificationCodeQueryVariables>(ValidateVerificationCodeDocument, options);
+        }
+export type ValidateVerificationCodeQueryHookResult = ReturnType<typeof useValidateVerificationCodeQuery>;
+export type ValidateVerificationCodeLazyQueryHookResult = ReturnType<typeof useValidateVerificationCodeLazyQuery>;
+export type ValidateVerificationCodeQueryResult = Apollo.QueryResult<ValidateVerificationCodeQuery, ValidateVerificationCodeQueryVariables>;
+export function refetchValidateVerificationCodeQuery(variables: ValidateVerificationCodeQueryVariables) {
+      return { query: ValidateVerificationCodeDocument, variables: variables }
+    }
 export const GetAccessTokenDocument = gql`
     query getAccessToken {
   accessToken

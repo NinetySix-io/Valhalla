@@ -1,4 +1,5 @@
 import { gRpcController } from '@app/grpc/grpc.controller';
+import { Query } from '@nestjs/graphql';
 import { Args, Resolver, Mutation } from '@nestjs/graphql';
 import {
   EmailParamValidation,
@@ -44,7 +45,7 @@ export class GqlVerificationResolver {
     return result.id;
   }
 
-  @Mutation(() => Boolean, {
+  @Query(() => Boolean, {
     description: 'Validate verification code',
   })
   async validateVerificationCode(
