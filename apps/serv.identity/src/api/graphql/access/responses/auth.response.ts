@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class LoginResponse {
+export class AuthResponse {
   @Field({ description: 'Logged in Account ID' })
   accountId!: string;
 

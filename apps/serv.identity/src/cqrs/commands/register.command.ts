@@ -5,13 +5,19 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
+import {
+  CreateAccessResponse,
+  RegisterRequest,
+  RegisterResponse,
+  Verification,
+} from '@app/protobuf';
 import { CreatePayload, RpcHandler } from '@valhalla/serv.core';
-import { RegisterRequest, RegisterResponse, Verification } from '@app/protobuf';
 
 import { AccountRegisteredEvent } from '../events/account.registered.event';
 import { AccountSchema } from '@app/entities/accounts/schema';
 import { AccountTransformer } from '@app/entities/accounts/transformer';
 import { AccountsModel } from '@app/entities/accounts';
+import { CreateAccessCommand } from './create.access.command';
 import { SendEmailVerificationCommand } from './send.email.verification.command';
 import { SendPhoneVerificationCommand } from './send.phone.verification.command';
 import mongoose from 'mongoose';
@@ -105,12 +111,18 @@ export class RegisterHandler
 
     const accountProto = new AccountTransformer(account).proto;
     const event = new AccountRegisteredEvent(accountProto, 'local');
+    const tokens: CreateAccessResponse = await this.commandBus.execute(
+      new CreateAccessCommand(accountProto),
+    );
 
     account.save();
     this.eventBus.publish(event);
 
     return {
       account: accountProto,
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      accessTokenExpiresAt: tokens.accessTokenExpiresAt,
     };
   }
 }

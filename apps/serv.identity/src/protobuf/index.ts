@@ -109,6 +109,9 @@ export interface RegisterRequest {
 
 export interface RegisterResponse {
   account: Account | undefined;
+  accessToken: string;
+  refreshToken: string;
+  accessTokenExpiresAt: string;
 }
 
 export interface DeleteResponse {

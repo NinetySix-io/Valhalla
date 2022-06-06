@@ -131,6 +131,9 @@ message RegisterRequest {
 
 message RegisterResponse {
     Account account = 1;
+    string accessToken = 2;
+    string refreshToken = 3;
+    string accessTokenExpiresAt = 4;
 }
 
 message DeleteResponse {
