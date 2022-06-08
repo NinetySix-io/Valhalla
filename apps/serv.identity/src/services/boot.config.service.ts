@@ -19,12 +19,8 @@ export class BootConfigService extends ServAppConfigService {
     return dayjs().add(milliseconds, 'milliseconds').toDate();
   }
 
-  get accessTokenExpiry(): Date {
-    const milliseconds = ms(
-      this.boot.get('app.accessToken.jwt.signOptions.expiresIn', '8h'),
-    );
-
-    return dayjs().add(milliseconds, 'milliseconds').toDate();
+  get accessTokenExpiry(): string {
+    return this.boot.get('app.accessToken.jwt.signOptions.expiresIn', '8h');
   }
 
   get verificationCode(): string {

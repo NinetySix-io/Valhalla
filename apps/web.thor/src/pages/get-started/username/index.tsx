@@ -12,17 +12,21 @@ import { BaseLayout } from '@app/layout/base';
 import { FaRedo } from 'react-icons/fa';
 import { FormContainer } from '@app/components/form.container';
 import { LoadingButton } from '@mui/lab';
+import { MetaSlice } from '@app/redux/slices/meta';
+import { PAGES } from '@app/PAGES_CONSTANTS';
 import { Page } from '@app/types/next';
 import { isEmail } from '@valhalla/utilities';
 import { useLogin } from '@app/graphql/valhalla/hooks/user.login';
-import { withApollo } from '@app/graphql/valhalla/with.apollo';
+import { useReduxDispatch } from '@app/redux/hooks';
+import { useRouter } from 'next/router';
 
 type Payload = {
   verificationCode: string;
-  username: string;
 };
 
 const GetStartedWithUsernamePage: Page = () => {
+  const router = useRouter();
+  const dispatch = useReduxDispatch();
   const [form] = Form.useForm<Payload>();
   const [username, setUsername] = React.useState<string>();
   const { login, loginResult, isLoggingIn, sendVerification } =
@@ -37,25 +41,29 @@ const GetStartedWithUsernamePage: Page = () => {
     const usernameField = fields.find(
       (field) => field.name[0] === UsernameFormItem.KEY,
     );
-    if (
-      usernameField &&
-      usernameField.value &&
-      usernameField.value !== username
-    ) {
-      setUsername(usernameField.value as string);
+
+    if (usernameField && usernameField.value !== username) {
+      setUsername(usernameField.value as string | undefined);
     }
   }
 
-  function handleSubmit({ verificationCode }: Payload) {
-    login(verificationCode);
+  function handleSubmit(payload: Payload) {
+    login(payload.verificationCode);
   }
 
   useChange(username, () => {
     sendVerification();
   });
 
-  useChange(loginResult, () => {
-    console.log(loginResult);
+  useChange(loginResult, async () => {
+    await dispatch(
+      MetaSlice.actions.setAccessToken({
+        accessToken: loginResult.accessToken,
+        accessTokenExpires: new Date(loginResult.accessTokenExpiresAt),
+      }),
+    );
+
+    router.push(PAGES.HOME);
   });
 
   return (

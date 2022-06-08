@@ -24,6 +24,17 @@ service IdentityService {
     rpc DeleteRefreshToken(DeleteRefreshTokenRequest) returns (DeleteRefreshTokenResponse) {}
     rpc ProvisionAccessToken(ProvisionAccessTokenRequest) returns (ProvisionAccessTokenResponse) {}
     rpc DecodeAccessToken(DecodeAccessTokenRequest) returns (DecodeAccessTokenResponse) {}
+
+    rpc ValidateVerification(ValidateVerificationRequest) returns (ValidateVerificationResponse) {}
+}
+
+message ValidateVerificationRequest {
+    string verificationId = 1;
+    string verificationCode = 2;
+}
+
+message ValidateVerificationResponse {
+    bool isValid = 1;
 }
 
 message DecodeAccessTokenResponse {
@@ -131,6 +142,9 @@ message RegisterRequest {
 
 message RegisterResponse {
     Account account = 1;
+    string accessToken = 2;
+    string refreshToken = 3;
+    string accessTokenExpiresAt = 4;
 }
 
 message DeleteResponse {

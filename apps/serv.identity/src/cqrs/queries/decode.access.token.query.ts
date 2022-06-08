@@ -1,8 +1,8 @@
-import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
 import {
   DecodeAccessTokenRequest,
   DecodeAccessTokenResponse,
 } from '@app/protobuf';
+import { ICommand, ICommandHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { AccessProvisionService } from '@app/modules/access.provision/access.provision.service';
 import { RpcHandler } from '@valhalla/serv.core';
@@ -11,7 +11,7 @@ export class DecodeAccessTokenQuery implements ICommand {
   constructor(public readonly input: DecodeAccessTokenRequest) {}
 }
 
-@CommandHandler(DecodeAccessTokenQuery)
+@QueryHandler(DecodeAccessTokenQuery)
 @RpcHandler()
 export class DecodeAccessTokenHandler
   implements ICommandHandler<DecodeAccessTokenQuery, DecodeAccessTokenResponse>
@@ -21,6 +21,8 @@ export class DecodeAccessTokenHandler
   execute(command: DecodeAccessTokenQuery): Promise<DecodeAccessTokenResponse> {
     const accessToken = command.input.accessToken;
     const data = this.provision.decodeAccessToken(accessToken);
-    return Promise.resolve(data);
+    return Promise.resolve({
+      account: data.account,
+    });
   }
 }

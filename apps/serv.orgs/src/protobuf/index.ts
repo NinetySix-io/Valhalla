@@ -1,5 +1,7 @@
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
+import Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import { Observable } from "rxjs";
 
 export const protobufPackage = "serv.orgs";
@@ -250,3 +252,8 @@ export function OrgsServiceControllerMethods() {
 }
 
 export const ORGS_SERVICE_NAME = "OrgsService";
+
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}

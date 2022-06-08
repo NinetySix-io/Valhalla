@@ -1,4 +1,5 @@
 import { Environment } from '@app/env';
+import { PAGES } from '@app/PAGES_CONSTANTS';
 import { useRouter } from 'next/router';
 
 const RETURN_TO = 'returnTo';
@@ -34,21 +35,36 @@ export function useRouterBack() {
   return {
     canGoBack,
     goBack,
+    returnToLink: returnTo,
   };
 }
 
 /**
- * It takes a URL, appends the current page's path to it, and returns the new URL
- * @param {T} url - The URL to build a returnable link for.
+ * It takes a URL and returns a URL that will return the user to the current page when they click on it
+ * @param {T} url - The url to build the link to.
  * @returns A function that takes a string and returns a string.
  */
-export function buildReturnableLink<T extends string>(url: T) {
-  if (Environment.isServer) {
-    return url;
+export function buildClientReturnableLink<T extends string>(url: T) {
+  return buildReturnableLink(
+    url,
+    Environment.isServer ? PAGES.HOME : window.location.pathname,
+  );
+}
+
+/**
+ * It takes a URL and appends a query parameter to it
+ * @param {string} nextPath - The path to the next page.
+ * @param {string} originalPath - The path that the user was on before they were redirected to the
+ * login page.
+ * @returns A string
+ */
+export function buildReturnableLink(nextPath: string, originalPath: string) {
+  const [path, query] = nextPath.split('?');
+  const params = new URLSearchParams(query);
+  if (!Object.values(PAGES).includes(originalPath)) {
+    return path;
   }
 
-  const [path, query] = url.split('?');
-  const params = new URLSearchParams(query);
-  params.append(RETURN_TO, window.location.pathname);
+  params.append(RETURN_TO, originalPath);
   return `${path}?${params.toString()}`;
 }

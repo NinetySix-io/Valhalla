@@ -8,10 +8,10 @@ module.exports = {
     },
   },
   overrides: [
-    {
-      files: ['*.ts', '*.tsx'],
-      excludedFiles: '*.js',
-    },
+    // {
+    //   files: ['*.ts', '*.tsx'],
+    //   excludedFiles: '*.js',
+    // },
   ],
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint'],
@@ -35,5 +35,6 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@next/next/no-html-link-for-pages': 'off',
     'react/prop-types': 'off',
+    '@typescript-eslint/no-unused-vars': 'error',
   },
 };

@@ -1,10 +1,9 @@
 import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo';
 import { GqlExecutionContext, GqlOptionsFactory } from '@nestjs/graphql';
 
-import { FastifyRequest } from 'fastify';
 import { Injectable } from '@nestjs/common';
 import { IntrospectAndCompose } from './introspect.and.compose';
-import { RemoteGraphQLDataSource } from '@apollo/gateway';
+import { RemoteDataSource } from './remote.data.source';
 import { SubgraphsProvider } from './subgraphs.provider';
 import { isDev } from '@valhalla/utilities';
 
@@ -19,6 +18,17 @@ export class ApolloGatewaySetupProvider
     if (this.composer) {
       await this.composer.rebuildSupergraphSdl();
     }
+  }
+
+  private get cors() {
+    if (isDev()) {
+      return {
+        origin: true,
+        credentials: true,
+      };
+    }
+
+    return true;
   }
 
   createGqlOptions(): Omit<
@@ -40,28 +50,13 @@ export class ApolloGatewaySetupProvider
           },
         },
         debug: isDev(),
-        cors: isDev()
-          ? {
-              origin: true,
-              credentials: true,
-            }
-          : true,
+        cors: this.cors,
       },
       gateway: {
         supergraphSdl: this.composer,
         buildService: ({ url }) =>
-          new RemoteGraphQLDataSource({
+          new RemoteDataSource({
             url,
-            willSendRequest({ request, context }) {
-              const fastifyReq: FastifyRequest = context.request;
-              if (fastifyReq) {
-                for (const [key, value] of Object.entries(fastifyReq.headers)) {
-                  if (typeof value === 'string') {
-                    request.http.headers.set(key, value);
-                  }
-                }
-              }
-            },
           }),
       },
     };

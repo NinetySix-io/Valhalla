@@ -1,8 +1,19 @@
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
+import Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import { Observable } from "rxjs";
 
 export const protobufPackage = "serv.identity";
+
+export interface ValidateVerificationRequest {
+  verificationId: string;
+  verificationCode: string;
+}
+
+export interface ValidateVerificationResponse {
+  isValid: boolean;
+}
 
 export interface DecodeAccessTokenResponse {
   account: Account | undefined;
@@ -109,6 +120,9 @@ export interface RegisterRequest {
 
 export interface RegisterResponse {
   account: Account | undefined;
+  accessToken: string;
+  refreshToken: string;
+  accessTokenExpiresAt: string;
 }
 
 export interface DeleteResponse {
@@ -248,6 +262,10 @@ export interface IdentityServiceClient {
   decodeAccessToken(
     request: DecodeAccessTokenRequest
   ): Observable<DecodeAccessTokenResponse>;
+
+  validateVerification(
+    request: ValidateVerificationRequest
+  ): Observable<ValidateVerificationResponse>;
 }
 
 export interface IdentityServiceController {
@@ -352,6 +370,13 @@ export interface IdentityServiceController {
     | Promise<DecodeAccessTokenResponse>
     | Observable<DecodeAccessTokenResponse>
     | DecodeAccessTokenResponse;
+
+  validateVerification(
+    request: ValidateVerificationRequest
+  ):
+    | Promise<ValidateVerificationResponse>
+    | Observable<ValidateVerificationResponse>
+    | ValidateVerificationResponse;
 }
 
 export function IdentityServiceControllerMethods() {
@@ -375,6 +400,7 @@ export function IdentityServiceControllerMethods() {
       "deleteRefreshToken",
       "provisionAccessToken",
       "decodeAccessToken",
+      "validateVerification",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(
@@ -403,3 +429,8 @@ export function IdentityServiceControllerMethods() {
 }
 
 export const IDENTITY_SERVICE_NAME = "IdentityService";
+
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}

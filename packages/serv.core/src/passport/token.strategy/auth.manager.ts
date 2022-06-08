@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 
+import { CookieSerializeOptions } from '@fastify/cookie';
 import { CookiesJar } from './cookies.jar';
 import { isDev } from '@valhalla/utilities';
 
@@ -8,6 +9,10 @@ export class AuthManager extends CookiesJar {
   private static readonly accessTokenKey = 'x-valhalla-access-token' as const;
   private reply: FastifyReply;
   private request: FastifyRequest;
+  private readonly defaultCookieOptions: CookieSerializeOptions = {
+    secure: !isDev(),
+    httpOnly: !isDev(),
+  };
 
   constructor(ctx: { reply: FastifyReply; request: FastifyRequest }) {
     super();
@@ -35,22 +40,17 @@ export class AuthManager extends CookiesJar {
    * @param {string} token - The token to set
    */
   setRefreshToken(token: string) {
-    const cookie = isDev()
-      ? AuthManager.buildCookie({
-          name: AuthManager.refreshTokenKey,
-          value: token,
-          secure: false,
-          httpOnly: false,
-          domain: 'localhost',
-        })
-      : AuthManager.buildCookie({
-          name: AuthManager.refreshTokenKey,
-          value: token,
-          secure: true,
-          httpOnly: true,
-        });
+    this.reply.setCookie(AuthManager.refreshTokenKey, token, {
+      ...this.defaultCookieOptions,
+    });
+  }
 
-    this.reply.header('Set-Cookie', cookie);
+  /**
+   * It sets the access token in the response header
+   * @param {string} accessToken - The access token to be set in the response header.
+   */
+  setAccessToken(accessToken: string) {
+    this.reply.header(AuthManager.accessTokenKey, accessToken);
   }
 
   /**
@@ -82,13 +82,5 @@ export class AuthManager extends CookiesJar {
    */
   getAccessToken() {
     return this.request.headers[AuthManager.accessTokenKey];
-  }
-
-  /**
-   * It sets the access token in the response header
-   * @param {string} accessToken - The access token to be set in the response header.
-   */
-  setAccessToken(accessToken: string) {
-    this.reply.header(AuthManager.accessTokenKey, accessToken);
   }
 }

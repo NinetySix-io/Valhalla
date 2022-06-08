@@ -3,9 +3,40 @@ import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 import createCache from '@emotion/cache';
 import { red } from '@mui/material/colors';
 
+const BORDER_RADIUS = 10;
+
 export const theme = responsiveFontSizes(
   createTheme({
-    components: {},
+    components: {
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            borderRadius: BORDER_RADIUS,
+          },
+        },
+      },
+      MuiInput: {
+        styleOverrides: {
+          root: {
+            borderRadius: BORDER_RADIUS,
+          },
+        },
+      },
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: {
+            borderRadius: BORDER_RADIUS,
+          },
+        },
+      },
+      MuiFilledInput: {
+        styleOverrides: {
+          root: {
+            borderRadius: BORDER_RADIUS,
+          },
+        },
+      },
+    },
     typography: {
       h1: {
         fontSize: 40,

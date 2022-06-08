@@ -1,13 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
 
 import { Account } from '@app/protobuf';
-import { AccountTransformer } from '@app/entities/accounts/transformer';
 import { AccountsModel } from '@app/entities/accounts';
 import { BootConfigService } from '@app/services/boot.config.service';
+import { JwtContent } from './types';
 import { JwtService } from '@nestjs/jwt';
 import { RefreshTokensModel } from '@app/entities/refresh.tokens';
+import dayjs from 'dayjs';
 import { isNil } from '@valhalla/utilities';
 import mongoose from 'mongoose';
+import ms from 'ms';
 
 @Injectable()
 export class AccessProvisionService {
@@ -46,9 +48,9 @@ export class AccessProvisionService {
    * a new access token
    * @param {Account} account - Account - This is the account object that was passed in from the login
    * method.
-   * @returns An object with the refreshToken, accessToken, and accessTokenExpiresAt
+   * @returns An object with the refreshToken, accessToken
    */
-  async createAccessToken(account: Account) {
+  async createRefreshToken(account: Account) {
     const accountId = new mongoose.Types.ObjectId(account.id);
     await this.refreshTokens.deleteMany({ account: accountId });
     const token = await this.refreshTokens.create({
@@ -57,11 +59,7 @@ export class AccessProvisionService {
     });
 
     const refreshToken = token.id;
-    const expiresAt = this.bootConfig.accessTokenExpiry.toISOString();
-    const accessToken = this.jwtService.sign({
-      account,
-      expiresAt,
-    });
+    const accessToken = this.createAccessToken(account);
 
     this.logger.warn(
       `Refresh Token[${refreshToken}] generated an access token`,
@@ -69,8 +67,8 @@ export class AccessProvisionService {
 
     return {
       refreshToken,
-      accessToken,
-      accessTokenExpiresAt: expiresAt,
+      accessToken: accessToken.value,
+      accessTokenExpiresAt: accessToken.expiresAt,
     };
   }
 
@@ -88,39 +86,49 @@ export class AccessProvisionService {
       .findById(token.account)
       .orFail(() => new Error('Account does not exists!'));
 
-    const expiresAt = this.bootConfig.accessTokenExpiry.toISOString();
-    const accessToken = this.jwtService.sign({
-      account: new AccountTransformer(account).proto,
-      expiresAt,
-    });
-
+    const accessToken = this.createAccessToken(account);
     this.logger.warn(
       `Refresh Token[${refreshToken}] generated an access token`,
     );
 
-    return {
-      accessToken,
-      accessTokenExpiresAt: expiresAt,
-    };
+    return accessToken;
   }
 
   /**
-   * It decodes the access token and returns the account and the expiration date
+   * It decodes the access token and returns the decoded data
    * @param {string} accessToken - The access token to decode.
-   * @returns An object with two properties: account and expiresAt.
+   * @returns The JwtContent interface is being returned.
    */
-  decodeAccessToken(accessToken: string): {
-    account: Account;
-    expiresAt: string;
-  } {
-    const data = this.jwtService.decode(accessToken);
+  decodeAccessToken(accessToken: string): JwtContent {
+    const data = this.jwtService.decode(accessToken) as JwtContent;
     if (isNil(data) || typeof data === 'string') {
       throw new Error('Invalid token!');
     }
 
+    return data;
+  }
+
+  /**
+   * It creates a JWT access token for the given account
+   * @param account - Pick<Account, 'id' | 'displayName'>
+   * @returns A string
+   */
+  createAccessToken(account: Pick<Account, 'id' | 'displayName'>) {
+    const expiresIn = this.bootConfig.accessTokenExpiry;
+    const content: JwtContent = {
+      account: {
+        id: account.id,
+        displayName: account.displayName,
+      },
+    };
+
+    const milliseconds = ms(expiresIn);
+    const expiresAt = dayjs().add(milliseconds, 'milliseconds').toDate();
+    const accessToken = this.jwtService.sign(content, { expiresIn });
+
     return {
-      account: data.account,
-      expiresAt: data.expiresAt,
+      value: accessToken,
+      expiresAt,
     };
   }
 }

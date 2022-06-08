@@ -7,8 +7,7 @@ import { GetServerSideProps } from '@valhalla/react';
 import NextLink from 'next/link';
 import { PAGES } from '@app/PAGES_CONSTANTS';
 import { Page } from '@app/types/next';
-import React from 'react';
-import { buildReturnableLink } from '@app/lib/router.utils';
+import { buildClientReturnableLink } from '@app/lib/router.utils';
 import cx from 'clsx';
 import styles from './styles.module.css';
 
@@ -26,7 +25,7 @@ const GetStartedPage: Page = () => {
       <FormContainer title="Continue">
         <NextLink
           passHref
-          href={buildReturnableLink(PAGES.GET_STARTED_WITH_USERNAME)}
+          href={buildClientReturnableLink(PAGES.GET_STARTED_WITH_USERNAME)}
         >
           <Button
             fullWidth

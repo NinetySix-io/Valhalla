@@ -33,6 +33,7 @@ export class TokensStrategy
     expiresAt: Date;
   }> {
     const accessToken = AuthManager.getAccessTokenFromRequest(request);
+
     if (!accessToken) {
       throw new UnauthorizedException('Access token not provided!');
     } else if (typeof accessToken !== 'string') {
@@ -52,7 +53,7 @@ export class TokensStrategy
     );
 
     if (error) {
-      this.logger.error(error);
+      this.logger.error((error as Error).message);
       throw new UnauthorizedException('Token is not valid or expired!');
     } else if (!result || !result.account) {
       this.logger.error('Unable to decode token', result);

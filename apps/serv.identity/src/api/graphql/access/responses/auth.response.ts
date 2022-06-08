@@ -8,6 +8,6 @@ export class AuthResponse {
   @Field({ description: 'Access token' })
   accessToken!: string;
 
-  @Field({ description: 'Access token expiry date' })
-  accessTokenExpiresAt!: string;
+  @Field({ description: 'Access token expiry' })
+  accessTokenExpiresAt!: Date;
 }

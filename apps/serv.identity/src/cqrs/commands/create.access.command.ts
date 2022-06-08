@@ -25,7 +25,7 @@ export class CreateAccessHandler
   ) {}
 
   async execute(command: CreateAccessCommand): Promise<CreateAccessResponse> {
-    const tokenData = await this.provision.createAccessToken(command.input);
+    const tokenData = await this.provision.createRefreshToken(command.input);
 
     this.eventBus.publish(
       new AccessTokenCreatedEvent(
@@ -34,6 +34,10 @@ export class CreateAccessHandler
       ),
     );
 
-    return tokenData;
+    return {
+      refreshToken: tokenData.refreshToken,
+      accessToken: tokenData.accessToken,
+      accessTokenExpiresAt: tokenData.accessTokenExpiresAt.toString(),
+    };
   }
 }

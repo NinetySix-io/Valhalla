@@ -1,5 +1,5 @@
 import { gRpcController } from '@app/grpc/grpc.controller';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
   Auth,
@@ -7,9 +7,11 @@ import {
   RefreshToken,
   resolveRpcRequest,
 } from '@valhalla/serv.core';
+import { tryNice } from 'try-nice';
 import { LoginWithEmailInput } from './inputs/login.with.email.input';
 import { LoginWithPhoneInput } from './inputs/login.with.phone.input';
 import { RegisterInput } from './inputs/register.input';
+import { AccessTokenResponse } from './responses/access.token.response';
 import { AuthResponse } from './responses/auth.response';
 
 @Resolver()
@@ -24,17 +26,12 @@ export class GqlAuthResolver {
     @Auth() auth: AuthManager,
   ): Promise<AuthResponse> {
     const result = await resolveRpcRequest(this.rpcClient.register(input));
-    if (!result.account) {
-      throw new Error('Unable to register!');
-    }
-
     auth.setRefreshToken(result.refreshToken);
-    auth.setAccessToken(result.accessToken);
 
     return {
-      accountId: result.account.id,
+      accountId: result.account!.id,
       accessToken: result.accessToken,
-      accessTokenExpiresAt: result.accessTokenExpiresAt,
+      accessTokenExpiresAt: new Date(result.accessToken),
     };
   }
 
@@ -49,17 +46,12 @@ export class GqlAuthResolver {
       this.rpcClient.loginWithEmail(input),
     );
 
-    if (!result.account) {
-      throw new Error('Unable to login!');
-    }
-
     auth.setRefreshToken(result.refreshToken);
-    auth.setAccessToken(result.accessToken);
 
     return {
-      accountId: result.account.id,
+      accountId: result.account!.id,
       accessToken: result.accessToken,
-      accessTokenExpiresAt: result.accessTokenExpiresAt,
+      accessTokenExpiresAt: new Date(result.accessTokenExpiresAt),
     };
   }
 
@@ -74,34 +66,42 @@ export class GqlAuthResolver {
       this.rpcClient.loginWithPhone(input),
     );
 
-    if (!result.account) {
-      throw new Error('Unable to login!');
-    }
-
     auth.setRefreshToken(result.refreshToken);
-    auth.setAccessToken(result.accessToken);
 
     return {
-      accountId: result.account.id,
+      accountId: result.account!.id,
       accessToken: result.accessToken,
-      accessTokenExpiresAt: result.accessTokenExpiresAt,
+      accessTokenExpiresAt: new Date(result.accessTokenExpiresAt),
     };
   }
 
-  @Query(() => String, {
+  @Query(() => AccessTokenResponse, {
     description: 'Generate an access token',
   })
-  async accessToken(@RefreshToken() refreshToken: string): Promise<string> {
+  async accessToken(
+    @RefreshToken() refreshToken: string,
+  ): Promise<AccessTokenResponse> {
     if (!refreshToken) {
       throw new BadRequestException('Refresh Token not found!');
     }
 
-    const result = await resolveRpcRequest(
-      this.rpcClient.provisionAccessToken({
-        refreshToken,
-      }),
+    const [result, error] = await tryNice(() =>
+      resolveRpcRequest(
+        this.rpcClient.provisionAccessToken({
+          refreshToken,
+        }),
+      ),
     );
 
-    return result.accessToken;
+    if (error instanceof Error) {
+      throw new ForbiddenException(error.message);
+    } else if (!result) {
+      throw new Error();
+    }
+
+    return {
+      token: result.accessToken,
+      expiresAt: new Date(result.accessToken),
+    };
   }
 }

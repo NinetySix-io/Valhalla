@@ -43,8 +43,7 @@ promiseExec("pwd").then(async (output) => {
 
     const opt = Object.entries({
       nestJs: true,
-      // context: true,
-      onlyTypes: true,
+      esModuleInterop: true,
     })
       .map(([key, value]) => `${key}=${value}`)
       .join(",");
@@ -52,7 +51,7 @@ promiseExec("pwd").then(async (output) => {
     const cmd = [
       "protoc",
       "--ts_proto_out=.",
-      apps.isFromApps ? "./src/rpc/**/*.proto" : `./apps/${app}/src/**/*.proto`,
+      apps.isFromApps ? "./src/**/*.proto" : `./apps/${app}/src/**/*.proto`,
       `--ts_proto_opt=${opt}`,
     ];
 

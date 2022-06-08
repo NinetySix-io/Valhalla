@@ -18,6 +18,14 @@ export type Scalars = {
   DateTime: Date;
 };
 
+export type AccessTokenResponse = {
+  readonly __typename?: 'AccessTokenResponse';
+  /** Token expiry */
+  readonly expiresAt: Scalars['DateTime'];
+  /** Access token */
+  readonly token: Scalars['String'];
+};
+
 export type AccountEmailSchema = {
   readonly __typename?: 'AccountEmailSchema';
   /** Date entity was created */
@@ -78,8 +86,8 @@ export type AuthResponse = {
   readonly __typename?: 'AuthResponse';
   /** Access token */
   readonly accessToken: Scalars['String'];
-  /** Access token expiry date */
-  readonly accessTokenExpiresAt: Scalars['String'];
+  /** Access token expiry */
+  readonly accessTokenExpiresAt: Scalars['DateTime'];
   /** Logged in Account ID */
   readonly accountId: Scalars['String'];
 };
@@ -236,7 +244,7 @@ export type OrganizationSchema = {
 export type Query = {
   readonly __typename?: 'Query';
   /** Generate an access token */
-  readonly accessToken: Scalars['String'];
+  readonly accessToken: AccessTokenResponse;
   /** Get current logged in user information */
   readonly account: AccountSchema;
   /** Get current user's organizations memberships */
@@ -275,11 +283,6 @@ export type UpdateAccountInput = {
   readonly lastName?: InputMaybe<Scalars['String']>;
 };
 
-export type GetAccessTokenQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetAccessTokenQuery = { readonly __typename?: 'Query', readonly accessToken: string };
-
 export type RegisterMutationVariables = Exact<{
   email: Scalars['String'];
   phone?: InputMaybe<Scalars['String']>;
@@ -289,7 +292,7 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { readonly __typename?: 'Mutation', readonly registerAccount: { readonly __typename?: 'AuthResponse', readonly accessToken: string, readonly accessTokenExpiresAt: string } };
+export type RegisterMutation = { readonly __typename?: 'Mutation', readonly registerAccount: { readonly __typename?: 'AuthResponse', readonly accessToken: string, readonly accessTokenExpiresAt: Date } };
 
 export type LoginWithEmailMutationVariables = Exact<{
   email: Scalars['String'];
@@ -298,7 +301,7 @@ export type LoginWithEmailMutationVariables = Exact<{
 }>;
 
 
-export type LoginWithEmailMutation = { readonly __typename?: 'Mutation', readonly loginWithEmail: { readonly __typename?: 'AuthResponse', readonly accessToken: string, readonly accessTokenExpiresAt: string } };
+export type LoginWithEmailMutation = { readonly __typename?: 'Mutation', readonly loginWithEmail: { readonly __typename?: 'AuthResponse', readonly accessToken: string, readonly accessTokenExpiresAt: Date } };
 
 export type LoginWithPhoneMutationVariables = Exact<{
   phone: Scalars['String'];
@@ -307,7 +310,7 @@ export type LoginWithPhoneMutationVariables = Exact<{
 }>;
 
 
-export type LoginWithPhoneMutation = { readonly __typename?: 'Mutation', readonly loginWithPhone: { readonly __typename?: 'AuthResponse', readonly accessToken: string, readonly accessTokenExpiresAt: string } };
+export type LoginWithPhoneMutation = { readonly __typename?: 'Mutation', readonly loginWithPhone: { readonly __typename?: 'AuthResponse', readonly accessToken: string, readonly accessTokenExpiresAt: Date } };
 
 export type UpdateAccountMutationVariables = Exact<{
   displayName?: InputMaybe<Scalars['String']>;
@@ -390,6 +393,11 @@ export type ValidateVerificationCodeQueryVariables = Exact<{
 
 export type ValidateVerificationCodeQuery = { readonly __typename?: 'Query', readonly validateVerificationCode: boolean };
 
+export type GetAccessTokenQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAccessTokenQuery = { readonly __typename?: 'Query', readonly accessToken: { readonly __typename?: 'AccessTokenResponse', readonly token: string, readonly expiresAt: Date } };
+
 export type GetAccountQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -401,41 +409,6 @@ export type GetOrganizationsMembershipQueryVariables = Exact<{ [key: string]: ne
 export type GetOrganizationsMembershipQuery = { readonly __typename?: 'Query', readonly organizations: ReadonlyArray<{ readonly __typename?: 'OrganizationSchema', readonly id: string, readonly name: string, readonly slug: string, readonly logoUrl: string }> };
 
 
-export const GetAccessTokenDocument = gql`
-    query getAccessToken {
-  accessToken
-}
-    `;
-
-/**
- * __useGetAccessTokenQuery__
- *
- * To run a query within a React component, call `useGetAccessTokenQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAccessTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetAccessTokenQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetAccessTokenQuery(baseOptions?: Apollo.QueryHookOptions<GetAccessTokenQuery, GetAccessTokenQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAccessTokenQuery, GetAccessTokenQueryVariables>(GetAccessTokenDocument, options);
-      }
-export function useGetAccessTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAccessTokenQuery, GetAccessTokenQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAccessTokenQuery, GetAccessTokenQueryVariables>(GetAccessTokenDocument, options);
-        }
-export type GetAccessTokenQueryHookResult = ReturnType<typeof useGetAccessTokenQuery>;
-export type GetAccessTokenLazyQueryHookResult = ReturnType<typeof useGetAccessTokenLazyQuery>;
-export type GetAccessTokenQueryResult = Apollo.QueryResult<GetAccessTokenQuery, GetAccessTokenQueryVariables>;
-export function refetchGetAccessTokenQuery(variables?: GetAccessTokenQueryVariables) {
-      return { query: GetAccessTokenDocument, variables: variables }
-    }
 export const RegisterDocument = gql`
     mutation register($email: String!, $phone: String, $firstName: String, $lastName: String, $displayName: String) {
   registerAccount(
@@ -911,6 +884,44 @@ export type ValidateVerificationCodeLazyQueryHookResult = ReturnType<typeof useV
 export type ValidateVerificationCodeQueryResult = Apollo.QueryResult<ValidateVerificationCodeQuery, ValidateVerificationCodeQueryVariables>;
 export function refetchValidateVerificationCodeQuery(variables: ValidateVerificationCodeQueryVariables) {
       return { query: ValidateVerificationCodeDocument, variables: variables }
+    }
+export const GetAccessTokenDocument = gql`
+    query getAccessToken {
+  accessToken {
+    token
+    expiresAt
+  }
+}
+    `;
+
+/**
+ * __useGetAccessTokenQuery__
+ *
+ * To run a query within a React component, call `useGetAccessTokenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAccessTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAccessTokenQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAccessTokenQuery(baseOptions?: Apollo.QueryHookOptions<GetAccessTokenQuery, GetAccessTokenQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAccessTokenQuery, GetAccessTokenQueryVariables>(GetAccessTokenDocument, options);
+      }
+export function useGetAccessTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAccessTokenQuery, GetAccessTokenQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAccessTokenQuery, GetAccessTokenQueryVariables>(GetAccessTokenDocument, options);
+        }
+export type GetAccessTokenQueryHookResult = ReturnType<typeof useGetAccessTokenQuery>;
+export type GetAccessTokenLazyQueryHookResult = ReturnType<typeof useGetAccessTokenLazyQuery>;
+export type GetAccessTokenQueryResult = Apollo.QueryResult<GetAccessTokenQuery, GetAccessTokenQueryVariables>;
+export function refetchGetAccessTokenQuery(variables?: GetAccessTokenQueryVariables) {
+      return { query: GetAccessTokenDocument, variables: variables }
     }
 export const GetAccountDocument = gql`
     query getAccount {

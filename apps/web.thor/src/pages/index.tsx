@@ -1,23 +1,17 @@
-import { Box, Typography, styled } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
-import { GetServerSideProps } from '@valhalla/react';
-import Link from 'next/link';
-import { PAGES } from '@app/PAGES_CONSTANTS';
+import { Page } from '@app/types/next';
+import { withSsrContext } from '@app/lib/next/with.ssr.ctx';
 
-const Page = styled(Box)`
-  flex-grow: 1;
-`;
-
-export default function HomePage() {
+const HomePage: Page = () => {
   return (
-    <Page>
+    <Box>
       <Typography variant="h1">Thor</Typography>
-      <Link href="/login">Login</Link>
-    </Page>
+    </Box>
   );
-}
+};
 
-export const getServerSideProps: GetServerSideProps = () => {
+export const getServerSideProps = withSsrContext(async () => {
   return {
     props: {
       SEO: {
@@ -26,9 +20,7 @@ export const getServerSideProps: GetServerSideProps = () => {
         description: 'The whole operation',
       },
     },
-    redirect: {
-      permanent: false,
-      destination: PAGES.GET_STARTED,
-    },
   };
-};
+});
+
+export default HomePage;

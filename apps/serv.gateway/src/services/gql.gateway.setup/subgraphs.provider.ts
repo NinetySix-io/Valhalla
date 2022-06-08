@@ -29,7 +29,7 @@ export abstract class SubgraphsProvider implements OnModuleInit {
 
   @Cron(syncInterval)
   private syncServices() {
-    const services = this.consul.getServiceNames();
+    const services = this.consul.getServiceNames() ?? [];
     this.buildSubgraphs(services).then(noop).catch(noop);
   }
 

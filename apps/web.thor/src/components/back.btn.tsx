@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Button, ButtonProps } from '@mui/material';
 
 import { FaArrowLeft } from 'react-icons/fa';
+import Link from 'next/link';
 import { cProps } from '@valhalla/react';
 import { useRouterBack } from '@app/lib/router.utils';
 
@@ -13,7 +14,7 @@ export const BackButton: React.FC<Props> = ({
   children,
   ...props
 }) => {
-  const { canGoBack, goBack } = useRouterBack();
+  const { canGoBack, returnToLink } = useRouterBack();
 
   if (!canGoBack && !withFiller) {
     return null;
@@ -22,14 +23,15 @@ export const BackButton: React.FC<Props> = ({
   }
 
   return (
-    <Button
-      startIcon={<FaArrowLeft />}
-      variant="text"
-      size="small"
-      {...props}
-      onClick={() => goBack()}
-    >
-      {children || 'Back'}
-    </Button>
+    <Link href={returnToLink} passHref>
+      <Button
+        startIcon={<FaArrowLeft />}
+        variant="text"
+        size="small"
+        {...props}
+      >
+        {children || 'Back'}
+      </Button>
+    </Link>
   );
 };
