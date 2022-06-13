@@ -30,7 +30,7 @@ export abstract class SubgraphsProvider implements OnModuleInit {
   @Cron(syncInterval)
   private syncServices() {
     const services = this.consul.getServiceNames() ?? [];
-    this.buildSubgraphs(services).then(noop).catch(noop);
+    this.buildSubgraphs(services);
   }
 
   /**
@@ -57,7 +57,7 @@ export abstract class SubgraphsProvider implements OnModuleInit {
    * @param {string[]} serviceNames - The list of services that you want to build subgraphs for.
    * @returns The subgraphs are being returned.
    */
-  private async buildSubgraphs(serviceNames: string[]): Promise<void> {
+  private buildSubgraphs(serviceNames: string[]) {
     const currentSubgraphMap = keyBy(
       this._subgraphs ?? [],
       (graph) => graph.name,

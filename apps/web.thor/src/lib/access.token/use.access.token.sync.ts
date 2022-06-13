@@ -1,6 +1,7 @@
+import { parseCookies, setCookie } from 'nookies';
+
 import { ACCESS_TOKEN_KEY } from './constants';
 import React from 'react';
-import cookie from 'js-cookie';
 import { useReduxSelector } from '@app/redux/hooks';
 
 export function useAccessTokenSync() {
@@ -10,9 +11,10 @@ export function useAccessTokenSync() {
   );
 
   React.useEffect(() => {
-    const currentToken = cookie.get(ACCESS_TOKEN_KEY);
+    const cookies = parseCookies();
+    const currentToken = cookies[ACCESS_TOKEN_KEY];
     if (accessToken && accessTokenExpires && accessToken !== currentToken) {
-      cookie.set(ACCESS_TOKEN_KEY, accessToken, {
+      setCookie(null, ACCESS_TOKEN_KEY, accessToken, {
         domain: location.hostname,
         secure: true,
         sameSite: 'strict',

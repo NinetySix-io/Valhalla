@@ -40,18 +40,6 @@ export function useRouterBack() {
 }
 
 /**
- * It takes a URL and returns a URL that will return the user to the current page when they click on it
- * @param {T} url - The url to build the link to.
- * @returns A function that takes a string and returns a string.
- */
-export function buildClientReturnableLink<T extends string>(url: T) {
-  return buildReturnableLink(
-    url,
-    Environment.isServer ? PAGES.HOME : window.location.pathname,
-  );
-}
-
-/**
  * It takes a URL and appends a query parameter to it
  * @param {string} nextPath - The path to the next page.
  * @param {string} originalPath - The path that the user was on before they were redirected to the
@@ -67,4 +55,16 @@ export function buildReturnableLink(nextPath: string, originalPath: string) {
 
   params.append(RETURN_TO, originalPath);
   return `${path}?${params.toString()}`;
+}
+
+/**
+ * It takes a URL and returns a URL that will return the user to the current page when they click on it
+ * @param {T} url - The url to build the link to.
+ * @returns A function that takes a string and returns a string.
+ */
+export function buildClientReturnableLink<T extends string>(url: T) {
+  return buildReturnableLink(
+    url,
+    Environment.isServer ? PAGES.HOME : window.location.pathname,
+  );
 }

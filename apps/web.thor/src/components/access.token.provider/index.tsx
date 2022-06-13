@@ -7,5 +7,5 @@ type Props = cProps;
 
 export const AccessTokenProvider: React.FC<Props> = ({ children }) => {
   useAccessTokenSync();
-  return <>{children}</>;
+  return children as React.ReactElement;
 };
