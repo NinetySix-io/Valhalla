@@ -6,7 +6,7 @@ import { ConsulService } from '@nestcloud2/service/service.consul';
 import { Logger, OnModuleInit } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ServAppConfigService } from '@valhalla/serv.core';
-import { isDev, noop } from '@valhalla/utilities';
+import { isDev } from '@valhalla/utilities';
 import CronTime from 'cron-time-generator';
 import keyBy from 'lodash.keyby';
 

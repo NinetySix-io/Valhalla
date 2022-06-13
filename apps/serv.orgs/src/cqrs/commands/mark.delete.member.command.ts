@@ -8,14 +8,13 @@ import {
   MarkDeleteMemberRequest,
   MarkDeleteMemberResponse,
 } from '@app/protobuf';
+import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { OrgMemberTransformer } from '@app/entities/org.members/transformer';
 import { OrgMembersModel } from '@app/entities/org.members';
 import { OrganizationMemberDeletingEvent } from '../events/org.member.deleting.event';
 import { OrganizationMemberUpdatedEvent } from '../events/org.member.updated.event';
-import { RpcHandler } from '@valhalla/serv.core';
 import dayjs from 'dayjs';
-import mongoose from 'mongoose';
 
 export class MarkDeleteOrgMemberCommand implements ICommand {
   constructor(public readonly request: MarkDeleteMemberRequest) {}
@@ -40,18 +39,17 @@ export class MarkDeleteOrgMemberHandler
     command: MarkDeleteOrgMemberCommand,
   ): Promise<MarkDeleteMemberResponse> {
     const { requestedUserId, orgId, memberId } = command.request;
+    const user = toObjectId(memberId);
+    const organization = toObjectId(orgId);
     const member = await this.members
-      .findOne({
-        user: new mongoose.Types.ObjectId(memberId),
-        organization: new mongoose.Types.ObjectId(orgId),
-      })
+      .findOne({ user, organization })
       .orFail(() => new Error('Member not found!'));
 
     if (member.deletingAt) {
       throw new Error('Member is already marked for deletion');
     }
 
-    member.updatedBy = new mongoose.Types.ObjectId(requestedUserId);
+    member.updatedBy = toObjectId(requestedUserId);
     member.deletingAt = this.deletingDate;
     await member.save();
 

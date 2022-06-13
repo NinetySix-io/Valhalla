@@ -5,6 +5,7 @@ import { AnyParamConstructor } from '@typegoose/typegoose/lib/types';
 import { BaseSchema } from './base.schema';
 import { InternalServerErrorException } from '@nestjs/common';
 import { OmitRecursively } from '@valhalla/utilities';
+import { toObjectId } from '../lib';
 import { tryNice } from 'try-nice';
 
 export type ModelType<TModel extends BaseSchema> = ReturnModelType<
@@ -58,7 +59,7 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
   async create(item: CreatePayload<TModel>) {
     const [creation, error] = await tryNice(() =>
       this._model.create({
-        _id: new mongoose.Types.ObjectId(),
+        _id: toObjectId(),
         ...item,
       }),
     );

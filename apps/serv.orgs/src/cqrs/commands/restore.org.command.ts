@@ -5,14 +5,13 @@ import {
   ICommandHandler,
 } from '@nestjs/cqrs';
 import { Organization, RestoreOrgRequest } from '@app/protobuf';
+import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { OrganizationRestoredEvent } from '../events/org.restored.event';
 import { OrganizationStatus } from '@app/entities/organizations/schema';
 import { OrganizationTransformer } from '@app/entities/organizations/transformer';
 import { OrganizationUpdatedEvent } from '../events/org.updated.event';
 import { OrganizationsModel } from '@app/entities/organizations';
-import { RpcHandler } from '@valhalla/serv.core';
-import mongoose from 'mongoose';
 
 export class RestoreOrgCommand implements ICommand {
   constructor(public readonly input: RestoreOrgRequest) {}
@@ -39,7 +38,7 @@ export class RestoreOrgHandler
     }
 
     organization.status = OrganizationStatus.ACTIVE;
-    organization.updatedBy = new mongoose.Types.ObjectId(requestedUserId);
+    organization.updatedBy = toObjectId(requestedUserId);
 
     await organization.save();
 

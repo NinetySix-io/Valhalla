@@ -34,6 +34,27 @@ export enum OrgRole {
   UNRECOGNIZED = -1,
 }
 
+export interface AccountSettings {
+  activeOrganizationId: string;
+}
+
+export interface GetAccountActiveOrgRequest {
+  accountId: string;
+}
+
+export interface GetAccountActiveOrgResponse {
+  organization?: Organization | undefined;
+}
+
+export interface SetAccountActiveOrgRequest {
+  accountId: string;
+  organizationId: string;
+}
+
+export interface SetAccountActiveOrgResponse {
+  success: boolean;
+}
+
 export interface GetUserMembershipsRequest {
   userId: string;
 }
@@ -147,6 +168,14 @@ export interface OrgsServiceClient {
 
   updateOrgLogo(request: UpdateOrgLogoRequest): Observable<Organization>;
 
+  setAccountActiveOrg(
+    request: SetAccountActiveOrgRequest
+  ): Observable<SetAccountActiveOrgResponse>;
+
+  getAccountActiveOrg(
+    request: GetAccountActiveOrgRequest
+  ): Observable<GetAccountActiveOrgResponse>;
+
   /**
    * rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse) {}
    * rpc AcceptMemberInvitation(AcceptMemberInvitationRequest) returns (AcceptMemberInvitationResponse) {}
@@ -188,6 +217,20 @@ export interface OrgsServiceController {
     request: UpdateOrgLogoRequest
   ): Promise<Organization> | Observable<Organization> | Organization;
 
+  setAccountActiveOrg(
+    request: SetAccountActiveOrgRequest
+  ):
+    | Promise<SetAccountActiveOrgResponse>
+    | Observable<SetAccountActiveOrgResponse>
+    | SetAccountActiveOrgResponse;
+
+  getAccountActiveOrg(
+    request: GetAccountActiveOrgRequest
+  ):
+    | Promise<GetAccountActiveOrgResponse>
+    | Observable<GetAccountActiveOrgResponse>
+    | GetAccountActiveOrgResponse;
+
   /**
    * rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse) {}
    * rpc AcceptMemberInvitation(AcceptMemberInvitationRequest) returns (AcceptMemberInvitationResponse) {}
@@ -221,6 +264,8 @@ export function OrgsServiceControllerMethods() {
       "restoreOrg",
       "updateOrgPlan",
       "updateOrgLogo",
+      "setAccountActiveOrg",
+      "getAccountActiveOrg",
       "markDeleteMember",
       "getMember",
       "getUserMemberships",

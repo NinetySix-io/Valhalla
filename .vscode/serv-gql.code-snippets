@@ -1,0 +1,15 @@
+{
+  "Gql Resolver": {
+    "prefix": "gResolver",
+    "description": "Gql resolver template",
+    "body": [
+      "import { Resolver } from '@nestjs/graphql';",
+      "import { gRpcController } from '@app/grpc/grpc.controller';",
+      "",
+      "@Resolver()",
+      "export class Gql$1Resolver {",
+      "\tconstructor(private readonly rpcClient: gRpcController) {}",
+      "}"
+    ]
+  }
+}

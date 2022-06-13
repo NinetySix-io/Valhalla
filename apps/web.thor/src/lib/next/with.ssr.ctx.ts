@@ -34,7 +34,7 @@ function withRedux(cb: GetServerSideProps) {
   return withSsrRedux(
     (store) => async (ctx: GetServerSidePropsContext & { store: Store }) => {
       ctx.store = store;
-      return cb(ctx);
+      return await cb(ctx);
     },
   );
 }

@@ -1,12 +1,12 @@
 import { Account, FindAccountRequest } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 import { SStruct, isEmpty } from '@valhalla/utilities';
-import mongoose, { FilterQuery } from 'mongoose';
 
 import { AccountSchema } from '@app/entities/accounts/schema';
 import { AccountTransformer } from '@app/entities/accounts/transformer';
 import { AccountsModel } from '@app/entities/accounts';
-import { RpcHandler } from '@valhalla/serv.core';
+import { FilterQuery } from 'mongoose';
 
 export class FindAccountQuery implements IQuery {
   constructor(public readonly request: FindAccountRequest) {}
@@ -37,7 +37,7 @@ export class FindAccountHandler
     const filter: FilterQuery<AccountSchema> = {};
 
     if (request.accountId) {
-      filter._id = new mongoose.Types.ObjectId(request.accountId);
+      filter._id = toObjectId(request.accountId);
       return filter;
     }
 

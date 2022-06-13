@@ -16,6 +16,7 @@ export class GqlOrganizationsResolver {
   constructor(private readonly rpcClient: gRpcController) {}
 
   @Mutation(() => OrganizationSchema, { description: 'Create an organization' })
+  @UseGuards(GqlAuthGuard)
   async createOrganization(
     @Args('input') input: CreateOrganizationInput,
     @CurrentAccount() account: ServIdentity.Account,
@@ -32,6 +33,7 @@ export class GqlOrganizationsResolver {
   }
 
   @Mutation(() => String, { description: 'Archive an organization' })
+  @UseGuards(GqlAuthGuard)
   async archiveOrganization(
     @Args('orgId') orgId: string,
     @CurrentAccount() account: ServIdentity.Account,
@@ -49,6 +51,7 @@ export class GqlOrganizationsResolver {
   @Mutation(() => String, {
     description: 'Restore an organization that was archived',
   })
+  @UseGuards(GqlAuthGuard)
   async restoreOrganization(
     @Args('orgId') orgId: string,
     @CurrentAccount() account: ServIdentity.Account,

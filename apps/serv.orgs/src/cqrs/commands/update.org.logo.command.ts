@@ -5,13 +5,12 @@ import {
   ICommandHandler,
 } from '@nestjs/cqrs';
 import { Organization, UpdateOrgLogoRequest } from '@app/protobuf';
+import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { OrganizationLogoUpdatedEventEvent } from '../events/org.logo.url.updated.event';
 import { OrganizationTransformer } from '@app/entities/organizations/transformer';
 import { OrganizationUpdatedEvent } from '../events/org.updated.event';
 import { OrganizationsModel } from '@app/entities/organizations';
-import { RpcHandler } from '@valhalla/serv.core';
-import mongoose from 'mongoose';
 
 export class UpdateOrgLogoCommand implements ICommand {
   constructor(public readonly request: UpdateOrgLogoRequest) {}
@@ -34,7 +33,7 @@ export class UpdateOrgLogoHandler
       .orFail(() => new Error('Organization not found!'));
 
     organization.logoUrl = imageUrl;
-    organization.updatedBy = new mongoose.Types.ObjectId(requestedUserId);
+    organization.updatedBy = toObjectId(requestedUserId);
     organization.save();
     const serialized = new OrganizationTransformer(organization).proto;
 

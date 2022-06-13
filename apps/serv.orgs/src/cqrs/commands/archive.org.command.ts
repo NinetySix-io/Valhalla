@@ -5,14 +5,13 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
+import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { OrganizationArchivedEvent } from '../events/org.arhived.event';
 import { OrganizationStatus } from '@app/entities/organizations/schema';
 import { OrganizationTransformer } from '@app/entities/organizations/transformer';
 import { OrganizationUpdatedEvent } from '../events/org.updated.event';
 import { OrganizationsModel } from '@app/entities/organizations';
-import { RpcHandler } from '@valhalla/serv.core';
-import mongoose from 'mongoose';
 
 export class ArchiveOrgCommand implements ICommand {
   constructor(public readonly input: ArchiveOrgRequest) {}
@@ -39,7 +38,7 @@ export class ArchiveOrgHandler
     }
 
     organization.status = OrganizationStatus.ARCHIVED;
-    organization.updatedBy = new mongoose.Types.ObjectId(requestedUserId);
+    organization.updatedBy = toObjectId(requestedUserId);
 
     await organization.save();
 

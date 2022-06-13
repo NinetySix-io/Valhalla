@@ -11,7 +11,7 @@ import {
   RegisterResponse,
   Verification,
 } from '@app/protobuf';
-import { CreatePayload, RpcHandler } from '@valhalla/serv.core';
+import { CreatePayload, RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { AccountRegisteredEvent } from '../events/account.registered.event';
 import { AccountSchema } from '@app/entities/accounts/schema';
@@ -20,7 +20,6 @@ import { AccountsModel } from '@app/entities/accounts';
 import { CreateAccessCommand } from './create.access.command';
 import { SendEmailVerificationCommand } from './send.email.verification.command';
 import { SendPhoneVerificationCommand } from './send.phone.verification.command';
-import mongoose from 'mongoose';
 
 export class RegisterCommand implements ICommand {
   constructor(public readonly request: RegisterRequest) {}
@@ -65,7 +64,7 @@ export class RegisterHandler
         value: phone,
         isVerified: false,
         isPrimary: true,
-        verification: new mongoose.Types.ObjectId(verification.id),
+        verification: toObjectId(verification.id),
       },
     ];
   }
@@ -84,7 +83,7 @@ export class RegisterHandler
         value: email,
         isVerified: false,
         isPrimary: true,
-        verification: new mongoose.Types.ObjectId(verification.id),
+        verification: toObjectId(verification.id),
       },
     ];
   }

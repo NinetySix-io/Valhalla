@@ -8,8 +8,8 @@ import { JwtService } from '@nestjs/jwt';
 import { RefreshTokensModel } from '@app/entities/refresh.tokens';
 import dayjs from 'dayjs';
 import { isNil } from '@valhalla/utilities';
-import mongoose from 'mongoose';
 import ms from 'ms';
+import { toObjectId } from '@valhalla/serv.core';
 
 @Injectable()
 export class AccessProvisionService {
@@ -38,7 +38,7 @@ export class AccessProvisionService {
    * @returns The content of the refresh token.
    */
   async revokeRefreshToken(refreshToken: string) {
-    const tokenId = new mongoose.Types.ObjectId(refreshToken);
+    const tokenId = toObjectId(refreshToken);
     const content = await this.refreshTokens.findOneAndDelete({ _id: tokenId });
     return content;
   }
@@ -51,7 +51,7 @@ export class AccessProvisionService {
    * @returns An object with the refreshToken, accessToken
    */
   async createRefreshToken(account: Account) {
-    const accountId = new mongoose.Types.ObjectId(account.id);
+    const accountId = toObjectId(account.id);
     await this.refreshTokens.deleteMany({ account: accountId });
     const token = await this.refreshTokens.create({
       account: accountId,

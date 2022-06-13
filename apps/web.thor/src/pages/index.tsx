@@ -11,7 +11,7 @@ const HomePage: Page = () => {
   );
 };
 
-export const getServerSideProps = withSsrContext(async () => {
+export const getServerSideProps = withSsrContext(() => {
   return {
     props: {
       SEO: {

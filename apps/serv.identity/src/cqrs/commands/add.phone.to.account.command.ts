@@ -6,13 +6,12 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
+import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { AccountTransformer } from '@app/entities/accounts/transformer';
 import { AccountsModel } from '@app/entities/accounts';
 import { PhoneAddedToAccountEvent } from '../events/phone.added.to.account.event';
-import { RpcHandler } from '@valhalla/serv.core';
 import { SendPhoneVerificationCommand } from './send.phone.verification.command';
-import mongoose from 'mongoose';
 
 export class AddPhoneToAccountCommand implements ICommand {
   constructor(public readonly request: AddPhoneToAccountRequest) {}
@@ -60,7 +59,7 @@ export class AddPhoneToAccountHandler
         value: command.request.phone,
         isVerified: false,
         isPrimary: false,
-        verification: new mongoose.Types.ObjectId(verification.id),
+        verification: toObjectId(verification.id),
         createdAt: new Date(),
         updatedAt: new Date(),
       });

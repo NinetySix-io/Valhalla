@@ -5,14 +5,13 @@ import {
   ICommandHandler,
 } from '@nestjs/cqrs';
 import { Organization, UpdateOrgPlanRequest } from '@app/protobuf';
+import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { OrganizationPlan } from '@app/entities/organizations/schema';
 import { OrganizationPlanUpdatedEvent } from '../events/org.plan.updated.event';
 import { OrganizationTransformer } from '@app/entities/organizations/transformer';
 import { OrganizationUpdatedEvent } from '../events/org.updated.event';
 import { OrganizationsModel } from '@app/entities/organizations';
-import { RpcHandler } from '@valhalla/serv.core';
-import mongoose from 'mongoose';
 
 export class UpdateOrgPlanCommand implements ICommand {
   constructor(public readonly request: UpdateOrgPlanRequest) {}
@@ -36,7 +35,7 @@ export class UpdateOrgPlanHandler
 
     //TODO: more logic
     organization.plan = plan as unknown as OrganizationPlan;
-    organization.updatedBy = new mongoose.Types.ObjectId(requestedUserId);
+    organization.updatedBy = toObjectId(requestedUserId);
     organization.save();
     const serialized = new OrganizationTransformer(organization).proto;
 

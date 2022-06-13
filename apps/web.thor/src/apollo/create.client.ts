@@ -60,7 +60,7 @@ export async function getToken(
   return result.data.accessToken;
 }
 
-export const authLink = setContext(async (_, { headers }) => {
+export const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,

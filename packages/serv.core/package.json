@@ -2,7 +2,7 @@
   "name": "@valhalla/serv.core",
   "version": "1.0.0",
   "main": "./dist/index.js",
-  "types": "./src",
+  "types": "./dist/index.d.ts",
   "sideEffects": false,
   "files": [
     "dist/**"

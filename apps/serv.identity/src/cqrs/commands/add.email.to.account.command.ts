@@ -6,13 +6,12 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
+import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { AccountTransformer } from '@app/entities/accounts/transformer';
 import { AccountsModel } from '@app/entities/accounts';
 import { EmailAddedToAccountEvent } from '../events/email.added.to.account.event';
-import { RpcHandler } from '@valhalla/serv.core';
 import { SendEmailVerificationCommand } from './send.email.verification.command';
-import mongoose from 'mongoose';
 
 export class AddEmailToAccountCommand implements ICommand {
   constructor(public readonly request: AddEmailToAccountRequest) {}
@@ -60,7 +59,7 @@ export class AddEmailToAccountHandler
         value: command.request.email,
         isVerified: false,
         isPrimary: false,
-        verification: new mongoose.Types.ObjectId(verification.id),
+        verification: toObjectId(verification.id),
         createdAt: new Date(),
         updatedAt: new Date(),
       });

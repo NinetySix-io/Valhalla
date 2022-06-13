@@ -13,6 +13,7 @@ import {
   OrganizationPlan,
   OrganizationStatus,
 } from '@app/entities/organizations/schema';
+import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { OrgMemberTransformer } from '@app/entities/org.members/transformer';
 import { OrgMembersModel } from '@app/entities/org.members';
@@ -20,7 +21,6 @@ import { OrganizationCreatedEvent } from '../events/org.created.event';
 import { OrganizationMemberCreatedEvent } from '../events/org.member.created.event';
 import { OrganizationTransformer } from '@app/entities/organizations/transformer';
 import { OrganizationsModel } from '@app/entities/organizations';
-import { RpcHandler } from '@valhalla/serv.core';
 import { ServIdentity } from '@valhalla/serv.clients';
 import mongoose from 'mongoose';
 import { slugify } from '@valhalla/utilities';
@@ -61,7 +61,7 @@ export class CreateOrgHandler
     }
 
     const slug = await this.generateSlug(command.input.name);
-    const userId = new mongoose.Types.ObjectId(command.user.id);
+    const userId = toObjectId(command.user.id);
 
     //TODO: maybe limit org creation per account
     const tenant = await this.organizations.create({
