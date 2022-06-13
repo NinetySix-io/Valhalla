@@ -22,7 +22,6 @@ import { OrganizationMemberCreatedEvent } from '../events/org.member.created.eve
 import { OrganizationTransformer } from '@app/entities/organizations/transformer';
 import { OrganizationsModel } from '@app/entities/organizations';
 import { ServIdentity } from '@valhalla/serv.clients';
-import mongoose from 'mongoose';
 import { slugify } from '@valhalla/utilities';
 
 export class CreateOrgCommand implements ICommand {

@@ -8,9 +8,10 @@ export class AccountSettingTransformer extends AccountSettingSchema {
     entity: DocumentType<AccountSettingSchema> | AccountSettingSchema,
   ) {
     super();
-    isDocument(entity)
-      ? Object.assign(this, entity.toObject({ virtuals: false }))
-      : entity;
+    Object.assign(
+      this,
+      isDocument(entity) ? entity.toObject({ virtuals: false }) : entity,
+    );
   }
 
   get proto(): Proto {
