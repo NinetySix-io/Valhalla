@@ -1,15 +1,14 @@
 import * as CustomPassport from 'passport-custom';
 
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AbstractStrategy, PassportStrategy } from '@nestjs/passport';
 import { IdentityRpcClientService, ServIdentity } from '@valhalla/serv.clients';
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 
-import { AuthManager } from './auth.manager';
-import { FastifyRequest } from 'fastify';
 import { Logger } from '@nestjs/common';
-import { resolveRpcRequest } from '../../lib/resolve.rpc.request';
+import { FastifyRequest } from 'fastify';
 import { tryNice } from 'try-nice';
-import dayjs from 'dayjs';
+import { resolveRpcRequest } from '../../lib/resolve.rpc.request';
+import { AuthManager } from './auth.manager';
 
 const TokenStrategyKey = 'token-strategy' as const;
 
@@ -29,8 +28,7 @@ export class TokensStrategy
   }
 
   async validate(request: FastifyRequest): Promise<{
-    account: ServIdentity.Account;
-    expiresAt: Date;
+    account: Pick<ServIdentity.Account, 'id' | 'displayName'>;
   }> {
     const accessToken = AuthManager.getAccessTokenFromRequest(request);
 
@@ -62,7 +60,6 @@ export class TokensStrategy
 
     return {
       account: result.account,
-      expiresAt: dayjs(result.expiresAt).toDate(),
     };
   }
 }

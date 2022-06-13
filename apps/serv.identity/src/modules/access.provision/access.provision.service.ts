@@ -1,15 +1,16 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 
-import { Account } from '@app/protobuf';
 import { AccountsModel } from '@app/entities/accounts';
-import { BootConfigService } from '@app/services/boot.config.service';
-import { JwtContent } from './types';
-import { JwtService } from '@nestjs/jwt';
 import { RefreshTokensModel } from '@app/entities/refresh.tokens';
-import dayjs from 'dayjs';
+import { Account } from '@app/protobuf';
+import { BootConfigService } from '@app/services/boot.config.service';
+import { JwtService } from '@nestjs/jwt';
+import { OrgsRpcClientService } from '@valhalla/serv.clients';
+import { resolveRpcRequest, toObjectId } from '@valhalla/serv.core';
 import { isNil } from '@valhalla/utilities';
+import dayjs from 'dayjs';
 import ms from 'ms';
-import { toObjectId } from '@valhalla/serv.core';
+import { JwtContent } from './types';
 
 @Injectable()
 export class AccessProvisionService {
@@ -20,6 +21,8 @@ export class AccessProvisionService {
     private readonly jwtService: JwtService,
     private readonly refreshTokens: RefreshTokensModel,
     private readonly accounts: AccountsModel,
+    @Inject(OrgsRpcClientService)
+    private readonly orgService: OrgsRpcClientService,
   ) {}
 
   /**
@@ -59,7 +62,7 @@ export class AccessProvisionService {
     });
 
     const refreshToken = token.id;
-    const accessToken = this.createAccessToken(account);
+    const accessToken = await this.createAccessToken(account);
 
     this.logger.warn(
       `Refresh Token[${refreshToken}] generated an access token`,
@@ -86,7 +89,7 @@ export class AccessProvisionService {
       .findById(token.account)
       .orFail(() => new Error('Account does not exists!'));
 
-    const accessToken = this.createAccessToken(account);
+    const accessToken = await this.createAccessToken(account);
     this.logger.warn(
       `Refresh Token[${refreshToken}] generated an access token`,
     );
@@ -113,9 +116,16 @@ export class AccessProvisionService {
    * @param account - Pick<Account, 'id' | 'displayName'>
    * @returns A string
    */
-  createAccessToken(account: Pick<Account, 'id' | 'displayName'>) {
+  async createAccessToken(account: JwtContent['account']) {
     const expiresIn = this.bootConfig.accessTokenExpiry;
+    const activeOrg = await resolveRpcRequest(
+      this.orgService.svc.getAccountActiveOrg({
+        accountId: account.id,
+      }),
+    );
+
     const content: JwtContent = {
+      activeOrg: activeOrg?.organization?.id,
       account: {
         id: account.id,
         displayName: account.displayName,

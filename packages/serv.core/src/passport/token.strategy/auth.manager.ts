@@ -1,10 +1,9 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { CookieSerializeOptions } from '@fastify/cookie';
-import { CookiesJar } from './cookies.jar';
 import { isDev } from '@valhalla/utilities';
 
-export class AuthManager extends CookiesJar {
+export class AuthManager {
   private static readonly refreshTokenKey = 'x-valhalla-refresh-token' as const;
   private static readonly accessTokenKey = 'x-valhalla-access-token' as const;
   private reply: FastifyReply;
@@ -15,7 +14,6 @@ export class AuthManager extends CookiesJar {
   };
 
   constructor(ctx: { reply: FastifyReply; request: FastifyRequest }) {
-    super();
     this.reply = ctx.reply;
     this.request = ctx.request;
   }
@@ -54,18 +52,11 @@ export class AuthManager extends CookiesJar {
   }
 
   /**
-   * It takes a string of cookies, splits them into an array, and then returns an object with the
-   * cookie names as keys and the cookie values as values
-   * @returns The cookies object is being returned.
+   * It returns the cookies from the request object
+   * @returns The cookies object from the request object.
    */
   get cookies() {
-    const cookieStr = this.request.headers['cookie'];
-    if (!cookieStr) {
-      return undefined;
-    }
-
-    const cookies = AuthManager.parseCookie(cookieStr);
-    return cookies;
+    return this.request.cookies;
   }
 
   /**

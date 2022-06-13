@@ -6,6 +6,11 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "serv.identity";
 
+export interface AccessTokenAccountContent {
+  id: string;
+  displayName: string;
+}
+
 export interface ValidateVerificationRequest {
   verificationId: string;
   verificationCode: string;
@@ -16,8 +21,7 @@ export interface ValidateVerificationResponse {
 }
 
 export interface DecodeAccessTokenResponse {
-  account: Account | undefined;
-  expiresAt: string;
+  account: AccessTokenAccountContent | undefined;
 }
 
 export interface AddEmailToAccountRequest {
@@ -101,7 +105,7 @@ export interface Phone {
 
 export interface Account {
   id: string;
-  displayName?: string | undefined;
+  displayName: string;
   firstName?: string | undefined;
   lastName?: string | undefined;
   createdAt: string;

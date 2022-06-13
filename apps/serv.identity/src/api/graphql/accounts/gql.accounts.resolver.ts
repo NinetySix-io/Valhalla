@@ -1,27 +1,31 @@
 import { AccountSchema } from '@app/entities/accounts/schema';
-import {
-  CurrentAccount,
-  EmailParamValidation,
-  GqlAuthGuard,
-  ParamValidationPipe,
-  PhoneParamValidation,
-  resolveRpcRequest,
-} from '@valhalla/serv.core';
+
 import { Account } from '@app/protobuf';
 import { UseGuards } from '@nestjs/common';
-import { Query, Resolver } from '@nestjs/graphql';
+import { PickType, Query, Resolver } from '@nestjs/graphql';
 import { Args } from '@nestjs/graphql';
 import { gRpcController } from '@app/grpc/grpc.controller';
 import { Mutation } from '@nestjs/graphql';
 import { UpdateAccountInput } from './inputs/update.account.input';
+import {
+  GqlAuthGuard,
+  CurrentAccount,
+  resolveRpcRequest,
+  ParamValidationPipe,
+  EmailParamValidation,
+  PhoneParamValidation,
+  AuthAccount,
+} from '@valhalla/serv.core';
 
 @Resolver()
 export class GqlAccountResolver {
   constructor(private readonly rpcClient: gRpcController) {}
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => AccountSchema, { description: 'Get current session user' })
-  session(@CurrentAccount() account: Account): Account {
+  @Query(() => PickType(AccountSchema, ['id', 'displayName']), {
+    description: 'Get current session user',
+  })
+  async session(@CurrentAccount() account: AuthAccount): Promise<AuthAccount> {
     return account;
   }
 
@@ -29,7 +33,7 @@ export class GqlAccountResolver {
   @Query(() => AccountSchema, {
     description: 'Get current logged in user information',
   })
-  async account(@CurrentAccount() account: Account): Promise<Account> {
+  async account(@CurrentAccount() account: AuthAccount): Promise<Account> {
     const response = await resolveRpcRequest(
       this.rpcClient.findAccount({
         accountId: account.id,
@@ -42,7 +46,7 @@ export class GqlAccountResolver {
   @UseGuards(GqlAuthGuard)
   @Mutation(() => Boolean, { description: 'Update account' })
   async updateAccount(
-    @CurrentAccount() account: Account,
+    @CurrentAccount() account: AuthAccount,
     @Args('input') input: UpdateAccountInput,
   ) {
     await resolveRpcRequest(
@@ -62,7 +66,7 @@ export class GqlAccountResolver {
     description: 'Add email address to account',
   })
   async addEmailToAccount(
-    @CurrentAccount() account: Account,
+    @CurrentAccount() account: AuthAccount,
     @Args('email', new ParamValidationPipe([EmailParamValidation]))
     email: string,
   ): Promise<boolean> {
@@ -81,7 +85,7 @@ export class GqlAccountResolver {
     description: 'Add phone number to account',
   })
   async addPhoneToAccount(
-    @CurrentAccount() account: Account,
+    @CurrentAccount() account: AuthAccount,
     @Args('phone', new ParamValidationPipe([PhoneParamValidation]))
     phone: string,
   ): Promise<boolean> {
@@ -100,7 +104,7 @@ export class GqlAccountResolver {
     description: 'Remove associated email from account',
   })
   async removeEmailFromAccount(
-    @CurrentAccount() account: Account,
+    @CurrentAccount() account: AuthAccount,
     @Args('email', new ParamValidationPipe([EmailParamValidation]))
     email: string,
   ): Promise<boolean> {
@@ -119,7 +123,7 @@ export class GqlAccountResolver {
     description: 'Remove associated phone from account',
   })
   async removePhoneFromAccount(
-    @CurrentAccount() account: Account,
+    @CurrentAccount() account: AuthAccount,
     @Args('phone', new ParamValidationPipe([PhoneParamValidation]))
     phone: string,
   ): Promise<boolean> {

@@ -10,11 +10,35 @@ service OrgsService {
     rpc UpdateOrgPlan(UpdateOrgPlanRequest) returns(Organization) {}
     rpc UpdateOrgLogo(UpdateOrgLogoRequest) returns(Organization) {}
 
+    rpc SetAccountActiveOrg(SetAccountActiveOrgRequest) returns(SetAccountActiveOrgResponse) {}
+    rpc GetAccountActiveOrg(GetAccountActiveOrgRequest) returns (GetAccountActiveOrgResponse) {}
+
     // rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse) {}
     // rpc AcceptMemberInvitation(AcceptMemberInvitationRequest) returns (AcceptMemberInvitationResponse) {}
     rpc MarkDeleteMember(MarkDeleteMemberRequest) returns (MarkDeleteMemberResponse) {}
     rpc GetMember(GetMemberRequest) returns (Member) {}
     rpc GetUserMemberships(GetUserMembershipsRequest) returns (GetUserMembershipsResponse) {}
+}
+
+message AccountSettings {
+    string activeOrganizationId = 1;
+}
+
+message GetAccountActiveOrgRequest {
+    string accountId = 1;
+}
+
+message GetAccountActiveOrgResponse {
+    optional Organization organization = 1;
+}
+
+message SetAccountActiveOrgRequest {
+    string accountId = 1;
+    string organizationId = 2;
+}
+
+message SetAccountActiveOrgResponse {
+    bool success = 1;
 }
 
 message GetUserMembershipsRequest {

@@ -3,8 +3,8 @@ import { gRpcController } from '@app/grpc/grpc.controller';
 import { Organization } from '@app/protobuf';
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { ServIdentity } from '@valhalla/serv.clients';
 import {
+  AuthAccount,
   CurrentAccount,
   GqlAuthGuard,
   resolveRpcRequest,
@@ -18,7 +18,7 @@ export class GqlAccountResolver {
   @Mutation(() => Boolean, { description: 'Set active org for account' })
   async setAccountActiveOrg(
     @Args('organization') org: string,
-    @CurrentAccount() account: ServIdentity.Account,
+    @CurrentAccount() account: AuthAccount,
   ): Promise<boolean> {
     await resolveRpcRequest(
       this.rpcClient.setAccountActiveOrg({
@@ -36,7 +36,7 @@ export class GqlAccountResolver {
     description: 'Current Active Organization',
   })
   async activeOrg(
-    @CurrentAccount() account: ServIdentity.Account,
+    @CurrentAccount() account: AuthAccount,
   ): Promise<Organization> {
     const result = await resolveRpcRequest(
       this.rpcClient.getAccountActiveOrg({

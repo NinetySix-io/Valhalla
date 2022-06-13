@@ -2,9 +2,9 @@ import { OrganizationSchema } from '@app/entities/organizations/schema';
 import { gRpcController } from '@app/grpc/grpc.controller';
 import { Organization, OrgPlan } from '@app/protobuf';
 import { UseGuards } from '@nestjs/common';
-import { Query, Resolver, Args, Mutation } from '@nestjs/graphql';
-import { ServIdentity } from '@valhalla/serv.clients';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
+  AuthAccount,
   CurrentAccount,
   GqlAuthGuard,
   resolveRpcRequest,
@@ -19,7 +19,7 @@ export class GqlOrganizationsResolver {
   @UseGuards(GqlAuthGuard)
   async createOrganization(
     @Args('input') input: CreateOrganizationInput,
-    @CurrentAccount() account: ServIdentity.Account,
+    @CurrentAccount() account: AuthAccount,
   ): Promise<Organization> {
     const response = await resolveRpcRequest(
       this.rpcClient.createOrg({
@@ -36,7 +36,7 @@ export class GqlOrganizationsResolver {
   @UseGuards(GqlAuthGuard)
   async archiveOrganization(
     @Args('orgId') orgId: string,
-    @CurrentAccount() account: ServIdentity.Account,
+    @CurrentAccount() account: AuthAccount,
   ): Promise<string> {
     const response = await resolveRpcRequest(
       this.rpcClient.archiveOrg({
@@ -54,7 +54,7 @@ export class GqlOrganizationsResolver {
   @UseGuards(GqlAuthGuard)
   async restoreOrganization(
     @Args('orgId') orgId: string,
-    @CurrentAccount() account: ServIdentity.Account,
+    @CurrentAccount() account: AuthAccount,
   ) {
     const response = await resolveRpcRequest(
       this.rpcClient.restoreOrg({
@@ -71,7 +71,7 @@ export class GqlOrganizationsResolver {
   })
   @UseGuards(GqlAuthGuard)
   async organizations(
-    @CurrentAccount() account: ServIdentity.Account,
+    @CurrentAccount() account: AuthAccount,
   ): Promise<Organization[]> {
     const response = await resolveRpcRequest(
       this.rpcClient.getUserMemberships({
