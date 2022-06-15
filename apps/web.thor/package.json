@@ -39,6 +39,7 @@
     "react-dom": "^18.1.0",
     "react-icons": "^4.4.0",
     "react-redux": "^8.0.2",
+    "redux": "^4.2.0",
     "try-nice": "^4.0.4"
   },
   "devDependencies": {

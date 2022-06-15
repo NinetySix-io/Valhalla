@@ -384,6 +384,7 @@ importers:
       react-dom: ^18.1.0
       react-icons: ^4.4.0
       react-redux: ^8.0.2
+      redux: ^4.2.0
       redux-logger: ^3.0.6
       rimraf: ^3.0.2
       try-nice: ^4.0.4
@@ -414,6 +415,7 @@ importers:
       react-dom: 18.1.0_react@18.1.0
       react-icons: 4.4.0_react@18.1.0
       react-redux: 8.0.2_d5prddqdjf6tcianjubzhf4vay
+      redux: 4.2.0
       try-nice: 4.0.4
     devDependencies:
       '@babel/core': 7.18.0
