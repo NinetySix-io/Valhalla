@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-const config = require('dotenv').config().parsed;
+const config = require('dotenv').config().parsed || {};
 const { pick } = require('@valhalla/utilities');
 const withTM = require('next-transpile-modules')(['@valhalla/react']);
 const withPlugins = require('next-compose-plugins');
