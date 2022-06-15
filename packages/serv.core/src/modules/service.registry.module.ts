@@ -6,12 +6,10 @@ import { ConfigModule } from '@nestcloud2/config';
 import { ConsulModule } from '@nestcloud2/consul';
 import { GrpcModule } from '@nestcloud2/grpc';
 import { LoadbalanceModule } from '@nestcloud2/loadbalance';
-import { LoggerModule } from '@nestcloud2/logger';
 import { ScheduleModule } from '@nestcloud2/schedule';
 import { ServiceModule } from '@nestcloud2/service';
 
 const modules = [
-  LoggerModule.forRoot(),
   ScheduleModule.forRoot(),
   GrpcModule.forRoot(),
   ConsulModule.forRootAsync({ inject: [BOOT] }),

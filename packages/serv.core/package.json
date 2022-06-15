@@ -21,7 +21,6 @@
     "@nestcloud2/core": "^0.8.3",
     "@nestcloud2/grpc": "^0.8.3",
     "@nestcloud2/loadbalance": "^0.8.3",
-    "@nestcloud2/logger": "^0.8.3",
     "@nestcloud2/schedule": "^0.8.3",
     "@nestcloud2/service": "^0.8.3",
     "@nestjs/apollo": "^10.0.11",

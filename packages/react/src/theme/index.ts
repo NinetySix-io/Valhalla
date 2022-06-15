@@ -7,6 +7,9 @@ const BORDER_RADIUS = 10;
 
 export const theme = responsiveFontSizes(
   createTheme({
+    shape: {
+      borderRadius: BORDER_RADIUS,
+    },
     components: {
       MuiButton: {
         styleOverrides: {

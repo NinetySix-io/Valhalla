@@ -44,6 +44,13 @@ export class AuthManager {
   }
 
   /**
+   * It clears the refresh token cookie
+   */
+  removeRefreshToken() {
+    this.reply.clearCookie(AuthManager.refreshTokenKey);
+  }
+
+  /**
    * It sets the access token in the response header
    * @param {string} accessToken - The access token to be set in the response header.
    */

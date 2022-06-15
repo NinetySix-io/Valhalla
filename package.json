@@ -41,5 +41,16 @@
   },
   "dependencies": {
     "lodash.camelcase": "^4.3.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "glob-parent@<5.1.2": ">=5.1.2",
+      "follow-redirects@<1.14.8": ">=1.14.8",
+      "follow-redirects@<1.14.7": ">=1.14.7",
+      "axios@<0.21.1": ">=0.21.1",
+      "trim@<0.0.3": ">=0.0.3",
+      "axios@<0.21.2": ">=0.21.2",
+      "trim-newlines@<3.0.1": ">=3.0.1"
+    }
   }
 }

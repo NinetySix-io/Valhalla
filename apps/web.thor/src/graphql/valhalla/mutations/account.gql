@@ -53,6 +53,10 @@ mutation loginWithPhone(
   }
 }
 
+mutation logout {
+  logout
+}
+
 mutation updateAccount(
   $displayName: String
   $firstName: String

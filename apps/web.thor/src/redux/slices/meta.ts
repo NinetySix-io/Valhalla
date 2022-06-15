@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 type State = {
+  isDarkMode?: boolean;
   accessToken?: string;
   accessTokenExpires?: Date;
 };
@@ -11,6 +12,10 @@ export const MetaSlice = createSlice({
   name: 'meta',
   initialState,
   reducers: {
+    clearAccessToken(state) {
+      state.accessToken = null;
+      state.accessTokenExpires = null;
+    },
     setAccessToken(
       state,
       action: PayloadAction<
@@ -19,6 +24,9 @@ export const MetaSlice = createSlice({
     ) {
       state.accessToken = action.payload.accessToken;
       state.accessTokenExpires = action.payload.accessTokenExpires;
+    },
+    setIsDarkMode(state, action: PayloadAction<State['isDarkMode']>) {
+      state.isDarkMode = action.payload;
     },
   },
 });

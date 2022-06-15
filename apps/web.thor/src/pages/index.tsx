@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 
 import { Page } from '@app/types/next';
-import { withSsrContext } from '@app/lib/next/with.ssr.ctx';
+import { withAuthSsrContext } from '@app/next/with.app.ctx';
 
 const HomePage: Page = () => {
   return (
@@ -11,7 +11,7 @@ const HomePage: Page = () => {
   );
 };
 
-export const getServerSideProps = withSsrContext(() => {
+export const getServerSideProps = withAuthSsrContext(() => {
   return {
     props: {
       SEO: {

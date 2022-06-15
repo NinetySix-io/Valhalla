@@ -131,6 +131,8 @@ export type Mutation = {
   readonly loginWithEmail: AuthResponse;
   /** Login to account with phone number */
   readonly loginWithPhone: AuthResponse;
+  /** Invalid current session */
+  readonly logout: Scalars['Boolean'];
   /** Register user account */
   readonly registerAccount: AuthResponse;
   /** Remove associated email from account */
@@ -143,6 +145,8 @@ export type Mutation = {
   readonly sendEmailVerificationCode: Scalars['String'];
   /** Send verification code to phone number */
   readonly sendPhoneVerificationCode: Scalars['String'];
+  /** Set active org for account */
+  readonly setAccountActiveOrg: Scalars['Boolean'];
   /** Update account */
   readonly updateAccount: Scalars['Boolean'];
 };
@@ -208,6 +212,11 @@ export type MutationSendPhoneVerificationCodeArgs = {
 };
 
 
+export type MutationSetAccountActiveOrgArgs = {
+  organization: Scalars['String'];
+};
+
+
 export type MutationUpdateAccountArgs = {
   input: UpdateAccountInput;
 };
@@ -247,10 +256,12 @@ export type Query = {
   readonly accessToken: AccessTokenResponse;
   /** Get current logged in user information */
   readonly account: AccountSchema;
+  /** Current Active Organization */
+  readonly activeOrg?: Maybe<OrganizationSchema>;
   /** Get current user's organizations memberships */
   readonly organizations: ReadonlyArray<OrganizationSchema>;
   /** Get current session user */
-  readonly session: AccountSchema;
+  readonly session: SessionResponse;
   /** Validate verification code */
   readonly validateVerificationCode: Scalars['Boolean'];
 };
@@ -272,6 +283,14 @@ export type RegisterInput = {
   readonly lastName?: InputMaybe<Scalars['String']>;
   /** Phone Number */
   readonly phone?: InputMaybe<Scalars['String']>;
+};
+
+export type SessionResponse = {
+  readonly __typename?: 'SessionResponse';
+  /** User Display Name */
+  readonly displayName: Scalars['String'];
+  /** Identifier of the entity */
+  readonly id: Scalars['ID'];
 };
 
 export type UpdateAccountInput = {
@@ -311,6 +330,11 @@ export type LoginWithPhoneMutationVariables = Exact<{
 
 
 export type LoginWithPhoneMutation = { readonly __typename?: 'Mutation', readonly loginWithPhone: { readonly __typename?: 'AuthResponse', readonly accessToken: string, readonly accessTokenExpiresAt: Date } };
+
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = { readonly __typename?: 'Mutation', readonly logout: boolean };
 
 export type UpdateAccountMutationVariables = Exact<{
   displayName?: InputMaybe<Scalars['String']>;
@@ -402,6 +426,11 @@ export type GetAccountQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAccountQuery = { readonly __typename?: 'Query', readonly account: { readonly __typename?: 'AccountSchema', readonly firstName: string, readonly lastName: string, readonly displayName: string } };
+
+export type SessionQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SessionQuery = { readonly __typename?: 'Query', readonly session: { readonly __typename?: 'SessionResponse', readonly id: string } };
 
 export type GetOrganizationsMembershipQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -525,6 +554,36 @@ export function useLoginWithPhoneMutation(baseOptions?: Apollo.MutationHookOptio
 export type LoginWithPhoneMutationHookResult = ReturnType<typeof useLoginWithPhoneMutation>;
 export type LoginWithPhoneMutationResult = Apollo.MutationResult<LoginWithPhoneMutation>;
 export type LoginWithPhoneMutationOptions = Apollo.BaseMutationOptions<LoginWithPhoneMutation, LoginWithPhoneMutationVariables>;
+export const LogoutDocument = gql`
+    mutation logout {
+  logout
+}
+    `;
+export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMutationVariables>;
+
+/**
+ * __useLogoutMutation__
+ *
+ * To run a mutation, you first call `useLogoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLogoutMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [logoutMutation, { data, loading, error }] = useLogoutMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, options);
+      }
+export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
+export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
+export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const UpdateAccountDocument = gql`
     mutation updateAccount($displayName: String, $firstName: String, $lastName: String) {
   updateAccount(
@@ -961,6 +1020,43 @@ export type GetAccountLazyQueryHookResult = ReturnType<typeof useGetAccountLazyQ
 export type GetAccountQueryResult = Apollo.QueryResult<GetAccountQuery, GetAccountQueryVariables>;
 export function refetchGetAccountQuery(variables?: GetAccountQueryVariables) {
       return { query: GetAccountDocument, variables: variables }
+    }
+export const SessionDocument = gql`
+    query session {
+  session {
+    id
+  }
+}
+    `;
+
+/**
+ * __useSessionQuery__
+ *
+ * To run a query within a React component, call `useSessionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSessionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSessionQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSessionQuery(baseOptions?: Apollo.QueryHookOptions<SessionQuery, SessionQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SessionQuery, SessionQueryVariables>(SessionDocument, options);
+      }
+export function useSessionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SessionQuery, SessionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SessionQuery, SessionQueryVariables>(SessionDocument, options);
+        }
+export type SessionQueryHookResult = ReturnType<typeof useSessionQuery>;
+export type SessionLazyQueryHookResult = ReturnType<typeof useSessionLazyQuery>;
+export type SessionQueryResult = Apollo.QueryResult<SessionQuery, SessionQueryVariables>;
+export function refetchSessionQuery(variables?: SessionQueryVariables) {
+      return { query: SessionDocument, variables: variables }
     }
 export const GetOrganizationsMembershipDocument = gql`
     query getOrganizationsMembership {

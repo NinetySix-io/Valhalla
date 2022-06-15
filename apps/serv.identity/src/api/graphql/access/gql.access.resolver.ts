@@ -1,5 +1,5 @@
 import { gRpcController } from '@app/grpc/grpc.controller';
-import { BadRequestException, ForbiddenException } from '@nestjs/common';
+import { ForbiddenException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
   Auth,
@@ -75,6 +75,21 @@ export class GqlAuthResolver {
     };
   }
 
+  @Mutation(() => Boolean, {
+    description: 'Invalid current session',
+  })
+  async logout(@Auth() auth: AuthManager): Promise<boolean> {
+    await resolveRpcRequest(
+      this.rpcClient.logout({
+        refreshToken: auth.getRefreshToken(),
+      }),
+    );
+
+    auth.removeRefreshToken();
+
+    return true;
+  }
+
   @Query(() => AccessTokenResponse, {
     description: 'Generate an access token',
   })
@@ -82,7 +97,7 @@ export class GqlAuthResolver {
     @RefreshToken() refreshToken: string,
   ): Promise<AccessTokenResponse> {
     if (!refreshToken) {
-      throw new BadRequestException('Refresh Token not found!');
+      throw new ForbiddenException('Refresh Token not found!');
     }
 
     const [result, error] = await tryNice(() =>
@@ -101,7 +116,7 @@ export class GqlAuthResolver {
 
     return {
       token: result.accessToken,
-      expiresAt: new Date(result.accessToken),
+      expiresAt: new Date(result.accessTokenExpiresAt),
     };
   }
 }

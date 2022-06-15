@@ -2,14 +2,14 @@ import * as React from 'react';
 
 import { Box, IconButton, InputAdornment, TextField } from '@mui/material';
 import {
+  FaSolid,
   Form,
-  GetServerSideProps,
+  Icon,
   UsernameFormItem,
   useChange,
 } from '@valhalla/react';
 
 import { BaseLayout } from '@app/layout/base';
-import { FaRedo } from 'react-icons/fa';
 import { FormContainer } from '@app/components/form.container';
 import { LoadingButton } from '@mui/lab';
 import { MetaSlice } from '@app/redux/slices/meta';
@@ -19,6 +19,7 @@ import { isEmail } from '@valhalla/utilities';
 import { useLogin } from '@app/graphql/valhalla/hooks/user.login';
 import { useReduxDispatch } from '@app/redux/hooks';
 import { useRouter } from 'next/router';
+import { withPublicSsrContext } from '@app/next/with.app.ctx';
 
 type Payload = {
   verificationCode: string;
@@ -111,7 +112,7 @@ const GetStartedWithUsernamePage: Page = () => {
                       endAdornment: (
                         <InputAdornment position="end">
                           <IconButton>
-                            <FaRedo size={15} />
+                            <Icon height={15} icon={FaSolid.faRedo} />
                           </IconButton>
                         </InputAdornment>
                       ),
@@ -147,15 +148,15 @@ const GetStartedWithUsernamePage: Page = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = () => {
+export const getServerSideProps = withPublicSsrContext(() => {
   return {
     props: {
       SEO: {
-        title: 'Get Started',
+        title: 'Authentication',
       },
     },
   };
-};
+});
 
 GetStartedWithUsernamePage.Layout = BaseLayout;
 

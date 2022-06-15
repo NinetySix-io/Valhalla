@@ -9,7 +9,7 @@ const EXPIRED_ACCESS_TOKEN_CODE = 401 as const;
  * @returns A function that takes an error and returns a boolean.
  */
 export function isApolloError(error: Error): error is ApolloError {
-  return error instanceof ApolloError;
+  return 'graphQLErrors' in error;
 }
 
 /**

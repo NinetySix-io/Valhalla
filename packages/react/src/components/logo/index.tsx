@@ -10,9 +10,9 @@ type Props = cProps<
 >;
 
 export const LOGO_WHITE_URL =
-  'https://res.cloudinary.com/ninetysix-io/image/upload/v1650833488/NinetySix/logo.white_kxcz7e.png';
+  'https://res.cloudinary.com/ninetysix-io/image/upload/v1655344119/NinetySix/white_logo_q5wkvn.png';
 export const LOGO_BLACK_URL =
-  'https://res.cloudinary.com/ninetysix-io/image/upload/v1650833488/NinetySix/logo.black_txzx7f.png';
+  'https://res.cloudinary.com/ninetysix-io/image/upload/v1655344117/NinetySix/black_logo_nolhv5.png';
 
 export const Logo: React.FC<Props> = ({ variant = 'black', ...props }) => {
   return (

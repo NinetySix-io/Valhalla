@@ -13,6 +13,8 @@
     "errmsg",
     "Eventstore",
     "fastify",
+    "fontawesome",
+    "fortawesome",
     "inapp",
     "Loadbalance",
     "metatype",

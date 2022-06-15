@@ -33,6 +33,11 @@
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
+    "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/free-brands-svg-icons": "^6.1.1",
+    "@fortawesome/free-regular-svg-icons": "^6.1.1",
+    "@fortawesome/free-solid-svg-icons": "^6.1.1",
+    "@fortawesome/react-fontawesome": "^0.1.18",
     "@mui/lab": "5.0.0-alpha.81",
     "@mui/material": "^5.7.0",
     "@react-hook/async": "^3.1.1",
@@ -43,7 +48,6 @@
     "rc-field-form": "^1.26.4",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
-    "react-icons": "^4.3.1",
     "require-from-string": "^2.0.2",
     "use-deep-compare-effect": "^1.8.1"
   }

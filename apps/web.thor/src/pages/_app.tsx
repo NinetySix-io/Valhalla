@@ -39,13 +39,13 @@ export default function App({ Component, ...props }: AppProps) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <ReduxProvider store={store}>
-          <AccessTokenProvider>
-            <ApolloProvider client={apolloClient}>
+          <ApolloProvider client={apolloClient}>
+            <AccessTokenProvider>
               <Layout>
                 <Component {...pageProps} />
               </Layout>
-            </ApolloProvider>
-          </AccessTokenProvider>
+            </AccessTokenProvider>
+          </ApolloProvider>
         </ReduxProvider>
       </ThemeProvider>
     </CacheProvider>

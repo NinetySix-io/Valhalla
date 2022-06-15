@@ -3,6 +3,7 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 
+import { NestApplicationContextOptions } from '@nestjs/common/interfaces/nest-application-context-options.interface';
 import { NestCloud } from '@nestcloud2/core';
 import { NestFactory } from '@nestjs/core';
 import { ServCoreSetup } from './setup';
@@ -21,6 +22,7 @@ export async function bootstrapApplication(
   options?: {
     grpc?: ServCoreSetup['grpc'];
     preSetup?: (app: NestFastifyApplication) => void | Promise<void>;
+    context?: NestApplicationContextOptions;
   },
 ) {
   loadDotEnv();

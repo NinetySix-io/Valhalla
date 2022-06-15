@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { FaSolid, Icon } from '../icons';
 import {
   IconButton,
   InputAdornment,
@@ -8,7 +9,6 @@ import {
 } from '@mui/material';
 import { isEmail, isPhoneNumber } from '@valhalla/utilities';
 
-import { FaTimes } from 'react-icons/fa';
 import { Form } from '../form';
 import { Rule } from 'rc-field-form/es/interface';
 import { cProps } from '../../types';
@@ -98,7 +98,7 @@ export const UsernameFormItem: ComponentType = ({
                     endAdornment: withClear && username && (
                       <InputAdornment position="end">
                         <IconButton onClick={handleClear}>
-                          <FaTimes size={15} />
+                          <Icon icon={FaSolid.faTimes} height={15} />
                         </IconButton>
                       </InputAdornment>
                     ),

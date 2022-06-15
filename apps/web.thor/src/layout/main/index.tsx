@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Box, Container, styled } from '@mui/material';
 
 import { Footer } from './footer';
+import { Header } from './header';
 import { cProps } from '@valhalla/react';
 
 type Props = cProps;
@@ -30,8 +31,9 @@ const Body = styled(Box)`
 
 export const MainLayout: React.FC<Props> = ({ children }) => {
   return (
-    <Wrapper fixed maxWidth="xl">
-      <Body>{children}</Body>
+    <Wrapper>
+      <Header />
+      <Body maxWidth="xl">{children}</Body>
       <Footer />
     </Wrapper>
   );
