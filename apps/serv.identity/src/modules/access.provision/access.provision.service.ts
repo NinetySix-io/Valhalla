@@ -1,16 +1,17 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { resolveRpcRequest, toObjectId } from '@valhalla/serv.core';
 
-import { AccountsModel } from '@app/entities/accounts';
-import { RefreshTokensModel } from '@app/entities/refresh.tokens';
 import { Account } from '@app/protobuf';
+import { AccountsModel } from '@app/entities/accounts';
 import { BootConfigService } from '@app/services/boot.config.service';
+import { Environment } from '@app/env';
+import { JwtContent } from './types';
 import { JwtService } from '@nestjs/jwt';
 import { OrgsRpcClientService } from '@valhalla/serv.clients';
-import { resolveRpcRequest, toObjectId } from '@valhalla/serv.core';
-import { isNil } from '@valhalla/utilities';
+import { RefreshTokensModel } from '@app/entities/refresh.tokens';
 import dayjs from 'dayjs';
+import { isNil } from '@valhalla/utilities';
 import ms from 'ms';
-import { JwtContent } from './types';
 
 @Injectable()
 export class AccessProvisionService {
@@ -21,7 +22,6 @@ export class AccessProvisionService {
     private readonly jwtService: JwtService,
     private readonly refreshTokens: RefreshTokensModel,
     private readonly accounts: AccountsModel,
-    @Inject(OrgsRpcClientService)
     private readonly orgService: OrgsRpcClientService,
   ) {}
 
@@ -55,7 +55,13 @@ export class AccessProvisionService {
    */
   async createRefreshToken(account: Account) {
     const accountId = toObjectId(account.id);
-    await this.refreshTokens.deleteMany({ account: accountId });
+
+    if (!Environment.isDev) {
+      await this.refreshTokens.deleteMany({
+        account: accountId,
+      });
+    }
+
     const token = await this.refreshTokens.create({
       account: accountId,
       expiresAt: this.bootConfig.refreshTokenExpiry,

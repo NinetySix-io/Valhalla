@@ -14,8 +14,8 @@ import { gRpcModule } from './grpc/grpc.module';
 
 @Module({
   imports: [
-    CoreModule,
     ServiceRegistryModule,
+    CoreModule,
     GqlModule,
     BootModule.forRoot({ filePath: configFilePath }),
     TypegooseModule.forRootAsync({ useClass: MongoConfigService }),

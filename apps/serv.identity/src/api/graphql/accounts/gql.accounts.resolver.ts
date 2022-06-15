@@ -1,28 +1,27 @@
 import { AccountSchema } from '@app/entities/accounts/schema';
 
+import { gRpcController } from '@app/grpc/grpc.controller';
 import { Account } from '@app/protobuf';
 import { UseGuards } from '@nestjs/common';
-import { PickType, Query, Resolver } from '@nestjs/graphql';
-import { Args } from '@nestjs/graphql';
-import { gRpcController } from '@app/grpc/grpc.controller';
-import { Mutation } from '@nestjs/graphql';
-import { UpdateAccountInput } from './inputs/update.account.input';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
-  GqlAuthGuard,
-  CurrentAccount,
-  resolveRpcRequest,
-  ParamValidationPipe,
-  EmailParamValidation,
-  PhoneParamValidation,
   AuthAccount,
+  CurrentAccount,
+  EmailParamValidation,
+  GqlAuthGuard,
+  ParamValidationPipe,
+  PhoneParamValidation,
+  resolveRpcRequest,
 } from '@valhalla/serv.core';
+import { UpdateAccountInput } from './inputs/update.account.input';
+import { SessionResponse } from './responses/session.response';
 
 @Resolver()
 export class GqlAccountResolver {
   constructor(private readonly rpcClient: gRpcController) {}
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => PickType(AccountSchema, ['id', 'displayName']), {
+  @Query(() => SessionResponse, {
     description: 'Get current session user',
   })
   async session(@CurrentAccount() account: AuthAccount): Promise<AuthAccount> {
