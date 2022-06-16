@@ -20,7 +20,6 @@
     "build:serv": "turbo run build --filter=./apps/serv.*",
     "build:web": "turbo run build --filter=./apps/web.*",
     "build:web.thor": "turbo run build --scope=web.thor --include-dependencies --no-deps",
-    "build:web.loki": "turbo run build --scope=web.loki --include-dependencies --no-deps",
     "build:clients": "turbo run build --filter=./packages/serv.clients",
     "lint": "turbo run lint",
     "test": "turbo run test",

@@ -6,10 +6,6 @@
       "outputs": ["dist/**", ".next/**", "public/dist/**"],
       "dependsOn": ["^build"]
     },
-    "loki#build": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**"]
-    },
     "thor#build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**"]

@@ -1,3 +1,0 @@
-# Loki
-
-Internal facing Dashboard
