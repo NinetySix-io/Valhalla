@@ -12,3 +12,4 @@ export * from './general.decorators';
 export * from './pipes';
 export * from './passport';
 export * from './gql.decorators';
+export * from './validator.decorators';
