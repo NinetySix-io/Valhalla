@@ -22,55 +22,6 @@ directive @inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUM
 
 directive @override(from: String!) on FIELD_DEFINITION
 
-type OrganizationSchema {
-  """Date entity was created"""
-  createdAt: DateTime!
-
-  """Date entity was updated"""
-  updatedAt: DateTime!
-
-  """Identifier of the entity"""
-  id: ID!
-
-  """Name of the organization"""
-  name: String!
-
-  """Organization status"""
-  status: OrganizationStatus!
-
-  """Unique slug identifier"""
-  slug: String!
-
-  """URL of the logo"""
-  logoUrl: String
-
-  """Subscription plan"""
-  plan: OrganizationPlan!
-
-  """ID of the account that created the organization"""
-  createdBy: String!
-
-  """ID of the account that last updated the organization"""
-  updatedBy: String!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-"""Organization status"""
-enum OrganizationStatus {
-  ACTIVE
-  INACTIVE
-  SUSPENDED
-}
-
-"""Subscription plan"""
-enum OrganizationPlan {
-  FREE
-}
-
 type OrgMemberSchema {
   """Date entity was created"""
   createdAt: DateTime!
@@ -106,6 +57,11 @@ type OrgMemberSchema {
   deletingAt: DateTime
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 enum OrgMemberStatus {
   PENDING
   ACCEPTED
@@ -120,23 +76,70 @@ enum OrgMemberRole {
   GUESS
 }
 
-type OrganizationBySlugResponse {
-  """Organization"""
-  organization: OrganizationSchema!
+type OrganizationSchema {
+  """Date entity was created"""
+  createdAt: DateTime!
 
-  """Organization Membership"""
-  membership: OrgMemberSchema!
+  """Date entity was updated"""
+  updatedAt: DateTime!
+
+  """Identifier of the entity"""
+  id: ID!
+
+  """Name of the organization"""
+  name: String!
+
+  """Organization status"""
+  status: OrganizationStatus!
+
+  """Unique slug identifier"""
+  slug: String!
+
+  """URL of the logo"""
+  logoUrl: String
+
+  """Subscription plan"""
+  plan: OrganizationPlan!
+
+  """ID of the account that created the organization"""
+  createdBy: String!
+
+  """ID of the account that last updated the organization"""
+  updatedBy: String!
+}
+
+"""Organization status"""
+enum OrganizationStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+"""Subscription plan"""
+enum OrganizationPlan {
+  FREE
+}
+
+type OrganizationBySlugResponse {
+  """Identifier of the entity"""
+  id: ID!
+
+  """Name of the organization"""
+  name: String!
 }
 
 type Query {
   """Get current user's organizations memberships"""
   organizations: [OrganizationSchema!]!
 
-  """Get organization by slug"""
-  organizationBySlug(slug: String!): OrganizationBySlugResponse!
+  """Get current organization"""
+  organization: [OrganizationSchema!]!
 
-  """Current Active Organization"""
-  activeOrg: OrganizationSchema
+  """Get current organization membership"""
+  organizationMembership: [OrgMemberSchema!]!
+
+  """Find organization by slug"""
+  organizationBySlug(slug: String!): OrganizationBySlugResponse!
 }
 
 type Mutation {
@@ -148,9 +151,6 @@ type Mutation {
 
   """Restore an organization that was archived"""
   restoreOrganization(orgId: String!): String!
-
-  """Set active org for account"""
-  setAccountActiveOrg(organization: String!): Boolean!
 }
 
 input CreateOrganizationInput {

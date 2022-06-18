@@ -1,16 +1,18 @@
+import { OrgMemberSchema } from '@app/entities/org.members/schema';
 import { OrganizationSchema } from '@app/entities/organizations/schema';
 import { gRpcController } from '@app/grpc/grpc.controller';
-import { OrgPlan } from '@app/protobuf';
+import { Member, Organization, OrgPlan } from '@app/protobuf';
 import { NotFoundException, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
+  AccountActiveOrg,
   AuthAccount,
   CurrentAccount,
   GqlAuthGuard,
   resolveRpcRequest,
 } from '@valhalla/serv.core';
 import { CreateOrganizationInput } from './inputs/create.org.input';
-import { OrganizationBySlugResponse } from './responses/organization.by.slug.response';
+import { OrganizationBySlugResponse } from './responses/org.by.slug.response';
 
 @Resolver()
 export class GqlOrganizationsResolver {
@@ -81,14 +83,47 @@ export class GqlOrganizationsResolver {
     return response.organizations;
   }
 
-  @Query(() => OrganizationBySlugResponse, {
-    description: 'Get organization by slug',
+  @Query(() => [OrganizationSchema], {
+    description: 'Get current organization',
   })
   @UseGuards(GqlAuthGuard)
-  async organizationBySlug(
+  async organization(@AccountActiveOrg() orgId: string): Promise<Organization> {
+    const { organization } = await resolveRpcRequest(
+      this.rpcClient.getOrg({
+        query: {
+          $case: 'orgId',
+          orgId,
+        },
+      }),
+    );
+
+    return organization;
+  }
+
+  @Query(() => [OrgMemberSchema], {
+    description: 'Get current organization membership',
+  })
+  @UseGuards(GqlAuthGuard)
+  async organizationMembership(
     @CurrentAccount() account: AuthAccount,
+    @AccountActiveOrg() orgId: string,
+  ): Promise<Member> {
+    const { member } = await resolveRpcRequest(
+      this.rpcClient.getMember({
+        userId: account.id,
+        orgId,
+      }),
+    );
+
+    return member;
+  }
+
+  @Query(() => OrganizationBySlugResponse, {
+    description: 'Find organization by slug',
+  })
+  async organizationBySlug(
     @Args('slug') slug: string,
-  ) {
+  ): Promise<Pick<Organization, 'id' | 'name'>> {
     const { organization } = await resolveRpcRequest(
       this.rpcClient.getOrg({
         query: {
@@ -102,20 +137,9 @@ export class GqlOrganizationsResolver {
       throw new NotFoundException('Organization not found!');
     }
 
-    const { member } = await resolveRpcRequest(
-      this.rpcClient.getMember({
-        userId: account.id,
-        orgId: organization.id,
-      }),
-    );
-
-    if (!member) {
-      throw new NotFoundException('User do not belong to this organization!');
-    }
-
     return {
-      organization,
-      membership: member,
+      id: organization.id,
+      name: organization.name,
     };
   }
 }
