@@ -35,7 +35,12 @@ export default function App({ Component, ...props }: AppProps) {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <SiteFavicon />
       </Head>
-      <NextSeo titleTemplate="%s | NinetySix" {...(SEO ?? {})} />
+      <NextSeo
+        titleTemplate="%s | NinetySix"
+        {...(SEO ?? {})}
+        noindex
+        nofollow
+      />
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <ReduxProvider store={store}>

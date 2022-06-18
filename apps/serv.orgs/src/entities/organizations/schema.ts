@@ -46,7 +46,7 @@ export class OrganizationSchema extends BaseSchema {
   @Field({ description: 'URL of the logo', nullable: true })
   logoUrl?: string;
 
-  @prop()
+  @prop({ required: true })
   @Exclude()
   @Field(() => OrgPlan, { description: 'Subscription plan' })
   plan: OrgPlan;

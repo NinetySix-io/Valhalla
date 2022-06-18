@@ -14,7 +14,6 @@ import { DynamicOrganizationCreateModal } from '../organization.create.modal/dyn
 import Link from 'next/link';
 import { OrganizationLogo } from '../organization.logo';
 import { Section } from '../section';
-import { buildClientReturnableLink } from '@app/lib/router.utils';
 import { useGetOrganizationsMembershipQuery } from '@app/graphql/valhalla/generated.gql';
 
 type Props = cProps;
@@ -76,11 +75,7 @@ export const OrganizationSection: React.FC<Props> = () => {
             <Icon fontSize={30} icon={FaSolid.faPlus} />
           </CreateButton>
           {organizations.data?.organizations.map((org) => (
-            <Link
-              passHref
-              key={org.id}
-              href={buildClientReturnableLink(org.slug)}
-            >
+            <Link passHref key={org.id} href={org.slug}>
               <OrgCard variant="outlined">
                 <OrgLogo organization={org} />
                 <OrgMeta>

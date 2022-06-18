@@ -64,18 +64,76 @@ enum OrganizationStatus {
   ACTIVE
   INACTIVE
   SUSPENDED
-  UNRECOGNIZED
 }
 
 """Subscription plan"""
 enum OrganizationPlan {
   FREE
-  UNRECOGNIZED
+}
+
+type OrgMemberSchema {
+  """Date entity was created"""
+  createdAt: DateTime!
+
+  """Date entity was updated"""
+  updatedAt: DateTime!
+
+  """Identifier of the entity"""
+  id: ID!
+
+  """ID of the account"""
+  user: String!
+
+  """ID of the organization"""
+  organization: String!
+
+  """ID of the account that sent out the invite"""
+  invitedBy: String
+
+  """URL of profile image"""
+  profileImageUrl: String
+
+  """ID of the account that last updated the member profile"""
+  updatedBy: String!
+
+  """Status of the organization member"""
+  status: OrgMemberStatus!
+
+  """Role of the organization member"""
+  role: OrgMemberRole!
+
+  """Timestamp in the profile should be deleted"""
+  deletingAt: DateTime
+}
+
+enum OrgMemberStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum OrgMemberRole {
+  OWNER
+  ADMIN
+  DEVELOPER
+  MEMBER
+  GUESS
+}
+
+type OrganizationBySlugResponse {
+  """Organization"""
+  organization: OrganizationSchema!
+
+  """Organization Membership"""
+  membership: OrgMemberSchema!
 }
 
 type Query {
   """Get current user's organizations memberships"""
   organizations: [OrganizationSchema!]!
+
+  """Get organization by slug"""
+  organizationBySlug(slug: String!): OrganizationBySlugResponse!
 
   """Current Active Organization"""
   activeOrg: OrganizationSchema

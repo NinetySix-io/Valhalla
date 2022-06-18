@@ -1,6 +1,6 @@
 import { DocumentType, isDocument } from '@typegoose/typegoose';
-import { OrgPlan, Organization as OrgProto, OrgStatus } from '@app/protobuf';
 
+import { Organization as OrgProto } from '@app/protobuf';
 import { OrganizationSchema } from './schema';
 
 export class OrganizationTransformer extends OrganizationSchema {
@@ -22,8 +22,8 @@ export class OrganizationTransformer extends OrganizationSchema {
       createdBy: this.createdBy.toHexString(),
       updateBy: this.updatedBy.toHexString(),
       logoUrl: this.logoUrl,
-      status: OrgStatus[this.status],
-      plan: OrgPlan[this.plan],
+      status: this.status,
+      plan: this.plan,
     };
   }
 }

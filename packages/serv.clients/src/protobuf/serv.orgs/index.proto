@@ -4,7 +4,7 @@ package serv.orgs;
 
 service OrgsService {
     rpc CreateOrg(CreateOrgRequest) returns (Organization) {}
-    rpc GetOrg(GetOrgRequest) returns (Organization) {}
+    rpc GetOrg(GetOrgRequest) returns (GetOrgResponse) {}
     rpc ArchiveOrg(ArchiveOrgRequest) returns (Organization) {}
     rpc RestoreOrg(RestoreOrgRequest) returns (Organization) {}
     rpc UpdateOrgPlan(UpdateOrgPlanRequest) returns(Organization) {}
@@ -12,7 +12,7 @@ service OrgsService {
     rpc SetAccountActiveOrg(SetAccountActiveOrgRequest) returns(SetAccountActiveOrgResponse) {}
     rpc GetAccountActiveOrg(GetAccountActiveOrgRequest) returns (GetAccountActiveOrgResponse) {}
     rpc MarkDeleteMember(MarkDeleteMemberRequest) returns (MarkDeleteMemberResponse) {}
-    rpc GetMember(GetMemberRequest) returns (Member) {}
+    rpc GetMember(GetMemberRequest) returns (GetMemberResponse) {}
     rpc GetUserMemberships(GetUserMembershipsRequest) returns (GetUserMembershipsResponse) {}
 }
 
@@ -98,13 +98,13 @@ message Member {
     string id = 1;
     string user = 2;
     string organization = 3;
-    string invitedBy = 4;
+    optional string invitedBy = 4;
     string status = 5;
     string role = 6;
     string createdAt = 7;
     string updatedAt = 8;
     string updatedBy = 9;
-    string profileImageUrl = 10;
+    optional string profileImageUrl = 10;
 }
 
 message CreateOrgRequest {
@@ -125,7 +125,14 @@ message RestoreOrgRequest {
 }
 
 message GetOrgRequest {
-    string orgId = 1;
+    oneof query {
+        string orgId = 1;
+        string orgSlug = 2;
+    }
+}
+
+message GetOrgResponse {
+    optional Organization organization = 1;
 }
 
 message MarkDeleteMemberRequest {
@@ -141,4 +148,8 @@ message MarkDeleteMemberResponse {
 message GetMemberRequest {
     string orgId = 1;
     string userId = 2;
+}
+
+message GetMemberResponse {
+    optional Member member = 1;
 }

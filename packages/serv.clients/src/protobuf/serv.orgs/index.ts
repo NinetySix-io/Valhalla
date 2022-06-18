@@ -88,13 +88,13 @@ export interface Member {
   id: string;
   user: string;
   organization: string;
-  invitedBy: string;
+  invitedBy?: string | undefined;
   status: string;
   role: string;
   createdAt: string;
   updatedAt: string;
   updatedBy: string;
-  profileImageUrl: string;
+  profileImageUrl?: string | undefined;
 }
 
 export interface CreateOrgRequest {
@@ -114,7 +114,13 @@ export interface RestoreOrgRequest {
 }
 
 export interface GetOrgRequest {
-  orgId: string;
+  query?:
+    | { $case: "orgId"; orgId: string }
+    | { $case: "orgSlug"; orgSlug: string };
+}
+
+export interface GetOrgResponse {
+  organization?: Organization | undefined;
 }
 
 export interface MarkDeleteMemberRequest {
@@ -132,12 +138,16 @@ export interface GetMemberRequest {
   userId: string;
 }
 
+export interface GetMemberResponse {
+  member?: Member | undefined;
+}
+
 export const SERV_ORGS_PACKAGE_NAME = "serv.orgs";
 
 export interface OrgsServiceClient {
   createOrg(request: CreateOrgRequest): Observable<Organization>;
 
-  getOrg(request: GetOrgRequest): Observable<Organization>;
+  getOrg(request: GetOrgRequest): Observable<GetOrgResponse>;
 
   archiveOrg(request: ArchiveOrgRequest): Observable<Organization>;
 
@@ -159,7 +169,7 @@ export interface OrgsServiceClient {
     request: MarkDeleteMemberRequest
   ): Observable<MarkDeleteMemberResponse>;
 
-  getMember(request: GetMemberRequest): Observable<Member>;
+  getMember(request: GetMemberRequest): Observable<GetMemberResponse>;
 
   getUserMemberships(
     request: GetUserMembershipsRequest
@@ -173,7 +183,7 @@ export interface OrgsServiceController {
 
   getOrg(
     request: GetOrgRequest
-  ): Promise<Organization> | Observable<Organization> | Organization;
+  ): Promise<GetOrgResponse> | Observable<GetOrgResponse> | GetOrgResponse;
 
   archiveOrg(
     request: ArchiveOrgRequest
@@ -214,7 +224,10 @@ export interface OrgsServiceController {
 
   getMember(
     request: GetMemberRequest
-  ): Promise<Member> | Observable<Member> | Member;
+  ):
+    | Promise<GetMemberResponse>
+    | Observable<GetMemberResponse>
+    | GetMemberResponse;
 
   getUserMemberships(
     request: GetUserMembershipsRequest

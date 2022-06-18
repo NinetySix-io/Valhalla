@@ -4,12 +4,13 @@ import {
   GetAccountActiveOrgRequest,
   GetAccountActiveOrgResponse,
   GetMemberRequest,
+  GetMemberResponse,
   GetOrgRequest,
+  GetOrgResponse,
   GetUserMembershipsRequest,
   GetUserMembershipsResponse,
   MarkDeleteMemberRequest,
   MarkDeleteMemberResponse,
-  Member,
   ORGS_SERVICE_NAME,
   Organization,
   OrgsServiceController,
@@ -72,7 +73,7 @@ export class gRpcController implements OrgsServiceController {
   }
   getOrg(
     request: GetOrgRequest,
-  ): Organization | Promise<Organization> | Observable<Organization> {
+  ): GetOrgResponse | Promise<GetOrgResponse> | Observable<GetOrgResponse> {
     return this.queryBus.execute(new GetOrgQuery(request));
   }
   archiveOrg(
@@ -105,7 +106,10 @@ export class gRpcController implements OrgsServiceController {
   }
   getMember(
     request: GetMemberRequest,
-  ): Member | Promise<Member> | Observable<Member> {
+  ):
+    | GetMemberResponse
+    | Promise<GetMemberResponse>
+    | Observable<GetMemberResponse> {
     return this.queryBus.execute(new GetMemberQuery(request));
   }
   getUserMemberships(

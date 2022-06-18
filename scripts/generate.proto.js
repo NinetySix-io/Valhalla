@@ -42,6 +42,7 @@ promiseExec("pwd").then(async (output) => {
     }
 
     const opt = Object.entries({
+      oneof: "unions",
       nestJs: true,
       esModuleInterop: true,
       stringEnums: true,
@@ -60,7 +61,9 @@ promiseExec("pwd").then(async (output) => {
       `--ts_proto_opt=${opt}`,
     ];
 
-    const result = await promiseExec(cmd.join(" "));
+    const runningCmd = cmd.join(" ");
+    console.warn(runningCmd);
+    const result = await promiseExec(runningCmd);
     result.stderr
       ? console.error(result.stderr)
       : console.warn(`Proto definition file generated for ${app}`);

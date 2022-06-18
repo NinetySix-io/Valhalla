@@ -44,13 +44,14 @@ export class OrgMemberSchema extends BaseSchema {
   @prop()
   @Exclude()
   @Field(() => String, {
+    nullable: true,
     description: 'ID of the account that sent out the invite',
   })
-  invitedBy: mongoose.Types.ObjectId;
+  invitedBy?: mongoose.Types.ObjectId;
 
   @prop()
   @Expose()
-  @Field({ description: 'URL of profile image' })
+  @Field({ description: 'URL of profile image', nullable: true })
   profileImageUrl?: string;
 
   @prop()
@@ -67,7 +68,7 @@ export class OrgMemberSchema extends BaseSchema {
   })
   status: InvitationStatus;
 
-  @prop()
+  @prop({ required: true })
   @Expose()
   @Field(() => OrgRole, {
     description: 'Role of the organization member',
@@ -77,6 +78,7 @@ export class OrgMemberSchema extends BaseSchema {
   @prop()
   @Expose()
   @Field({
+    nullable: true,
     description: 'Timestamp in the profile should be deleted',
   })
   deletingAt?: Date;
