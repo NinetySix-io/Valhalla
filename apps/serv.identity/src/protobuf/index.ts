@@ -21,7 +21,7 @@ export interface ValidateVerificationResponse {
 }
 
 export interface DecodeAccessTokenResponse {
-  account: AccessTokenAccountContent | undefined;
+  account?: AccessTokenAccountContent;
 }
 
 export interface AddEmailToAccountRequest {
@@ -61,7 +61,7 @@ export interface LoginWithPhoneRequest {
 }
 
 export interface LoginWithPhoneResponse {
-  account: Account | undefined;
+  account?: Account;
   accessToken: string;
   refreshToken: string;
   accessTokenExpiresAt: string;
@@ -123,7 +123,7 @@ export interface RegisterRequest {
 }
 
 export interface RegisterResponse {
-  account: Account | undefined;
+  account?: Account;
   accessToken: string;
   refreshToken: string;
   accessTokenExpiresAt: string;
@@ -141,11 +141,11 @@ export interface UpdateAccountRequest {
 }
 
 export interface UpdateAccountResponse {
-  updatedAccount: Account | undefined;
+  updatedAccount?: Account;
 }
 
 export interface LoginWithEmailResponse {
-  account: Account | undefined;
+  account?: Account;
   accessToken: string;
   refreshToken: string;
   accessTokenExpiresAt: string;

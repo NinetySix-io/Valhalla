@@ -8,21 +8,18 @@ export const protobufPackage = "serv.orgs";
 
 export enum OrgPlan {
   FREE = "FREE",
-  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export enum OrgStatus {
   ACTIVE = "ACTIVE",
   INACTIVE = "INACTIVE",
   SUSPENDED = "SUSPENDED",
-  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export enum InvitationStatus {
   PENDING = "PENDING",
   ACCEPTED = "ACCEPTED",
   REJECTED = "REJECTED",
-  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export enum OrgRole {
@@ -31,7 +28,6 @@ export enum OrgRole {
   DEVELOPER = "DEVELOPER",
   MEMBER = "MEMBER",
   GUESS = "GUESS",
-  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export interface AccountSettings {
@@ -128,7 +124,7 @@ export interface MarkDeleteMemberRequest {
 }
 
 export interface MarkDeleteMemberResponse {
-  member: Member | undefined;
+  member?: Member;
 }
 
 export interface GetMemberRequest {

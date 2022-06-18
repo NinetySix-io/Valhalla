@@ -45,6 +45,10 @@ promiseExec("pwd").then(async (output) => {
       nestJs: true,
       esModuleInterop: true,
       stringEnums: true,
+      env: "node",
+      useOptionals: "messages",
+      unrecognizedEnum: false,
+      useObjectId: true,
     })
       .map(([key, value]) => `${key}=${value}`)
       .join(",");
