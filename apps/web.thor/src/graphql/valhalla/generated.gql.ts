@@ -221,6 +221,54 @@ export type MutationUpdateAccountArgs = {
   input: UpdateAccountInput;
 };
 
+export enum OrgMemberRole {
+  ADMIN = 'ADMIN',
+  DEVELOPER = 'DEVELOPER',
+  GUESS = 'GUESS',
+  MEMBER = 'MEMBER',
+  OWNER = 'OWNER'
+}
+
+export type OrgMemberSchema = {
+  readonly __typename?: 'OrgMemberSchema';
+  /** Date entity was created */
+  readonly createdAt: Scalars['DateTime'];
+  /** Timestamp in the profile should be deleted */
+  readonly deletingAt?: Maybe<Scalars['DateTime']>;
+  /** Identifier of the entity */
+  readonly id: Scalars['ID'];
+  /** ID of the account that sent out the invite */
+  readonly invitedBy?: Maybe<Scalars['String']>;
+  /** ID of the organization */
+  readonly organization: Scalars['String'];
+  /** URL of profile image */
+  readonly profileImageUrl?: Maybe<Scalars['String']>;
+  /** Role of the organization member */
+  readonly role: OrgMemberRole;
+  /** Status of the organization member */
+  readonly status: OrgMemberStatus;
+  /** Date entity was updated */
+  readonly updatedAt: Scalars['DateTime'];
+  /** ID of the account that last updated the member profile */
+  readonly updatedBy: Scalars['String'];
+  /** ID of the account */
+  readonly user: Scalars['String'];
+};
+
+export enum OrgMemberStatus {
+  ACCEPTED = 'ACCEPTED',
+  PENDING = 'PENDING',
+  REJECTED = 'REJECTED'
+}
+
+export type OrganizationBySlugResponse = {
+  readonly __typename?: 'OrganizationBySlugResponse';
+  /** Organization Membership */
+  readonly membership: OrgMemberSchema;
+  /** Organization */
+  readonly organization: OrganizationSchema;
+};
+
 /** Subscription plan */
 export enum OrganizationPlan {
   FREE = 'FREE'
@@ -235,7 +283,7 @@ export type OrganizationSchema = {
   /** Identifier of the entity */
   readonly id: Scalars['ID'];
   /** URL of the logo */
-  readonly logoUrl: Scalars['String'];
+  readonly logoUrl?: Maybe<Scalars['String']>;
   /** Name of the organization */
   readonly name: Scalars['String'];
   /** Subscription plan */
@@ -243,12 +291,19 @@ export type OrganizationSchema = {
   /** Unique slug identifier */
   readonly slug: Scalars['String'];
   /** Organization status */
-  readonly status: Scalars['String'];
+  readonly status: OrganizationStatus;
   /** Date entity was updated */
   readonly updatedAt: Scalars['DateTime'];
   /** ID of the account that last updated the organization */
   readonly updatedBy: Scalars['String'];
 };
+
+/** Organization status */
+export enum OrganizationStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  SUSPENDED = 'SUSPENDED'
+}
 
 export type Query = {
   readonly __typename?: 'Query';
@@ -258,12 +313,19 @@ export type Query = {
   readonly account: AccountSchema;
   /** Current Active Organization */
   readonly activeOrg?: Maybe<OrganizationSchema>;
+  /** Get organization by slug */
+  readonly organizationBySlug: OrganizationBySlugResponse;
   /** Get current user's organizations memberships */
   readonly organizations: ReadonlyArray<OrganizationSchema>;
   /** Get current session user */
   readonly session: SessionResponse;
   /** Validate verification code */
   readonly validateVerificationCode: Scalars['Boolean'];
+};
+
+
+export type QueryOrganizationBySlugArgs = {
+  slug: Scalars['String'];
 };
 
 
@@ -427,6 +489,13 @@ export type GetAccountQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetAccountQuery = { readonly __typename?: 'Query', readonly account: { readonly __typename?: 'AccountSchema', readonly firstName: string, readonly lastName: string, readonly displayName: string } };
 
+export type GetOrganizationBySlugQueryVariables = Exact<{
+  slug: Scalars['String'];
+}>;
+
+
+export type GetOrganizationBySlugQuery = { readonly __typename?: 'Query', readonly organizationBySlug: { readonly __typename?: 'OrganizationBySlugResponse', readonly organization: { readonly __typename?: 'OrganizationSchema', readonly id: string, readonly name: string, readonly plan: OrganizationPlan, readonly status: OrganizationStatus, readonly logoUrl?: string | null }, readonly membership: { readonly __typename?: 'OrgMemberSchema', readonly profileImageUrl?: string | null, readonly status: OrgMemberStatus, readonly role: OrgMemberRole } } };
+
 export type SessionQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -435,7 +504,7 @@ export type SessionQuery = { readonly __typename?: 'Query', readonly session: { 
 export type GetOrganizationsMembershipQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOrganizationsMembershipQuery = { readonly __typename?: 'Query', readonly organizations: ReadonlyArray<{ readonly __typename?: 'OrganizationSchema', readonly id: string, readonly name: string, readonly slug: string, readonly logoUrl: string }> };
+export type GetOrganizationsMembershipQuery = { readonly __typename?: 'Query', readonly organizations: ReadonlyArray<{ readonly __typename?: 'OrganizationSchema', readonly id: string, readonly name: string, readonly slug: string, readonly logoUrl?: string | null }> };
 
 
 export const RegisterDocument = gql`
@@ -1020,6 +1089,55 @@ export type GetAccountLazyQueryHookResult = ReturnType<typeof useGetAccountLazyQ
 export type GetAccountQueryResult = Apollo.QueryResult<GetAccountQuery, GetAccountQueryVariables>;
 export function refetchGetAccountQuery(variables?: GetAccountQueryVariables) {
       return { query: GetAccountDocument, variables: variables }
+    }
+export const GetOrganizationBySlugDocument = gql`
+    query getOrganizationBySlug($slug: String!) {
+  organizationBySlug(slug: $slug) {
+    organization {
+      id
+      name
+      plan
+      status
+      logoUrl
+    }
+    membership {
+      profileImageUrl
+      status
+      role
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetOrganizationBySlugQuery__
+ *
+ * To run a query within a React component, call `useGetOrganizationBySlugQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrganizationBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrganizationBySlugQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useGetOrganizationBySlugQuery(baseOptions: Apollo.QueryHookOptions<GetOrganizationBySlugQuery, GetOrganizationBySlugQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOrganizationBySlugQuery, GetOrganizationBySlugQueryVariables>(GetOrganizationBySlugDocument, options);
+      }
+export function useGetOrganizationBySlugLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrganizationBySlugQuery, GetOrganizationBySlugQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOrganizationBySlugQuery, GetOrganizationBySlugQueryVariables>(GetOrganizationBySlugDocument, options);
+        }
+export type GetOrganizationBySlugQueryHookResult = ReturnType<typeof useGetOrganizationBySlugQuery>;
+export type GetOrganizationBySlugLazyQueryHookResult = ReturnType<typeof useGetOrganizationBySlugLazyQuery>;
+export type GetOrganizationBySlugQueryResult = Apollo.QueryResult<GetOrganizationBySlugQuery, GetOrganizationBySlugQueryVariables>;
+export function refetchGetOrganizationBySlugQuery(variables: GetOrganizationBySlugQueryVariables) {
+      return { query: GetOrganizationBySlugDocument, variables: variables }
     }
 export const SessionDocument = gql`
     query session {

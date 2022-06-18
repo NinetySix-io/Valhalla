@@ -1,6 +1,6 @@
 import {
-  GetAccessTokenDocument,
   GetAccessTokenQuery,
+  refetchGetAccessTokenQuery,
 } from '@app/graphql/valhalla/generated.gql';
 
 import { ApolloClient } from '@apollo/client';
@@ -22,9 +22,7 @@ export async function getAccessToken(options?: {
       headers: options.headers as Record<string, string>,
     });
 
-  const result = await client.query<GetAccessTokenQuery>({
-    query: GetAccessTokenDocument,
-  });
-
+  const query = refetchGetAccessTokenQuery();
+  const result = await client.query<GetAccessTokenQuery>(query);
   return result.data?.accessToken;
 }

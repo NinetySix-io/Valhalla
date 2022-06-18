@@ -1,0 +1,16 @@
+query getOrganizationBySlug($slug: String!) {
+  organizationBySlug(slug: $slug) {
+    organization {
+      id
+      name
+      plan
+      status
+      logoUrl
+    }
+    membership {
+      profileImageUrl
+      status
+      role
+    }
+  }
+}
