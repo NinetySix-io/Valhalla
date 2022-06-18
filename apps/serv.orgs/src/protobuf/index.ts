@@ -1,37 +1,37 @@
 /* eslint-disable */
-import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
-import Long from 'long';
-import * as _m0 from 'protobufjs/minimal';
-import { Observable } from 'rxjs';
+import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
+import Long from "long";
+import * as _m0 from "protobufjs/minimal";
+import { Observable } from "rxjs";
 
-export const protobufPackage = 'serv.orgs';
+export const protobufPackage = "serv.orgs";
 
 export enum OrgPlan {
-  FREE = 0,
-  UNRECOGNIZED = -1,
+  FREE = "FREE",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export enum OrgStatus {
-  ACTIVE = 0,
-  INACTIVE = 1,
-  SUSPENDED = 2,
-  UNRECOGNIZED = -1,
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
+  SUSPENDED = "SUSPENDED",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export enum InvitationStatus {
-  PENDING = 0,
-  ACCEPTED = 1,
-  REJECTED = 2,
-  UNRECOGNIZED = -1,
+  PENDING = "PENDING",
+  ACCEPTED = "ACCEPTED",
+  REJECTED = "REJECTED",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export enum OrgRole {
-  OWNER = 0,
-  ADMIN = 1,
-  DEVELOPER = 2,
-  MEMBER = 3,
-  GUESS = 4,
-  UNRECOGNIZED = -1,
+  OWNER = "OWNER",
+  ADMIN = "ADMIN",
+  DEVELOPER = "DEVELOPER",
+  MEMBER = "MEMBER",
+  GUESS = "GUESS",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export interface AccountSettings {
@@ -71,8 +71,9 @@ export interface Organization {
   createdAt: string;
   updateBy: string;
   updatedAt: string;
-  logoUrl: string;
+  logoUrl?: string | undefined;
   status: OrgStatus;
+  plan: OrgPlan;
 }
 
 export interface UpdateOrgLogoRequest {
@@ -135,7 +136,7 @@ export interface GetMemberRequest {
   userId: string;
 }
 
-export const SERV_ORGS_PACKAGE_NAME = 'serv.orgs';
+export const SERV_ORGS_PACKAGE_NAME = "serv.orgs";
 
 export interface OrgsServiceClient {
   createOrg(request: CreateOrgRequest): Observable<Organization>;
@@ -151,76 +152,76 @@ export interface OrgsServiceClient {
   updateOrgLogo(request: UpdateOrgLogoRequest): Observable<Organization>;
 
   setAccountActiveOrg(
-    request: SetAccountActiveOrgRequest,
+    request: SetAccountActiveOrgRequest
   ): Observable<SetAccountActiveOrgResponse>;
 
   getAccountActiveOrg(
-    request: GetAccountActiveOrgRequest,
+    request: GetAccountActiveOrgRequest
   ): Observable<GetAccountActiveOrgResponse>;
 
   markDeleteMember(
-    request: MarkDeleteMemberRequest,
+    request: MarkDeleteMemberRequest
   ): Observable<MarkDeleteMemberResponse>;
 
   getMember(request: GetMemberRequest): Observable<Member>;
 
   getUserMemberships(
-    request: GetUserMembershipsRequest,
+    request: GetUserMembershipsRequest
   ): Observable<GetUserMembershipsResponse>;
 }
 
 export interface OrgsServiceController {
   createOrg(
-    request: CreateOrgRequest,
+    request: CreateOrgRequest
   ): Promise<Organization> | Observable<Organization> | Organization;
 
   getOrg(
-    request: GetOrgRequest,
+    request: GetOrgRequest
   ): Promise<Organization> | Observable<Organization> | Organization;
 
   archiveOrg(
-    request: ArchiveOrgRequest,
+    request: ArchiveOrgRequest
   ): Promise<Organization> | Observable<Organization> | Organization;
 
   restoreOrg(
-    request: RestoreOrgRequest,
+    request: RestoreOrgRequest
   ): Promise<Organization> | Observable<Organization> | Organization;
 
   updateOrgPlan(
-    request: UpdateOrgPlanRequest,
+    request: UpdateOrgPlanRequest
   ): Promise<Organization> | Observable<Organization> | Organization;
 
   updateOrgLogo(
-    request: UpdateOrgLogoRequest,
+    request: UpdateOrgLogoRequest
   ): Promise<Organization> | Observable<Organization> | Organization;
 
   setAccountActiveOrg(
-    request: SetAccountActiveOrgRequest,
+    request: SetAccountActiveOrgRequest
   ):
     | Promise<SetAccountActiveOrgResponse>
     | Observable<SetAccountActiveOrgResponse>
     | SetAccountActiveOrgResponse;
 
   getAccountActiveOrg(
-    request: GetAccountActiveOrgRequest,
+    request: GetAccountActiveOrgRequest
   ):
     | Promise<GetAccountActiveOrgResponse>
     | Observable<GetAccountActiveOrgResponse>
     | GetAccountActiveOrgResponse;
 
   markDeleteMember(
-    request: MarkDeleteMemberRequest,
+    request: MarkDeleteMemberRequest
   ):
     | Promise<MarkDeleteMemberResponse>
     | Observable<MarkDeleteMemberResponse>
     | MarkDeleteMemberResponse;
 
   getMember(
-    request: GetMemberRequest,
+    request: GetMemberRequest
   ): Promise<Member> | Observable<Member> | Member;
 
   getUserMemberships(
-    request: GetUserMembershipsRequest,
+    request: GetUserMembershipsRequest
   ):
     | Promise<GetUserMembershipsResponse>
     | Observable<GetUserMembershipsResponse>
@@ -230,45 +231,45 @@ export interface OrgsServiceController {
 export function OrgsServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = [
-      'createOrg',
-      'getOrg',
-      'archiveOrg',
-      'restoreOrg',
-      'updateOrgPlan',
-      'updateOrgLogo',
-      'setAccountActiveOrg',
-      'getAccountActiveOrg',
-      'markDeleteMember',
-      'getMember',
-      'getUserMemberships',
+      "createOrg",
+      "getOrg",
+      "archiveOrg",
+      "restoreOrg",
+      "updateOrgPlan",
+      "updateOrgLogo",
+      "setAccountActiveOrg",
+      "getAccountActiveOrg",
+      "markDeleteMember",
+      "getMember",
+      "getUserMemberships",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(
         constructor.prototype,
-        method,
+        method
       );
-      GrpcMethod('OrgsService', method)(
+      GrpcMethod("OrgsService", method)(
         constructor.prototype[method],
         method,
-        descriptor,
+        descriptor
       );
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(
         constructor.prototype,
-        method,
+        method
       );
-      GrpcStreamMethod('OrgsService', method)(
+      GrpcStreamMethod("OrgsService", method)(
         constructor.prototype[method],
         method,
-        descriptor,
+        descriptor
       );
     }
   };
 }
 
-export const ORGS_SERVICE_NAME = 'OrgsService';
+export const ORGS_SERVICE_NAME = "OrgsService";
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

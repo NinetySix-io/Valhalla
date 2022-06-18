@@ -49,7 +49,7 @@ export function useRouterBack() {
 export function buildReturnableLink(nextPath: string, originalPath: string) {
   const [path, query] = nextPath.split('?');
   const params = new URLSearchParams(query);
-  if (!Object.values(PAGES).includes(originalPath)) {
+  if (Environment.isServer || !Object.values(PAGES).includes(originalPath)) {
     return path;
   }
 
@@ -65,6 +65,6 @@ export function buildReturnableLink(nextPath: string, originalPath: string) {
 export function buildClientReturnableLink<T extends string>(url: T) {
   return buildReturnableLink(
     url,
-    Environment.isServer ? PAGES.HOME : window.location.pathname,
+    Environment.isServer ? undefined : window.location.pathname,
   );
 }

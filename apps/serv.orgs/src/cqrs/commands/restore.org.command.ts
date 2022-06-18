@@ -4,11 +4,10 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { Organization, RestoreOrgRequest } from '@app/protobuf';
+import { OrgStatus, Organization, RestoreOrgRequest } from '@app/protobuf';
 import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { OrganizationRestoredEvent } from '../events/org.restored.event';
-import { OrganizationStatus } from '@app/entities/organizations/schema';
 import { OrganizationTransformer } from '@app/entities/organizations/transformer';
 import { OrganizationUpdatedEvent } from '../events/org.updated.event';
 import { OrganizationsModel } from '@app/entities/organizations';
@@ -33,11 +32,11 @@ export class RestoreOrgHandler
       .findById(orgId)
       .orFail(() => new Error('Organization not found!'));
 
-    if (organization.status === OrganizationStatus.ACTIVE) {
+    if (organization.status === OrgStatus.ACTIVE) {
       throw new Error('Organization is already active');
     }
 
-    organization.status = OrganizationStatus.ACTIVE;
+    organization.status = OrgStatus.ACTIVE;
     organization.updatedBy = toObjectId(requestedUserId);
 
     await organization.save();

@@ -1,4 +1,4 @@
-import { ArchiveOrgRequest, Organization } from '@app/protobuf';
+import { ArchiveOrgRequest, OrgStatus, Organization } from '@app/protobuf';
 import {
   CommandHandler,
   EventBus,
@@ -8,7 +8,6 @@ import {
 import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { OrganizationArchivedEvent } from '../events/org.arhived.event';
-import { OrganizationStatus } from '@app/entities/organizations/schema';
 import { OrganizationTransformer } from '@app/entities/organizations/transformer';
 import { OrganizationUpdatedEvent } from '../events/org.updated.event';
 import { OrganizationsModel } from '@app/entities/organizations';
@@ -33,11 +32,11 @@ export class ArchiveOrgHandler
       .findById(orgId)
       .orFail(() => new Error('Organization not found!'));
 
-    if (organization.status === OrganizationStatus.ARCHIVED) {
+    if (organization.status === OrgStatus.INACTIVE) {
       throw new Error('Organization is already archived');
     }
 
-    organization.status = OrganizationStatus.ARCHIVED;
+    organization.status = OrgStatus.INACTIVE;
     organization.updatedBy = toObjectId(requestedUserId);
 
     await organization.save();

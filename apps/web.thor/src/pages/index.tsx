@@ -1,13 +1,13 @@
-import { Box, Typography } from '@mui/material';
-
+import { OrganizationSection } from '@app/components/organizations.section';
 import { Page } from '@app/types/next';
+import { Stack } from '@mui/material';
 import { withAuthSsrContext } from '@app/next/with.app.ctx';
 
 const HomePage: Page = () => {
   return (
-    <Box>
-      <Typography variant="h1">Thor</Typography>
-    </Box>
+    <Stack direction="column" spacing={4}>
+      <OrganizationSection />
+    </Stack>
   );
 };
 

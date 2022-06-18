@@ -23,6 +23,7 @@ const env = config
 
 module.exports = withPlugins([withTM, withBundleAnalyzer], {
   env,
+  poweredByHeader: false,
   reactStrictMode: true,
   swcMinify: true,
   experimental: {

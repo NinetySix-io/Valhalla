@@ -9,12 +9,8 @@ service OrgsService {
     rpc RestoreOrg(RestoreOrgRequest) returns (Organization) {}
     rpc UpdateOrgPlan(UpdateOrgPlanRequest) returns(Organization) {}
     rpc UpdateOrgLogo(UpdateOrgLogoRequest) returns(Organization) {}
-
     rpc SetAccountActiveOrg(SetAccountActiveOrgRequest) returns(SetAccountActiveOrgResponse) {}
     rpc GetAccountActiveOrg(GetAccountActiveOrgRequest) returns (GetAccountActiveOrgResponse) {}
-
-    // rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse) {}
-    // rpc AcceptMemberInvitation(AcceptMemberInvitationRequest) returns (AcceptMemberInvitationResponse) {}
     rpc MarkDeleteMember(MarkDeleteMemberRequest) returns (MarkDeleteMemberResponse) {}
     rpc GetMember(GetMemberRequest) returns (Member) {}
     rpc GetUserMemberships(GetUserMembershipsRequest) returns (GetUserMembershipsResponse) {}
@@ -57,8 +53,9 @@ message Organization {
     string createdAt = 5;
     string updateBy = 6;
     string updatedAt = 7;
-    string logoUrl = 8;
+    optional string logoUrl = 8;
     OrgStatus status = 9;
+    OrgPlan plan = 10;
 }
 
 enum OrgPlan {
@@ -131,16 +128,6 @@ message GetOrgRequest {
     string orgId = 1;
 }
 
-message InviteMemberRequest {
-    string email = 2;
-    string userId = 3;
-    string role = 6;
-}
-
-message InviteMemberResponse {
-    Member member = 1;
-}
-
 message MarkDeleteMemberRequest {
     string orgId = 1;
     string memberId = 2;
@@ -154,12 +141,4 @@ message MarkDeleteMemberResponse {
 message GetMemberRequest {
     string orgId = 1;
     string userId = 2;
-}
-
-message AcceptMemberInvitationRequest {
-    string token = 1;
-}
-
-message AcceptMemberInvitationResponse {
-    Member member = 1;
 }

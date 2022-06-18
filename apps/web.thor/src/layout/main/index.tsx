@@ -8,7 +8,7 @@ import { cProps } from '@valhalla/react';
 
 type Props = cProps;
 
-const Wrapper = styled(Container)`
+const Wrapper = styled(Box)`
   display: flex;
   flex-direction: column;
   width: 100vw;
@@ -23,10 +23,12 @@ const Wrapper = styled(Container)`
   top: 0;
 `;
 
-const Body = styled(Box)`
+const Body = styled(Container)`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  padding-top: 10px;
+  padding-bottom: 10px;
 `;
 
 export const MainLayout: React.FC<Props> = ({ children }) => {

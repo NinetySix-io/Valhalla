@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import {
   Avatar,
+  Box,
   Divider,
   IconButton,
   ListItemIcon,
@@ -27,7 +28,7 @@ export const AccountBtn: React.FC<Props> = () => {
   }
 
   return (
-    <div>
+    <Box>
       <IconButton onClick={(e) => setAnchor(e.currentTarget)} size="small">
         <Avatar variant="rounded">{account.firstName[0].toUpperCase()}</Avatar>
       </IconButton>
@@ -36,14 +37,6 @@ export const AccountBtn: React.FC<Props> = () => {
         anchorEl={anchor}
         onClose={() => setAnchor(null)}
         PaperProps={{ elevation: 4 }}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
       >
         <MenuItem>
           <Typography>{account.displayName}</Typography>
@@ -56,6 +49,6 @@ export const AccountBtn: React.FC<Props> = () => {
           Logout
         </MenuItem>
       </Menu>
-    </div>
+    </Box>
   );
 };

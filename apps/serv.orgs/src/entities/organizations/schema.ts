@@ -5,26 +5,17 @@ import {
 } from '@valhalla/serv.core';
 import { Exclude, Expose } from 'class-transformer';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { OrgPlan, OrgStatus } from '@app/protobuf';
 import { index, prop } from '@typegoose/typegoose';
 
 import mongoose from 'mongoose';
 
-export enum OrganizationPlan {
-  FREE = 'free',
-}
-
-export enum OrganizationStatus {
-  ACTIVE = 'active',
-  SUSPENDED = 'suspended',
-  ARCHIVED = 'archived',
-}
-
-registerEnumType(OrganizationPlan, {
+registerEnumType(OrgPlan, {
   name: 'OrganizationPlan',
   description: 'Subscription plan',
 });
 
-registerEnumType(OrganizationStatus, {
+registerEnumType(OrgStatus, {
   name: 'OrganizationStatus',
   description: 'Organization status',
 });
@@ -42,8 +33,8 @@ export class OrganizationSchema extends BaseSchema {
 
   @prop()
   @Exclude()
-  @Field({ description: 'Organization status' })
-  status: OrganizationStatus;
+  @Field(() => OrgStatus, { description: 'Organization status' })
+  status: OrgStatus;
 
   @prop()
   @Expose()
@@ -52,13 +43,13 @@ export class OrganizationSchema extends BaseSchema {
 
   @prop()
   @Expose()
-  @Field({ description: 'URL of the logo' })
+  @Field({ description: 'URL of the logo', nullable: true })
   logoUrl?: string;
 
   @prop()
   @Exclude()
-  @Field(() => OrganizationPlan, { description: 'Subscription plan' })
-  plan: OrganizationPlan;
+  @Field(() => OrgPlan, { description: 'Subscription plan' })
+  plan: OrgPlan;
 
   @prop()
   @Exclude()

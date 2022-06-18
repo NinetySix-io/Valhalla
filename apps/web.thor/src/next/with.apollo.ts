@@ -44,7 +44,10 @@ export function withSsrApolloClient(
     }
 
     const page = await cb(ctx);
-    page['props']['apolloState'] = ctx.gqlClient.cache.extract();
+    if (page['props']) {
+      page['props']['apolloState'] = ctx.gqlClient.cache.extract();
+    }
+
     return page;
   };
 }

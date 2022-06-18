@@ -7,7 +7,6 @@ import {
 import { Organization, UpdateOrgPlanRequest } from '@app/protobuf';
 import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
-import { OrganizationPlan } from '@app/entities/organizations/schema';
 import { OrganizationPlanUpdatedEvent } from '../events/org.plan.updated.event';
 import { OrganizationTransformer } from '@app/entities/organizations/transformer';
 import { OrganizationUpdatedEvent } from '../events/org.updated.event';
@@ -34,7 +33,7 @@ export class UpdateOrgPlanHandler
       .orFail(() => new Error('Organization not found!'));
 
     //TODO: more logic
-    organization.plan = plan as unknown as OrganizationPlan;
+    organization.plan = plan;
     organization.updatedBy = toObjectId(requestedUserId);
     organization.save();
     const serialized = new OrganizationTransformer(organization).proto;

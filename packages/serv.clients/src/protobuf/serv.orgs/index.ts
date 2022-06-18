@@ -7,31 +7,31 @@ import { Observable } from "rxjs";
 export const protobufPackage = "serv.orgs";
 
 export enum OrgPlan {
-  FREE = 0,
-  UNRECOGNIZED = -1,
+  FREE = "FREE",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export enum OrgStatus {
-  ACTIVE = 0,
-  INACTIVE = 1,
-  SUSPENDED = 2,
-  UNRECOGNIZED = -1,
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
+  SUSPENDED = "SUSPENDED",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export enum InvitationStatus {
-  PENDING = 0,
-  ACCEPTED = 1,
-  REJECTED = 2,
-  UNRECOGNIZED = -1,
+  PENDING = "PENDING",
+  ACCEPTED = "ACCEPTED",
+  REJECTED = "REJECTED",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export enum OrgRole {
-  OWNER = 0,
-  ADMIN = 1,
-  DEVELOPER = 2,
-  MEMBER = 3,
-  GUESS = 4,
-  UNRECOGNIZED = -1,
+  OWNER = "OWNER",
+  ADMIN = "ADMIN",
+  DEVELOPER = "DEVELOPER",
+  MEMBER = "MEMBER",
+  GUESS = "GUESS",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export interface AccountSettings {
@@ -71,8 +71,9 @@ export interface Organization {
   createdAt: string;
   updateBy: string;
   updatedAt: string;
-  logoUrl: string;
+  logoUrl?: string | undefined;
   status: OrgStatus;
+  plan: OrgPlan;
 }
 
 export interface UpdateOrgLogoRequest {
@@ -120,16 +121,6 @@ export interface GetOrgRequest {
   orgId: string;
 }
 
-export interface InviteMemberRequest {
-  email: string;
-  userId: string;
-  role: string;
-}
-
-export interface InviteMemberResponse {
-  member: Member | undefined;
-}
-
 export interface MarkDeleteMemberRequest {
   orgId: string;
   memberId: string;
@@ -143,14 +134,6 @@ export interface MarkDeleteMemberResponse {
 export interface GetMemberRequest {
   orgId: string;
   userId: string;
-}
-
-export interface AcceptMemberInvitationRequest {
-  token: string;
-}
-
-export interface AcceptMemberInvitationResponse {
-  member: Member | undefined;
 }
 
 export const SERV_ORGS_PACKAGE_NAME = "serv.orgs";
@@ -175,11 +158,6 @@ export interface OrgsServiceClient {
   getAccountActiveOrg(
     request: GetAccountActiveOrgRequest
   ): Observable<GetAccountActiveOrgResponse>;
-
-  /**
-   * rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse) {}
-   * rpc AcceptMemberInvitation(AcceptMemberInvitationRequest) returns (AcceptMemberInvitationResponse) {}
-   */
 
   markDeleteMember(
     request: MarkDeleteMemberRequest
@@ -230,11 +208,6 @@ export interface OrgsServiceController {
     | Promise<GetAccountActiveOrgResponse>
     | Observable<GetAccountActiveOrgResponse>
     | GetAccountActiveOrgResponse;
-
-  /**
-   * rpc InviteMember(InviteMemberRequest) returns (InviteMemberResponse) {}
-   * rpc AcceptMemberInvitation(AcceptMemberInvitationRequest) returns (AcceptMemberInvitationResponse) {}
-   */
 
   markDeleteMember(
     request: MarkDeleteMemberRequest

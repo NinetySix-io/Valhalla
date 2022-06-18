@@ -53,8 +53,9 @@ message Organization {
     string createdAt = 5;
     string updateBy = 6;
     string updatedAt = 7;
-    string logoUrl = 8;
+    optional string logoUrl = 8;
     OrgStatus status = 9;
+    OrgPlan plan = 10;
 }
 
 enum OrgPlan {

@@ -14,7 +14,7 @@ module.exports = {
     // },
   ],
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'eslint-plugin-no-inline-styles'],
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: 'module',
@@ -36,5 +36,6 @@ module.exports = {
     '@next/next/no-html-link-for-pages': 'off',
     'react/prop-types': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
+    'no-inline-styles/no-inline-styles': 'error',
   },
 };

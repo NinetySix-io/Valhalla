@@ -44,6 +44,7 @@ promiseExec("pwd").then(async (output) => {
     const opt = Object.entries({
       nestJs: true,
       esModuleInterop: true,
+      stringEnums: true,
     })
       .map(([key, value]) => `${key}=${value}`)
       .join(",");

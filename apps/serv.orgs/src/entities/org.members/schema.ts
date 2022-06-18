@@ -6,30 +6,16 @@ import {
 } from '@valhalla/serv.core';
 import { Exclude, Expose } from 'class-transformer';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { InvitationStatus, OrgRole } from '@app/protobuf';
 import { index, prop } from '@typegoose/typegoose';
 
 import mongoose from 'mongoose';
 
-export enum OrgMemberStatus {
-  Pending = 'pending',
-  Accepted = 'accepted',
-  Rejected = 'rejected',
-  Suspended = 'suspended',
-}
-
-export enum OrgMemberRole {
-  Owner = 'owner',
-  Admin = 'admin',
-  Developer = 'developer',
-  Member = 'member',
-  Guess = 'guest',
-}
-
-registerEnumType(OrgMemberStatus, {
+registerEnumType(InvitationStatus, {
   name: 'OrgMemberStatus',
 });
 
-registerEnumType(OrgMemberRole, {
+registerEnumType(OrgRole, {
   name: 'OrgMemberRole',
 });
 
@@ -76,17 +62,17 @@ export class OrgMemberSchema extends BaseSchema {
 
   @prop()
   @Expose()
-  @Field(() => OrgMemberStatus, {
+  @Field(() => InvitationStatus, {
     description: 'Status of the organization member',
   })
-  status: OrgMemberStatus;
+  status: InvitationStatus;
 
   @prop()
   @Expose()
-  @Field(() => OrgMemberRole, {
+  @Field(() => OrgRole, {
     description: 'Role of the organization member',
   })
-  role: OrgMemberRole;
+  role: OrgRole;
 
   @prop()
   @Expose()

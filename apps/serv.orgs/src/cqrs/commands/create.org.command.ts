@@ -4,15 +4,14 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { CreateOrgRequest, Organization } from '@app/protobuf';
 import {
-  OrgMemberRole,
-  OrgMemberStatus,
-} from '@app/entities/org.members/schema';
-import {
-  OrganizationPlan,
-  OrganizationStatus,
-} from '@app/entities/organizations/schema';
+  CreateOrgRequest,
+  InvitationStatus,
+  OrgPlan,
+  OrgRole,
+  OrgStatus,
+  Organization,
+} from '@app/protobuf';
 import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { OrgMemberTransformer } from '@app/entities/org.members/transformer';
@@ -21,14 +20,10 @@ import { OrganizationCreatedEvent } from '../events/org.created.event';
 import { OrganizationMemberCreatedEvent } from '../events/org.member.created.event';
 import { OrganizationTransformer } from '@app/entities/organizations/transformer';
 import { OrganizationsModel } from '@app/entities/organizations';
-import { ServIdentity } from '@valhalla/serv.clients';
 import { slugify } from '@valhalla/utilities';
 
 export class CreateOrgCommand implements ICommand {
-  constructor(
-    public readonly input: CreateOrgRequest,
-    public readonly user?: ServIdentity.Account,
-  ) {}
+  constructor(public readonly request: CreateOrgRequest) {}
 }
 
 @CommandHandler(CreateOrgCommand)
@@ -53,21 +48,15 @@ export class CreateOrgHandler
   }
 
   async execute(command: CreateOrgCommand): Promise<Organization> {
-    if (!command.user?.id) {
-      throw new Error('User is not defined');
-    } else if (command.input.name) {
-      throw new Error('Org name is not defined');
-    }
-
-    const slug = await this.generateSlug(command.input.name);
-    const userId = toObjectId(command.user.id);
+    const slug = await this.generateSlug(command.request.name);
+    const userId = toObjectId(command.request.requestedUserId);
 
     //TODO: maybe limit org creation per account
     const tenant = await this.organizations.create({
       slug,
-      name: command.input.name,
-      plan: OrganizationPlan.FREE,
-      status: OrganizationStatus.ACTIVE,
+      name: command.request.name,
+      plan: OrgPlan.FREE,
+      status: OrgStatus.ACTIVE,
       createdBy: userId,
       updatedBy: userId,
     });
@@ -75,8 +64,8 @@ export class CreateOrgHandler
     const member = await this.members.create({
       user: userId,
       organization: tenant._id,
-      status: OrgMemberStatus.Accepted,
-      role: OrgMemberRole.Owner,
+      status: InvitationStatus.ACCEPTED,
+      role: OrgRole.OWNER,
       updatedBy: userId,
       invitedBy: userId,
     });
