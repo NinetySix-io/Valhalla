@@ -46,35 +46,33 @@ export const OrganizationCreateModal: React.FC<Props> = ({
   }
 
   return (
-    <React.Fragment>
-      <Modal
-        {...props}
-        withCancel
-        withSubmit
-        title="Create Org"
-        onSubmit={() => form.submit()}
-        onClose={onClose}
-      >
-        <Box width={400}>
-          <Form<Payload> form={form} onFinish={handleSubmit}>
-            <Form.Item
-              name="name"
-              rules={[{ required: true, message: 'Required!', min: 3 }]}
-            >
-              <TextField
-                autoFocus
-                disabled={loading}
-                size="small"
-                label="Organization Name"
-                variant="outlined"
-                autoComplete="off"
-                autoCapitalize="words"
-              />
-            </Form.Item>
-          </Form>
-          {error && <Alert severity="error">{error.message}</Alert>}
-        </Box>
-      </Modal>
-    </React.Fragment>
+    <Modal
+      {...props}
+      withCancel
+      withSubmit
+      title="Create Org"
+      onSubmit={() => form.submit()}
+      onClose={onClose}
+    >
+      <Box width={400}>
+        <Form<Payload> form={form} onFinish={handleSubmit}>
+          <Form.Item
+            name="name"
+            rules={[{ required: true, message: 'Required!', min: 3 }]}
+          >
+            <TextField
+              autoFocus
+              disabled={loading}
+              size="small"
+              label="Organization Name"
+              variant="outlined"
+              autoComplete="off"
+              autoCapitalize="words"
+            />
+          </Form.Item>
+        </Form>
+        {error && <Alert severity="error">{error.message}</Alert>}
+      </Box>
+    </Modal>
   );
 };
