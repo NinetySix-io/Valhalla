@@ -1,0 +1,228 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+directive @key(fields: String!, resolvable: Boolean = true) repeatable on OBJECT | INTERFACE
+
+directive @extends on OBJECT | INTERFACE
+
+directive @external on OBJECT | FIELD_DEFINITION
+
+directive @requires(fields: String!) on FIELD_DEFINITION
+
+directive @provides(fields: String!) on FIELD_DEFINITION
+
+directive @shareable on FIELD_DEFINITION | OBJECT
+
+directive @link(url: String!, import: [link__Import]) on SCHEMA
+
+directive @tag(name: String!) repeatable on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @override(from: String!) on FIELD_DEFINITION
+
+type AccountEmailSchema {
+  """Date entity was created"""
+  createdAt: DateTime!
+
+  """Date entity was updated"""
+  updatedAt: DateTime!
+
+  """Email address value"""
+  value: String!
+
+  """Whether email address is primary"""
+  isPrimary: Boolean!
+
+  """Whether email address is verified"""
+  isVerified: Boolean!
+
+  """Verification date"""
+  verifiedDate: DateTime!
+
+  """Verification ID"""
+  verification: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type AccountPhoneSchema {
+  """Date entity was created"""
+  createdAt: DateTime!
+
+  """Date entity was updated"""
+  updatedAt: DateTime!
+
+  """Phone number value"""
+  value: String!
+
+  """Whether phone number is primary"""
+  isPrimary: Boolean!
+
+  """Whether phone number is verified"""
+  isVerified: Boolean!
+
+  """Verification date"""
+  verifiedDate: DateTime!
+
+  """Verification ID"""
+  verification: String!
+}
+
+type AccountSchema {
+  """Date entity was created"""
+  createdAt: DateTime!
+
+  """Date entity was updated"""
+  updatedAt: DateTime!
+
+  """Identifier of the entity"""
+  id: ID!
+
+  """User Display Name"""
+  displayName: String!
+
+  """First Name"""
+  firstName: String!
+
+  """Last Name"""
+  lastName: String!
+
+  """Associated email addresses"""
+  emails: [AccountEmailSchema!]!
+
+  """Associated phone numbers"""
+  phones: [AccountPhoneSchema!]!
+}
+
+type AccessTokenResponse {
+  """Access token"""
+  token: String!
+
+  """Token expiry"""
+  expiresAt: DateTime!
+}
+
+type AuthResponse {
+  """Logged in Account ID"""
+  accountId: String!
+
+  """Access token"""
+  accessToken: String!
+
+  """Access token expiry"""
+  accessTokenExpiresAt: DateTime!
+}
+
+type SessionResponse {
+  """Identifier of the entity"""
+  id: ID!
+
+  """User Display Name"""
+  displayName: String!
+}
+
+type Query {
+  """Generate an access token"""
+  accessToken: AccessTokenResponse!
+
+  """Get current session user"""
+  session: SessionResponse!
+
+  """Get current logged in user information"""
+  account: AccountSchema!
+
+  """Validate verification code"""
+  validateVerificationCode(verificationId: String!, verificationCode: String!): Boolean!
+}
+
+type Mutation {
+  """Register user account"""
+  registerAccount(input: RegisterInput!): AuthResponse!
+
+  """Login to account with email address"""
+  loginWithEmail(input: LoginWithEmailInput!): AuthResponse!
+
+  """Login to account with phone number"""
+  loginWithPhone(input: LoginWithPhoneInput!): AuthResponse!
+
+  """Invalid current session"""
+  logout: Boolean!
+
+  """Update account"""
+  updateAccount(input: UpdateAccountInput!): Boolean!
+
+  """Add email address to account"""
+  addEmailToAccount(email: String!): Boolean!
+
+  """Add phone number to account"""
+  addPhoneToAccount(phone: String!): Boolean!
+
+  """Remove associated email from account"""
+  removeEmailFromAccount(email: String!): Boolean!
+
+  """Remove associated phone from account"""
+  removePhoneFromAccount(phone: String!): Boolean!
+
+  """Send verification code to email"""
+  sendEmailVerificationCode(email: String!): String!
+
+  """Send verification code to phone number"""
+  sendPhoneVerificationCode(phone: String!): String!
+}
+
+input RegisterInput {
+  """User Display Name"""
+  displayName: String
+
+  """First Name"""
+  firstName: String
+
+  """Last Name"""
+  lastName: String
+
+  """Email Address"""
+  email: String!
+
+  """Phone Number"""
+  phone: String
+}
+
+input LoginWithEmailInput {
+  """Email address"""
+  email: String!
+
+  """Verification Code"""
+  verificationCode: String!
+
+  """Verification Sent"""
+  verificationId: String!
+}
+
+input LoginWithPhoneInput {
+  """Phone number"""
+  phone: String!
+
+  """Verification Code"""
+  verificationCode: String!
+
+  """Verification Sent"""
+  verificationId: String!
+}
+
+input UpdateAccountInput {
+  """User Display Name"""
+  displayName: String
+
+  """First Name"""
+  firstName: String
+
+  """Last Name"""
+  lastName: String
+}
+
+scalar link__Import

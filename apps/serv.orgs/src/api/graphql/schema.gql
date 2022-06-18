@@ -1,0 +1,106 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+directive @key(fields: String!, resolvable: Boolean = true) repeatable on OBJECT | INTERFACE
+
+directive @extends on OBJECT | INTERFACE
+
+directive @external on OBJECT | FIELD_DEFINITION
+
+directive @requires(fields: String!) on FIELD_DEFINITION
+
+directive @provides(fields: String!) on FIELD_DEFINITION
+
+directive @shareable on FIELD_DEFINITION | OBJECT
+
+directive @link(url: String!, import: [link__Import]) on SCHEMA
+
+directive @tag(name: String!) repeatable on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @override(from: String!) on FIELD_DEFINITION
+
+type OrganizationSchema {
+  """Date entity was created"""
+  createdAt: DateTime!
+
+  """Date entity was updated"""
+  updatedAt: DateTime!
+
+  """Identifier of the entity"""
+  id: ID!
+
+  """Name of the organization"""
+  name: String!
+
+  """Organization status"""
+  status: OrganizationStatus!
+
+  """Unique slug identifier"""
+  slug: String!
+
+  """URL of the logo"""
+  logoUrl: String
+
+  """Subscription plan"""
+  plan: OrganizationPlan!
+
+  """ID of the account that created the organization"""
+  createdBy: String!
+
+  """ID of the account that last updated the organization"""
+  updatedBy: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""Organization status"""
+enum OrganizationStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  UNRECOGNIZED
+}
+
+"""Subscription plan"""
+enum OrganizationPlan {
+  FREE
+  UNRECOGNIZED
+}
+
+type Query {
+  """Get current user's organizations memberships"""
+  organizations: [OrganizationSchema!]!
+
+  """Current Active Organization"""
+  activeOrg: OrganizationSchema
+}
+
+type Mutation {
+  """Create an organization"""
+  createOrganization(input: CreateOrganizationInput!): OrganizationSchema!
+
+  """Archive an organization"""
+  archiveOrganization(orgId: String!): String!
+
+  """Restore an organization that was archived"""
+  restoreOrganization(orgId: String!): String!
+
+  """Set active org for account"""
+  setAccountActiveOrg(organization: String!): Boolean!
+}
+
+input CreateOrganizationInput {
+  """Name of the organization"""
+  name: String!
+
+  """Subscription plan"""
+  plan: OrganizationPlan!
+}
+
+scalar link__Import

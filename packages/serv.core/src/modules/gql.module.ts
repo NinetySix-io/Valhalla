@@ -17,7 +17,7 @@ import { isDev } from '@valhalla/utilities';
         settings: { 'request.credentials': 'same-origin' },
       },
       debug: isDev(),
-      autoSchemaFile: true,
+      autoSchemaFile: 'src/api/graphql/schema.gql',
     }),
   ],
 })
