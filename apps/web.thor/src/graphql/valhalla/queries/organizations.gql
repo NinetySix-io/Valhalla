@@ -1,9 +1,0 @@
-query getOrganizationsMembership {
-  organizations {
-    id
-    name
-    slug
-    name
-    logoUrl
-  }
-}

@@ -34,8 +34,9 @@ export function useAccessTokenSync() {
 
       const timeoutDur = moment
         .duration(moment(accessTokenExpires).diff(new Date()))
-        .subtract(2, 'minutes')
-        .asMilliseconds();
+        .subtract(2, 'minutes');
+
+      console.debug('Next access token in', timeoutDur.humanize());
 
       const timeoutId = setTimeout(async () => {
         const [nextToken] = await tryNice(() =>
@@ -54,7 +55,7 @@ export function useAccessTokenSync() {
         } else {
           router.push(buildClientReturnableLink(PAGES.AUTH));
         }
-      }, Math.abs(timeoutDur));
+      }, Math.abs(timeoutDur.asMilliseconds()));
 
       timeoutRef.current = timeoutId;
     }

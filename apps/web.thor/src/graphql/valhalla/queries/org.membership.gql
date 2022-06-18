@@ -1,0 +1,17 @@
+query getOrgMembership {
+  organizationMembership {
+    profileImageUrl
+    status
+    role
+  }
+}
+
+query getOrganizationsMembershipList {
+  organizations {
+    id
+    name
+    slug
+    name
+    logoUrl
+  }
+}

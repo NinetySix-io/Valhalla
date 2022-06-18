@@ -13,16 +13,21 @@ import { TemporaryApolloClient } from '@app/apollo/temp.client';
  */
 export async function getAccessToken(options?: {
   client?: ApolloClient<unknown>;
-  headers?: Record<string, string> | IncomingHttpHeaders;
+  headers?: IncomingHttpHeaders;
+  organization?: string;
 }) {
   const client =
     options?.client ??
     new TemporaryApolloClient({
       uri: Environment.GQL_SERVER,
-      headers: options.headers as Record<string, string>,
+      headers: options.headers,
     });
 
-  const query = refetchGetAccessTokenQuery();
-  const result = await client.query<GetAccessTokenQuery>(query);
-  return result.data?.accessToken;
+  const result = await client.query<GetAccessTokenQuery>(
+    refetchGetAccessTokenQuery({
+      organization: options?.organization,
+    }),
+  );
+
+  return result.data.accessToken;
 }

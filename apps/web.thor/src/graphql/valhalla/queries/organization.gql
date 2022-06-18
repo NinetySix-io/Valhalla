@@ -1,0 +1,15 @@
+query getCurrentOrganization {
+  organization {
+    name
+    logoUrl
+    plan
+    slug
+  }
+}
+
+query findOrganizationBySlug($slug: String!) {
+  organizationBySlug(slug: $slug) {
+    id
+    name
+  }
+}

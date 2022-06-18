@@ -7,6 +7,7 @@ import { PreviewData } from 'next';
 import { Store } from '@app/redux';
 import { buildReturnableLink } from '../lib/router.utils';
 import { getAccessToken } from '../lib/access.token/get.access.token';
+import { getOrganizationBySlug } from '@app/lib/organization/get.org.by.slug';
 import { isRefreshTokenExpiredError } from '@app/apollo/utilities';
 import { tryNice } from 'try-nice';
 import { withRedux } from './with.redux';
@@ -23,6 +24,7 @@ type CB<
   {
     store: Store;
     gqlClient: ApolloClient<unknown>;
+    organization?: Awaited<ReturnType<typeof getOrganizationBySlug>>;
   }
 >;
 

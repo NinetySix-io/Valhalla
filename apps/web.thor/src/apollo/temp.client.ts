@@ -11,12 +11,19 @@ import {
   QueryOptions,
 } from '@apollo/client';
 
+import { IncomingHttpHeaders } from 'http';
 import { createHttpLink } from './http.link';
 
 export class TemporaryApolloClient extends ApolloClient<NormalizedCacheObject> {
-  constructor(options: { uri: string; headers?: Record<string, string> }) {
+  constructor(options: {
+    uri: string;
+    headers?: Record<string, string> | IncomingHttpHeaders;
+  }) {
     super({
-      link: createHttpLink(options.uri, options.headers),
+      link: createHttpLink(
+        options.uri,
+        options.headers as Record<string, string>,
+      ),
       uri: options.uri,
       cache: new InMemoryCache(),
     });

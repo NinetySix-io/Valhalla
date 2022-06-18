@@ -18,6 +18,11 @@ export type Scalars = {
   DateTime: Date;
 };
 
+export type AccessTokenQuery = {
+  /** Auth for organization */
+  readonly organization?: InputMaybe<Scalars['String']>;
+};
+
 export type AccessTokenResponse = {
   readonly __typename?: 'AccessTokenResponse';
   /** Token expiry */
@@ -145,8 +150,6 @@ export type Mutation = {
   readonly sendEmailVerificationCode: Scalars['String'];
   /** Send verification code to phone number */
   readonly sendPhoneVerificationCode: Scalars['String'];
-  /** Set active org for account */
-  readonly setAccountActiveOrg: Scalars['Boolean'];
   /** Update account */
   readonly updateAccount: Scalars['Boolean'];
 };
@@ -212,11 +215,6 @@ export type MutationSendPhoneVerificationCodeArgs = {
 };
 
 
-export type MutationSetAccountActiveOrgArgs = {
-  organization: Scalars['String'];
-};
-
-
 export type MutationUpdateAccountArgs = {
   input: UpdateAccountInput;
 };
@@ -263,10 +261,10 @@ export enum OrgMemberStatus {
 
 export type OrganizationBySlugResponse = {
   readonly __typename?: 'OrganizationBySlugResponse';
-  /** Organization Membership */
-  readonly membership: OrgMemberSchema;
-  /** Organization */
-  readonly organization: OrganizationSchema;
+  /** Identifier of the entity */
+  readonly id: Scalars['ID'];
+  /** Name of the organization */
+  readonly name: Scalars['String'];
 };
 
 /** Subscription plan */
@@ -311,16 +309,23 @@ export type Query = {
   readonly accessToken: AccessTokenResponse;
   /** Get current logged in user information */
   readonly account: AccountSchema;
-  /** Current Active Organization */
-  readonly activeOrg?: Maybe<OrganizationSchema>;
-  /** Get organization by slug */
+  /** Get current organization */
+  readonly organization: ReadonlyArray<OrganizationSchema>;
+  /** Find organization by slug */
   readonly organizationBySlug: OrganizationBySlugResponse;
+  /** Get current organization membership */
+  readonly organizationMembership: ReadonlyArray<OrgMemberSchema>;
   /** Get current user's organizations memberships */
   readonly organizations: ReadonlyArray<OrganizationSchema>;
   /** Get current session user */
   readonly session: SessionResponse;
   /** Validate verification code */
   readonly validateVerificationCode: Scalars['Boolean'];
+};
+
+
+export type QueryAccessTokenArgs = {
+  query: AccessTokenQuery;
 };
 
 
@@ -479,32 +484,44 @@ export type ValidateVerificationCodeQueryVariables = Exact<{
 
 export type ValidateVerificationCodeQuery = { readonly __typename?: 'Query', readonly validateVerificationCode: boolean };
 
-export type GetAccessTokenQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetAccessTokenQuery = { readonly __typename?: 'Query', readonly accessToken: { readonly __typename?: 'AccessTokenResponse', readonly token: string, readonly expiresAt: Date } };
-
 export type GetAccountQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAccountQuery = { readonly __typename?: 'Query', readonly account: { readonly __typename?: 'AccountSchema', readonly firstName: string, readonly lastName: string, readonly displayName: string } };
 
-export type GetOrganizationBySlugQueryVariables = Exact<{
+export type GetOrgMembershipQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetOrgMembershipQuery = { readonly __typename?: 'Query', readonly organizationMembership: ReadonlyArray<{ readonly __typename?: 'OrgMemberSchema', readonly profileImageUrl?: string | null, readonly status: OrgMemberStatus, readonly role: OrgMemberRole }> };
+
+export type GetOrganizationsMembershipListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetOrganizationsMembershipListQuery = { readonly __typename?: 'Query', readonly organizations: ReadonlyArray<{ readonly __typename?: 'OrganizationSchema', readonly id: string, readonly name: string, readonly slug: string, readonly logoUrl?: string | null }> };
+
+export type GetCurrentOrganizationQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCurrentOrganizationQuery = { readonly __typename?: 'Query', readonly organization: ReadonlyArray<{ readonly __typename?: 'OrganizationSchema', readonly name: string, readonly logoUrl?: string | null, readonly plan: OrganizationPlan, readonly slug: string }> };
+
+export type FindOrganizationBySlugQueryVariables = Exact<{
   slug: Scalars['String'];
 }>;
 
 
-export type GetOrganizationBySlugQuery = { readonly __typename?: 'Query', readonly organizationBySlug: { readonly __typename?: 'OrganizationBySlugResponse', readonly organization: { readonly __typename?: 'OrganizationSchema', readonly id: string, readonly name: string, readonly plan: OrganizationPlan, readonly status: OrganizationStatus, readonly logoUrl?: string | null }, readonly membership: { readonly __typename?: 'OrgMemberSchema', readonly profileImageUrl?: string | null, readonly status: OrgMemberStatus, readonly role: OrgMemberRole } } };
+export type FindOrganizationBySlugQuery = { readonly __typename?: 'Query', readonly organizationBySlug: { readonly __typename?: 'OrganizationBySlugResponse', readonly id: string, readonly name: string } };
 
 export type SessionQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SessionQuery = { readonly __typename?: 'Query', readonly session: { readonly __typename?: 'SessionResponse', readonly id: string } };
 
-export type GetOrganizationsMembershipQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetAccessTokenQueryVariables = Exact<{
+  organization?: InputMaybe<Scalars['String']>;
+}>;
 
 
-export type GetOrganizationsMembershipQuery = { readonly __typename?: 'Query', readonly organizations: ReadonlyArray<{ readonly __typename?: 'OrganizationSchema', readonly id: string, readonly name: string, readonly slug: string, readonly logoUrl?: string | null }> };
+export type GetAccessTokenQuery = { readonly __typename?: 'Query', readonly accessToken: { readonly __typename?: 'AccessTokenResponse', readonly token: string, readonly expiresAt: Date } };
 
 
 export const RegisterDocument = gql`
@@ -1013,44 +1030,6 @@ export type ValidateVerificationCodeQueryResult = Apollo.QueryResult<ValidateVer
 export function refetchValidateVerificationCodeQuery(variables: ValidateVerificationCodeQueryVariables) {
       return { query: ValidateVerificationCodeDocument, variables: variables }
     }
-export const GetAccessTokenDocument = gql`
-    query getAccessToken {
-  accessToken {
-    token
-    expiresAt
-  }
-}
-    `;
-
-/**
- * __useGetAccessTokenQuery__
- *
- * To run a query within a React component, call `useGetAccessTokenQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAccessTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetAccessTokenQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetAccessTokenQuery(baseOptions?: Apollo.QueryHookOptions<GetAccessTokenQuery, GetAccessTokenQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAccessTokenQuery, GetAccessTokenQueryVariables>(GetAccessTokenDocument, options);
-      }
-export function useGetAccessTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAccessTokenQuery, GetAccessTokenQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAccessTokenQuery, GetAccessTokenQueryVariables>(GetAccessTokenDocument, options);
-        }
-export type GetAccessTokenQueryHookResult = ReturnType<typeof useGetAccessTokenQuery>;
-export type GetAccessTokenLazyQueryHookResult = ReturnType<typeof useGetAccessTokenLazyQuery>;
-export type GetAccessTokenQueryResult = Apollo.QueryResult<GetAccessTokenQuery, GetAccessTokenQueryVariables>;
-export function refetchGetAccessTokenQuery(variables?: GetAccessTokenQueryVariables) {
-      return { query: GetAccessTokenDocument, variables: variables }
-    }
 export const GetAccountDocument = gql`
     query getAccount {
   account {
@@ -1090,54 +1069,164 @@ export type GetAccountQueryResult = Apollo.QueryResult<GetAccountQuery, GetAccou
 export function refetchGetAccountQuery(variables?: GetAccountQueryVariables) {
       return { query: GetAccountDocument, variables: variables }
     }
-export const GetOrganizationBySlugDocument = gql`
-    query getOrganizationBySlug($slug: String!) {
-  organizationBySlug(slug: $slug) {
-    organization {
-      id
-      name
-      plan
-      status
-      logoUrl
-    }
-    membership {
-      profileImageUrl
-      status
-      role
-    }
+export const GetOrgMembershipDocument = gql`
+    query getOrgMembership {
+  organizationMembership {
+    profileImageUrl
+    status
+    role
   }
 }
     `;
 
 /**
- * __useGetOrganizationBySlugQuery__
+ * __useGetOrgMembershipQuery__
  *
- * To run a query within a React component, call `useGetOrganizationBySlugQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetOrganizationBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetOrgMembershipQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrgMembershipQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetOrganizationBySlugQuery({
+ * const { data, loading, error } = useGetOrgMembershipQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetOrgMembershipQuery(baseOptions?: Apollo.QueryHookOptions<GetOrgMembershipQuery, GetOrgMembershipQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOrgMembershipQuery, GetOrgMembershipQueryVariables>(GetOrgMembershipDocument, options);
+      }
+export function useGetOrgMembershipLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrgMembershipQuery, GetOrgMembershipQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOrgMembershipQuery, GetOrgMembershipQueryVariables>(GetOrgMembershipDocument, options);
+        }
+export type GetOrgMembershipQueryHookResult = ReturnType<typeof useGetOrgMembershipQuery>;
+export type GetOrgMembershipLazyQueryHookResult = ReturnType<typeof useGetOrgMembershipLazyQuery>;
+export type GetOrgMembershipQueryResult = Apollo.QueryResult<GetOrgMembershipQuery, GetOrgMembershipQueryVariables>;
+export function refetchGetOrgMembershipQuery(variables?: GetOrgMembershipQueryVariables) {
+      return { query: GetOrgMembershipDocument, variables: variables }
+    }
+export const GetOrganizationsMembershipListDocument = gql`
+    query getOrganizationsMembershipList {
+  organizations {
+    id
+    name
+    slug
+    name
+    logoUrl
+  }
+}
+    `;
+
+/**
+ * __useGetOrganizationsMembershipListQuery__
+ *
+ * To run a query within a React component, call `useGetOrganizationsMembershipListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrganizationsMembershipListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrganizationsMembershipListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetOrganizationsMembershipListQuery(baseOptions?: Apollo.QueryHookOptions<GetOrganizationsMembershipListQuery, GetOrganizationsMembershipListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOrganizationsMembershipListQuery, GetOrganizationsMembershipListQueryVariables>(GetOrganizationsMembershipListDocument, options);
+      }
+export function useGetOrganizationsMembershipListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrganizationsMembershipListQuery, GetOrganizationsMembershipListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOrganizationsMembershipListQuery, GetOrganizationsMembershipListQueryVariables>(GetOrganizationsMembershipListDocument, options);
+        }
+export type GetOrganizationsMembershipListQueryHookResult = ReturnType<typeof useGetOrganizationsMembershipListQuery>;
+export type GetOrganizationsMembershipListLazyQueryHookResult = ReturnType<typeof useGetOrganizationsMembershipListLazyQuery>;
+export type GetOrganizationsMembershipListQueryResult = Apollo.QueryResult<GetOrganizationsMembershipListQuery, GetOrganizationsMembershipListQueryVariables>;
+export function refetchGetOrganizationsMembershipListQuery(variables?: GetOrganizationsMembershipListQueryVariables) {
+      return { query: GetOrganizationsMembershipListDocument, variables: variables }
+    }
+export const GetCurrentOrganizationDocument = gql`
+    query getCurrentOrganization {
+  organization {
+    name
+    logoUrl
+    plan
+    slug
+  }
+}
+    `;
+
+/**
+ * __useGetCurrentOrganizationQuery__
+ *
+ * To run a query within a React component, call `useGetCurrentOrganizationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCurrentOrganizationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCurrentOrganizationQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCurrentOrganizationQuery(baseOptions?: Apollo.QueryHookOptions<GetCurrentOrganizationQuery, GetCurrentOrganizationQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCurrentOrganizationQuery, GetCurrentOrganizationQueryVariables>(GetCurrentOrganizationDocument, options);
+      }
+export function useGetCurrentOrganizationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCurrentOrganizationQuery, GetCurrentOrganizationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCurrentOrganizationQuery, GetCurrentOrganizationQueryVariables>(GetCurrentOrganizationDocument, options);
+        }
+export type GetCurrentOrganizationQueryHookResult = ReturnType<typeof useGetCurrentOrganizationQuery>;
+export type GetCurrentOrganizationLazyQueryHookResult = ReturnType<typeof useGetCurrentOrganizationLazyQuery>;
+export type GetCurrentOrganizationQueryResult = Apollo.QueryResult<GetCurrentOrganizationQuery, GetCurrentOrganizationQueryVariables>;
+export function refetchGetCurrentOrganizationQuery(variables?: GetCurrentOrganizationQueryVariables) {
+      return { query: GetCurrentOrganizationDocument, variables: variables }
+    }
+export const FindOrganizationBySlugDocument = gql`
+    query findOrganizationBySlug($slug: String!) {
+  organizationBySlug(slug: $slug) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useFindOrganizationBySlugQuery__
+ *
+ * To run a query within a React component, call `useFindOrganizationBySlugQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindOrganizationBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindOrganizationBySlugQuery({
  *   variables: {
  *      slug: // value for 'slug'
  *   },
  * });
  */
-export function useGetOrganizationBySlugQuery(baseOptions: Apollo.QueryHookOptions<GetOrganizationBySlugQuery, GetOrganizationBySlugQueryVariables>) {
+export function useFindOrganizationBySlugQuery(baseOptions: Apollo.QueryHookOptions<FindOrganizationBySlugQuery, FindOrganizationBySlugQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetOrganizationBySlugQuery, GetOrganizationBySlugQueryVariables>(GetOrganizationBySlugDocument, options);
+        return Apollo.useQuery<FindOrganizationBySlugQuery, FindOrganizationBySlugQueryVariables>(FindOrganizationBySlugDocument, options);
       }
-export function useGetOrganizationBySlugLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrganizationBySlugQuery, GetOrganizationBySlugQueryVariables>) {
+export function useFindOrganizationBySlugLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindOrganizationBySlugQuery, FindOrganizationBySlugQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetOrganizationBySlugQuery, GetOrganizationBySlugQueryVariables>(GetOrganizationBySlugDocument, options);
+          return Apollo.useLazyQuery<FindOrganizationBySlugQuery, FindOrganizationBySlugQueryVariables>(FindOrganizationBySlugDocument, options);
         }
-export type GetOrganizationBySlugQueryHookResult = ReturnType<typeof useGetOrganizationBySlugQuery>;
-export type GetOrganizationBySlugLazyQueryHookResult = ReturnType<typeof useGetOrganizationBySlugLazyQuery>;
-export type GetOrganizationBySlugQueryResult = Apollo.QueryResult<GetOrganizationBySlugQuery, GetOrganizationBySlugQueryVariables>;
-export function refetchGetOrganizationBySlugQuery(variables: GetOrganizationBySlugQueryVariables) {
-      return { query: GetOrganizationBySlugDocument, variables: variables }
+export type FindOrganizationBySlugQueryHookResult = ReturnType<typeof useFindOrganizationBySlugQuery>;
+export type FindOrganizationBySlugLazyQueryHookResult = ReturnType<typeof useFindOrganizationBySlugLazyQuery>;
+export type FindOrganizationBySlugQueryResult = Apollo.QueryResult<FindOrganizationBySlugQuery, FindOrganizationBySlugQueryVariables>;
+export function refetchFindOrganizationBySlugQuery(variables: FindOrganizationBySlugQueryVariables) {
+      return { query: FindOrganizationBySlugDocument, variables: variables }
     }
 export const SessionDocument = gql`
     query session {
@@ -1176,44 +1265,42 @@ export type SessionQueryResult = Apollo.QueryResult<SessionQuery, SessionQueryVa
 export function refetchSessionQuery(variables?: SessionQueryVariables) {
       return { query: SessionDocument, variables: variables }
     }
-export const GetOrganizationsMembershipDocument = gql`
-    query getOrganizationsMembership {
-  organizations {
-    id
-    name
-    slug
-    name
-    logoUrl
+export const GetAccessTokenDocument = gql`
+    query getAccessToken($organization: String) {
+  accessToken(query: {organization: $organization}) {
+    token
+    expiresAt
   }
 }
     `;
 
 /**
- * __useGetOrganizationsMembershipQuery__
+ * __useGetAccessTokenQuery__
  *
- * To run a query within a React component, call `useGetOrganizationsMembershipQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetOrganizationsMembershipQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetAccessTokenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAccessTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetOrganizationsMembershipQuery({
+ * const { data, loading, error } = useGetAccessTokenQuery({
  *   variables: {
+ *      organization: // value for 'organization'
  *   },
  * });
  */
-export function useGetOrganizationsMembershipQuery(baseOptions?: Apollo.QueryHookOptions<GetOrganizationsMembershipQuery, GetOrganizationsMembershipQueryVariables>) {
+export function useGetAccessTokenQuery(baseOptions?: Apollo.QueryHookOptions<GetAccessTokenQuery, GetAccessTokenQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetOrganizationsMembershipQuery, GetOrganizationsMembershipQueryVariables>(GetOrganizationsMembershipDocument, options);
+        return Apollo.useQuery<GetAccessTokenQuery, GetAccessTokenQueryVariables>(GetAccessTokenDocument, options);
       }
-export function useGetOrganizationsMembershipLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrganizationsMembershipQuery, GetOrganizationsMembershipQueryVariables>) {
+export function useGetAccessTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAccessTokenQuery, GetAccessTokenQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetOrganizationsMembershipQuery, GetOrganizationsMembershipQueryVariables>(GetOrganizationsMembershipDocument, options);
+          return Apollo.useLazyQuery<GetAccessTokenQuery, GetAccessTokenQueryVariables>(GetAccessTokenDocument, options);
         }
-export type GetOrganizationsMembershipQueryHookResult = ReturnType<typeof useGetOrganizationsMembershipQuery>;
-export type GetOrganizationsMembershipLazyQueryHookResult = ReturnType<typeof useGetOrganizationsMembershipLazyQuery>;
-export type GetOrganizationsMembershipQueryResult = Apollo.QueryResult<GetOrganizationsMembershipQuery, GetOrganizationsMembershipQueryVariables>;
-export function refetchGetOrganizationsMembershipQuery(variables?: GetOrganizationsMembershipQueryVariables) {
-      return { query: GetOrganizationsMembershipDocument, variables: variables }
+export type GetAccessTokenQueryHookResult = ReturnType<typeof useGetAccessTokenQuery>;
+export type GetAccessTokenLazyQueryHookResult = ReturnType<typeof useGetAccessTokenLazyQuery>;
+export type GetAccessTokenQueryResult = Apollo.QueryResult<GetAccessTokenQuery, GetAccessTokenQueryVariables>;
+export function refetchGetAccessTokenQuery(variables?: GetAccessTokenQueryVariables) {
+      return { query: GetAccessTokenDocument, variables: variables }
     }
