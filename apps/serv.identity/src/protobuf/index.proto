@@ -223,6 +223,7 @@ message DecodeAccessTokenRequest {
 
 message ProvisionAccessTokenRequest {
     string refreshToken = 1;
+    optional string organization = 2;
 }
 
 message ProvisionAccessTokenResponse {

@@ -201,6 +201,7 @@ export interface DecodeAccessTokenRequest {
 
 export interface ProvisionAccessTokenRequest {
   refreshToken: string;
+  organization?: string | undefined;
 }
 
 export interface ProvisionAccessTokenResponse {

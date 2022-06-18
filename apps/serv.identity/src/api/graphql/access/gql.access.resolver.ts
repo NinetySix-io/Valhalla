@@ -8,6 +8,7 @@ import {
   resolveRpcRequest,
 } from '@valhalla/serv.core';
 import { tryNice } from 'try-nice';
+import { AccessTokenQuery } from './inputs/get.access.token.input';
 import { LoginWithEmailInput } from './inputs/login.with.email.input';
 import { LoginWithPhoneInput } from './inputs/login.with.phone.input';
 import { RegisterInput } from './inputs/register.input';
@@ -95,6 +96,7 @@ export class GqlAuthResolver {
   })
   async accessToken(
     @RefreshToken() refreshToken: string,
+    @Args('query') query: AccessTokenQuery,
   ): Promise<AccessTokenResponse> {
     if (!refreshToken) {
       throw new ForbiddenException('Refresh Token not found!');
@@ -104,6 +106,7 @@ export class GqlAuthResolver {
       resolveRpcRequest(
         this.rpcClient.provisionAccessToken({
           refreshToken,
+          organization: query.organization,
         }),
       ),
     );
@@ -111,7 +114,7 @@ export class GqlAuthResolver {
     if (error instanceof Error) {
       throw new ForbiddenException(error.message);
     } else if (!result) {
-      throw new Error();
+      throw new Error('Unexpected Error!');
     }
 
     return {

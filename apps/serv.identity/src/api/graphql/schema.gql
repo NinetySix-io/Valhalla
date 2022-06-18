@@ -128,7 +128,7 @@ type SessionResponse {
 
 type Query {
   """Generate an access token"""
-  accessToken: AccessTokenResponse!
+  accessToken(query: AccessTokenQuery!): AccessTokenResponse!
 
   """Get current session user"""
   session: SessionResponse!
@@ -138,6 +138,11 @@ type Query {
 
   """Validate verification code"""
   validateVerificationCode(verificationId: String!, verificationCode: String!): Boolean!
+}
+
+input AccessTokenQuery {
+  """Auth for organization"""
+  organization: String
 }
 
 type Mutation {

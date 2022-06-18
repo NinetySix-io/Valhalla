@@ -9,6 +9,7 @@ import { JwtContent } from './types';
 import { JwtService } from '@nestjs/jwt';
 import { OrgsRpcClientService } from '@valhalla/serv.clients';
 import { RefreshTokensModel } from '@app/entities/refresh.tokens';
+import { ServOrgs } from '@valhalla/serv.clients';
 import dayjs from 'dayjs';
 import { isNil } from '@valhalla/utilities';
 import ms from 'ms';
@@ -86,7 +87,10 @@ export class AccessProvisionService {
    * @param {string} refreshToken - The refresh token that was sent to the client.
    * @returns An object with the access token and the access token expiry date.
    */
-  async renewAccessToken(refreshToken: string) {
+  async renewAccessToken(
+    refreshToken: string,
+    options?: Parameters<typeof this['createAccessToken']>[1],
+  ) {
     const token = await this.refreshTokens
       .findById(refreshToken)
       .orFail(() => new Error('Refresh token does not exists!'));
@@ -95,7 +99,7 @@ export class AccessProvisionService {
       .findById(token.account)
       .orFail(() => new Error('Account does not exists!'));
 
-    const accessToken = await this.createAccessToken(account);
+    const accessToken = await this.createAccessToken(account, options);
     this.logger.warn(
       `Refresh Token[${refreshToken}] generated an access token`,
     );
@@ -122,21 +126,35 @@ export class AccessProvisionService {
    * @param account - Pick<Account, 'id' | 'displayName'>
    * @returns A string
    */
-  async createAccessToken(account: JwtContent['account']) {
+  async createAccessToken(
+    account: JwtContent['account'],
+    options?: {
+      organization?: ServOrgs.Organization['id'];
+    },
+  ) {
     const expiresIn = this.bootConfig.accessTokenExpiry;
-    const activeOrg = await resolveRpcRequest(
-      this.orgService.svc.getAccountActiveOrg({
-        accountId: account.id,
-      }),
-    );
-
     const content: JwtContent = {
-      activeOrg: activeOrg?.organization?.id,
       account: {
         id: account.id,
         displayName: account.displayName,
       },
     };
+
+    if (options?.organization) {
+      const organization = await resolveRpcRequest(
+        this.orgService.svc.getMember({
+          userId: account.id,
+          orgId: options.organization,
+        }),
+      );
+
+      if (organization.member) {
+        content.organization = {
+          id: organization.member.organization,
+          role: organization.member.role,
+        };
+      }
+    }
 
     const milliseconds = ms(expiresIn);
     const expiresAt = dayjs().add(milliseconds, 'milliseconds').toDate();

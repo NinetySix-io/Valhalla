@@ -32,7 +32,9 @@ export class ProvisionAccessTokenHandler
     command: ProvisionAccessTokenCommand,
   ): Promise<ProvisionAccessTokenResponse> {
     const refreshToken = command.input.refreshToken;
-    const accessToken = await this.provision.renewAccessToken(refreshToken);
+    const accessToken = await this.provision.renewAccessToken(refreshToken, {
+      organization: command.input.organization,
+    });
 
     this.eventBus.publish(
       new AccessTokenRenewedEvent(refreshToken, accessToken.value),
