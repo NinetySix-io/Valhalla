@@ -287,6 +287,77 @@ importers:
       ts-proto: 1.115.4
       typescript: 4.6.4
 
+  apps/serv.sites:
+    specifiers:
+      '@nestcloud2/boot': ^0.8.3
+      '@nestcloud2/core': ^0.8.3
+      '@nestjs/cli': ^8.2.5
+      '@nestjs/common': ^8.4.5
+      '@nestjs/core': ^8.4.5
+      '@nestjs/cqrs': ^8.0.4
+      '@nestjs/graphql': ^10.0.11
+      '@nestjs/microservices': ^8.4.4
+      '@nestjs/platform-fastify': ^8.4.4
+      '@nestjs/schematics': ^8.0.11
+      '@nestjs/terminus': ^8.0.6
+      '@nestjs/testing': ^8.4.4
+      '@typegoose/typegoose': ^9.8.1
+      '@valhalla/serv.clients': workspace:*
+      '@valhalla/serv.core': workspace:*
+      '@valhalla/utilities': workspace:*
+      casbin: ^5.15.1
+      class-transformer: ^0.5.1
+      class-validator: ^0.13.2
+      dayjs: ^1.11.2
+      dotenv: ^16.0.1
+      graphql: ^16.5.0
+      long: ^5.2.0
+      mongodb: ^4.6.0
+      mongoose: ^6.3.3
+      nestjs-casbin: ^2.0.8
+      nestjs-typegoose: ^7.1.38
+      protobufjs: ^6.11.2
+      reflect-metadata: ^0.1.13
+      rimraf: ^3.0.2
+      rxjs: ^7.5.5
+      ts-proto: ^1.112.1
+      typescript: ^4.6.4
+    dependencies:
+      '@nestcloud2/boot': 0.8.3
+      '@nestcloud2/core': 0.8.3
+      '@nestjs/common': 8.4.6_kgmvgmqc4iohdboj3f7yqhrie4
+      '@nestjs/core': 8.4.6_ohkmdv3xyvkszfvb2ghqzzao7e
+      '@nestjs/cqrs': 8.0.4_ylfx5swiot7inr3kdyigrsa54e
+      '@nestjs/graphql': 10.0.15_7vx4dzesc35xphnxlqqjuxv64y
+      '@nestjs/microservices': 8.4.6_ylfx5swiot7inr3kdyigrsa54e
+      '@nestjs/platform-fastify': 8.4.6_etfae4mmenqzp3rs3pua7csngy
+      '@nestjs/terminus': 8.0.6_ylfx5swiot7inr3kdyigrsa54e
+      '@typegoose/typegoose': 9.9.0_mongoose@6.3.6
+      '@valhalla/serv.clients': link:../../packages/serv.clients
+      '@valhalla/serv.core': link:../../packages/serv.core
+      '@valhalla/utilities': link:../../packages/utilities
+      casbin: 5.15.1
+      class-transformer: 0.5.1
+      class-validator: 0.13.2
+      dayjs: 1.11.3
+      dotenv: 16.0.1
+      graphql: 16.5.0
+      long: 5.2.0
+      mongodb: 4.7.0
+      mongoose: 6.3.6
+      nestjs-casbin: 2.0.8_@nestjs+common@8.4.6
+      nestjs-typegoose: 7.1.38_uqozpzescqhfdyoemdrytzmezi
+      protobufjs: 6.11.3
+      reflect-metadata: 0.1.13
+      rxjs: 7.5.5
+    devDependencies:
+      '@nestjs/cli': 8.2.6
+      '@nestjs/schematics': 8.0.11_typescript@4.6.4
+      '@nestjs/testing': 8.4.6_ho6gtkhdw5qetc3qlmwjnxsixy
+      rimraf: 3.0.2
+      ts-proto: 1.115.4
+      typescript: 4.6.4
+
   apps/web.thor:
     specifiers:
       '@apollo/client': ^3.6.6
@@ -4705,7 +4776,6 @@ packages:
       uuid: 8.3.2
     transitivePeerDependencies:
       - debug
-    dev: false
 
   /@nestjs/core/8.4.6_ohkmdv3xyvkszfvb2ghqzzao7e:
     resolution: {integrity: sha512-5zHpxTYV7HT3lfF7l/x0EWBfmuyuDOnGRcALf88tzDGs/7Q/VC6l65d6eFwDwI37NLtScqnmEkT9of8E3fT3mA==}
@@ -5091,7 +5161,7 @@ packages:
       reflect-metadata: 0.1.x
       rxjs: 7.x
     dependencies:
-      '@nestjs/common': 8.4.6_47vcjb2de6lyibr6g4enoa5lyu
+      '@nestjs/common': 8.4.6_kgmvgmqc4iohdboj3f7yqhrie4
       '@nestjs/core': 8.4.6_ohkmdv3xyvkszfvb2ghqzzao7e
       check-disk-space: 3.3.0
       reflect-metadata: 0.1.13
@@ -5111,7 +5181,7 @@ packages:
       '@nestjs/platform-express':
         optional: true
     dependencies:
-      '@nestjs/common': 8.4.6_47vcjb2de6lyibr6g4enoa5lyu
+      '@nestjs/common': 8.4.6_kgmvgmqc4iohdboj3f7yqhrie4
       '@nestjs/core': 8.4.6_ohkmdv3xyvkszfvb2ghqzzao7e
       '@nestjs/microservices': 8.4.6_ylfx5swiot7inr3kdyigrsa54e
       tslib: 2.4.0
@@ -9672,7 +9742,6 @@ packages:
 
   /class-transformer/0.5.1:
     resolution: {integrity: sha512-SQa1Ws6hUbfC98vKGxZH3KFY0Y1lm5Zm0SY8XX9zbK7FJCyVEac3ATW0RIpwzW+oOfmHE5PMPufDG9hCfoEOMw==}
-    dev: false
 
   /class-utils/0.3.6:
     resolution: {integrity: sha512-qOhPa/Fj7s6TY8H8esGu5QNpMMQxz79h+urzrNYN6mn+9BnxlDGf5QZ+XeCDsxSjPqsSR56XOZOJmpeurnLMeg==}
@@ -9689,7 +9758,6 @@ packages:
     dependencies:
       libphonenumber-js: 1.10.6
       validator: 13.7.0
-    dev: false
 
   /clean-css/4.2.4:
     resolution: {integrity: sha512-EJUDT7nDVFDvaQgAo2G/PJvxmp1o/c6iXLbswsBbUFXi1Nr+AjA2cKmfbKDMjMvzEe75g3P6JkaDDAKk96A85A==}
@@ -14435,7 +14503,6 @@ packages:
 
   /libphonenumber-js/1.10.6:
     resolution: {integrity: sha512-CIjT100/SmntsUjsLVs2t3ufeN4KdNXUxhD07tH153pdbaCWuAjv0jK/gPuywR3IImB/U/MQM+x9RfhMs5XZiA==}
-    dev: false
 
   /light-my-request/4.10.1:
     resolution: {integrity: sha512-l+zWk0HXGhGzY7IYTZnYEqIpj3Mpcyk2f8+FkKUyREywvaiWCf2jyQVxpasKRsploY/nVpoqTlxx72CIeQNcIQ==}
@@ -18295,7 +18362,7 @@ packages:
     dev: true
 
   /sparse-bitfield/3.0.3:
-    resolution: {integrity: sha1-/0rm5oZWBWuks+eSqzM004JzyhE=}
+    resolution: {integrity: sha512-kvzhi7vqKTfkh0PZU+2D2PIllw2ymqJKujUcyPMd9Y75Nv4nPbGJZXNhxsgdQab2BmlDct1YnfQCguEvHr7VsQ==}
     dependencies:
       memory-pager: 1.5.0
     dev: false
@@ -19827,7 +19894,6 @@ packages:
   /validator/13.7.0:
     resolution: {integrity: sha512-nYXQLCBkpJ8X6ltALua9dRrZDHVYxjJ1wgskNt1lH9fzGjs3tgojGSCBjmEPwkWS1y29+DrizMTW19Pr9uB2nw==}
     engines: {node: '>= 0.10'}
-    dev: false
 
   /value-or-promise/1.0.11:
     resolution: {integrity: sha512-41BrgH+dIbCFXClcSapVs5M6GkENd3gQOJpEfPDNa71LsUGMXDL0jMWpI/Rh7WhX+Aalfz2TTS3Zt5pUsbnhLg==}
@@ -19930,7 +19996,7 @@ packages:
     dev: true
 
   /wcwidth/1.0.1:
-    resolution: {integrity: sha1-8LDc+RW8X/FSivrbLA4XtTLaL+g=}
+    resolution: {integrity: sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg==}
     dependencies:
       defaults: 1.0.3
     dev: true

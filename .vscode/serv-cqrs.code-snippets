@@ -80,5 +80,27 @@
       "\tconstructor(public readonly data: $1) {}",
       "}"
     ]
+  },
+  "Controller Impl": {
+    "prefix": "cController",
+    "description": "Grpc Controller",
+    "body": [
+      "import { $1 } from '@app/protobuf';",
+      "import { CommandBus, QueryBus } from '@nestjs/cqrs';",
+      "import { GrpcClass } from '@valhalla/serv.core';",
+      "import { Controller } from '@nestjs/common';",
+      "import { GrpcLogger } from './grpc.logger';",
+      "import { Observable } from 'rxjs';",
+      "",
+      "@Controller()",
+      "@GrpcClass($1)",
+      "export class gRpcController implements SitesServiceController {",
+      "\tconstructor(",
+      "\t\tprivate readonly commandBus: CommandBus,",
+      "\t\tprivate readonly queryBus: QueryBus,",
+      "\t) {}",
+      "",
+      "}"
+    ]
   }
 }
