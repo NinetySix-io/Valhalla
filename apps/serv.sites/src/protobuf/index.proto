@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package serv.sites;
+
+service SitesService {
+
+}
