@@ -36,8 +36,6 @@ export function useAccessTokenSync() {
         .duration(moment(accessTokenExpires).diff(new Date()))
         .subtract(2, 'minutes');
 
-      console.debug('Next access token in', timeoutDur.humanize());
-
       const timeoutId = setTimeout(async () => {
         const [nextToken] = await tryNice(() =>
           getAccessToken({
