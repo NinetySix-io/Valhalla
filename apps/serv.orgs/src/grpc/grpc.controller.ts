@@ -17,7 +17,6 @@ import {
   UpdateOrgPlanRequest,
 } from '@app/protobuf';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { GrpcClass, LogClassMethods } from '@valhalla/serv.core';
 
 import { ArchiveOrgCommand } from '@app/cqrs/commands/archive.org.command';
 import { Controller } from '@nestjs/common';
@@ -25,20 +24,15 @@ import { CreateOrgCommand } from '@app/cqrs/commands/create.org.command';
 import { GetMemberQuery } from '@app/cqrs/queries/get.member.query';
 import { GetOrgQuery } from '@app/cqrs/queries/get.org.query';
 import { GetUserMembershipsQuery } from '@app/cqrs/queries/get.user.memberships.query';
-import { GrpcLogger } from './grpc.logger';
+import { GrpcClass } from '@valhalla/serv.core';
 import { MarkDeleteOrgMemberCommand } from '@app/cqrs/commands/mark.delete.member.command';
 import { Observable } from 'rxjs';
 import { RestoreOrgCommand } from '@app/cqrs/commands/restore.org.command';
 import { UpdateOrgLogoCommand } from '@app/cqrs/commands/update.org.logo.command';
 import { UpdateOrgPlanCommand } from '@app/cqrs/commands/update.org.plan.command';
-import { isDev } from '@valhalla/utilities';
 
 @Controller()
 @GrpcClass(ORGS_SERVICE_NAME)
-@LogClassMethods({
-  when: isDev(),
-  onTrigger: (fnName) => GrpcLogger.debug(`gRPC: ${fnName}`),
-})
 export class gRpcController implements OrgsServiceController {
   constructor(
     private readonly commandBus: CommandBus,

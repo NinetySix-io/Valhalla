@@ -9,22 +9,16 @@ import {
   SITES_SERVICE_NAME,
   SitesServiceController,
 } from '@app/protobuf';
-import { GrpcClass, LogClassMethods } from '@valhalla/serv.core';
 
 import { Controller } from '@nestjs/common';
 import { CreateSiteCommand } from '@app/cqrs/commands/create.site.command';
 import { GetSiteListQuery } from '@app/cqrs/queries/get.site.list.query';
 import { GetSiteQuery } from '@app/cqrs/queries/get.site.query';
-import { GrpcLogger } from './grpc.logger';
+import { GrpcClass } from '@valhalla/serv.core';
 import { Observable } from 'rxjs';
-import { isDev } from '@valhalla/utilities';
 
 @Controller()
 @GrpcClass(SITES_SERVICE_NAME)
-@LogClassMethods({
-  when: isDev(),
-  onTrigger: (fnName) => GrpcLogger.debug(`gRPC: ${fnName}`),
-})
 export class gRpcController implements SitesServiceController {
   constructor(
     private readonly commandBus: CommandBus,

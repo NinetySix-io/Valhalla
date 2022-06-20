@@ -35,15 +35,15 @@ import {
   VerifyPhoneResponse,
 } from '@app/protobuf';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { Controller, Logger } from '@nestjs/common';
-import { GrpcClass, LogClassMethods } from '@valhalla/serv.core';
 
 import { AddEmailToAccountCommand } from '@app/cqrs/commands/add.email.to.account.command';
 import { AddPhoneToAccountCommand } from '@app/cqrs/commands/add.phone.to.account.command';
+import { Controller } from '@nestjs/common';
 import { CreateAccessCommand } from '@app/cqrs/commands/create.access.command';
 import { DecodeAccessTokenQuery } from '@app/cqrs/queries/decode.access.token.query';
 import { DeleteRefreshTokenCommand } from '@app/cqrs/commands/delete.refresh.token.command';
 import { FindAccountQuery } from '@app/cqrs/queries/find.account.query';
+import { GrpcClass } from '@valhalla/serv.core';
 import { LoginWithEmailCommand } from '@app/cqrs/commands/login.with.email.command';
 import { LoginWithPhoneCommand } from '@app/cqrs/commands/login.with.phone.command';
 import { LogoutCommand } from '@app/cqrs/commands/logout.command';
@@ -58,14 +58,9 @@ import { UpdateAccountCommand } from '@app/cqrs/commands/update.account.command'
 import { ValidateVerificationQuery } from '@app/cqrs/queries/validate.verification.query';
 import { VerifyEmailCommand } from '@app/cqrs/commands/verify.email.command';
 import { VerifyPhoneCommand } from '@app/cqrs/commands/verify.phone.command';
-import { isDev } from '@valhalla/utilities';
 
 @Controller()
 @GrpcClass(IDENTITY_SERVICE_NAME)
-@LogClassMethods({
-  when: isDev(),
-  onTrigger: (fnName) => Logger.debug(`gRPC: ${fnName}`),
-})
 export class gRpcController implements IdentityServiceController {
   constructor(
     private readonly commandBus: CommandBus,
