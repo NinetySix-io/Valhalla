@@ -1,7 +1,7 @@
 import {
   EventStoreModuleOptions,
   EventStoreOptionsFactory,
-} from '../../modules/event.store.module/contract';
+} from '../../modules/event.store/contract';
 import { InjectConfig } from '@nestcloud2/config';
 import { EtcdConfig } from '@nestcloud2/config/config.etcd';
 import { Injectable } from '@nestjs/common';

@@ -11,3 +11,4 @@ export { default as pick } from 'lodash.pick';
 export { default as omit } from 'lodash.omit';
 export * as SStruct from 'superstruct';
 export * from './validators';
+export * from './make.tag';

@@ -6,6 +6,7 @@ import {
 } from '../protobuf/serv.sites';
 
 import { Injectable } from '@nestjs/common';
+import { MetadataProvider } from '../metadata.provider';
 import path from 'path';
 
 const protoPath = path.resolve(
@@ -16,7 +17,7 @@ const protoPath = path.resolve(
 );
 
 @Injectable()
-export class SitesRpcClientService {
+export class SitesRpcClientService extends MetadataProvider<SitesServiceClient> {
   @RpcClient({
     service: protobufPackage,
     package: protobufPackage,
@@ -29,5 +30,7 @@ export class SitesRpcClientService {
     package: protobufPackage,
     protoPath,
   })
+  public _svc!: SitesServiceClient;
+
   public svc!: SitesServiceClient;
 }

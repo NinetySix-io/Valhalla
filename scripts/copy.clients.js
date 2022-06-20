@@ -25,6 +25,7 @@ import {
 } from '../protobuf/${servApp}';
 
 import { Injectable } from '@nestjs/common';
+import { MetadataProvider } from '../metadata.provider';
 import path from 'path';
 
 const protoPath = path.resolve(
@@ -35,7 +36,7 @@ const protoPath = path.resolve(
 );
 
 @Injectable()
-export class ${startCase}RpcClientService {
+export class ${startCase}RpcClientService extends MetadataProvider<${startCase}ServiceClient> {
   @RpcClient({
     service: protobufPackage,
     package: protobufPackage,
@@ -48,6 +49,8 @@ export class ${startCase}RpcClientService {
     package: protobufPackage,
     protoPath,
   })
+  public _svc!: ${startCase}ServiceClient;
+
   public svc!: ${startCase}ServiceClient;
 }
 `;
@@ -130,6 +133,7 @@ function run() {
 
   entryIndex.push("export * from './clients';");
   entryIndex.push("export * from './protobuf';");
+  entryIndex.push("export * from './metadata.keys';");
   entryIndex.push("");
 
   fs.writeFileSync(

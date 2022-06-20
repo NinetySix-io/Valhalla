@@ -41,10 +41,13 @@ export class ServCoreSetup {
     /**
      * If {option.url} is not provided, its default to 5000
      */
-    this.app.connectMicroservice<GrpcOptions>({
-      transport: Transport.GRPC,
-      options,
-    });
+    this.app.connectMicroservice<GrpcOptions>(
+      {
+        transport: Transport.GRPC,
+        options,
+      },
+      { inheritAppConfig: true },
+    );
   }
 
   /**
