@@ -71,7 +71,7 @@ export abstract class SubgraphsProvider implements OnModuleInit {
     for (const service of serviceNames) {
       const nodes = this.consul.getServiceServers(service);
       const isGateway = this.boot.get('service.name') === service;
-      const hasGql = nodes[0].tags?.includes('graphql');
+      const hasGql = nodes[0]?.tags?.includes('graphql');
       const serviceName = nodes[0]?.service;
       const isInCurrent = currentSubgraphMap[serviceName];
 

@@ -4,6 +4,7 @@ import {
   ValidateVerificationResponse,
 } from '@app/protobuf';
 
+import { RpcHandler } from '@valhalla/serv.core';
 import { VerificationsModel } from '@app/entities/verifications';
 
 export class ValidateVerificationQuery implements IQuery {
@@ -11,6 +12,7 @@ export class ValidateVerificationQuery implements IQuery {
 }
 
 @QueryHandler(ValidateVerificationQuery)
+@RpcHandler()
 export class ValidateVerificationHandler
   implements
     IQueryHandler<ValidateVerificationQuery, ValidateVerificationResponse>

@@ -1,18 +1,19 @@
 import { GetSiteListRequest, GetSiteListResponse } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { FilterQuery } from 'mongoose';
 import { SiteSchema } from '@app/entities/sites/schema';
 import { SiteTransformer } from '@app/entities/sites/transformer';
 import { SitesModel } from '@app/entities/sites';
 import { isEmpty } from '@valhalla/utilities';
-import { toObjectId } from '@valhalla/serv.core';
 
 export class GetSiteListQuery implements IQuery {
   constructor(public readonly request: GetSiteListRequest) {}
 }
 
 @QueryHandler(GetSiteListQuery)
+@RpcHandler()
 export class GetSiteListHandler
   implements IQueryHandler<GetSiteListQuery, GetSiteListResponse>
 {

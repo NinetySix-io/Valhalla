@@ -51,5 +51,6 @@
   ],
   "editor.quickSuggestions": {
     "strings": true // forces VS Code to trigger completions when editing "string" content
-  }
+  },
+  "js/ts.implicitProjectConfig.experimentalDecorators": true
 }

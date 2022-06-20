@@ -1,6 +1,7 @@
 import { GetSiteRequest, GetSiteResponse } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
+import { RpcHandler } from '@valhalla/serv.core';
 import { SiteTransformer } from '@app/entities/sites/transformer';
 import { SitesModel } from '@app/entities/sites';
 
@@ -9,6 +10,7 @@ export class GetSiteQuery implements IQuery {
 }
 
 @QueryHandler(GetSiteQuery)
+@RpcHandler()
 export class GetSiteHandler
   implements IQueryHandler<GetSiteQuery, GetSiteResponse>
 {

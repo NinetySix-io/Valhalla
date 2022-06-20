@@ -7,6 +7,7 @@ import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { OrgMembersModel } from '@app/entities/org.members';
 import { OrganizationTransformer } from '@app/entities/organizations/transformer';
 import { OrganizationsModel } from '@app/entities/organizations';
+import { RpcHandler } from '@valhalla/serv.core';
 import { isEmpty } from '@valhalla/utilities';
 
 export class GetUserMembershipsQuery implements IQuery {
@@ -14,6 +15,7 @@ export class GetUserMembershipsQuery implements IQuery {
 }
 
 @QueryHandler(GetUserMembershipsQuery)
+@RpcHandler()
 export class GetUserMembershipsHandler
   implements IQueryHandler<GetUserMembershipsQuery, GetUserMembershipsResponse>
 {
