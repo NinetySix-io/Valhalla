@@ -27,11 +27,6 @@ export abstract class MetadataProvider<T> implements OnApplicationBootstrap {
   private get metadata(): Metadata {
     const metadata = new Metadata();
 
-    /**
-     * Known bugs:
-     *  - RPC AsyncContext won't be available if the
-     *    request was made from passport strategy
-     */
     if (!this.ac.als.getStore()) {
       return metadata;
     }

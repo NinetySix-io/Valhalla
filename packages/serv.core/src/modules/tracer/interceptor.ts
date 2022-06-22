@@ -9,10 +9,13 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { GqlExecutionContext } from '@nestjs/graphql';
 import { PATTERN_METADATA } from '@nestjs/microservices/constants';
 import { metadataKeysMap } from '@valhalla/serv.clients';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import * as rx from 'rxjs';
 import { toObjectId } from '../../lib';
+import { ContextMiddleware } from '../http.context/context.middleware';
 import { Telemetry } from './telemetry';
 
 @Injectable()
@@ -98,6 +101,28 @@ export class TracerInterceptor implements NestInterceptor {
         traceId = String(forwardTraceId);
         isParent = false;
       }
+    } else if (type === 'http') {
+      const key = ContextMiddleware.traceIdKey;
+      const ctx = context.switchToHttp();
+      const request: FastifyRequest = ctx.getRequest();
+      const reply: FastifyReply = ctx.getResponse();
+
+      if (typeof request.headers[key] === 'string') {
+        traceId = request.headers[key] as string;
+      }
+
+      reply.header(key, traceId);
+    } else if (type === 'graphql') {
+      const key = ContextMiddleware.traceIdKey;
+      const ctx = GqlExecutionContext.create(context);
+      const request: FastifyRequest = ctx.getContext().req;
+      const reply: FastifyReply = ctx.getContext().reply;
+
+      if (typeof request.headers[key] === 'string') {
+        traceId = request.headers[key] as string;
+      }
+
+      reply.header(key, traceId);
     }
 
     return [traceId, isParent];
