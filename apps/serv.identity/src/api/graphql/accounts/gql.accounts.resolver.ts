@@ -24,7 +24,7 @@ export class GqlAccountResolver {
   @Query(() => SessionResponse, {
     description: 'Get current session user',
   })
-  async session(@CurrentAccount() account: AuthAccount): Promise<AuthAccount> {
+  session(@CurrentAccount() account: AuthAccount): AuthAccount {
     return account;
   }
 

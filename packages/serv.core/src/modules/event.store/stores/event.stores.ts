@@ -163,9 +163,7 @@ export class EventStore
     );
   }
 
-  async subscribeToCatchUpSubscriptions(
-    subscriptions: ESCatchUpSubscription[],
-  ) {
+  subscribeToCatchUpSubscriptions(subscriptions: ESCatchUpSubscription[]) {
     this.catchupSubscriptionsCount = subscriptions.length;
     this.catchupSubscriptions = subscriptions.map(async (subscription) => {
       let lcp = subscription.lastCheckpoint;
@@ -343,7 +341,7 @@ export class EventStore
     error?: Error,
   ) {
     subscription.isLive = false;
-    this.logger.error('onDropped => ' + error);
+    this.logger.error('onDropped => ', error);
   }
 
   onLiveProcessingStarted(subscription: ExtendedCatchUpSubscription) {
@@ -363,8 +361,8 @@ export class EventStore
     this.eventHandlers = { ...this.eventHandlers, ...eventHandlers };
   }
   onModuleInit(): any {
-    this.subject$ = (this.eventsBus as any).subject$;
-    this.bridgeEventsTo((this.eventsBus as any).subject$);
+    this.subject$ = this.eventsBus.subject$;
+    this.bridgeEventsTo(this.eventsBus.subject$);
     this.eventsBus.publisher = this;
   }
 
@@ -372,7 +370,7 @@ export class EventStore
     this.eventStore.close();
   }
 
-  async bridgeEventsTo<T extends IEvent>(subject: Subject<T>): Promise<any> {
-    this.subject$ = subject as any;
+  bridgeEventsTo<T extends IEvent>(subject: Subject<T>) {
+    this.subject$ = subject as unknown as Subject<IEvent>;
   }
 }

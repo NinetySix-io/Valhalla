@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* tslint:disable:variable-name */
-
 import {
   Inject,
   Injectable,
@@ -50,7 +47,8 @@ export class NatsEventStore
   private volatileSubscriptionsCount!: number;
 
   constructor(
-    @Inject(ProvidersConstants.EVENT_STORE_PROVIDER) eventStore: any,
+    @Inject(ProvidersConstants.EVENT_STORE_PROVIDER)
+    eventStore: NatsEventStoreBroker,
     @Inject(ProvidersConstants.EVENT_STORE_CONNECTION_CONFIG_PROVIDER)
     private readonly configService: EventStoreModuleOptions,
     @Inject(ProvidersConstants.EVENT_STORE_STREAM_CONFIG_PROVIDER)
@@ -288,10 +286,8 @@ export class NatsEventStore
     return resolved;
   }
 
-  async onEvent(payload: Message) {
-    const data: any & { handlerType?: string } = JSON.parse(
-      payload.getRawData().toString(),
-    );
+  onEvent(payload: Message) {
+    const data = JSON.parse(payload.getRawData().toString());
     const handlerType = data.handlerType;
     delete data.handlerType;
     const handler = this.eventHandlers[handlerType];
@@ -326,17 +322,17 @@ export class NatsEventStore
   addEventHandlers(eventHandlers: IEventConstructors) {
     this.eventHandlers = { ...this.eventHandlers, ...eventHandlers };
   }
-  onModuleInit(): any {
-    this.subject$ = (this.eventsBus as any).subject$;
-    this.bridgeEventsTo((this.eventsBus as any).subject$);
+  onModuleInit() {
+    this.subject$ = this.eventsBus.subject$;
+    this.bridgeEventsTo(this.eventsBus.subject$);
     this.eventsBus.publisher = this;
   }
 
-  onModuleDestroy(): any {
+  onModuleDestroy() {
     this.eventStore.close();
   }
 
-  async bridgeEventsTo<T extends IEvent>(subject: Subject<T>): Promise<any> {
-    this.subject$ = subject as any;
+  bridgeEventsTo<T extends IEvent>(subject: Subject<T>) {
+    this.subject$ = subject as unknown as Subject<IEvent>;
   }
 }

@@ -10,5 +10,5 @@ export function makeTag(key: string, value?: unknown) {
     return `[${key}]`;
   }
 
-  return `[${key}:${value}]`;
+  return `[${key}:${String(value)}]`;
 }

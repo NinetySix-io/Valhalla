@@ -70,7 +70,7 @@ export class EventStoreCoreModule {
 
     const configProv: Provider = {
       provide: ProvidersConstants.EVENT_STORE_CONNECTION_CONFIG_PROVIDER,
-      useFactory: async (esOptions: EventStoreModuleOptions) => {
+      useFactory: (esOptions: EventStoreModuleOptions) => {
         return {
           ...esOptions,
         };
@@ -117,7 +117,7 @@ export class EventStoreCoreModule {
   ): DynamicModule {
     const configProv: Provider = {
       provide: ProvidersConstants.EVENT_STORE_STREAM_CONFIG_PROVIDER,
-      useFactory: async (config: EventStoreOptionConfig) => {
+      useFactory: (config: EventStoreOptionConfig) => {
         return {
           ...config,
         };

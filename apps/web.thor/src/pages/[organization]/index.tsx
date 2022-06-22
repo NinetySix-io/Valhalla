@@ -5,7 +5,7 @@ const OrganizationPage: Page = () => {
   return <div>test</div>;
 };
 
-export const getServerSideProps = withAuthSsrContext(async (ctx) => {
+export const getServerSideProps = withAuthSsrContext((ctx) => {
   return {
     props: {
       SEO: {
