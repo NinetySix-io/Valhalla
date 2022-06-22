@@ -23,6 +23,10 @@ export class TracerInterceptor implements NestInterceptor {
   ) {}
 
   intercept(context: ExecutionContext, next: CallHandler): rx.Observable<void> {
+    if (context.getType() === 'ws') {
+      return next.handle();
+    }
+
     const [traceId, isParent] = this.getTraceId(context);
     const telemetry = new Telemetry({
       context,
