@@ -18,8 +18,10 @@ export class GetSiteHandler
 
   async execute(command: GetSiteQuery): Promise<GetSiteResponse> {
     const site = await this.sites.findById(command.request.siteId);
+    const serialized = site ? new SiteTransformer(site).proto : undefined;
+
     return {
-      site: site ? new SiteTransformer(site).proto : undefined,
+      site: serialized,
     };
   }
 }

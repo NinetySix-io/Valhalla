@@ -30,12 +30,17 @@ export class CreateSiteHandler
   ) {}
 
   async execute(command: CreateSiteCommand): Promise<CreateSiteResponse> {
+    const { requestedUserId, owner, name } = command.request;
+    const ownBy = toObjectId(owner);
+    const createdBy = toObjectId(requestedUserId);
+    const updatedBy = createdBy;
+    const status = SiteStatus.PENDING;
     const site = await this.sites.create({
-      name: command.request.name,
-      ownBy: toObjectId(command.request.owner),
-      createdBy: toObjectId(command.request.requestedUser),
-      updatedBy: toObjectId(command.request.requestedUser),
-      status: SiteStatus.PENDING,
+      name,
+      ownBy,
+      createdBy,
+      updatedBy,
+      status,
     });
 
     this.eventBus.publish(

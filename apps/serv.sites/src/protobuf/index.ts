@@ -89,8 +89,10 @@ export interface UpdatePageRequest {
   organizationId: string;
   siteId: string;
   pageId: string;
+  requestedUserId: string;
   title?: string | undefined;
   description?: string | undefined;
+  isLoneTitle?: boolean | undefined;
 }
 
 export interface UpdatePageResponse {
@@ -121,7 +123,7 @@ export interface ArchivePageResponse {
 export interface CreateSiteRequest {
   name: string;
   owner: string;
-  requestedUser: string;
+  requestedUserId: string;
   logoUrl?: string | undefined;
   faviconUrl?: string | undefined;
 }
@@ -132,7 +134,7 @@ export interface CreateSiteResponse {
 }
 
 export interface UpdateSiteRequest {
-  requestedUser: string;
+  requestedUserId: string;
   organizationId: string;
   siteId: string;
   name?: string | undefined;
@@ -158,6 +160,16 @@ export interface GetSiteListResponse {
   sites: Site[];
 }
 
+export interface SuspendSiteRequest {
+  requestedUserId: string;
+  organizationId: string;
+  siteId: string;
+}
+
+export interface SuspendSiteResponse {
+  site?: Site;
+}
+
 export const SERV_SITES_PACKAGE_NAME = "serv.sites";
 
 export interface SitesServiceClient {
@@ -170,6 +182,8 @@ export interface SitesServiceClient {
   getSiteList(request: GetSiteListRequest): Observable<GetSiteListResponse>;
 
   createPage(request: CreatePageRequest): Observable<CreatePageResponse>;
+
+  suspendSite(request: SuspendSiteRequest): Observable<SuspendSiteResponse>;
 
   getPageList(request: GetPageListRequest): Observable<GetPageListResponse>;
 
@@ -215,6 +229,13 @@ export interface SitesServiceController {
     | Observable<CreatePageResponse>
     | CreatePageResponse;
 
+  suspendSite(
+    request: SuspendSiteRequest
+  ):
+    | Promise<SuspendSiteResponse>
+    | Observable<SuspendSiteResponse>
+    | SuspendSiteResponse;
+
   getPageList(
     request: GetPageListRequest
   ):
@@ -256,6 +277,7 @@ export function SitesServiceControllerMethods() {
       "updateSite",
       "getSiteList",
       "createPage",
+      "suspendSite",
       "getPageList",
       "getPage",
       "updatePage",

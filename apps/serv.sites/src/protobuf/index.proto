@@ -8,6 +8,7 @@ service SitesService {
   rpc UpdateSite(UpdateSiteRequest) returns (UpdateSiteResponse) {}
   rpc GetSiteList(GetSiteListRequest) returns (GetSiteListResponse) {}
   rpc CreatePage(CreatePageRequest) returns (CreatePageResponse) {}
+  rpc SuspendSite(SuspendSiteRequest) returns (SuspendSiteResponse) {}
   rpc GetPageList(GetPageListRequest) returns (GetPageListResponse) {}
   rpc GetPage(GetPageRequest) returns (GetPageResponse) {}
   rpc UpdatePage(UpdatePageRequest) returns (UpdatePageResponse) {}
@@ -94,8 +95,10 @@ message UpdatePageRequest {
   string organizationId = 1;
   string siteId = 2;
   string pageId = 3;
-  optional string title = 4;
-  optional string description = 5;
+  string requestedUserId = 4;
+  optional string title = 5;
+  optional string description = 6;
+  optional bool isLoneTitle = 7;
 }
 
 message UpdatePageResponse {
@@ -130,7 +133,7 @@ message ArchivePageResponse {
 message CreateSiteRequest {
   string name = 1;
   string owner = 2;
-  string requestedUser = 3;
+  string requestedUserId = 3;
   optional string logoUrl = 4;
   optional string faviconUrl = 5;
 }
@@ -141,7 +144,7 @@ message CreateSiteResponse {
 }
 
 message UpdateSiteRequest {
-  string requestedUser = 1;
+  string requestedUserId = 1;
   string organizationId = 2;
   string siteId = 3;
   optional string name = 4;
@@ -167,4 +170,14 @@ message GetSiteListRequest {
 
 message GetSiteListResponse {
   repeated Site sites = 1;
+}
+
+message SuspendSiteRequest {
+  string requestedUserId = 1;
+  string organizationId = 2;
+  string siteId = 3;
+}
+
+message SuspendSiteResponse {
+  Site site = 1;
 }
