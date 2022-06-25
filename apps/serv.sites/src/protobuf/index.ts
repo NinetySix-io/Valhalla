@@ -7,7 +7,6 @@ import { Observable } from "rxjs";
 export const protobufPackage = "serv.sites";
 
 export enum SiteStatus {
-  INACTIVE = "INACTIVE",
   DEPLOYED = "DEPLOYED",
   PENDING = "PENDING",
   SUSPENDED = "SUSPENDED",
@@ -16,6 +15,8 @@ export enum SiteStatus {
 export enum PageStatus {
   ACTIVE = "ACTIVE",
   DRAFT = "DRAFT",
+  ARCHIVED = "ARCHIVED",
+  SCHEDULED = "SCHEDULED",
 }
 
 /**
