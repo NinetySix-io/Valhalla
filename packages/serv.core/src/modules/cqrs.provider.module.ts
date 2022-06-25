@@ -17,9 +17,10 @@ export class CqrsProviderModule {
     type: 'commands' | 'queries',
     getHandler: (module: Record<string, unknown>, fileName: string) => unknown,
   ) {
+    const readDir = promisify(fs.readdir);
+    const targetDir = path.resolve(cqrsDir, type);
+
     try {
-      const readDir = promisify(fs.readdir);
-      const targetDir = path.resolve(cqrsDir, type);
       const files = await readDir(targetDir);
       const withoutMapFiles = files.filter((v) => !v.endsWith('.map'));
       const providers: Provider[] = [];
@@ -46,7 +47,9 @@ export class CqrsProviderModule {
 
       return providers;
     } catch {
-      this.logger.error(`Cqrs ${type} directory does not exists`);
+      this.logger.error(
+        `Cqrs ${type} directory does not exists at ${targetDir}`,
+      );
       return [];
     }
   }

@@ -5,14 +5,45 @@ package serv.sites;
 service SitesService {
   rpc CreateSite(CreateSiteRequest) returns (CreateSiteResponse){}
   rpc GetSite(GetSiteRequest) returns (GetSiteResponse) {}
-  rpc getSiteList(GetSiteListRequest) returns (GetSiteListResponse) {}
+  rpc UpdateSite(UpdateSiteRequest) returns (UpdateSiteResponse) {}
+  rpc GetSiteList(GetSiteListRequest) returns (GetSiteListResponse) {}
+  rpc CreatePage(CreatePageRequest) returns (CreatePageResponse) {}
+  rpc SuspendSite(SuspendSiteRequest) returns (SuspendSiteResponse) {}
+  rpc GetPageList(GetPageListRequest) returns (GetPageListResponse) {}
+  rpc GetPage(GetPageRequest) returns (GetPageResponse) {}
+  rpc UpdatePage(UpdatePageRequest) returns (UpdatePageResponse) {}
+  rpc DeletePage(DeletePageRequest) returns (DeletePageResponse) {}
+  rpc ArchivePage(ArchivePageRequest) returns (ArchivePageResponse) {}
 }
 
 enum SiteStatus {
-  INACTIVE = 0;
-  DEPLOYED = 1;
-  PENDING = 2;
-  SUSPENDED = 3;
+  DEPLOYED = 0;
+  PENDING = 1;
+  SUSPENDED = 2;
+}
+
+enum PageStatus {
+  ACTIVE = 0;
+  DRAFT = 1;
+  ARCHIVED = 2;
+  SCHEDULED = 3;
+}
+
+// -----------------------------
+// Entity
+// -----------------------------
+message Page {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  string organization = 4;
+  string site = 5;
+  PageStatus status = 6;
+  bool isLoneTitle = 7;
+  string createdBy = 8;
+  string updatedBy = 9;
+  string createdAt = 10;
+  string updatedAt = 11;
 }
 
 message Site {
@@ -23,12 +54,86 @@ message Site {
   string ownBy = 5;
   SiteStatus status = 6;
   optional string url = 7;
+  string createdAt = 8;
+  string updatedAt = 9;
 }
+
+// -----------------------------
+// PAGE
+// -----------------------------
+message CreatePageRequest {
+  string requestedUserId = 1;
+  string organizationId = 2;
+  string siteId = 3;
+  string title = 4;
+}
+
+message CreatePageResponse {
+  Page page = 1;
+}
+
+message GetPageRequest {
+  string organizationId = 1;
+  string siteId = 2;
+  string pageId = 3;
+}
+
+message GetPageResponse {
+  optional Page page = 1;
+}
+
+message GetPageListRequest {
+  string organizationId = 1;
+  string siteId = 2;
+}
+
+message GetPageListResponse {
+  repeated Page pageList = 1;
+}
+
+message UpdatePageRequest {
+  string organizationId = 1;
+  string siteId = 2;
+  string pageId = 3;
+  string requestedUserId = 4;
+  optional string title = 5;
+  optional string description = 6;
+  optional bool isLoneTitle = 7;
+}
+
+message UpdatePageResponse {
+  Page page = 1;
+}
+
+message DeletePageRequest {
+  string organizationId = 1;
+  string siteId = 2;
+  string requestedUserId = 3;
+  string pageId = 4;
+}
+
+message DeletePageResponse {
+  Page page = 1;
+}
+
+message ArchivePageRequest {
+  string organizationId = 1;
+  string siteId = 2;
+  string requestedUserId = 3;
+}
+
+message ArchivePageResponse {
+  Page page = 1;
+}
+
+// -----------------------------
+// SITE
+// -----------------------------
 
 message CreateSiteRequest {
   string name = 1;
   string owner = 2;
-  string requestedUser = 3;
+  string requestedUserId = 3;
   optional string logoUrl = 4;
   optional string faviconUrl = 5;
 }
@@ -36,6 +141,17 @@ message CreateSiteRequest {
 message CreateSiteResponse {
   string siteId = 1;
   SiteStatus status = 2;
+}
+
+message UpdateSiteRequest {
+  string requestedUserId = 1;
+  string organizationId = 2;
+  string siteId = 3;
+  optional string name = 4;
+}
+
+message UpdateSiteResponse {
+  Site site = 1;
 }
 
 message GetSiteRequest {
@@ -54,4 +170,14 @@ message GetSiteListRequest {
 
 message GetSiteListResponse {
   repeated Site sites = 1;
+}
+
+message SuspendSiteRequest {
+  string requestedUserId = 1;
+  string organizationId = 2;
+  string siteId = 3;
+}
+
+message SuspendSiteResponse {
+  Site site = 1;
 }

@@ -25,18 +25,14 @@ export class HealthController {
    */
   private checkGrpc(): HealthIndicatorFunction {
     return () =>
-      this.grpc.checkService<GrpcOptions>(
-        ORGS_SERVICE_NAME,
-        protobufPackage,
-        {
-          package: protobufPackage,
-          healthServiceName: ORGS_SERVICE_NAME,
-          healthServiceCheck: () => Promise.resolve({ status: 1 }),
-          url: this.bootConfig.gRpcUrl,
-          timeout: 2000,
-          protoPath,
-        },
-      );
+      this.grpc.checkService<GrpcOptions>(ORGS_SERVICE_NAME, protobufPackage, {
+        package: protobufPackage,
+        healthServiceName: ORGS_SERVICE_NAME,
+        healthServiceCheck: () => Promise.resolve({ status: 1 }),
+        url: this.bootConfig.gRpcUrl,
+        timeout: 2000,
+        protoPath,
+      });
   }
 
   @Get()
