@@ -108,6 +108,16 @@ export interface DeletePageResponse {
   page?: Page;
 }
 
+export interface ArchivePageRequest {
+  organizationId: string;
+  siteId: string;
+  requestedUserId: string;
+}
+
+export interface ArchivePageResponse {
+  page?: Page;
+}
+
 export interface CreateSiteRequest {
   name: string;
   owner: string;
@@ -168,6 +178,8 @@ export interface SitesServiceClient {
   updatePage(request: UpdatePageRequest): Observable<UpdatePageResponse>;
 
   deletePage(request: DeletePageRequest): Observable<DeletePageResponse>;
+
+  archivePage(request: ArchivePageRequest): Observable<ArchivePageResponse>;
 }
 
 export interface SitesServiceController {
@@ -227,6 +239,13 @@ export interface SitesServiceController {
     | Promise<DeletePageResponse>
     | Observable<DeletePageResponse>
     | DeletePageResponse;
+
+  archivePage(
+    request: ArchivePageRequest
+  ):
+    | Promise<ArchivePageResponse>
+    | Observable<ArchivePageResponse>
+    | ArchivePageResponse;
 }
 
 export function SitesServiceControllerMethods() {
@@ -241,6 +260,7 @@ export function SitesServiceControllerMethods() {
       "getPage",
       "updatePage",
       "deletePage",
+      "archivePage",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(

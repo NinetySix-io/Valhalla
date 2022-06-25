@@ -12,6 +12,7 @@ service SitesService {
   rpc GetPage(GetPageRequest) returns (GetPageResponse) {}
   rpc UpdatePage(UpdatePageRequest) returns (UpdatePageResponse) {}
   rpc DeletePage(DeletePageRequest) returns (DeletePageResponse) {}
+  rpc ArchivePage(ArchivePageRequest) returns (ArchivePageResponse) {}
 }
 
 enum SiteStatus {
@@ -109,6 +110,16 @@ message DeletePageRequest {
 }
 
 message DeletePageResponse {
+  Page page = 1;
+}
+
+message ArchivePageRequest {
+  string organizationId = 1;
+  string siteId = 2;
+  string requestedUserId = 3;
+}
+
+message ArchivePageResponse {
   Page page = 1;
 }
 
