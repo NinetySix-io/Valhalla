@@ -1,10 +1,10 @@
 import { DocumentType, ReturnModelType } from '@typegoose/typegoose';
+import { OmitRecursively, isNil, omitBy } from '@valhalla/utilities';
 import mongoose, { FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
 
 import { AnyParamConstructor } from '@typegoose/typegoose/lib/types';
 import { BaseSchema } from './base.schema';
 import { InternalServerErrorException } from '@nestjs/common';
-import { OmitRecursively } from '@valhalla/utilities';
 import { toObjectId } from '../lib';
 import { tryNice } from 'try-nice';
 
@@ -126,7 +126,7 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
     updateQuery: UpdateQuery<DocumentType<TModel>>,
     options: QueryOptions<DocumentType<TModel>> & { upsert?: boolean } = {},
   ): ReturnType<BaseFactory<TModel>['_model']['updateOne']> {
-    return this._model.updateOne(
+    return this.updateOne(
       { _id: new mongoose.Schema.Types.ObjectId(id) },
       updateQuery,
       options,
@@ -143,9 +143,16 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
   updateOne(
     filter: FilterQuery<DocumentType<TModel>> = {},
     updateQuery: UpdateQuery<DocumentType<TModel>>,
-    options: QueryOptions<DocumentType<TModel>> & { upsert?: boolean } = {},
+    options: QueryOptions<DocumentType<TModel>> & {
+      upsert?: boolean;
+      withoutNil?: boolean;
+    } = {},
   ): ReturnType<BaseFactory<TModel>['_model']['updateOne']> {
-    return this._model.updateOne(filter, updateQuery, options);
+    return this._model.updateOne(
+      filter,
+      options?.withoutNil ? omitBy(updateQuery, isNil) : updateQuery,
+      options,
+    );
   }
 
   /**
@@ -158,9 +165,16 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
   updateMany(
     filter: FilterQuery<DocumentType<TModel>> = {},
     updateQuery: UpdateQuery<DocumentType<TModel>>,
-    options: QueryOptions<DocumentType<TModel>> & { upsert?: boolean } = {},
+    options: QueryOptions<DocumentType<TModel>> & {
+      upsert?: boolean;
+      withoutNil?: boolean;
+    } = {},
   ): ReturnType<BaseFactory<TModel>['_model']['updateMany']> {
-    return this._model.updateMany(filter, updateQuery, options);
+    return this._model.updateMany(
+      filter,
+      options?.withoutNil ? omitBy(updateQuery, isNil) : updateQuery,
+      options,
+    );
   }
 
   /**
@@ -176,9 +190,10 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
     options: QueryOptions<DocumentType<TModel>> & {
       upsert?: boolean;
       new?: boolean;
+      withoutNil?: boolean;
     } = {},
   ) {
-    return this._model.findByIdAndUpdate(
+    return this.findOneAndUpdate(
       { _id: new mongoose.Schema.Types.ObjectId(id) },
       updateQuery,
       options,
@@ -198,9 +213,14 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
     options: QueryOptions<DocumentType<TModel>> & {
       upsert?: boolean;
       new?: boolean;
+      withoutNil?: boolean;
     } = {},
   ) {
-    return this._model.findOneAndUpdate(filter, updateQuery, options);
+    return this._model.findOneAndUpdate(
+      filter,
+      options?.withoutNil ? omitBy(updateQuery, isNil) : updateQuery,
+      options,
+    );
   }
 
   /**
