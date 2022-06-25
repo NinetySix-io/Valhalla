@@ -2,10 +2,17 @@ syntax = "proto3";
 
 package serv.sites;
 
+import "google/protobuf/timestamp.proto";
+
 service SitesService {
   rpc CreateSite(CreateSiteRequest) returns (CreateSiteResponse){}
   rpc GetSite(GetSiteRequest) returns (GetSiteResponse) {}
   rpc getSiteList(GetSiteListRequest) returns (GetSiteListResponse) {}
+  rpc CreatePage(CreatePageRequest) returns (CreatePageResponse) {}
+  rpc GetPageList(GetPageListRequest) returns (GetPageListResponse) {}
+  rpc GetPage(GetPageRequest) returns (GetPageResponse) {}
+  rpc UpdatePage(UpdatePageRequest) returns (UpdatePageResponse) {}
+  rpc DeletePage(DeletePageRequest) returns (DeletePageResponse) {}
 }
 
 enum SiteStatus {
@@ -13,6 +20,25 @@ enum SiteStatus {
   DEPLOYED = 1;
   PENDING = 2;
   SUSPENDED = 3;
+}
+
+enum PageStatus {
+  ACTIVE = 0;
+  DRAFT = 1;
+}
+
+message Page {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  string organization = 4;
+  string site = 5;
+  PageStatus status = 6;
+  bool isLoneTitle = 7;
+  string createdBy = 8;
+  string updatedBy = 9;
+  google.protobuf.Timestamp createdAt = 10;
+  google.protobuf.Timestamp updatedAt = 11;
 }
 
 message Site {
@@ -23,6 +49,61 @@ message Site {
   string ownBy = 5;
   SiteStatus status = 6;
   optional string url = 7;
+  google.protobuf.Timestamp createdAt = 8;
+  google.protobuf.Timestamp updatedAt = 9;
+}
+
+message CreatePageRequest {
+  string requestedUserId = 1;
+  string organizationId = 2;
+  string siteId = 3;
+  string title = 4;
+}
+
+message CreatePageResponse {
+  Page page = 1;
+}
+
+message GetPageRequest {
+  string organizationId = 1;
+  string siteId = 2;
+  string pageId = 3;
+}
+
+message GetPageResponse {
+  optional Page page = 1;
+}
+
+message GetPageListRequest {
+  string organizationId = 1;
+  string siteId = 2;
+}
+
+message GetPageListResponse {
+  repeated Page pageList = 1;
+}
+
+message UpdatePageRequest {
+  string organizationId = 1;
+  string siteId = 2;
+  string pageId = 3;
+  optional string title = 4;
+  optional string description = 5;
+}
+
+message UpdatePageResponse {
+  Page page = 1;
+}
+
+message DeletePageRequest {
+  string organizationId = 1;
+  string siteId = 2;
+  string requestedUserId = 3;
+  string pageId = 4;
+}
+
+message DeletePageResponse {
+  Page page = 1;
 }
 
 message CreateSiteRequest {

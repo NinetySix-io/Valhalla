@@ -13,6 +13,25 @@ export enum SiteStatus {
   SUSPENDED = "SUSPENDED",
 }
 
+export enum PageStatus {
+  ACTIVE = "ACTIVE",
+  DRAFT = "DRAFT",
+}
+
+export interface Page {
+  id: string;
+  title: string;
+  description: string;
+  organization: string;
+  site: string;
+  status: PageStatus;
+  isLoneTitle: boolean;
+  createdBy: string;
+  updatedBy: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 export interface Site {
   id: string;
   name: string;
@@ -21,6 +40,61 @@ export interface Site {
   ownBy: string;
   status: SiteStatus;
   url?: string | undefined;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface CreatePageRequest {
+  requestedUserId: string;
+  organizationId: string;
+  siteId: string;
+  title: string;
+}
+
+export interface CreatePageResponse {
+  page?: Page;
+}
+
+export interface GetPageRequest {
+  organizationId: string;
+  siteId: string;
+  pageId: string;
+}
+
+export interface GetPageResponse {
+  page?: Page | undefined;
+}
+
+export interface GetPageListRequest {
+  organizationId: string;
+  siteId: string;
+}
+
+export interface GetPageListResponse {
+  pageList: Page[];
+}
+
+export interface UpdatePageRequest {
+  organizationId: string;
+  siteId: string;
+  pageId: string;
+  title?: string | undefined;
+  description?: string | undefined;
+}
+
+export interface UpdatePageResponse {
+  page?: Page;
+}
+
+export interface DeletePageRequest {
+  organizationId: string;
+  siteId: string;
+  requestedUserId: string;
+  pageId: string;
+}
+
+export interface DeletePageResponse {
+  page?: Page;
 }
 
 export interface CreateSiteRequest {
@@ -60,6 +134,16 @@ export interface SitesServiceClient {
   getSite(request: GetSiteRequest): Observable<GetSiteResponse>;
 
   getSiteList(request: GetSiteListRequest): Observable<GetSiteListResponse>;
+
+  createPage(request: CreatePageRequest): Observable<CreatePageResponse>;
+
+  getPageList(request: GetPageListRequest): Observable<GetPageListResponse>;
+
+  getPage(request: GetPageRequest): Observable<GetPageResponse>;
+
+  updatePage(request: UpdatePageRequest): Observable<UpdatePageResponse>;
+
+  deletePage(request: DeletePageRequest): Observable<DeletePageResponse>;
 }
 
 export interface SitesServiceController {
@@ -80,11 +164,52 @@ export interface SitesServiceController {
     | Promise<GetSiteListResponse>
     | Observable<GetSiteListResponse>
     | GetSiteListResponse;
+
+  createPage(
+    request: CreatePageRequest
+  ):
+    | Promise<CreatePageResponse>
+    | Observable<CreatePageResponse>
+    | CreatePageResponse;
+
+  getPageList(
+    request: GetPageListRequest
+  ):
+    | Promise<GetPageListResponse>
+    | Observable<GetPageListResponse>
+    | GetPageListResponse;
+
+  getPage(
+    request: GetPageRequest
+  ): Promise<GetPageResponse> | Observable<GetPageResponse> | GetPageResponse;
+
+  updatePage(
+    request: UpdatePageRequest
+  ):
+    | Promise<UpdatePageResponse>
+    | Observable<UpdatePageResponse>
+    | UpdatePageResponse;
+
+  deletePage(
+    request: DeletePageRequest
+  ):
+    | Promise<DeletePageResponse>
+    | Observable<DeletePageResponse>
+    | DeletePageResponse;
 }
 
 export function SitesServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["createSite", "getSite", "getSiteList"];
+    const grpcMethods: string[] = [
+      "createSite",
+      "getSite",
+      "getSiteList",
+      "createPage",
+      "getPageList",
+      "getPage",
+      "updatePage",
+      "deletePage",
+    ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(
         constructor.prototype,
