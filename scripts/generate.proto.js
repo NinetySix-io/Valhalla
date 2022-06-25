@@ -50,6 +50,7 @@ promiseExec("pwd").then(async (output) => {
       useOptionals: "messages",
       unrecognizedEnum: false,
       useObjectId: true,
+      useDate: true,
     })
       .map(([key, value]) => `${key}=${value}`)
       .join(",");
