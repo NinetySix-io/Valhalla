@@ -18,6 +18,11 @@ export enum PageStatus {
   DRAFT = "DRAFT",
 }
 
+/**
+ * -----------------------------
+ * Entity
+ * -----------------------------
+ */
 export interface Page {
   id: string;
   title: string;
@@ -28,8 +33,8 @@ export interface Page {
   isLoneTitle: boolean;
   createdBy: string;
   updatedBy: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Site {
@@ -40,10 +45,15 @@ export interface Site {
   ownBy: string;
   status: SiteStatus;
   url?: string | undefined;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
+/**
+ * -----------------------------
+ * PAGE
+ * -----------------------------
+ */
 export interface CreatePageRequest {
   requestedUserId: string;
   organizationId: string;
@@ -110,6 +120,17 @@ export interface CreateSiteResponse {
   status: SiteStatus;
 }
 
+export interface UpdateSiteRequest {
+  requestedUser: string;
+  organizationId: string;
+  siteId: string;
+  name?: string | undefined;
+}
+
+export interface UpdateSiteResponse {
+  site?: Site;
+}
+
 export interface GetSiteRequest {
   siteId: string;
 }
@@ -132,6 +153,8 @@ export interface SitesServiceClient {
   createSite(request: CreateSiteRequest): Observable<CreateSiteResponse>;
 
   getSite(request: GetSiteRequest): Observable<GetSiteResponse>;
+
+  updateSite(request: UpdateSiteRequest): Observable<UpdateSiteResponse>;
 
   getSiteList(request: GetSiteListRequest): Observable<GetSiteListResponse>;
 
@@ -157,6 +180,13 @@ export interface SitesServiceController {
   getSite(
     request: GetSiteRequest
   ): Promise<GetSiteResponse> | Observable<GetSiteResponse> | GetSiteResponse;
+
+  updateSite(
+    request: UpdateSiteRequest
+  ):
+    | Promise<UpdateSiteResponse>
+    | Observable<UpdateSiteResponse>
+    | UpdateSiteResponse;
 
   getSiteList(
     request: GetSiteListRequest
@@ -203,6 +233,7 @@ export function SitesServiceControllerMethods() {
     const grpcMethods: string[] = [
       "createSite",
       "getSite",
+      "updateSite",
       "getSiteList",
       "createPage",
       "getPageList",

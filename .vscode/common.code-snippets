@@ -3,5 +3,14 @@
     "prefix": "im",
     "description": "Import module",
     "body": "import { $2 } from '$1';"
+  },
+  "Section": {
+    "prefix": "section",
+    "description": "Section Divider",
+    "body": [
+      "// -----------------------------",
+      "// $1",
+      "// -----------------------------"
+    ]
   }
 }
