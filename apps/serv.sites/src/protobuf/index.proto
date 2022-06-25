@@ -7,7 +7,7 @@ import "google/protobuf/timestamp.proto";
 service SitesService {
   rpc CreateSite(CreateSiteRequest) returns (CreateSiteResponse){}
   rpc GetSite(GetSiteRequest) returns (GetSiteResponse) {}
-  rpc getSiteList(GetSiteListRequest) returns (GetSiteListResponse) {}
+  rpc GetSiteList(GetSiteListRequest) returns (GetSiteListResponse) {}
   rpc CreatePage(CreatePageRequest) returns (CreatePageResponse) {}
   rpc GetPageList(GetPageListRequest) returns (GetPageListResponse) {}
   rpc GetPage(GetPageRequest) returns (GetPageResponse) {}
