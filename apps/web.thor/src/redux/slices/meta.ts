@@ -1,12 +1,15 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 type State = {
+  domain: string;
   isDarkMode?: boolean;
   accessToken?: string;
   accessTokenExpires?: Date;
 };
 
-const initialState: State = {};
+const initialState: State = {
+  domain: '',
+};
 
 export const MetaSlice = createSlice({
   name: 'meta',
@@ -27,6 +30,9 @@ export const MetaSlice = createSlice({
     },
     setIsDarkMode(state, action: PayloadAction<State['isDarkMode']>) {
       state.isDarkMode = action.payload;
+    },
+    setDomain(state, action: PayloadAction<State['domain']>) {
+      state.domain = action.payload;
     },
   },
 });

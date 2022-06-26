@@ -21,13 +21,15 @@ const env = config
     )
   : {};
 
-module.exports = withPlugins([withTM, withBundleAnalyzer], {
+/**
+ * @type {import('next').NextConfig}
+ */
+const nextConfig = {
   env,
   poweredByHeader: false,
   reactStrictMode: true,
   swcMinify: true,
   experimental: {
-    runtime: 'nodejs',
     serverComponents: true,
   },
   images: {
@@ -35,4 +37,6 @@ module.exports = withPlugins([withTM, withBundleAnalyzer], {
     dangerouslyAllowSVG: false,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
-});
+};
+
+module.exports = withPlugins([withTM, withBundleAnalyzer], nextConfig);

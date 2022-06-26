@@ -11,10 +11,12 @@ import {
 import { FaSolid, Icon, cProps, theme } from '@valhalla/react';
 
 import { DynamicOrganizationCreateModal } from '../organization.create.modal/dynamic';
+import { Environment } from '@app/env';
 import Link from 'next/link';
 import { OrganizationLogo } from '../organization.logo';
 import { Section } from '../section';
-import { useGetOrganizationsMembershipQuery } from '@app/graphql/valhalla/generated.gql';
+import { useGetOrgsMembershipListQuery } from '@app/graphql/valhalla/generated.gql';
+import { useReduxSelector } from '@app/redux/hooks';
 
 type Props = cProps;
 
@@ -47,7 +49,16 @@ const OrgMeta = styled(Box)``;
 
 export const OrganizationSection: React.FC<Props> = () => {
   const [creating, setCreating] = React.useState(false);
-  const organizations = useGetOrganizationsMembershipQuery();
+  const domain = useReduxSelector((state) => state.meta.domain);
+  const organizations = useGetOrgsMembershipListQuery();
+
+  function buildOrgLink(slug: string) {
+    if (Environment.isDev) {
+      return `http://${slug}.${domain}`;
+    }
+
+    return `https://${slug}.${domain}`;
+  }
 
   return (
     <React.Fragment>
@@ -75,7 +86,7 @@ export const OrganizationSection: React.FC<Props> = () => {
             <Icon fontSize={30} icon={FaSolid.faPlus} />
           </CreateButton>
           {organizations.data?.organizations.map((org) => (
-            <Link passHref key={org.id} href={org.slug}>
+            <Link passHref key={org.id} href={buildOrgLink(org.slug)}>
               <OrgCard variant="outlined">
                 <OrgLogo organization={org} />
                 <OrgMeta>

@@ -1,5 +1,7 @@
+import { AppPages, PAGES } from '@app/PAGES_CONSTANTS';
+
 import { Environment } from '@app/env';
-import { PAGES } from '@app/PAGES_CONSTANTS';
+import { UrlObject } from 'url';
 import { useRouter } from 'next/router';
 
 const RETURN_TO = 'returnTo';
@@ -46,15 +48,40 @@ export function useRouterBack() {
  * login page.
  * @returns A string
  */
-export function buildReturnableLink(nextPath: string, originalPath: string) {
+export function buildReturnableLink<T extends boolean>(
+  nextPath: string,
+  originalPath: string,
+  returnUrlObject?: T,
+): T extends true ? UrlObject : string {
   const [path, query] = nextPath.split('?');
-  const params = new URLSearchParams(query);
-  if (Environment.isServer || !Object.values(PAGES).includes(originalPath)) {
-    return path;
+  const isValid =
+    originalPath && Object.values(PAGES).includes(originalPath as AppPages);
+
+  let result: T extends true ? UrlObject : string;
+  type Result = typeof result;
+
+  if (returnUrlObject) {
+    const link: UrlObject = { pathname: path };
+    if (isValid) {
+      if (!link.query) {
+        link.query = {};
+      }
+
+      link.query[RETURN_TO] = originalPath;
+    }
+
+    result = link as Result;
   }
 
-  params.append(RETURN_TO, originalPath);
-  return `${path}?${params.toString()}`;
+  if (isValid) {
+    const params = new URLSearchParams(query);
+    params.append(RETURN_TO, originalPath);
+    result = `${path}?${params.toString()}` as Result;
+  } else {
+    result = path as Result;
+  }
+
+  return result;
 }
 
 /**
@@ -66,5 +93,6 @@ export function buildClientReturnableLink<T extends string>(url: T) {
   return buildReturnableLink(
     url,
     Environment.isServer ? undefined : window.location.pathname,
+    true,
   );
 }

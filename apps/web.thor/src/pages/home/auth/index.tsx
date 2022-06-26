@@ -6,12 +6,15 @@ import { FormContainer } from '@app/components/form.container';
 import NextLink from 'next/link';
 import { PAGES } from '@app/PAGES_CONSTANTS';
 import { Page } from '@app/types/next';
-import { buildClientReturnableLink } from '@app/lib/router.utils';
 import cx from 'clsx';
 import styles from './styles.module.css';
-import { withPublicSsrContext } from '@app/next/with.app.ctx';
+import { useReturnableLink } from '@app/hooks/use.returnable.link';
+import { useSessionResume } from '@app/hooks/use.session.resume';
 
-const GetStartedPage: Page = () => {
+const AuthPage: Page = () => {
+  useSessionResume();
+  const buildLink = useReturnableLink();
+
   return (
     <Box
       maxWidth="md"
@@ -23,10 +26,7 @@ const GetStartedPage: Page = () => {
       width="100%"
     >
       <FormContainer title="Continue">
-        <NextLink
-          passHref
-          href={buildClientReturnableLink(PAGES.AUTH_WITH_USERNAME)}
-        >
+        <NextLink passHref href={buildLink(PAGES.AUTH_WITH_USERNAME)}>
           <Button
             fullWidth
             variant="outlined"
@@ -41,16 +41,6 @@ const GetStartedPage: Page = () => {
   );
 };
 
-export const getServerSideProps = withPublicSsrContext(() => {
-  return {
-    props: {
-      SEO: {
-        title: 'Authentication',
-      },
-    },
-  };
-});
+AuthPage.Layout = BaseLayout;
 
-GetStartedPage.Layout = BaseLayout;
-
-export default GetStartedPage;
+export default AuthPage;

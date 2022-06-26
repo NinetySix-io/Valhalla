@@ -19,42 +19,37 @@ import { isEmail } from '@valhalla/utilities';
 import { useLogin } from '@app/graphql/valhalla/hooks/user.login';
 import { useReduxDispatch } from '@app/redux/hooks';
 import { useRouter } from 'next/router';
-import { withPublicSsrContext } from '@app/next/with.app.ctx';
+import { useSessionResume } from '@app/hooks/use.session.resume';
 
 type Payload = {
+  isEnteringCode?: boolean;
+  username: string;
   verificationCode: string;
 };
 
 const GetStartedWithUsernamePage: Page = () => {
+  useSessionResume();
   const router = useRouter();
   const dispatch = useReduxDispatch();
   const [form] = Form.useForm<Payload>();
-  const [username, setUsername] = React.useState<string>();
-  const { login, loginResult, isLoggingIn, sendVerification } =
-    useLogin(username);
-
-  function handleFieldsChange(
-    fields: Array<{
-      name: string[];
-      value: unknown;
-    }>,
-  ) {
-    const usernameField = fields.find(
-      (field) => field.name[0] === UsernameFormItem.KEY,
-    );
-
-    if (usernameField && usernameField.value !== username) {
-      setUsername(usernameField.value as string | undefined);
-    }
-  }
+  const { login, loginResult, isLoggingIn, sendVerification, setUsername } =
+    useLogin();
 
   function handleSubmit(payload: Payload) {
     login(payload.verificationCode);
   }
 
-  useChange(username, () => {
+  function handleClearUsername() {
+    form.setFieldValue('isEnteringCode', false);
+  }
+
+  async function handleSubmitUsername() {
+    const username = form.getFieldValue(UsernameFormItem.KEY);
+
+    form.setFieldValue('isEnteringCode', true);
+    setUsername(username);
     sendVerification();
-  });
+  }
 
   useChange(loginResult, async () => {
     await dispatch(
@@ -64,7 +59,7 @@ const GetStartedWithUsernamePage: Page = () => {
       }),
     );
 
-    router.push(PAGES.HOME);
+    router.push(PAGES.ME);
   });
 
   return (
@@ -78,17 +73,15 @@ const GetStartedWithUsernamePage: Page = () => {
       width="100%"
     >
       <FormContainer title="Username">
-        <Form
-          form={form}
-          onFieldsChange={handleFieldsChange}
-          onFinish={handleSubmit}
-        >
+        <Form preserve form={form} onFinish={handleSubmit}>
           <Form.Item noStyle>
             {({ getFieldValue }) => {
               return (
                 <UsernameFormItem
                   disabled={isLoggingIn}
-                  readOnly={Boolean(getFieldValue(UsernameFormItem.KEY))}
+                  readOnly={getFieldValue('isEnteringCode')}
+                  onSubmitUsername={handleSubmitUsername}
+                  onClear={handleClearUsername}
                 />
               );
             }}
@@ -96,7 +89,8 @@ const GetStartedWithUsernamePage: Page = () => {
           <Form.Item noStyle>
             {({ getFieldValue }) => {
               const username = getFieldValue(UsernameFormItem.KEY);
-              if (!username) {
+              const isEnteringCode = getFieldValue('isEnteringCode');
+              if (!isEnteringCode) {
                 return null;
               }
 
@@ -147,16 +141,6 @@ const GetStartedWithUsernamePage: Page = () => {
     </Box>
   );
 };
-
-export const getServerSideProps = withPublicSsrContext(() => {
-  return {
-    props: {
-      SEO: {
-        title: 'Authentication',
-      },
-    },
-  };
-});
 
 GetStartedWithUsernamePage.Layout = BaseLayout;
 

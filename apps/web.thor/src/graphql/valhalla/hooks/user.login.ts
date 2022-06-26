@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import { isEmail, isNil, isPhoneNumber } from '@valhalla/utilities';
 import {
   useLoginWithEmailMutation,
@@ -11,7 +13,8 @@ import {
  * @param type
  * @returns
  */
-export function useLogin(username?: string) {
+export function useLogin() {
+  const [username, setUsername] = React.useState<string>();
   const isEmailAddress = isEmail(username);
   const isPhone = isPhoneNumber(username);
   const hasUsername = !isNil(username);
@@ -76,6 +79,7 @@ export function useLogin(username?: string) {
   return {
     login,
     sendVerification,
+    setUsername,
     isLoggingIn,
     loginResult,
   };
