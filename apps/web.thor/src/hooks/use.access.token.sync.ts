@@ -1,4 +1,3 @@
-import { parseCookies, setCookie } from 'nookies';
 import { useReduxDispatch, useReduxSelector } from '@app/redux/hooks';
 
 import { ACCESS_TOKEN_KEY } from '../lib/access.token/constants';
@@ -6,6 +5,7 @@ import { MetaSlice } from '@app/redux/slices/meta';
 import { PAGES } from '@app/PAGES_CONSTANTS';
 import React from 'react';
 import { buildClientReturnableLink } from '../lib/router.utils';
+import cookies from 'js-cookie';
 import { getAccessToken } from '../lib/access.token/get.access.token';
 import moment from 'moment';
 import { tryNice } from 'try-nice';
@@ -66,11 +66,9 @@ export function useAccessTokenSync() {
   }, [accessTokenExpires, router, client, dispatch]);
 
   React.useEffect(() => {
-    const cookies = parseCookies();
-    const currentToken = cookies[ACCESS_TOKEN_KEY];
-
+    const currentToken = cookies.get(ACCESS_TOKEN_KEY);
     if (accessToken && accessTokenExpires && accessToken !== currentToken) {
-      setCookie(null, ACCESS_TOKEN_KEY, accessToken, {
+      cookies.set(ACCESS_TOKEN_KEY, accessToken, {
         domain: location.hostname,
         secure: true,
         sameSite: 'strict',

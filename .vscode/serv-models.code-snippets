@@ -22,7 +22,7 @@
   "Schema": {
     "prefix": "schema",
     "body": [
-      "import { prop } from '@typegoose/typegoose';",
+      "import { typegoose } from '@valhalla/serv.core';",
       "import { SimpleModel, BaseSchema } from '@valhalla/serv.core';",
       "",
       "@SimpleModel('$1')",
@@ -35,15 +35,15 @@
     "prefix": "transformer",
     "description": "Entity transformer",
     "body": [
-      "import { DocumentType, isDocument } from '@typegoose/typegoose';",
+      "import { typegoose } from '@valhalla/serv.core';",
       "import { $1Schema } from './schema';",
       "import { $1 as Proto } from '@app/protobuf';",
       "",
       "export class $1Transformer extends $1Schema {",
       "",
-      "\tconstructor(entity: DocumentType<$1Schema> | $1Schema) {",
+      "\tconstructor(entity: typegoose.DocumentType<$1Schema> | $1Schema) {",
       "\t\tsuper()",
-      "\t\tObject.assign(this, isDocument(entity) ? entity.toObject({ virtuals: false }) : entity)",
+      "\t\tObject.assign(this, typegoose.isDocument(entity) ? entity.toObject({ virtuals: false }) : entity)",
       "\t}",
       "",
       "\tget proto(): Proto {",

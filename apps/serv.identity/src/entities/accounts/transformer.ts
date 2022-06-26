@@ -1,11 +1,16 @@
 import { AccountSchema } from './schema';
-import { DocumentType } from '@typegoose/typegoose';
 import { Account as Proto } from '@app/protobuf';
+import { typegoose } from '@valhalla/serv.core';
 
 export class AccountTransformer extends AccountSchema {
-  constructor(entity: DocumentType<AccountSchema>) {
+  constructor(entity: typegoose.DocumentType<AccountSchema> | AccountSchema) {
     super();
-    Object.assign(this, entity.toObject({ virtuals: false }));
+    Object.assign(
+      this,
+      typegoose.isDocument(entity)
+        ? entity.toObject({ virtuals: false })
+        : entity,
+    );
   }
 
   get proto(): Proto {

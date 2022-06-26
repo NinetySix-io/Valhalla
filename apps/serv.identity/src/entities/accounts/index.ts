@@ -22,7 +22,7 @@ export class AccountsModel extends BaseFactory<AccountSchema> {
     return this.updateMany(
       {
         emails: {
-          $elemMath: {
+          $elemMatch: {
             value: email,
             isVerified: false,
             isPrimary: false,
@@ -83,6 +83,29 @@ export class AccountsModel extends BaseFactory<AccountSchema> {
         },
         {
           'email.value': email,
+          isVerified: true,
+        },
+      ],
+    });
+  }
+
+  findByUsername(username: string) {
+    return this.findOne({
+      $or: [
+        {
+          'email.value': username,
+          isPrimary: true,
+        },
+        {
+          'email.value': username,
+          isVerified: true,
+        },
+        {
+          'phone.value': username,
+          isPrimary: true,
+        },
+        {
+          'phone.value': username,
           isVerified: true,
         },
       ],

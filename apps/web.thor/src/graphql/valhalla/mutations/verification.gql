@@ -1,9 +1,8 @@
-mutation sendVerificationToEmail($email: String!) {
-  sendEmailVerificationCode(email: $email)
-}
-
-mutation sendVerificationToPhone($phone: String!) {
-  sendPhoneVerificationCode(phone: $phone)
+mutation sendVerification(
+  $channel: VerificationChannel!
+  $destination: String!
+) {
+  sendVerificationCode(input: { channel: $channel, destination: $destination })
 }
 
 query validateVerificationCode(
@@ -11,7 +10,9 @@ query validateVerificationCode(
   $verificationCode: String!
 ) {
   validateVerificationCode(
-    verificationId: $verificationId
-    verificationCode: $verificationCode
+    input: {
+      verificationId: $verificationId
+      verificationCode: $verificationCode
+    }
   )
 }

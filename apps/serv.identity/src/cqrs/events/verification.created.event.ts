@@ -1,14 +1,16 @@
-import { IEvent } from '@nestjs/cqrs';
-import { Verification } from '@app/protobuf';
+import { Verification, VerificationChannel } from '@app/protobuf';
 
-export class EmailVerificationCreatedEvent implements IEvent {
+import { IEvent } from '@nestjs/cqrs';
+
+export class VerificationCreatedEvent implements IEvent {
   constructor(
     public readonly data: {
+      channel: VerificationChannel;
       verificationId: Verification['id'];
       expiresAt: Date;
       owner?: string;
-      email: string;
       code: string;
+      destination: string;
     },
   ) {}
 }

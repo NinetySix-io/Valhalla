@@ -1,4 +1,9 @@
-import { Account, AddEmailToAccountRequest, Verification } from '@app/protobuf';
+import {
+  Account,
+  AddEmailToAccountRequest,
+  Verification,
+  VerificationChannel,
+} from '@app/protobuf';
 import {
   CommandBus,
   CommandHandler,
@@ -11,7 +16,7 @@ import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 import { AccountTransformer } from '@app/entities/accounts/transformer';
 import { AccountsModel } from '@app/entities/accounts';
 import { EmailAddedToAccountEvent } from '../events/email.added.to.account.event';
-import { SendEmailVerificationCommand } from './send.email.verification.command';
+import { SendVerificationCodeCommand } from './send.verification.code.command';
 
 export class AddEmailToAccountCommand implements ICommand {
   constructor(public readonly request: AddEmailToAccountRequest) {}
@@ -50,8 +55,9 @@ export class AddEmailToAccountHandler
 
     if (!isAlreadyAdded) {
       const verification: Verification = await this.commandBus.execute(
-        new SendEmailVerificationCommand({
-          email: command.request.email,
+        new SendVerificationCodeCommand({
+          channel: VerificationChannel.EMAIL,
+          destination: command.request.email,
         }),
       );
 

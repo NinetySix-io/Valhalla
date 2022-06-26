@@ -1,4 +1,9 @@
-import { Account, AddPhoneToAccountRequest, Verification } from '@app/protobuf';
+import {
+  Account,
+  AddPhoneToAccountRequest,
+  Verification,
+  VerificationChannel,
+} from '@app/protobuf';
 import {
   CommandBus,
   CommandHandler,
@@ -11,7 +16,7 @@ import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 import { AccountTransformer } from '@app/entities/accounts/transformer';
 import { AccountsModel } from '@app/entities/accounts';
 import { PhoneAddedToAccountEvent } from '../events/phone.added.to.account.event';
-import { SendPhoneVerificationCommand } from './send.phone.verification.command';
+import { SendVerificationCodeCommand } from './send.verification.code.command';
 
 export class AddPhoneToAccountCommand implements ICommand {
   constructor(public readonly request: AddPhoneToAccountRequest) {}
@@ -50,8 +55,9 @@ export class AddPhoneToAccountHandler
 
     if (!isAlreadyAdded) {
       const verification: Verification = await this.commandBus.execute(
-        new SendPhoneVerificationCommand({
-          phone: command.request.phone,
+        new SendVerificationCodeCommand({
+          channel: VerificationChannel.SMS,
+          destination: command.request.phone,
         }),
       );
 

@@ -9,8 +9,7 @@ import {
 } from '@valhalla/serv.core';
 import { tryNice } from 'try-nice';
 import { AccessTokenQuery } from './inputs/get.access.token.input';
-import { LoginWithEmailInput } from './inputs/login.with.email.input';
-import { LoginWithPhoneInput } from './inputs/login.with.phone.input';
+import { LoginWithVerificationInput } from './inputs/login.with.verification.input';
 import { RegisterInput } from './inputs/register.input';
 import { AccessTokenResponse } from './responses/access.token.response';
 import { AuthResponse } from './responses/auth.response';
@@ -37,34 +36,14 @@ export class GqlAuthResolver {
   }
 
   @Mutation(() => AuthResponse, {
-    description: 'Login to account with email address',
+    description: 'Login to account with verification code',
   })
-  async loginWithEmail(
-    @Args('input') input: LoginWithEmailInput,
+  async loginWithVerification(
+    @Args('input') input: LoginWithVerificationInput,
     @Auth() auth: AuthManager,
   ): Promise<AuthResponse> {
     const result = await resolveRpcRequest(
-      this.rpcClient.loginWithEmail(input),
-    );
-
-    auth.setRefreshToken(result.refreshToken);
-
-    return {
-      accountId: result.account!.id,
-      accessToken: result.accessToken,
-      accessTokenExpiresAt: new Date(result.accessTokenExpiresAt),
-    };
-  }
-
-  @Mutation(() => AuthResponse, {
-    description: 'Login to account with phone number',
-  })
-  async loginWithPhone(
-    @Args('input') input: LoginWithPhoneInput,
-    @Auth() auth: AuthManager,
-  ): Promise<AuthResponse> {
-    const result = await resolveRpcRequest(
-      this.rpcClient.loginWithPhone(input),
+      this.rpcClient.loginWithVerification(input),
     );
 
     auth.setRefreshToken(result.refreshToken);

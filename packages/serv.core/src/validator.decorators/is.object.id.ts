@@ -1,6 +1,6 @@
 import { ValidationOptions, registerDecorator } from 'class-validator';
 
-import mongoose from 'mongoose';
+import { mongoose } from '@typegoose/typegoose';
 
 /**
  * It's a decorator that validates a property to be a valid MongoDB ObjectId

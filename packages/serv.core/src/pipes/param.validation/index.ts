@@ -12,13 +12,13 @@ import { ValidatorOption } from './types';
 
 @Injectable()
 export class ParamValidationPipe<T> implements PipeTransform<T> {
-  private validators: ValidatorOption[];
+  private validators: ValidatorOption<T>[];
   protected exceptionFactory: (
     type: ErrorHttpStatusCode,
     error: string,
   ) => unknown;
 
-  constructor(@Optional() validators?: ValidatorOption[]) {
+  constructor(@Optional() validators?: ValidatorOption<T>[]) {
     this.validators = validators ?? [];
     this.exceptionFactory = (type: ErrorHttpStatusCode, error) => {
       const HttpError = HttpErrorByCode[type];
@@ -33,14 +33,22 @@ export class ParamValidationPipe<T> implements PipeTransform<T> {
    * @param value currently processed route argument
    * @param metadata contains metadata about the currently processed route argument
    */
-  async transform(value: unknown) {
+  async transform(value: T) {
     for (const validator of this.validators) {
-      const isValid = await validator.validate(value);
-      if (!isValid) {
+      try {
+        const isValid = await validator.validate(value);
+        if (!isValid) {
+          throw this.exceptionFactory(
+            (validator.errorType as ErrorHttpStatusCode) ||
+              HttpStatus.BAD_REQUEST,
+            validator.errorMessage ?? 'Validation Failed',
+          );
+        }
+      } catch (e) {
         throw this.exceptionFactory(
           (validator.errorType as ErrorHttpStatusCode) ||
             HttpStatus.BAD_REQUEST,
-          validator.errorMessage,
+          validator.errorMessage ?? (e as Error).message ?? 'Validation Failed',
         );
       }
     }

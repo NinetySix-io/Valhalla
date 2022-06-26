@@ -1,14 +1,16 @@
-import { BaseSchema, SimpleModel } from '@valhalla/serv.core';
-import { index, prop } from '@typegoose/typegoose';
-
-import mongoose from 'mongoose';
+import {
+  BaseSchema,
+  SimpleModel,
+  mongoose,
+  typegoose,
+} from '@valhalla/serv.core';
 
 @SimpleModel('account-settings')
-@index({ account: 1 })
+@typegoose.index({ account: 1 })
 export class AccountSettingSchema extends BaseSchema {
-  @prop()
+  @typegoose.prop()
   account!: mongoose.Types.ObjectId;
 
-  @prop()
+  @typegoose.prop()
   activeOrg?: mongoose.Types.ObjectId;
 }

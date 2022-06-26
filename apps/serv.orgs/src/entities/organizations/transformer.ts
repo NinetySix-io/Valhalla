@@ -1,14 +1,17 @@
-import { DocumentType, isDocument } from '@typegoose/typegoose';
-
 import { Organization as OrgProto } from '@app/protobuf';
 import { OrganizationSchema } from './schema';
+import { typegoose } from '@valhalla/serv.core';
 
 export class OrganizationTransformer extends OrganizationSchema {
-  constructor(entity: DocumentType<OrganizationSchema> | OrganizationSchema) {
+  constructor(
+    entity: typegoose.DocumentType<OrganizationSchema> | OrganizationSchema,
+  ) {
     super();
     Object.assign(
       this,
-      isDocument(entity) ? entity.toObject({ virtuals: false }) : entity,
+      typegoose.isDocument(entity)
+        ? entity.toObject({ virtuals: false })
+        : entity,
     );
   }
 

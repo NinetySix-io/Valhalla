@@ -1,14 +1,15 @@
-import { DocumentType, isDocument } from '@typegoose/typegoose';
-
 import { PageSchema } from './schema';
 import { Page as Proto } from '@app/protobuf';
+import { typegoose } from '@valhalla/serv.core';
 
 export class PageTransformer extends PageSchema {
-  constructor(entity: DocumentType<PageSchema> | PageSchema) {
+  constructor(entity: typegoose.DocumentType<PageSchema> | PageSchema) {
     super();
     Object.assign(
       this,
-      isDocument(entity) ? entity.toObject({ virtuals: false }) : entity,
+      typegoose.isDocument(entity)
+        ? entity.toObject({ virtuals: false })
+        : entity,
     );
   }
 

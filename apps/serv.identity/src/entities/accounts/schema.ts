@@ -1,62 +1,64 @@
-import { BaseSchema, SimpleModel } from '@valhalla/serv.core';
+import {
+  BaseSchema,
+  SimpleModel,
+  mongoose,
+  typegoose,
+} from '@valhalla/serv.core';
 import { Exclude, Expose } from 'class-transformer';
 import { Field, ObjectType, OmitType } from '@nestjs/graphql';
-import { modelOptions, prop } from '@typegoose/typegoose';
-
-import mongoose from 'mongoose';
 
 @ObjectType()
-@modelOptions({ schemaOptions: { timestamps: true, _id: true } })
+@typegoose.modelOptions({ schemaOptions: { timestamps: true, _id: true } })
 class AccountEmailSchema extends OmitType(BaseSchema, ['_id', 'id']) {
-  @prop()
+  @typegoose.prop()
   @Field({ description: 'Email address value' })
   value!: string;
 
-  @prop()
+  @typegoose.prop()
   @Expose()
   @Field({ description: 'Whether email address is primary' })
   isPrimary!: boolean;
 
-  @prop()
+  @typegoose.prop()
   @Expose()
   @Field({ description: 'Whether email address is verified' })
   isVerified!: boolean;
 
-  @prop()
+  @typegoose.prop()
   @Expose()
   @Field({ description: 'Verification date' })
   verifiedDate?: Date;
 
-  @prop()
+  @typegoose.prop()
   @Exclude()
   @Field(() => String, { description: 'Verification ID' })
   verification!: mongoose.Types.ObjectId;
 }
 
 @ObjectType()
-@modelOptions({ schemaOptions: { timestamps: true, _id: true } })
+@typegoose.modelOptions({ schemaOptions: { timestamps: true, _id: true } })
 class AccountPhoneSchema extends OmitType(BaseSchema, ['_id', 'id']) {
-  @prop()
+  @typegoose.prop()
   @Expose()
   @Field({ description: 'Phone number value' })
   value!: string;
 
-  @prop()
+  @typegoose.prop()
   @Expose()
   @Field({ description: 'Whether phone number is primary' })
   isPrimary!: boolean;
 
-  @prop()
+  @typegoose.prop()
   @Expose()
   @Field({ description: 'Whether phone number is verified' })
   isVerified!: boolean;
 
-  @prop()
+  @typegoose.prop()
   @Expose()
   @Field({ description: 'Verification date' })
   verifiedDate?: Date;
 
-  @prop()
+  @typegoose.prop()
   @Exclude()
   @Field(() => String, { description: 'Verification ID' })
   verification!: mongoose.Types.ObjectId;
@@ -65,29 +67,29 @@ class AccountPhoneSchema extends OmitType(BaseSchema, ['_id', 'id']) {
 @ObjectType()
 @SimpleModel('accounts')
 export class AccountSchema extends BaseSchema {
-  @prop()
+  @typegoose.prop()
   @Expose()
   @Field({ description: 'User Display Name' })
   displayName!: string;
 
-  @prop()
+  @typegoose.prop()
   @Expose()
   @Field({ description: 'First Name' })
   firstName?: string;
 
-  @prop()
+  @typegoose.prop()
   @Expose()
   @Field({ description: 'Last Name' })
   lastName?: string;
 
-  @prop({ type: [AccountEmailSchema], _id: true })
+  @typegoose.prop({ type: [AccountEmailSchema], _id: true })
   @Expose()
   @Field(() => [AccountEmailSchema], {
     description: 'Associated email addresses',
   })
   emails!: AccountEmailSchema[];
 
-  @prop({ type: [AccountPhoneSchema], _id: true })
+  @typegoose.prop({ type: [AccountPhoneSchema], _id: true })
   @Expose()
   @Field(() => [AccountPhoneSchema], {
     description: 'Associated phone numbers',

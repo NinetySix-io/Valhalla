@@ -1,18 +1,28 @@
-import { BaseSchema, ExpiryIndex, SimpleModel } from '@valhalla/serv.core';
-import { index, prop } from '@typegoose/typegoose';
+import {
+  BaseSchema,
+  ExpiryIndex,
+  SimpleModel,
+  mongoose,
+  typegoose,
+} from '@valhalla/serv.core';
 
-import mongoose from 'mongoose';
+import { VerificationChannel } from '@app/protobuf';
+import { registerEnumType } from '@nestjs/graphql';
+
+registerEnumType(VerificationChannel, {
+  name: 'VerificationChannel',
+});
 
 @SimpleModel('verifications')
 @ExpiryIndex({ expiredAt: 1 })
-@index({ owner: 1 })
+@typegoose.index({ owner: 1 })
 export class VerificationSchema extends BaseSchema {
-  @prop()
+  @typegoose.prop()
   owner?: mongoose.Types.ObjectId;
 
-  @prop()
+  @typegoose.prop()
   hashed!: string;
 
-  @prop()
+  @typegoose.prop()
   expiresAt!: Date;
 }

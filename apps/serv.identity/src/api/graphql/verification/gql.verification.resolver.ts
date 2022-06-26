@@ -1,13 +1,8 @@
 import { gRpcController } from '@app/grpc/grpc.controller';
-import { Query } from '@nestjs/graphql';
-import { Args, Resolver, Mutation } from '@nestjs/graphql';
-import {
-  EmailParamValidation,
-  EmptyStringValidation,
-  ParamValidationPipe,
-  PhoneParamValidation,
-  resolveRpcRequest,
-} from '@valhalla/serv.core';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { resolveRpcRequest } from '@valhalla/serv.core';
+import { SendVerificationCodeInput } from './inputs/send.verification.code.input';
+import { ValidateVerificationCodeInput } from './inputs/validator.verification.code.input';
 
 @Resolver()
 export class GqlVerificationResolver {
@@ -16,30 +11,11 @@ export class GqlVerificationResolver {
   @Mutation(() => String, {
     description: 'Send verification code to email',
   })
-  async sendEmailVerificationCode(
-    @Args('email', new ParamValidationPipe([EmailParamValidation]))
-    email: string,
+  async sendVerificationCode(
+    @Args('input') input: SendVerificationCodeInput,
   ): Promise<string> {
     const result = await resolveRpcRequest(
-      this.rpcClient.sendEmailVerification({
-        email,
-      }),
-    );
-
-    return result.id;
-  }
-
-  @Mutation(() => String, {
-    description: 'Send verification code to phone number',
-  })
-  async sendPhoneVerificationCode(
-    @Args('phone', new ParamValidationPipe([PhoneParamValidation]))
-    phone: string,
-  ): Promise<string> {
-    const result = await resolveRpcRequest(
-      this.rpcClient.sendPhoneVerification({
-        phone,
-      }),
+      this.rpcClient.sendVerificationCode(input),
     );
 
     return result.id;
@@ -49,16 +25,10 @@ export class GqlVerificationResolver {
     description: 'Validate verification code',
   })
   async validateVerificationCode(
-    @Args('verificationId', new ParamValidationPipe([EmptyStringValidation]))
-    verificationId: string,
-    @Args('verificationCode', new ParamValidationPipe([EmptyStringValidation]))
-    verificationCode: string,
-  ) {
+    @Args('input') input: ValidateVerificationCodeInput,
+  ): Promise<boolean> {
     const result = await resolveRpcRequest(
-      this.rpcClient.validateVerification({
-        verificationCode,
-        verificationId,
-      }),
+      this.rpcClient.validateVerification(input),
     );
 
     return result.isValid;

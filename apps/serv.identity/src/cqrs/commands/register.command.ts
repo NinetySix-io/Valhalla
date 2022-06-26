@@ -10,6 +10,7 @@ import {
   RegisterRequest,
   RegisterResponse,
   Verification,
+  VerificationChannel,
 } from '@app/protobuf';
 import { CreatePayload, RpcHandler, toObjectId } from '@valhalla/serv.core';
 
@@ -18,8 +19,7 @@ import { AccountSchema } from '@app/entities/accounts/schema';
 import { AccountTransformer } from '@app/entities/accounts/transformer';
 import { AccountsModel } from '@app/entities/accounts';
 import { CreateAccessCommand } from './create.access.command';
-import { SendEmailVerificationCommand } from './send.email.verification.command';
-import { SendPhoneVerificationCommand } from './send.phone.verification.command';
+import { SendVerificationCodeCommand } from './send.verification.code.command';
 
 export class RegisterCommand implements ICommand {
   constructor(public readonly request: RegisterRequest) {}
@@ -54,8 +54,9 @@ export class RegisterHandler
     phone: string,
   ): Promise<CreatePayload<AccountSchema>['phones']> {
     const verification: Verification = await this.commandBus.execute(
-      new SendPhoneVerificationCommand({
-        phone,
+      new SendVerificationCodeCommand({
+        channel: VerificationChannel.SMS,
+        destination: phone,
       }),
     );
 
@@ -73,8 +74,9 @@ export class RegisterHandler
     email: string,
   ): Promise<CreatePayload<AccountSchema>['emails']> {
     const verification: Verification = await this.commandBus.execute(
-      new SendEmailVerificationCommand({
-        email,
+      new SendVerificationCodeCommand({
+        channel: VerificationChannel.EMAIL,
+        destination: email,
       }),
     );
 

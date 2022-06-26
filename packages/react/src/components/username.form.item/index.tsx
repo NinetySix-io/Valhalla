@@ -80,9 +80,8 @@ export const UsernameFormItem: ComponentType = ({
           <Form.Item name={key} rules={[{ validator: validateUsername }]}>
             {(_f, _m, control) => {
               function handleClear() {
-                control.onChange?.('');
-                inputRef.current?.focus();
                 onClear?.();
+                inputRef.current?.focus();
               }
 
               let endAdornment: React.ReactNode;

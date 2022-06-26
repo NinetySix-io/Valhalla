@@ -9,6 +9,8 @@ import { useReduxDispatch, useReduxSelector } from '@app/redux/hooks';
 
 import { MetaSlice } from '@app/redux/slices/meta';
 import { PAGES } from '@app/PAGES_CONSTANTS';
+import { REFRESH_TOKEN_KEY } from '@app/lib/access.token';
+import cookies from 'js-cookie';
 import { noop } from '@valhalla/utilities';
 import { useRouter } from 'next/router';
 
@@ -19,20 +21,25 @@ export function useSessionResume() {
   const dispatch = useReduxDispatch();
 
   React.useEffect(() => {
-    if (!accessToken) {
+    if (!accessToken && cookies.get(REFRESH_TOKEN_KEY)) {
       client
-        .query<GetAccessTokenQuery>({ query: GetAccessTokenDocument })
+        .query<GetAccessTokenQuery>({
+          query: GetAccessTokenDocument,
+          errorPolicy: 'all',
+        })
         .catch(noop)
         .then((result: ApolloQueryResult<GetAccessTokenQuery>) => {
-          const nextAccessToken = result.data.accessToken;
-          dispatch(
-            MetaSlice.actions.setAccessToken({
-              accessToken: nextAccessToken.token,
-              accessTokenExpires: nextAccessToken.expiresAt,
-            }),
-          );
+          const nextAccessToken = result.data?.accessToken;
+          if (nextAccessToken) {
+            dispatch(
+              MetaSlice.actions.setAccessToken({
+                accessToken: nextAccessToken.token,
+                accessTokenExpires: nextAccessToken.expiresAt,
+              }),
+            );
 
-          router.push({ pathname: PAGES.ME });
+            router.push({ pathname: PAGES.ME });
+          }
         });
     }
   }, [accessToken, client, router, dispatch]);

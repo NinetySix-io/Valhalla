@@ -1,9 +1,9 @@
-import { DocumentType } from '@typegoose/typegoose';
 import { Member as MemberProto } from '@app/protobuf';
 import { OrgMemberSchema } from './schema';
+import { typegoose } from '@valhalla/serv.core';
 
 export class OrgMemberTransformer extends OrgMemberSchema {
-  constructor(entity: DocumentType<OrgMemberSchema>) {
+  constructor(entity: typegoose.DocumentType<OrgMemberSchema>) {
     super();
     Object.assign(this, entity.toObject({ virtuals: false }));
   }

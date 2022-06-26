@@ -10,10 +10,8 @@ import {
   FindAccountRequest,
   IDENTITY_SERVICE_NAME,
   IdentityServiceController,
-  LoginWithEmailRequest,
-  LoginWithEmailResponse,
-  LoginWithPhoneRequest,
-  LoginWithPhoneResponse,
+  LoginWithVerificationRequest,
+  LoginWithVerificationResponse,
   LogoutRequest,
   LogoutResponse,
   ProvisionAccessTokenRequest,
@@ -22,8 +20,7 @@ import {
   RegisterResponse,
   RemoveEmailFromAccountRequest,
   RemovePhoneFromAccountRequest,
-  SendEmailVerificationRequest,
-  SendPhoneVerificationRequest,
+  SendVerificationCodeRequest,
   UpdateAccountRequest,
   UpdateAccountResponse,
   ValidateVerificationRequest,
@@ -44,16 +41,14 @@ import { DecodeAccessTokenQuery } from '@app/cqrs/queries/decode.access.token.qu
 import { DeleteRefreshTokenCommand } from '@app/cqrs/commands/delete.refresh.token.command';
 import { FindAccountQuery } from '@app/cqrs/queries/find.account.query';
 import { GrpcClass } from '@valhalla/serv.core';
-import { LoginWithEmailCommand } from '@app/cqrs/commands/login.with.email.command';
-import { LoginWithPhoneCommand } from '@app/cqrs/commands/login.with.phone.command';
+import { LoginWithVerificationCommand } from '@app/cqrs/commands/login.with.verification.command';
 import { LogoutCommand } from '@app/cqrs/commands/logout.command';
 import { Observable } from 'rxjs';
 import { ProvisionAccessTokenCommand } from '@app/cqrs/commands/provision.access.token.command';
 import { RegisterCommand } from '@app/cqrs/commands/register.command';
 import { RemoveEmailFromAccountCommand } from '@app/cqrs/commands/remove.email.from.account.command';
 import { RemovePhoneFromAccountCommand } from '@app/cqrs/commands/remove.phone.from.account.command';
-import { SendEmailVerificationCommand } from '@app/cqrs/commands/send.email.verification.command';
-import { SendPhoneVerificationCommand } from '@app/cqrs/commands/send.phone.verification.command';
+import { SendVerificationCodeCommand } from '@app/cqrs/commands/send.verification.code.command';
 import { UpdateAccountCommand } from '@app/cqrs/commands/update.account.command';
 import { ValidateVerificationQuery } from '@app/cqrs/queries/validate.verification.query';
 import { VerifyEmailCommand } from '@app/cqrs/commands/verify.email.command';
@@ -66,6 +61,19 @@ export class gRpcController implements IdentityServiceController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
+  sendVerificationCode(
+    request: SendVerificationCodeRequest,
+  ): Verification | Promise<Verification> | Observable<Verification> {
+    return this.commandBus.execute(new SendVerificationCodeCommand(request));
+  }
+  loginWithVerification(
+    request: LoginWithVerificationRequest,
+  ):
+    | LoginWithVerificationResponse
+    | Promise<LoginWithVerificationResponse>
+    | Observable<LoginWithVerificationResponse> {
+    return this.commandBus.execute(new LoginWithVerificationCommand(request));
+  }
   validateVerification(
     request: ValidateVerificationRequest,
   ):
@@ -94,14 +102,6 @@ export class gRpcController implements IdentityServiceController {
   ): Account | Promise<Account> | Observable<Account> {
     return this.commandBus.execute(new RemovePhoneFromAccountCommand(request));
   }
-  loginWithPhone(
-    request: LoginWithPhoneRequest,
-  ):
-    | LoginWithPhoneResponse
-    | Promise<LoginWithPhoneResponse>
-    | Observable<LoginWithPhoneResponse> {
-    return this.commandBus.execute(new LoginWithPhoneCommand(request));
-  }
   verifyEmail(
     request: VerifyEmailRequest,
   ):
@@ -118,16 +118,6 @@ export class gRpcController implements IdentityServiceController {
     | Observable<VerifyPhoneResponse> {
     return this.commandBus.execute(new VerifyPhoneCommand(request));
   }
-  sendPhoneVerification(
-    request: SendPhoneVerificationRequest,
-  ): Verification | Promise<Verification> | Observable<Verification> {
-    return this.commandBus.execute(new SendPhoneVerificationCommand(request));
-  }
-  sendEmailVerification(
-    request: SendEmailVerificationRequest,
-  ): Verification | Promise<Verification> | Observable<Verification> {
-    return this.commandBus.execute(new SendEmailVerificationCommand(request));
-  }
   register(
     request: RegisterRequest,
   ):
@@ -135,14 +125,6 @@ export class gRpcController implements IdentityServiceController {
     | Promise<RegisterResponse>
     | Observable<RegisterResponse> {
     return this.commandBus.execute(new RegisterCommand(request));
-  }
-  loginWithEmail(
-    request: LoginWithEmailRequest,
-  ):
-    | LoginWithEmailResponse
-    | Promise<LoginWithEmailResponse>
-    | Observable<LoginWithEmailResponse> {
-    return this.commandBus.execute(new LoginWithEmailCommand(request));
   }
   logout(
     request: LogoutRequest,

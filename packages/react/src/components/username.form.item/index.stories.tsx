@@ -18,7 +18,7 @@ export const Primary: React.FC = () => {
 
   return (
     <Container maxWidth="sm">
-      <Form form={form} onFinish={(p) => console.log(p)}>
+      <Form form={form}>
         <UsernameFormItem autoFocus />
         <Form.Item>
           <Button variant="contained" onClick={() => form.submit()}>

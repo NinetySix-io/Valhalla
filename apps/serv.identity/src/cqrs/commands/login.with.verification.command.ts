@@ -7,8 +7,8 @@ import {
 } from '@nestjs/cqrs';
 import {
   CreateAccessResponse,
-  LoginWithPhoneRequest,
-  LoginWithPhoneResponse,
+  LoginWithVerificationRequest,
+  LoginWithVerificationResponse,
 } from '@app/protobuf';
 
 import { AccountLoggedInEvent } from '../events/account.logged.in.event';
@@ -18,26 +18,30 @@ import { CreateAccessCommand } from './create.access.command';
 import { RpcHandler } from '@valhalla/serv.core';
 import { VerificationsModel } from '@app/entities/verifications';
 
-export class LoginWithPhoneCommand implements ICommand {
-  constructor(public readonly request: LoginWithPhoneRequest) {}
+export class LoginWithVerificationCommand implements ICommand {
+  constructor(public readonly cmd: LoginWithVerificationRequest) {}
 }
 
-@CommandHandler(LoginWithPhoneCommand)
+@CommandHandler(LoginWithVerificationCommand)
 @RpcHandler()
-export class LoginWithPhoneHandler
-  implements ICommandHandler<LoginWithPhoneCommand, LoginWithPhoneResponse>
+export class LoginWithVerificationHandler
+  implements
+    ICommandHandler<
+      LoginWithVerificationCommand,
+      LoginWithVerificationResponse
+    >
 {
   constructor(
-    private readonly eventBus: EventBus,
-    private readonly commandBus: CommandBus,
     private readonly accounts: AccountsModel,
     private readonly verifications: VerificationsModel,
+    private readonly eventBus: EventBus,
+    private readonly commandBus: CommandBus,
   ) {}
 
   async execute(
-    command: LoginWithPhoneCommand,
-  ): Promise<LoginWithPhoneResponse> {
-    const { verificationCode, verificationId, phone } = command.request;
+    command: LoginWithVerificationCommand,
+  ): Promise<LoginWithVerificationResponse> {
+    const { verificationCode, verificationId, username } = command.cmd;
     const verification = await this.verifications
       .findById(verificationId)
       .orFail(() => new Error('Verification not found!'));
@@ -52,7 +56,7 @@ export class LoginWithPhoneHandler
     }
 
     const account = await this.accounts
-      .findByValidPhone(phone)
+      .findByUsername(username)
       .orFail(() => new Error('Account not found!'));
 
     const accountProto = new AccountTransformer(account).proto;
@@ -61,6 +65,7 @@ export class LoginWithPhoneHandler
     );
 
     this.eventBus.publish(new AccountLoggedInEvent(accountProto, tokens));
+    verification.delete();
 
     return {
       account: accountProto,

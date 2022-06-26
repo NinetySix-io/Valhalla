@@ -6,11 +6,12 @@ import { isDev } from '@valhalla/utilities';
 export class AuthManager {
   private static readonly refreshTokenKey = 'x-valhalla-refresh-token' as const;
   private static readonly accessTokenKey = 'x-valhalla-access-token' as const;
-  private reply: FastifyReply;
+  reply: FastifyReply;
   private request: FastifyRequest;
   private readonly defaultCookieOptions: CookieSerializeOptions = {
-    secure: !isDev(),
+    secure: true,
     httpOnly: !isDev(),
+    sameSite: isDev() ? 'none' : 'strict',
   };
 
   constructor(ctx: { reply: FastifyReply; request: FastifyRequest }) {

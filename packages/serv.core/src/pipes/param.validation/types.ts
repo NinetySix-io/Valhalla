@@ -1,8 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 
-export type ValidatorOption = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  validate: (value: any) => boolean | Promise<boolean>;
-  errorMessage: string;
+export type ValidatorOption<V = unknown> = {
+  validate: (value: V) => boolean | Promise<boolean> | Promise<void>;
+  errorMessage?: string;
   errorType?: HttpStatus;
 };

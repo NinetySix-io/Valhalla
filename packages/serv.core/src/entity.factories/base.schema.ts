@@ -1,9 +1,8 @@
 import { Directive, Field, ID, ObjectType } from '@nestjs/graphql';
 import { Exclude, Expose } from 'class-transformer';
+import { mongoose, prop } from '@typegoose/typegoose';
 
 import { Base } from '@typegoose/typegoose/lib/defaultClasses';
-import mongoose from 'mongoose';
-import { prop } from '@typegoose/typegoose';
 
 @ObjectType({ isAbstract: true })
 @Directive('@extends')

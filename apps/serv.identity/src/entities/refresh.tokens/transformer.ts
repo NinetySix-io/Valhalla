@@ -1,9 +1,9 @@
-import { DocumentType } from '@typegoose/typegoose';
 import { RefreshToken as Proto } from '@app/protobuf';
 import { RefreshTokenSchema } from './schema';
+import { typegoose } from '@valhalla/serv.core';
 
 export class RefreshTokenTransformer extends RefreshTokenSchema {
-  constructor(entity: DocumentType<RefreshTokenSchema>) {
+  constructor(entity: typegoose.DocumentType<RefreshTokenSchema>) {
     super();
     Object.assign(this, entity.toObject({ virtuals: false }));
   }

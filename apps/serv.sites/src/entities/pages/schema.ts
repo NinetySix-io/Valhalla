@@ -1,10 +1,13 @@
-import { BaseSchema, SimpleModel } from '@valhalla/serv.core';
+import {
+  BaseSchema,
+  SimpleModel,
+  mongoose,
+  typegoose,
+} from '@valhalla/serv.core';
 import { Exclude, Expose } from 'class-transformer';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { index, prop } from '@typegoose/typegoose';
 
 import { PageStatus } from '@app/protobuf';
-import mongoose from 'mongoose';
 
 registerEnumType(PageStatus, {
   name: 'PageStatus',
@@ -12,28 +15,28 @@ registerEnumType(PageStatus, {
 
 @ObjectType()
 @SimpleModel('pages')
-@index({ site: 1 })
-@index({ organization: 1 })
+@typegoose.index({ site: 1 })
+@typegoose.index({ organization: 1 })
 export class PageSchema extends BaseSchema {
-  @prop()
+  @typegoose.prop()
   @Exclude()
   organization: mongoose.Types.ObjectId;
 
-  @prop()
+  @typegoose.prop()
   @Exclude()
   site: mongoose.Types.ObjectId;
 
-  @prop()
+  @typegoose.prop()
   @Expose()
   @Field({ description: 'Page deployment status' })
   status: PageStatus;
 
-  @prop()
+  @typegoose.prop()
   @Expose()
   @Field({ description: 'Page title' })
   title: string;
 
-  @prop()
+  @typegoose.prop()
   @Expose()
   @Field({
     description:
@@ -41,15 +44,15 @@ export class PageSchema extends BaseSchema {
   })
   isLoneTitle?: boolean;
 
-  @prop()
+  @typegoose.prop()
   @Field({ description: 'Page description' })
   description?: string;
 
-  @prop()
+  @typegoose.prop()
   @Exclude()
   createdBy: mongoose.Types.ObjectId;
 
-  @prop()
+  @typegoose.prop()
   @Exclude()
   updatedBy: mongoose.Types.ObjectId;
 }

@@ -9,7 +9,6 @@ import {
   useChange,
 } from '@valhalla/react';
 
-import { BaseLayout } from '@app/layout/base';
 import { FormContainer } from '@app/components/form.container';
 import { LoadingButton } from '@mui/lab';
 import { MetaSlice } from '@app/redux/slices/meta';
@@ -32,8 +31,7 @@ const GetStartedWithUsernamePage: Page = () => {
   const router = useRouter();
   const dispatch = useReduxDispatch();
   const [form] = Form.useForm<Payload>();
-  const { login, loginResult, isLoggingIn, sendVerification, setUsername } =
-    useLogin();
+  const { login, loginResult, loading, sendVerification } = useLogin();
 
   function handleSubmit(payload: Payload) {
     login(payload.verificationCode);
@@ -41,14 +39,17 @@ const GetStartedWithUsernamePage: Page = () => {
 
   function handleClearUsername() {
     form.setFieldValue('isEnteringCode', false);
+    form.setFieldValue('verificationCode', undefined);
+  }
+
+  function shouldUpdate(prev: Payload, current: Payload) {
+    return prev.isEnteringCode !== current.isEnteringCode;
   }
 
   async function handleSubmitUsername() {
     const username = form.getFieldValue(UsernameFormItem.KEY);
-
     form.setFieldValue('isEnteringCode', true);
-    setUsername(username);
-    sendVerification();
+    sendVerification(username);
   }
 
   useChange(loginResult, async () => {
@@ -74,11 +75,11 @@ const GetStartedWithUsernamePage: Page = () => {
     >
       <FormContainer title="Username">
         <Form preserve form={form} onFinish={handleSubmit}>
-          <Form.Item noStyle>
+          <Form.Item noStyle shouldUpdate={shouldUpdate}>
             {({ getFieldValue }) => {
               return (
                 <UsernameFormItem
-                  disabled={isLoggingIn}
+                  disabled={loading}
                   readOnly={getFieldValue('isEnteringCode')}
                   onSubmitUsername={handleSubmitUsername}
                   onClear={handleClearUsername}
@@ -86,8 +87,8 @@ const GetStartedWithUsernamePage: Page = () => {
               );
             }}
           </Form.Item>
-          <Form.Item noStyle>
-            {({ getFieldValue }) => {
+          <Form.Item noStyle shouldUpdate={shouldUpdate}>
+            {({ getFieldValue, submit }) => {
               const username = getFieldValue(UsernameFormItem.KEY);
               const isEnteringCode = getFieldValue('isEnteringCode');
               if (!isEnteringCode) {
@@ -97,42 +98,33 @@ const GetStartedWithUsernamePage: Page = () => {
               const channel = isEmail(username) ? 'email' : 'sms';
               const label = `Verification code from ${channel}`;
               return (
-                <Form.Item name="verificationCode">
-                  <TextField
-                    disabled={isLoggingIn}
-                    variant="outlined"
-                    label={label}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton>
-                            <Icon height={15} icon={FaSolid.faRedo} />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Form.Item>
-              );
-            }}
-          </Form.Item>
-          <Form.Item noStyle>
-            {({ getFieldValue, submit }) => {
-              const verificationCode = getFieldValue('verificationCode');
-              if (!verificationCode) {
-                return null;
-              }
-
-              return (
-                <Form.Item>
-                  <LoadingButton
-                    variant="contained"
-                    loading={isLoggingIn}
-                    onClick={() => submit()}
-                  >
-                    Continue
-                  </LoadingButton>
-                </Form.Item>
+                <React.Fragment>
+                  <Form.Item name="verificationCode">
+                    <TextField
+                      disabled={loading}
+                      variant="outlined"
+                      label={label}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton>
+                              <Icon height={15} icon={FaSolid.faRedo} />
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Form.Item>
+                  <Form.Item>
+                    <LoadingButton
+                      variant="contained"
+                      loading={loading}
+                      onClick={() => submit()}
+                    >
+                      Continue
+                    </LoadingButton>
+                  </Form.Item>
+                </React.Fragment>
               );
             }}
           </Form.Item>
@@ -141,7 +133,5 @@ const GetStartedWithUsernamePage: Page = () => {
     </Box>
   );
 };
-
-GetStartedWithUsernamePage.Layout = BaseLayout;
 
 export default GetStartedWithUsernamePage;

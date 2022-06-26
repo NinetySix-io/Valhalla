@@ -1,6 +1,7 @@
+import { ACCESS_TOKEN_KEY } from '@app/lib/access.token';
 import { MetaSlice } from '@app/redux/slices/meta';
 import { PAGES } from '@app/PAGES_CONSTANTS';
-import { removeAccessToken } from '@app/lib/access.token';
+import cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';
 import { useLogoutMutation } from '@app/graphql/valhalla/generated.gql';
 import { useRouter } from 'next/router';
@@ -17,9 +18,9 @@ export function useLogout() {
     await Promise.all([
       logout(),
       dispatch(MetaSlice.actions.clearAccessToken()),
+      cookies.remove(ACCESS_TOKEN_KEY),
     ]);
 
-    removeAccessToken();
     router.push(PAGES.AUTH);
   }
 

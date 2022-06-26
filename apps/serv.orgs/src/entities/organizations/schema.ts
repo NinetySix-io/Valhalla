@@ -2,13 +2,12 @@ import {
   BaseSchema,
   CaseInsensitiveIndex,
   SimpleModel,
+  mongoose,
+  typegoose,
 } from '@valhalla/serv.core';
 import { Exclude, Expose } from 'class-transformer';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { OrgPlan, OrgStatus } from '@app/protobuf';
-import { index, prop } from '@typegoose/typegoose';
-
-import mongoose from 'mongoose';
 
 registerEnumType(OrgPlan, {
   name: 'OrganizationPlan',
@@ -21,44 +20,44 @@ registerEnumType(OrgStatus, {
 });
 @SimpleModel('organizations')
 @CaseInsensitiveIndex({ name: 1 })
-@index({ slug: 1 }, { unique: true })
-@index({ plan: 1 })
-@index({ inactiveAt: 1 })
+@typegoose.index({ slug: 1 })
+@typegoose.index({ plan: 1 })
+@typegoose.index({ inactiveAt: 1 })
 @ObjectType()
 export class OrganizationSchema extends BaseSchema {
-  @prop()
+  @typegoose.prop()
   @Expose()
   @Field({ description: 'Name of the organization' })
   name: string;
 
-  @prop()
+  @typegoose.prop()
   @Exclude()
   @Field(() => OrgStatus, { description: 'Organization status' })
   status: OrgStatus;
 
-  @prop()
+  @typegoose.prop()
   @Expose()
   @Field({ description: 'Unique slug identifier' })
   slug: string;
 
-  @prop()
+  @typegoose.prop()
   @Expose()
   @Field({ description: 'URL of the logo', nullable: true })
   logoUrl?: string;
 
-  @prop({ required: true })
+  @typegoose.prop({ required: true })
   @Exclude()
   @Field(() => OrgPlan, { description: 'Subscription plan' })
   plan: OrgPlan;
 
-  @prop()
+  @typegoose.prop()
   @Exclude()
   @Field(() => String, {
     description: 'ID of the account that created the organization',
   })
   createdBy: mongoose.Types.ObjectId;
 
-  @prop()
+  @typegoose.prop()
   @Exclude()
   @Field(() => String, {
     description: 'ID of the account that last updated the organization',

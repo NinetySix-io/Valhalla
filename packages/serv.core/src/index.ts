@@ -13,3 +13,5 @@ export * from './pipes';
 export * from './passport';
 export * from './gql.decorators';
 export * from './validator.decorators';
+export * as typegoose from '@typegoose/typegoose';
+export { default as mongoose } from 'mongoose';

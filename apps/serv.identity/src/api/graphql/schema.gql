@@ -137,7 +137,7 @@ type Query {
   account: AccountSchema!
 
   """Validate verification code"""
-  validateVerificationCode(verificationId: String!, verificationCode: String!): Boolean!
+  validateVerificationCode(input: ValidateVerificationCodeInput!): Boolean!
 }
 
 input AccessTokenQuery {
@@ -145,15 +145,20 @@ input AccessTokenQuery {
   organization: String
 }
 
+input ValidateVerificationCodeInput {
+  """Verification ID"""
+  verificationId: String!
+
+  """Verification Code"""
+  verificationCode: String!
+}
+
 type Mutation {
   """Register user account"""
   registerAccount(input: RegisterInput!): AuthResponse!
 
-  """Login to account with email address"""
-  loginWithEmail(input: LoginWithEmailInput!): AuthResponse!
-
-  """Login to account with phone number"""
-  loginWithPhone(input: LoginWithPhoneInput!): AuthResponse!
+  """Login to account with verification code"""
+  loginWithVerification(input: LoginWithVerificationInput!): AuthResponse!
 
   """Invalid current session"""
   logout: Boolean!
@@ -174,10 +179,7 @@ type Mutation {
   removePhoneFromAccount(phone: String!): Boolean!
 
   """Send verification code to email"""
-  sendEmailVerificationCode(email: String!): String!
-
-  """Send verification code to phone number"""
-  sendPhoneVerificationCode(phone: String!): String!
+  sendVerificationCode(input: SendVerificationCodeInput!): String!
 }
 
 input RegisterInput {
@@ -197,20 +199,9 @@ input RegisterInput {
   phone: String
 }
 
-input LoginWithEmailInput {
-  """Email address"""
-  email: String!
-
-  """Verification Code"""
-  verificationCode: String!
-
-  """Verification Sent"""
-  verificationId: String!
-}
-
-input LoginWithPhoneInput {
-  """Phone number"""
-  phone: String!
+input LoginWithVerificationInput {
+  """Username"""
+  username: String!
 
   """Verification Code"""
   verificationCode: String!
@@ -228,6 +219,19 @@ input UpdateAccountInput {
 
   """Last Name"""
   lastName: String
+}
+
+input SendVerificationCodeInput {
+  """Sending verification code target"""
+  destination: String!
+
+  """Verification channel"""
+  channel: VerificationChannel!
+}
+
+enum VerificationChannel {
+  EMAIL
+  SMS
 }
 
 scalar link__Import

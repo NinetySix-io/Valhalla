@@ -19,56 +19,25 @@ mutation register(
   }
 }
 
-mutation loginWithEmail(
-  $email: String!
-  $verificationId: String!
-  $verificationCode: String!
-) {
-  loginWithEmail(
-    input: {
-      email: $email
-      verificationId: $verificationId
-      verificationCode: $verificationCode
-    }
-  ) {
-    accessToken
-    accessTokenExpiresAt
-  }
-}
-
-mutation loginWithPhone(
-  $phone: String!
-  $verificationId: String!
-  $verificationCode: String!
-) {
-  loginWithPhone(
-    input: {
-      phone: $phone
-      verificationId: $verificationId
-      verificationCode: $verificationCode
-    }
-  ) {
-    accessToken
-    accessTokenExpiresAt
-  }
-}
-
 mutation logout {
   logout
 }
 
-mutation updateAccount(
-  $displayName: String
-  $firstName: String
-  $lastName: String
+mutation loginWithVerification(
+  $username: String!
+  $verificationId: String!
+  $verificationCode: String!
 ) {
-  updateAccount(
+  loginWithVerification(
     input: {
-      displayName: $displayName
-      firstName: $firstName
-      lastName: $lastName
+      username: $username
+      verificationId: $verificationId
+      verificationCode: $verificationCode
     }
-  )
+  ) {
+    accessToken
+    accessTokenExpiresAt
+  }
 }
 
 mutation addEmail($email: String!) {

@@ -28,8 +28,8 @@ export class UpdateSiteHandler
   async execute(command: UpdateSiteCommand): Promise<UpdateSiteResponse> {
     const { requestedUserId, siteId, name } = command.request;
     const updatedBy = toObjectId(requestedUserId);
-    const site = await this.sites.findByIdAndUpdate(
-      siteId,
+    const site = await this.sites.findOneAndUpdate(
+      { _id: toObjectId(siteId) },
       { $set: { name, updatedBy } },
       { withoutNil: true, new: true },
     );

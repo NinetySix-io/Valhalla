@@ -1,15 +1,18 @@
-import { BaseSchema, ExpiryIndex, SimpleModel } from '@valhalla/serv.core';
-import { index, prop } from '@typegoose/typegoose';
-
-import mongoose from 'mongoose';
+import {
+  BaseSchema,
+  ExpiryIndex,
+  SimpleModel,
+  mongoose,
+  typegoose,
+} from '@valhalla/serv.core';
 
 @SimpleModel('refresh-tokens')
-@index({ account: 1 })
+@typegoose.index({ account: 1 })
 @ExpiryIndex({ expiresAt: 1 })
 export class RefreshTokenSchema extends BaseSchema {
-  @prop()
+  @typegoose.prop()
   account!: mongoose.Types.ObjectId;
 
-  @prop()
+  @typegoose.prop()
   expiresAt!: Date;
 }

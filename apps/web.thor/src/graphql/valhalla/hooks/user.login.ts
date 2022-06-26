@@ -1,12 +1,11 @@
 import * as React from 'react';
 
-import { isEmail, isNil, isPhoneNumber } from '@valhalla/utilities';
 import {
-  useLoginWithEmailMutation,
-  useLoginWithPhoneMutation,
-  useSendVerificationToEmailMutation,
-  useSendVerificationToPhoneMutation,
+  VerificationChannel,
+  useLoginWithVerificationMutation,
+  useSendVerificationMutation,
 } from '../generated.gql';
+import { isEmail, isPhoneNumber } from '@valhalla/utilities';
 
 /**
  * Hook to facilitate login in
@@ -14,73 +13,46 @@ import {
  * @returns
  */
 export function useLogin() {
-  const [username, setUsername] = React.useState<string>();
-  const isEmailAddress = isEmail(username);
-  const isPhone = isPhoneNumber(username);
-  const hasUsername = !isNil(username);
-  const [loginWithEmail, loginEmailProps] = useLoginWithEmailMutation();
-  const [loginWithPhone, loginPhoneProps] = useLoginWithPhoneMutation();
-  const [emailVerification, emailVProps] = useSendVerificationToEmailMutation();
-  const [textVerification, textVProps] = useSendVerificationToPhoneMutation();
-  const loginResult = isEmailAddress
-    ? loginEmailProps.data?.loginWithEmail
-    : loginPhoneProps.data?.loginWithPhone;
-  const verificationId = isEmailAddress
-    ? emailVProps.data?.sendEmailVerificationCode
-    : textVProps.data?.sendPhoneVerificationCode;
-  const isLoggingIn = isEmailAddress
-    ? loginEmailProps.loading
-    : loginPhoneProps.loading;
+  const username = React.useRef<string>();
+  const [_login, { loading, data }] = useLoginWithVerificationMutation();
+  const [_sendVerification, { data: verificationId }] =
+    useSendVerificationMutation();
 
   const login = async (verificationCode: string) => {
-    if (!hasUsername) {
-      return;
-    }
-
-    if (isEmailAddress) {
-      await loginWithEmail({
-        variables: {
-          email: username,
-          verificationCode,
-          verificationId,
-        },
-      });
-    } else if (isPhone) {
-      await loginWithPhone({
-        variables: {
-          phone: username,
-          verificationCode,
-          verificationId,
-        },
-      });
-    }
+    _login({
+      variables: {
+        verificationCode,
+        verificationId: verificationId.sendVerificationCode,
+        username: username.current,
+      },
+    });
   };
 
-  const sendVerification = async () => {
-    if (!hasUsername) {
-      return;
+  const sendVerification = async (destination: string) => {
+    const destIsEmail = isEmail(destination);
+    const destIsPhone = isPhoneNumber(destination);
+    let channel: VerificationChannel;
+    if (!destIsEmail && !destIsPhone) {
+      throw new Error('Not email or phone!');
+    } else if (destIsEmail) {
+      channel = VerificationChannel.EMAIL;
+    } else if (destIsPhone) {
+      channel = VerificationChannel.SMS;
     }
 
-    if (isEmailAddress) {
-      await emailVerification({
-        variables: {
-          email: username,
-        },
-      });
-    } else if (isPhone) {
-      await textVerification({
-        variables: {
-          phone: username,
-        },
-      });
-    }
+    username.current = destination;
+    _sendVerification({
+      variables: {
+        destination,
+        channel,
+      },
+    });
   };
 
   return {
     login,
     sendVerification,
-    setUsername,
-    isLoggingIn,
-    loginResult,
+    loading,
+    loginResult: data?.loginWithVerification,
   };
 }

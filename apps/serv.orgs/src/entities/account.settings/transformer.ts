@@ -1,16 +1,17 @@
-import { DocumentType, isDocument } from '@typegoose/typegoose';
-
 import { AccountSettingSchema } from './schema';
 import { AccountSettings as Proto } from '@app/protobuf';
+import { typegoose } from '@valhalla/serv.core';
 
 export class AccountSettingTransformer extends AccountSettingSchema {
   constructor(
-    entity: DocumentType<AccountSettingSchema> | AccountSettingSchema,
+    entity: typegoose.DocumentType<AccountSettingSchema> | AccountSettingSchema,
   ) {
     super();
     Object.assign(
       this,
-      isDocument(entity) ? entity.toObject({ virtuals: false }) : entity,
+      typegoose.isDocument(entity)
+        ? entity.toObject({ virtuals: false })
+        : entity,
     );
   }
 

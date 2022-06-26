@@ -1,14 +1,15 @@
-import { DocumentType, isDocument } from '@typegoose/typegoose';
-
 import { Site as Proto } from '@app/protobuf';
 import { SiteSchema } from './schema';
+import { typegoose } from '@valhalla/serv.core';
 
 export class SiteTransformer extends SiteSchema {
-  constructor(entity: DocumentType<SiteSchema> | SiteSchema) {
+  constructor(entity: typegoose.DocumentType<SiteSchema> | SiteSchema) {
     super();
     Object.assign(
       this,
-      isDocument(entity) ? entity.toObject({ virtuals: false }) : entity,
+      typegoose.isDocument(entity)
+        ? entity.toObject({ virtuals: false })
+        : entity,
     );
   }
 
