@@ -23,14 +23,6 @@ export type AccessTokenQuery = {
   readonly organization?: InputMaybe<Scalars['String']>;
 };
 
-export type AccessTokenResponse = {
-  readonly __typename?: 'AccessTokenResponse';
-  /** Token expiry */
-  readonly expiresAt: Scalars['DateTime'];
-  /** Access token */
-  readonly token: Scalars['String'];
-};
-
 export type AccountEmailSchema = {
   readonly __typename?: 'AccountEmailSchema';
   /** Date entity was created */
@@ -90,9 +82,7 @@ export type AccountSchema = {
 export type AuthResponse = {
   readonly __typename?: 'AuthResponse';
   /** Access token */
-  readonly accessToken: Scalars['String'];
-  /** Access token expiry */
-  readonly accessTokenExpiresAt: Scalars['DateTime'];
+  readonly accessToken: TokenResponse;
   /** Logged in Account ID */
   readonly accountId: Scalars['String'];
 };
@@ -283,7 +273,7 @@ export enum OrganizationStatus {
 export type Query = {
   readonly __typename?: 'Query';
   /** Generate an access token */
-  readonly accessToken: AccessTokenResponse;
+  readonly accessToken: TokenResponse;
   /** Get current logged in user information */
   readonly account: AccountSchema;
   /** Get current organization */
@@ -343,6 +333,14 @@ export type SessionResponse = {
   readonly id: Scalars['ID'];
 };
 
+export type TokenResponse = {
+  readonly __typename?: 'TokenResponse';
+  /** Token expiry */
+  readonly expiresAt: Scalars['DateTime'];
+  /** Token */
+  readonly value: Scalars['String'];
+};
+
 export type UpdateAccountInput = {
   /** User Display Name */
   readonly displayName?: InputMaybe<Scalars['String']>;
@@ -373,7 +371,7 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { readonly __typename?: 'Mutation', readonly registerAccount: { readonly __typename?: 'AuthResponse', readonly accessToken: string, readonly accessTokenExpiresAt: Date } };
+export type RegisterMutation = { readonly __typename?: 'Mutation', readonly registerAccount: { readonly __typename?: 'AuthResponse', readonly accessToken: { readonly __typename?: 'TokenResponse', readonly value: string, readonly expiresAt: Date } } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -387,7 +385,7 @@ export type LoginWithVerificationMutationVariables = Exact<{
 }>;
 
 
-export type LoginWithVerificationMutation = { readonly __typename?: 'Mutation', readonly loginWithVerification: { readonly __typename?: 'AuthResponse', readonly accessToken: string, readonly accessTokenExpiresAt: Date } };
+export type LoginWithVerificationMutation = { readonly __typename?: 'Mutation', readonly loginWithVerification: { readonly __typename?: 'AuthResponse', readonly accessToken: { readonly __typename?: 'TokenResponse', readonly value: string, readonly expiresAt: Date } } };
 
 export type AddEmailMutationVariables = Exact<{
   email: Scalars['String'];
@@ -492,7 +490,7 @@ export type GetAccessTokenQueryVariables = Exact<{
 }>;
 
 
-export type GetAccessTokenQuery = { readonly __typename?: 'Query', readonly accessToken: { readonly __typename?: 'AccessTokenResponse', readonly token: string, readonly expiresAt: Date } };
+export type GetAccessTokenQuery = { readonly __typename?: 'Query', readonly accessToken: { readonly __typename?: 'TokenResponse', readonly value: string, readonly expiresAt: Date } };
 
 
 export const RegisterDocument = gql`
@@ -500,8 +498,10 @@ export const RegisterDocument = gql`
   registerAccount(
     input: {email: $email, phone: $phone, firstName: $firstName, lastName: $lastName, displayName: $displayName}
   ) {
-    accessToken
-    accessTokenExpiresAt
+    accessToken {
+      value
+      expiresAt
+    }
   }
 }
     `;
@@ -570,8 +570,10 @@ export const LoginWithVerificationDocument = gql`
   loginWithVerification(
     input: {username: $username, verificationId: $verificationId, verificationCode: $verificationCode}
   ) {
-    accessToken
-    accessTokenExpiresAt
+    accessToken {
+      value
+      expiresAt
+    }
   }
 }
     `;
@@ -1135,7 +1137,7 @@ export function refetchSessionQuery(variables?: SessionQueryVariables) {
 export const GetAccessTokenDocument = gql`
     query getAccessToken($organization: String) {
   accessToken(query: {organization: $organization}) {
-    token
+    value
     expiresAt
   }
 }

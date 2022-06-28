@@ -6,7 +6,7 @@ query session {
 
 query getAccessToken($organization: String) {
   accessToken(query: { organization: $organization }) {
-    token
+    value
     expiresAt
   }
 }

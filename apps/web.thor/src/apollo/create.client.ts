@@ -49,7 +49,7 @@ export const getErrorLink = (
                 headers: {
                   ...operation.getContext().headers,
                   ...headers,
-                  authorization: accessToken.token,
+                  authorization: accessToken.value,
                 },
               });
 

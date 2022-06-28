@@ -14,8 +14,10 @@ mutation register(
       displayName: $displayName
     }
   ) {
-    accessToken
-    accessTokenExpiresAt
+    accessToken {
+      value
+      expiresAt
+    }
   }
 }
 
@@ -35,8 +37,10 @@ mutation loginWithVerification(
       verificationCode: $verificationCode
     }
   ) {
-    accessToken
-    accessTokenExpiresAt
+    accessToken {
+      value
+      expiresAt
+    }
   }
 }
 
