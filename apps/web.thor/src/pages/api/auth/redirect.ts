@@ -6,6 +6,7 @@ import {
   SSO_REFRESH_TOKEN,
 } from '@app/lib/router.utils/sso.redirect';
 
+import { Environment } from '@app/env';
 import { REFRESH_TOKEN_KEY } from '@app/lib/access.token';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -23,8 +24,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const url =
     tenant === '.'
-      ? `http://localhost:3005${callbackUrl}}`
-      : `http://${tenant}.localhost:3005${callbackUrl}`;
+      ? `${Environment.rootUrl}${callbackUrl}}`
+      : `${Environment.getTenantUrl(tenant)}${callbackUrl}`;
 
   const refreshToken = req.cookies[REFRESH_TOKEN_KEY];
   if (!refreshToken) {

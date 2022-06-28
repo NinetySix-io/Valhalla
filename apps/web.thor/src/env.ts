@@ -29,9 +29,21 @@ export class Environment extends buildEnvironment(schema) {
     return Boolean(this.variables.DISABLE_REDUX_LOGGER);
   }
 
+  static get domain() {
+    if (this.isDev) {
+      return 'localhost:3005';
+    }
+  }
+
   static get rootUrl() {
     if (this.isDev) {
-      return 'http://localhost:3005';
+      return `http://${this.domain}`;
+    }
+  }
+
+  static getTenantUrl(tenantSlug: string) {
+    if (this.isDev) {
+      return `http://${tenantSlug}.${this.domain}`;
     }
   }
 }
