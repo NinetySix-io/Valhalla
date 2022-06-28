@@ -68,11 +68,12 @@ export interface Verification {
   expiresAt: string;
 }
 
-export interface RefreshToken {
-  id: string;
+export interface Token {
+  value: string;
   expiresAt: string;
-  account: string;
 }
+
+export interface AccessToken {}
 
 export interface Email {
   value: string;
@@ -111,9 +112,8 @@ export interface RegisterRequest {
 
 export interface RegisterResponse {
   account?: Account;
-  accessToken: string;
-  refreshToken: string;
-  accessTokenExpiresAt: string;
+  accessToken?: Token;
+  refreshToken?: Token;
 }
 
 export interface DeleteResponse {
@@ -133,9 +133,8 @@ export interface UpdateAccountResponse {
 
 export interface LoginWithVerificationResponse {
   account?: Account;
-  accessToken: string;
-  refreshToken: string;
-  accessTokenExpiresAt: string;
+  refreshToken?: Token;
+  accessToken?: Token;
 }
 
 export interface LoginWithVerificationRequest {
@@ -169,9 +168,8 @@ export interface FindAccountRequest {
 }
 
 export interface CreateAccessResponse {
-  refreshToken: string;
-  accessToken: string;
-  accessTokenExpiresAt: string;
+  refreshToken?: Token;
+  accessToken?: Token;
 }
 
 export interface DeleteRefreshTokenRequest {
@@ -192,8 +190,7 @@ export interface ProvisionAccessTokenRequest {
 }
 
 export interface ProvisionAccessTokenResponse {
-  accessToken: string;
-  accessTokenExpiresAt: string;
+  accessToken?: Token;
 }
 
 export const SERV_IDENTITY_PACKAGE_NAME = "serv.identity";

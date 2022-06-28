@@ -6,13 +6,24 @@ import { isDev } from '@valhalla/utilities';
 export class AuthManager {
   private static readonly refreshTokenKey = 'x-valhalla-refresh-token' as const;
   private static readonly accessTokenKey = 'x-valhalla-access-token' as const;
-  reply: FastifyReply;
-  private request: FastifyRequest;
-  private readonly defaultCookieOptions: CookieSerializeOptions = {
-    secure: true,
-    httpOnly: !isDev(),
-    sameSite: isDev() ? 'none' : 'strict',
-  };
+  private readonly reply: FastifyReply;
+  private readonly request: FastifyRequest;
+
+  private get defaultCookieOptions(): CookieSerializeOptions {
+    if (isDev()) {
+      return {
+        secure: false,
+        httpOnly: false,
+        sameSite: 'strict',
+      };
+    }
+
+    return {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+    };
+  }
 
   constructor(ctx: { reply: FastifyReply; request: FastifyRequest }) {
     this.reply = ctx.reply;
@@ -36,11 +47,11 @@ export class AuthManager {
 
   /**
    * It sets the refresh token in the cookie
-   * @param {string} token - The token to set
    */
-  setRefreshToken(token: string) {
+  setRefreshToken(token: string, expires: Date) {
     this.reply.setCookie(AuthManager.refreshTokenKey, token, {
       ...this.defaultCookieOptions,
+      expires,
     });
   }
 

@@ -34,9 +34,7 @@ export class DeleteRefreshTokenHandler
     const refreshToken = command.input.refreshToken;
     const tokenData = await this.provision.revokeRefreshToken(refreshToken);
     if (tokenData) {
-      this.eventBus.publish(
-        new RefreshTokenDeletedEvent(refreshToken, tokenData),
-      );
+      this.eventBus.publish(new RefreshTokenDeletedEvent(tokenData));
     }
 
     return {

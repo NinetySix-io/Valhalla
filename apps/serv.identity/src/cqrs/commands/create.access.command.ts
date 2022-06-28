@@ -7,8 +7,9 @@ import {
 } from '@nestjs/cqrs';
 
 import { AccessProvisionService } from '@app/modules/access.provision/access.provision.service';
-import { AccessTokenCreatedEvent } from '../events/access.token.created.event';
+import { RefreshTokenCreatedEvent } from '../events/refresh.token.created.event';
 import { RpcHandler } from '@valhalla/serv.core';
+import { TokenTransformer } from '@app/lib/transformers/token.transformer';
 
 export class CreateAccessCommand implements ICommand {
   constructor(public readonly input: Account) {}
@@ -25,19 +26,22 @@ export class CreateAccessHandler
   ) {}
 
   async execute(command: CreateAccessCommand): Promise<CreateAccessResponse> {
+    const account = command.input;
     const tokenData = await this.provision.createRefreshToken(command.input);
+    const { accessToken, refreshToken } = tokenData;
+    const accessTokenProto = new TokenTransformer(accessToken).proto;
+    const refreshTokenProto = new TokenTransformer(refreshToken).proto;
 
     this.eventBus.publish(
-      new AccessTokenCreatedEvent(
-        tokenData.refreshToken,
-        tokenData.accessToken,
-      ),
+      new RefreshTokenCreatedEvent({
+        account: account.id,
+        refreshToken: refreshTokenProto,
+      }),
     );
 
     return {
-      refreshToken: tokenData.refreshToken,
-      accessToken: tokenData.accessToken,
-      accessTokenExpiresAt: tokenData.accessTokenExpiresAt.toString(),
+      accessToken: accessTokenProto,
+      refreshToken: refreshTokenProto,
     };
   }
 }

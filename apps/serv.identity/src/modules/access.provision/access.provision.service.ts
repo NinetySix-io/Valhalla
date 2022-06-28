@@ -32,8 +32,7 @@ export class AccessProvisionService {
    * @returns The refresh token
    */
   async findRefreshToken(refreshToken: string) {
-    const data = await this.refreshTokens.findById(refreshToken);
-    return data;
+    return this.refreshTokens.findById(refreshToken);
   }
 
   /**
@@ -68,7 +67,7 @@ export class AccessProvisionService {
       expiresAt: this.bootConfig.refreshTokenExpiry,
     });
 
-    const refreshToken = token.id;
+    const refreshToken = { value: token.id, expiresAt: token.expiresAt };
     const accessToken = await this.createAccessToken(account);
 
     this.logger.warn(
@@ -77,8 +76,7 @@ export class AccessProvisionService {
 
     return {
       refreshToken,
-      accessToken: accessToken.value,
-      accessTokenExpiresAt: accessToken.expiresAt,
+      accessToken,
     };
   }
 

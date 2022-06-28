@@ -1,5 +1,8 @@
 import { gRpcController } from '@app/grpc/grpc.controller';
-import { ForbiddenException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
   Auth,
@@ -11,8 +14,8 @@ import { tryNice } from 'try-nice';
 import { AccessTokenQuery } from './inputs/get.access.token.input';
 import { LoginWithVerificationInput } from './inputs/login.with.verification.input';
 import { RegisterInput } from './inputs/register.input';
-import { AccessTokenResponse } from './responses/access.token.response';
 import { AuthResponse } from './responses/auth.response';
+import { TokenResponse } from './responses/token.response';
 
 @Resolver()
 export class GqlAuthResolver {
@@ -26,12 +29,24 @@ export class GqlAuthResolver {
     @Auth() auth: AuthManager,
   ): Promise<AuthResponse> {
     const result = await resolveRpcRequest(this.rpcClient.register(input));
-    auth.setRefreshToken(result.refreshToken);
+    const { accessToken, refreshToken, account } = result;
+
+    if (!accessToken) {
+      throw new InternalServerErrorException();
+    } else if (!refreshToken) {
+      throw new InternalServerErrorException();
+    } else if (!account) {
+      throw new InternalServerErrorException();
+    }
+
+    auth.setRefreshToken(refreshToken.value, new Date(refreshToken.expiresAt));
 
     return {
-      accountId: result.account!.id,
-      accessToken: result.accessToken,
-      accessTokenExpiresAt: new Date(result.accessToken),
+      accountId: account.id,
+      accessToken: {
+        value: accessToken.value,
+        expiresAt: new Date(accessToken.expiresAt),
+      },
     };
   }
 
@@ -42,16 +57,26 @@ export class GqlAuthResolver {
     @Args('input') input: LoginWithVerificationInput,
     @Auth() auth: AuthManager,
   ): Promise<AuthResponse> {
-    const result = await resolveRpcRequest(
-      this.rpcClient.loginWithVerification(input),
-    );
+    const command = this.rpcClient.loginWithVerification(input);
+    const result = await resolveRpcRequest(command);
+    const { accessToken, account, refreshToken } = result;
 
-    auth.setRefreshToken(result.refreshToken);
+    if (!accessToken) {
+      throw new InternalServerErrorException();
+    } else if (!refreshToken) {
+      throw new InternalServerErrorException();
+    } else if (!account) {
+      throw new InternalServerErrorException();
+    }
+
+    auth.setRefreshToken(refreshToken.value, new Date(refreshToken.expiresAt));
 
     return {
-      accountId: result.account!.id,
-      accessToken: result.accessToken,
-      accessTokenExpiresAt: new Date(result.accessTokenExpiresAt),
+      accountId: account.id,
+      accessToken: {
+        value: accessToken.value,
+        expiresAt: new Date(accessToken.expiresAt),
+      },
     };
   }
 
@@ -70,13 +95,13 @@ export class GqlAuthResolver {
     return true;
   }
 
-  @Query(() => AccessTokenResponse, {
+  @Query(() => TokenResponse, {
     description: 'Generate an access token',
   })
   async accessToken(
     @RefreshToken() refreshToken: string,
     @Args('query') query: AccessTokenQuery,
-  ): Promise<AccessTokenResponse> {
+  ): Promise<TokenResponse> {
     if (!refreshToken) {
       throw new ForbiddenException('Refresh Token not found!');
     }
@@ -92,13 +117,13 @@ export class GqlAuthResolver {
 
     if (error instanceof Error) {
       throw new ForbiddenException(error.message);
-    } else if (!result) {
-      throw new Error('Unexpected Error!');
+    } else if (!result?.accessToken) {
+      throw new InternalServerErrorException();
     }
 
     return {
-      token: result.accessToken,
-      expiresAt: new Date(result.accessTokenExpiresAt),
+      value: result.accessToken.value,
+      expiresAt: new Date(result.accessToken?.expiresAt),
     };
   }
 }

@@ -99,9 +99,9 @@ type AccountSchema {
   phones: [AccountPhoneSchema!]!
 }
 
-type AccessTokenResponse {
-  """Access token"""
-  token: String!
+type TokenResponse {
+  """Token"""
+  value: String!
 
   """Token expiry"""
   expiresAt: DateTime!
@@ -112,10 +112,7 @@ type AuthResponse {
   accountId: String!
 
   """Access token"""
-  accessToken: String!
-
-  """Access token expiry"""
-  accessTokenExpiresAt: DateTime!
+  accessToken: TokenResponse!
 }
 
 type SessionResponse {
@@ -128,7 +125,7 @@ type SessionResponse {
 
 type Query {
   """Generate an access token"""
-  accessToken(query: AccessTokenQuery!): AccessTokenResponse!
+  accessToken(query: AccessTokenQuery!): TokenResponse!
 
   """Get current session user"""
   session: SessionResponse!

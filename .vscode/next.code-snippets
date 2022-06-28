@@ -1,0 +1,17 @@
+{
+  "Page": {
+    "prefix": "page",
+    "description": "Next Page",
+    "body": [
+      "import { Page } from '@app/types/next';",
+      "",
+      "const $1Page: Page = () => {",
+      "\treturn (",
+      "\t\t$2",
+      "\t)",
+      "};",
+      "",
+      "export default $1Page"
+    ]
+  }
+}

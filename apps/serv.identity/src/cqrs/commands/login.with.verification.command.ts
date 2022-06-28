@@ -1,15 +1,16 @@
 import {
+  Account,
+  CreateAccessResponse,
+  LoginWithVerificationRequest,
+  LoginWithVerificationResponse,
+} from '@app/protobuf';
+import {
   CommandBus,
   CommandHandler,
   EventBus,
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import {
-  CreateAccessResponse,
-  LoginWithVerificationRequest,
-  LoginWithVerificationResponse,
-} from '@app/protobuf';
 
 import { AccountLoggedInEvent } from '../events/account.logged.in.event';
 import { AccountTransformer } from '@app/entities/accounts/transformer';
@@ -38,6 +39,10 @@ export class LoginWithVerificationHandler
     private readonly commandBus: CommandBus,
   ) {}
 
+  private async makeToken(account: Account): Promise<CreateAccessResponse> {
+    return this.commandBus.execute(new CreateAccessCommand(account));
+  }
+
   async execute(
     command: LoginWithVerificationCommand,
   ): Promise<LoginWithVerificationResponse> {
@@ -60,18 +65,14 @@ export class LoginWithVerificationHandler
       .orFail(() => new Error('Account not found!'));
 
     const accountProto = new AccountTransformer(account).proto;
-    const tokens: CreateAccessResponse = await this.commandBus.execute(
-      new CreateAccessCommand(accountProto),
-    );
-
-    this.eventBus.publish(new AccountLoggedInEvent(accountProto, tokens));
+    const tokens = await this.makeToken(accountProto);
+    this.eventBus.publish(new AccountLoggedInEvent(accountProto));
     verification.delete();
 
     return {
       account: accountProto,
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
-      accessTokenExpiresAt: tokens.accessTokenExpiresAt,
     };
   }
 }

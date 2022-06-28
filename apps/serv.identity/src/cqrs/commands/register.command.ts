@@ -1,17 +1,18 @@
 import {
-  CommandBus,
-  CommandHandler,
-  EventBus,
-  ICommand,
-  ICommandHandler,
-} from '@nestjs/cqrs';
-import {
+  Account,
   CreateAccessResponse,
   RegisterRequest,
   RegisterResponse,
   Verification,
   VerificationChannel,
 } from '@app/protobuf';
+import {
+  CommandBus,
+  CommandHandler,
+  EventBus,
+  ICommand,
+  ICommandHandler,
+} from '@nestjs/cqrs';
 import { CreatePayload, RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { AccountRegisteredEvent } from '../events/account.registered.event';
@@ -90,6 +91,10 @@ export class RegisterHandler
     ];
   }
 
+  private async makeToken(account: Account): Promise<CreateAccessResponse> {
+    return this.commandBus.execute(new CreateAccessCommand(account));
+  }
+
   async execute(command: RegisterCommand): Promise<RegisterResponse> {
     const { email, phone, firstName, lastName, displayName } = command.request;
     await Promise.all([
@@ -112,9 +117,7 @@ export class RegisterHandler
 
     const accountProto = new AccountTransformer(account).proto;
     const event = new AccountRegisteredEvent(accountProto, 'local');
-    const tokens: CreateAccessResponse = await this.commandBus.execute(
-      new CreateAccessCommand(accountProto),
-    );
+    const tokens = await this.makeToken(accountProto);
 
     account.save();
     this.eventBus.publish(event);
@@ -123,7 +126,6 @@ export class RegisterHandler
       account: accountProto,
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
-      accessTokenExpiresAt: tokens.accessTokenExpiresAt,
     };
   }
 }

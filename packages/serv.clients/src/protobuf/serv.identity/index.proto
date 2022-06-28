@@ -4,10 +4,8 @@ package serv.identity;
 
 service IdentityService {
     rpc Register(RegisterRequest) returns (RegisterResponse) {}
-    rpc SendEmailVerification(SendEmailVerificationRequest) returns (Verification) {}
-    rpc SendPhoneVerification(SendPhoneVerificationRequest) returns (Verification) {}
-    rpc LoginWithEmail(LoginWithEmailRequest) returns (LoginWithEmailResponse) {}
-    rpc LoginWithPhone(LoginWithPhoneRequest) returns (LoginWithPhoneResponse) {}
+    rpc SendVerificationCode(SendVerificationCodeRequest) returns (Verification) {}
+    rpc LoginWithVerification(LoginWithVerificationRequest) returns (LoginWithVerificationResponse) {}
     rpc Logout(LogoutRequest) returns (LogoutResponse) {}
 
     rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse) {}
@@ -26,6 +24,11 @@ service IdentityService {
     rpc DecodeAccessToken(DecodeAccessTokenRequest) returns (DecodeAccessTokenResponse) {}
 
     rpc ValidateVerification(ValidateVerificationRequest) returns (ValidateVerificationResponse) {}
+}
+
+enum VerificationChannel {
+    EMAIL = 0;
+    SMS = 1;
 }
 
 message AccessTokenAccountContent {
@@ -76,25 +79,9 @@ message VerifyPhoneResponse {
     string verificationId = 1;
 }
 
-message LoginWithPhoneRequest {
-    string phone = 1;
-    string verificationCode = 2;
-    string verificationId = 3;
-}
-
-message LoginWithPhoneResponse {
-    Account account = 1;
-    string accessToken = 2;
-    string refreshToken = 3;
-    string accessTokenExpiresAt = 4;
-}
-
-message SendEmailVerificationRequest {
-    string email = 1;
-}
-
-message SendPhoneVerificationRequest {
-    string phone = 1;
+message SendVerificationCodeRequest {
+    string destination = 1;
+    VerificationChannel channel = 2;
 }
 
 message Verification {
@@ -103,10 +90,13 @@ message Verification {
     string expiresAt = 3;
 }
 
-message RefreshToken {
-    string id = 1;
+message Token {
+    string value = 1;
     string expiresAt = 2;
-    string account = 3;
+}
+
+message AccessToken {
+
 }
 
 message Email {
@@ -146,9 +136,8 @@ message RegisterRequest {
 
 message RegisterResponse {
     Account account = 1;
-    string accessToken = 2;
-    string refreshToken = 3;
-    string accessTokenExpiresAt = 4;
+    Token accessToken = 2;
+    Token refreshToken = 3;
 }
 
 message DeleteResponse {
@@ -166,17 +155,16 @@ message UpdateAccountResponse {
     Account updatedAccount = 1;
 }
 
-message LoginWithEmailResponse {
+message LoginWithVerificationResponse {
     Account account = 1;
-    string accessToken = 2;
-    string refreshToken = 3;
-    string accessTokenExpiresAt = 4;
+    Token refreshToken = 2;
+    Token accessToken = 3;
 }
 
-message LoginWithEmailRequest {
-    string email = 1;
-    string verificationCode = 2;
-    string verificationId = 3;
+message LoginWithVerificationRequest {
+    string verificationCode = 1;
+    string verificationId = 2;
+    string username = 3;
 }
 
 message LogoutRequest {
@@ -204,9 +192,8 @@ message FindAccountRequest {
 }
 
 message CreateAccessResponse {
-    string refreshToken = 1;
-    string accessToken = 2;
-    string accessTokenExpiresAt = 4;
+    Token refreshToken = 1;
+    Token accessToken = 2;
 }
 
 message DeleteRefreshTokenRequest {
@@ -227,6 +214,5 @@ message ProvisionAccessTokenRequest {
 }
 
 message ProvisionAccessTokenResponse {
-    string accessToken = 1;
-    string accessTokenExpiresAt = 4;
+    Token accessToken = 1;
 }
