@@ -1,10 +1,9 @@
 import { useReduxDispatch, useReduxSelector } from '@app/redux/hooks';
 
 import { ACCESS_TOKEN_KEY } from '../lib/access.token/constants';
+import { Environment } from '@app/env';
 import { MetaSlice } from '@app/redux/slices/meta';
-import { PAGES } from '@app/PAGES_CONSTANTS';
 import React from 'react';
-import { buildClientReturnableLink } from '../lib/router.utils';
 import cookies from 'js-cookie';
 import { getAccessToken } from '../lib/access.token/get.access.token';
 import moment from 'moment';
@@ -51,7 +50,7 @@ export function useAccessTokenSync() {
             }),
           );
         } else {
-          router.push(buildClientReturnableLink(PAGES.AUTH));
+          router.push(`${Environment.rootUrl}/auth`);
         }
       }, Math.abs(timeoutDur.asMilliseconds()));
 

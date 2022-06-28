@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import { Box, Grid, Typography } from '@mui/material';
 
-import { BackButton } from '../back.btn';
 import { cProps } from '@valhalla/react';
 
 type Props = cProps<{
@@ -18,7 +17,7 @@ export const FormContainer: React.FC<Props> = ({ children, title }) => {
       alignItems="flex-start"
       justifyContent="center"
     >
-      <Grid item xs={12} md={6} style={{ height: 500 }}>
+      <Grid item xs={12} md={6} height={500}>
         <Box
           display="flex"
           flexDirection="row"
@@ -26,7 +25,6 @@ export const FormContainer: React.FC<Props> = ({ children, title }) => {
           alignItems="flex-end"
           marginBottom={6}
         >
-          <BackButton withFiller />
           <Typography variant="h1">{title}</Typography>
         </Box>
         <Box>{children}</Box>

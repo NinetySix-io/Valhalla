@@ -17,34 +17,23 @@ export default function middleware(req: NextRequest) {
     return new Response(null, { status: 404 });
   }
 
+  // -----------------------------
+  // Main
+  // -----------------------------
+
   const currentHost = Environment.isDev
     ? hostname.replace(`.localhost:${port}`, '')
     : hostname.replace('.vercel.pub', '');
 
-  if (!pathname.includes('.') && !pathname.startsWith('/api')) {
-    if (currentHost == 'app') {
-      if (
-        pathname === '/login' &&
-        (req.cookies['next-auth.session-token'] ||
-          req.cookies['__Secure-next-auth.session-token'])
-      ) {
-        url.pathname = '/';
-        return NextResponse.redirect(url);
-      }
-
-      url.pathname = `/app${pathname}`;
-      return NextResponse.rewrite(url);
+  if (!pathname.includes('.') && !url.pathname.startsWith('/api')) {
+    if (hostname === `localhost:${port}`) {
+      url.pathname = `/root${pathname}`;
+    } else {
+      url.pathname = `/_sites/${currentHost}${pathname}`;
     }
 
-    if (
-      hostname === `localhost:${port}` ||
-      hostname === 'platformize.vercel.app'
-    ) {
-      url.pathname = `/home${pathname}`;
-      return NextResponse.rewrite(url);
-    }
-
-    url.pathname = `/_sites/${currentHost}${pathname}`;
     return NextResponse.rewrite(url);
   }
+
+  return NextResponse.next();
 }

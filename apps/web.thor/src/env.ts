@@ -28,4 +28,10 @@ export class Environment extends buildEnvironment(schema) {
   static get DISABLE_REDUX_LOGGER() {
     return Boolean(this.variables.DISABLE_REDUX_LOGGER);
   }
+
+  static get rootUrl() {
+    if (this.isDev) {
+      return 'http://localhost:3005';
+    }
+  }
 }

@@ -1,10 +1,8 @@
+import { withApollo, withRedux, withSsrPlugins } from '@app/next/plugins';
+
 import { OrganizationSection } from '@app/components/organizations.section';
 import { Page } from '@app/types/next';
 import { Stack } from '@mui/material';
-import { withProtectedApollo } from '@app/next/plugins/with.apollo.ctx';
-import { withRedux } from '@app/next/plugins/with.redux';
-import { withReduxReqMeta } from '@app/next/plugins/with.req.meta';
-import { withSsrPlugins } from '@app/next/plugins';
 
 const MePage: Page = () => {
   return (
@@ -15,7 +13,7 @@ const MePage: Page = () => {
 };
 
 export const getServerSideProps = withSsrPlugins(
-  [withRedux, withReduxReqMeta, withProtectedApollo],
+  [withRedux, withApollo({ protected: true })],
   () => {
     return {
       props: {

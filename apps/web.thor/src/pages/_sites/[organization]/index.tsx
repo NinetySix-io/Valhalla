@@ -1,11 +1,7 @@
-import * as React from 'react';
+import { withApollo, withRedux, withSsrPlugins } from '@app/next/plugins';
 
 import { Page } from '@app/types/next';
 import { cProps } from '@valhalla/react';
-import { withProtectedApollo } from '@app/next/plugins/with.apollo.ctx';
-import { withRedux } from '@app/next/plugins/with.redux';
-import { withReduxReqMeta } from '@app/next/plugins/with.req.meta';
-import { withSsrPlugins } from '@app/next';
 
 type Props = cProps;
 
@@ -14,7 +10,7 @@ const OrganizationPage: Page<Props> = () => {
 };
 
 export const getServerSideProps = withSsrPlugins(
-  [withRedux, withReduxReqMeta, withProtectedApollo],
+  [withRedux, withApollo({ protected: true })],
   () => {
     return {
       props: {},

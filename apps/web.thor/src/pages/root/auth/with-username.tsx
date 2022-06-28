@@ -1,24 +1,21 @@
 import * as React from 'react';
 
-import { Box, IconButton, InputAdornment, TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import {
-  FaSolid,
   Form,
-  Icon,
+  GetServerSideProps,
   UsernameFormItem,
   useChange,
 } from '@valhalla/react';
 
+import { BaseLayout } from '@app/layout/base';
 import { FormContainer } from '@app/components/form.container';
 import { LoadingButton } from '@mui/lab';
-import { MetaSlice } from '@app/redux/slices/meta';
-import { PAGES } from '@app/PAGES_CONSTANTS';
 import { Page } from '@app/types/next';
+import { REFRESH_TOKEN_KEY } from '@app/lib/access.token';
 import { isEmail } from '@valhalla/utilities';
 import { useLogin } from '@app/graphql/valhalla/hooks/user.login';
-import { useReduxDispatch } from '@app/redux/hooks';
 import { useRouter } from 'next/router';
-import { useSessionResume } from '@app/hooks/use.session.resume';
 
 type Payload = {
   isEnteringCode?: boolean;
@@ -26,10 +23,12 @@ type Payload = {
   verificationCode: string;
 };
 
-const GetStartedWithUsernamePage: Page = () => {
-  useSessionResume();
+type Props = {
+  returnTo?: string;
+};
+
+const WithUsernamePage: Page<Props> = () => {
   const router = useRouter();
-  const dispatch = useReduxDispatch();
   const [form] = Form.useForm<Payload>();
   const { login, loginResult, loading, sendVerification } = useLogin();
 
@@ -53,14 +52,10 @@ const GetStartedWithUsernamePage: Page = () => {
   }
 
   useChange(loginResult, async () => {
-    await dispatch(
-      MetaSlice.actions.setAccessToken({
-        accessToken: loginResult.accessToken,
-        accessTokenExpires: new Date(loginResult.accessTokenExpiresAt),
-      }),
-    );
-
-    router.push(PAGES.ME);
+    router.replace({
+      pathname: '/api/auth/redirect',
+      query: router.query,
+    });
   });
 
   return (
@@ -104,15 +99,6 @@ const GetStartedWithUsernamePage: Page = () => {
                       disabled={loading}
                       variant="outlined"
                       label={label}
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton>
-                              <Icon height={15} icon={FaSolid.faRedo} />
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
                     />
                   </Form.Item>
                   <Form.Item>
@@ -134,4 +120,24 @@ const GetStartedWithUsernamePage: Page = () => {
   );
 };
 
-export default GetStartedWithUsernamePage;
+export const getServerSideProps: GetServerSideProps = (ctx) => {
+  if (ctx.req.cookies[REFRESH_TOKEN_KEY]) {
+    const query = ctx.query as Record<string, string>;
+    const params = new URLSearchParams(query);
+
+    return {
+      redirect: {
+        destination: `/api/auth/redirect?${params.toString()}`,
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};
+
+WithUsernamePage.Layout = BaseLayout;
+
+export default WithUsernamePage;

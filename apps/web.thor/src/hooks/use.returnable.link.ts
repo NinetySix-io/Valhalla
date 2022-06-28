@@ -1,6 +1,5 @@
-import { AppPages } from '@app/PAGES_CONSTANTS';
 import { UrlObject } from 'url';
-import { buildClientReturnableLink } from '@app/lib/router.utils';
+import { buildReturnableUrl } from '@app/lib/router.utils/returnable';
 import { useIsMounted } from './use.is.mounted';
 
 /**
@@ -11,8 +10,10 @@ import { useIsMounted } from './use.is.mounted';
 export function useReturnableLink() {
   const isMounted = useIsMounted()();
 
-  function returnTo(path: AppPages): string | UrlObject {
-    return isMounted ? buildClientReturnableLink(path) : path;
+  function returnTo(
+    ...[url, options]: Parameters<typeof buildReturnableUrl>
+  ): string | UrlObject {
+    return isMounted ? buildReturnableUrl(url, options) : url;
   }
 
   return returnTo;

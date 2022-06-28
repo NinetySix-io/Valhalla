@@ -29,11 +29,11 @@ export function useSessionResume() {
         })
         .catch(noop)
         .then((result: ApolloQueryResult<GetAccessTokenQuery>) => {
-          const nextAccessToken = result.data?.accessToken;
+          const nextAccessToken = result?.data?.accessToken;
           if (nextAccessToken) {
             dispatch(
               MetaSlice.actions.setAccessToken({
-                accessToken: nextAccessToken.token,
+                accessToken: nextAccessToken.value,
                 accessTokenExpires: nextAccessToken.expiresAt,
               }),
             );

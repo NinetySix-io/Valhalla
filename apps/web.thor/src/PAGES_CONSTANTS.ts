@@ -2,15 +2,20 @@ import { ValueOf } from '@app/types/value.of';
 
 export const HOME = '/';
 export const ME = '/me';
-export const AUTH = '/auth';
-export const AUTH_WITH_USERNAME = '/auth/with-username';
+export const NOT_FOUND = '/404';
 
 export const PAGES = {
   LANDING: HOME,
   HOME,
   ME,
-  AUTH,
-  AUTH_WITH_USERNAME,
+  NOT_FOUND,
 } as const;
+
+export const SSO_PAGES = {
+  HOME,
+  NOT_FOUND,
+  AUTH: '/auth',
+  WITH_USERNAME: '/auth/with-username',
+};
 
 export type AppPages = ValueOf<typeof PAGES>;
