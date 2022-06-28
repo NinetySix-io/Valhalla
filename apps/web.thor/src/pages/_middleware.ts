@@ -29,7 +29,7 @@ export default function middleware(req: NextRequest) {
     if (hostname === `localhost:${port}`) {
       url.pathname = `/root${pathname}`;
     } else {
-      url.pathname = `/_sites/${currentHost}${pathname}`;
+      url.pathname = `/_tenants/${currentHost}${pathname}`;
     }
 
     return NextResponse.rewrite(url);
