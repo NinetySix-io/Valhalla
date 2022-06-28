@@ -69,6 +69,12 @@ export class TracerInterceptor implements NestInterceptor {
 
     if (type === 'rpc') {
       return pattern.service + '.' + pattern.rpc;
+    } else if (type === 'graphql') {
+      const ctx = GqlExecutionContext.create(context);
+      const info = ctx.getInfo();
+      const operation = info.operation.operation;
+      const query = info.fieldName;
+      return `${operation}.${query}`;
     }
 
     return undefined;
