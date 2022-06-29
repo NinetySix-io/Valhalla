@@ -14,7 +14,6 @@ import { BaseLayout } from '@app/layout/base';
 import { CacheProvider } from '@emotion/react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Head from 'next/head';
-import { NextSeo } from 'next-seo';
 import { Page as PageType } from '@app/types/next/page';
 import { Provider as ReduxProvider } from 'react-redux';
 import { ThemeProvider } from '@mui/material/styles';
@@ -38,18 +37,12 @@ export default function App({ Component, ...props }: AppProps) {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <SiteFavicon />
       </Head>
-      <NextSeo
-        titleTemplate="%s | NinetySix"
-        {...(SEO ?? {})}
-        noindex
-        nofollow
-      />
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <ReduxProvider store={store}>
           <ApolloProvider client={apolloClient}>
             <AuthRedirectProvider isProtected={isProtected}>
-              <Layout>
+              <Layout SEO={SEO}>
                 <Page {...pageProps} />
               </Layout>
             </AuthRedirectProvider>
