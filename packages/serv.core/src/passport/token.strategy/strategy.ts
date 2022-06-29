@@ -2,13 +2,14 @@ import * as CustomPassport from 'passport-custom';
 
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AbstractStrategy, PassportStrategy } from '@nestjs/passport';
-import { IdentityRpcClientService, ServIdentity } from '@valhalla/serv.clients';
+import { IdentityRpcClientService } from '@valhalla/serv.clients';
 
 import { Logger } from '@nestjs/common';
 import { FastifyRequest } from 'fastify';
 import { tryNice } from 'try-nice';
 import { resolveRpcRequest } from '../../lib/resolve.rpc.request';
 import { AuthManager } from './auth.manager';
+import { DecodeAccessTokenResponse } from '@valhalla/serv.clients/src/protobuf/serv.identity';
 
 const TokenStrategyKey = 'token-strategy' as const;
 
@@ -27,9 +28,7 @@ export class TokensStrategy
     super();
   }
 
-  async validate(request: FastifyRequest): Promise<{
-    account: Pick<ServIdentity.Account, 'id' | 'displayName'>;
-  }> {
+  async validate(request: FastifyRequest): Promise<DecodeAccessTokenResponse> {
     const accessToken = AuthManager.getAccessTokenFromRequest(request);
 
     if (!accessToken) {
@@ -60,6 +59,7 @@ export class TokensStrategy
 
     return {
       account: result.account,
+      organization: result.organization,
     };
   }
 }

@@ -14,6 +14,11 @@ export interface AccessTokenAccountContent {
   displayName: string;
 }
 
+export interface AccessTokenOrContent {
+  id: string;
+  role: string;
+}
+
 export interface ValidateVerificationRequest {
   verificationId: string;
   verificationCode: string;
@@ -25,6 +30,7 @@ export interface ValidateVerificationResponse {
 
 export interface DecodeAccessTokenResponse {
   account?: AccessTokenAccountContent;
+  organization?: AccessTokenOrContent | undefined;
 }
 
 export interface AddEmailToAccountRequest {

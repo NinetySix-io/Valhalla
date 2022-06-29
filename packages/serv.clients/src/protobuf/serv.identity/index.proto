@@ -36,6 +36,11 @@ message AccessTokenAccountContent {
     string displayName = 2;
 }
 
+message AccessTokenOrContent {
+    string id = 1;
+    string role = 2;
+}
+
 message ValidateVerificationRequest {
     string verificationId = 1;
     string verificationCode = 2;
@@ -47,6 +52,7 @@ message ValidateVerificationResponse {
 
 message DecodeAccessTokenResponse {
     AccessTokenAccountContent account = 1;
+    optional AccessTokenOrContent organization = 2;
 }
 
 message AddEmailToAccountRequest {

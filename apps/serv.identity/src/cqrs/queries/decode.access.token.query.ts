@@ -21,8 +21,10 @@ export class DecodeAccessTokenHandler
   execute(command: DecodeAccessTokenQuery): Promise<DecodeAccessTokenResponse> {
     const accessToken = command.input.accessToken;
     const data = this.provision.decodeAccessToken(accessToken);
+
     return Promise.resolve({
       account: data.account,
+      organization: data.organization,
     });
   }
 }
