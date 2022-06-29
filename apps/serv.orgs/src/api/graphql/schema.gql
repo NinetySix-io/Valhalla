@@ -136,7 +136,7 @@ type Query {
   organization: [OrganizationSchema!]!
 
   """Get current organization membership"""
-  organizationMembership: [OrgMemberSchema!]!
+  organizationMembership: OrgMemberSchema!
 
   """Find organization by slug"""
   organizationBySlug(slug: String!): OrganizationBySlugResponse!

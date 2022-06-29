@@ -100,7 +100,7 @@ export class GqlOrganizationsResolver {
     return organization;
   }
 
-  @Query(() => [OrgMemberSchema], {
+  @Query(() => OrgMemberSchema, {
     description: 'Get current organization membership',
   })
   @UseGuards(GqlAuthGuard)
