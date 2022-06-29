@@ -18,6 +18,10 @@ export class Environment extends buildEnvironment(schema) {
   }
 
   static get GQL_SERVER() {
+    if (!this.isServer) {
+      return '/api/graphql';
+    }
+
     return this.variables.SERVER + '/graphql';
   }
 

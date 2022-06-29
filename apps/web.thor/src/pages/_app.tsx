@@ -9,11 +9,13 @@ import {
 } from '@valhalla/react';
 
 import { ApolloProvider } from '@apollo/client';
+import { AuthRedirectProvider } from '@app/components/auth.redirect.provider';
 import { BaseLayout } from '@app/layout/base';
 import { CacheProvider } from '@emotion/react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Head from 'next/head';
 import { NextSeo } from 'next-seo';
+import { Page as PageType } from '@app/types/next/page';
 import { Provider as ReduxProvider } from 'react-redux';
 import { ThemeProvider } from '@mui/material/styles';
 import { useApollo } from '@app/apollo/use.apollo';
@@ -25,7 +27,9 @@ export default function App({ Component, ...props }: AppProps) {
   const store = useReduxHydration(props);
   const pageProps = props.pageProps;
   const SEO: WithSEO<unknown>['SEO'] = pageProps?.SEO;
-  const Layout = Component['Layout'] ?? BaseLayout;
+  const Page = Component as PageType;
+  const Layout = Page.Layout ?? BaseLayout;
+  const isProtected = !Page.isUnprotected;
   const apolloClient = useApollo(pageProps);
 
   return (
@@ -44,9 +48,11 @@ export default function App({ Component, ...props }: AppProps) {
         <CssBaseline />
         <ReduxProvider store={store}>
           <ApolloProvider client={apolloClient}>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            <AuthRedirectProvider isProtected={isProtected}>
+              <Layout>
+                <Page {...pageProps} />
+              </Layout>
+            </AuthRedirectProvider>
           </ApolloProvider>
         </ReduxProvider>
       </ThemeProvider>

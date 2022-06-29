@@ -20,7 +20,6 @@ export default function middleware(req: NextRequest) {
   // -----------------------------
   // Main
   // -----------------------------
-
   const currentHost = Environment.isDev
     ? hostname.replace(`.localhost:${port}`, '')
     : hostname.replace('.vercel.pub', '');
@@ -33,6 +32,8 @@ export default function middleware(req: NextRequest) {
     }
 
     return NextResponse.rewrite(url);
+  } else if (url.pathname.startsWith('/api/graphql')) {
+    return NextResponse.rewrite(Environment.GQL_SERVER);
   }
 
   return NextResponse.next();

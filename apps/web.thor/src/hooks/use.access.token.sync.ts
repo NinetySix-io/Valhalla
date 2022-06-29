@@ -45,7 +45,7 @@ export function useAccessTokenSync() {
         if (nextToken) {
           dispatch(
             MetaSlice.actions.setAccessToken({
-              accessToken: nextToken.token,
+              accessToken: nextToken.value,
               accessTokenExpires: moment(nextToken.expiresAt).toDate(),
             }),
           );

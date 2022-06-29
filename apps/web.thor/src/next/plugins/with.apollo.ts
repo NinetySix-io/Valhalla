@@ -1,10 +1,10 @@
 import {
+  SSO_CALLBACK,
   SSO_REDIRECT_ROOT,
   makeSSORedirectUrl,
 } from '@app/lib/router.utils/sso.redirect';
 
 import { ApolloClient } from '@apollo/client';
-import { MetaSlice } from '@app/redux/slices/meta';
 import { Store } from '@app/redux';
 import { createApolloClient } from '@app/apollo/create.client';
 import { createSsrPlugin } from './create.plugin';
@@ -41,7 +41,7 @@ export const withApollo = (options?: { protected?: true }) =>
         destination: makeSSORedirectUrl({
           tenant: reqOrg || SSO_REDIRECT_ROOT,
           returningUrl: ctx.req.url,
-          callbackUrl: '/api/auth/callback',
+          callbackUrl: SSO_CALLBACK,
         }),
       };
 
@@ -55,15 +55,6 @@ export const withApollo = (options?: { protected?: true }) =>
         authorization,
       },
     });
-
-    if (ctx.reduxStore && accessToken) {
-      ctx.reduxStore.dispatch(
-        MetaSlice.actions.setAccessToken({
-          accessToken: authorization,
-          accessTokenExpires: accessToken.expiresAt,
-        }),
-      );
-    }
 
     ctx.apolloClient = apolloClient;
     ctx.onPageProps(() => ({ apolloState: apolloClient.cache.extract() }));

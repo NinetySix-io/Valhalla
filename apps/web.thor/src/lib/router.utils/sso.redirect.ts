@@ -5,6 +5,7 @@ export const SSO_REDIRECT_TENANT = '_tenant';
 export const SSO_REDIRECT_RETURN = '_return';
 export const SSO_REDIRECT_CALLBACK = '_callback';
 export const SSO_REFRESH_TOKEN = '_x_token';
+export const SSO_CALLBACK = '/api/auth/callback';
 
 /**
  * It takes an application name, a request URL, and a callback URL, and returns a URL that will

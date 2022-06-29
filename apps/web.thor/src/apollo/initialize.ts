@@ -5,6 +5,10 @@ import { createApolloClient } from './create.client';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
+/**
+ * If we're on the server, create a new Apollo Client. If we're on the client, create a new Apollo
+ * Client if one doesn't already exist
+ */
 export function initializeApollo(props?: {
   initialState?: NormalizedCacheObject;
   headers?: Record<string, string>;

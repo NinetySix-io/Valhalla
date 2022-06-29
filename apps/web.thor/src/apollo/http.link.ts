@@ -1,5 +1,4 @@
 import { createHttpLink as createApolloHttpLink } from '@apollo/client';
-import fetch from 'isomorphic-unfetch';
 
 /**
  * It creates a new HTTP link with the given headers
@@ -12,15 +11,7 @@ export const createHttpLink = (
 ) => {
   return createApolloHttpLink({
     uri,
-    credentials: 'include',
-    fetch: (url, init) => {
-      return fetch(url, {
-        ...init,
-        headers: {
-          ...init.headers,
-          ...(headers ?? {}),
-        },
-      });
-    },
+    headers,
+    credentials: 'same-origin',
   });
 };

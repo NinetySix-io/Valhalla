@@ -51,5 +51,8 @@
   "editor.quickSuggestions": {
     "strings": true // forces VS Code to trigger completions when editing "string" content
   },
-  "js/ts.implicitProjectConfig.experimentalDecorators": true
+  "js/ts.implicitProjectConfig.experimentalDecorators": true,
+  "docwriter.custom.template": "{{summary}}",
+  "docwriter.progress.trackMethods": false,
+  "docwriter.progress.trackFunctions": false
 }

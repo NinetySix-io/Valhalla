@@ -5,10 +5,7 @@ import { initializeApollo } from './initialize';
 
 export function useApollo(pageProps?: { apolloState: NormalizedCacheObject }) {
   const store = React.useMemo(
-    () =>
-      initializeApollo({
-        initialState: pageProps?.apolloState,
-      }),
+    () => initializeApollo({ initialState: pageProps?.apolloState }),
     [pageProps],
   );
 

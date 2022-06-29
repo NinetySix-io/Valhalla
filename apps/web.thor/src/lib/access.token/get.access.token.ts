@@ -7,6 +7,7 @@ import { ApolloClient } from '@apollo/client';
 import { Environment } from '@app/env';
 import { IncomingHttpHeaders } from 'http';
 import { TemporaryApolloClient } from '@app/apollo/temp.client';
+import { getStore } from '@app/redux';
 
 /**
  * It returns the access token from the server
@@ -14,7 +15,7 @@ import { TemporaryApolloClient } from '@app/apollo/temp.client';
 export async function getAccessToken(options?: {
   client?: ApolloClient<unknown>;
   headers?: IncomingHttpHeaders;
-  organization?: string;
+  organizationId?: string;
 }) {
   const client =
     options?.client ??
@@ -23,9 +24,13 @@ export async function getAccessToken(options?: {
       headers: options.headers,
     });
 
+  const store = getStore();
+  const organization =
+    options.organizationId || store.getState().tenant.organization?.id;
+
   const result = await client.query<GetAccessTokenQuery>(
     refetchGetAccessTokenQuery({
-      organization: options?.organization,
+      organization,
     }),
   );
 

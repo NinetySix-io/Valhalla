@@ -2,7 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 import { Environment } from '@app/env';
 import { MetaSlice } from './slices/meta';
-import { OrganizationSlice } from './slices/organization.';
+import { TenantSlice } from './slices/tenant';
 import { withHydration } from './utils/with.hydration';
 
 let _store: ReturnType<typeof _makeStore>;
@@ -42,7 +42,7 @@ function _makeStore() {
     reducer: withHydration(
       combineReducers({
         [MetaSlice.name]: MetaSlice.reducer,
-        [OrganizationSlice.name]: OrganizationSlice.reducer,
+        [TenantSlice.name]: TenantSlice.reducer,
       }),
     ),
   });

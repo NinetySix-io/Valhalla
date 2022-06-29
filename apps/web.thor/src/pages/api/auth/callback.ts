@@ -24,8 +24,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       name: REFRESH_TOKEN_KEY,
       value: refreshToken,
       path: '/',
-      sameSite: 'Strict',
-      secure: !Environment.isDev,
+      secure: true,
       httpOnly: !Environment.isDev,
     }),
   );
