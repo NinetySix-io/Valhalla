@@ -36,5 +36,5 @@ export const AuthRedirectProvider: React.FC<Props> = ({
     router.push(url);
   }
 
-  return <>{children}</>;
+  return children as React.ReactElement;
 };

@@ -13,5 +13,5 @@ export const TenantStartupProvider: React.FC<Props> = ({ children }) => {
     return <div>Loading...</div>;
   }
 
-  return <>{children}</>;
+  return children as React.ReactElement;
 };
