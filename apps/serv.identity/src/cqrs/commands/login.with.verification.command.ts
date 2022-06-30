@@ -39,7 +39,7 @@ export class LoginWithVerificationHandler
     private readonly commandBus: CommandBus,
   ) {}
 
-  private async makeToken(account: Account): Promise<CreateAccessResponse> {
+  private makeToken(account: Account): Promise<CreateAccessResponse> {
     return this.commandBus.execute(new CreateAccessCommand(account));
   }
 

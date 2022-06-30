@@ -31,7 +31,7 @@ export class AccessProvisionService {
    * @param {string} refreshToken - The refresh token that was sent to the client.
    * @returns The refresh token
    */
-  async findRefreshToken(refreshToken: string) {
+  findRefreshToken(refreshToken: string) {
     return this.refreshTokens.findById(refreshToken);
   }
 

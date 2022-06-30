@@ -27,7 +27,7 @@ export function OrValidation<T>(
   validators: ValidatorOption<T>[],
 ): ValidatorOption<T> {
   return {
-    validate: async (value) => {
+    validate: (value) => {
       for (const validator of validators) {
         if (!validator.validate(value)) {
           return true;
@@ -49,7 +49,7 @@ export function AndValidation<T>(
   validators: ValidatorOption<T>[],
 ): ValidatorOption<T> {
   return {
-    validate: async (value) => {
+    validate: (value) => {
       for (const validator of validators) {
         if (!validator.validate(value)) {
           throw new Error(validator.errorMessage);

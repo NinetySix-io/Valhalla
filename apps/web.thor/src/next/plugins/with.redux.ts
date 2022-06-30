@@ -4,9 +4,11 @@ import { reduxWrapper } from '@app/redux/with.redux';
 
 export const withRedux = createSsrPlugin<{ reduxStore: Store }>(async (ctx) => {
   let store: Store;
-  await reduxWrapper.getServerSideProps((wrapperStore) => async () => {
+  await reduxWrapper.getServerSideProps((wrapperStore) => () => {
     store = wrapperStore;
-    return { props: {} };
+    return Promise.resolve({
+      props: {},
+    });
   })(ctx);
 
   ctx.reduxStore = store;

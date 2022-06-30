@@ -91,7 +91,7 @@ export class RegisterHandler
     ];
   }
 
-  private async makeToken(account: Account): Promise<CreateAccessResponse> {
+  private makeToken(account: Account): Promise<CreateAccessResponse> {
     return this.commandBus.execute(new CreateAccessCommand(account));
   }
 

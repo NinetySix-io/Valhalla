@@ -4,9 +4,9 @@ import {
   SSO_REFRESH_TOKEN,
 } from '@app/lib/router.utils/sso.redirect';
 
-import { CookiesJar } from '@app/lib/cookies.jar';
 import { Environment } from '@app/env';
 import { REFRESH_TOKEN_KEY } from '@app/lib/access.token';
+import cookies from 'cookie';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const returnUrl = req.query[SSO_REDIRECT_RETURN] as string;
@@ -19,16 +19,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   if (req.cookies[REFRESH_TOKEN_KEY] !== refreshToken) {
-    res.setHeader(
-      'set-cookie',
-      CookiesJar.buildCookie({
-        name: REFRESH_TOKEN_KEY,
-        value: refreshToken,
-        path: '/',
-        secure: true,
-        httpOnly: !Environment.isDev,
-      }),
-    );
+    const cookieContent = cookies.serialize(REFRESH_TOKEN_KEY, refreshToken, {
+      path: '/',
+      secure: true,
+      httpOnly: !Environment.isDev,
+    });
+
+    res.setHeader('set-cookie', cookieContent);
   }
 
   return res.redirect(returnUrl);

@@ -41,13 +41,13 @@ const WithUsernamePage: Page<Props> = () => {
     return prev.isEnteringCode !== current.isEnteringCode;
   }
 
-  async function handleSubmitUsername() {
+  function handleSubmitUsername() {
     const username = form.getFieldValue(UsernameFormItem.KEY);
     form.setFieldValue('isEnteringCode', true);
     sendVerification(username);
   }
 
-  useChange(loginResult, async () => {
+  useChange(loginResult, () => {
     router.replace({
       pathname: '/api/auth/redirect',
       query: router.query,

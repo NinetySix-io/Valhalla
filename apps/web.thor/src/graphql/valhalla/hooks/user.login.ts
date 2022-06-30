@@ -18,7 +18,7 @@ export function useLogin() {
   const [_sendVerification, { data: verificationId }] =
     useSendVerificationMutation();
 
-  const login = async (verificationCode: string) => {
+  const login = (verificationCode: string) => {
     _login({
       variables: {
         verificationCode,
@@ -28,7 +28,7 @@ export function useLogin() {
     });
   };
 
-  const sendVerification = async (destination: string) => {
+  const sendVerification = (destination: string) => {
     const destIsEmail = isEmail(destination);
     const destIsPhone = isPhoneNumber(destination);
     let channel: VerificationChannel;
