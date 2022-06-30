@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import {
   SSO_REDIRECT_CALLBACK,
   SSO_REDIRECT_RETURN,
+  SSO_REDIRECT_ROOT,
   SSO_REDIRECT_TENANT,
   SSO_REFRESH_TOKEN,
 } from '@app/lib/router.utils/sso.redirect';
@@ -18,18 +19,18 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const returnUrl = req.query[SSO_REDIRECT_RETURN] as string;
   const callbackUrl = req.query[SSO_REDIRECT_CALLBACK] as string;
 
-  if (!tenant && !returnUrl && !callbackUrl) {
-    return res.status(400);
+  if (!returnUrl && !callbackUrl) {
+    return res.status(400).redirect('/');
   }
 
   const url =
-    tenant === '.'
-      ? `${Environment.rootUrl}${callbackUrl}}`
+    !tenant || tenant === SSO_REDIRECT_ROOT
+      ? `${Environment.rootUrl}${callbackUrl}`
       : `${Environment.getTenantUrl(tenant)}${callbackUrl}`;
 
   const refreshToken = req.cookies[REFRESH_TOKEN_KEY];
   if (!refreshToken) {
-    return res.status(404).end();
+    return res.status(404).redirect('/');
   }
 
   const params = new URLSearchParams({
@@ -37,5 +38,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     [SSO_REDIRECT_RETURN]: returnUrl,
   });
 
-  return res.status(200).redirect(`${url}?${params.toString()}`);
+  const redirectUrl = `${url}?${params.toString()}`;
+  return res.status(200).redirect(redirectUrl);
 }

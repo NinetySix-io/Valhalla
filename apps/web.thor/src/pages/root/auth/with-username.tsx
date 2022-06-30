@@ -1,21 +1,17 @@
 import * as React from 'react';
 
 import { Box, TextField } from '@mui/material';
-import {
-  Form,
-  GetServerSideProps,
-  UsernameFormItem,
-  useChange,
-} from '@valhalla/react';
+import { Form, UsernameFormItem, useChange } from '@valhalla/react';
 
 import { BaseLayout } from '@app/layout/base';
 import { FormContainer } from '@app/components/form.container';
 import { LoadingButton } from '@mui/lab';
 import { Page } from '@app/types/next';
-import { REFRESH_TOKEN_KEY } from '@app/lib/access.token';
 import { isEmail } from '@valhalla/utilities';
 import { useLogin } from '@app/graphql/valhalla/hooks/user.login';
 import { useRouter } from 'next/router';
+import { withAuthorizedRedirect } from '@app/next/plugins/with.authorized';
+import { withSsrPlugins } from '@app/next';
 
 type Payload = {
   isEnteringCode?: boolean;
@@ -120,24 +116,19 @@ const WithUsernamePage: Page<Props> = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = (ctx) => {
-  if (ctx.req.cookies[REFRESH_TOKEN_KEY]) {
-    const query = ctx.query as Record<string, string>;
-    const params = new URLSearchParams(query);
-
+export const getServerSideProps = withSsrPlugins(
+  [withAuthorizedRedirect],
+  () => {
     return {
-      redirect: {
-        destination: `/api/auth/redirect?${params.toString()}`,
-        permanent: false,
+      props: {
+        SEO: {
+          title: 'Get started',
+        },
       },
     };
-  }
-
-  return {
-    props: {},
-  };
-};
-
-WithUsernamePage.Layout = BaseLayout;
+  },
+);
 
 export default WithUsernamePage;
+
+WithUsernamePage.Layout = BaseLayout;

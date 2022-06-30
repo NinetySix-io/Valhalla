@@ -12,12 +12,15 @@ export const SSO_CALLBACK = '/api/auth/callback';
  * redirect the user to the SSO login page, and then back to the request URL after they've logged in
  */
 export function makeSSORedirectUrl(props: {
-  tenant: string;
+  tenant?: string;
   returningUrl: string;
   callbackUrl: string;
 }) {
   const params = new URLSearchParams();
-  params.append(SSO_REDIRECT_TENANT, props.tenant);
+  if (props.tenant && props.tenant !== SSO_REDIRECT_ROOT) {
+    params.append(SSO_REDIRECT_TENANT, props.tenant);
+  }
+
   params.append(SSO_REDIRECT_RETURN, props.returningUrl);
   params.append(SSO_REDIRECT_CALLBACK, props.callbackUrl);
   return `${Environment.rootUrl}/auth?${params.toString()}`;

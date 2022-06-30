@@ -1,21 +1,18 @@
 import { Box, Button } from '@mui/material';
-import { FaSolid, GetServerSideProps, Icon } from '@valhalla/react';
+import { FaSolid, Icon } from '@valhalla/react';
 
 import { BaseLayout } from '@app/layout/base';
 import { FormContainer } from '@app/components/form.container';
 import NextLink from 'next/link';
 import { Page } from '@app/types/next';
-import { REFRESH_TOKEN_KEY } from '@app/lib/access.token';
 import { SSO_PAGES } from '@app/PAGES_CONSTANTS';
+import { buildReturnableUrl } from '@app/lib/router.utils/returnable';
 import cx from 'clsx';
 import styles from './styles.module.css';
-import { useReturnableLink } from '@app/hooks/use.returnable.link';
-import { useRouter } from 'next/router';
+import { withAuthorizedRedirect } from '@app/next/plugins/with.authorized';
+import { withSsrPlugins } from '@app/next';
 
-const AuthPage: Page = () => {
-  const router = useRouter();
-  const buildLink = useReturnableLink();
-
+const AuthPage: Page = ({ query }) => {
   return (
     <Box
       maxWidth="md"
@@ -29,8 +26,8 @@ const AuthPage: Page = () => {
       <FormContainer title="Continue">
         <NextLink
           passHref
-          href={buildLink(SSO_PAGES.WITH_USERNAME, {
-            query: router.query,
+          href={buildReturnableUrl(SSO_PAGES.WITH_USERNAME, {
+            query,
           })}
         >
           <Button
@@ -47,24 +44,20 @@ const AuthPage: Page = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = (ctx) => {
-  if (ctx.req.cookies[REFRESH_TOKEN_KEY]) {
-    const query = ctx.query as Record<string, string>;
-    const params = new URLSearchParams(query);
-
+export const getServerSideProps = withSsrPlugins(
+  [withAuthorizedRedirect],
+  (ctx) => {
     return {
-      redirect: {
-        destination: `/api/auth/redirect?${params.toString()}`,
-        permanent: false,
+      props: {
+        query: ctx.query,
+        SEO: {
+          title: 'Get started',
+        },
       },
     };
-  }
-
-  return {
-    props: {},
-  };
-};
-
-AuthPage.Layout = BaseLayout;
+  },
+);
 
 export default AuthPage;
+
+AuthPage.Layout = BaseLayout;

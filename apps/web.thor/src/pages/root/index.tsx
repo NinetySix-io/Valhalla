@@ -9,7 +9,7 @@ const HomePage: Page = () => {
   return (
     <Stack direction="column" spacing={4}>
       <Typography variant="h1">Home</Typography>
-      <Link href={PAGES.ME}>
+      <Link passHref href={PAGES.ME}>
         <Button>Me</Button>
       </Link>
     </Stack>

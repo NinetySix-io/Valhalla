@@ -1,6 +1,7 @@
 import {
   ApolloCache,
   ApolloClient,
+  ApolloLink,
   ApolloQueryResult,
   DefaultContext,
   FetchResult,
@@ -12,6 +13,7 @@ import {
 } from '@apollo/client';
 
 import { IncomingHttpHeaders } from 'http';
+import { authRedirectLink } from './auth.redirect.link';
 import { createHttpLink } from './http.link';
 
 export class TemporaryApolloClient extends ApolloClient<NormalizedCacheObject> {
@@ -20,10 +22,10 @@ export class TemporaryApolloClient extends ApolloClient<NormalizedCacheObject> {
     headers?: Record<string, string> | IncomingHttpHeaders;
   }) {
     super({
-      link: createHttpLink(
-        options.uri,
-        options.headers as Record<string, string>,
-      ),
+      link: ApolloLink.from([
+        authRedirectLink,
+        createHttpLink(options.uri, options.headers as Record<string, string>),
+      ]),
       uri: options.uri,
       cache: new InMemoryCache(),
     });

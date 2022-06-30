@@ -2,14 +2,12 @@ import * as React from 'react';
 
 import {
   SSO_CALLBACK,
-  SSO_REDIRECT_ROOT,
   makeSSORedirectUrl,
 } from '@app/lib/router.utils/sso.redirect';
 
 import { Environment } from '@app/env';
 import { useOrgQuery } from '@app/hooks/use.org.query';
 import { useReduxSelector } from '@app/redux/hooks';
-import { useRouter } from 'next/router';
 
 type Props = {
   isProtected?: boolean;
@@ -20,20 +18,24 @@ export const AuthRedirectProvider: React.FC<Props> = ({
   isProtected,
   children,
 }) => {
-  const router = useRouter();
   const tenant = useOrgQuery();
+  const redirected = React.useRef(false);
   const shouldRedirect = useReduxSelector(
     (state) => state.meta.requireAuth && !Environment.isServer,
   );
 
-  if (isProtected && shouldRedirect) {
-    const url = makeSSORedirectUrl({
-      tenant: tenant || SSO_REDIRECT_ROOT,
+  if (
+    !Environment.isServer &&
+    isProtected &&
+    !redirected.current &&
+    shouldRedirect
+  ) {
+    redirected.current = true;
+    location.href = makeSSORedirectUrl({
+      tenant,
       returningUrl: location.pathname + location.search,
       callbackUrl: SSO_CALLBACK,
     });
-
-    router.push(url);
   }
 
   return children as React.ReactElement;

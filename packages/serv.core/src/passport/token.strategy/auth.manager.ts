@@ -12,9 +12,9 @@ export class AuthManager {
   private get defaultCookieOptions(): CookieSerializeOptions {
     if (isDev()) {
       return {
-        secure: false,
+        secure: true,
         httpOnly: false,
-        sameSite: 'strict',
+        sameSite: 'none',
       };
     }
 
@@ -52,6 +52,7 @@ export class AuthManager {
     this.reply.setCookie(AuthManager.refreshTokenKey, token, {
       ...this.defaultCookieOptions,
       expires,
+      path: '/',
     });
   }
 

@@ -18,16 +18,18 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(500).json({ message: 'Error!' });
   }
 
-  res.setHeader(
-    'set-cookie',
-    CookiesJar.buildCookie({
-      name: REFRESH_TOKEN_KEY,
-      value: refreshToken,
-      path: '/',
-      secure: true,
-      httpOnly: !Environment.isDev,
-    }),
-  );
+  if (req.cookies[REFRESH_TOKEN_KEY] !== refreshToken) {
+    res.setHeader(
+      'set-cookie',
+      CookiesJar.buildCookie({
+        name: REFRESH_TOKEN_KEY,
+        value: refreshToken,
+        path: '/',
+        secure: true,
+        httpOnly: !Environment.isDev,
+      }),
+    );
+  }
 
   return res.redirect(returnUrl);
 }

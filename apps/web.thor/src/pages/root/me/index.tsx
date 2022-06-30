@@ -1,8 +1,9 @@
-import { withApollo, withRedux, withSsrPlugins } from '@app/next/plugins';
-
+import { MainLayout } from '@app/layout/main';
 import { OrganizationSection } from '@app/components/organizations.section';
 import { Page } from '@app/types/next';
 import { Stack } from '@mui/material';
+import { withAuth } from '@app/next/plugins/with.auth';
+import { withSsrPlugins } from '@app/next';
 
 const MePage: Page = () => {
   return (
@@ -12,19 +13,16 @@ const MePage: Page = () => {
   );
 };
 
-export const getServerSideProps = withSsrPlugins(
-  [withRedux, withApollo({ protected: true })],
-  () => {
-    return {
-      props: {
-        SEO: {
-          title: 'NinetySix',
-          titleTemplate: '%s',
-          description: 'The whole operation',
-        },
+export const getServerSideProps = withSsrPlugins([withAuth], () => {
+  return {
+    props: {
+      SEO: {
+        title: 'Me',
       },
-    };
-  },
-);
+    },
+  };
+});
 
 export default MePage;
+
+MePage.Layout = MainLayout;
