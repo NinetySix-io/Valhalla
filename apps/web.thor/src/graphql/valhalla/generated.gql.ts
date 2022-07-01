@@ -281,7 +281,7 @@ export type Query = {
   /** Find organization by slug */
   readonly organizationBySlug: OrganizationBySlugResponse;
   /** Get current organization membership */
-  readonly organizationMembership: ReadonlyArray<OrgMemberSchema>;
+  readonly organizationMembership: OrgMemberSchema;
   /** Get current user's organizations memberships */
   readonly organizations: ReadonlyArray<OrganizationSchema>;
   /** Get current session user */
@@ -461,7 +461,7 @@ export type GetAccountQuery = { readonly __typename?: 'Query', readonly account:
 export type GetOrgMembershipQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOrgMembershipQuery = { readonly __typename?: 'Query', readonly organizationMembership: ReadonlyArray<{ readonly __typename?: 'OrgMemberSchema', readonly profileImageUrl?: string | null, readonly status: OrgMemberStatus, readonly role: OrgMemberRole }> };
+export type GetOrgMembershipQuery = { readonly __typename?: 'Query', readonly organizationMembership: { readonly __typename?: 'OrgMemberSchema', readonly profileImageUrl?: string | null, readonly status: OrgMemberStatus, readonly role: OrgMemberRole } };
 
 export type GetOrgsMembershipListQueryVariables = Exact<{ [key: string]: never; }>;
 

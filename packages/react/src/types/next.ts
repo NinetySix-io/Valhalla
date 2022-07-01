@@ -20,8 +20,9 @@ export type GetServerSideProps<
   P extends BasicObject = BasicObject,
   Q extends ParsedUrlQuery = ParsedUrlQuery,
   D extends PreviewData = PreviewData,
+  C extends BasicObject = BasicObject,
 > = (
-  context: GetServerSidePropsContext<Q, D>,
+  context: GetServerSidePropsContext<Q, D> & C,
 ) =>
   | Promise<GetServerSidePropsResult<WithSEO<P>>>
   | GetServerSidePropsResult<WithSEO<P>>;
@@ -30,8 +31,9 @@ export type GetStaticProps<
   P extends BasicObject = BasicObject,
   Q extends ParsedUrlQuery = ParsedUrlQuery,
   D extends PreviewData = PreviewData,
+  C extends BasicObject = BasicObject,
 > = (
-  context: GetStaticPropsContext<Q, D>,
+  context: GetStaticPropsContext<Q, D> & C,
 ) =>
   | Promise<GetStaticPropsResult<WithSEO<P>>>
   | GetStaticPropsResult<WithSEO<P>>;

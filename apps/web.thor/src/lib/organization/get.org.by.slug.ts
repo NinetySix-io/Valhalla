@@ -8,6 +8,9 @@ import { Environment } from '@app/env';
 import { IncomingHttpHeaders } from 'http';
 import { TemporaryApolloClient } from '@app/apollo/temp.client';
 
+/**
+ * Find organization from slug
+ */
 export async function getOrganizationBySlug(
   slug: string,
   options?: {

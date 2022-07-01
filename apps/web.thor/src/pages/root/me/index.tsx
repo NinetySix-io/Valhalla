@@ -2,8 +2,8 @@ import { MainLayout } from '@app/layout/main';
 import { OrganizationSection } from '@app/components/organizations.section';
 import { Page } from '@app/types/next';
 import { Stack } from '@mui/material';
-import { withAuth } from '@app/next/plugins/with.auth';
-import { withSsrPlugins } from '@app/next';
+import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
+import { withAuth } from '@app/next/plugins/presets/with.auth';
 
 const MePage: Page = () => {
   return (
@@ -13,7 +13,7 @@ const MePage: Page = () => {
   );
 };
 
-export const getServerSideProps = withSsrPlugins([withAuth], () => {
+export const getServerSideProps = composeNextPlugins([withAuth], () => {
   return {
     props: {
       SEO: {

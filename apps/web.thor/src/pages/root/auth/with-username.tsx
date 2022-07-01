@@ -7,11 +7,11 @@ import { BaseLayout } from '@app/layout/base';
 import { FormContainer } from '@app/components/form.container';
 import { LoadingButton } from '@mui/lab';
 import { Page } from '@app/types/next';
+import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
 import { isEmail } from '@valhalla/utilities';
 import { useLogin } from '@app/graphql/valhalla/hooks/user.login';
 import { useRouter } from 'next/router';
-import { withAuthorizedRedirect } from '@app/next/plugins/with.authorized';
-import { withSsrPlugins } from '@app/next';
+import { withAuthorizedRedirect } from '@app/next/plugins/presets/with.authorized';
 
 type Payload = {
   isEnteringCode?: boolean;
@@ -116,7 +116,7 @@ const WithUsernamePage: Page<Props> = () => {
   );
 };
 
-export const getServerSideProps = withSsrPlugins(
+export const getServerSideProps = composeNextPlugins(
   [withAuthorizedRedirect],
   () => {
     return {

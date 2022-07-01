@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { useTenantHydrate } from '@app/hooks/use.org.hydrate';
+import { useTenantHydrate } from '@app/hooks/use.tenant.hydrate';
 
 type Props = {
   children?: React.ReactNode;

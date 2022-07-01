@@ -29,13 +29,17 @@ const Body = styled(Box)`
   flex-direction: column;
   flex-grow: 1;
   align-items: center;
+
+  > * {
+    width: 100%;
+  }
 `;
 
 export const BaseLayout: React.FC<Props> = ({ children, footer, header }) => {
   return (
     <Wrapper fixed maxWidth="xl">
       {header}
-      <Body className={'body-test'}>{children}</Body>
+      <Body>{children}</Body>
       {footer}
     </Wrapper>
   );

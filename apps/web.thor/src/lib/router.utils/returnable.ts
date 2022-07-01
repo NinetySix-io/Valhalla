@@ -6,9 +6,6 @@ export const RETURN_TO = 'return_to' as const;
 /**
  * It takes a path and an optional query object, and returns a URL object that can be used with the
  * `next/link` component
- * @param {string} nextPath - The path to redirect to.
- * @param [options] - {
- * @returns A function that returns a UrlObject
  */
 export function buildReturnableUrl<Q extends object>(
   nextPath: string,

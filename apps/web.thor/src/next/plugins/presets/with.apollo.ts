@@ -1,10 +1,16 @@
 import { ApolloClient } from '@apollo/client';
 import { createApolloClient } from '@app/apollo/create.client';
-import { createSsrPlugin } from './create.plugin';
+import { createNextPlugin } from '../create.plugin';
 
+/**
+ * It creates an Apollo Client instance and attaches it to the context object
+ */
 export const withApollo = () =>
-  createSsrPlugin<{ apolloClient: ApolloClient<unknown> }>(async (ctx) => {
-    const headers = ctx.req.headers as Record<string, string>;
+  createNextPlugin<{ apolloClient: ApolloClient<unknown> }>(async (ctx) => {
+    const headers = ctx.isSsr
+      ? (ctx.ssrCtx.req.headers as Record<string, string>)
+      : undefined;
+
     const apolloClient = createApolloClient({ headers });
     ctx.apolloClient = apolloClient;
     ctx.onPageProps(() => ({ apolloState: apolloClient.cache.extract() }));

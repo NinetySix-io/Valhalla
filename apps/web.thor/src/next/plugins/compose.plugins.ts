@@ -1,19 +1,16 @@
+import { GetServerSideProps, GetStaticProps } from '@valhalla/react';
 import { OnPagePropsCb, PluginCtx } from './types';
 
-import { BasicObject } from '@valhalla/utilities';
-import { GetServerSideProps } from '../types';
+import { Environment } from '@app/env';
+import { GetServerSidePropsContext } from 'next';
 import { IntersectionOfArrayFnReturn } from '@app/types/intersection.of.array.fn.return';
-import { ParsedUrlQuery } from 'querystring';
-import { PreviewData } from 'next';
 import { merge } from 'merge-anything';
 
-export function withSsrPlugins<
-  R extends GetServerSideProps<
-    BasicObject,
-    ParsedUrlQuery,
-    PreviewData,
-    BasicObject
-  >,
+/**
+ * SSR Next plugins composer
+ */
+export function composeNextPlugins<
+  R extends GetServerSideProps | GetStaticProps,
   P extends (...args) => unknown,
   C extends Parameters<R>[0] & IntersectionOfArrayFnReturn<Array<P>>,
   O extends ReturnType<R>,
@@ -24,6 +21,9 @@ export function withSsrPlugins<
   return async (ctx) => {
     const pagePropsCbList: OnPagePropsCb[] = [];
     ctx.onPageProps = (cb: OnPagePropsCb) => pagePropsCbList.push(cb);
+    ctx.isSsr = Environment.isServer;
+    ctx.ssgCtx = ctx;
+    ctx.ssrCtx = ctx as GetServerSidePropsContext;
 
     let lastCtx = ctx;
     for (const plugin of plugins) {
