@@ -3,7 +3,7 @@ import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 import createCache from '@emotion/cache';
 import { red } from '@mui/material/colors';
 
-const BORDER_RADIUS = 10;
+const BORDER_RADIUS = '10px';
 
 export const theme = responsiveFontSizes(
   createTheme({

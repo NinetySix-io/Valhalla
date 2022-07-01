@@ -13,5 +13,9 @@
       "",
       "export default $1Page"
     ]
+  },
+  "Styled with theme": {
+    "prefix": "sth",
+    "body": ["const $2 = styled($1)(", "\t({ theme }) => `", "\t$3", "`,", ");"]
   }
 }

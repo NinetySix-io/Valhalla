@@ -9,8 +9,10 @@ type Props = cProps;
 
 export const MainLayout: React.FC<Props> = ({ children }) => {
   return (
-    <BaseLayout footer={<Footer />} header={<Header />}>
+    <BaseLayout>
+      <Header />
       {children}
+      <Footer />
     </BaseLayout>
   );
 };

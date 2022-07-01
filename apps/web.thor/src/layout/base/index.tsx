@@ -2,12 +2,11 @@ import * as React from 'react';
 
 import { Box, Container, styled } from '@mui/material';
 
-import { cProps } from '@valhalla/react';
+type Props = React.ComponentProps<typeof Container>;
 
-type Props = cProps<{
-  footer?: React.ReactNode;
-  header?: React.ReactNode;
-}>;
+export const BaseLayout: React.FC<Props> = (props) => {
+  return <Wrapper fixed maxWidth="xl" {...props} />;
+};
 
 const Wrapper = styled(Container)`
   display: flex;
@@ -16,7 +15,7 @@ const Wrapper = styled(Container)`
   height: 100vh;
   max-height: 100vh;
   max-width: 100vw;
-  overflow: auto;
+  overflow: hidden;
   position: fixed;
   left: 0;
   right: 0;
@@ -24,9 +23,10 @@ const Wrapper = styled(Container)`
   top: 0;
 `;
 
-const Body = styled(Box)`
+export const LayoutBody = styled(Box)`
   display: flex;
   flex-direction: column;
+  overflow: auto;
   flex-grow: 1;
   align-items: center;
 
@@ -34,13 +34,3 @@ const Body = styled(Box)`
     width: 100%;
   }
 `;
-
-export const BaseLayout: React.FC<Props> = ({ children, footer, header }) => {
-  return (
-    <Wrapper fixed maxWidth="xl">
-      {header}
-      <Body>{children}</Body>
-      {footer}
-    </Wrapper>
-  );
-};
