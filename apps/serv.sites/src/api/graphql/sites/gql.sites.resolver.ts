@@ -26,6 +26,7 @@ export class GqlSitesResolver {
   constructor(private readonly rpcClient: gRpcController) {}
 
   @Mutation(() => SiteUpdatedResponse)
+  @UseGuards(GqlAuthGuard)
   async createSite(
     @CurrentAccount() account: AuthAccount,
     @AccountActiveOrg() orgId: string,
@@ -46,6 +47,7 @@ export class GqlSitesResolver {
   }
 
   @Mutation(() => SiteUpdatedResponse)
+  @UseGuards(GqlAuthGuard)
   async updateSite(
     @CurrentAccount() account: AuthAccount,
     @AccountActiveOrg() orgId: string,
