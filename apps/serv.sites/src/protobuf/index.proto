@@ -16,6 +16,9 @@ service SitesService {
   rpc ArchivePage(ArchivePageRequest) returns (ArchivePageResponse) {}
 }
 
+// -----------------------------
+// ENUMS
+// -----------------------------
 enum SiteStatus {
   DEPLOYED = 0;
   PENDING = 1;
@@ -29,9 +32,118 @@ enum PageStatus {
   SCHEDULED = 3;
 }
 
+enum ElementType {
+  meta = 0;
+  style = 1;
+  link = 2;
+  title = 3;
+  address = 4;
+  article = 5;
+  aside = 6;
+  footer = 7;
+  header = 8;
+  h1 = 9;
+  h2 = 10;
+  h3 = 11;
+  h4 = 12;
+  h5 = 13;
+  h6 = 14;
+  main = 15;
+  nav = 16;
+  section = 17;
+
+  blockquote = 18;
+  dd = 19;
+  div = 20;
+  dl = 21;
+  dt = 22;
+  figcaption = 23;
+  figure = 24;
+  hr = 25;
+  li = 26;
+  menu = 27;
+  ol = 28;
+  p = 29;
+  pre = 30;
+  ul = 31;
+
+  a = 32;
+  abbr = 33;
+  b = 34;
+  bdi = 35;
+  bdo = 36;
+  br = 37;
+  cite = 38;
+  code = 39;
+  data = 40;
+  dfn = 41;
+  em = 42;
+  i = 43;
+  kbd = 44;
+  mark = 45;
+  q = 46;
+  rp = 47;
+  rt = 48;
+  ruby = 49;
+  s = 50;
+  samp = 51;
+  small = 52;
+  span = 53;
+  strong = 54;
+  sub = 55;
+  sup = 56;
+  time = 57;
+  u = 58;
+  var = 59;
+  wbr = 60;
+  area = 61;
+  audio = 62;
+  img = 63;
+  map = 64;
+  track = 65;
+  video = 66;
+  embed = 67;
+  iframe = 68;
+  object = 69;
+  picture = 70;
+  portal = 71;
+  source = 72;
+  svg = 73;
+  math = 74;
+  canvas = 75;
+  noscript = 76;
+  script = 77;
+}
+
 // -----------------------------
 // Entity
 // -----------------------------
+message Component {
+  string id = 1;
+  string ownBy = 2;
+  string createdBy = 3;
+  string updatedBy = 4;
+  string name = 5;
+  optional string iconUrl = 6;
+  repeated Element elements = 7;
+  string createdAt = 8;
+  string updatedAt = 9;
+}
+
+message ElementStyle {
+  string updatedAt = 1;
+}
+
+message Element {
+  ElementType type = 1;
+  optional string id = 2;
+  optional string className = 3;
+  repeated Element children = 4;
+  string updatedAt = 5;
+  string updatedBy = 6;
+  optional ElementStyle style = 7;
+}
+
 message Page {
   string id = 1;
   string title = 2;

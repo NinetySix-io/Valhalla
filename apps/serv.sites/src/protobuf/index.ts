@@ -4,6 +4,11 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "serv.sites";
 
+/**
+ * -----------------------------
+ * ENUMS
+ * -----------------------------
+ */
 export enum SiteStatus {
   DEPLOYED = "DEPLOYED",
   PENDING = "PENDING",
@@ -17,11 +22,118 @@ export enum PageStatus {
   SCHEDULED = "SCHEDULED",
 }
 
+export enum ElementType {
+  meta = "meta",
+  style = "style",
+  link = "link",
+  title = "title",
+  address = "address",
+  article = "article",
+  aside = "aside",
+  footer = "footer",
+  header = "header",
+  h1 = "h1",
+  h2 = "h2",
+  h3 = "h3",
+  h4 = "h4",
+  h5 = "h5",
+  h6 = "h6",
+  main = "main",
+  nav = "nav",
+  section = "section",
+  blockquote = "blockquote",
+  dd = "dd",
+  div = "div",
+  dl = "dl",
+  dt = "dt",
+  figcaption = "figcaption",
+  figure = "figure",
+  hr = "hr",
+  li = "li",
+  menu = "menu",
+  ol = "ol",
+  p = "p",
+  pre = "pre",
+  ul = "ul",
+  a = "a",
+  abbr = "abbr",
+  b = "b",
+  bdi = "bdi",
+  bdo = "bdo",
+  br = "br",
+  cite = "cite",
+  code = "code",
+  data = "data",
+  dfn = "dfn",
+  em = "em",
+  i = "i",
+  kbd = "kbd",
+  mark = "mark",
+  q = "q",
+  rp = "rp",
+  rt = "rt",
+  ruby = "ruby",
+  s = "s",
+  samp = "samp",
+  small = "small",
+  span = "span",
+  strong = "strong",
+  sub = "sub",
+  sup = "sup",
+  time = "time",
+  u = "u",
+  var = "var",
+  wbr = "wbr",
+  area = "area",
+  audio = "audio",
+  img = "img",
+  map = "map",
+  track = "track",
+  video = "video",
+  embed = "embed",
+  iframe = "iframe",
+  object = "object",
+  picture = "picture",
+  portal = "portal",
+  source = "source",
+  svg = "svg",
+  math = "math",
+  canvas = "canvas",
+  noscript = "noscript",
+  script = "script",
+}
+
 /**
  * -----------------------------
  * Entity
  * -----------------------------
  */
+export interface Component {
+  id: string;
+  ownBy: string;
+  createdBy: string;
+  updatedBy: string;
+  name: string;
+  iconUrl?: string | undefined;
+  elements: Element[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ElementStyle {
+  updatedAt: string;
+}
+
+export interface Element {
+  type: ElementType;
+  id?: string | undefined;
+  className?: string | undefined;
+  children: Element[];
+  updatedAt: string;
+  updatedBy: string;
+  style?: ElementStyle | undefined;
+}
+
 export interface Page {
   id: string;
   title: string;
