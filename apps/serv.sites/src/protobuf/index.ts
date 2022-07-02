@@ -144,6 +144,7 @@ export interface UpdateSiteResponse {
 
 export interface GetSiteRequest {
   siteId: string;
+  orgId?: string | undefined;
 }
 
 export interface GetSiteResponse {

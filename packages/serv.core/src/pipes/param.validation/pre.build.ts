@@ -1,6 +1,7 @@
 import { isEmail, isEmpty, isPhoneNumber } from 'class-validator';
 
 import { ValidatorOption } from './types';
+import { isObjectIdOrHexString } from 'mongoose';
 
 export const EmailParamValidation: ValidatorOption<string> = {
   validate: isEmail,
@@ -15,6 +16,16 @@ export const PhoneParamValidation: ValidatorOption<string> = {
 export const EmptyStringValidation: ValidatorOption<string> = {
   validate: isEmpty,
   errorMessage: 'Field must be a non-empty string',
+};
+
+export const ObjectIdParamValidation: ValidatorOption<string> = {
+  validate: isObjectIdOrHexString,
+  errorMessage: 'Invalid id type',
+};
+
+export const EmptyObjectValidation: ValidatorOption<object> = {
+  validate: isEmpty,
+  errorMessage: 'Field has no properties',
 };
 
 /**

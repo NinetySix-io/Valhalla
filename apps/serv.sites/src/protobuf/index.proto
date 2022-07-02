@@ -156,6 +156,7 @@ message UpdateSiteResponse {
 
 message GetSiteRequest {
   string siteId = 1;
+  optional string orgId = 2;
 }
 
 message GetSiteResponse {

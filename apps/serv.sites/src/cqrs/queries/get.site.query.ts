@@ -1,7 +1,9 @@
 import { GetSiteRequest, GetSiteResponse } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
-import { RpcHandler } from '@valhalla/serv.core';
+import { FilterQuery } from 'mongoose';
+import { SiteSchema } from '@app/entities/sites/schema';
 import { SiteTransformer } from '@app/entities/sites/transformer';
 import { SitesModel } from '@app/entities/sites';
 
@@ -17,7 +19,14 @@ export class GetSiteHandler
   constructor(private readonly sites: SitesModel) {}
 
   async execute(command: GetSiteQuery): Promise<GetSiteResponse> {
-    const site = await this.sites.findById(command.request.siteId);
+    const query: FilterQuery<SiteSchema> = {};
+    const { siteId, orgId } = command.request;
+    query._id = toObjectId(siteId);
+    if (orgId) {
+      query.ownBy = toObjectId(orgId);
+    }
+
+    const site = await this.sites.findOne(query);
     const serialized = site ? new SiteTransformer(site).proto : undefined;
 
     return {
