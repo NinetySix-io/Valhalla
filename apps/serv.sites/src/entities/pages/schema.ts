@@ -45,14 +45,17 @@ export class PageSchema extends BaseSchema {
   isLoneTitle?: boolean;
 
   @typegoose.prop()
+  @Expose()
   @Field({ description: 'Page description' })
   description?: string;
 
   @typegoose.prop()
   @Exclude()
+  @Field(() => String, { description: 'Account ID of creator' })
   createdBy: mongoose.Types.ObjectId;
 
   @typegoose.prop()
   @Exclude()
+  @Field(() => String, { description: 'Account ID of updater' })
   updatedBy: mongoose.Types.ObjectId;
 }

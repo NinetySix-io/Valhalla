@@ -22,4 +22,130 @@ directive @inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUM
 
 directive @override(from: String!) on FIELD_DEFINITION
 
+type PageSchema {
+  """Date entity was created"""
+  createdAt: DateTime!
+
+  """Date entity was updated"""
+  updatedAt: DateTime!
+
+  """Identifier of the entity"""
+  id: ID!
+
+  """Page deployment status"""
+  status: String!
+
+  """Page title"""
+  title: String!
+
+  """Whether the title should be independent or part of the title template"""
+  isLoneTitle: Boolean!
+
+  """Page description"""
+  description: String!
+
+  """Account ID of creator"""
+  createdBy: String!
+
+  """Account ID of updater"""
+  updatedBy: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type SiteSchema {
+  """Date entity was created"""
+  createdAt: DateTime!
+
+  """Date entity was updated"""
+  updatedAt: DateTime!
+
+  """Identifier of the entity"""
+  id: ID!
+
+  """Site name"""
+  name: String!
+
+  """Site status"""
+  status: SiteStatus!
+
+  """Site url"""
+  url: String!
+
+  """Account ID of creator"""
+  createdBy: String!
+
+  """Account ID of last updater"""
+  updatedBy: String!
+
+  """Site owner"""
+  ownBy: String!
+}
+
+enum SiteStatus {
+  DEPLOYED
+  PENDING
+  SUSPENDED
+}
+
+type PageUpdatedResponse {
+  """Identifier of the entity"""
+  id: ID!
+
+  """Page deployment status"""
+  status: String!
+}
+
+type SiteUpdatedResponse {
+  """Identifier of the entity"""
+  id: ID!
+
+  """Site status"""
+  status: SiteStatus!
+}
+
+type Query {
+  sites: [SiteSchema!]!
+  site(siteId: String!): SiteSchema!
+  getPageList(siteId: String!): [PageSchema!]!
+  getPage(siteId: String!, pageId: String!): PageSchema!
+}
+
+type Mutation {
+  createSite(input: CreateSiteInput!): SiteUpdatedResponse!
+  updateSite(input: UpdateSiteInput!, siteId: String!): SiteUpdatedResponse!
+  createPage(siteId: String!, input: CreatePageInput!): PageUpdatedResponse!
+  deletePage(siteId: String!, pageId: String!): PageUpdatedResponse!
+  updatePage(siteId: String!, pageId: String!, input: UpdatePageInput!): PageUpdatedResponse!
+}
+
+input CreateSiteInput {
+  """Site name"""
+  name: String!
+}
+
+input UpdateSiteInput {
+  """Site name"""
+  name: String
+}
+
+input CreatePageInput {
+  """Page title"""
+  title: String!
+}
+
+input UpdatePageInput {
+  """Page title"""
+  title: String
+
+  """Whether the title should be independent or part of the title template"""
+  isLoneTitle: Boolean
+
+  """Page description"""
+  description: String
+}
+
 scalar link__Import

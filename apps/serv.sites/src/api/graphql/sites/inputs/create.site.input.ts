@@ -1,4 +1,4 @@
-import { InputType, ObjectType, PickType } from '@nestjs/graphql';
+import { InputType, PickType } from '@nestjs/graphql';
 
 import { SiteSchema } from '@app/entities/sites/schema';
 
@@ -6,5 +6,5 @@ import { SiteSchema } from '@app/entities/sites/schema';
 export class CreateSiteInput extends PickType(
   SiteSchema,
   ['name'],
-  ObjectType,
+  InputType,
 ) {}

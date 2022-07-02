@@ -1,4 +1,4 @@
-import { InputType, ObjectType, PickType } from '@nestjs/graphql';
+import { InputType, PickType } from '@nestjs/graphql';
 
 import { PageSchema } from '@app/entities/pages/schema';
 
@@ -6,5 +6,5 @@ import { PageSchema } from '@app/entities/pages/schema';
 export class CreatePageInput extends PickType(
   PageSchema,
   ['title'],
-  ObjectType,
+  InputType,
 ) {}

@@ -11,5 +11,21 @@
       "\tconstructor(private readonly rpcClient: gRpcController) {}",
       "}"
     ]
+  },
+  "Gql Module": {
+    "prefix": "gModule",
+    "body": [
+      "import { Gql$1Resolver } from './gql.$2.resolver';",
+      "import { Module } from '@nestjs/common';",
+      "import { gRpcController } from '@app/grpc/grpc.controller';",
+      "import { gRpcModule } from '@app/grpc/grpc.module';",
+      "",
+      "@Module({",
+      "\tproviders: [gRpcController, Gql$1Resolver],",
+      "\timports: [gRpcModule],",
+      "})",
+      "export class Gql$1Module {}",
+      ""
+    ]
   }
 }

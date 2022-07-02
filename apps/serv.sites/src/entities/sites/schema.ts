@@ -21,7 +21,7 @@ export class SiteSchema extends BaseSchema {
   @typegoose.prop()
   name: string;
 
-  @Field({ description: 'Site status' })
+  @Field(() => SiteStatus, { description: 'Site status' })
   @Expose()
   @typegoose.prop()
   status: SiteStatus;
@@ -31,17 +31,17 @@ export class SiteSchema extends BaseSchema {
   @typegoose.prop()
   url?: string;
 
-  @Field({ description: 'Author' })
+  @Field(() => String, { description: 'Account ID of creator' })
   @Exclude()
   @typegoose.prop()
   createdBy: mongoose.Types.ObjectId;
 
-  @Field({ description: 'Last Updated By' })
+  @Field(() => String, { description: 'Account ID of last updater' })
   @Exclude()
   @typegoose.prop()
   updatedBy: mongoose.Types.ObjectId;
 
-  @Field({ description: 'Site owner' })
+  @Field(() => String, { description: 'Site owner' })
   @Exclude()
   @typegoose.prop()
   ownBy: mongoose.Types.ObjectId;
