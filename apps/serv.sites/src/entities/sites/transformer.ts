@@ -22,8 +22,8 @@ export class SiteTransformer extends SiteSchema {
       ownBy: this.ownBy.toHexString(),
       createdBy: this.createdBy.toHexString(),
       updatedBy: this.updatedBy.toHexString(),
-      updatedAt: this.updatedAt.toISOString(),
-      createdAt: this.createdAt.toISOString(),
+      updatedAt: this.updatedAt,
+      createdAt: this.createdAt,
     };
   }
 }

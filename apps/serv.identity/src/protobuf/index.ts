@@ -71,12 +71,12 @@ export interface SendVerificationCodeRequest {
 export interface Verification {
   id: string;
   owner?: string | undefined;
-  expiresAt: string;
+  expiresAt?: Date;
 }
 
 export interface Token {
   value: string;
-  expiresAt: string;
+  expiresAt?: Date;
 }
 
 export interface AccessToken {}
@@ -85,16 +85,16 @@ export interface Email {
   value: string;
   isVerified: boolean;
   isPrimary: boolean;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface Phone {
   value: string;
   isVerified: boolean;
   isPrimary: boolean;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface Account {
@@ -102,8 +102,8 @@ export interface Account {
   displayName: string;
   firstName?: string | undefined;
   lastName?: string | undefined;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: Date;
+  updatedAt?: Date;
   emails: Email[];
   phones: Phone[];
 }

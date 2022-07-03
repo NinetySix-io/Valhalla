@@ -103,11 +103,6 @@ export enum ElementType {
   script = "script",
 }
 
-/**
- * -----------------------------
- * Entity
- * -----------------------------
- */
 export interface Component {
   id: string;
   ownBy: string;
@@ -116,12 +111,12 @@ export interface Component {
   name: string;
   iconUrl?: string | undefined;
   elements: Element[];
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface ElementStyle {
-  updatedAt: string;
+  updatedAt?: Date;
 }
 
 export interface Element {
@@ -129,9 +124,10 @@ export interface Element {
   id?: string | undefined;
   className?: string | undefined;
   children: Element[];
-  updatedAt: string;
-  updatedBy: string;
+  updatedAt?: Date;
+  updatedBy?: Date;
   style?: ElementStyle | undefined;
+  props?: { [key: string]: any };
 }
 
 export interface Page {
@@ -144,8 +140,8 @@ export interface Page {
   isLoneTitle: boolean;
   createdBy: string;
   updatedBy: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface Site {
@@ -156,8 +152,8 @@ export interface Site {
   ownBy: string;
   status: SiteStatus;
   url?: string | undefined;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 /**

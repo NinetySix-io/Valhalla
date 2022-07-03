@@ -11,7 +11,7 @@ export class TokenTransformer {
   get proto(): Token {
     return {
       value: this.value,
-      expiresAt: this.expiresAt.toISOString(),
+      expiresAt: this.expiresAt,
     };
   }
 }

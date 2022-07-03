@@ -93,12 +93,12 @@ message SendVerificationCodeRequest {
 message Verification {
     string id = 1;
     optional string owner = 2;
-    string expiresAt = 3;
+    google.protobuf.Timestamp expiresAt = 3;
 }
 
 message Token {
     string value = 1;
-    string expiresAt = 2;
+    google.protobuf.Timestamp expiresAt = 2;
 }
 
 message AccessToken {

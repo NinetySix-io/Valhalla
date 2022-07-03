@@ -2,6 +2,9 @@ syntax = "proto3";
 
 package serv.sites;
 
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
 service SitesService {
   rpc CreateSite(CreateSiteRequest) returns (CreateSiteResponse){}
   rpc GetSite(GetSiteRequest) returns (GetSiteResponse) {}
@@ -118,6 +121,7 @@ enum ElementType {
 // -----------------------------
 // Entity
 // -----------------------------
+
 message Component {
   string id = 1;
   string ownBy = 2;
@@ -126,12 +130,12 @@ message Component {
   string name = 5;
   optional string iconUrl = 6;
   repeated Element elements = 7;
-  string createdAt = 8;
-  string updatedAt = 9;
+  google.protobuf.Timestamp createdAt = 8;
+  google.protobuf.Timestamp updatedAt = 9;
 }
 
 message ElementStyle {
-  string updatedAt = 1;
+  google.protobuf.Timestamp updatedAt = 1;
 }
 
 message Element {
@@ -139,9 +143,10 @@ message Element {
   optional string id = 2;
   optional string className = 3;
   repeated Element children = 4;
-  string updatedAt = 5;
-  string updatedBy = 6;
+  google.protobuf.Timestamp updatedAt = 5;
+  google.protobuf.Timestamp updatedBy = 6;
   optional ElementStyle style = 7;
+  optional google.protobuf.Struct props = 8;
 }
 
 message Page {
@@ -154,8 +159,8 @@ message Page {
   bool isLoneTitle = 7;
   string createdBy = 8;
   string updatedBy = 9;
-  string createdAt = 10;
-  string updatedAt = 11;
+  google.protobuf.Timestamp createdAt = 10;
+  google.protobuf.Timestamp updatedAt = 11;
 }
 
 message Site {
@@ -166,8 +171,8 @@ message Site {
   string ownBy = 5;
   SiteStatus status = 6;
   optional string url = 7;
-  string createdAt = 8;
-  string updatedAt = 9;
+  google.protobuf.Timestamp createdAt = 8;
+  google.protobuf.Timestamp updatedAt = 9;
 }
 
 // -----------------------------

@@ -16,8 +16,8 @@ export class PageTransformer extends PageSchema {
   get proto(): Proto {
     return {
       id: this.id,
-      createdAt: this.createdAt.toISOString(),
-      updatedAt: this.updatedAt.toISOString(),
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
       updatedBy: this.updatedBy.toHexString(),
       createdBy: this.createdBy.toHexString(),
       isLoneTitle: this.isLoneTitle,

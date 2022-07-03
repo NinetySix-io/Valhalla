@@ -39,13 +39,13 @@ export class GqlAuthResolver {
       throw new InternalServerErrorException();
     }
 
-    auth.setRefreshToken(refreshToken.value, new Date(refreshToken.expiresAt));
+    auth.setRefreshToken(refreshToken.value, refreshToken.expiresAt!);
 
     return {
       accountId: account.id,
       accessToken: {
         value: accessToken.value,
-        expiresAt: new Date(accessToken.expiresAt),
+        expiresAt: accessToken.expiresAt!,
       },
     };
   }
@@ -69,13 +69,13 @@ export class GqlAuthResolver {
       throw new InternalServerErrorException();
     }
 
-    auth.setRefreshToken(refreshToken.value, new Date(refreshToken.expiresAt));
+    auth.setRefreshToken(refreshToken.value, refreshToken.expiresAt!);
 
     return {
       accountId: account.id,
       accessToken: {
         value: accessToken.value,
-        expiresAt: new Date(accessToken.expiresAt),
+        expiresAt: accessToken.expiresAt!,
       },
     };
   }
@@ -123,7 +123,7 @@ export class GqlAuthResolver {
 
     return {
       value: result.accessToken.value,
-      expiresAt: new Date(result.accessToken?.expiresAt),
+      expiresAt: result.accessToken.expiresAt!,
     };
   }
 }

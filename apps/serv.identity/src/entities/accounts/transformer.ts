@@ -19,22 +19,10 @@ export class AccountTransformer extends AccountSchema {
       displayName: this.displayName,
       firstName: this.firstName,
       lastName: this.lastName,
-      createdAt: this.createdAt.toString(),
-      updatedAt: this.updatedAt.toString(),
-      emails: this.emails.map((email) => ({
-        isPrimary: email.isPrimary,
-        value: email.value,
-        isVerified: email.isVerified,
-        createdAt: email.createdAt.toString(),
-        updatedAt: email.updatedAt.toString(),
-      })),
-      phones: this.phones.map((phone) => ({
-        isPrimary: phone.isPrimary,
-        value: phone.value,
-        isVerified: phone.isVerified,
-        createdAt: phone.createdAt.toString(),
-        updatedAt: phone.updatedAt.toString(),
-      })),
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      emails: this.emails,
+      phones: this.phones,
     };
   }
 }

@@ -21,10 +21,10 @@ export class ComponentTransformer extends ComponentSchema {
       name: this.name,
       ownBy: this.ownBy.toHexString(),
       elements: this.elements,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
       createdBy: this.createdBy.toHexString(),
       updatedBy: this.updatedBy.toHexString(),
-      createdAt: this.createdAt.toString(),
-      updatedAt: this.updatedAt.toString(),
     };
   }
 }

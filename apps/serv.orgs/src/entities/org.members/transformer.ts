@@ -16,9 +16,9 @@ export class OrgMemberTransformer extends OrgMemberSchema {
       invitedBy: this.invitedBy?.toHexString(),
       role: this.role,
       status: this.status,
-      createdAt: this.createdAt.toString(),
-      updatedAt: this.updatedAt.toString(),
-      updatedBy: this.updatedBy.toString(),
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      updatedBy: this.updatedBy.toHexString(),
       profileImageUrl: this.profileImageUrl,
     };
   }

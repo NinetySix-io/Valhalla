@@ -3,7 +3,7 @@ import { Field, ObjectType, PickType, registerEnumType } from '@nestjs/graphql';
 
 import { ElementType } from '@app/protobuf';
 import { Expose } from 'class-transformer';
-import mongoose from 'mongoose';
+import { IsObject } from 'class-validator';
 
 registerEnumType(ElementType, { name: 'ElementType' });
 
@@ -59,6 +59,7 @@ export class ElementSchema extends PickType(
 
   @typegoose.prop()
   @Expose()
-  @Field(() => String, { description: 'Account ID of updated' })
-  updatedBy: mongoose.Types.ObjectId;
+  @Field({ description: 'Additional properties' })
+  @IsObject()
+  props?: Record<string, string | number>;
 }

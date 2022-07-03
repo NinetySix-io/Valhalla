@@ -18,11 +18,11 @@ const OrganizationPage: Page<Props> = () => {
 export const getStaticPaths = makeTenantStaticPaths();
 export const getStaticProps = composeNextPlugins(
   [withApollo, withRedux, withOrgContext],
-  (ctx) => {
+  () => {
     return {
       props: {
         SEO: {
-          title: ctx.organization.name,
+          title: 'Home',
         },
       },
     };

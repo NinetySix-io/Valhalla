@@ -51,6 +51,7 @@ promiseExec("pwd").then(async (output) => {
       unrecognizedEnum: false,
       useObjectId: true,
       useDate: true,
+      useMongoObjectId: true,
     })
       .map(([key, value]) => `${key}=${value}`)
       .join(",");

@@ -12,7 +12,7 @@ export class VerificationTransformer extends VerificationSchema {
     return {
       id: this.id,
       owner: this.owner?.toHexString(),
-      expiresAt: this.expiresAt.toString(),
+      expiresAt: this.expiresAt,
     };
   }
 }
