@@ -2,12 +2,6 @@ import * as React from 'react';
 
 import { Box, Container, styled } from '@mui/material';
 
-type Props = React.ComponentProps<typeof Container>;
-
-export const BaseLayout: React.FC<Props> = (props) => {
-  return <Wrapper fixed maxWidth="xl" {...props} />;
-};
-
 const Wrapper = styled(Container)`
   display: flex;
   flex-direction: column;
@@ -34,3 +28,9 @@ export const LayoutBody = styled(Box)`
     width: 100%;
   }
 `;
+
+type Props = React.ComponentProps<typeof Container>;
+
+export const BaseLayout: React.FC<Props> = (props) => {
+  return <Wrapper fixed maxWidth="xl" {...props} />;
+};

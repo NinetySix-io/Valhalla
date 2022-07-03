@@ -16,6 +16,12 @@
   },
   "Styled with theme": {
     "prefix": "sth",
-    "body": ["const $2 = styled($1)(", "\t({ theme }) => `", "\t$3", "`,", ");"]
+    "body": [
+      "const $2 = styled($1)(",
+      "\t({ theme }) => css`",
+      "\t$3",
+      "`,",
+      ");"
+    ]
   }
 }

@@ -9,11 +9,37 @@ import {
   Paper,
   Stack,
   Typography,
+  css,
   styled,
 } from '@mui/material';
-import { FaSolid, Icon, cProps, theme } from '@valhalla/react';
+import { FaSolid, Icon, cProps } from '@valhalla/react';
 
 import { LoadingButton } from '@mui/lab';
+
+const Body = styled(Box)``;
+
+const Header = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Footer = styled(Stack)``;
+
+const Content = styled(Paper)(
+  ({ theme }) => css`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: ${theme.palette.background.paper};
+    padding: ${theme.spacing(2)} ${theme.spacing(3)};
+    max-width: 95vw;
+    max-height: 95vh;
+    width: fit-content;
+  `,
+);
 
 type ActionProps =
   | true
@@ -29,29 +55,6 @@ type Props = cProps<Omit<ModalProps, 'onSubmit' | 'onClose'>> & {
   withSubmit?: ActionProps;
   loading?: boolean;
 };
-
-const Body = styled(Box)``;
-
-const Header = styled(Box)`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const Footer = styled(Stack)``;
-
-const Content = styled(Paper)`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: ${theme.palette.background.paper};
-  padding: ${theme.spacing(2)} ${theme.spacing(3)};
-  max-width: 95vw;
-  max-height: 95vh;
-  width: fit-content;
-`;
 
 export const Modal: React.FC<Props> = ({
   title,

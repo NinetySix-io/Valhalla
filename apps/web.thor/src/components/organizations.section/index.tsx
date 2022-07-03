@@ -6,9 +6,11 @@ import {
   IconButton,
   Stack,
   Typography,
+  css,
   styled,
+  useTheme,
 } from '@mui/material';
-import { FaSolid, Icon, cProps, theme } from '@valhalla/react';
+import { FaSolid, Icon, cProps } from '@valhalla/react';
 
 import { DynamicOrganizationCreateModal } from '../organization.create.modal/dynamic';
 import { Environment } from '@app/env';
@@ -17,19 +19,19 @@ import { OrganizationLogo } from '../organization.logo';
 import { Section } from '../section';
 import { useGetOrgsMembershipListQuery } from '@app/graphql/valhalla/generated.gql';
 
-type Props = cProps;
-
-const CreateButton = styled(Button)`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  aspect-ratio: 2;
-  width: 300px;
-  height: 150px;
-  min-width: 250px;
-  border-color: ${theme.palette.grey[500]};
-`;
+const CreateButton = styled(Button)(
+  ({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 2;
+    width: 300px;
+    height: 150px;
+    min-width: 250px;
+    border-color: ${theme.palette.grey[500]};
+  `,
+);
 
 const OrgCard = styled(Button)`
   height: 150px;
@@ -46,9 +48,12 @@ const OrgLogo = styled(OrganizationLogo)`
 
 const OrgMeta = styled(Box)``;
 
+type Props = cProps;
+
 export const OrganizationSection: React.FC<Props> = () => {
   const [creating, setCreating] = React.useState(false);
   const organizations = useGetOrgsMembershipListQuery();
+  const theme = useTheme();
 
   return (
     <React.Fragment>

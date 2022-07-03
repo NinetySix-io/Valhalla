@@ -1,11 +1,10 @@
 import * as React from 'react';
 
-import { Box, Typography, styled } from '@mui/material';
+import { Box, Typography, css, styled } from '@mui/material';
 import { FormInstance, Meta } from 'rc-field-form/es/interface';
 
 import { Field } from 'rc-field-form';
 import { FieldProps } from 'rc-field-form/es/Field';
-import { red } from '@mui/material/colors';
 
 type Props<T, P> = Omit<FieldProps, 'children'> & {
   label?: React.ReactNode;
@@ -39,11 +38,13 @@ const Label = styled('label')`
   margin-bottom: 5px;
 `;
 
-const Error = styled(Typography)`
-  color: ${red[400]};
-  font-size: small;
-  min-height: 30px;
-`;
+const Error = styled(Typography)(
+  ({ theme }) => css`
+    color: ${theme.palette.error.light};
+    font-size: small;
+    min-height: 30px;
+  `,
+);
 
 export function FormItem<T, P = unknown>({
   label,
