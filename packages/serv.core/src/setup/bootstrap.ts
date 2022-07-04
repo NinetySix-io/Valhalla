@@ -39,7 +39,8 @@ export async function bootstrapApplication(
   servCore.handleProcessTerminate();
   app.useGlobalPipes(new ValidationPipe());
 
-  await app.register(fastifyCookie);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await app.register(fastifyCookie as any);
   await options?.preSetup?.(app);
   await servCore.setup();
   return app;

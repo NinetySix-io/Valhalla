@@ -67,12 +67,9 @@ export class AccessProvisionService {
       expiresAt: this.bootConfig.refreshTokenExpiry,
     });
 
+    this.logger.warn(`Refresh Token[${token.id}] generated an access token`);
     const refreshToken = { value: token.id, expiresAt: token.expiresAt };
     const accessToken = await this.createAccessToken(account);
-
-    this.logger.warn(
-      `Refresh Token[${refreshToken}] generated an access token`,
-    );
 
     return {
       refreshToken,

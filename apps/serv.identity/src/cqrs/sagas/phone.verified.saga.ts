@@ -1,5 +1,4 @@
-import * as rx from 'rxjs';
-
+import { Observable, delay, map } from 'rxjs';
 import { Saga, ofType } from '@nestjs/cqrs';
 
 import { AccountsModel } from '@app/entities/accounts';
@@ -11,13 +10,11 @@ export class PhoneVerifiedSaga {
   constructor(private readonly accounts: AccountsModel) {}
 
   @Saga()
-  onEvent(
-    events$: rx.Observable<PhoneVerifiedEvent>,
-  ): rx.Observable<Promise<void>> {
+  onEvent(events$: Observable<PhoneVerifiedEvent>): Observable<Promise<void>> {
     return events$.pipe(
       ofType(PhoneVerifiedEvent),
-      rx.delay(500),
-      rx.map(async (event) => {
+      delay(500),
+      map(async (event) => {
         await this.accounts.deleteAllUnverifiedPhone(event.data.phoneVerified);
       }),
     );

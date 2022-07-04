@@ -3,7 +3,6 @@ import {
   SERVICE_DEFINITION_QUERY,
   ServiceEndpointDefinition,
 } from '@apollo/gateway';
-import { Headers, HeadersInit } from 'node-fetch';
 
 import { GraphQLDataSourceRequestKind } from '@apollo/gateway/dist/datasources/types';
 import { GraphQLRequest } from 'apollo-server-types';
@@ -65,6 +64,8 @@ export async function loadServicesFromRemoteEndpoint({
 
       if (errors) {
         throw new Error(errors?.map((e) => e.message).join('\n'));
+      } else if (!data) {
+        throw new Error('Unable to resolve schema');
       }
 
       const typeDefs = data._service.sdl as string;

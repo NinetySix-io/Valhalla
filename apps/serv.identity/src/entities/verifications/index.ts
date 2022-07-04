@@ -1,7 +1,7 @@
 import { BootConfigService } from '@app/services/boot.config.service';
 import { Injectable } from '@nestjs/common';
 import { BaseFactory, ModelType } from '@valhalla/serv.core';
-import * as bcrypt from 'bcryptjs';
+import { compare, hash } from 'bcryptjs';
 import { InjectModel } from 'nestjs-typegoose';
 import { VerificationSchema } from './schema';
 import dayjs from 'dayjs';
@@ -23,7 +23,7 @@ export class VerificationsModel extends BaseFactory<VerificationSchema> {
    * @returns A promise that resolves to a boolean.
    */
   validateCode(raw: string, hashed: string): Promise<boolean> {
-    return bcrypt.compare(raw, hashed);
+    return compare(raw, hashed);
   }
 
   /**
@@ -38,7 +38,7 @@ export class VerificationsModel extends BaseFactory<VerificationSchema> {
   ) {
     const code = this.config.verificationCode;
     const salt = this.config.verificationSalt;
-    const hashed = await bcrypt.hash(code, salt);
+    const hashed = await hash(code, salt);
     const verification = await this.create({
       owner,
       hashed,

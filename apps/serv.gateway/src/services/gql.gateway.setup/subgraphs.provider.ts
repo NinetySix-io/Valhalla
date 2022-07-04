@@ -16,7 +16,7 @@ const syncInterval = isDev()
 
 export abstract class SubgraphsProvider implements OnModuleInit {
   private logger = new Logger(SubgraphsProvider.name);
-  private _subgraphs: ServiceEndpointDefinition[];
+  private _subgraphs!: ServiceEndpointDefinition[];
 
   constructor(
     @InjectService() private readonly consul: ConsulService,

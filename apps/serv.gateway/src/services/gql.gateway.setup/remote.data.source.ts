@@ -28,7 +28,7 @@ export class RemoteDataSource extends RemoteGraphQLDataSource {
     }
   }
 
-  didReceiveResponse({
+  override didReceiveResponse({
     response,
     context,
     request,
@@ -43,12 +43,16 @@ export class RemoteDataSource extends RemoteGraphQLDataSource {
     >
   >): ValueOrPromise<GraphQLResponse> {
     const fastifyReply: FastifyReply = context.reply;
+    if (!request.http || !response.http) {
+      throw new Error('Unable to resolve http');
+    }
+
     if (fastifyReply) {
       if (isDev()) {
-        response.http.headers.set(
-          'Access-Control-Allow-Origin',
-          request.http.headers.get('origin'),
-        );
+        const origin = request.http.headers.get('origin');
+        if (origin) {
+          response.http.headers.set('Access-Control-Allow-Origin', origin);
+        }
       }
 
       this.handleHeaders(
@@ -60,17 +64,18 @@ export class RemoteDataSource extends RemoteGraphQLDataSource {
     return response;
   }
 
-  willSendRequest({
+  override willSendRequest({
     request,
     context,
   }: GraphQLDataSourceProcessOptions<{
     request: FastifyRequest;
     reply: FastifyReply;
   }>): ValueOrPromise<void> {
-    if (context.request) {
+    if (context.request && request.http) {
+      const http = request.http;
       this.handleHeaders(
         Object.entries(context.request.headers),
-        (key, value) => request.http.headers.set(key, value),
+        (key, value) => http.headers.set(key, value),
       );
     }
   }

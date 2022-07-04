@@ -6,7 +6,7 @@ import { createNextPlugin } from '../create.plugin';
  * It creates an Apollo Client instance and attaches it to the context object
  */
 export const withApollo = () =>
-  createNextPlugin<{ apolloClient: ApolloClient<unknown> }>(async (ctx) => {
+  createNextPlugin<{ apolloClient: ApolloClient<unknown> }>((ctx) => {
     const headers = ctx.isSsr
       ? (ctx.ssrCtx.req.headers as Record<string, string>)
       : undefined;

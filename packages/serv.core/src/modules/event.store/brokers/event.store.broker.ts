@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import * as uuid from 'uuid';
-
 import {
   ConnectionSettings,
   EventStoreNodeConnection,
@@ -11,6 +8,7 @@ import {
 import { BrokerTypes } from '../contract';
 import { Logger } from '@nestjs/common';
 import assert from 'assert';
+import { v4 } from 'uuid';
 
 /**
  * @description Event store setup from eventstore.org
@@ -55,26 +53,26 @@ export class EventStoreBroker {
     return this.client;
   }
 
-  newEvent(name: string, payload: any) {
+  newEvent<M>(name: string, payload: M) {
     return this.newEventBuilder(name, payload);
   }
 
-  private newEventBuilder(
+  private newEventBuilder<D, M>(
     eventType: string,
-    data: any,
-    metadata?: any,
+    data: D,
+    metadata?: M,
     eventId?: string,
   ) {
     assert(eventType);
     assert(data);
 
     const event: {
-      eventId: string | any;
-      eventType?: string | any;
-      data?: any;
-      metadata?: any;
+      eventId: string;
+      eventType?: string;
+      data?: D;
+      metadata?: M;
     } = {
-      eventId: eventId || uuid.v4(),
+      eventId: eventId || v4(),
       eventType,
       data,
     };

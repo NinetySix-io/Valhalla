@@ -22,7 +22,7 @@ export interface IntrospectAndComposeOptions {
     | HeadersInit
     | ((
         service: ServiceEndpointDefinition,
-      ) => Promise<HeadersInit> | HeadersInit);
+      ) => Promise<HeadersInit | undefined> | HeadersInit);
   pollIntervalInMs?: number;
   subgraphHealthCheck?: boolean;
 }
@@ -41,7 +41,7 @@ export class IntrospectAndCompose implements SupergraphManager {
   private serviceSdlCache: Map<string, string> = new Map();
   private timerRef: NodeJS.Timeout | null = null;
   private state: State;
-  private buildSubgraph: () => void;
+  private buildSubgraph!: () => void;
   private fallbackPath = path.resolve(__dirname, 'fallback.graphql');
   private fallbackSupergraphSdl = fs.readFileSync(this.fallbackPath, {
     encoding: 'utf-8',
@@ -92,7 +92,7 @@ export class IntrospectAndCompose implements SupergraphManager {
       // on init, this supergraphSdl should never actually be `null`.
       // `this.updateSupergraphSdl()` will only return null if the schema hasn't
       // changed over the course of an _update_.
-      supergraphSdl: initialSupergraphSdl,
+      supergraphSdl: initialSupergraphSdl || this.fallbackSupergraphSdl,
       cleanup: async () => {
         if (this.state.phase === 'polling') {
           await this.state.pollingPromise;
@@ -119,12 +119,12 @@ export class IntrospectAndCompose implements SupergraphManager {
 
     const result = await loadServicesFromRemoteEndpoint({
       serviceList: this.subgraphs,
+      serviceSdlCache: this.serviceSdlCache,
       getServiceIntrospectionHeaders: async (service) => {
         return typeof this.config.introspectionHeaders === 'function'
           ? await this.config.introspectionHeaders(service)
           : this.config.introspectionHeaders;
       },
-      serviceSdlCache: this.serviceSdlCache,
     });
 
     if (!result.serviceDefinitions?.length) {
@@ -155,7 +155,7 @@ export class IntrospectAndCompose implements SupergraphManager {
    * @returns An array of service definitions.
    */
   private filterInvalidSubgraphs(
-    subgraphs: ServiceDefinitionUpdate['serviceDefinitions'],
+    subgraphs: ServiceDefinitionUpdate['serviceDefinitions'] = [],
   ) {
     const result: ServiceDefinitionUpdate['serviceDefinitions'] = [];
 
@@ -180,7 +180,7 @@ export class IntrospectAndCompose implements SupergraphManager {
    * @returns The supergraphSdl is being returned.
    */
   private createSupergraphFromSubgraphList(
-    subgraphs: ServiceDefinitionUpdate['serviceDefinitions'],
+    subgraphs: ServiceDefinitionUpdate['serviceDefinitions'] = [],
   ) {
     const compositionResult = composeServices(subgraphs);
 

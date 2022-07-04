@@ -236,8 +236,8 @@ export class EventStore
     return (
       initialized &&
       this.catchupSubscriptions.every(async (subscription) => {
-        const s = await subscription;
-        return !!s && s.isLive;
+        const sub = await subscription;
+        return !!sub && sub.isLive;
       })
     );
   }

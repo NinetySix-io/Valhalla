@@ -1,9 +1,10 @@
 import { BeAnObject, IndexOptions } from '@typegoose/typegoose/lib/types';
 
+import { IndexDefinition } from 'mongoose';
 import { index } from '@typegoose/typegoose';
 
 export function CaseInsensitiveIndex(
-  fields: Partial<Record<string, string | 1 | -1>>,
+  fields: IndexDefinition,
   options: Omit<IndexOptions<BeAnObject>, 'collation'> = {},
 ): ClassDecorator {
   return function (target) {

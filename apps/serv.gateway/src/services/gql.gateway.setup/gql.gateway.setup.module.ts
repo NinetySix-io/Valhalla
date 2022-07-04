@@ -12,7 +12,7 @@ export class ApolloGatewaySetupProvider
   extends SubgraphsProvider
   implements GqlOptionsFactory<ApolloGatewayDriverConfig>
 {
-  private composer: IntrospectAndCompose;
+  private composer!: IntrospectAndCompose;
 
   async onSubgraphUpdated() {
     if (this.composer) {

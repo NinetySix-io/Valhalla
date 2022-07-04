@@ -48,7 +48,6 @@
     "graphql": "^16.5.0",
     "lodash.keyby": "^4.6.0",
     "long": "^5.2.0",
-    "node-fetch": "^2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.5.5"
   },

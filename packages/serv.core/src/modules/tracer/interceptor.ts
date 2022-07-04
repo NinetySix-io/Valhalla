@@ -13,7 +13,7 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 import { PATTERN_METADATA } from '@nestjs/microservices/constants';
 import { metadataKeysMap } from '@valhalla/serv.clients';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import * as rx from 'rxjs';
+import { tap, Observable } from 'rxjs';
 import { toObjectId } from '../../lib';
 import { ContextMiddleware } from '../http.context/context.middleware';
 import { Telemetry } from './telemetry';
@@ -25,7 +25,7 @@ export class TracerInterceptor implements NestInterceptor {
     @Inject(Reflector) private readonly reflector: Reflector,
   ) {}
 
-  intercept(context: ExecutionContext, next: CallHandler): rx.Observable<void> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<void> {
     if (context.getType() === 'ws') {
       return next.handle();
     }
@@ -46,7 +46,7 @@ export class TracerInterceptor implements NestInterceptor {
     this.ac.set('_telemetry', telemetry);
 
     return next.handle().pipe(
-      rx.tap({
+      tap({
         next: () => {
           telemetry.finish();
         },
