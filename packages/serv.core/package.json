@@ -71,6 +71,6 @@
     "@nestjs/cli": "^8.2.5",
     "@types/cache-manager-redis-store": "^2.0.1",
     "@types/uuid": "^8.3.4",
-    "typescript": "^4.6.4"
+    "typescript": "^4.7.4"
   }
 }

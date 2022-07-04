@@ -21,6 +21,6 @@
     "eslint-plugin-no-inline-styles": "^1.0.5",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-unused-imports": "^2.0.0",
-    "typescript": "^4.6.4"
+    "typescript": "^4.7.4"
   }
 }

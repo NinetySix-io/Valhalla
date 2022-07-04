@@ -68,7 +68,7 @@ importers:
       reflect-metadata: ^0.1.13
       rimraf: ^3.0.2
       rxjs: ^7.5.5
-      typescript: ^4.6.4
+      typescript: ^4.7.4
     dependencies:
       '@apollo/composition': 2.0.5_graphql@16.5.0
       '@apollo/federation-internals': 2.0.5_graphql@16.5.0
@@ -100,7 +100,7 @@ importers:
       rxjs: 7.5.5
     devDependencies:
       '@nestjs/cli': 8.2.8
-      '@nestjs/schematics': 8.0.11_nobats3jkocaued6l3papcxri4
+      '@nestjs/schematics': 8.0.11_typescript@4.7.4
       '@nestjs/testing': 8.4.7_nqdqjzydlmtoifrhbibafyh3qe
       '@types/lodash.keyby': 4.6.7
       dotenv: 16.0.1
@@ -154,7 +154,7 @@ importers:
       rxjs: ^7.5.5
       try-nice: ^4.0.4
       ts-proto: ^1.112.1
-      typescript: ^4.6.4
+      typescript: ^4.7.4
       zod: ^3.17.0
     dependencies:
       '@apollo/subgraph': 2.0.5_graphql@16.5.0
@@ -235,7 +235,7 @@ importers:
       rimraf: ^3.0.2
       rxjs: ^7.5.5
       ts-proto: ^1.112.1
-      typescript: ^4.6.4
+      typescript: ^4.7.4
     dependencies:
       '@nestcloud2/boot': 0.8.3
       '@nestcloud2/core': 0.8.3
@@ -296,7 +296,7 @@ importers:
       rimraf: ^3.0.2
       rxjs: ^7.5.5
       ts-proto: ^1.112.1
-      typescript: ^4.6.4
+      typescript: ^4.7.4
     dependencies:
       '@nestcloud2/boot': 0.8.3
       '@nestcloud2/core': 0.8.3
@@ -386,7 +386,7 @@ importers:
       redux-logger: ^3.0.6
       rimraf: ^3.0.2
       try-nice: ^4.0.4
-      typescript: ^4.6.4
+      typescript: ^4.7.4
       typescript-styled-plugin: ^0.18.2
     dependencies:
       '@apollo/client': 3.6.9_aez2jvt6lsvokp3l4ousdbdxf4
@@ -463,7 +463,7 @@ importers:
       next: 12.1.6
       react: ^18.1.0
       react-dom: ^18.1.0
-      typescript: ^4.6.4
+      typescript: ^4.7.4
     dependencies:
       eslint: 8.18.0
       eslint-config-next: 12.2.0_b5e7v2qnwxfo6hmiq56u52mz3e
@@ -517,7 +517,7 @@ importers:
       react: ^18.1.0
       react-dom: ^18.1.0
       require-from-string: ^2.0.2
-      typescript: ^4.6.4
+      typescript: ^4.7.4
       use-deep-compare-effect: ^1.8.1
       webpack: ^5.72.1
     dependencies:
@@ -574,7 +574,7 @@ importers:
       protobufjs: ^6.11.2
       reflect-metadata: ^0.1.13
       rxjs: ^7.5.5
-      typescript: ^4.6.4
+      typescript: ^4.7.4
     dependencies:
       '@grpc/grpc-js': 1.6.7
       '@nestcloud2/grpc': 0.8.4
@@ -648,7 +648,7 @@ importers:
       reflect-metadata: ^0.1.13
       rxjs: ^7.5.5
       try-nice: ^4.0.4
-      typescript: ^4.6.4
+      typescript: ^4.7.4
       uuid: ^8.3.2
     dependencies:
       '@fastify/cookie': 6.0.0
@@ -741,7 +741,7 @@ importers:
       pnpm: ^7.1.9
       slugify: ^1.6.5
       superstruct: ^0.15.4
-      typescript: ^4.6.4
+      typescript: ^4.7.4
     dependencies:
       class-validator: 0.13.2
       lodash.compact: 3.0.1
@@ -4153,7 +4153,6 @@ packages:
     dependencies:
       '@grpc/proto-loader': 0.6.13
       '@types/node': 18.0.0
-    dev: false
 
   /@grpc/proto-loader/0.5.6:
     resolution: {integrity: sha512-DT14xgw3PSzPxwS13auTEwxhMMOoz33DPUKNtmYK/QYbBSpLXJy78FGGs5yVoxVobEqPm4iW9MOIoz0A3bLTRQ==}
@@ -4173,7 +4172,6 @@ packages:
       long: 4.0.0
       protobufjs: 6.11.3
       yargs: 16.2.0
-    dev: false
 
   /@humanwhocodes/config-array/0.9.5:
     resolution: {integrity: sha512-ObyMyWxZiCu/yTisA7uzx81s40xR2fD5Cg/2Kq7G02ajkNubJf6BopgDTmDyc3U7sXpNKM8cYOw7s7Tyr+DnCw==}
@@ -5285,7 +5283,7 @@ packages:
         optional: true
     dependencies:
       '@nestjs/common': 8.4.7_47vcjb2de6lyibr6g4enoa5lyu
-      '@nestjs/microservices': 8.4.7_is5nhplidwfwwktrrhg7r46vx4
+      '@nestjs/microservices': 8.4.7_mjgyynno2xl35iepxl56ipjamu
       '@nuxtjs/opencollective': 0.3.2
       fast-safe-stringify: 2.1.1
       iterare: 1.2.1
@@ -5306,7 +5304,7 @@ packages:
       reflect-metadata: 0.1.13
       rxjs: ^7.2.0
     dependencies:
-      '@nestjs/common': 8.4.7_47vcjb2de6lyibr6g4enoa5lyu
+      '@nestjs/common': 8.4.7_37tgzg5iwyrf23cqcmjxlmljgu
       '@nestjs/core': 8.4.7_uqox75xpi6vzmoesxch6gsx23q
       reflect-metadata: 0.1.13
       rxjs: 7.5.5
@@ -5685,7 +5683,6 @@ packages:
       reflect-metadata: 0.1.13
       rxjs: 7.5.5
       tslib: 2.4.0
-    dev: false
 
   /@nestjs/passport/8.2.2_ajebcnomotz225cztrmzhvaeiq:
     resolution: {integrity: sha512-Ytbn8j7WZ4INmEntOpdJY1isTgdQqZkx5ADz8zsZ5wAp0t8tc5GF/A+GlXlmn9/yRPwZHSbmHpv7Qt2EIiNnrw==}
@@ -15515,7 +15512,6 @@ packages:
 
   /lodash.camelcase/4.3.0:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
-    dev: false
 
   /lodash.clonedeep/4.5.0:
     resolution: {integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==}
