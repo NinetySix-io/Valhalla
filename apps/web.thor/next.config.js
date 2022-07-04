@@ -37,6 +37,45 @@ const nextConfig = {
     dangerouslyAllowSVG: false,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
+  headers: [
+    {
+      source: '/:path*',
+      headers: [
+        {
+          key: 'X-XSS-Protection',
+          value: '1; mode=block',
+        },
+        {
+          key: 'X-Frame-Options',
+          value: 'SAMEORIGIN',
+        },
+        {
+          key: 'Permissions-Policy',
+          value: 'interest-cohort=(), fullscreen=()',
+        },
+        {
+          key: 'X-Content-Type-Options',
+          value: 'nosniff',
+        },
+        {
+          key: 'Referrer-Policy',
+          value: 'origin-when-cross-origin',
+        },
+        {
+          key: 'Content-Security-Policy',
+          value: `
+  default-src 'self';
+  script-src 'self';
+  child-src 'self';
+  style-src 'self';
+  font-src 'self';
+  `
+            .replace(/\s{2,}/g, ' ')
+            .trim(),
+        },
+      ],
+    },
+  ],
 };
 
 module.exports = withPlugins([withTM, withBundleAnalyzer], nextConfig);
