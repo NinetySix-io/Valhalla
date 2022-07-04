@@ -1,12 +1,13 @@
 /* eslint-disable */
-import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
-import { Observable } from "rxjs";
+import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
 
-export const protobufPackage = "serv.identity";
+import { Observable } from 'rxjs';
+
+export const protobufPackage = 'serv.identity';
 
 export enum VerificationChannel {
-  EMAIL = "EMAIL",
-  SMS = "SMS",
+  EMAIL = 'EMAIL',
+  SMS = 'SMS',
 }
 
 export interface AccessTokenAccountContent {
@@ -71,12 +72,12 @@ export interface SendVerificationCodeRequest {
 export interface Verification {
   id: string;
   owner?: string | undefined;
-  expiresAt: string;
+  expiresAt?: Date;
 }
 
 export interface Token {
   value: string;
-  expiresAt: string;
+  expiresAt?: Date;
 }
 
 export interface AccessToken {}
@@ -85,16 +86,16 @@ export interface Email {
   value: string;
   isVerified: boolean;
   isPrimary: boolean;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface Phone {
   value: string;
   isVerified: boolean;
   isPrimary: boolean;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface Account {
@@ -102,8 +103,8 @@ export interface Account {
   displayName: string;
   firstName?: string | undefined;
   lastName?: string | undefined;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: Date;
+  updatedAt?: Date;
   emails: Email[];
   phones: Phone[];
 }
@@ -199,17 +200,17 @@ export interface ProvisionAccessTokenResponse {
   accessToken?: Token;
 }
 
-export const SERV_IDENTITY_PACKAGE_NAME = "serv.identity";
+export const SERV_IDENTITY_PACKAGE_NAME = 'serv.identity';
 
 export interface IdentityServiceClient {
   register(request: RegisterRequest): Observable<RegisterResponse>;
 
   sendVerificationCode(
-    request: SendVerificationCodeRequest
+    request: SendVerificationCodeRequest,
   ): Observable<Verification>;
 
   loginWithVerification(
-    request: LoginWithVerificationRequest
+    request: LoginWithVerificationRequest,
   ): Observable<LoginWithVerificationResponse>;
 
   logout(request: LogoutRequest): Observable<LogoutResponse>;
@@ -221,7 +222,7 @@ export interface IdentityServiceClient {
   findAccount(request: FindAccountRequest): Observable<Account>;
 
   updateAccount(
-    request: UpdateAccountRequest
+    request: UpdateAccountRequest,
   ): Observable<UpdateAccountResponse>;
 
   addEmailToAccount(request: AddEmailToAccountRequest): Observable<Account>;
@@ -229,126 +230,126 @@ export interface IdentityServiceClient {
   addPhoneToAccount(request: AddPhoneToAccountRequest): Observable<Account>;
 
   removeEmailFromAccount(
-    request: RemoveEmailFromAccountRequest
+    request: RemoveEmailFromAccountRequest,
   ): Observable<Account>;
 
   removePhoneFromAccount(
-    request: RemovePhoneFromAccountRequest
+    request: RemovePhoneFromAccountRequest,
   ): Observable<Account>;
 
   createAccess(request: Account): Observable<CreateAccessResponse>;
 
   deleteRefreshToken(
-    request: DeleteRefreshTokenRequest
+    request: DeleteRefreshTokenRequest,
   ): Observable<DeleteRefreshTokenResponse>;
 
   provisionAccessToken(
-    request: ProvisionAccessTokenRequest
+    request: ProvisionAccessTokenRequest,
   ): Observable<ProvisionAccessTokenResponse>;
 
   decodeAccessToken(
-    request: DecodeAccessTokenRequest
+    request: DecodeAccessTokenRequest,
   ): Observable<DecodeAccessTokenResponse>;
 
   validateVerification(
-    request: ValidateVerificationRequest
+    request: ValidateVerificationRequest,
   ): Observable<ValidateVerificationResponse>;
 }
 
 export interface IdentityServiceController {
   register(
-    request: RegisterRequest
+    request: RegisterRequest,
   ):
     | Promise<RegisterResponse>
     | Observable<RegisterResponse>
     | RegisterResponse;
 
   sendVerificationCode(
-    request: SendVerificationCodeRequest
+    request: SendVerificationCodeRequest,
   ): Promise<Verification> | Observable<Verification> | Verification;
 
   loginWithVerification(
-    request: LoginWithVerificationRequest
+    request: LoginWithVerificationRequest,
   ):
     | Promise<LoginWithVerificationResponse>
     | Observable<LoginWithVerificationResponse>
     | LoginWithVerificationResponse;
 
   logout(
-    request: LogoutRequest
+    request: LogoutRequest,
   ): Promise<LogoutResponse> | Observable<LogoutResponse> | LogoutResponse;
 
   verifyEmail(
-    request: VerifyEmailRequest
+    request: VerifyEmailRequest,
   ):
     | Promise<VerifyEmailResponse>
     | Observable<VerifyEmailResponse>
     | VerifyEmailResponse;
 
   verifyPhone(
-    request: VerifyPhoneRequest
+    request: VerifyPhoneRequest,
   ):
     | Promise<VerifyPhoneResponse>
     | Observable<VerifyPhoneResponse>
     | VerifyPhoneResponse;
 
   findAccount(
-    request: FindAccountRequest
+    request: FindAccountRequest,
   ): Promise<Account> | Observable<Account> | Account;
 
   updateAccount(
-    request: UpdateAccountRequest
+    request: UpdateAccountRequest,
   ):
     | Promise<UpdateAccountResponse>
     | Observable<UpdateAccountResponse>
     | UpdateAccountResponse;
 
   addEmailToAccount(
-    request: AddEmailToAccountRequest
+    request: AddEmailToAccountRequest,
   ): Promise<Account> | Observable<Account> | Account;
 
   addPhoneToAccount(
-    request: AddPhoneToAccountRequest
+    request: AddPhoneToAccountRequest,
   ): Promise<Account> | Observable<Account> | Account;
 
   removeEmailFromAccount(
-    request: RemoveEmailFromAccountRequest
+    request: RemoveEmailFromAccountRequest,
   ): Promise<Account> | Observable<Account> | Account;
 
   removePhoneFromAccount(
-    request: RemovePhoneFromAccountRequest
+    request: RemovePhoneFromAccountRequest,
   ): Promise<Account> | Observable<Account> | Account;
 
   createAccess(
-    request: Account
+    request: Account,
   ):
     | Promise<CreateAccessResponse>
     | Observable<CreateAccessResponse>
     | CreateAccessResponse;
 
   deleteRefreshToken(
-    request: DeleteRefreshTokenRequest
+    request: DeleteRefreshTokenRequest,
   ):
     | Promise<DeleteRefreshTokenResponse>
     | Observable<DeleteRefreshTokenResponse>
     | DeleteRefreshTokenResponse;
 
   provisionAccessToken(
-    request: ProvisionAccessTokenRequest
+    request: ProvisionAccessTokenRequest,
   ):
     | Promise<ProvisionAccessTokenResponse>
     | Observable<ProvisionAccessTokenResponse>
     | ProvisionAccessTokenResponse;
 
   decodeAccessToken(
-    request: DecodeAccessTokenRequest
+    request: DecodeAccessTokenRequest,
   ):
     | Promise<DecodeAccessTokenResponse>
     | Observable<DecodeAccessTokenResponse>
     | DecodeAccessTokenResponse;
 
   validateVerification(
-    request: ValidateVerificationRequest
+    request: ValidateVerificationRequest,
   ):
     | Promise<ValidateVerificationResponse>
     | Observable<ValidateVerificationResponse>
@@ -358,48 +359,48 @@ export interface IdentityServiceController {
 export function IdentityServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = [
-      "register",
-      "sendVerificationCode",
-      "loginWithVerification",
-      "logout",
-      "verifyEmail",
-      "verifyPhone",
-      "findAccount",
-      "updateAccount",
-      "addEmailToAccount",
-      "addPhoneToAccount",
-      "removeEmailFromAccount",
-      "removePhoneFromAccount",
-      "createAccess",
-      "deleteRefreshToken",
-      "provisionAccessToken",
-      "decodeAccessToken",
-      "validateVerification",
+      'register',
+      'sendVerificationCode',
+      'loginWithVerification',
+      'logout',
+      'verifyEmail',
+      'verifyPhone',
+      'findAccount',
+      'updateAccount',
+      'addEmailToAccount',
+      'addPhoneToAccount',
+      'removeEmailFromAccount',
+      'removePhoneFromAccount',
+      'createAccess',
+      'deleteRefreshToken',
+      'provisionAccessToken',
+      'decodeAccessToken',
+      'validateVerification',
     ];
     for (const method of grpcMethods) {
-      const descriptor: any = Reflect.getOwnPropertyDescriptor(
+      const descriptor = Reflect.getOwnPropertyDescriptor(
         constructor.prototype,
-        method
-      );
-      GrpcMethod("IdentityService", method)(
+        method,
+      ) as PropertyDescriptor;
+      GrpcMethod('IdentityService', method)(
         constructor.prototype[method],
         method,
-        descriptor
+        descriptor,
       );
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
-      const descriptor: any = Reflect.getOwnPropertyDescriptor(
+      const descriptor = Reflect.getOwnPropertyDescriptor(
         constructor.prototype,
-        method
-      );
-      GrpcStreamMethod("IdentityService", method)(
+        method,
+      ) as PropertyDescriptor;
+      GrpcStreamMethod('IdentityService', method)(
         constructor.prototype[method],
         method,
-        descriptor
+        descriptor,
       );
     }
   };
 }
 
-export const IDENTITY_SERVICE_NAME = "IdentityService";
+export const IDENTITY_SERVICE_NAME = 'IdentityService';

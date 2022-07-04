@@ -45,9 +45,9 @@ export interface Organization {
   slug: string;
   name: string;
   createdBy: string;
-  createdAt: string;
+  createdAt?: Date;
   updateBy: string;
-  updatedAt: string;
+  updatedAt?: Date;
   logoUrl?: string | undefined;
   status: OrgStatus;
   plan: OrgPlan;
@@ -72,8 +72,8 @@ export interface Member {
   invitedBy?: string | undefined;
   status: string;
   role: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: Date;
+  updatedAt?: Date;
   updatedBy: string;
   profileImageUrl?: string | undefined;
 }

@@ -1,27 +1,136 @@
 /* eslint-disable */
-import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
-import { Observable } from "rxjs";
+import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
 
-export const protobufPackage = "serv.sites";
+import { Observable } from 'rxjs';
 
-export enum SiteStatus {
-  DEPLOYED = "DEPLOYED",
-  PENDING = "PENDING",
-  SUSPENDED = "SUSPENDED",
-}
-
-export enum PageStatus {
-  ACTIVE = "ACTIVE",
-  DRAFT = "DRAFT",
-  ARCHIVED = "ARCHIVED",
-  SCHEDULED = "SCHEDULED",
-}
+export const protobufPackage = 'serv.sites';
 
 /**
  * -----------------------------
- * Entity
+ * ENUMS
  * -----------------------------
  */
+export enum SiteStatus {
+  DEPLOYED = 'DEPLOYED',
+  PENDING = 'PENDING',
+  SUSPENDED = 'SUSPENDED',
+}
+
+export enum PageStatus {
+  ACTIVE = 'ACTIVE',
+  DRAFT = 'DRAFT',
+  ARCHIVED = 'ARCHIVED',
+  SCHEDULED = 'SCHEDULED',
+}
+
+export enum ElementType {
+  meta = 'meta',
+  style = 'style',
+  link = 'link',
+  title = 'title',
+  address = 'address',
+  article = 'article',
+  aside = 'aside',
+  footer = 'footer',
+  header = 'header',
+  h1 = 'h1',
+  h2 = 'h2',
+  h3 = 'h3',
+  h4 = 'h4',
+  h5 = 'h5',
+  h6 = 'h6',
+  main = 'main',
+  nav = 'nav',
+  section = 'section',
+  blockquote = 'blockquote',
+  dd = 'dd',
+  div = 'div',
+  dl = 'dl',
+  dt = 'dt',
+  figcaption = 'figcaption',
+  figure = 'figure',
+  hr = 'hr',
+  li = 'li',
+  menu = 'menu',
+  ol = 'ol',
+  p = 'p',
+  pre = 'pre',
+  ul = 'ul',
+  a = 'a',
+  abbr = 'abbr',
+  b = 'b',
+  bdi = 'bdi',
+  bdo = 'bdo',
+  br = 'br',
+  cite = 'cite',
+  code = 'code',
+  data = 'data',
+  dfn = 'dfn',
+  em = 'em',
+  i = 'i',
+  kbd = 'kbd',
+  mark = 'mark',
+  q = 'q',
+  rp = 'rp',
+  rt = 'rt',
+  ruby = 'ruby',
+  s = 's',
+  samp = 'samp',
+  small = 'small',
+  span = 'span',
+  strong = 'strong',
+  sub = 'sub',
+  sup = 'sup',
+  time = 'time',
+  u = 'u',
+  var = 'var',
+  wbr = 'wbr',
+  area = 'area',
+  audio = 'audio',
+  img = 'img',
+  map = 'map',
+  track = 'track',
+  video = 'video',
+  embed = 'embed',
+  iframe = 'iframe',
+  object = 'object',
+  picture = 'picture',
+  portal = 'portal',
+  source = 'source',
+  svg = 'svg',
+  math = 'math',
+  canvas = 'canvas',
+  noscript = 'noscript',
+  script = 'script',
+}
+
+export interface Component {
+  id: string;
+  ownBy: string;
+  createdBy: string;
+  updatedBy: string;
+  name: string;
+  iconUrl?: string | undefined;
+  elements: Element[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface ElementStyle {
+  updatedAt?: Date;
+}
+
+export interface Element {
+  type: ElementType;
+  id?: string | undefined;
+  className?: string | undefined;
+  children: Element[];
+  updatedAt?: Date;
+  updatedBy?: Date;
+  style?: ElementStyle | undefined;
+  props?: { [key: string]: string | number };
+}
+
 export interface Page {
   id: string;
   title: string;
@@ -32,8 +141,8 @@ export interface Page {
   isLoneTitle: boolean;
   createdBy: string;
   updatedBy: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface Site {
@@ -44,8 +153,8 @@ export interface Site {
   ownBy: string;
   status: SiteStatus;
   url?: string | undefined;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 /**
@@ -144,6 +253,7 @@ export interface UpdateSiteResponse {
 
 export interface GetSiteRequest {
   siteId: string;
+  orgId?: string | undefined;
 }
 
 export interface GetSiteResponse {
@@ -151,7 +261,7 @@ export interface GetSiteResponse {
 }
 
 export interface GetSiteListRequest {
-  query?: { $case: "ownBy"; ownBy: string };
+  query?: { $case: 'ownBy'; ownBy: string };
 }
 
 export interface GetSiteListResponse {
@@ -168,7 +278,7 @@ export interface SuspendSiteResponse {
   site?: Site;
 }
 
-export const SERV_SITES_PACKAGE_NAME = "serv.sites";
+export const SERV_SITES_PACKAGE_NAME = 'serv.sites';
 
 export interface SitesServiceClient {
   createSite(request: CreateSiteRequest): Observable<CreateSiteResponse>;
@@ -196,71 +306,71 @@ export interface SitesServiceClient {
 
 export interface SitesServiceController {
   createSite(
-    request: CreateSiteRequest
+    request: CreateSiteRequest,
   ):
     | Promise<CreateSiteResponse>
     | Observable<CreateSiteResponse>
     | CreateSiteResponse;
 
   getSite(
-    request: GetSiteRequest
+    request: GetSiteRequest,
   ): Promise<GetSiteResponse> | Observable<GetSiteResponse> | GetSiteResponse;
 
   updateSite(
-    request: UpdateSiteRequest
+    request: UpdateSiteRequest,
   ):
     | Promise<UpdateSiteResponse>
     | Observable<UpdateSiteResponse>
     | UpdateSiteResponse;
 
   getSiteList(
-    request: GetSiteListRequest
+    request: GetSiteListRequest,
   ):
     | Promise<GetSiteListResponse>
     | Observable<GetSiteListResponse>
     | GetSiteListResponse;
 
   createPage(
-    request: CreatePageRequest
+    request: CreatePageRequest,
   ):
     | Promise<CreatePageResponse>
     | Observable<CreatePageResponse>
     | CreatePageResponse;
 
   suspendSite(
-    request: SuspendSiteRequest
+    request: SuspendSiteRequest,
   ):
     | Promise<SuspendSiteResponse>
     | Observable<SuspendSiteResponse>
     | SuspendSiteResponse;
 
   getPageList(
-    request: GetPageListRequest
+    request: GetPageListRequest,
   ):
     | Promise<GetPageListResponse>
     | Observable<GetPageListResponse>
     | GetPageListResponse;
 
   getPage(
-    request: GetPageRequest
+    request: GetPageRequest,
   ): Promise<GetPageResponse> | Observable<GetPageResponse> | GetPageResponse;
 
   updatePage(
-    request: UpdatePageRequest
+    request: UpdatePageRequest,
   ):
     | Promise<UpdatePageResponse>
     | Observable<UpdatePageResponse>
     | UpdatePageResponse;
 
   deletePage(
-    request: DeletePageRequest
+    request: DeletePageRequest,
   ):
     | Promise<DeletePageResponse>
     | Observable<DeletePageResponse>
     | DeletePageResponse;
 
   archivePage(
-    request: ArchivePageRequest
+    request: ArchivePageRequest,
   ):
     | Promise<ArchivePageResponse>
     | Observable<ArchivePageResponse>
@@ -270,42 +380,42 @@ export interface SitesServiceController {
 export function SitesServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = [
-      "createSite",
-      "getSite",
-      "updateSite",
-      "getSiteList",
-      "createPage",
-      "suspendSite",
-      "getPageList",
-      "getPage",
-      "updatePage",
-      "deletePage",
-      "archivePage",
+      'createSite',
+      'getSite',
+      'updateSite',
+      'getSiteList',
+      'createPage',
+      'suspendSite',
+      'getPageList',
+      'getPage',
+      'updatePage',
+      'deletePage',
+      'archivePage',
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(
         constructor.prototype,
-        method
+        method,
       );
-      GrpcMethod("SitesService", method)(
+      GrpcMethod('SitesService', method)(
         constructor.prototype[method],
         method,
-        descriptor
+        descriptor,
       );
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(
         constructor.prototype,
-        method
+        method,
       );
-      GrpcStreamMethod("SitesService", method)(
+      GrpcStreamMethod('SitesService', method)(
         constructor.prototype[method],
         method,
-        descriptor
+        descriptor,
       );
     }
   };
 }
 
-export const SITES_SERVICE_NAME = "SitesService";
+export const SITES_SERVICE_NAME = 'SitesService';

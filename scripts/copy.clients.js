@@ -35,19 +35,26 @@ const protoPath = path.resolve(
   'index.proto',
 );
 
+const service = protobufPackage;
+const loader = {
+  includeDirs: ['../protobuf.presets'],
+};
+
 @Injectable()
 export class ${startCase}RpcClientService extends MetadataProvider<${startCase}ServiceClient> {
   @RpcClient({
-    service: protobufPackage,
-    package: protobufPackage,
+    package: service,
+    service,
     protoPath,
+    loader,
   })
   public readonly client!: GrpcClient;
 
   @Service(${allCaps}_SERVICE_NAME, {
-    service: protobufPackage,
-    package: protobufPackage,
+    package: service,
+    service,
     protoPath,
+    loader,
   })
   public _svc!: ${startCase}ServiceClient;
 

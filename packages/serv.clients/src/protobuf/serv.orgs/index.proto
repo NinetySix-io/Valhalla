@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package serv.orgs;
 
+import "google/protobuf/timestamp.proto";
+
 service OrgsService {
     rpc CreateOrg(CreateOrgRequest) returns (Organization) {}
     rpc GetOrg(GetOrgRequest) returns (GetOrgResponse) {}
@@ -31,9 +33,9 @@ message Organization {
     string slug = 2;
     string name = 3;
     string createdBy = 4;
-    string createdAt = 5;
+    google.protobuf.Timestamp createdAt = 5;
     string updateBy = 6;
-    string updatedAt = 7;
+    google.protobuf.Timestamp updatedAt = 7;
     optional string logoUrl = 8;
     OrgStatus status = 9;
     OrgPlan plan = 10;
@@ -82,8 +84,8 @@ message Member {
     optional string invitedBy = 4;
     string status = 5;
     string role = 6;
-    string createdAt = 7;
-    string updatedAt = 8;
+    google.protobuf.Timestamp createdAt = 7;
+    google.protobuf.Timestamp updatedAt = 8;
     string updatedBy = 9;
     optional string profileImageUrl = 10;
 }

@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package serv.identity;
 
+import "google/protobuf/timestamp.proto";
+
 service IdentityService {
     rpc Register(RegisterRequest) returns (RegisterResponse) {}
     rpc SendVerificationCode(SendVerificationCodeRequest) returns (Verification) {}
@@ -109,16 +111,16 @@ message Email {
     string value = 2;
     bool isVerified = 4;
     bool isPrimary = 5;
-    string createdAt = 6;
-    string updatedAt = 7;
+    google.protobuf.Timestamp createdAt = 6;
+    google.protobuf.Timestamp updatedAt = 7;
 }
 
 message Phone {
     string value = 2;
     bool isVerified = 4;
     bool isPrimary = 5;
-    string createdAt = 6;
-    string updatedAt = 7;
+    google.protobuf.Timestamp createdAt = 6;
+    google.protobuf.Timestamp updatedAt = 7;
 }
 
 message Account {
@@ -126,8 +128,8 @@ message Account {
     string displayName = 2;
     optional string firstName = 3;
     optional string lastName = 4;
-    string createdAt = 5;
-    string updatedAt = 6;
+    google.protobuf.Timestamp createdAt = 5;
+    google.protobuf.Timestamp updatedAt = 6;
     repeated Email emails = 7;
     repeated Phone phones = 8;
 }
