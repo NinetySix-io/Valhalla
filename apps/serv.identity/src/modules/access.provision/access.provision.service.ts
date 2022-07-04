@@ -84,7 +84,7 @@ export class AccessProvisionService {
    */
   async renewAccessToken(
     refreshToken: string,
-    options?: Parameters<typeof this['createAccessToken']>[1],
+    options?: Parameters<AccessProvisionService['createAccessToken']>[1],
   ) {
     const token = await this.refreshTokens
       .findById(refreshToken)

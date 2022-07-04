@@ -13,6 +13,22 @@
     "preserveWatchOutput": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "noImplicitAny": true,
+    "strictNullChecks": false,
+    "strictBindCallApply": true,
+    "noEmit": false,
+    "allowJs": false,
+    "incremental": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowUnreachableCode": false,
+    "alwaysStrict": true,
+    "allowUnusedLabels": false,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true
   }
 }

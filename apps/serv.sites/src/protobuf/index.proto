@@ -152,11 +152,11 @@ message Element {
 message Page {
   string id = 1;
   string title = 2;
-  string description = 3;
+  optional string description = 3;
   string organization = 4;
   string site = 5;
   PageStatus status = 6;
-  bool isLoneTitle = 7;
+  optional bool isLoneTitle = 7;
   string createdBy = 8;
   string updatedBy = 9;
   google.protobuf.Timestamp createdAt = 10;

@@ -3,7 +3,11 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { PageSchema } from '@app/entities/pages/schema';
 import { gRpcController } from '@app/grpc/grpc.controller';
 import { Page } from '@app/protobuf';
-import { NotFoundException, UseGuards } from '@nestjs/common';
+import {
+  NotFoundException,
+  UseGuards,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import {
   AccountActiveOrg,
   AuthAccount,
@@ -39,6 +43,10 @@ export class GqlPagesResolver {
         title: input.title,
       }),
     );
+
+    if (!result.page) {
+      throw new InternalServerErrorException();
+    }
 
     return {
       id: result.page.id,

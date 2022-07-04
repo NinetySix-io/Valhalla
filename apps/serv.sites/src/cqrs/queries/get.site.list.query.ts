@@ -22,8 +22,10 @@ export class GetSiteListHandler
   async execute(command: GetSiteListQuery): Promise<GetSiteListResponse> {
     const query: FilterQuery<SiteSchema> = {};
 
-    if (command.request.query.$case === 'ownBy') {
-      query.ownBy = toObjectId(command.request.query.ownBy);
+    if (command.request.query) {
+      if (command.request.query.$case === 'ownBy') {
+        query.ownBy = toObjectId(command.request.query.ownBy);
+      }
     }
 
     if (isEmpty(query)) {

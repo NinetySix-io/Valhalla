@@ -6,11 +6,8 @@
     "module": "commonjs",
     "outDir": "./dist",
     "rootDir": "./src",
-    "declaration": true,
     "experimentalDecorators": true,
-    "esModuleInterop": true,
-    "strictPropertyInitialization": false,
-    "strictNullChecks": true
+    "esModuleInterop": true
   },
   "extends": "../tsconfig/base.json",
   "include": ["src/*"],

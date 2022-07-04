@@ -133,11 +133,11 @@ export interface Element {
 export interface Page {
   id: string;
   title: string;
-  description: string;
+  description?: string | undefined;
   organization: string;
   site: string;
   status: PageStatus;
-  isLoneTitle: boolean;
+  isLoneTitle?: boolean | undefined;
   createdBy: string;
   updatedBy: string;
   createdAt?: Date;

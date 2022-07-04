@@ -6,6 +6,11 @@
     "baseUrl": "./",
     "paths": {
       "@app/*": ["src/*"]
-    }
+    },
+    "plugins": [
+      {
+        "name": "typescript-styled-plugin"
+      }
+    ]
   }
 }

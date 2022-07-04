@@ -72,6 +72,7 @@
     "next-transpile-modules": "^9.0.0",
     "redux-logger": "^3.0.6",
     "rimraf": "^3.0.2",
-    "typescript": "^4.6.4"
+    "typescript": "^4.6.4",
+    "typescript-styled-plugin": "^0.18.2"
   }
 }
