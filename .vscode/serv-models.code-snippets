@@ -35,7 +35,7 @@
     "prefix": "transformer",
     "description": "Entity transformer",
     "body": [
-      "import { typegoose } from '@valhalla/serv.core';",
+      "import { typegoose, toDto } from '@valhalla/serv.core';",
       "import { $1Schema } from './schema';",
       "import { $1 as Proto } from '@app/protobuf';",
       "",
@@ -43,7 +43,7 @@
       "",
       "\tconstructor(entity: typegoose.DocumentType<$1Schema> | $1Schema) {",
       "\t\tsuper()",
-      "\t\tObject.assign(this, typegoose.isDocument(entity) ? entity.toObject({ virtuals: false }) : entity)",
+      "\t\tObject.assign(this, toDto(entity, { virtuals: false }))",
       "\t}",
       "",
       "\tget proto(): Proto {",

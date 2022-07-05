@@ -1,18 +1,14 @@
+import { toDto, typegoose } from '@valhalla/serv.core';
+
 import { Organization as OrgProto } from '@app/protobuf';
 import { OrganizationSchema } from './schema';
-import { typegoose } from '@valhalla/serv.core';
 
 export class OrganizationTransformer extends OrganizationSchema {
   constructor(
     entity: typegoose.DocumentType<OrganizationSchema> | OrganizationSchema,
   ) {
     super();
-    Object.assign(
-      this,
-      typegoose.isDocument(entity)
-        ? entity.toObject({ virtuals: false })
-        : entity,
-    );
+    Object.assign(this, toDto(entity, { virtuals: false }));
   }
 
   get proto(): OrgProto {

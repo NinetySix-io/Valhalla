@@ -1,18 +1,14 @@
+import { toDto, typegoose } from '@valhalla/serv.core';
+
 import { ComponentSchema } from './schema';
 import { Component as Proto } from '@app/protobuf';
-import { typegoose } from '@valhalla/serv.core';
 
 export class ComponentTransformer extends ComponentSchema {
   constructor(
     entity: typegoose.DocumentType<ComponentSchema> | ComponentSchema,
   ) {
     super();
-    Object.assign(
-      this,
-      typegoose.isDocument(entity)
-        ? entity.toObject({ virtuals: false })
-        : entity,
-    );
+    Object.assign(this, toDto(entity, { virtuals: false }));
   }
 
   get proto(): Proto {

@@ -1,16 +1,12 @@
+import { toDto, typegoose } from '@valhalla/serv.core';
+
 import { PageSchema } from './schema';
 import { Page as Proto } from '@app/protobuf';
-import { typegoose } from '@valhalla/serv.core';
 
 export class PageTransformer extends PageSchema {
   constructor(entity: typegoose.DocumentType<PageSchema> | PageSchema) {
     super();
-    Object.assign(
-      this,
-      typegoose.isDocument(entity)
-        ? entity.toObject({ virtuals: false })
-        : entity,
-    );
+    Object.assign(this, toDto(entity, { virtuals: false }));
   }
 
   get proto(): Proto {
