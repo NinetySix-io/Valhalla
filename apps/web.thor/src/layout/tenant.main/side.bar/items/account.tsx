@@ -7,11 +7,11 @@ import { SidebarItem } from './base';
 
 type Props = cProps;
 
-export const SitesItem: React.FC<Props> = (props) => {
+export const AccountItem: React.FC<Props> = (props) => {
   return (
-    <Link href="/sites" passHref>
-      <SidebarItem {...props} icon={FaReg.faWindowMaximize}>
-        Sites
+    <Link href="/me" passHref>
+      <SidebarItem {...props} icon={FaReg.faUser}>
+        Account
       </SidebarItem>
     </Link>
   );

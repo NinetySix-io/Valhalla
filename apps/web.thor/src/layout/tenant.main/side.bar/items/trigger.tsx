@@ -1,7 +1,8 @@
 import * as React from 'react';
 
-import { FaSolid, Icon, cProps } from '@valhalla/react';
-import { ListItemButton, ListItemIcon } from '@mui/material';
+import { FaSolid, cProps } from '@valhalla/react';
+
+import { SidebarItem } from './base';
 
 type Props = cProps<{
   onChange: (isOpen: boolean) => void;
@@ -10,12 +11,11 @@ type Props = cProps<{
 
 export const TriggerItem: React.FC<Props> = ({ isOpen, onChange }) => {
   const [icon] = isOpen ? [FaSolid.faChevronLeft] : [FaSolid.faChevronRight];
+  const text = isOpen ? 'Collapse' : 'Expand';
 
   return (
-    <ListItemButton onClick={() => onChange(!isOpen)}>
-      <ListItemIcon>
-        <Icon icon={icon} />
-      </ListItemIcon>
-    </ListItemButton>
+    <SidebarItem onClick={() => onChange(!isOpen)} icon={icon}>
+      {text}
+    </SidebarItem>
   );
 };

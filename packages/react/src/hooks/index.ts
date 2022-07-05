@@ -5,3 +5,4 @@ export {
   useDeepCompareEffectNoCheck,
   useDeepCompareMemoize,
 } from 'use-deep-compare-effect';
+export * from './use.dark.mode';
