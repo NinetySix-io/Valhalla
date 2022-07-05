@@ -28,7 +28,7 @@
     "alwaysStrict": true,
     "allowUnusedLabels": false,
     "noImplicitOverride": true,
-    "noImplicitReturns": true,
+    "noImplicitReturns": false,
     "noImplicitThis": true
   }
 }
