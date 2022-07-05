@@ -70,45 +70,44 @@ export class AccountsModel extends BaseFactory<AccountSchema> {
   }
 
   /**
+   * It returns an array of objects that can be used as a query to find a user by their phone number or
+   * email address
+   * @param {'phones' | 'emails'} type - 'phones' | 'emails'
+   * @param {string} value - The value of the phone number or email address
+   * @returns An array of objects.
+   */
+  private getUsernameQuery(type: 'phones' | 'emails', value: string) {
+    return [
+      {
+        [`${type}.value`]: value.trim(),
+        [`${type}.isPrimary`]: true,
+      },
+      {
+        [`${type}.value`]: value.trim(),
+        [`${type}.isVerified`]: true,
+      },
+    ];
+  }
+
+  /**
    * It finds a user by email, but only if the email is either the primary email or a verified email
    * @param {string} email - The email address to search for.
    * @returns A promise that resolves to a user document.
    */
   findByValidEmail(email: string) {
-    return this.findOne({
-      $or: [
-        {
-          'email.value': email,
-          isPrimary: true,
-        },
-        {
-          'email.value': email,
-          isVerified: true,
-        },
-      ],
-    });
+    return this.findOne({ $or: this.getUsernameQuery('emails', email) });
   }
 
+  /**
+   * It returns a user document whose username matches the given username
+   * @param {string} username - The username to search for.
+   * @returns A promise that resolves to a user document.
+   */
   findByUsername(username: string) {
     return this.findOne({
-      $or: [
-        {
-          'email.value': username,
-          isPrimary: true,
-        },
-        {
-          'email.value': username,
-          isVerified: true,
-        },
-        {
-          'phone.value': username,
-          isPrimary: true,
-        },
-        {
-          'phone.value': username,
-          isVerified: true,
-        },
-      ],
+      $or: this.getUsernameQuery('emails', username).concat(
+        this.getUsernameQuery('phones', username),
+      ),
     });
   }
 
@@ -119,18 +118,7 @@ export class AccountsModel extends BaseFactory<AccountSchema> {
    * @returns A promise that resolves to a user document.
    */
   findByValidPhone(phone: string) {
-    return this.findOne({
-      $or: [
-        {
-          'phone.value': phone,
-          isPrimary: true,
-        },
-        {
-          'phone.value': phone,
-          isVerified: true,
-        },
-      ],
-    });
+    return this.findOne({ $or: this.getUsernameQuery('phones', phone) });
   }
 
   /**
@@ -139,19 +127,7 @@ export class AccountsModel extends BaseFactory<AccountSchema> {
    * @returns A boolean value
    */
   isPhoneTaken(phone: string) {
-    const trimmed = phone.trim();
-    return this.exists({
-      $or: [
-        {
-          'phones.value': trimmed,
-          isVerified: true,
-        },
-        {
-          'phones.value': trimmed,
-          isPrimary: true,
-        },
-      ],
-    });
+    return this.exists({ $or: this.getUsernameQuery('phones', phone) });
   }
 
   /**
@@ -160,18 +136,6 @@ export class AccountsModel extends BaseFactory<AccountSchema> {
    * @returns A boolean value.
    */
   isEmailTaken(email: string) {
-    const trimmed = email.trim();
-    return this.exists({
-      $or: [
-        {
-          'emails.value': trimmed,
-          isVerified: true,
-        },
-        {
-          'emails.value': trimmed,
-          isPrimary: true,
-        },
-      ],
-    });
+    return this.exists({ $or: this.getUsernameQuery('emails', email) });
   }
 }
