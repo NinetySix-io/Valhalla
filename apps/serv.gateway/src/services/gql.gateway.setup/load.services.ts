@@ -6,7 +6,7 @@ import {
 
 import { GraphQLDataSourceRequestKind } from '@apollo/gateway/dist/datasources/types';
 import { GraphQLRequest } from 'apollo-server-types';
-import { Headers } from 'node-fetch';
+import { Headers } from 'headers-polyfill';
 import { Logger } from '@nestjs/common';
 import { ServiceDefinition } from '@apollo/federation-internals';
 import { ServiceDefinitionUpdate } from '@apollo/gateway/dist/config';
