@@ -1,10 +1,4 @@
-import {
-  Action,
-  AnyAction,
-  CombinedState,
-  Reducer,
-  ReducersMapObject,
-} from 'redux';
+import { Action, AnyAction, CombinedState, Reducer } from 'redux';
 
 import { HYDRATE } from 'next-redux-wrapper';
 import { merge } from 'merge-anything';
@@ -14,8 +8,8 @@ import { merge } from 'merge-anything';
  * @param reducers
  * @returns
  */
-export function withHydration<S, A extends Action = AnyAction>(
-  reducers: ReducersMapObject<S, A>,
+export function withHydration<S, A extends Action>(
+  reducers: Reducer<CombinedState<S>, A>,
 ): Reducer<CombinedState<S>, A> {
   return function (state: CombinedState<unknown>, action: AnyAction) {
     switch (action.type) {
