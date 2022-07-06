@@ -15,11 +15,11 @@ export const LOGO_WHITE_URL =
 export const LOGO_BLACK_URL =
   'https://res.cloudinary.com/ninetysix-io/image/upload/v1655344117/NinetySix/black_logo_nolhv5.png';
 
-export const Logo: React.FC<Props> = ({ variant = 'black', ...props }) => {
+export const Logo: React.FC<Props> = ({ variant, ...props }) => {
   const isDarkMode = useDarkMode();
   const src = React.useMemo(
     (): string =>
-      (variant ?? isDarkMode ? 'white' : 'black') === 'black'
+      (variant ?? (isDarkMode ? 'white' : 'black')) === 'black'
         ? LOGO_BLACK_URL
         : LOGO_WHITE_URL,
     [variant, isDarkMode],

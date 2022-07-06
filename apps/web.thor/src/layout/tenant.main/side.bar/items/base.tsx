@@ -22,9 +22,16 @@ const Container = styled(ListItemButton)(
 
 const Text = styled(ListItemText)(
   ({ theme }) => css`
+    margin: 0;
+    line-height: normal;
     color: ${theme.palette.mode === 'dark'
-      ? theme.palette.common.black
-      : theme.palette.common.white};
+      ? theme.palette.common.white
+      : theme.palette.common.black};
+
+    > * {
+      line-height: 0;
+      font-size: 20px;
+    }
   `,
 );
 
@@ -36,8 +43,8 @@ export const SidebarItem: React.FC<Props> = ({ icon, children, ...props }) => {
   const isDarkMode = useDarkMode();
   const theme = useTheme();
   const color = isDarkMode
-    ? theme.palette.common.black
-    : theme.palette.common.white;
+    ? theme.palette.common.white
+    : theme.palette.common.black;
 
   const ItemIcon = React.useMemo(() => {
     const style: React.CSSProperties = {

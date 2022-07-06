@@ -1,27 +1,35 @@
 import * as React from 'react';
 
-import { Logo as AppLogo, cProps } from '@valhalla/react';
 import { Divider, List, css, styled } from '@mui/material';
+import { cProps, useDebounce } from '@valhalla/react';
 
 import { AccountItem } from './items/account';
-import Link from 'next/link';
+import { LogoItem } from './items/logo';
 import { SitesItem } from './items/sites';
-import { TriggerItem } from './items/trigger';
 
-const Logo = styled(AppLogo)`
-  cursor: pointer;
+const Container = styled('div')`
+  display: flex;
+  flex-direction: row-reverse;
 `;
 
-const Container = styled('div')<{ expanded?: boolean }>(
-  ({ theme, expanded }) => css`
-    background-color: ${theme.palette.primary.dark};
+const Content = styled('div')<{
+  expanded?: boolean;
+  initialWidth: number;
+}>(
+  ({ theme, expanded, initialWidth }) => css`
+    background-color: ${theme.palette.common.white};
     overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    transition: all 0.3s;
     border: solid thin ${theme.palette.divider};
-    width: ${expanded ? 200 : 60}px;
+    width: ${expanded ? 200 : initialWidth}px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    top: 0;
 
     > * {
       width: 100%;
@@ -29,23 +37,17 @@ const Container = styled('div')<{ expanded?: boolean }>(
   `,
 );
 
-const Header = styled('div')(
-  ({ theme }) => css`
-    padding: ${theme.spacing(1)};
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  `,
-);
+const Header = styled(List)`
+  padding: 0;
+`;
 
-const Footer = styled(List)``;
+const Footer = styled(List)`
+  padding: 0;
+`;
 
 const SidebarDivider = styled(Divider)(
   ({ theme }) => css`
-    background-color: ${theme.palette.grey[800]};
-    margin-top: ${theme.spacing(1)};
-    margin-bottom: ${theme.spacing(1)};
+    background-color: ${theme.palette.divider};
   `,
 );
 
@@ -57,29 +59,30 @@ const Body = styled(List)(
   `,
 );
 
-type Props = cProps;
+type Props = cProps & { initialWidth: number };
 
-export const Sidebar: React.FC<Props> = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
+export const Sidebar: React.FC<Props> = ({ initialWidth, ...props }) => {
+  const [isOpen, setIsOpen] = useDebounce(false);
 
   return (
-    <Container expanded={isOpen}>
-      <Header>
-        <Link passHref href="/">
-          <a>
-            <Logo variant="white" height={30} width={30} />
-          </a>
-        </Link>
-      </Header>
-      <SidebarDivider />
-      <Body>
-        <SitesItem />
-      </Body>
-      <Footer>
-        <AccountItem />
+    <Container
+      {...props}
+      onMouseOver={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
+      <Content expanded={isOpen} initialWidth={initialWidth}>
+        <Header>
+          <LogoItem />
+        </Header>
         <SidebarDivider />
-        <TriggerItem isOpen={isOpen} onChange={setIsOpen} />
-      </Footer>
+        <Body>
+          <SitesItem />
+        </Body>
+        <Footer>
+          <AccountItem />
+          <SidebarDivider />
+        </Footer>
+      </Content>
     </Container>
   );
 };

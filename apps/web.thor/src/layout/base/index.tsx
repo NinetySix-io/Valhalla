@@ -32,5 +32,5 @@ export const LayoutBody = styled(Box)`
 type Props = React.ComponentProps<typeof Container>;
 
 export const BaseLayout: React.FC<Props> = (props) => {
-  return <Wrapper fixed maxWidth="xl" {...props} />;
+  return <Wrapper className={'test'} fixed maxWidth="xl" {...props} />;
 };

@@ -1,7 +1,7 @@
 import { createTheme, responsiveFontSizes } from '@mui/material/styles';
+import { grey, red } from '@mui/material/colors';
 
 import createCache from '@emotion/cache';
-import { red } from '@mui/material/colors';
 
 const BORDER_RADIUS = '10px';
 
@@ -46,6 +46,7 @@ export const theme = responsiveFontSizes(
       },
     },
     palette: {
+      divider: grey[200],
       text: {
         primary: '#000',
         secondary: '#000',
