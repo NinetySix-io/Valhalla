@@ -32,6 +32,7 @@
     "graphql": "^16.5.0",
     "graphql-tag": "^2.12.6",
     "isomorphic-unfetch": "^3.1.0",
+    "jotai": "^1.7.3",
     "js-cookie": "^3.0.1",
     "merge-anything": "^5.0.2",
     "moment": "^2.29.3",

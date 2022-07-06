@@ -28,12 +28,12 @@ const Content = styled(LayoutBody)(
   ({ theme }) => css`
     flex-grow: 1;
     padding: ${theme.spacing(1)};
-    margin-left: 60px;
   `,
 );
 
 type Props = cProps;
 
+const sidebarWidth = 60;
 export const TenantMainLayout: Layout<Props> = ({ children, SEO }) => {
   const orgName = useReduxSelector((state) => state.tenant.organization?.name);
   const titleTemplate = orgName ? `%s | ${orgName}` : undefined;
@@ -42,9 +42,9 @@ export const TenantMainLayout: Layout<Props> = ({ children, SEO }) => {
     <React.Fragment>
       <NextSeo titleTemplate={titleTemplate} {...SEO} noindex nofollow />
       <Container>
-        <Sidebar initialWidth={60} />
+        <Sidebar initialWidth={sidebarWidth} />
         <TenantStartupProvider>
-          <Content>{children}</Content>
+          <Content style={{ marginLeft: sidebarWidth }}>{children}</Content>
         </TenantStartupProvider>
       </Container>
     </React.Fragment>

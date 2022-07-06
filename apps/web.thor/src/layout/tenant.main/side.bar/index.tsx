@@ -7,17 +7,24 @@ import { AccountItem } from './items/account';
 import { LogoItem } from './items/logo';
 import { SitesItem } from './items/sites';
 
-const Container = styled('div')`
-  display: flex;
-  flex-direction: row-reverse;
-`;
+const Container = styled('div')(
+  ({ theme }) => css`
+    display: flex;
+    flex-direction: row;
+    background-color: ${theme.palette.common.white};
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    z-index: 1;
+  `,
+);
 
 const Content = styled('div')<{
   expanded?: boolean;
   initialWidth: number;
 }>(
   ({ theme, expanded, initialWidth }) => css`
-    background-color: ${theme.palette.common.white};
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -26,10 +33,6 @@ const Content = styled('div')<{
     transition: all 0.3s;
     border: solid thin ${theme.palette.divider};
     width: ${expanded ? 200 : initialWidth}px;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    top: 0;
 
     > * {
       width: 100%;

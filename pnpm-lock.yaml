@@ -371,6 +371,7 @@ importers:
       graphql: ^16.5.0
       graphql-tag: ^2.12.6
       isomorphic-unfetch: ^3.1.0
+      jotai: ^1.7.3
       js-cookie: ^3.0.1
       merge-anything: ^5.0.2
       moment: ^2.29.3
@@ -407,6 +408,7 @@ importers:
       graphql: 16.5.0
       graphql-tag: 2.12.6_graphql@16.5.0
       isomorphic-unfetch: 3.1.0
+      jotai: 1.7.3_5wvcx74lvxq2lfpc5x4ihgp2jm
       js-cookie: 3.0.1
       merge-anything: 5.0.2
       moment: 2.29.3
@@ -15050,6 +15052,44 @@ packages:
     engines: {node: '>=10.13.0'}
     dependencies:
       '@panva/asn1.js': 1.0.0
+    dev: false
+
+  /jotai/1.7.3_5wvcx74lvxq2lfpc5x4ihgp2jm:
+    resolution: {integrity: sha512-7oyKS1cUlwO8bLvhrSrw3/G2tiprmUjt0eK19z4LMiyScsaeqnFwcr+3xaM6N8Ej6iGd0MmBlGhQsmJcnV6+Fw==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      '@babel/core': '*'
+      '@babel/template': '*'
+      '@urql/core': '*'
+      immer: '*'
+      optics-ts: '*'
+      react: '>=16.8'
+      react-query: '*'
+      valtio: '*'
+      wonka: '*'
+      xstate: '*'
+    peerDependenciesMeta:
+      '@babel/core':
+        optional: true
+      '@babel/template':
+        optional: true
+      '@urql/core':
+        optional: true
+      immer:
+        optional: true
+      optics-ts:
+        optional: true
+      react-query:
+        optional: true
+      valtio:
+        optional: true
+      wonka:
+        optional: true
+      xstate:
+        optional: true
+    dependencies:
+      '@babel/core': 7.18.5
+      react: 18.2.0
     dev: false
 
   /js-cookie/3.0.1:

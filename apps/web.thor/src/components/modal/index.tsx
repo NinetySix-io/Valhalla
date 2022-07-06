@@ -48,7 +48,7 @@ type ActionProps =
     };
 
 type Props = cProps<Omit<ModalProps, 'onSubmit' | 'onClose'>> & {
-  title: string;
+  title?: string;
   onSubmit?: () => void;
   onClose?: () => void;
   withCancel?: ActionProps;
@@ -75,7 +75,7 @@ export const Modal: React.FC<Props> = ({
         <Stack direction="column" spacing={3}>
           <Header>
             <Typography variant="h4">{title}</Typography>
-            <IconButton disabled={loading}>
+            <IconButton disabled={loading} onClick={onClose}>
               <Icon icon={FaSolid.faTimes} />
             </IconButton>
           </Header>

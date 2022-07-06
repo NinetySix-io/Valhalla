@@ -1,18 +1,15 @@
 import * as React from 'react';
 
-import { FaReg, Icon, useDarkMode } from '@valhalla/react';
+import { FaReg, Icon, useDarkMode, useDebounce } from '@valhalla/react';
 import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Popover,
   css,
   styled,
   useTheme,
 } from '@mui/material';
-
-type Props = React.ComponentProps<typeof ListItemButton> & {
-  icon: React.ReactElement | FaReg.IconDefinition;
-};
 
 const Container = styled(ListItemButton)(
   ({ theme }) => css`
@@ -39,9 +36,21 @@ const IconWrapper = styled(ListItemIcon)`
   padding-left: 3px;
 `;
 
-export const SidebarItem: React.FC<Props> = ({ icon, children, ...props }) => {
+type Props = React.ComponentProps<typeof ListItemButton> & {
+  icon: React.ReactElement | FaReg.IconDefinition;
+  popoverContent?: React.ReactElement;
+};
+
+export const SidebarItem: React.FC<Props> = ({
+  icon,
+  children,
+  popoverContent,
+  ...props
+}) => {
   const isDarkMode = useDarkMode();
   const theme = useTheme();
+  const [anchor, setAnchor] = useDebounce<HTMLElement>(null, 500);
+  const textRef = React.useRef<HTMLElement>(null);
   const color = isDarkMode
     ? theme.palette.common.white
     : theme.palette.common.black;
@@ -58,10 +67,41 @@ export const SidebarItem: React.FC<Props> = ({ icon, children, ...props }) => {
     return <Icon icon={icon} color={color} fontSize={20} style={style} />;
   }, [icon, color, theme]);
 
+  function handleAnchor(target?: HTMLElement | null) {
+    if (popoverContent) {
+      setAnchor(target);
+    }
+  }
+
   return (
-    <Container {...props}>
-      <IconWrapper>{ItemIcon}</IconWrapper>
-      <Text>{children}</Text>
-    </Container>
+    <React.Fragment>
+      <Container
+        {...props}
+        onMouseOver={() => handleAnchor(textRef.current)}
+        onMouseLeave={() => handleAnchor(null)}
+      >
+        <IconWrapper>{ItemIcon}</IconWrapper>
+        <Text ref={textRef}>{children}</Text>
+      </Container>
+      {popoverContent && (
+        <Popover
+          disableRestoreFocus
+          onClose={() => handleAnchor(null)}
+          sx={{ pointerEvents: 'none' }}
+          open={Boolean(anchor)}
+          anchorEl={anchor}
+          anchorOrigin={{
+            vertical: 'center',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'center',
+            horizontal: 'left',
+          }}
+        >
+          {popoverContent}
+        </Popover>
+      )}
+    </React.Fragment>
   );
 };

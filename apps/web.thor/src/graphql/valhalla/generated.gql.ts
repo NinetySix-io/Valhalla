@@ -94,6 +94,16 @@ export type CreateOrganizationInput = {
   readonly plan: OrganizationPlan;
 };
 
+export type CreatePageInput = {
+  /** Page title */
+  readonly title: Scalars['String'];
+};
+
+export type CreateSiteInput = {
+  /** Site name */
+  readonly name: Scalars['String'];
+};
+
 export type LoginWithVerificationInput = {
   /** Username */
   readonly username: Scalars['String'];
@@ -113,6 +123,9 @@ export type Mutation = {
   readonly archiveOrganization: Scalars['String'];
   /** Create an organization */
   readonly createOrganization: OrganizationSchema;
+  readonly createPage: PageUpdatedResponse;
+  readonly createSite: SiteUpdatedResponse;
+  readonly deletePage: PageUpdatedResponse;
   /** Login to account with verification code */
   readonly loginWithVerification: AuthResponse;
   /** Invalid current session */
@@ -129,6 +142,8 @@ export type Mutation = {
   readonly sendVerificationCode: Scalars['String'];
   /** Update account */
   readonly updateAccount: Scalars['Boolean'];
+  readonly updatePage: PageUpdatedResponse;
+  readonly updateSite: SiteUpdatedResponse;
 };
 
 
@@ -149,6 +164,23 @@ export type MutationArchiveOrganizationArgs = {
 
 export type MutationCreateOrganizationArgs = {
   input: CreateOrganizationInput;
+};
+
+
+export type MutationCreatePageArgs = {
+  input: CreatePageInput;
+  siteId: Scalars['String'];
+};
+
+
+export type MutationCreateSiteArgs = {
+  input: CreateSiteInput;
+};
+
+
+export type MutationDeletePageArgs = {
+  pageId: Scalars['String'];
+  siteId: Scalars['String'];
 };
 
 
@@ -184,6 +216,19 @@ export type MutationSendVerificationCodeArgs = {
 
 export type MutationUpdateAccountArgs = {
   input: UpdateAccountInput;
+};
+
+
+export type MutationUpdatePageArgs = {
+  input: UpdatePageInput;
+  pageId: Scalars['String'];
+  siteId: Scalars['String'];
+};
+
+
+export type MutationUpdateSiteArgs = {
+  input: UpdateSiteInput;
+  siteId: Scalars['String'];
 };
 
 export enum OrgMemberRole {
@@ -270,12 +315,44 @@ export enum OrganizationStatus {
   SUSPENDED = 'SUSPENDED'
 }
 
+export type PageSchema = {
+  readonly __typename?: 'PageSchema';
+  /** Date entity was created */
+  readonly createdAt: Scalars['DateTime'];
+  /** Account ID of creator */
+  readonly createdBy: Scalars['String'];
+  /** Page description */
+  readonly description: Scalars['String'];
+  /** Identifier of the entity */
+  readonly id: Scalars['ID'];
+  /** Whether the title should be independent or part of the title template */
+  readonly isLoneTitle: Scalars['Boolean'];
+  /** Page deployment status */
+  readonly status: Scalars['String'];
+  /** Page title */
+  readonly title: Scalars['String'];
+  /** Date entity was updated */
+  readonly updatedAt: Scalars['DateTime'];
+  /** Account ID of updater */
+  readonly updatedBy: Scalars['String'];
+};
+
+export type PageUpdatedResponse = {
+  readonly __typename?: 'PageUpdatedResponse';
+  /** Identifier of the entity */
+  readonly id: Scalars['ID'];
+  /** Page deployment status */
+  readonly status: Scalars['String'];
+};
+
 export type Query = {
   readonly __typename?: 'Query';
   /** Generate an access token */
   readonly accessToken: TokenResponse;
   /** Get current logged in user information */
   readonly account: AccountSchema;
+  readonly getPage: PageSchema;
+  readonly getPageList: ReadonlyArray<PageSchema>;
   /** Get current organization */
   readonly organization: ReadonlyArray<OrganizationSchema>;
   /** Find organization by slug */
@@ -286,6 +363,8 @@ export type Query = {
   readonly organizations: ReadonlyArray<OrganizationSchema>;
   /** Get current session user */
   readonly session: SessionResponse;
+  readonly site: SiteSchema;
+  readonly sites: ReadonlyArray<SiteSchema>;
   /** Validate verification code */
   readonly validateVerificationCode: Scalars['Boolean'];
 };
@@ -296,8 +375,24 @@ export type QueryAccessTokenArgs = {
 };
 
 
+export type QueryGetPageArgs = {
+  pageId: Scalars['String'];
+  siteId: Scalars['String'];
+};
+
+
+export type QueryGetPageListArgs = {
+  siteId: Scalars['String'];
+};
+
+
 export type QueryOrganizationBySlugArgs = {
   slug: Scalars['String'];
+};
+
+
+export type QuerySiteArgs = {
+  siteId: Scalars['String'];
 };
 
 
@@ -333,6 +428,42 @@ export type SessionResponse = {
   readonly id: Scalars['ID'];
 };
 
+export type SiteSchema = {
+  readonly __typename?: 'SiteSchema';
+  /** Date entity was created */
+  readonly createdAt: Scalars['DateTime'];
+  /** Account ID of creator */
+  readonly createdBy: Scalars['String'];
+  /** Identifier of the entity */
+  readonly id: Scalars['ID'];
+  /** Site name */
+  readonly name: Scalars['String'];
+  /** Site owner */
+  readonly ownBy: Scalars['String'];
+  /** Site status */
+  readonly status: SiteStatus;
+  /** Date entity was updated */
+  readonly updatedAt: Scalars['DateTime'];
+  /** Account ID of last updater */
+  readonly updatedBy: Scalars['String'];
+  /** Site url */
+  readonly url: Scalars['String'];
+};
+
+export enum SiteStatus {
+  DEPLOYED = 'DEPLOYED',
+  PENDING = 'PENDING',
+  SUSPENDED = 'SUSPENDED'
+}
+
+export type SiteUpdatedResponse = {
+  readonly __typename?: 'SiteUpdatedResponse';
+  /** Identifier of the entity */
+  readonly id: Scalars['ID'];
+  /** Site status */
+  readonly status: SiteStatus;
+};
+
 export type TokenResponse = {
   readonly __typename?: 'TokenResponse';
   /** Token expiry */
@@ -348,6 +479,20 @@ export type UpdateAccountInput = {
   readonly firstName?: InputMaybe<Scalars['String']>;
   /** Last Name */
   readonly lastName?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdatePageInput = {
+  /** Page description */
+  readonly description?: InputMaybe<Scalars['String']>;
+  /** Whether the title should be independent or part of the title template */
+  readonly isLoneTitle?: InputMaybe<Scalars['Boolean']>;
+  /** Page title */
+  readonly title?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateSiteInput = {
+  /** Site name */
+  readonly name?: InputMaybe<Scalars['String']>;
 };
 
 export type ValidateVerificationCodeInput = {
@@ -436,6 +581,26 @@ export type RestoreOrganizationMutationVariables = Exact<{
 
 
 export type RestoreOrganizationMutation = { readonly __typename?: 'Mutation', readonly restoreOrganization: string };
+
+export type SitesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SitesQuery = { readonly __typename?: 'Query', readonly sites: ReadonlyArray<{ readonly __typename?: 'SiteSchema', readonly id: string, readonly name: string, readonly status: SiteStatus }> };
+
+export type CreateSiteMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type CreateSiteMutation = { readonly __typename?: 'Mutation', readonly createSite: { readonly __typename?: 'SiteUpdatedResponse', readonly id: string } };
+
+export type UpdateSiteMutationVariables = Exact<{
+  siteId: Scalars['String'];
+  name: Scalars['String'];
+}>;
+
+
+export type UpdateSiteMutation = { readonly __typename?: 'Mutation', readonly updateSite: { readonly __typename?: 'SiteUpdatedResponse', readonly id: string, readonly status: SiteStatus } };
 
 export type SendVerificationMutationVariables = Exact<{
   channel: VerificationChannel;
@@ -828,6 +993,113 @@ export function useRestoreOrganizationMutation(baseOptions?: Apollo.MutationHook
 export type RestoreOrganizationMutationHookResult = ReturnType<typeof useRestoreOrganizationMutation>;
 export type RestoreOrganizationMutationResult = Apollo.MutationResult<RestoreOrganizationMutation>;
 export type RestoreOrganizationMutationOptions = Apollo.BaseMutationOptions<RestoreOrganizationMutation, RestoreOrganizationMutationVariables>;
+export const SitesDocument = gql`
+    query sites {
+  sites {
+    id
+    name
+    status
+  }
+}
+    `;
+
+/**
+ * __useSitesQuery__
+ *
+ * To run a query within a React component, call `useSitesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSitesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSitesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSitesQuery(baseOptions?: Apollo.QueryHookOptions<SitesQuery, SitesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SitesQuery, SitesQueryVariables>(SitesDocument, options);
+      }
+export function useSitesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SitesQuery, SitesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SitesQuery, SitesQueryVariables>(SitesDocument, options);
+        }
+export type SitesQueryHookResult = ReturnType<typeof useSitesQuery>;
+export type SitesLazyQueryHookResult = ReturnType<typeof useSitesLazyQuery>;
+export type SitesQueryResult = Apollo.QueryResult<SitesQuery, SitesQueryVariables>;
+export function refetchSitesQuery(variables?: SitesQueryVariables) {
+      return { query: SitesDocument, variables: variables }
+    }
+export const CreateSiteDocument = gql`
+    mutation createSite($name: String!) {
+  createSite(input: {name: $name}) {
+    id
+  }
+}
+    `;
+export type CreateSiteMutationFn = Apollo.MutationFunction<CreateSiteMutation, CreateSiteMutationVariables>;
+
+/**
+ * __useCreateSiteMutation__
+ *
+ * To run a mutation, you first call `useCreateSiteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateSiteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createSiteMutation, { data, loading, error }] = useCreateSiteMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useCreateSiteMutation(baseOptions?: Apollo.MutationHookOptions<CreateSiteMutation, CreateSiteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateSiteMutation, CreateSiteMutationVariables>(CreateSiteDocument, options);
+      }
+export type CreateSiteMutationHookResult = ReturnType<typeof useCreateSiteMutation>;
+export type CreateSiteMutationResult = Apollo.MutationResult<CreateSiteMutation>;
+export type CreateSiteMutationOptions = Apollo.BaseMutationOptions<CreateSiteMutation, CreateSiteMutationVariables>;
+export const UpdateSiteDocument = gql`
+    mutation updateSite($siteId: String!, $name: String!) {
+  updateSite(input: {name: $name}, siteId: $siteId) {
+    id
+    status
+  }
+}
+    `;
+export type UpdateSiteMutationFn = Apollo.MutationFunction<UpdateSiteMutation, UpdateSiteMutationVariables>;
+
+/**
+ * __useUpdateSiteMutation__
+ *
+ * To run a mutation, you first call `useUpdateSiteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateSiteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateSiteMutation, { data, loading, error }] = useUpdateSiteMutation({
+ *   variables: {
+ *      siteId: // value for 'siteId'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useUpdateSiteMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSiteMutation, UpdateSiteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateSiteMutation, UpdateSiteMutationVariables>(UpdateSiteDocument, options);
+      }
+export type UpdateSiteMutationHookResult = ReturnType<typeof useUpdateSiteMutation>;
+export type UpdateSiteMutationResult = Apollo.MutationResult<UpdateSiteMutation>;
+export type UpdateSiteMutationOptions = Apollo.BaseMutationOptions<UpdateSiteMutation, UpdateSiteMutationVariables>;
 export const SendVerificationDocument = gql`
     mutation sendVerification($channel: VerificationChannel!, $destination: String!) {
   sendVerificationCode(input: {channel: $channel, destination: $destination})

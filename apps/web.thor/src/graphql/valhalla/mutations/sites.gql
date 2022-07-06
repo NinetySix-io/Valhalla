@@ -1,0 +1,20 @@
+query sites {
+  sites {
+    id
+    name
+    status
+  }
+}
+
+mutation createSite($name: String!) {
+  createSite(input: { name: $name }) {
+    id
+  }
+}
+
+mutation updateSite($siteId: String!, $name: String!) {
+  updateSite(input: { name: $name }, siteId: $siteId) {
+    id
+    status
+  }
+}
