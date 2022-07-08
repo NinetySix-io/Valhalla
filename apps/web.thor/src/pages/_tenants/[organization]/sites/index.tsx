@@ -14,6 +14,8 @@ import { withApollo } from '@app/next/plugins/presets/with.apollo';
 import { withOrgContext } from '@app/next/plugins/presets/with.org.context';
 import { withRedux } from '@app/next/plugins/presets/with.redux';
 
+const Container = styled('div')``;
+
 const SiteListPage: Page = () => {
   const [addingSite, setAddingSite] = React.useState(false);
   const sites = useGetSitesQuery();
@@ -29,8 +31,6 @@ const SiteListPage: Page = () => {
     </Container>
   );
 };
-
-const Container = styled('div')``;
 
 export const getStaticPaths = makeTenantStaticPaths();
 export const getStaticProps = composeNextPlugins([

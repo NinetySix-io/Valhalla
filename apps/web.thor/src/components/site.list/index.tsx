@@ -6,6 +6,13 @@ import Link from 'next/link';
 import { cProps } from '@valhalla/react';
 import { useGetSitesQuery } from '@app/generated/valhalla.gql';
 
+const Container = styled('div')`
+  display: flex;
+  flex-direction: row;
+`;
+
+const SiteCard = styled(Button)``;
+
 type Props = cProps;
 
 export const SiteList: React.FC<Props> = () => {
@@ -23,10 +30,3 @@ export const SiteList: React.FC<Props> = () => {
     </Container>
   );
 };
-
-const Container = styled('div')`
-  display: flex;
-  flex-direction: row;
-`;
-
-const SiteCard = styled(Button)``;
