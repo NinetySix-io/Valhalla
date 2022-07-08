@@ -1,4 +1,5 @@
 import { ApolloError } from '@apollo/client';
+import { ModGraphQLErrorExtensions } from '@app/types/apollo';
 
 const EXPIRED_REFRESH_TOKEN_CODE = 403 as const;
 const EXPIRED_ACCESS_TOKEN_CODE = 401 as const;
@@ -23,7 +24,9 @@ export function apolloErrorHasCode(error: ApolloError, code: number) {
   return (
     isApolloError(error) &&
     error.graphQLErrors.some(
-      (e) => e.extensions.response['statusCode'] === code,
+      (e) =>
+        (e.extensions as ModGraphQLErrorExtensions).response['statusCode'] ===
+        code,
     )
   );
 }

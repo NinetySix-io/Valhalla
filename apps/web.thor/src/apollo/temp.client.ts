@@ -31,7 +31,7 @@ export class TemporaryApolloClient extends ApolloClient<NormalizedCacheObject> {
     });
   }
 
-  query<T, TVariables = OperationVariables>({
+  override query<T, TVariables = OperationVariables>({
     query,
     fetchPolicy = 'no-cache',
     ...props
@@ -43,7 +43,11 @@ export class TemporaryApolloClient extends ApolloClient<NormalizedCacheObject> {
     });
   }
 
-  mutate<TData, TVariables = OperationVariables, TContext = DefaultContext>({
+  override mutate<
+    TData,
+    TVariables = OperationVariables,
+    TContext = DefaultContext,
+  >({
     mutation,
     fetchPolicy = 'no-cache',
     ...props

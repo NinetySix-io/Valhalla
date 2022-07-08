@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { Environment } from '@app/env';
+const isDev = Boolean(process.env.IS_DEV);
+const GQL_SERVER = '/api/graphql';
 
 export default function middleware(req: NextRequest) {
   const port = 3005;
@@ -20,7 +21,7 @@ export default function middleware(req: NextRequest) {
   // -----------------------------
   // Main
   // -----------------------------
-  const currentHost = Environment.isDev
+  const currentHost = isDev
     ? hostname.replace(`.localhost:${port}`, '')
     : hostname.replace('.vercel.pub', '');
 
@@ -33,7 +34,7 @@ export default function middleware(req: NextRequest) {
 
     return NextResponse.rewrite(url);
   } else if (url.pathname.startsWith('/api/graphql')) {
-    return NextResponse.rewrite(Environment.GQL_SERVER);
+    return NextResponse.rewrite(GQL_SERVER);
   }
 
   return NextResponse.next();

@@ -20,7 +20,7 @@ type Props = cProps<
 >;
 
 type Payload = CreateOrganizationMutationVariables;
-
+export type OrganizationCreateModalProps = Props;
 export const OrganizationCreateModal: React.FC<Props> = ({
   onFinish,
   onClose,

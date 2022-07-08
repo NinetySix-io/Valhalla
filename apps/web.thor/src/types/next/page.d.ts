@@ -2,7 +2,7 @@ import { NextSeoProps } from 'next-seo';
 import { BasicObject } from '@valhalla/utilities';
 import * as React from 'react';
 
-export type Layout<P extends BasicObject> = React.FC<
+export type Layout<P extends BasicObject = BasicObject> = React.FC<
   {
     SEO?: NextSeoProps;
     children: React.ReactNode;
