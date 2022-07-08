@@ -1,4 +1,5 @@
-import '../scripts/wdyr';
+import '@app/scripts/mui.classnames';
+import '@app/scripts/wdyr';
 
 import {
   AppProps,

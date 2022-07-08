@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const isDev = Boolean(process.env.IS_DEV);
-const GQL_SERVER = '/api/graphql';
+const SERVER = process.env.SERVER;
+const GQL_SERVER = SERVER + '/graphql';
 
 export default function middleware(req: NextRequest) {
   const port = 3005;

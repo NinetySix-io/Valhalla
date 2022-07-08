@@ -11,9 +11,5 @@ export const LoadingBlock: React.FC<Props> = ({
   isReady = true,
   spinner = 'Loading ...',
 }) => {
-  if (!isReady) {
-    return <React.Fragment>{spinner}</React.Fragment>;
-  }
-
-  return <React.Fragment>{children}</React.Fragment>;
+  return (isReady ? children : spinner) as React.ReactElement;
 };

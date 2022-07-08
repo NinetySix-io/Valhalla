@@ -13,9 +13,19 @@ export const theme = responsiveFontSizes(
     components: {
       MuiButton: {
         styleOverrides: {
+          endIcon: {
+            '>*:nth-of-type(1)': {
+              fontSize: 12,
+            },
+          },
           root: {
             borderRadius: BORDER_RADIUS,
           },
+        },
+      },
+      MuiIconButton: {
+        defaultProps: {
+          color: 'primary',
         },
       },
       MuiInput: {

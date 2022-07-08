@@ -24,7 +24,7 @@ type Props = React.ComponentProps<typeof Container>;
 
 export const BaseLayout: Layout<Props> = ({ SEO, children, ...props }) => {
   return (
-    <Wrapper className={'test'} fixed maxWidth="xl" {...props}>
+    <Wrapper {...props}>
       <NextSeo {...SEO} />
       {children}
     </Wrapper>
