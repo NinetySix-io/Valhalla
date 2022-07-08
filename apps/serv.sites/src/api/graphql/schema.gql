@@ -108,8 +108,8 @@ type SiteUpdatedResponse {
 }
 
 type Query {
-  sites: [SiteSchema!]!
-  site(siteId: String!): SiteSchema!
+  getSiteList: [SiteSchema!]!
+  getSite(siteId: String!): SiteSchema!
   getPageList(siteId: String!): [PageSchema!]!
   getPage(siteId: String!, pageId: String!): PageSchema!
 }

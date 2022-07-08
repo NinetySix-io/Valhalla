@@ -15,6 +15,8 @@ registerEnumType(SiteStatus, {
 
 @ObjectType()
 @SimpleModel('sites')
+@typegoose.index({ ownBy: 1, name: 1 }, { unique: true })
+@typegoose.index({ status: 1 })
 export class SiteSchema extends BaseSchema {
   @Field({ description: 'Site name' })
   @Expose()

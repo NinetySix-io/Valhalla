@@ -77,7 +77,7 @@ export class GqlSitesResolver {
 
   @Query(() => [SiteSchema])
   @UseGuards(GqlAuthGuard)
-  async sites(@AccountActiveOrg() orgId: string): Promise<Site[]> {
+  async getSiteList(@AccountActiveOrg() orgId: string): Promise<Site[]> {
     const { sites } = await resolveRpcRequest(
       this.rpcClient.getSiteList({
         query: {
@@ -92,7 +92,7 @@ export class GqlSitesResolver {
 
   @Query(() => SiteSchema)
   @UseGuards(GqlAuthGuard)
-  async site(
+  async getSite(
     @AccountActiveOrg() orgId: string,
     @Args('siteId', new ParamValidationPipe([ObjectIdParamValidation]))
     siteId: string,

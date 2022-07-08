@@ -134,7 +134,7 @@ export interface Page {
   id: string;
   title: string;
   description?: string | undefined;
-  organization: string;
+  ownBy: string;
   site: string;
   status: PageStatus;
   isLoneTitle?: boolean | undefined;

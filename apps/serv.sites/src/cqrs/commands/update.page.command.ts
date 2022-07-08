@@ -2,7 +2,7 @@ import {
   CommandHandler,
   EventBus,
   ICommand,
-  ICommandHandler
+  ICommandHandler,
 } from '@nestjs/cqrs';
 import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 import { UpdatePageRequest, UpdatePageResponse } from '@app/protobuf';

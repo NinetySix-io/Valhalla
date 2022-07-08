@@ -16,11 +16,11 @@ registerEnumType(PageStatus, {
 @ObjectType()
 @SimpleModel('pages')
 @typegoose.index({ site: 1 })
-@typegoose.index({ organization: 1 })
+@typegoose.index({ ownBy: 1 })
 export class PageSchema extends BaseSchema {
   @typegoose.prop()
   @Exclude()
-  organization: mongoose.Types.ObjectId;
+  ownBy: mongoose.Types.ObjectId;
 
   @typegoose.prop()
   @Exclude()

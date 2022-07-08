@@ -39,8 +39,8 @@ export class CreatePageHandler
       createdBy,
       updatedBy,
       site,
-      organization,
       title,
+      ownBy: organization,
       status: PageStatus.DRAFT,
     });
 

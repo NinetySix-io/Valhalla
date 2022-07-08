@@ -19,7 +19,7 @@ export class PageTransformer extends PageSchema {
       isLoneTitle: this.isLoneTitle,
       title: this.title,
       description: this.description,
-      organization: this.organization.toHexString(),
+      ownBy: this.ownBy.toHexString(),
       site: this.site.toHexString(),
       status: this.status,
     };
