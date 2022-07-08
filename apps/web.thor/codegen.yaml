@@ -1,5 +1,5 @@
 generates:
-  ./src/graphql/valhalla/generated.gql.ts:
+  ./src/generated/valhalla.gql.ts:
     schema: http://localhost:3010/graphql
     documents: 'src/graphql/valhalla/**/*.gql'
     plugins:

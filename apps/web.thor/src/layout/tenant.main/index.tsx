@@ -1,27 +1,17 @@
 import { css, styled } from '@mui/material';
 
+import { BaseLayout } from '../base';
 import { Layout } from '@app/types/next';
-import { LayoutBody } from '../base';
-import { NextSeo } from 'next-seo';
-import React from 'react';
+import { LayoutBody } from '@app/layout/base/body';
+import { LoadingBlock } from '@app/components/loading.block';
 import { Sidebar } from './side.bar';
-import { TenantStartupProvider } from '@app/components/tenant.startup.provider';
 import { cProps } from '@valhalla/react';
-import { useReduxSelector } from '@app/redux/hooks';
+import { useOrgMembershipHydrate } from '@app/hooks/use.org.hydrate';
+import { useTenantSEO } from '@app/hooks/use.tenant.seo.title';
 
 const Container = styled('div')`
   display: flex;
   flex-direction: row;
-  width: 100vw;
-  height: 100vh;
-  max-height: 100vh;
-  max-width: 100vw;
-  overflow: hidden;
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
 `;
 
 const Content = styled(LayoutBody)(
@@ -34,19 +24,18 @@ const Content = styled(LayoutBody)(
 type Props = cProps;
 
 const sidebarWidth = 60;
-export const TenantMainLayout: Layout<Props> = ({ children, SEO }) => {
-  const orgName = useReduxSelector((state) => state.tenant.organization?.name);
-  const titleTemplate = orgName ? `%s | ${orgName}` : undefined;
+export const TenantMainLayout: Layout<Props> = ({ children, SEO: _seo }) => {
+  const SEO = useTenantSEO(_seo);
+  const memberships = useOrgMembershipHydrate();
 
   return (
-    <React.Fragment>
-      <NextSeo titleTemplate={titleTemplate} {...SEO} noindex nofollow />
+    <BaseLayout SEO={SEO}>
       <Container>
         <Sidebar initialWidth={sidebarWidth} />
-        <TenantStartupProvider>
+        <LoadingBlock isReady={Boolean(memberships.data)}>
           <Content style={{ marginLeft: sidebarWidth }}>{children}</Content>
-        </TenantStartupProvider>
+        </LoadingBlock>
       </Container>
-    </React.Fragment>
+    </BaseLayout>
   );
 };

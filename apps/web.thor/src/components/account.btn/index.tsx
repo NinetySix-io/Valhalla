@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { FaSolid, Icon, cProps } from '@valhalla/react';
 
-import { useGetAccountQuery } from '@app/graphql/valhalla/generated.gql';
+import { useGetAccountQuery } from '@app/generated/valhalla.gql';
 import { useLogout } from '@app/hooks/use.logout';
 
 type Props = cProps;

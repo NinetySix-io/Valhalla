@@ -1,0 +1,28 @@
+query getSites {
+  getSiteList {
+    id
+    name
+    status
+  }
+}
+
+query getSiteById($siteId: String!) {
+  getSite(siteId: $siteId) {
+    id
+    name
+    updatedAt
+  }
+}
+
+mutation createSite($name: String!) {
+  createSite(input: { name: $name }) {
+    id
+  }
+}
+
+mutation updateSite($siteId: String!, $name: String!) {
+  updateSite(input: { name: $name }, siteId: $siteId) {
+    id
+    status
+  }
+}

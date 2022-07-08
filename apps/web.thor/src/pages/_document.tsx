@@ -5,8 +5,10 @@ import { SiteFavicon, createEmotionCache, theme } from '@valhalla/react';
 
 import createEmotionServer from '@emotion/server/create-instance';
 
-export default class Doc extends Document {
-  render() {
+export default class Doc extends Document<{
+  emotionStyleTags: React.ReactNode;
+}> {
+  override render() {
     return (
       <Html lang="en">
         <Head>
@@ -19,7 +21,7 @@ export default class Doc extends Document {
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
           {/* Inject MUI styles first to match with the prepend: true configuration. */}
-          {this.props['emotionStyleTags']}
+          {this.props.emotionStyleTags}
         </Head>
         <body>
           <Main />

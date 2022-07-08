@@ -5,7 +5,7 @@ import {
   CreateOrganizationMutationVariables,
   OrganizationPlan,
   useCreateOrganizationMutation,
-} from '@app/graphql/valhalla/generated.gql';
+} from '@app/generated/valhalla.gql';
 import { Form, cProps } from '@valhalla/react';
 
 import { Modal } from '../modal';

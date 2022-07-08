@@ -1,7 +1,7 @@
 import {
   GetAccessTokenQuery,
   refetchGetAccessTokenQuery,
-} from '@app/graphql/valhalla/generated.gql';
+} from '@app/generated/valhalla.gql';
 
 import { ApolloClient } from '@apollo/client';
 import { Environment } from '@app/env';

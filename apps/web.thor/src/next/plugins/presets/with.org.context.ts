@@ -1,10 +1,10 @@
 import { ApolloClient } from '@apollo/client';
-import { FindOrganizationBySlugQuery } from '@app/graphql/valhalla/generated.gql';
+import { FindOrganizationBySlugQuery } from '@app/generated/valhalla.gql';
 import { NextPluginError } from '../errors';
 import { Store } from '@app/redux';
 import { TenantSlice } from '@app/redux/slices/tenant';
 import { createNextPlugin } from '../create.plugin';
-import { getOrganizationBySlug } from '@app/lib/organization/get.org.by.slug';
+import { getOrganizationBySlug } from '@app/graphql/valhalla/utils/get.org.by.slug';
 
 /**
  * Plugin to hydrate organization from params

@@ -11,7 +11,8 @@ import { merge } from 'merge-anything';
  */
 export function composeNextPlugins<
   R extends GetServerSideProps | GetStaticProps,
-  P extends (...args) => unknown,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  P extends (...args: any[]) => unknown,
   C extends Parameters<R>[0] & IntersectionOfArrayFnReturn<Array<P>>,
   O extends ReturnType<R>,
 >(
@@ -36,7 +37,10 @@ export function composeNextPlugins<
       }
     }
 
-    const pageProps = (await cb(lastCtx)) ?? { props: {} };
+    const pageProps = ((await cb?.(lastCtx)) ?? { props: {} }) as {
+      props?: object;
+    };
+
     for (const cb of pagePropsCbList) {
       const props = pageProps['props'] ?? {};
       pageProps['props'] = merge(cb(props), props);

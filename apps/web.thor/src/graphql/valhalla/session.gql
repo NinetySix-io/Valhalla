@@ -1,0 +1,12 @@
+query session {
+  session {
+    id
+  }
+}
+
+query getAccessToken($organization: String) {
+  accessToken(query: { organization: $organization }) {
+    value
+    expiresAt
+  }
+}

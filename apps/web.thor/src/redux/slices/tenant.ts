@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { FindOrganizationBySlugQuery } from '@app/graphql/valhalla/generated.gql';
+import { FindOrganizationBySlugQuery } from '@app/generated/valhalla.gql';
 
 type State = {
   organization?: FindOrganizationBySlugQuery['organizationBySlug'];

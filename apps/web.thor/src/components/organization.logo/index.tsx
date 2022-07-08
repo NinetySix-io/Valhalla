@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Box, Typography } from '@mui/material';
 
 import Image from 'next/image';
-import { OrganizationSchema } from '@app/graphql/valhalla/generated.gql';
+import { OrganizationSchema } from '@app/generated/valhalla.gql';
 import { cProps } from '@valhalla/react';
 
 type Props = cProps<{

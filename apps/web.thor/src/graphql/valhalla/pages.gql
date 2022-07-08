@@ -1,0 +1,44 @@
+query getPageList($siteId: String!) {
+  getPageList(siteId: $siteId) {
+    id
+    title
+    status
+  }
+}
+
+query getPage($siteId: String!, $pageId: String!) {
+  getPage(siteId: $siteId, pageId: $pageId) {
+    id
+    title
+    status
+    isLoneTitle
+    description
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+  }
+}
+
+mutation createPage($siteId: String!, $prop: CreatePageInput!) {
+  createPage(siteId: $siteId, input: $prop) {
+    id
+    status
+  }
+}
+
+mutation updatePage(
+  $siteId: String!
+  $pageId: String!
+  $prop: UpdatePageInput!
+) {
+  updatePage(siteId: $siteId, pageId: $pageId, input: $prop) {
+    status
+  }
+}
+
+mutation deletePage($siteId: String!, $pageId: String!) {
+  deletePage(siteId: $siteId, pageId: $pageId) {
+    status
+  }
+}

@@ -1,0 +1,18 @@
+mutation sendVerification(
+  $channel: VerificationChannel!
+  $destination: String!
+) {
+  sendVerificationCode(input: { channel: $channel, destination: $destination })
+}
+
+query validateVerificationCode(
+  $verificationId: String!
+  $verificationCode: String!
+) {
+  validateVerificationCode(
+    input: {
+      verificationId: $verificationId
+      verificationCode: $verificationCode
+    }
+  )
+}

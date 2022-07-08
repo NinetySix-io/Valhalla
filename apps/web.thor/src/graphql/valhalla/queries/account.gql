@@ -1,7 +1,0 @@
-query getAccount {
-  account {
-    firstName
-    lastName
-    displayName
-  }
-}

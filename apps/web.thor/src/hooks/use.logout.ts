@@ -1,7 +1,7 @@
 import { ACCESS_TOKEN_KEY } from '@app/lib/access.token';
 import { PAGES } from '@app/PAGES_CONSTANTS';
 import cookies from 'js-cookie';
-import { useLogoutMutation } from '@app/graphql/valhalla/generated.gql';
+import { useLogoutMutation } from '@app/generated/valhalla.gql';
 import { useRouter } from 'next/router';
 
 /**

@@ -1,8 +1,11 @@
 import * as React from 'react';
 
-import { Box, Container, styled } from '@mui/material';
+import { Container, styled } from '@mui/material';
 
-const Wrapper = styled(Container)`
+import { Layout } from '@app/types/next';
+import { NextSeo } from 'next-seo';
+
+const Wrapper = styled('div')`
   display: flex;
   flex-direction: column;
   width: 100vw;
@@ -17,20 +20,13 @@ const Wrapper = styled(Container)`
   top: 0;
 `;
 
-export const LayoutBody = styled(Box)`
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
-  flex-grow: 1;
-  align-items: center;
-
-  > * {
-    width: 100%;
-  }
-`;
-
 type Props = React.ComponentProps<typeof Container>;
 
-export const BaseLayout: React.FC<Props> = (props) => {
-  return <Wrapper className={'test'} fixed maxWidth="xl" {...props} />;
+export const BaseLayout: Layout<Props> = ({ SEO, children, ...props }) => {
+  return (
+    <Wrapper className={'test'} fixed maxWidth="xl" {...props}>
+      <NextSeo {...SEO} />
+      {children}
+    </Wrapper>
+  );
 };

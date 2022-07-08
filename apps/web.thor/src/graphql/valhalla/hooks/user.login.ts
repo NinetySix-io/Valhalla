@@ -4,7 +4,7 @@ import {
   VerificationChannel,
   useLoginWithVerificationMutation,
   useSendVerificationMutation,
-} from '../generated.gql';
+} from '@app/generated/valhalla.gql';
 import { isEmail, isPhoneNumber } from '@valhalla/utilities';
 
 /**
