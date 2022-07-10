@@ -142,7 +142,7 @@ export class EventStoreCoreModule {
     if (options.useExisting || options.useFactory) {
       return [this.createAsyncOptionsProvider(options)];
     }
-    const useClass = options.useClass as Type<EventStoreOptionsFactory>;
+    const useClass = options.useClass;
     return [
       this.createAsyncOptionsProvider(options),
       {
@@ -180,7 +180,7 @@ export class EventStoreCoreModule {
     if (options.useExisting || options.useFactory) {
       return [this.createFeatureAsyncOptionsProvider(options)];
     }
-    const useClass = options.useClass as Type<EventStoreFeatureOptionsFactory>;
+    const useClass = options.useClass;
     return [
       this.createFeatureAsyncOptionsProvider(options),
       {
