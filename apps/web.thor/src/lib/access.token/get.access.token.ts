@@ -24,9 +24,11 @@ export async function getAccessToken(options?: {
       headers: options.headers,
     });
 
-  const store = getStore();
   const organization =
-    options.organizationId || store.getState().tenant.organization?.id;
+    options.organizationId ||
+    // TODO: this is little awkward,
+    // should probably find a better way to get this data
+    getStore().getState().Tenant.organization?.id;
 
   const result = await client.query<GetAccessTokenQuery>(
     refetchGetAccessTokenQuery({

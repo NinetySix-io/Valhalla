@@ -1,0 +1,54 @@
+import * as React from 'react';
+
+import { Typography, css, styled } from '@mui/material';
+
+import { Menu } from './menu';
+import { MetaUpdateModal } from './update.modal';
+import { cProps } from '@valhalla/react';
+import { useAnchor } from '@app/hooks/dom/use.anchor';
+import { useSitePageHydrate } from '@app/hooks/hydrate/use.site.page.hydrate';
+
+const Container = styled('div')(
+  ({ theme }) => css`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 ${theme.spacing(1)};
+  `,
+);
+
+const Content = styled('button')(
+  () => css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+  `,
+);
+
+type Props = cProps;
+
+export const Meta: React.FC<Props> = () => {
+  const anchor = useAnchor();
+  const page = useSitePageHydrate();
+  const [updating, setUpdating] = React.useState(false);
+
+  return (
+    <Container>
+      <Content onClick={() => setUpdating(true)}>
+        <Typography variant="h6" component="h1" lineHeight="normal">
+          {page.data?.title ?? 'Loading ...'}
+        </Typography>
+        {page.data && (
+          <Typography variant="caption" lineHeight="normal">
+            {page.data.status}
+          </Typography>
+        )}
+      </Content>
+      <Menu open={anchor.isActive} onClose={anchor.remove} />
+      <MetaUpdateModal open={updating} onClose={() => setUpdating(false)} />
+    </Container>
+  );
+};

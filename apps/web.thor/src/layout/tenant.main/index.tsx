@@ -6,7 +6,7 @@ import { LayoutBody } from '@app/layout/base/body';
 import { LoadingBlock } from '@app/components/loading.block';
 import { Sidebar } from './side.bar';
 import { cProps } from '@valhalla/react';
-import { useOrgMembershipHydrate } from '@app/hooks/use.org.hydrate';
+import { useOrgMembershipHydrate } from '@app/hooks/hydrate/use.org.hydrate';
 import { useTenantSEO } from '@app/hooks/use.tenant.seo.title';
 
 const Container = styled('div')`

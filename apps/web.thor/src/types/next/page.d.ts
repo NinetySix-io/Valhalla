@@ -9,7 +9,7 @@ export type Layout<P extends BasicObject = BasicObject> = React.FC<
   } & P
 >;
 
-export type Page<
+export type View<
   T extends BasicObject = BasicObject,
   L extends BasicObject = BasicObject,
 > = React.FC<T> & {

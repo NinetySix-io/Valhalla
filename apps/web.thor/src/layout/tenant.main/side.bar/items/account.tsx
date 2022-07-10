@@ -10,7 +10,11 @@ type Props = cProps;
 export const AccountItem: React.FC<Props> = (props) => {
   return (
     <Link href="/me" passHref>
-      <SidebarItem {...props} icon={FaReg.faUser}>
+      <SidebarItem
+        {...props}
+        icon={FaReg.faUser}
+        popoverContent={<div>test</div>}
+      >
         Account
       </SidebarItem>
     </Link>

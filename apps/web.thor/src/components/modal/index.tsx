@@ -21,9 +21,14 @@ const Body = styled(Box)``;
 const Header = styled(Box)`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
 `;
+
+const Title = styled(Typography)`
+  flex-grow: 1;
+`;
+
+const CloseBtn = styled(IconButton)``;
 
 const Footer = styled(Stack)``;
 
@@ -53,7 +58,9 @@ type Props = cProps<Omit<ModalProps, 'onSubmit' | 'onClose'>> & {
   onClose?: () => void;
   withCancel?: ActionProps;
   withSubmit?: ActionProps;
+  withCloseBtn?: boolean;
   loading?: boolean;
+  allowBackdropClose?: boolean;
 };
 
 export const Modal: React.FC<Props> = ({
@@ -61,6 +68,8 @@ export const Modal: React.FC<Props> = ({
   withCancel,
   withSubmit,
   loading,
+  allowBackdropClose = true,
+  withCloseBtn = true,
   onClose,
   onSubmit,
   ...props
@@ -70,14 +79,16 @@ export const Modal: React.FC<Props> = ({
   }
 
   return (
-    <MuiModal {...props}>
+    <MuiModal {...props} onClose={allowBackdropClose && onClose}>
       <Content>
         <Stack direction="column" spacing={3}>
           <Header>
-            <Typography variant="h4">{title}</Typography>
-            <IconButton disabled={loading} onClick={onClose}>
-              <Icon icon={FaSolid.faTimes} />
-            </IconButton>
+            <Title variant="h4">{title}</Title>
+            {withCloseBtn && (
+              <CloseBtn size="small" disabled={loading} onClick={onClose}>
+                <Icon icon={FaSolid.faTimes} size="xs" />
+              </CloseBtn>
+            )}
           </Header>
           <Body>{props.children}</Body>
           <Footer direction="row" spacing={2} justifyContent="flex-end">

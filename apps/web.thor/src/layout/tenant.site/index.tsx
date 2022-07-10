@@ -1,13 +1,19 @@
 import { BaseLayout } from '../base';
 import { Layout } from '@app/types/next';
-import { LayoutBody } from '../base/body';
 import { LoadingBlock } from '@app/components/loading.block';
 import { TopBar } from './top.bar';
 import { cProps } from '@valhalla/react';
-import { useSiteHydrate } from '@app/hooks/use.site.hydrate';
+import { styled } from '@mui/material';
+import { useSiteHydrate } from '@app/hooks/hydrate/use.site.hydrate';
 import { useTenantSEO } from '@app/hooks/use.tenant.seo.title';
 
 type Props = cProps;
+
+const Body = styled('div')`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+`;
 
 export const TenantSiteLayout: Layout<Props> = ({ children, SEO: _seo }) => {
   const SEO = useTenantSEO(_seo);
@@ -17,7 +23,7 @@ export const TenantSiteLayout: Layout<Props> = ({ children, SEO: _seo }) => {
     <BaseLayout SEO={SEO}>
       <LoadingBlock isReady={Boolean(site.data)}>
         <TopBar />
-        <LayoutBody>{children}</LayoutBody>
+        <Body>{children}</Body>
       </LoadingBlock>
     </BaseLayout>
   );

@@ -4,9 +4,9 @@ import { Button, styled } from '@mui/material';
 import { FaSolid, Icon } from '@valhalla/react';
 
 import { CreateSiteModal } from '@app/components/site.create.modal';
-import { Page } from '@app/types/next';
 import { SiteList } from '@app/components/site.list';
 import { TenantMainLayout } from '@app/layout/tenant.main';
+import { View } from '@app/types/next';
 import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
 import { makeTenantStaticPaths } from '@app/next/tenant/make.static.paths';
 import { useGetSitesQuery } from '@app/generated/valhalla.gql';
@@ -16,7 +16,7 @@ import { withRedux } from '@app/next/plugins/presets/with.redux';
 
 const Container = styled('div')``;
 
-const SiteListPage: Page = () => {
+const SiteListView: View = () => {
   const [addingSite, setAddingSite] = React.useState(false);
   const sites = useGetSitesQuery();
 
@@ -39,5 +39,5 @@ export const getStaticProps = composeNextPlugins([
   withOrgContext,
 ]);
 
-SiteListPage.Layout = TenantMainLayout;
-export default SiteListPage;
+SiteListView.Layout = TenantMainLayout;
+export default SiteListView;

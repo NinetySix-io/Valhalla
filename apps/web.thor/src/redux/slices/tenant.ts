@@ -9,7 +9,7 @@ type State = {
 export const initialState: State = {};
 
 export const TenantSlice = createSlice({
-  name: 'tenant',
+  name: 'Tenant',
   initialState,
   reducers: {
     setOrganization(state, action: PayloadAction<State['organization']>) {

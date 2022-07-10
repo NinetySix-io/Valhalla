@@ -1,17 +1,17 @@
 {
   "Page": {
-    "prefix": "page",
+    "prefix": "view",
     "description": "Next Page",
     "body": [
-      "import { Page } from '@app/types/next';",
+      "import { View } from '@app/types/next';",
       "",
-      "const $1Page: Page = () => {",
+      "const $1View: View = () => {",
       "\treturn (",
       "\t\t$2",
       "\t)",
       "};",
       "",
-      "export default $1Page"
+      "export default $1View"
     ]
   },
   "Styled with theme": {
@@ -22,6 +22,19 @@
       "\t$3",
       "`,",
       ");"
+    ]
+  },
+  "Tenant Static Paths": {
+    "prefix": "tenant static",
+    "body": "export const getStaticPaths = makeTenantStaticPaths();\n"
+  },
+  "Static Props": {
+    "prefix": "staticprops",
+    "body": [
+      "export const getStaticProps = composeNextPlugins([",
+      "\t$1",
+      "])",
+      ""
     ]
   }
 }

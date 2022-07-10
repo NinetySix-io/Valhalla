@@ -87,7 +87,6 @@ export const SidebarItem: React.FC<Props> = ({
         <Popover
           disableRestoreFocus
           onClose={() => handleAnchor(null)}
-          sx={{ pointerEvents: 'none' }}
           open={Boolean(anchor)}
           anchorEl={anchor}
           anchorOrigin={{

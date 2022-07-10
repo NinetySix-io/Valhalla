@@ -6,7 +6,7 @@ import {
 } from '@app/lib/router.utils/sso.redirect';
 
 import { Environment } from '@app/env';
-import { useOrgQuery } from '@app/hooks/use.org.hydrate';
+import { useOrgQuery } from '@app/hooks/hydrate/use.org.hydrate';
 import { useReduxSelector } from '@app/redux/hooks';
 import { useRouter } from 'next/router';
 
@@ -23,7 +23,7 @@ export const AuthRedirectProvider: React.FC<Props> = ({
   const tenant = useOrgQuery();
   const redirected = React.useRef(false);
   const shouldRedirect = useReduxSelector(
-    (state) => state.meta.requireAuth && !Environment.isServer,
+    (state) => state.Meta.requireAuth && !Environment.isServer,
   );
 
   if (

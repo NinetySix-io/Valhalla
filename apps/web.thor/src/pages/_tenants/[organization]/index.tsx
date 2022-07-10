@@ -1,17 +1,17 @@
-import { Page } from '@app/types/next';
 import { TenantMainLayout } from '@app/layout/tenant.main';
+import { View } from '@app/types/next';
 import { cProps } from '@valhalla/react';
 import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
 import { makeTenantStaticPaths } from '@app/next/tenant/make.static.paths';
-import { useReduxSelector } from '@app/redux/hooks';
+import { useOrgCtx } from '@app/hooks/hydrate/use.org.hydrate';
 import { withApollo } from '@app/next/plugins/presets/with.apollo';
 import { withOrgContext } from '@app/next/plugins/presets/with.org.context';
 import { withRedux } from '@app/next/plugins/presets/with.redux';
 
 type Props = cProps;
 
-const OrganizationPage: Page<Props> = () => {
-  const tenant = useReduxSelector((state) => state.tenant.organization);
+const OrganizationView: View<Props> = () => {
+  const tenant = useOrgCtx();
   return <div>{tenant.id}</div>;
 };
 
@@ -29,6 +29,6 @@ export const getStaticProps = composeNextPlugins(
   },
 );
 
-OrganizationPage.Layout = TenantMainLayout;
+OrganizationView.Layout = TenantMainLayout;
 
-export default OrganizationPage;
+export default OrganizationView;

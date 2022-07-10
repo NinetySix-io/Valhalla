@@ -10,14 +10,14 @@ export function useAnchor<T extends HTMLElement>() {
     _setAnchor(event.currentTarget);
   }
 
-  function clearAnchor() {
+  function remove() {
     _setAnchor(null);
   }
 
   return {
     value: anchor,
-    visible: Boolean(anchor),
+    isActive: Boolean(anchor),
     setAnchor,
-    clearAnchor,
+    remove,
   };
 }

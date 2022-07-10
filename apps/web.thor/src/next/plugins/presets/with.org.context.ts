@@ -1,10 +1,14 @@
+import {
+  FindOrganizationBySlugDocument,
+  FindOrganizationBySlugQuery,
+} from '@app/generated/valhalla.gql';
+
 import { ApolloClient } from '@apollo/client';
-import { FindOrganizationBySlugQuery } from '@app/generated/valhalla.gql';
 import { NextPluginError } from '../errors';
 import { Store } from '@app/redux';
 import { TenantSlice } from '@app/redux/slices/tenant';
 import { createNextPlugin } from '../create.plugin';
-import { getOrganizationBySlug } from '@app/graphql/valhalla/utils/get.org.by.slug';
+import { tryNice } from 'try-nice';
 
 /**
  * Plugin to hydrate organization from params
@@ -21,12 +25,17 @@ export const withOrgContext = createNextPlugin<
     throw new NextPluginError('Organization param does not exist!');
   }
 
-  const org = await getOrganizationBySlug(ctx.params.organization, {
-    client: ctx.apolloClient,
-    silentFail: true,
-  });
+  const [result] = await tryNice(() =>
+    ctx.apolloClient.query<FindOrganizationBySlugQuery>({
+      query: FindOrganizationBySlugDocument,
+      fetchPolicy: 'no-cache',
+      variables: {
+        slug: ctx.params.organization,
+      },
+    }),
+  );
 
-  if (!org) {
+  if (!result?.data) {
     ctx.redirect = {
       permanent: false,
       destination: '/404',
@@ -35,8 +44,10 @@ export const withOrgContext = createNextPlugin<
     return ctx;
   }
 
-  ctx.organization = org;
-  ctx.reduxStore?.dispatch(TenantSlice.actions.setOrganization(org));
+  ctx.organization = result.data.organizationBySlug;
+  ctx.reduxStore?.dispatch(
+    TenantSlice.actions.setOrganization(ctx.organization),
+  );
 
   return ctx;
 });

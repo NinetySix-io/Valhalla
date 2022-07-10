@@ -1,11 +1,11 @@
 import { MainLayout } from '@app/layout/main';
 import { OrganizationList } from '@app/components/organization.list';
-import { Page } from '@app/types/next';
 import { Stack } from '@mui/material';
+import { View } from '@app/types/next';
 import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
 import { withAuth } from '@app/next/plugins/presets/with.auth';
 
-const MePage: Page = () => {
+const MeView: View = () => {
   return (
     <Stack direction="column" spacing={4}>
       <OrganizationList />
@@ -23,6 +23,6 @@ export const getServerSideProps = composeNextPlugins([withAuth], () => {
   };
 });
 
-export default MePage;
+export default MeView;
 
-MePage.Layout = MainLayout;
+MeView.Layout = MainLayout;

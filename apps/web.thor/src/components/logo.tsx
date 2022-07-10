@@ -9,7 +9,7 @@ type Props = cProps<
 >;
 
 export const Logo: React.FC<Props> = (props) => {
-  const isDarkMode = useReduxSelector((state) => state.meta.isDarkMode);
+  const isDarkMode = useReduxSelector((state) => state.Meta.isDarkMode);
 
   return <NinetySixLogo {...props} variant={isDarkMode ? 'white' : 'black'} />;
 };

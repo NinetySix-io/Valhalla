@@ -1,16 +1,15 @@
 import * as React from 'react';
 
-import { Layout, Page } from '@app/types/next';
+import { Layout, View } from '@app/types/next';
 
 /**
- * WithLayout is a function that takes a Page and a Component and returns a Component with the Page's
- * Layout.
+ * Compose component with layout prop
  */
 export function withLayout<P, L>(
-  Page: Page<P, L>,
+  View: View<P, L>,
   Component: React.FC & { Layout: Layout<L> },
 ) {
-  Component['Layout'] = Page['Layout'];
+  Component['Layout'] = View['Layout'];
 
   return <Component />;
 }

@@ -5,14 +5,15 @@ import {
 
 import { REFRESH_TOKEN_KEY } from '@app/lib/access.token';
 import { createNextPlugin } from '../create.plugin';
-import { guardServerOnly } from '@app/lib/router.utils/guard.server';
 
 /**
  A plugin that is used to redirect to SSO login page if the user is not logged in
  */
 export const withAuth = createNextPlugin<unknown, { organization?: string }>(
   (ctx) => {
-    guardServerOnly();
+    if (!ctx.isSsr) {
+      throw new Error('[withAuth] can only be initialized from SSR');
+    }
 
     const ssrCtx = ctx.ssrCtx;
     let reqUrl = ssrCtx.req.url;

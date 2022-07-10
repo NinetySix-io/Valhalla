@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import { Box, TextField } from '@mui/material';
 import { Form, cProps } from '@valhalla/react';
 
-import { Modal } from '@app/components/modal';
+import { FormModal } from '../modal.form';
+import { TextField } from '@mui/material';
 import { useCreateSiteMutation } from '@app/generated/valhalla.gql';
 
 type Props = cProps<{
@@ -45,31 +45,24 @@ export const CreateSiteModal: React.FC<Props> = ({
   }
 
   return (
-    <Modal
+    <FormModal
       title="Add Site"
       open={isOpen}
       loading={loading}
       onClose={handleClose}
-      onSubmit={() => form.submit()}
+      onSubmit={form.submit}
+      onFinish={handleFinish}
       withCancel
-      withSubmit
     >
-      <Box width={400}>
-        <Form form={form} onFinish={handleFinish}>
-          <Form.Item
-            name="name"
-            rules={[{ required: true, message: 'Required!' }]}
-          >
-            <TextField
-              autoFocus
-              label="Site name"
-              variant="outlined"
-              autoComplete="off"
-              autoCapitalize="words"
-            />
-          </Form.Item>
-        </Form>
-      </Box>
-    </Modal>
+      <Form.Item name="name" rules={[{ required: true, message: 'Required!' }]}>
+        <TextField
+          autoFocus
+          label="Site name"
+          variant="outlined"
+          autoComplete="off"
+          autoCapitalize="words"
+        />
+      </Form.Item>
+    </FormModal>
   );
 };

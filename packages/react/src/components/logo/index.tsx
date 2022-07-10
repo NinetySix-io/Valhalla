@@ -7,6 +7,7 @@ import { useDarkMode } from '../../hooks/use.dark.mode';
 type Props = cProps<
   Omit<React.ComponentProps<typeof Image>, 'src'> & {
     variant?: 'black' | 'white';
+    size?: number | string;
   }
 >;
 
@@ -15,7 +16,13 @@ export const LOGO_WHITE_URL =
 export const LOGO_BLACK_URL =
   'https://res.cloudinary.com/ninetysix-io/image/upload/v1655344117/NinetySix/black_logo_nolhv5.png';
 
-export const Logo: React.FC<Props> = ({ variant, ...props }) => {
+export const Logo: React.FC<Props> = ({
+  variant,
+  size,
+  width = '100%',
+  height = '100%',
+  ...props
+}) => {
   const isDarkMode = useDarkMode();
   const src = React.useMemo(
     (): string =>
@@ -25,5 +32,13 @@ export const Logo: React.FC<Props> = ({ variant, ...props }) => {
     [variant, isDarkMode],
   );
 
-  return <Image alt="Logo" width="100%" height="100%" {...props} src={src} />;
+  return (
+    <Image
+      alt="Logo"
+      {...props}
+      src={src}
+      width={size || width}
+      height={size || height}
+    />
+  );
 };

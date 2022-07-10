@@ -14,7 +14,7 @@ export const Header: React.FC<Props> = () => {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box>
-            <Logo height="30" width="30" />
+            <Logo size={30} />
           </Box>
           <Box
             flexGrow={1}

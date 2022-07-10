@@ -1,30 +1,26 @@
 import * as React from 'react';
 
-import { Alert, Box, TextField } from '@mui/material';
+import { Alert, TextField } from '@mui/material';
 import {
   CreateOrganizationMutationVariables,
   OrganizationPlan,
   useCreateOrganizationMutation,
 } from '@app/generated/valhalla.gql';
 import { Form, cProps } from '@valhalla/react';
-
-import { Modal } from '../modal';
-
-type Props = cProps<
-  Omit<
-    React.ComponentProps<typeof Modal>,
-    'children' | 'title' | 'withCancel' | 'withSubmit' | 'onSubmit'
-  > & {
-    onFinish?: () => void;
-  }
->;
+import { FormModal, FormModalProps } from '../modal.form';
 
 type Payload = CreateOrganizationMutationVariables;
+type Props = cProps<
+  {
+    onFinish?: () => void;
+  } & Pick<FormModalProps<Payload>, 'onClose' | 'open'>
+>;
+
 export type OrganizationCreateModalProps = Props;
 export const OrganizationCreateModal: React.FC<Props> = ({
   onFinish,
   onClose,
-  ...props
+  open,
 }) => {
   const [form] = Form.useForm<Payload>();
   const [createOrg, { loading, error }] = useCreateOrganizationMutation({
@@ -46,33 +42,31 @@ export const OrganizationCreateModal: React.FC<Props> = ({
   }
 
   return (
-    <Modal
-      {...props}
+    <FormModal
       withCancel
-      withSubmit
+      open={open}
+      loading={loading}
       title="Create Org"
-      onSubmit={() => form.submit()}
+      form={form}
+      onSubmit={form.submit}
+      onFinish={handleSubmit}
       onClose={onClose}
     >
-      <Box width={400}>
-        <Form<Payload> form={form} onFinish={handleSubmit}>
-          <Form.Item
-            name="name"
-            rules={[{ required: true, message: 'Required!', min: 3 }]}
-          >
-            <TextField
-              autoFocus
-              disabled={loading}
-              size="small"
-              label="Organization Name"
-              variant="outlined"
-              autoComplete="off"
-              autoCapitalize="words"
-            />
-          </Form.Item>
-        </Form>
-        {error && <Alert severity="error">{error.message}</Alert>}
-      </Box>
-    </Modal>
+      <Form.Item
+        name="name"
+        rules={[{ required: true, message: 'Required!', min: 3 }]}
+      >
+        <TextField
+          autoFocus
+          disabled={loading}
+          size="small"
+          label="Organization Name"
+          variant="outlined"
+          autoComplete="off"
+          autoCapitalize="words"
+        />
+      </Form.Item>
+      {error && <Alert severity="error">{error.message}</Alert>}
+    </FormModal>
   );
 };

@@ -4,9 +4,9 @@ import { FaSolid, Icon } from '@valhalla/react';
 import { BaseLayout } from '@app/layout/base';
 import { FormContainer } from '@app/components/form.container';
 import NextLink from 'next/link';
-import { Page } from '@app/types/next';
 import { ParsedUrlQuery } from 'querystring';
 import { SSO_PAGES } from '@app/PAGES_CONSTANTS';
+import { View } from '@app/types/next';
 import { buildReturnableUrl } from '@app/lib/router.utils/returnable';
 import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
 import cx from 'clsx';
@@ -17,7 +17,7 @@ type Props = {
   query: ParsedUrlQuery;
 };
 
-const AuthPage: Page<Props> = ({ query }) => {
+const AuthView: View<Props> = ({ query }) => {
   return (
     <Box
       maxWidth="md"
@@ -63,6 +63,6 @@ export const getServerSideProps = composeNextPlugins(
   },
 );
 
-export default AuthPage;
+export default AuthView;
 
-AuthPage.Layout = BaseLayout;
+AuthView.Layout = BaseLayout;

@@ -4,6 +4,7 @@ import { Button, Typography, styled } from '@mui/material';
 
 import Link from 'next/link';
 import { cProps } from '@valhalla/react';
+import { makeSitePath } from '@app/lib/router.utils/path.builder';
 import { useGetSitesQuery } from '@app/generated/valhalla.gql';
 
 const Container = styled('div')`
@@ -21,7 +22,13 @@ export const SiteList: React.FC<Props> = () => {
   return (
     <Container>
       {sites.data?.getSiteList.map((site) => (
-        <Link passHref key={site.id} href={`/sites/${site.id}`}>
+        <Link
+          passHref
+          key={site.id}
+          href={{
+            pathname: makeSitePath(site.id),
+          }}
+        >
           <SiteCard>
             <Typography>{site.name}</Typography>
           </SiteCard>

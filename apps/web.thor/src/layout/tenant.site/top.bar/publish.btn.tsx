@@ -19,8 +19,8 @@ export const PublishBtn: React.FC = () => {
       </Button>
       <Menu
         anchorEl={anchor.value}
-        onClose={anchor.clearAnchor}
-        open={anchor.visible}
+        onClose={anchor.remove}
+        open={anchor.isActive}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >

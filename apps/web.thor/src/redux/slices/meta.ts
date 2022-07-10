@@ -8,7 +8,7 @@ type State = {
 const initialState: State = {};
 
 export const MetaSlice = createSlice({
-  name: 'meta',
+  name: 'Meta',
   initialState,
   reducers: {
     setIsDarkMode(state, action: PayloadAction<State['isDarkMode']>) {

@@ -1,19 +1,31 @@
 import { Button } from '@mui/material';
 import Link from 'next/link';
-import { Page } from '@app/types/next';
 import { TenantMainLayout } from '@app/layout/tenant.main';
+import { View } from '@app/types/next';
 import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
+import { getSingleUse } from '@app/lib/get.single.use';
+import { makeSitePath } from '@app/lib/router.utils/path.builder';
 import { makeTenantStaticPaths } from '@app/next/tenant/make.static.paths';
 import { useRouter } from 'next/router';
 import { withApollo } from '@app/next/plugins/presets/with.apollo';
 import { withOrgContext } from '@app/next/plugins/presets/with.org.context';
 import { withRedux } from '@app/next/plugins/presets/with.redux';
 
-const SitePage: Page = () => {
+const SiteView: View = () => {
   const router = useRouter();
+  const siteId = getSingleUse(router.query.siteId);
+
   return (
     <div>
-      <Link passHref href={`/sites/${router.query.siteId}/editor`}>
+      <Link
+        passHref
+        href={{
+          pathname: `${makeSitePath(siteId)}/pages`,
+          query: {
+            auto: true,
+          },
+        }}
+      >
         <Button>Open Editor</Button>
       </Link>
     </div>
@@ -27,6 +39,6 @@ export const getStaticProps = composeNextPlugins([
   withOrgContext,
 ]);
 
-SitePage.Layout = TenantMainLayout;
+SiteView.Layout = TenantMainLayout;
 
-export default SitePage;
+export default SiteView;

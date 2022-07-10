@@ -1,12 +1,12 @@
-import { Page } from '@app/types/next';
 import { TenantMainLayout } from '@app/layout/tenant.main';
+import { View } from '@app/types/next';
 import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
 import { makeTenantStaticPaths } from '@app/next/tenant/make.static.paths';
 import { withApollo } from '@app/next/plugins/presets/with.apollo';
 import { withOrgContext } from '@app/next/plugins/presets/with.org.context';
 import { withRedux } from '@app/next/plugins/presets/with.redux';
 
-const TenantMePage: Page = () => {
+const TenantMeView: View = () => {
   return <div>me</div>;
 };
 
@@ -26,5 +26,5 @@ export const getStaticProps = composeNextPlugins(
   },
 );
 
-TenantMePage.Layout = TenantMainLayout;
-export default TenantMePage;
+TenantMeView.Layout = TenantMainLayout;
+export default TenantMeView;

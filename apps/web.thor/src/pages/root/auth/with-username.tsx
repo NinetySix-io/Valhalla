@@ -6,7 +6,7 @@ import { Form, UsernameFormItem, useChange } from '@valhalla/react';
 import { BaseLayout } from '@app/layout/base';
 import { FormContainer } from '@app/components/form.container';
 import { LoadingButton } from '@mui/lab';
-import { Page } from '@app/types/next';
+import { View } from '@app/types/next';
 import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
 import { isEmail } from '@valhalla/utilities';
 import { useLogin } from '@app/graphql/valhalla/hooks/user.login';
@@ -23,7 +23,7 @@ type Props = {
   returnTo?: string;
 };
 
-const WithUsernamePage: Page<Props> = () => {
+const WithUsernameView: View<Props> = () => {
   const router = useRouter();
   const [form] = Form.useForm<Payload>();
   const { login, loginResult, loading, sendVerification } = useLogin();
@@ -129,6 +129,6 @@ export const getServerSideProps = composeNextPlugins(
   },
 );
 
-export default WithUsernamePage;
+export default WithUsernameView;
 
-WithUsernamePage.Layout = BaseLayout;
+WithUsernameView.Layout = BaseLayout;

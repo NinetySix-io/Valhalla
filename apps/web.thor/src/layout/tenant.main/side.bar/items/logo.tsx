@@ -16,7 +16,7 @@ const Title = styled(Typography)`
 export const LogoItem: React.FC<Props> = (props) => {
   return (
     <Link href="/" passHref>
-      <SidebarItem {...props} icon={<Logo height={25} width={25} />}>
+      <SidebarItem {...props} icon={<Logo size={25} />}>
         <Title variant="h6">NinetySix</Title>
       </SidebarItem>
     </Link>

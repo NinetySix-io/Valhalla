@@ -126,6 +126,7 @@ export type Mutation = {
   readonly createPage: PageUpdatedResponse;
   readonly createSite: SiteUpdatedResponse;
   readonly deletePage: PageUpdatedResponse;
+  readonly getOrCreateFirstPage: PageSchema;
   /** Login to account with verification code */
   readonly loginWithVerification: AuthResponse;
   /** Invalid current session */
@@ -180,6 +181,11 @@ export type MutationCreateSiteArgs = {
 
 export type MutationDeletePageArgs = {
   pageId: Scalars['String'];
+  siteId: Scalars['String'];
+};
+
+
+export type MutationGetOrCreateFirstPageArgs = {
   siteId: Scalars['String'];
 };
 
@@ -322,11 +328,13 @@ export type PageSchema = {
   /** Account ID of creator */
   readonly createdBy: Scalars['String'];
   /** Page description */
-  readonly description: Scalars['String'];
+  readonly description?: Maybe<Scalars['String']>;
   /** Identifier of the entity */
   readonly id: Scalars['ID'];
   /** Whether the title should be independent or part of the title template */
-  readonly isLoneTitle: Scalars['Boolean'];
+  readonly isLoneTitle?: Maybe<Scalars['Boolean']>;
+  /** Page url */
+  readonly slug?: Maybe<Scalars['String']>;
   /** Page deployment status */
   readonly status: Scalars['String'];
   /** Page title */
@@ -447,7 +455,7 @@ export type SiteSchema = {
   /** Account ID of last updater */
   readonly updatedBy: Scalars['String'];
   /** Site url */
-  readonly url: Scalars['String'];
+  readonly url?: Maybe<Scalars['String']>;
 };
 
 export enum SiteStatus {
@@ -622,7 +630,7 @@ export type GetPageQueryVariables = Exact<{
 }>;
 
 
-export type GetPageQuery = { readonly __typename?: 'Query', readonly getPage: { readonly __typename?: 'PageSchema', readonly id: string, readonly title: string, readonly status: string, readonly isLoneTitle: boolean, readonly description: string, readonly createdAt: Date, readonly updatedAt: Date, readonly createdBy: string, readonly updatedBy: string } };
+export type GetPageQuery = { readonly __typename?: 'Query', readonly getPage: { readonly __typename?: 'PageSchema', readonly id: string, readonly title: string, readonly status: string, readonly isLoneTitle?: boolean | null, readonly description?: string | null, readonly createdAt: Date, readonly updatedAt: Date, readonly createdBy: string, readonly updatedBy: string } };
 
 export type CreatePageMutationVariables = Exact<{
   siteId: Scalars['String'];
@@ -635,7 +643,7 @@ export type CreatePageMutation = { readonly __typename?: 'Mutation', readonly cr
 export type UpdatePageMutationVariables = Exact<{
   siteId: Scalars['String'];
   pageId: Scalars['String'];
-  prop: UpdatePageInput;
+  input: UpdatePageInput;
 }>;
 
 
@@ -648,6 +656,13 @@ export type DeletePageMutationVariables = Exact<{
 
 
 export type DeletePageMutation = { readonly __typename?: 'Mutation', readonly deletePage: { readonly __typename?: 'PageUpdatedResponse', readonly status: string } };
+
+export type GetFirstPageMutationVariables = Exact<{
+  siteId: Scalars['String'];
+}>;
+
+
+export type GetFirstPageMutation = { readonly __typename?: 'Mutation', readonly getOrCreateFirstPage: { readonly __typename?: 'PageSchema', readonly id: string } };
 
 export type SessionQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1361,8 +1376,8 @@ export type CreatePageMutationHookResult = ReturnType<typeof useCreatePageMutati
 export type CreatePageMutationResult = Apollo.MutationResult<CreatePageMutation>;
 export type CreatePageMutationOptions = Apollo.BaseMutationOptions<CreatePageMutation, CreatePageMutationVariables>;
 export const UpdatePageDocument = gql`
-    mutation updatePage($siteId: String!, $pageId: String!, $prop: UpdatePageInput!) {
-  updatePage(siteId: $siteId, pageId: $pageId, input: $prop) {
+    mutation updatePage($siteId: String!, $pageId: String!, $input: UpdatePageInput!) {
+  updatePage(siteId: $siteId, pageId: $pageId, input: $input) {
     status
   }
 }
@@ -1384,7 +1399,7 @@ export type UpdatePageMutationFn = Apollo.MutationFunction<UpdatePageMutation, U
  *   variables: {
  *      siteId: // value for 'siteId'
  *      pageId: // value for 'pageId'
- *      prop: // value for 'prop'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -1429,6 +1444,39 @@ export function useDeletePageMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeletePageMutationHookResult = ReturnType<typeof useDeletePageMutation>;
 export type DeletePageMutationResult = Apollo.MutationResult<DeletePageMutation>;
 export type DeletePageMutationOptions = Apollo.BaseMutationOptions<DeletePageMutation, DeletePageMutationVariables>;
+export const GetFirstPageDocument = gql`
+    mutation getFirstPage($siteId: String!) {
+  getOrCreateFirstPage(siteId: $siteId) {
+    id
+  }
+}
+    `;
+export type GetFirstPageMutationFn = Apollo.MutationFunction<GetFirstPageMutation, GetFirstPageMutationVariables>;
+
+/**
+ * __useGetFirstPageMutation__
+ *
+ * To run a mutation, you first call `useGetFirstPageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGetFirstPageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [getFirstPageMutation, { data, loading, error }] = useGetFirstPageMutation({
+ *   variables: {
+ *      siteId: // value for 'siteId'
+ *   },
+ * });
+ */
+export function useGetFirstPageMutation(baseOptions?: Apollo.MutationHookOptions<GetFirstPageMutation, GetFirstPageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GetFirstPageMutation, GetFirstPageMutationVariables>(GetFirstPageDocument, options);
+      }
+export type GetFirstPageMutationHookResult = ReturnType<typeof useGetFirstPageMutation>;
+export type GetFirstPageMutationResult = Apollo.MutationResult<GetFirstPageMutation>;
+export type GetFirstPageMutationOptions = Apollo.BaseMutationOptions<GetFirstPageMutation, GetFirstPageMutationVariables>;
 export const SessionDocument = gql`
     query session {
   session {

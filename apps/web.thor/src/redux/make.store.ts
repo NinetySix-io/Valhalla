@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 import { Environment } from '@app/env';
 import { MetaSlice } from './slices/meta';
+import { SiteEditorSlice } from './slices/editor';
 import { TenantSlice } from './slices/tenant';
 import { withHydration } from './utils/with.hydration';
 
@@ -43,6 +44,7 @@ function _makeStore() {
       combineReducers({
         [MetaSlice.name]: MetaSlice.reducer,
         [TenantSlice.name]: TenantSlice.reducer,
+        [SiteEditorSlice.name]: SiteEditorSlice.reducer,
       }),
     ),
   });

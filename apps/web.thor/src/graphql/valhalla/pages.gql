@@ -30,9 +30,9 @@ mutation createPage($siteId: String!, $prop: CreatePageInput!) {
 mutation updatePage(
   $siteId: String!
   $pageId: String!
-  $prop: UpdatePageInput!
+  $input: UpdatePageInput!
 ) {
-  updatePage(siteId: $siteId, pageId: $pageId, input: $prop) {
+  updatePage(siteId: $siteId, pageId: $pageId, input: $input) {
     status
   }
 }
@@ -40,5 +40,11 @@ mutation updatePage(
 mutation deletePage($siteId: String!, $pageId: String!) {
   deletePage(siteId: $siteId, pageId: $pageId) {
     status
+  }
+}
+
+mutation getFirstPage($siteId: String!) {
+  getOrCreateFirstPage(siteId: $siteId) {
+    id
   }
 }

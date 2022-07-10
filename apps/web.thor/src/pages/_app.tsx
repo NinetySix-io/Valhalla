@@ -15,9 +15,9 @@ import { BaseLayout } from '@app/layout/base';
 import { CacheProvider } from '@emotion/react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Head from 'next/head';
-import { Page as PageType } from '@app/types/next/page';
 import { Provider as ReduxProvider } from 'react-redux';
 import { ThemeProvider } from '@mui/material/styles';
+import { View } from '@app/types/next/page';
 import { useApollo } from '@app/apollo/use.apollo';
 import { useReduxHydration } from '@app/redux/with.redux';
 
@@ -27,7 +27,7 @@ export default function App({ Component, ...props }: AppProps) {
   const store = useReduxHydration(props);
   const pageProps = props.pageProps;
   const SEO: WithSEO<unknown>['SEO'] = pageProps?.SEO;
-  const Page = Component as PageType;
+  const Page = Component as View;
   const Layout = Page.Layout ?? BaseLayout;
   const isProtected = !Page.isUnprotected;
   const apolloClient = useApollo(pageProps);

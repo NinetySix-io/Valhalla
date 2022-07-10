@@ -1,7 +1,6 @@
 import { GetServerSideProps, GetStaticProps } from '@valhalla/react';
 import { OnPagePropsCb, PluginCtx } from './types';
 
-import { Environment } from '@app/env';
 import { GetServerSidePropsContext } from 'next';
 import { IntersectionOfArrayFnReturn } from '@app/types/intersection.of.array.fn.return';
 import { merge } from 'merge-anything';
@@ -22,7 +21,7 @@ export function composeNextPlugins<
   return async (ctx) => {
     const pagePropsCbList: OnPagePropsCb[] = [];
     ctx.onPageProps = (cb: OnPagePropsCb) => pagePropsCbList.push(cb);
-    ctx.isSsr = Environment.isServer;
+    ctx.isSsr = Boolean(ctx.req);
     ctx.ssgCtx = ctx;
     ctx.ssrCtx = ctx as GetServerSidePropsContext;
 

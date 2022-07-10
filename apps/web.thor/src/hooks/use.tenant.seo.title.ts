@@ -1,16 +1,17 @@
 import { NextSeoProps } from 'next-seo';
-import { useReduxSelector } from '@app/redux/hooks';
+import { useOrgCtx } from './hydrate/use.org.hydrate';
 
 /**
  * Hook to transform seo for tenant
  */
 export function useTenantSEO(SEO: NextSeoProps): NextSeoProps {
-  const orgName = useReduxSelector((state) => state.tenant.organization?.name);
+  const organization = useOrgCtx().name;
 
   return {
     ...SEO,
-    titleTemplate: !orgName || !SEO?.title ? undefined : `%s | ${orgName}`,
-    title: SEO?.title || orgName,
+    titleTemplate:
+      !organization || !SEO?.title ? undefined : `%s | ${organization}`,
+    title: SEO?.title || organization,
     noindex: true,
     nofollow: true,
   };

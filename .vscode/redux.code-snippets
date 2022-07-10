@@ -1,0 +1,23 @@
+{
+  "Slice": {
+    "prefix": "rslice",
+    "body": [
+      "import { PayloadAction, createSlice } from '@reduxjs/toolkit';",
+      "",
+      "type State = {",
+      "\t$",
+      "};",
+      "",
+      "const initialState: State = {};",
+      "",
+      "export const MetaSlice = createSlice({",
+      "\tname: '$2',",
+      "\tinitialState,",
+      "\treducers: {",
+      "\t\t$3",
+      "\t},",
+      "});",
+      ""
+    ]
+  }
+}
