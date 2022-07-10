@@ -35,7 +35,7 @@ type PageSchema {
   """Page url"""
   slug: String
 
-  """Page deployment status"""
+  """Edit status"""
   status: String!
 
   """Page title"""
@@ -98,7 +98,7 @@ type PageUpdatedResponse {
   """Identifier of the entity"""
   id: ID!
 
-  """Page deployment status"""
+  """Edit status"""
   status: String!
 }
 

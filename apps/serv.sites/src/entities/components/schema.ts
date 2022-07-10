@@ -12,7 +12,9 @@ import { ElementSchema } from '../elements/schema';
 import { Field } from '@nestjs/graphql';
 import mongoose from 'mongoose';
 
-@SimpleModel('components')
+@SimpleModel('components', {
+  allowMixed: typegoose.Severity.ALLOW,
+})
 @typegoose.index({ owners: 1 })
 export class ComponentSchema extends BaseSchema {
   @typegoose.prop()
@@ -20,9 +22,8 @@ export class ComponentSchema extends BaseSchema {
   @Field({ description: 'Edit status' })
   status: EditStatus;
 
-  @typegoose.prop()
+  @typegoose.prop({ type: [String] })
   @Exclude()
-  @Field({ description: 'Owners of the component' })
   owners: string[];
 
   @typegoose.prop()
