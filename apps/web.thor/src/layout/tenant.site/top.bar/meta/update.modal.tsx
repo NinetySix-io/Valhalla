@@ -62,12 +62,13 @@ export const MetaUpdateModal: React.FC<Props> = ({ open, onClose }) => {
       >
         <TextField label="Title" autoComplete="off" autoCapitalize="words" />
       </Form.Item>
-      <Form.Item name="description" rules={[{ whitespace: true, max: 300 }]}>
+      <Form.Item name="description">
         <TextField
           multiline
           label="Description"
           autoComplete="off"
           autoCapitalize="off"
+          inputProps={{ maxLength: 300 }}
         />
       </Form.Item>
     </FormModal>

@@ -1,13 +1,12 @@
 import * as React from 'react';
 
 import { Box, BoxProps } from '@mui/material';
-import { Form, FormProps, cProps } from '@valhalla/react';
+import { Form, FormProps } from '@valhalla/react';
 
 import { Modal } from '@app/components/modal';
 import { tryNice } from 'try-nice';
 
-type Props<T> = cProps &
-  Pick<FormProps<T>, 'form'> &
+type Props<T> = Pick<FormProps<T>, 'form'> &
   Pick<
     React.ComponentProps<typeof Modal>,
     'withCancel' | 'onClose' | 'open' | 'title' | 'loading' | 'withCloseBtn'
@@ -17,6 +16,7 @@ type Props<T> = cProps &
     onSuccess?: () => void;
     onError?: (error: Error) => void;
     closeOnSuccess?: boolean;
+    children: React.ReactElement | Array<React.ReactElement>;
   };
 
 export type FormModalProps<T> = Props<T>;

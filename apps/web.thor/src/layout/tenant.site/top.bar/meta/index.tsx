@@ -35,18 +35,30 @@ export const Meta: React.FC<Props> = () => {
   const page = useSitePageHydrate();
   const [updating, setUpdating] = React.useState(false);
 
+  function getTitle() {
+    if (!page.data || page.loading) {
+      return (
+        <Typography variant="h6" component="h1" lineHeight="normal">
+          Loading ...
+        </Typography>
+      );
+    }
+
+    return (
+      <React.Fragment>
+        <Typography variant="h6" component="h1" lineHeight="normal">
+          {page.data.title}
+        </Typography>
+        <Typography variant="caption" lineHeight="normal">
+          {page.data.status}
+        </Typography>
+      </React.Fragment>
+    );
+  }
+
   return (
     <Container>
-      <Content onClick={() => setUpdating(true)}>
-        <Typography variant="h6" component="h1" lineHeight="normal">
-          {page.data?.title ?? 'Loading ...'}
-        </Typography>
-        {page.data && (
-          <Typography variant="caption" lineHeight="normal">
-            {page.data.status}
-          </Typography>
-        )}
-      </Content>
+      <Content onClick={() => setUpdating(true)}>{getTitle()}</Content>
       <Menu open={anchor.isActive} onClose={anchor.remove} />
       <MetaUpdateModal open={updating} onClose={() => setUpdating(false)} />
     </Container>
