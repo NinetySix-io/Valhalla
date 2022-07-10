@@ -6,15 +6,13 @@ import {
 } from '@apollo/client';
 
 import { Environment } from '@app/env';
+import { authLink } from './auth.link';
 import { authRedirectLink } from './auth.redirect.link';
 import { createHttpLink } from './http.link';
 import { getErrorLink } from './error.link';
 
 /**
- * It creates an Apollo Client instance with a link chain that includes an auth link, an error link,
- * and an http link
- * @param [options] - {
- * @returns A function that returns an ApolloClient
+ * It creates an Apollo Client instance
  */
 export function createApolloClient(options?: {
   withLogger?: boolean;
@@ -22,6 +20,7 @@ export function createApolloClient(options?: {
   initialState?: NormalizedCacheObject;
 }) {
   const links = [
+    authLink,
     authRedirectLink,
     getErrorLink({ headers: options.headers }),
     createHttpLink(Environment.GQL_SERVER, options?.headers),
