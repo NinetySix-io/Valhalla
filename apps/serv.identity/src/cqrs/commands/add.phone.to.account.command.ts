@@ -41,7 +41,7 @@ export class AddPhoneToAccountHandler
 
     const account = await this.accounts
       .findById(command.request.accountId)
-      .orFail(() => new Error('Account not found!'));
+      .orFail();
 
     const primaryPhone = account.phones.find((phone) => phone.isPrimary);
     if (!primaryPhone?.isVerified) {

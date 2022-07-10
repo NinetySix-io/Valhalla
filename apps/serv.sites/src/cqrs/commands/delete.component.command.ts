@@ -5,11 +5,7 @@ import {
   ICommandHandler,
 } from '@nestjs/cqrs';
 import { DeleteComponentRequest, DeleteComponentResponse } from '@app/protobuf';
-import {
-  RpcHandler,
-  throwEntityNotFound,
-  toObjectId,
-} from '@valhalla/serv.core';
+import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { ComponentDeletedEvent } from '../events/component.deleted.event';
 import { ComponentTransformer } from '@app/entities/components/transformer';
@@ -43,7 +39,7 @@ export class DeleteComponentHandler
           elements: 0,
         },
       },
-    ).orFail(throwEntityNotFound);
+    ).orFail();
 
     const serialized = new ComponentTransformer(result).proto;
     this.eventBus.publish(

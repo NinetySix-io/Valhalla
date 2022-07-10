@@ -55,10 +55,7 @@ export class FindAccountHandler
   async execute(command: FindAccountQuery): Promise<Account> {
     const payload = this.validateRequest(command.request);
     const filter = this.buildFilter(payload);
-    const user = await this.accounts
-      .findOne(filter)
-      .orFail(() => new Error('No user found'));
-
+    const user = await this.accounts.findOne(filter).orFail();
     const userProto = new AccountTransformer(user).proto;
     return userProto;
   }

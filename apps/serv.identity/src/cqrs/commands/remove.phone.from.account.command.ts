@@ -28,7 +28,7 @@ export class RemovePhoneFromAccountHandler
   async execute(command: RemovePhoneFromAccountCommand): Promise<Account> {
     const account = await this.accounts
       .findById(command.request.accountId)
-      .orFail(() => new Error('Account not found!'));
+      .orFail();
 
     const originalLen = account.emails.length;
     account.phones = account.emails.filter(

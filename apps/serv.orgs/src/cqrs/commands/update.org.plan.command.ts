@@ -28,9 +28,7 @@ export class UpdateOrgPlanHandler
 
   async execute(command: UpdateOrgPlanCommand): Promise<Organization> {
     const { plan, orgId, requestedUserId } = command.request;
-    const organization = await this.organizations
-      .findById(orgId)
-      .orFail(() => new Error('Organization not found!'));
+    const organization = await this.organizations.findById(orgId).orFail();
 
     //TODO: more logic
     organization.plan = plan;

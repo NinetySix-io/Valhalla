@@ -30,9 +30,7 @@ export class VerifyPhoneHandler
   async execute(command: VerifyPhoneCommand): Promise<VerifyPhoneResponse> {
     const { phone, verificationCode, accountId } = command.request;
 
-    const account = await this.accounts
-      .findById(accountId)
-      .orFail(() => new Error('Account not found!'));
+    const account = await this.accounts.findById(accountId).orFail();
 
     const accountPhone = account.phones.find((item) => item.value === phone);
     if (!accountPhone) {
@@ -41,7 +39,7 @@ export class VerifyPhoneHandler
 
     const verification = await this.verifications
       .findById(accountPhone.verification)
-      .orFail(() => new Error('Verification not found!'));
+      .orFail();
 
     const isValid = await this.verifications.validateCode(
       verificationCode,

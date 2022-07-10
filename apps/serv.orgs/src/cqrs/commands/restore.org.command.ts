@@ -28,9 +28,7 @@ export class RestoreOrgHandler
 
   async execute(command: RestoreOrgCommand): Promise<Organization> {
     const { orgId, requestedUserId } = command.input;
-    const organization = await this.organizations
-      .findById(orgId)
-      .orFail(() => new Error('Organization not found!'));
+    const organization = await this.organizations.findById(orgId).orFail();
 
     if (organization.status === OrgStatus.ACTIVE) {
       throw new Error('Organization is already active');

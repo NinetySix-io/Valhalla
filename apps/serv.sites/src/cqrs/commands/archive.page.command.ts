@@ -9,11 +9,7 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import {
-  RpcHandler,
-  throwEntityNotFound,
-  toObjectId,
-} from '@valhalla/serv.core';
+import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { PageArchivedEvent } from '../events/page.archived.event';
 import { PageTransformer } from '@app/entities/pages/transformer';
@@ -45,7 +41,7 @@ export class ArchivePageHandler
         { $set: { status, updatedBy } },
         { new: true },
       )
-      .orFail(throwEntityNotFound);
+      .orFail();
 
     const serialized = new PageTransformer(page).proto;
     this.eventBus.publish(new PageArchivedEvent(serialized));

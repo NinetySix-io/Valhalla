@@ -49,7 +49,7 @@ export class LoginWithVerificationHandler
     const { verificationCode, verificationId, username } = command.cmd;
     const verification = await this.verifications
       .findById(verificationId)
-      .orFail(() => new Error('Verification not found!'));
+      .orFail();
 
     const isValid = await this.verifications.validateCode(
       verificationCode,
@@ -60,10 +60,7 @@ export class LoginWithVerificationHandler
       throw new Error('Invalid verification code!');
     }
 
-    const account = await this.accounts
-      .findByUsername(username)
-      .orFail(() => new Error('Account not found!'));
-
+    const account = await this.accounts.findByUsername(username).orFail();
     const accountProto = new AccountTransformer(account).proto;
     const tokens = await this.makeToken(accountProto);
     this.eventBus.publish(new AccountLoggedInEvent(accountProto));

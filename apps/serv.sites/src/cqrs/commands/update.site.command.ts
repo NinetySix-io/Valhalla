@@ -4,11 +4,7 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import {
-  RpcHandler,
-  throwEntityNotFound,
-  toObjectId,
-} from '@valhalla/serv.core';
+import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 import { UpdateSiteRequest, UpdateSiteResponse } from '@app/protobuf';
 
 import { SiteTransformer } from '@app/entities/sites/transformer';
@@ -40,7 +36,7 @@ export class UpdateSiteHandler
         { $set: { name, updatedBy } },
         { withoutNil: true, new: true },
       )
-      .orFail(throwEntityNotFound);
+      .orFail();
 
     const serialized = new SiteTransformer(site).proto;
     this.eventBus.publish(new SiteUpdatedEvent(serialized));

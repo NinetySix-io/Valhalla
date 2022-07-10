@@ -28,9 +28,7 @@ export class UpdateOrgLogoHandler
 
   async execute(command: UpdateOrgLogoCommand): Promise<Organization> {
     const { imageUrl, orgId, requestedUserId } = command.request;
-    const organization = await this.organizations
-      .findById(orgId)
-      .orFail(() => new Error('Organization not found!'));
+    const organization = await this.organizations.findById(orgId).orFail();
 
     organization.logoUrl = imageUrl;
     organization.updatedBy = toObjectId(requestedUserId);

@@ -41,7 +41,7 @@ export class AddEmailToAccountHandler
 
     const account = await this.accounts
       .findById(command.request.accountId)
-      .orFail(() => new Error('Account not found!'));
+      .orFail();
 
     const primaryEmail = account.emails.find((email) => email.isPrimary);
     if (!primaryEmail?.isVerified) {

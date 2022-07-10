@@ -28,7 +28,7 @@ export class RemoveEmailFromAccountHandler
   async execute(command: RemoveEmailFromAccountCommand): Promise<Account> {
     const account = await this.accounts
       .findById(command.request.accountId)
-      .orFail(() => new Error('Account not found!'));
+      .orFail();
 
     const originalLen = account.emails.length;
     account.emails = account.emails.filter(

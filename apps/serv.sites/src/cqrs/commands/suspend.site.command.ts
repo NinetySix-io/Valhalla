@@ -4,11 +4,7 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import {
-  RpcHandler,
-  throwEntityNotFound,
-  toObjectId,
-} from '@valhalla/serv.core';
+import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 import {
   SiteStatus,
   SuspendSiteRequest,
@@ -45,7 +41,7 @@ export class SuspendSiteHandler
         { $set: { updatedBy, status } },
         { new: true },
       )
-      .orFail(throwEntityNotFound);
+      .orFail();
 
     const serialized = new SiteTransformer(site).proto;
 

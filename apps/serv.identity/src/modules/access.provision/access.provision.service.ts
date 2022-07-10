@@ -86,14 +86,8 @@ export class AccessProvisionService {
     refreshToken: string,
     options?: Parameters<AccessProvisionService['createAccessToken']>[1],
   ) {
-    const token = await this.refreshTokens
-      .findById(refreshToken)
-      .orFail(() => new Error('Refresh token does not exists!'));
-
-    const account = await this.accounts
-      .findById(token.account)
-      .orFail(() => new Error('Account does not exists!'));
-
+    const token = await this.refreshTokens.findById(refreshToken).orFail();
+    const account = await this.accounts.findById(token.account).orFail();
     const accessToken = await this.createAccessToken(account, options);
     this.logger.warn(
       `Refresh Token[${refreshToken}] generated an access token`,

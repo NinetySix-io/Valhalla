@@ -30,10 +30,7 @@ export class VerifyEmailHandler
   async execute(command: VerifyEmailCommand): Promise<VerifyEmailResponse> {
     const { email, verificationCode, accountId } = command.request;
 
-    const account = await this.accounts
-      .findById(accountId)
-      .orFail(() => new Error('Account not found!'));
-
+    const account = await this.accounts.findById(accountId).orFail();
     const accountEmail = account.emails.find((item) => item.value === email);
     if (!accountEmail) {
       throw new Error('Email is not associated with this account!');
@@ -41,7 +38,7 @@ export class VerifyEmailHandler
 
     const verification = await this.verifications
       .findById(accountEmail.verification)
-      .orFail(() => new Error('Verification not found!'));
+      .orFail();
 
     const isValid = await this.verifications.validateCode(
       verificationCode,

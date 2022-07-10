@@ -5,11 +5,7 @@ import {
   ICommandHandler,
 } from '@nestjs/cqrs';
 import { DeletePageRequest, DeletePageResponse } from '@app/protobuf';
-import {
-  RpcHandler,
-  throwEntityNotFound,
-  toObjectId,
-} from '@valhalla/serv.core';
+import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { PageDeletedEventEvent } from '../events/page.deleted.event';
 import { PageTransformer } from '@app/entities/pages/transformer';
@@ -40,7 +36,7 @@ export class DeletePageHandler
         ownBy,
         site,
       })
-      .orFail(throwEntityNotFound);
+      .orFail();
 
     const serialized = new PageTransformer(deletedPage).proto;
     this.eventBus.publish(

@@ -9,11 +9,7 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import {
-  RpcHandler,
-  throwEntityNotFound,
-  toObjectId,
-} from '@valhalla/serv.core';
+import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { ComponentArchivedEvent } from '../events/component.archived.event';
 import { ComponentTransformer } from '@app/entities/components/transformer';
@@ -56,7 +52,7 @@ export class ArchiveComponentHandler
       },
     )
       .select({ elements: 0 })
-      .orFail(throwEntityNotFound);
+      .orFail();
 
     const serialized = new ComponentTransformer(result).proto;
     const event = new ComponentArchivedEvent(serialized);

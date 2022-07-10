@@ -41,9 +41,7 @@ export class MarkDeleteOrgMemberHandler
     const { requestedUserId, orgId, memberId } = command.request;
     const user = toObjectId(memberId);
     const organization = toObjectId(orgId);
-    const member = await this.members
-      .findOne({ user, organization })
-      .orFail(() => new Error('Member not found!'));
+    const member = await this.members.findOne({ user, organization }).orFail();
 
     if (member.deletingAt) {
       throw new Error('Member is already marked for deletion');

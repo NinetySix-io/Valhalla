@@ -28,9 +28,7 @@ export class ArchiveOrgHandler
 
   async execute(command: ArchiveOrgCommand): Promise<Organization> {
     const { requestedUserId, orgId } = command.input;
-    const organization = await this.organizations
-      .findById(orgId)
-      .orFail(() => new Error('Organization not found!'));
+    const organization = await this.organizations.findById(orgId).orFail();
 
     if (organization.status === OrgStatus.INACTIVE) {
       throw new Error('Organization is already archived');

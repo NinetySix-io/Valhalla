@@ -4,11 +4,7 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import {
-  RpcHandler,
-  throwEntityNotFound,
-  toObjectId,
-} from '@valhalla/serv.core';
+import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 import { UpdateComponentRequest, UpdateComponentResponse } from '@app/protobuf';
 
 import { ComponentTransformer } from '@app/entities/components/transformer';
@@ -63,7 +59,7 @@ export class UpdateComponentHandler
           elements: 0,
         },
       },
-    ).orFail(throwEntityNotFound);
+    ).orFail();
 
     const serialized = new ComponentTransformer(result).proto;
     const event = new ComponentUpdatedEvent(serialized);

@@ -47,7 +47,7 @@ export class UpdateAccountHandler
     const payload = this.validateRequest(rest);
     const user = await this.accounts
       .findOneAndUpdate({ _id: accountId }, payload, { new: true })
-      .orFail(() => new Error('User not found'));
+      .orFail();
 
     const userProto = new AccountTransformer(user).proto;
     this.eventBus.publish(new AccountUpdatedEvent(userProto));

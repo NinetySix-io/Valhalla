@@ -23,7 +23,7 @@ export class ComponentSchema extends BaseSchema {
   @typegoose.prop()
   @Exclude()
   @Field({ description: 'Owners of the component' })
-  owners: Array<string>;
+  owners: string[];
 
   @typegoose.prop()
   @Expose()
