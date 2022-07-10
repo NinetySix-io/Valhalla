@@ -42,7 +42,7 @@ export class ComponentSchema extends BaseSchema {
   @typegoose.prop()
   @Expose()
   @IsUrl()
-  @Field(() => String, { description: 'URI of the icon' })
+  @Field(() => String, { description: 'URI of the icon', nullable: true })
   iconUrl?: string;
 
   @typegoose.prop()

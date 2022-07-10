@@ -20,10 +20,10 @@ export class GetSiteHandler
 
   async execute(command: GetSiteQuery): Promise<GetSiteResponse> {
     const query: FilterQuery<SiteSchema> = {};
-    const { siteId, orgId } = command.request;
+    const { siteId, ownerId } = command.request;
     query._id = toObjectId(siteId);
-    if (orgId) {
-      query.ownBy = toObjectId(orgId);
+    if (ownerId) {
+      query.ownBy = toObjectId(ownerId);
     }
 
     const site = await this.sites.findOne(query);

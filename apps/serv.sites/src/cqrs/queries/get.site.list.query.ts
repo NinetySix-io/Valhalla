@@ -23,8 +23,8 @@ export class GetSiteListHandler
     const query: FilterQuery<SiteSchema> = {};
 
     if (command.request.query) {
-      if (command.request.query.$case === 'ownBy') {
-        query.ownBy = toObjectId(command.request.query.ownBy);
+      if (command.request.query.$case === 'ownerId') {
+        query.ownBy = toObjectId(command.request.query.ownerId);
       }
     }
 

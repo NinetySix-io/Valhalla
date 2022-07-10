@@ -30,8 +30,8 @@ export class CreateSiteHandler
   ) {}
 
   async execute(command: CreateSiteCommand): Promise<CreateSiteResponse> {
-    const { requestedUserId, owner, name } = command.request;
-    const ownBy = toObjectId(owner);
+    const { requestedUserId, ownerId, name } = command.request;
+    const ownBy = toObjectId(ownerId);
     const createdBy = toObjectId(requestedUserId);
     const updatedBy = createdBy;
     const status = SiteStatus.PENDING;

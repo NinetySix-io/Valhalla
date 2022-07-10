@@ -1,6 +1,7 @@
-import { isEmail, isEmpty, isPhoneNumber } from 'class-validator';
+import { isEmail, isPhoneNumber } from 'class-validator';
 
 import { ValidatorOption } from './types';
+import { isEmpty } from '@valhalla/utilities';
 import { isObjectIdOrHexString } from 'mongoose';
 
 export const EmailParamValidation: ValidatorOption<string> = {
@@ -14,7 +15,7 @@ export const PhoneParamValidation: ValidatorOption<string> = {
 };
 
 export const EmptyStringValidation: ValidatorOption<string> = {
-  validate: isEmpty,
+  validate: (v) => !isEmpty(v),
   errorMessage: 'Field must be a non-empty string',
 };
 
@@ -24,7 +25,7 @@ export const ObjectIdParamValidation: ValidatorOption<string> = {
 };
 
 export const EmptyObjectValidation: ValidatorOption<object> = {
-  validate: isEmpty,
+  validate: (v) => !isEmpty(v),
   errorMessage: 'Field has no properties',
 };
 

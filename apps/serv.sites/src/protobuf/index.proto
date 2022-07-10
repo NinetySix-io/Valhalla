@@ -14,6 +14,7 @@ service SitesService {
   rpc SuspendSite(SuspendSiteRequest) returns (SuspendSiteResponse) {}
   rpc GetPageList(GetPageListRequest) returns (GetPageListResponse) {}
   rpc GetPage(GetPageRequest) returns (GetPageResponse) {}
+  rpc GetOrCreateFirstPage(GetOrCreateFirstPageRequest) returns (GetOrCreateFirstPageResponse) {}
   rpc UpdatePage(UpdatePageRequest) returns (UpdatePageResponse) {}
   rpc DeletePage(DeletePageRequest) returns (DeletePageResponse) {}
   rpc ArchivePage(ArchivePageRequest) returns (ArchivePageResponse) {}
@@ -161,6 +162,7 @@ message Page {
   string updatedBy = 9;
   google.protobuf.Timestamp createdAt = 10;
   google.protobuf.Timestamp updatedAt = 11;
+  optional string slug = 12;
 }
 
 message Site {
@@ -180,17 +182,28 @@ message Site {
 // -----------------------------
 message CreatePageRequest {
   string requestedUserId = 1;
-  string organizationId = 2;
+  string ownerId = 2;
   string siteId = 3;
-  string title = 4;
+  optional string title = 4;
 }
 
 message CreatePageResponse {
   Page page = 1;
 }
 
+message GetOrCreateFirstPageRequest {
+  string requestedUserId = 1;
+  string ownerId = 2;
+  string siteId = 3;
+  optional string fallbackTitle = 4;
+}
+
+message GetOrCreateFirstPageResponse {
+  Page page = 1;
+}
+
 message GetPageRequest {
-  string organizationId = 1;
+  string ownerId = 1;
   string siteId = 2;
   string pageId = 3;
 }
@@ -200,7 +213,7 @@ message GetPageResponse {
 }
 
 message GetPageListRequest {
-  string organizationId = 1;
+  string ownerId = 1;
   string siteId = 2;
 }
 
@@ -209,7 +222,7 @@ message GetPageListResponse {
 }
 
 message UpdatePageRequest {
-  string organizationId = 1;
+  string ownerId = 1;
   string siteId = 2;
   string pageId = 3;
   string requestedUserId = 4;
@@ -223,7 +236,7 @@ message UpdatePageResponse {
 }
 
 message DeletePageRequest {
-  string organizationId = 1;
+  string ownerId = 1;
   string siteId = 2;
   string requestedUserId = 3;
   string pageId = 4;
@@ -234,7 +247,7 @@ message DeletePageResponse {
 }
 
 message ArchivePageRequest {
-  string organizationId = 1;
+  string ownerId = 1;
   string siteId = 2;
   string requestedUserId = 3;
 }
@@ -249,7 +262,7 @@ message ArchivePageResponse {
 
 message CreateSiteRequest {
   string name = 1;
-  string owner = 2;
+  string ownerId = 2;
   string requestedUserId = 3;
   optional string logoUrl = 4;
   optional string faviconUrl = 5;
@@ -262,7 +275,7 @@ message CreateSiteResponse {
 
 message UpdateSiteRequest {
   string requestedUserId = 1;
-  string organizationId = 2;
+  string ownerId = 2;
   string siteId = 3;
   optional string name = 4;
 }
@@ -273,7 +286,7 @@ message UpdateSiteResponse {
 
 message GetSiteRequest {
   string siteId = 1;
-  optional string orgId = 2;
+  optional string ownerId = 2;
 }
 
 message GetSiteResponse {
@@ -282,7 +295,7 @@ message GetSiteResponse {
 
 message GetSiteListRequest {
   oneof query {
-    string ownBy = 1;
+    string ownerId = 1;
   }
 }
 
@@ -292,7 +305,7 @@ message GetSiteListResponse {
 
 message SuspendSiteRequest {
   string requestedUserId = 1;
-  string organizationId = 2;
+  string ownerId = 2;
   string siteId = 3;
 }
 

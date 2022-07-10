@@ -27,21 +27,22 @@ export class UpdatePageHandler
 
   async execute(command: UpdatePageCommand): Promise<UpdatePageResponse> {
     const {
+      ownerId,
       description,
       title,
       isLoneTitle,
-      organizationId,
       siteId,
       pageId,
       requestedUserId,
     } = command.request;
+
     const _id = toObjectId(pageId);
-    const organization = toObjectId(organizationId);
+    const ownBy = toObjectId(ownerId);
     const site = toObjectId(siteId);
     const updatedBy = toObjectId(requestedUserId);
     const page = await this.pages
       .findOneAndUpdate(
-        { _id, organization, site },
+        { _id, ownBy, site },
         { $set: { title, description, isLoneTitle, updatedBy } },
         { withoutNil: true, new: true },
       )

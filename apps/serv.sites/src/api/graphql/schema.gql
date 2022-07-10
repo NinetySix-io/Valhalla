@@ -32,6 +32,9 @@ type PageSchema {
   """Identifier of the entity"""
   id: ID!
 
+  """Page url"""
+  slug: String
+
   """Page deployment status"""
   status: String!
 
@@ -39,10 +42,10 @@ type PageSchema {
   title: String!
 
   """Whether the title should be independent or part of the title template"""
-  isLoneTitle: Boolean!
+  isLoneTitle: Boolean
 
   """Page description"""
-  description: String!
+  description: String
 
   """Account ID of creator"""
   createdBy: String!
@@ -73,7 +76,7 @@ type SiteSchema {
   status: SiteStatus!
 
   """Site url"""
-  url: String!
+  url: String
 
   """Account ID of creator"""
   createdBy: String!
@@ -120,6 +123,7 @@ type Mutation {
   createPage(siteId: String!, input: CreatePageInput!): PageUpdatedResponse!
   deletePage(siteId: String!, pageId: String!): PageUpdatedResponse!
   updatePage(siteId: String!, pageId: String!, input: UpdatePageInput!): PageUpdatedResponse!
+  getOrCreateFirstPage(siteId: String!): PageSchema!
 }
 
 input CreateSiteInput {

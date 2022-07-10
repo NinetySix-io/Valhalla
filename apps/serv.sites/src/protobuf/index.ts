@@ -142,6 +142,7 @@ export interface Page {
   updatedBy: string;
   createdAt?: Date;
   updatedAt?: Date;
+  slug?: string | undefined;
 }
 
 export interface Site {
@@ -163,17 +164,28 @@ export interface Site {
  */
 export interface CreatePageRequest {
   requestedUserId: string;
-  organizationId: string;
+  ownerId: string;
   siteId: string;
-  title: string;
+  title?: string | undefined;
 }
 
 export interface CreatePageResponse {
   page?: Page;
 }
 
+export interface GetOrCreateFirstPageRequest {
+  requestedUserId: string;
+  ownerId: string;
+  siteId: string;
+  fallbackTitle?: string | undefined;
+}
+
+export interface GetOrCreateFirstPageResponse {
+  page?: Page;
+}
+
 export interface GetPageRequest {
-  organizationId: string;
+  ownerId: string;
   siteId: string;
   pageId: string;
 }
@@ -183,7 +195,7 @@ export interface GetPageResponse {
 }
 
 export interface GetPageListRequest {
-  organizationId: string;
+  ownerId: string;
   siteId: string;
 }
 
@@ -192,7 +204,7 @@ export interface GetPageListResponse {
 }
 
 export interface UpdatePageRequest {
-  organizationId: string;
+  ownerId: string;
   siteId: string;
   pageId: string;
   requestedUserId: string;
@@ -206,7 +218,7 @@ export interface UpdatePageResponse {
 }
 
 export interface DeletePageRequest {
-  organizationId: string;
+  ownerId: string;
   siteId: string;
   requestedUserId: string;
   pageId: string;
@@ -217,7 +229,7 @@ export interface DeletePageResponse {
 }
 
 export interface ArchivePageRequest {
-  organizationId: string;
+  ownerId: string;
   siteId: string;
   requestedUserId: string;
 }
@@ -228,7 +240,7 @@ export interface ArchivePageResponse {
 
 export interface CreateSiteRequest {
   name: string;
-  owner: string;
+  ownerId: string;
   requestedUserId: string;
   logoUrl?: string | undefined;
   faviconUrl?: string | undefined;
@@ -241,7 +253,7 @@ export interface CreateSiteResponse {
 
 export interface UpdateSiteRequest {
   requestedUserId: string;
-  organizationId: string;
+  ownerId: string;
   siteId: string;
   name?: string | undefined;
 }
@@ -252,7 +264,7 @@ export interface UpdateSiteResponse {
 
 export interface GetSiteRequest {
   siteId: string;
-  orgId?: string | undefined;
+  ownerId?: string | undefined;
 }
 
 export interface GetSiteResponse {
@@ -260,7 +272,7 @@ export interface GetSiteResponse {
 }
 
 export interface GetSiteListRequest {
-  query?: { $case: "ownBy"; ownBy: string };
+  query?: { $case: "ownerId"; ownerId: string };
 }
 
 export interface GetSiteListResponse {
@@ -269,7 +281,7 @@ export interface GetSiteListResponse {
 
 export interface SuspendSiteRequest {
   requestedUserId: string;
-  organizationId: string;
+  ownerId: string;
   siteId: string;
 }
 
@@ -295,6 +307,10 @@ export interface SitesServiceClient {
   getPageList(request: GetPageListRequest): Observable<GetPageListResponse>;
 
   getPage(request: GetPageRequest): Observable<GetPageResponse>;
+
+  getOrCreateFirstPage(
+    request: GetOrCreateFirstPageRequest
+  ): Observable<GetOrCreateFirstPageResponse>;
 
   updatePage(request: UpdatePageRequest): Observable<UpdatePageResponse>;
 
@@ -354,6 +370,13 @@ export interface SitesServiceController {
     request: GetPageRequest
   ): Promise<GetPageResponse> | Observable<GetPageResponse> | GetPageResponse;
 
+  getOrCreateFirstPage(
+    request: GetOrCreateFirstPageRequest
+  ):
+    | Promise<GetOrCreateFirstPageResponse>
+    | Observable<GetOrCreateFirstPageResponse>
+    | GetOrCreateFirstPageResponse;
+
   updatePage(
     request: UpdatePageRequest
   ):
@@ -387,6 +410,7 @@ export function SitesServiceControllerMethods() {
       "suspendSite",
       "getPageList",
       "getPage",
+      "getOrCreateFirstPage",
       "updatePage",
       "deletePage",
       "archivePage",

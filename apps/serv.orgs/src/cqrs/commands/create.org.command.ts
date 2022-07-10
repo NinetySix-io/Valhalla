@@ -38,7 +38,7 @@ export class CreateOrgHandler
   ) {}
 
   private async generateSlug(name: string) {
-    let slug = slugify(name.toLowerCase());
+    let slug = slugify(name, { trim: true, lower: true });
     const count = await this.organizations.count({ slug });
     if (count > 0) {
       slug += `-${count}`;

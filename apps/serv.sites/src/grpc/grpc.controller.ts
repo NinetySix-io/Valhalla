@@ -7,6 +7,7 @@ import {
   CreateSiteResponse,
   DeletePageRequest,
   DeletePageResponse,
+  GetOrCreateFirstPageRequest,
   GetPageListRequest,
   GetPageListResponse,
   GetPageRequest,
@@ -31,6 +32,7 @@ import { Controller } from '@nestjs/common';
 import { CreatePageCommand } from '@app/cqrs/commands/create.page.command';
 import { CreateSiteCommand } from '@app/cqrs/commands/create.site.command';
 import { DeletePageCommand } from '@app/cqrs/commands/delete.page.command';
+import { GetOrCreateFirstPageCommand } from '@app/cqrs/commands/get.or.create.first.page.command';
 import { GetPageListQuery } from '@app/cqrs/queries/get.page.list.query';
 import { GetPageQuery } from '@app/cqrs/queries/get.page.query';
 import { GetSiteListQuery } from '@app/cqrs/queries/get.site.list.query';
@@ -48,6 +50,11 @@ export class gRpcController implements SitesServiceController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
+  getOrCreateFirstPage(
+    request: GetOrCreateFirstPageRequest,
+  ): GetPageResponse | Observable<GetPageResponse> | Promise<GetPageResponse> {
+    return this.commandBus.execute(new GetOrCreateFirstPageCommand(request));
+  }
   updateSite(
     request: UpdateSiteRequest,
   ):

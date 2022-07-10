@@ -38,7 +38,7 @@ export class GqlPagesResolver {
     const result = await resolveRpcRequest(
       this.rpcClient.createPage({
         requestedUserId: account.id,
-        organizationId,
+        ownerId: organizationId,
         siteId,
         title: input.title,
       }),
@@ -68,7 +68,7 @@ export class GqlPagesResolver {
       this.rpcClient.deletePage({
         pageId,
         siteId,
-        organizationId,
+        ownerId: organizationId,
         requestedUserId: account.id,
       }),
     );
@@ -98,7 +98,7 @@ export class GqlPagesResolver {
     const result = await resolveRpcRequest(
       this.rpcClient.updatePage({
         requestedUserId: account.id,
-        organizationId,
+        ownerId: organizationId,
         siteId,
         pageId,
         isLoneTitle: input.isLoneTitle,
@@ -126,7 +126,7 @@ export class GqlPagesResolver {
   ): Promise<Page[]> {
     const result = await resolveRpcRequest(
       this.rpcClient.getPageList({
-        organizationId,
+        ownerId: organizationId,
         siteId,
       }),
     );
@@ -147,13 +147,32 @@ export class GqlPagesResolver {
       this.rpcClient.getPage({
         pageId,
         siteId,
-        organizationId,
+        ownerId: organizationId,
       }),
     );
 
     if (!result.page) {
       throw new NotFoundException();
     }
+
+    return result.page;
+  }
+
+  @Mutation(() => PageSchema)
+  @UseGuards(GqlAuthGuard)
+  async getOrCreateFirstPage(
+    @CurrentAccount() account: AuthAccount,
+    @AccountActiveOrg() organizationId: string,
+    @Args('siteId', new ParamValidationPipe([ObjectIdParamValidation]))
+    siteId: string,
+  ): Promise<Page> {
+    const result = await resolveRpcRequest(
+      this.rpcClient.getOrCreateFirstPage({
+        requestedUserId: account.id,
+        ownerId: organizationId,
+        siteId,
+      }),
+    );
 
     return result.page;
   }

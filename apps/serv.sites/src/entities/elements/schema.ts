@@ -39,12 +39,12 @@ export class ElementSchema extends PickType(
 
   @typegoose.prop()
   @Expose()
-  @Field({ description: 'Element ID' })
+  @Field({ description: 'Element ID', nullable: true })
   id?: string;
 
   @typegoose.prop()
   @Expose()
-  @Field({ description: 'Element class name' })
+  @Field({ description: 'Element class name', nullable: true })
   className?: string;
 
   @typegoose.prop()
@@ -54,12 +54,12 @@ export class ElementSchema extends PickType(
 
   @typegoose.prop()
   @Expose()
-  @Field({ description: 'Element style' })
+  @Field({ description: 'Element style', nullable: true })
   style?: ElementStyleSchema;
 
   @typegoose.prop()
   @Expose()
-  @Field({ description: 'Additional properties' })
+  @Field({ description: 'Additional properties', nullable: true })
   @IsObject()
   props?: Record<string, string | number>;
 }

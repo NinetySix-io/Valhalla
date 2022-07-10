@@ -30,14 +30,14 @@ export class ArchivePageHandler
   ) {}
 
   async execute(command: ArchivePageCommand): Promise<ArchivePageResponse> {
-    const { organizationId, siteId, requestedUserId } = command.request;
-    const organization = toObjectId(organizationId);
+    const { ownerId, siteId, requestedUserId } = command.request;
+    const ownBy = toObjectId(ownerId);
     const site = toObjectId(siteId);
     const updatedBy = toObjectId(requestedUserId);
     const status = PageStatus.ARCHIVED;
     const page = await this.pages
       .findOneAndUpdate(
-        { organization, site },
+        { ownBy, site },
         { $set: { status, updatedBy } },
         { new: true },
       )

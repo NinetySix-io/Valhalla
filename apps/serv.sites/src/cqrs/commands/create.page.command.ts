@@ -30,17 +30,24 @@ export class CreatePageHandler
   ) {}
 
   async execute(command: CreatePageCommand): Promise<CreatePageResponse> {
-    const { requestedUserId, organizationId, siteId, title } = command.request;
+    const {
+      requestedUserId,
+      ownerId,
+      siteId,
+      title = 'Untitled',
+    } = command.request;
+
     const createdBy = toObjectId(requestedUserId);
     const updatedBy = createdBy;
-    const organization = toObjectId(organizationId);
+    const ownBy = toObjectId(ownerId);
     const site = toObjectId(siteId);
+
     const page = await this.pages.create({
       createdBy,
       updatedBy,
       site,
       title,
-      ownBy: organization,
+      ownBy,
       status: PageStatus.DRAFT,
     });
 

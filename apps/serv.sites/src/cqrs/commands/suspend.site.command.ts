@@ -30,14 +30,14 @@ export class SuspendSiteHandler
   ) {}
 
   async execute(command: SuspendSiteCommand): Promise<SuspendSiteResponse> {
-    const { requestedUserId, organizationId, siteId } = command.request;
+    const { requestedUserId, ownerId, siteId } = command.request;
     const _id = toObjectId(siteId);
     const updatedBy = toObjectId(requestedUserId);
-    const organization = toObjectId(organizationId);
+    const ownBy = toObjectId(ownerId);
     const status = SiteStatus.SUSPENDED;
     const site = await this.sites
       .findOneAndUpdate(
-        { _id, organization },
+        { _id, ownBy },
         { $set: { updatedBy, status } },
         { new: true },
       )

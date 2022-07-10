@@ -26,13 +26,13 @@ export class DeletePageHandler
   ) {}
 
   async execute(command: DeletePageCommand): Promise<DeletePageResponse> {
-    const { organizationId, requestedUserId, siteId, pageId } = command.request;
+    const { ownerId, requestedUserId, siteId, pageId } = command.request;
     const page = toObjectId(pageId);
-    const organization = toObjectId(organizationId);
+    const ownBy = toObjectId(ownerId);
     const site = toObjectId(siteId);
     const deletedPage = await this.pages.findOneAndDelete({
       _id: page,
-      organization,
+      ownBy,
       site,
     });
 

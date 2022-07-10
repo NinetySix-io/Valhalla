@@ -17,6 +17,15 @@ registerEnumType(PageStatus, {
 @SimpleModel('pages')
 @typegoose.index({ site: 1 })
 @typegoose.index({ ownBy: 1 })
+@typegoose.index(
+  { ownBy: 1, site: 1, slug: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      slug: { $type: 'string' },
+    },
+  },
+)
 export class PageSchema extends BaseSchema {
   @typegoose.prop()
   @Exclude()
@@ -25,6 +34,11 @@ export class PageSchema extends BaseSchema {
   @typegoose.prop()
   @Exclude()
   site: mongoose.Types.ObjectId;
+
+  @typegoose.prop()
+  @Expose()
+  @Field({ description: 'Page url', nullable: true })
+  slug?: string;
 
   @typegoose.prop()
   @Expose()
@@ -39,6 +53,7 @@ export class PageSchema extends BaseSchema {
   @typegoose.prop()
   @Expose()
   @Field({
+    nullable: true,
     description:
       'Whether the title should be independent or part of the title template',
   })
@@ -46,7 +61,7 @@ export class PageSchema extends BaseSchema {
 
   @typegoose.prop()
   @Expose()
-  @Field({ description: 'Page description' })
+  @Field({ description: 'Page description', nullable: true })
   description?: string;
 
   @typegoose.prop()

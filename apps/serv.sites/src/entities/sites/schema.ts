@@ -28,7 +28,7 @@ export class SiteSchema extends BaseSchema {
   @typegoose.prop()
   status: SiteStatus;
 
-  @Field({ description: 'Site url' })
+  @Field({ description: 'Site url', nullable: true })
   @Expose()
   @typegoose.prop()
   url?: string;

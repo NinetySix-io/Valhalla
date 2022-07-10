@@ -35,7 +35,7 @@ export class GqlSitesResolver {
     const result = await resolveRpcRequest(
       await this.rpcClient.createSite({
         name: input.name,
-        owner: orgId,
+        ownerId: orgId,
         requestedUserId: account.id,
       }),
     );
@@ -61,7 +61,7 @@ export class GqlSitesResolver {
         name: input.name,
         requestedUserId: account.id,
         siteId: siteId,
-        organizationId: orgId,
+        ownerId: orgId,
       }),
     );
 
@@ -81,8 +81,8 @@ export class GqlSitesResolver {
     const { sites } = await resolveRpcRequest(
       this.rpcClient.getSiteList({
         query: {
-          $case: 'ownBy',
-          ownBy: orgId,
+          $case: 'ownerId',
+          ownerId: orgId,
         },
       }),
     );
@@ -99,7 +99,7 @@ export class GqlSitesResolver {
   ): Promise<Site> {
     const { site } = await resolveRpcRequest(
       this.rpcClient.getSite({
-        orgId,
+        ownerId: orgId,
         siteId,
       }),
     );

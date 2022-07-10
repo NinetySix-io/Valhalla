@@ -26,13 +26,18 @@ export class UpdateSiteHandler
   ) {}
 
   async execute(command: UpdateSiteCommand): Promise<UpdateSiteResponse> {
-    const { requestedUserId, siteId, name } = command.request;
+    const { requestedUserId, siteId, name, ownerId } = command.request;
+    const _id = toObjectId(siteId);
     const updatedBy = toObjectId(requestedUserId);
-    const site = await this.sites.findOneAndUpdate(
-      { _id: toObjectId(siteId) },
-      { $set: { name, updatedBy } },
-      { withoutNil: true, new: true },
-    );
+    const ownBy = toObjectId(ownerId);
+    const site = await this.sites
+      .findOneAndUpdate(
+        { _id, ownBy },
+        { $set: { name, updatedBy } },
+        { withoutNil: true, new: true },
+      )
+      .orFail(() => new Error('Site not found!'));
+
     const serialized = new SiteTransformer(site).proto;
     this.eventBus.publish(new SiteUpdatedEvent(serialized));
 

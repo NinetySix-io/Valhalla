@@ -12,6 +12,7 @@ export class PageTransformer extends PageSchema {
   get proto(): Proto {
     return {
       id: this.id,
+      slug: this.slug,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       updatedBy: this.updatedBy.toHexString(),

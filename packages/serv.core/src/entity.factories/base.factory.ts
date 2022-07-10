@@ -1,5 +1,5 @@
 import { DocumentType, ReturnModelType } from '@typegoose/typegoose';
-import { OmitRecursively, isNil, omitBy } from '@valhalla/utilities';
+import { OmitRecursively, isNil, omitBy, slugify } from '@valhalla/utilities';
 import mongoose, { FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
 
 import { AnyParamConstructor } from '@typegoose/typegoose/lib/types';
