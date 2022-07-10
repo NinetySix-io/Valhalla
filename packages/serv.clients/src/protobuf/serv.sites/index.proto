@@ -1,23 +1,41 @@
 syntax = "proto3";
 
+package serv.sites;
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/struct.proto";
 
-package serv.sites;
-
 service SitesService {
+  // -----------------------------
+  // SITE
+  // -----------------------------
   rpc CreateSite(CreateSiteRequest) returns (CreateSiteResponse){}
   rpc GetSite(GetSiteRequest) returns (GetSiteResponse) {}
   rpc UpdateSite(UpdateSiteRequest) returns (UpdateSiteResponse) {}
   rpc GetSiteList(GetSiteListRequest) returns (GetSiteListResponse) {}
-  rpc CreatePage(CreatePageRequest) returns (CreatePageResponse) {}
   rpc SuspendSite(SuspendSiteRequest) returns (SuspendSiteResponse) {}
+
+  // -----------------------------
+  // PAGE
+  // -----------------------------
+  rpc CreatePage(CreatePageRequest) returns (CreatePageResponse) {}
   rpc GetPageList(GetPageListRequest) returns (GetPageListResponse) {}
   rpc GetPage(GetPageRequest) returns (GetPageResponse) {}
+  rpc GetOrCreateFirstPage(GetOrCreateFirstPageRequest) returns (GetOrCreateFirstPageResponse) {}
   rpc UpdatePage(UpdatePageRequest) returns (UpdatePageResponse) {}
   rpc DeletePage(DeletePageRequest) returns (DeletePageResponse) {}
   rpc ArchivePage(ArchivePageRequest) returns (ArchivePageResponse) {}
+
+  // -----------------------------
+  // COMPONENT
+  // -----------------------------
+  rpc GetComponentElementList(GetComponentElementListRequest) returns (GetComponentElementListResponse) {}
+  rpc GetComponent(GetComponentRequest) returns (GetComponentResponse) {}
+  rpc GetComponentList(GetComponentListRequest) returns (GetComponentListResponse) {}
+  rpc CreateComponent(CreateComponentRequest) returns (CreateComponentResponse) {}
+  rpc UpdateComponent(UpdateComponentRequest) returns (UpdateComponentResponse) {}
+  rpc DeleteComponent(DeleteComponentRequest) returns (DeleteComponentResponse) {}
+  rpc ArchiveComponent(ArchiveComponentRequest) returns (ArchiveComponentResponse) {}
 }
 
 // -----------------------------
@@ -29,11 +47,10 @@ enum SiteStatus {
   SUSPENDED = 2;
 }
 
-enum PageStatus {
+enum EditStatus {
   ACTIVE = 0;
   DRAFT = 1;
   ARCHIVED = 2;
-  SCHEDULED = 3;
 }
 
 enum ElementType {
@@ -125,14 +142,14 @@ enum ElementType {
 
 message Component {
   string id = 1;
-  string ownBy = 2;
+  repeated string owners = 2;
   string createdBy = 3;
   string updatedBy = 4;
   string name = 5;
-  optional string iconUrl = 6;
-  repeated Element elements = 7;
+  optional string thumbnailUrl = 6;
   google.protobuf.Timestamp createdAt = 8;
   google.protobuf.Timestamp updatedAt = 9;
+  EditStatus status = 10;
 }
 
 message ElementStyle {
@@ -153,15 +170,16 @@ message Element {
 message Page {
   string id = 1;
   string title = 2;
-  string description = 3;
-  string organization = 4;
+  optional string description = 3;
+  string ownBy = 4;
   string site = 5;
-  PageStatus status = 6;
-  bool isLoneTitle = 7;
+  EditStatus status = 6;
+  optional bool isLoneTitle = 7;
   string createdBy = 8;
   string updatedBy = 9;
   google.protobuf.Timestamp createdAt = 10;
   google.protobuf.Timestamp updatedAt = 11;
+  optional string slug = 12;
 }
 
 message Site {
@@ -176,22 +194,109 @@ message Site {
   google.protobuf.Timestamp updatedAt = 9;
 }
 
+
+// -----------------------------
+// COMPONENTS
+// -----------------------------
+
+message GetComponentElementListRequest {
+  repeated string ownerIdList = 1;
+  string componentId = 2;
+}
+
+message GetComponentElementListResponse {
+  repeated Element elements = 1;
+}
+
+message CreateComponentRequest {
+  repeated string ownerIdList = 1;
+  string requestedUserId = 2;
+  string name = 3;
+  repeated Element elements = 4;
+  optional EditStatus status = 5;
+}
+
+message CreateComponentResponse {
+  string componentId = 1;
+}
+
+message UpdateComponentRequest {
+  repeated string ownerIdList = 1;
+  string requestedUserId = 2;
+  string componentId = 3;
+  optional string name = 4;
+  repeated Element elements = 5;
+  optional EditStatus status = 6;
+}
+
+message UpdateComponentResponse {
+
+}
+
+message DeleteComponentRequest {
+  repeated string ownerIdList = 1;
+  string componentId = 2;
+  string requestedUserId = 3;
+}
+
+message DeleteComponentResponse {
+
+}
+
+message ArchiveComponentRequest {
+  repeated string ownerIdList = 1;
+  string componentId = 2;
+  string requestedUserId = 3;
+}
+
+message ArchiveComponentResponse {
+
+}
+
+message GetComponentRequest {
+  repeated string ownerIdList = 1;
+  string componentId = 2;
+}
+
+message GetComponentResponse {
+  Component component = 1;
+}
+
+message GetComponentListRequest {
+  repeated string ownerIdList = 1;
+}
+
+message GetComponentListResponse {
+  repeated Component result = 1;
+}
+
 // -----------------------------
 // PAGE
 // -----------------------------
 message CreatePageRequest {
   string requestedUserId = 1;
-  string organizationId = 2;
+  string ownerId = 2;
   string siteId = 3;
-  string title = 4;
+  optional string title = 4;
 }
 
 message CreatePageResponse {
   Page page = 1;
 }
 
+message GetOrCreateFirstPageRequest {
+  string requestedUserId = 1;
+  string ownerId = 2;
+  string siteId = 3;
+  optional string fallbackTitle = 4;
+}
+
+message GetOrCreateFirstPageResponse {
+  Page page = 1;
+}
+
 message GetPageRequest {
-  string organizationId = 1;
+  string ownerId = 1;
   string siteId = 2;
   string pageId = 3;
 }
@@ -201,7 +306,7 @@ message GetPageResponse {
 }
 
 message GetPageListRequest {
-  string organizationId = 1;
+  string ownerId = 1;
   string siteId = 2;
 }
 
@@ -210,7 +315,7 @@ message GetPageListResponse {
 }
 
 message UpdatePageRequest {
-  string organizationId = 1;
+  string ownerId = 1;
   string siteId = 2;
   string pageId = 3;
   string requestedUserId = 4;
@@ -224,7 +329,7 @@ message UpdatePageResponse {
 }
 
 message DeletePageRequest {
-  string organizationId = 1;
+  string ownerId = 1;
   string siteId = 2;
   string requestedUserId = 3;
   string pageId = 4;
@@ -235,7 +340,7 @@ message DeletePageResponse {
 }
 
 message ArchivePageRequest {
-  string organizationId = 1;
+  string ownerId = 1;
   string siteId = 2;
   string requestedUserId = 3;
 }
@@ -250,7 +355,7 @@ message ArchivePageResponse {
 
 message CreateSiteRequest {
   string name = 1;
-  string owner = 2;
+  string ownerId = 2;
   string requestedUserId = 3;
   optional string logoUrl = 4;
   optional string faviconUrl = 5;
@@ -263,7 +368,7 @@ message CreateSiteResponse {
 
 message UpdateSiteRequest {
   string requestedUserId = 1;
-  string organizationId = 2;
+  string ownerId = 2;
   string siteId = 3;
   optional string name = 4;
 }
@@ -274,7 +379,7 @@ message UpdateSiteResponse {
 
 message GetSiteRequest {
   string siteId = 1;
-  optional string orgId = 2;
+  optional string ownerId = 2;
 }
 
 message GetSiteResponse {
@@ -283,7 +388,7 @@ message GetSiteResponse {
 
 message GetSiteListRequest {
   oneof query {
-    string ownBy = 1;
+    string ownerId = 1;
   }
 }
 
@@ -293,7 +398,7 @@ message GetSiteListResponse {
 
 message SuspendSiteRequest {
   string requestedUserId = 1;
-  string organizationId = 2;
+  string ownerId = 2;
   string siteId = 3;
 }
 
