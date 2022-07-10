@@ -150,6 +150,7 @@ message Component {
   google.protobuf.Timestamp createdAt = 8;
   google.protobuf.Timestamp updatedAt = 9;
   EditStatus status = 10;
+  optional bool isHidden = 11;
 }
 
 message ElementStyle {
@@ -214,6 +215,7 @@ message CreateComponentRequest {
   string name = 3;
   repeated Element elements = 4;
   optional EditStatus status = 5;
+  optional bool isHidden = 6;
 }
 
 message CreateComponentResponse {

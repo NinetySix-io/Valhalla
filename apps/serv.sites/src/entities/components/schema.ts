@@ -16,6 +16,8 @@ import mongoose from 'mongoose';
   allowMixed: typegoose.Severity.ALLOW,
 })
 @typegoose.index({ owners: 1 })
+@typegoose.index({ status: 1 })
+@typegoose.index({ isHidden: 1 })
 export class ComponentSchema extends BaseSchema {
   @typegoose.prop()
   @Expose()
@@ -54,4 +56,8 @@ export class ComponentSchema extends BaseSchema {
   @typegoose.prop()
   @Exclude()
   elements: Array<ElementSchema>;
+
+  @typegoose.prop()
+  @Exclude()
+  isHidden?: boolean;
 }

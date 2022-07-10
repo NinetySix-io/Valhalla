@@ -22,6 +22,7 @@ export class ComponentTransformer extends ComponentSchema {
       updatedAt: this.updatedAt,
       createdBy: this.createdBy.toHexString(),
       updatedBy: this.updatedBy.toHexString(),
+      isHidden: this.isHidden,
     };
   }
 }

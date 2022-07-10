@@ -112,6 +112,7 @@ export interface Component {
   createdAt?: Date;
   updatedAt?: Date;
   status: EditStatus;
+  isHidden?: boolean | undefined;
 }
 
 export interface ElementStyle {
@@ -171,6 +172,7 @@ export interface CreateComponentRequest {
   name: string;
   elements: Element[];
   status?: EditStatus | undefined;
+  isHidden?: boolean | undefined;
 }
 
 export interface CreateComponentResponse {
