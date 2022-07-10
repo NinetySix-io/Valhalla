@@ -7,18 +7,23 @@ import {
 import { Exclude, Expose } from 'class-transformer';
 import { IsUrl, MaxLength, MinLength } from 'class-validator';
 
+import { EditStatus } from '@app/protobuf';
 import { ElementSchema } from '../elements/schema';
 import { Field } from '@nestjs/graphql';
 import mongoose from 'mongoose';
 
 @SimpleModel('components')
-@typegoose.index({ ownBy: 1 })
+@typegoose.index({ owners: 1 })
 export class ComponentSchema extends BaseSchema {
   @typegoose.prop()
+  @Expose()
+  @Field({ description: 'Edit status' })
+  status: EditStatus;
+
+  @typegoose.prop()
   @Exclude()
-  @IsObjectId()
-  @Field(() => String, { description: 'Owner of the component' })
-  ownBy: mongoose.Types.ObjectId;
+  @Field({ description: 'Owners of the component' })
+  owners: Array<string>;
 
   @typegoose.prop()
   @Expose()
@@ -42,12 +47,10 @@ export class ComponentSchema extends BaseSchema {
   @typegoose.prop()
   @Expose()
   @IsUrl()
-  @Field(() => String, { description: 'URI of the icon', nullable: true })
-  iconUrl?: string;
+  @Field(() => String, { description: 'Thumbnail URI', nullable: true })
+  thumbnailUrl?: string;
 
   @typegoose.prop()
-  @Expose()
-  @MinLength(1)
-  @Field({ description: 'Elements' })
+  @Exclude()
   elements: Array<ElementSchema>;
 }

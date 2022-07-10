@@ -15,8 +15,9 @@ export class ComponentTransformer extends ComponentSchema {
     return {
       id: this.id,
       name: this.name,
-      ownBy: this.ownBy.toHexString(),
-      elements: this.elements,
+      status: this.status,
+      owners: this.owners,
+      thumbnailUrl: this.thumbnailUrl,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       createdBy: this.createdBy.toHexString(),

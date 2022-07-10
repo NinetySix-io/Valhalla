@@ -27,7 +27,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "gen:react": "cd apps/web.thor && npm run codegen",
     "gen:proto": "node scripts/generate.proto",
-    "copy:clients": "npm run proto:generate && node scripts/copy.clients && npm run build:clients",
+    "copy:clients": "npm run gen:proto && node scripts/copy.clients && npm run build:clients",
     "copy": "npm run copy:entities && npm run copy:clients"
   },
   "devDependencies": {

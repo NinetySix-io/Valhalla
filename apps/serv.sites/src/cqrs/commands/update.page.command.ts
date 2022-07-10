@@ -4,7 +4,11 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import {
+  RpcHandler,
+  throwEntityNotFound,
+  toObjectId,
+} from '@valhalla/serv.core';
 import { UpdatePageRequest, UpdatePageResponse } from '@app/protobuf';
 
 import { PageTransformer } from '@app/entities/pages/transformer';
@@ -46,7 +50,7 @@ export class UpdatePageHandler
         { $set: { title, description, isLoneTitle, updatedBy } },
         { withoutNil: true, new: true },
       )
-      .orFail(() => new Error('Page not found!'));
+      .orFail(throwEntityNotFound);
 
     const serialized = new PageTransformer(page).proto;
     this.eventBus.publish(new PageUpdatedEvent(serialized));

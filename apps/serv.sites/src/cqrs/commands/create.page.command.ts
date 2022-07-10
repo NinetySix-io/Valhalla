@@ -7,7 +7,7 @@ import {
 import {
   CreatePageRequest,
   CreatePageResponse,
-  PageStatus,
+  EditStatus,
 } from '@app/protobuf';
 import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
@@ -48,7 +48,7 @@ export class CreatePageHandler
       site,
       title,
       ownBy,
-      status: PageStatus.DRAFT,
+      status: EditStatus.DRAFT,
     });
 
     const serialized = new PageTransformer(page).proto;

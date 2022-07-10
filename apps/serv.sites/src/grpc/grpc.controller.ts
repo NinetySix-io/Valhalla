@@ -1,12 +1,24 @@
 import {
+  ArchiveComponentRequest,
+  ArchiveComponentResponse,
   ArchivePageRequest,
   ArchivePageResponse,
+  CreateComponentRequest,
+  CreateComponentResponse,
   CreatePageRequest,
   CreatePageResponse,
   CreateSiteRequest,
   CreateSiteResponse,
+  DeleteComponentRequest,
+  DeleteComponentResponse,
   DeletePageRequest,
   DeletePageResponse,
+  GetComponentElementListRequest,
+  GetComponentElementListResponse,
+  GetComponentListRequest,
+  GetComponentListResponse,
+  GetComponentRequest,
+  GetComponentResponse,
   GetOrCreateFirstPageRequest,
   GetPageListRequest,
   GetPageListResponse,
@@ -20,6 +32,8 @@ import {
   SitesServiceController,
   SuspendSiteRequest,
   SuspendSiteResponse,
+  UpdateComponentRequest,
+  UpdateComponentResponse,
   UpdatePageRequest,
   UpdatePageResponse,
   UpdateSiteRequest,
@@ -27,11 +41,17 @@ import {
 } from '@app/protobuf';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
+import { ArchiveComponentCommand } from '@app/cqrs/commands/archive.component.command';
 import { ArchivePageCommand } from '@app/cqrs/commands/archive.page.command';
 import { Controller } from '@nestjs/common';
+import { CreateComponentCommand } from '@app/cqrs/commands/create.component.command';
 import { CreatePageCommand } from '@app/cqrs/commands/create.page.command';
 import { CreateSiteCommand } from '@app/cqrs/commands/create.site.command';
+import { DeleteComponentCommand } from '@app/cqrs/commands/delete.component.command';
 import { DeletePageCommand } from '@app/cqrs/commands/delete.page.command';
+import { GetComponentElementListQuery } from '@app/cqrs/queries/get.component.elements.list.query';
+import { GetComponentListQuery } from '@app/cqrs/queries/get.component.list.query';
+import { GetComponentQuery } from '@app/cqrs/queries/get.component.query';
 import { GetOrCreateFirstPageCommand } from '@app/cqrs/commands/get.or.create.first.page.command';
 import { GetPageListQuery } from '@app/cqrs/queries/get.page.list.query';
 import { GetPageQuery } from '@app/cqrs/queries/get.page.query';
@@ -40,6 +60,7 @@ import { GetSiteQuery } from '@app/cqrs/queries/get.site.query';
 import { GrpcClass } from '@valhalla/serv.core';
 import { Observable } from 'rxjs';
 import { SuspendSiteCommand } from '@app/cqrs/commands/suspend.site.command';
+import { UpdateComponentCommand } from '@app/cqrs/commands/update.component.command';
 import { UpdatePageCommand } from '@app/cqrs/commands/update.page.command';
 import { UpdateSiteCommand } from '@app/cqrs/commands/update.site.command';
 
@@ -50,6 +71,63 @@ export class gRpcController implements SitesServiceController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
+  updateComponent(
+    request: UpdateComponentRequest,
+  ):
+    | UpdateComponentResponse
+    | Promise<UpdateComponentResponse>
+    | Observable<UpdateComponentResponse> {
+    return this.commandBus.execute(new UpdateComponentCommand(request));
+  }
+  deleteComponent(
+    request: DeleteComponentRequest,
+  ):
+    | DeleteComponentResponse
+    | Promise<DeleteComponentResponse>
+    | Observable<DeleteComponentResponse> {
+    return this.commandBus.execute(new DeleteComponentCommand(request));
+  }
+  archiveComponent(
+    request: ArchiveComponentRequest,
+  ):
+    | ArchiveComponentResponse
+    | Promise<ArchiveComponentResponse>
+    | Observable<ArchiveComponentResponse> {
+    return this.commandBus.execute(new ArchiveComponentCommand(request));
+  }
+  getComponentElementList(
+    request: GetComponentElementListRequest,
+  ):
+    | GetComponentElementListResponse
+    | Promise<GetComponentElementListResponse>
+    | Observable<GetComponentElementListResponse> {
+    return this.queryBus.execute(new GetComponentElementListQuery(request));
+  }
+  getComponent(
+    request: GetComponentRequest,
+  ):
+    | GetComponentResponse
+    | Promise<GetComponentResponse>
+    | Observable<GetComponentResponse> {
+    return this.queryBus.execute(new GetComponentQuery(request));
+  }
+  getComponentList(
+    request: GetComponentListRequest,
+  ):
+    | GetComponentListResponse
+    | Promise<GetComponentListResponse>
+    | Observable<GetComponentListResponse> {
+    return this.queryBus.execute(new GetComponentListQuery(request));
+  }
+  createComponent(
+    request: CreateComponentRequest,
+  ):
+    | CreateComponentResponse
+    | Promise<CreateComponentResponse>
+    | Observable<CreateComponentResponse> {
+    return this.commandBus.execute(new CreateComponentCommand(request));
+  }
+
   getOrCreateFirstPage(
     request: GetOrCreateFirstPageRequest,
   ): GetPageResponse | Observable<GetPageResponse> | Promise<GetPageResponse> {

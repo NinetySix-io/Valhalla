@@ -1,7 +1,7 @@
 import {
   ArchivePageRequest,
   ArchivePageResponse,
-  PageStatus,
+  EditStatus,
 } from '@app/protobuf';
 import {
   CommandHandler,
@@ -9,7 +9,11 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import {
+  RpcHandler,
+  throwEntityNotFound,
+  toObjectId,
+} from '@valhalla/serv.core';
 
 import { PageArchivedEvent } from '../events/page.archived.event';
 import { PageTransformer } from '@app/entities/pages/transformer';
@@ -34,14 +38,14 @@ export class ArchivePageHandler
     const ownBy = toObjectId(ownerId);
     const site = toObjectId(siteId);
     const updatedBy = toObjectId(requestedUserId);
-    const status = PageStatus.ARCHIVED;
+    const status = EditStatus.ARCHIVED;
     const page = await this.pages
       .findOneAndUpdate(
         { ownBy, site },
         { $set: { status, updatedBy } },
         { new: true },
       )
-      .orFail(() => new Error('Page not found!'));
+      .orFail(throwEntityNotFound);
 
     const serialized = new PageTransformer(page).proto;
     this.eventBus.publish(new PageArchivedEvent(serialized));

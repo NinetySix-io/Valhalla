@@ -15,11 +15,10 @@ export enum SiteStatus {
   SUSPENDED = "SUSPENDED",
 }
 
-export enum PageStatus {
+export enum EditStatus {
   ACTIVE = "ACTIVE",
   DRAFT = "DRAFT",
   ARCHIVED = "ARCHIVED",
-  SCHEDULED = "SCHEDULED",
 }
 
 export enum ElementType {
@@ -105,14 +104,14 @@ export enum ElementType {
 
 export interface Component {
   id: string;
-  ownBy: string;
+  owners: string[];
   createdBy: string;
   updatedBy: string;
   name: string;
-  iconUrl?: string | undefined;
-  elements: Element[];
+  thumbnailUrl?: string | undefined;
   createdAt?: Date;
   updatedAt?: Date;
+  status: EditStatus;
 }
 
 export interface ElementStyle {
@@ -136,7 +135,7 @@ export interface Page {
   description?: string | undefined;
   ownBy: string;
   site: string;
-  status: PageStatus;
+  status: EditStatus;
   isLoneTitle?: boolean | undefined;
   createdBy: string;
   updatedBy: string;
@@ -155,6 +154,71 @@ export interface Site {
   url?: string | undefined;
   createdAt?: Date;
   updatedAt?: Date;
+}
+
+export interface GetComponentElementListRequest {
+  ownerIdList: string[];
+  componentId: string;
+}
+
+export interface GetComponentElementListResponse {
+  elements: Element[];
+}
+
+export interface CreateComponentRequest {
+  ownerIdList: string[];
+  requestedUserId: string;
+  name: string;
+  elements: Element[];
+  status?: EditStatus | undefined;
+}
+
+export interface CreateComponentResponse {
+  componentId: string;
+}
+
+export interface UpdateComponentRequest {
+  ownerIdList: string[];
+  requestedUserId: string;
+  componentId: string;
+  name?: string | undefined;
+  elements: Element[];
+  status?: EditStatus | undefined;
+}
+
+export interface UpdateComponentResponse {}
+
+export interface DeleteComponentRequest {
+  ownerIdList: string[];
+  componentId: string;
+  requestedUserId: string;
+}
+
+export interface DeleteComponentResponse {}
+
+export interface ArchiveComponentRequest {
+  ownerIdList: string[];
+  componentId: string;
+  requestedUserId: string;
+}
+
+export interface ArchiveComponentResponse {}
+
+export interface GetComponentRequest {
+  ownerIdList: string[];
+  componentId: string;
+}
+
+export interface GetComponentResponse {
+  component?: Component;
+}
+
+export interface GetComponentListRequest {
+  ownerIdList: string[];
+}
+
+export interface GetComponentListResponse {
+  result: Component[];
 }
 
 /**
@@ -292,6 +356,12 @@ export interface SuspendSiteResponse {
 export const SERV_SITES_PACKAGE_NAME = "serv.sites";
 
 export interface SitesServiceClient {
+  /**
+   * -----------------------------
+   * SITE
+   * -----------------------------
+   */
+
   createSite(request: CreateSiteRequest): Observable<CreateSiteResponse>;
 
   getSite(request: GetSiteRequest): Observable<GetSiteResponse>;
@@ -300,9 +370,15 @@ export interface SitesServiceClient {
 
   getSiteList(request: GetSiteListRequest): Observable<GetSiteListResponse>;
 
-  createPage(request: CreatePageRequest): Observable<CreatePageResponse>;
-
   suspendSite(request: SuspendSiteRequest): Observable<SuspendSiteResponse>;
+
+  /**
+   * -----------------------------
+   * PAGE
+   * -----------------------------
+   */
+
+  createPage(request: CreatePageRequest): Observable<CreatePageResponse>;
 
   getPageList(request: GetPageListRequest): Observable<GetPageListResponse>;
 
@@ -317,9 +393,47 @@ export interface SitesServiceClient {
   deletePage(request: DeletePageRequest): Observable<DeletePageResponse>;
 
   archivePage(request: ArchivePageRequest): Observable<ArchivePageResponse>;
+
+  /**
+   * -----------------------------
+   * COMPONENT
+   * -----------------------------
+   */
+
+  getComponentElementList(
+    request: GetComponentElementListRequest
+  ): Observable<GetComponentElementListResponse>;
+
+  getComponent(request: GetComponentRequest): Observable<GetComponentResponse>;
+
+  getComponentList(
+    request: GetComponentListRequest
+  ): Observable<GetComponentListResponse>;
+
+  createComponent(
+    request: CreateComponentRequest
+  ): Observable<CreateComponentResponse>;
+
+  updateComponent(
+    request: UpdateComponentRequest
+  ): Observable<UpdateComponentResponse>;
+
+  deleteComponent(
+    request: DeleteComponentRequest
+  ): Observable<DeleteComponentResponse>;
+
+  archiveComponent(
+    request: ArchiveComponentRequest
+  ): Observable<ArchiveComponentResponse>;
 }
 
 export interface SitesServiceController {
+  /**
+   * -----------------------------
+   * SITE
+   * -----------------------------
+   */
+
   createSite(
     request: CreateSiteRequest
   ):
@@ -345,19 +459,25 @@ export interface SitesServiceController {
     | Observable<GetSiteListResponse>
     | GetSiteListResponse;
 
-  createPage(
-    request: CreatePageRequest
-  ):
-    | Promise<CreatePageResponse>
-    | Observable<CreatePageResponse>
-    | CreatePageResponse;
-
   suspendSite(
     request: SuspendSiteRequest
   ):
     | Promise<SuspendSiteResponse>
     | Observable<SuspendSiteResponse>
     | SuspendSiteResponse;
+
+  /**
+   * -----------------------------
+   * PAGE
+   * -----------------------------
+   */
+
+  createPage(
+    request: CreatePageRequest
+  ):
+    | Promise<CreatePageResponse>
+    | Observable<CreatePageResponse>
+    | CreatePageResponse;
 
   getPageList(
     request: GetPageListRequest
@@ -397,6 +517,61 @@ export interface SitesServiceController {
     | Promise<ArchivePageResponse>
     | Observable<ArchivePageResponse>
     | ArchivePageResponse;
+
+  /**
+   * -----------------------------
+   * COMPONENT
+   * -----------------------------
+   */
+
+  getComponentElementList(
+    request: GetComponentElementListRequest
+  ):
+    | Promise<GetComponentElementListResponse>
+    | Observable<GetComponentElementListResponse>
+    | GetComponentElementListResponse;
+
+  getComponent(
+    request: GetComponentRequest
+  ):
+    | Promise<GetComponentResponse>
+    | Observable<GetComponentResponse>
+    | GetComponentResponse;
+
+  getComponentList(
+    request: GetComponentListRequest
+  ):
+    | Promise<GetComponentListResponse>
+    | Observable<GetComponentListResponse>
+    | GetComponentListResponse;
+
+  createComponent(
+    request: CreateComponentRequest
+  ):
+    | Promise<CreateComponentResponse>
+    | Observable<CreateComponentResponse>
+    | CreateComponentResponse;
+
+  updateComponent(
+    request: UpdateComponentRequest
+  ):
+    | Promise<UpdateComponentResponse>
+    | Observable<UpdateComponentResponse>
+    | UpdateComponentResponse;
+
+  deleteComponent(
+    request: DeleteComponentRequest
+  ):
+    | Promise<DeleteComponentResponse>
+    | Observable<DeleteComponentResponse>
+    | DeleteComponentResponse;
+
+  archiveComponent(
+    request: ArchiveComponentRequest
+  ):
+    | Promise<ArchiveComponentResponse>
+    | Observable<ArchiveComponentResponse>
+    | ArchiveComponentResponse;
 }
 
 export function SitesServiceControllerMethods() {
@@ -406,14 +581,21 @@ export function SitesServiceControllerMethods() {
       "getSite",
       "updateSite",
       "getSiteList",
-      "createPage",
       "suspendSite",
+      "createPage",
       "getPageList",
       "getPage",
       "getOrCreateFirstPage",
       "updatePage",
       "deletePage",
       "archivePage",
+      "getComponentElementList",
+      "getComponent",
+      "getComponentList",
+      "createComponent",
+      "updateComponent",
+      "deleteComponent",
+      "archiveComponent",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(

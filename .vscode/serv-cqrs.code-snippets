@@ -17,6 +17,8 @@
       "\timplements IQueryHandler<$1Query,$1Response>",
       "{",
       "",
+      "constructor($2) {}",
+      "",
       "\tasync execute(",
       "\t\tcommand: $1Query,",
       "\t): Promise<$1Response> {",

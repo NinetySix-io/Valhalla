@@ -7,10 +7,10 @@ import {
 import { Exclude, Expose } from 'class-transformer';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 
-import { PageStatus } from '@app/protobuf';
+import { EditStatus } from '@app/protobuf';
 
-registerEnumType(PageStatus, {
-  name: 'PageStatus',
+registerEnumType(EditStatus, {
+  name: 'EditStatus',
 });
 
 @ObjectType()
@@ -42,8 +42,8 @@ export class PageSchema extends BaseSchema {
 
   @typegoose.prop()
   @Expose()
-  @Field({ description: 'Page deployment status' })
-  status: PageStatus;
+  @Field({ description: 'Edit status' })
+  status: EditStatus;
 
   @typegoose.prop()
   @Expose()

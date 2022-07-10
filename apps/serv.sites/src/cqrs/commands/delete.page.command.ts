@@ -5,7 +5,11 @@ import {
   ICommandHandler,
 } from '@nestjs/cqrs';
 import { DeletePageRequest, DeletePageResponse } from '@app/protobuf';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import {
+  RpcHandler,
+  throwEntityNotFound,
+  toObjectId,
+} from '@valhalla/serv.core';
 
 import { PageDeletedEventEvent } from '../events/page.deleted.event';
 import { PageTransformer } from '@app/entities/pages/transformer';
@@ -30,11 +34,13 @@ export class DeletePageHandler
     const page = toObjectId(pageId);
     const ownBy = toObjectId(ownerId);
     const site = toObjectId(siteId);
-    const deletedPage = await this.pages.findOneAndDelete({
-      _id: page,
-      ownBy,
-      site,
-    });
+    const deletedPage = await this.pages
+      .findOneAndDelete({
+        _id: page,
+        ownBy,
+        site,
+      })
+      .orFail(throwEntityNotFound);
 
     const serialized = new PageTransformer(deletedPage).proto;
     this.eventBus.publish(
