@@ -32,25 +32,22 @@ export class CreateComponentHandler
   async execute(
     command: CreateComponentCommand,
   ): Promise<CreateComponentResponse> {
-    const { requestedUserId, ownerIdList, name, elements, status, isHidden } =
-      command.request;
-
+    const { requestedUserId, ownerId, name, status } = command.request;
+    const ownBy = toObjectId(ownerId);
     const createdBy = toObjectId(requestedUserId);
     const result = await this.Components.create({
-      owners: ownerIdList,
+      ownBy,
       name,
-      elements,
       createdBy,
       updatedBy: createdBy,
       status: status || EditStatus.DRAFT,
-      isHidden,
     });
 
     const serialized = new ComponentTransformer(result).proto;
     this.eventBus.publish(new ComponentCreatedEvent(serialized));
 
     return {
-      componentId: result.id,
+      component: serialized,
     };
   }
 }

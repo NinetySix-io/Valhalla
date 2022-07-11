@@ -27,15 +27,12 @@ export class DeletePageHandler
 
   async execute(command: DeletePageCommand): Promise<DeletePageResponse> {
     const { ownerId, requestedUserId, siteId, pageId } = command.request;
-    const page = toObjectId(pageId);
+    const _id = toObjectId(pageId);
     const ownBy = toObjectId(ownerId);
     const site = toObjectId(siteId);
     const deletedPage = await this.pages
-      .findOneAndDelete({
-        _id: page,
-        ownBy,
-        site,
-      })
+      .findOneAndDelete({ _id, ownBy, site })
+      .lean()
       .orFail();
 
     const serialized = new PageTransformer(deletedPage).proto;

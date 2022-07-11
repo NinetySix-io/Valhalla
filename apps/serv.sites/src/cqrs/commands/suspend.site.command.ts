@@ -41,10 +41,10 @@ export class SuspendSiteHandler
         { $set: { updatedBy, status } },
         { new: true },
       )
+      .lean()
       .orFail();
 
     const serialized = new SiteTransformer(site).proto;
-
     this.eventBus.publish(new SiteSuspendedEvent(serialized));
 
     return {

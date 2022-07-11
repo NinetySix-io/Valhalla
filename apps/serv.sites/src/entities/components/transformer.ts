@@ -16,13 +16,12 @@ export class ComponentTransformer extends ComponentSchema {
       id: this.id,
       name: this.name,
       status: this.status,
-      owners: this.owners,
+      ownBy: this.ownBy.toHexString(),
       thumbnailUrl: this.thumbnailUrl,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       createdBy: this.createdBy.toHexString(),
       updatedBy: this.updatedBy.toHexString(),
-      isHidden: this.isHidden,
     };
   }
 }

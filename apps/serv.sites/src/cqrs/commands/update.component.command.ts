@@ -28,38 +28,19 @@ export class UpdateComponentHandler
   async execute(
     command: UpdateComponentCommand,
   ): Promise<UpdateComponentResponse> {
-    const {
-      componentId,
-      ownerIdList,
-      requestedUserId,
-      name,
-      elements,
-      status,
-    } = command.request;
+    const { componentId, ownerId, requestedUserId, name, status } =
+      command.request;
 
     const _id = toObjectId(componentId);
+    const ownBy = toObjectId(ownerId);
     const updatedBy = toObjectId(requestedUserId);
     const result = await this.Components.findOneAndUpdate(
-      {
-        _id,
-        owners: ownerIdList,
-      },
-      {
-        $set: {
-          updatedBy,
-          name,
-          status,
-          elements,
-        },
-      },
-      {
-        withoutNil: true,
-        new: true,
-        projection: {
-          elements: 0,
-        },
-      },
-    ).orFail();
+      { _id, ownBy },
+      { $set: { updatedBy, name, status } },
+      { withoutNil: true, new: true },
+    )
+      .lean()
+      .orFail();
 
     const serialized = new ComponentTransformer(result).proto;
     const event = new ComponentUpdatedEvent(serialized);

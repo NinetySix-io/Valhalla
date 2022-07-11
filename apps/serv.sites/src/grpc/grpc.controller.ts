@@ -5,20 +5,26 @@ import {
   ArchivePageResponse,
   CreateComponentRequest,
   CreateComponentResponse,
+  CreateElementRequest,
+  CreateElementResponse,
   CreatePageRequest,
   CreatePageResponse,
   CreateSiteRequest,
   CreateSiteResponse,
   DeleteComponentRequest,
   DeleteComponentResponse,
+  DeleteElementRequest,
+  DeleteElementResponse,
   DeletePageRequest,
   DeletePageResponse,
-  GetComponentElementListRequest,
-  GetComponentElementListResponse,
   GetComponentListRequest,
   GetComponentListResponse,
   GetComponentRequest,
   GetComponentResponse,
+  GetElementFlatListRequest,
+  GetElementFlatListResponse,
+  GetElementHierarchicalListRequest,
+  GetElementHierarchicalListResponse,
   GetOrCreateFirstPageRequest,
   GetPageListRequest,
   GetPageListResponse,
@@ -34,6 +40,8 @@ import {
   SuspendSiteResponse,
   UpdateComponentRequest,
   UpdateComponentResponse,
+  UpdateElementRequest,
+  UpdateElementResponse,
   UpdatePageRequest,
   UpdatePageResponse,
   UpdateSiteRequest,
@@ -45,13 +53,16 @@ import { ArchiveComponentCommand } from '@app/cqrs/commands/archive.component.co
 import { ArchivePageCommand } from '@app/cqrs/commands/archive.page.command';
 import { Controller } from '@nestjs/common';
 import { CreateComponentCommand } from '@app/cqrs/commands/create.component.command';
+import { CreateElementCommand } from '@app/cqrs/commands/create.element.command';
 import { CreatePageCommand } from '@app/cqrs/commands/create.page.command';
 import { CreateSiteCommand } from '@app/cqrs/commands/create.site.command';
 import { DeleteComponentCommand } from '@app/cqrs/commands/delete.component.command';
+import { DeleteElementCommand } from '@app/cqrs/commands/delete.element.command';
 import { DeletePageCommand } from '@app/cqrs/commands/delete.page.command';
-import { GetComponentElementListQuery } from '@app/cqrs/queries/get.component.elements.list.query';
 import { GetComponentListQuery } from '@app/cqrs/queries/get.component.list.query';
 import { GetComponentQuery } from '@app/cqrs/queries/get.component.query';
+import { GetElementFlatListQuery } from '@app/cqrs/queries/get.element.flat.list.query';
+import { GetElementHierarchicalListQuery } from '@app/cqrs/queries/get.element.hierachical.list.query';
 import { GetOrCreateFirstPageCommand } from '@app/cqrs/commands/get.or.create.first.page.command';
 import { GetPageListQuery } from '@app/cqrs/queries/get.page.list.query';
 import { GetPageQuery } from '@app/cqrs/queries/get.page.query';
@@ -61,6 +72,7 @@ import { GrpcClass } from '@valhalla/serv.core';
 import { Observable } from 'rxjs';
 import { SuspendSiteCommand } from '@app/cqrs/commands/suspend.site.command';
 import { UpdateComponentCommand } from '@app/cqrs/commands/update.component.command';
+import { UpdateElementCommand } from '@app/cqrs/commands/update.element.command';
 import { UpdatePageCommand } from '@app/cqrs/commands/update.page.command';
 import { UpdateSiteCommand } from '@app/cqrs/commands/update.site.command';
 
@@ -71,6 +83,46 @@ export class gRpcController implements SitesServiceController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
+  getElementFlatList(
+    request: GetElementFlatListRequest,
+  ):
+    | GetElementFlatListResponse
+    | Promise<GetElementFlatListResponse>
+    | Observable<GetElementFlatListResponse> {
+    return this.queryBus.execute(new GetElementFlatListQuery(request));
+  }
+  getElementHierarchicalList(
+    request: GetElementHierarchicalListRequest,
+  ):
+    | GetElementHierarchicalListResponse
+    | Promise<GetElementHierarchicalListResponse>
+    | Observable<GetElementHierarchicalListResponse> {
+    return this.queryBus.execute(new GetElementHierarchicalListQuery(request));
+  }
+  createElement(
+    request: CreateElementRequest,
+  ):
+    | CreateElementResponse
+    | Promise<CreateElementResponse>
+    | Observable<CreateElementResponse> {
+    return this.commandBus.execute(new CreateElementCommand(request));
+  }
+  updateElement(
+    request: UpdateElementRequest,
+  ):
+    | UpdateElementResponse
+    | Promise<UpdateElementResponse>
+    | Observable<UpdateElementResponse> {
+    return this.commandBus.execute(new UpdateElementCommand(request));
+  }
+  deleteElement(
+    request: DeleteElementRequest,
+  ):
+    | DeleteElementResponse
+    | Promise<DeleteElementResponse>
+    | Observable<DeleteElementResponse> {
+    return this.commandBus.execute(new DeleteElementCommand(request));
+  }
   updateComponent(
     request: UpdateComponentRequest,
   ):
@@ -94,14 +146,6 @@ export class gRpcController implements SitesServiceController {
     | Promise<ArchiveComponentResponse>
     | Observable<ArchiveComponentResponse> {
     return this.commandBus.execute(new ArchiveComponentCommand(request));
-  }
-  getComponentElementList(
-    request: GetComponentElementListRequest,
-  ):
-    | GetComponentElementListResponse
-    | Promise<GetComponentElementListResponse>
-    | Observable<GetComponentElementListResponse> {
-    return this.queryBus.execute(new GetComponentElementListQuery(request));
   }
   getComponent(
     request: GetComponentRequest,

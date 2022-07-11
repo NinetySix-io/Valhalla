@@ -17,12 +17,10 @@ export class GetComponentHandler
   constructor(private readonly Components: ComponentsModel) {}
 
   async execute(command: GetComponentQuery): Promise<GetComponentResponse> {
-    const { componentId, ownerIdList } = command.request;
+    const { componentId, ownerId } = command.request;
     const _id = toObjectId(componentId);
-    const result = await this.Components.findOne({ _id, owners: ownerIdList })
-      .select({ elements: 0 })
-      .lean();
-
+    const ownBy = toObjectId(ownerId);
+    const result = await this.Components.findOne({ _id, ownBy }).lean();
     const serialized = new ComponentTransformer(result).proto;
     return { component: serialized };
   }

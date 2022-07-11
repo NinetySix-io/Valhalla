@@ -43,9 +43,9 @@ export class CreateSiteHandler
       status,
     });
 
-    this.eventBus.publish(
-      new SiteCreatedEvent(new SiteTransformer(site).proto),
-    );
+    const serialized = SiteTransformer.fromEntity(site).proto;
+    const event = new SiteCreatedEvent(serialized);
+    this.eventBus.publish(event);
 
     return {
       siteId: site.id,

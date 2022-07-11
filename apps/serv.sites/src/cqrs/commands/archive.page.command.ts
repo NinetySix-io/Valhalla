@@ -41,6 +41,7 @@ export class ArchivePageHandler
         { $set: { status, updatedBy } },
         { new: true },
       )
+      .lean()
       .orFail();
 
     const serialized = new PageTransformer(page).proto;

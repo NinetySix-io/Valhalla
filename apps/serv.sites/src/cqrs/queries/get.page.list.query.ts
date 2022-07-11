@@ -19,7 +19,7 @@ export class GetPageListHandler
   async execute(command: GetPageListQuery): Promise<GetPageListResponse> {
     const ownBy = toObjectId(command.request.ownerId);
     const site = toObjectId(command.request.siteId);
-    const pageList = await this.pagesEntity.find({ ownBy, site });
+    const pageList = await this.pagesEntity.find({ ownBy, site }).lean();
     const serialized = pageList.map((page) => new PageTransformer(page).proto);
     return {
       pageList: serialized,

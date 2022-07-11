@@ -36,6 +36,7 @@ export class UpdateSiteHandler
         { $set: { name, updatedBy } },
         { withoutNil: true, new: true },
       )
+      .lean()
       .orFail();
 
     const serialized = new SiteTransformer(site).proto;

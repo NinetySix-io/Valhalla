@@ -46,6 +46,7 @@ export class UpdatePageHandler
         { $set: { title, description, isLoneTitle, updatedBy } },
         { withoutNil: true, new: true },
       )
+      .lean()
       .orFail();
 
     const serialized = new PageTransformer(page).proto;

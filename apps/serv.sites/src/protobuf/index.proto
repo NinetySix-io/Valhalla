@@ -29,13 +29,21 @@ service SitesService {
   // -----------------------------
   // COMPONENT
   // -----------------------------
-  rpc GetComponentElementList(GetComponentElementListRequest) returns (GetComponentElementListResponse) {}
   rpc GetComponent(GetComponentRequest) returns (GetComponentResponse) {}
   rpc GetComponentList(GetComponentListRequest) returns (GetComponentListResponse) {}
   rpc CreateComponent(CreateComponentRequest) returns (CreateComponentResponse) {}
   rpc UpdateComponent(UpdateComponentRequest) returns (UpdateComponentResponse) {}
   rpc DeleteComponent(DeleteComponentRequest) returns (DeleteComponentResponse) {}
   rpc ArchiveComponent(ArchiveComponentRequest) returns (ArchiveComponentResponse) {}
+
+  // -----------------------------
+  // Elements
+  // -----------------------------
+  rpc GetElementFlatList(GetElementFlatListRequest) returns (GetElementFlatListResponse) {}
+  rpc GetElementHierarchicalList(GetElementHierarchicalListRequest) returns (GetElementHierarchicalListResponse) {}
+  rpc CreateElement(CreateElementRequest) returns(CreateElementResponse) {}
+  rpc UpdateElement(UpdateElementRequest) returns(UpdateElementResponse) {}
+  rpc DeleteElement(DeleteElementRequest) returns(DeleteElementResponse) {}
 }
 
 // -----------------------------
@@ -142,30 +150,33 @@ enum ElementType {
 
 message Component {
   string id = 1;
-  repeated string owners = 2;
-  string createdBy = 3;
+  string name = 2;
+  string ownBy = 3;
   string updatedBy = 4;
-  string name = 5;
-  optional string thumbnailUrl = 6;
-  google.protobuf.Timestamp createdAt = 8;
-  google.protobuf.Timestamp updatedAt = 9;
-  EditStatus status = 10;
-  optional bool isHidden = 11;
-}
-
-message ElementStyle {
-  google.protobuf.Timestamp updatedAt = 1;
+  string createdBy = 5;
+  string thumbnailUrl = 6;
+  EditStatus status = 7;
+  google.protobuf.Timestamp updatedAt = 8;
+  google.protobuf.Timestamp createdAt = 9;
 }
 
 message Element {
-  ElementType type = 1;
-  optional string id = 2;
-  optional string className = 3;
-  repeated Element children = 4;
-  google.protobuf.Timestamp updatedAt = 5;
-  google.protobuf.Timestamp updatedBy = 6;
-  optional ElementStyle style = 7;
-  optional google.protobuf.Struct props = 8;
+  string id = 1;
+  string ownBy = 2;
+  string parent = 3;
+  string updatedBy = 4;
+  ElementType type = 5;
+  optional bool isRoot = 6;
+  google.protobuf.Struct props = 7;
+  google.protobuf.Timestamp createdAt = 8;
+  google.protobuf.Timestamp updatedAt = 9;
+}
+
+message HierarchicalElement {
+  string id = 1;
+  ElementType type = 2;
+  google.protobuf.Struct props = 3;
+  repeated HierarchicalElement children = 4;
 }
 
 message Page {
@@ -195,68 +206,109 @@ message Site {
   google.protobuf.Timestamp updatedAt = 9;
 }
 
-
 // -----------------------------
 // COMPONENTS
 // -----------------------------
 
-message GetComponentElementListRequest {
-  repeated string ownerIdList = 1;
-  string componentId = 2;
+message CreateElementRequest {
+  string parent = 1;
+  string requestedUserId = 2;
+  string ownerId = 3;
+  ElementType type = 4;
+  optional bool isRoot = 5;
+  optional google.protobuf.Struct props = 6;
 }
 
-message GetComponentElementListResponse {
+message CreateElementResponse {
+  Element element = 1;
+}
+
+message UpdateElementRequest {
+  string elementId = 1;
+  string requestedUserId = 2;
+  string ownerId = 3;
+  optional string type = 4;
+  optional string parent = 5;
+  optional google.protobuf.Struct props = 6;
+}
+
+message UpdateElementResponse {
+  Element element = 1;
+}
+
+message DeleteElementRequest {
+  string elementId = 1;
+  string requestedUserId = 2;
+  string ownerId = 3;
+}
+
+message DeleteElementResponse {
+  Element element = 1;
+}
+
+message GetElementFlatListRequest {
+  string ownerId = 1;
+}
+
+message GetElementFlatListResponse {
   repeated Element elements = 1;
 }
 
+message GetElementHierarchicalListRequest {
+  string ownerId = 1;
+}
+
+message GetElementHierarchicalListResponse {
+  repeated HierarchicalElement elements = 1;
+}
+
 message CreateComponentRequest {
-  repeated string ownerIdList = 1;
-  string requestedUserId = 2;
-  string name = 3;
-  repeated Element elements = 4;
-  optional EditStatus status = 5;
-  optional bool isHidden = 6;
+  string requestedUserId = 1;
+  string ownerId = 2;
+
+  EditStatus status = 3;
+  string name = 4;
 }
 
 message CreateComponentResponse {
-  string componentId = 1;
+  Component component = 1;
 }
 
 message UpdateComponentRequest {
-  repeated string ownerIdList = 1;
-  string requestedUserId = 2;
-  string componentId = 3;
+  string ownerId = 1;
+  string componentId = 2;
+  string requestedUserId = 3;
+
   optional string name = 4;
-  repeated Element elements = 5;
-  optional EditStatus status = 6;
+  optional EditStatus status = 5;
 }
 
 message UpdateComponentResponse {
-
+  Component component = 1;
 }
 
 message DeleteComponentRequest {
-  repeated string ownerIdList = 1;
+  string ownerId = 1;
   string componentId = 2;
   string requestedUserId = 3;
 }
 
 message DeleteComponentResponse {
-
+  Component component = 1;
 }
 
 message ArchiveComponentRequest {
-  repeated string ownerIdList = 1;
+  string ownerId = 1;
   string componentId = 2;
   string requestedUserId = 3;
 }
 
 message ArchiveComponentResponse {
-
+  Component component = 1;
 }
 
 message GetComponentRequest {
-  repeated string ownerIdList = 1;
+  string ownerId = 1;
   string componentId = 2;
 }
 
@@ -265,7 +317,7 @@ message GetComponentResponse {
 }
 
 message GetComponentListRequest {
-  repeated string ownerIdList = 1;
+  string ownerId = 1;
 }
 
 message GetComponentListResponse {

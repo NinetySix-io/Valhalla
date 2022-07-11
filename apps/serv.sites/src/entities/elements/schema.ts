@@ -1,37 +1,45 @@
-import { BaseSchema, typegoose } from '@valhalla/serv.core';
-import { Field, ObjectType, PickType, registerEnumType } from '@nestjs/graphql';
+import {
+  BaseSchema,
+  IsObjectId,
+  SimpleModel,
+  mongoose,
+  typegoose,
+} from '@valhalla/serv.core';
+import { Exclude, Expose } from 'class-transformer';
+import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 
 import { ElementType } from '@app/protobuf';
-import { Expose } from 'class-transformer';
 import { IsObject } from 'class-validator';
 
 registerEnumType(ElementType, { name: 'ElementType' });
 
-@typegoose.modelOptions({
-  schemaOptions: {
-    timestamps: false,
-    id: false,
-  },
-})
 @ObjectType()
-export class ElementStyleSchema extends PickType(
-  BaseSchema,
-  ['updatedAt'],
-  ObjectType,
-) {}
+@SimpleModel('elements', { allowMixed: typegoose.Severity.ALLOW })
+@typegoose.index({ parent: 1 })
+export class ElementSchema extends BaseSchema {
+  @typegoose.prop()
+  @Expose()
+  @Field({
+    description: 'When is root, parent is not an element',
+    nullable: true,
+  })
+  isRoot?: boolean;
 
-@typegoose.modelOptions({
-  schemaOptions: {
-    timestamps: true,
-    id: false,
-  },
-})
-@ObjectType()
-export class ElementSchema extends PickType(
-  BaseSchema,
-  ['updatedAt'],
-  ObjectType,
-) {
+  @typegoose.prop()
+  @Exclude()
+  ownBy: mongoose.Types.ObjectId;
+
+  @typegoose.prop()
+  @Expose()
+  @Field({ description: 'Parent of element' })
+  parent: string;
+
+  @typegoose.prop()
+  @Expose()
+  @IsObjectId()
+  @Field(() => String)
+  updatedBy: mongoose.Types.ObjectId;
+
   @typegoose.prop()
   @Expose()
   @Field({ description: 'Element type' })
@@ -39,27 +47,7 @@ export class ElementSchema extends PickType(
 
   @typegoose.prop()
   @Expose()
-  @Field({ description: 'Element ID', nullable: true })
-  id?: string;
-
-  @typegoose.prop()
-  @Expose()
-  @Field({ description: 'Element class name', nullable: true })
-  className?: string;
-
-  @typegoose.prop()
-  @Expose()
-  @Field({ description: 'Element children' })
-  children: Array<ElementSchema>;
-
-  @typegoose.prop()
-  @Expose()
-  @Field({ description: 'Element style', nullable: true })
-  style?: ElementStyleSchema;
-
-  @typegoose.prop()
-  @Expose()
   @Field({ description: 'Additional properties', nullable: true })
   @IsObject()
-  props?: Record<string, string | number>;
+  props?: Record<string, unknown>;
 }

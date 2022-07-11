@@ -36,7 +36,7 @@ export class GetOrCreateFirstPageHandler
     const { fallbackTitle, ownerId, siteId, requestedUserId } = command.request;
     const site = toObjectId(siteId);
     const ownBy = toObjectId(ownerId);
-    const page = await this.Pages.findOne({ ownBy, site });
+    const page = await this.Pages.findOne({ ownBy, site }).lean();
     if (page) {
       return {
         page: new PageTransformer(page).proto,

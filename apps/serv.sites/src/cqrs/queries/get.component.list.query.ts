@@ -3,10 +3,10 @@ import {
   GetComponentListResponse,
 } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { ComponentTransformer } from '@app/entities/components/transformer';
 import { ComponentsModel } from '@app/entities/components';
-import { RpcHandler } from '@valhalla/serv.core';
 
 export class GetComponentListQuery implements IQuery {
   constructor(public readonly request: GetComponentListRequest) {}
@@ -22,8 +22,9 @@ export class GetComponentListHandler
   async execute(
     command: GetComponentListQuery,
   ): Promise<GetComponentListResponse> {
-    const { ownerIdList } = command.request;
-    const result = await this.Components.find({ owners: ownerIdList }).lean();
+    const { ownerId } = command.request;
+    const ownBy = toObjectId(ownerId);
+    const result = await this.Components.find({ ownBy }).lean();
     const serialized = result.map(
       (item) => new ComponentTransformer(item).proto,
     );

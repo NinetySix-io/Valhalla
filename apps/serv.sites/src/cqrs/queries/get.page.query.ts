@@ -17,8 +17,11 @@ export class GetPageHandler
   constructor(private readonly pagesEntity: PagesModel) {}
   async execute(command: GetPageQuery): Promise<GetPageResponse> {
     const pageId = command.request.pageId;
-    const page = await this.pagesEntity.findById(pageId);
-    const serialized = page ? new PageTransformer(page).proto : undefined;
+    const page = await this.pagesEntity.findById(pageId).lean();
+    const serialized = page
+      ? PageTransformer.fromEntity(page).proto
+      : undefined;
+
     return {
       page: serialized,
     };

@@ -32,26 +32,17 @@ export class ArchiveComponentHandler
   async execute(
     command: ArchiveComponentCommand,
   ): Promise<ArchiveComponentResponse> {
-    const { componentId, ownerIdList, requestedUserId } = command.request;
+    const { componentId, ownerId, requestedUserId } = command.request;
     const _id = toObjectId(componentId);
     const updatedBy = toObjectId(requestedUserId);
+    const ownBy = toObjectId(ownerId);
     const status = EditStatus.ARCHIVED;
     const result = await this.Components.findOneAndUpdate(
-      {
-        _id,
-        owners: ownerIdList,
-      },
-      {
-        $set: {
-          updatedBy,
-          status,
-        },
-      },
-      {
-        new: true,
-      },
+      { _id, ownBy },
+      { $set: { updatedBy, status } },
+      { new: true },
     )
-      .select({ elements: 0 })
+      .lean()
       .orFail();
 
     const serialized = new ComponentTransformer(result).proto;

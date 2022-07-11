@@ -104,30 +104,33 @@ export enum ElementType {
 
 export interface Component {
   id: string;
-  owners: string[];
-  createdBy: string;
-  updatedBy: string;
   name: string;
-  thumbnailUrl?: string | undefined;
-  createdAt?: Date;
-  updatedAt?: Date;
+  ownBy: string;
+  updatedBy: string;
+  createdBy: string;
+  thumbnailUrl: string;
   status: EditStatus;
-  isHidden?: boolean | undefined;
-}
-
-export interface ElementStyle {
   updatedAt?: Date;
+  createdAt?: Date;
 }
 
 export interface Element {
+  id: string;
+  ownBy: string;
+  parent: string;
+  updatedBy: string;
   type: ElementType;
-  id?: string | undefined;
-  className?: string | undefined;
-  children: Element[];
-  updatedAt?: Date;
-  updatedBy?: Date;
-  style?: ElementStyle | undefined;
+  isRoot?: boolean | undefined;
   props?: { [key: string]: any };
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface HierarchicalElement {
+  id: string;
+  type: ElementType;
+  props?: { [key: string]: any };
+  children: HierarchicalElement[];
 }
 
 export interface Page {
@@ -157,57 +160,103 @@ export interface Site {
   updatedAt?: Date;
 }
 
-export interface GetComponentElementListRequest {
-  ownerIdList: string[];
-  componentId: string;
+export interface CreateElementRequest {
+  parent: string;
+  requestedUserId: string;
+  ownerId: string;
+  type: ElementType;
+  isRoot?: boolean | undefined;
+  props?: { [key: string]: any };
 }
 
-export interface GetComponentElementListResponse {
+export interface CreateElementResponse {
+  element?: Element;
+}
+
+export interface UpdateElementRequest {
+  elementId: string;
+  requestedUserId: string;
+  ownerId: string;
+  type?: string | undefined;
+  parent?: string | undefined;
+  props?: { [key: string]: any };
+}
+
+export interface UpdateElementResponse {
+  element?: Element;
+}
+
+export interface DeleteElementRequest {
+  elementId: string;
+  requestedUserId: string;
+  ownerId: string;
+}
+
+export interface DeleteElementResponse {
+  element?: Element;
+}
+
+export interface GetElementFlatListRequest {
+  ownerId: string;
+}
+
+export interface GetElementFlatListResponse {
   elements: Element[];
+}
+
+export interface GetElementHierarchicalListRequest {
+  ownerId: string;
+}
+
+export interface GetElementHierarchicalListResponse {
+  elements: HierarchicalElement[];
 }
 
 export interface CreateComponentRequest {
-  ownerIdList: string[];
   requestedUserId: string;
+  ownerId: string;
+  status: EditStatus;
   name: string;
-  elements: Element[];
-  status?: EditStatus | undefined;
-  isHidden?: boolean | undefined;
 }
 
 export interface CreateComponentResponse {
-  componentId: string;
+  component?: Component;
 }
 
 export interface UpdateComponentRequest {
-  ownerIdList: string[];
-  requestedUserId: string;
+  ownerId: string;
   componentId: string;
+  requestedUserId: string;
   name?: string | undefined;
-  elements: Element[];
   status?: EditStatus | undefined;
 }
 
-export interface UpdateComponentResponse {}
+export interface UpdateComponentResponse {
+  component?: Component;
+}
 
 export interface DeleteComponentRequest {
-  ownerIdList: string[];
+  ownerId: string;
   componentId: string;
   requestedUserId: string;
 }
 
-export interface DeleteComponentResponse {}
+export interface DeleteComponentResponse {
+  component?: Component;
+}
 
 export interface ArchiveComponentRequest {
-  ownerIdList: string[];
+  ownerId: string;
   componentId: string;
   requestedUserId: string;
 }
 
-export interface ArchiveComponentResponse {}
+export interface ArchiveComponentResponse {
+  component?: Component;
+}
 
 export interface GetComponentRequest {
-  ownerIdList: string[];
+  ownerId: string;
   componentId: string;
 }
 
@@ -216,7 +265,7 @@ export interface GetComponentResponse {
 }
 
 export interface GetComponentListRequest {
-  ownerIdList: string[];
+  ownerId: string;
 }
 
 export interface GetComponentListResponse {
@@ -402,10 +451,6 @@ export interface SitesServiceClient {
    * -----------------------------
    */
 
-  getComponentElementList(
-    request: GetComponentElementListRequest
-  ): Observable<GetComponentElementListResponse>;
-
   getComponent(request: GetComponentRequest): Observable<GetComponentResponse>;
 
   getComponentList(
@@ -427,6 +472,32 @@ export interface SitesServiceClient {
   archiveComponent(
     request: ArchiveComponentRequest
   ): Observable<ArchiveComponentResponse>;
+
+  /**
+   * -----------------------------
+   * Elements
+   * -----------------------------
+   */
+
+  getElementFlatList(
+    request: GetElementFlatListRequest
+  ): Observable<GetElementFlatListResponse>;
+
+  getElementHierarchicalList(
+    request: GetElementHierarchicalListRequest
+  ): Observable<GetElementHierarchicalListResponse>;
+
+  createElement(
+    request: CreateElementRequest
+  ): Observable<CreateElementResponse>;
+
+  updateElement(
+    request: UpdateElementRequest
+  ): Observable<UpdateElementResponse>;
+
+  deleteElement(
+    request: DeleteElementRequest
+  ): Observable<DeleteElementResponse>;
 }
 
 export interface SitesServiceController {
@@ -526,13 +597,6 @@ export interface SitesServiceController {
    * -----------------------------
    */
 
-  getComponentElementList(
-    request: GetComponentElementListRequest
-  ):
-    | Promise<GetComponentElementListResponse>
-    | Observable<GetComponentElementListResponse>
-    | GetComponentElementListResponse;
-
   getComponent(
     request: GetComponentRequest
   ):
@@ -574,6 +638,47 @@ export interface SitesServiceController {
     | Promise<ArchiveComponentResponse>
     | Observable<ArchiveComponentResponse>
     | ArchiveComponentResponse;
+
+  /**
+   * -----------------------------
+   * Elements
+   * -----------------------------
+   */
+
+  getElementFlatList(
+    request: GetElementFlatListRequest
+  ):
+    | Promise<GetElementFlatListResponse>
+    | Observable<GetElementFlatListResponse>
+    | GetElementFlatListResponse;
+
+  getElementHierarchicalList(
+    request: GetElementHierarchicalListRequest
+  ):
+    | Promise<GetElementHierarchicalListResponse>
+    | Observable<GetElementHierarchicalListResponse>
+    | GetElementHierarchicalListResponse;
+
+  createElement(
+    request: CreateElementRequest
+  ):
+    | Promise<CreateElementResponse>
+    | Observable<CreateElementResponse>
+    | CreateElementResponse;
+
+  updateElement(
+    request: UpdateElementRequest
+  ):
+    | Promise<UpdateElementResponse>
+    | Observable<UpdateElementResponse>
+    | UpdateElementResponse;
+
+  deleteElement(
+    request: DeleteElementRequest
+  ):
+    | Promise<DeleteElementResponse>
+    | Observable<DeleteElementResponse>
+    | DeleteElementResponse;
 }
 
 export function SitesServiceControllerMethods() {
@@ -591,13 +696,17 @@ export function SitesServiceControllerMethods() {
       "updatePage",
       "deletePage",
       "archivePage",
-      "getComponentElementList",
       "getComponent",
       "getComponentList",
       "createComponent",
       "updateComponent",
       "deleteComponent",
       "archiveComponent",
+      "getElementFlatList",
+      "getElementHierarchicalList",
+      "createElement",
+      "updateElement",
+      "deleteElement",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(

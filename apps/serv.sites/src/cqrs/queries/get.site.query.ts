@@ -27,7 +27,9 @@ export class GetSiteHandler
     }
 
     const site = await this.sites.findOne(query);
-    const serialized = site ? new SiteTransformer(site).proto : undefined;
+    const serialized = site
+      ? SiteTransformer.fromEntity(site).proto
+      : undefined;
 
     return {
       site: serialized,

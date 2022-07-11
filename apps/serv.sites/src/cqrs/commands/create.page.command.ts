@@ -1,5 +1,4 @@
 import {
-  CommandBus,
   CommandHandler,
   EventBus,
   ICommand,
@@ -12,7 +11,6 @@ import {
 } from '@app/protobuf';
 import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
-import { CreateComponentCommand } from './create.component.command';
 import { PageCreatedEvent } from '../events/page.created.event';
 import { PageTransformer } from '@app/entities/pages/transformer';
 import { PagesModel } from '@app/entities/pages';
@@ -28,7 +26,6 @@ export class CreatePageHandler
 {
   constructor(
     private readonly eventBus: EventBus,
-    private readonly commandBus: CommandBus,
     private readonly pages: PagesModel,
   ) {}
 
@@ -44,28 +41,18 @@ export class CreatePageHandler
     const updatedBy = createdBy;
     const ownBy = toObjectId(ownerId);
     const site = toObjectId(siteId);
-
+    const status = EditStatus.DRAFT;
     const page = await this.pages.create({
       createdBy,
       updatedBy,
       site,
       title,
       ownBy,
-      status: EditStatus.DRAFT,
+      status,
     });
 
     const serialized = new PageTransformer(page).proto;
     this.eventBus.publish(new PageCreatedEvent(serialized));
-    this.commandBus.execute(
-      new CreateComponentCommand({
-        name: page.id,
-        requestedUserId,
-        ownerIdList: [ownerId, siteId, page.id],
-        status: EditStatus.ACTIVE,
-        elements: [],
-        isHidden: true,
-      }),
-    );
 
     return {
       page: serialized,

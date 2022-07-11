@@ -32,9 +32,10 @@ export class GetSiteListHandler
       throw new Error('Invalid Query');
     }
 
-    const sites = await this.sites.find(query);
+    const sites = await this.sites.find(query).lean();
+
     return {
-      sites: sites.map((site) => new SiteTransformer(site).proto),
+      sites: sites.map((site) => SiteTransformer.fromEntity(site).proto),
     };
   }
 }

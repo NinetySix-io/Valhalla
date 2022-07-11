@@ -28,18 +28,15 @@ export class DeleteComponentHandler
   async execute(
     command: DeleteComponentCommand,
   ): Promise<DeleteComponentResponse> {
-    const { requestedUserId, componentId, ownerIdList } = command.request;
-    const result = await this.Components.findOneAndDelete(
-      {
-        _id: toObjectId(componentId),
-        ownBy: ownerIdList,
-      },
-      {
-        projection: {
-          elements: 0,
-        },
-      },
-    ).orFail();
+    const { requestedUserId, componentId, ownerId } = command.request;
+    const _id = toObjectId(componentId);
+    const ownBy = toObjectId(ownerId);
+    const result = await this.Components.findOneAndDelete({
+      _id,
+      ownBy,
+    })
+      .lean()
+      .orFail();
 
     const serialized = new ComponentTransformer(result).proto;
     this.eventBus.publish(
