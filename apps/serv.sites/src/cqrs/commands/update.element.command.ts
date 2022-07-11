@@ -26,14 +26,13 @@ export class UpdateElementHandler
   ) {}
 
   async execute(command: UpdateElementCommand): Promise<UpdateElementResponse> {
-    const { ownerId, requestedUserId, elementId, parent, props, type } =
+    const { owners, requestedUserId, elementId, parent, props, type } =
       command.request;
 
     const _id = toObjectId(elementId);
-    const ownBy = toObjectId(ownerId);
     const updatedBy = toObjectId(requestedUserId);
     const result = await this.Elements.findOneAndUpdate(
-      { _id, ownBy },
+      { _id, owners },
       { $set: { parent, props, type, updatedBy } },
       { new: true, withoutNil: true },
     )

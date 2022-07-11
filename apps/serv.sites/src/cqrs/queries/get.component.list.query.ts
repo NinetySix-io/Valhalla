@@ -30,7 +30,7 @@ export class GetComponentListHandler
     );
 
     return {
-      result: serialized,
+      componentList: serialized,
     };
   }
 }

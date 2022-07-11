@@ -21,7 +21,7 @@ export class ElementTransformer extends ElementSchema {
       type: this.type,
       props: this.props,
       parent: this.parent,
-      ownBy: this.ownBy.toHexString(),
+      owners: this.owners,
       updatedBy: this.updatedBy.toHexString(),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,

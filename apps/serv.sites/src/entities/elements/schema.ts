@@ -1,5 +1,6 @@
 import {
   BaseSchema,
+  GraphQLJSON,
   IsObjectId,
   SimpleModel,
   mongoose,
@@ -13,7 +14,7 @@ import { IsObject } from 'class-validator';
 
 registerEnumType(ElementType, { name: 'ElementType' });
 
-@ObjectType()
+@ObjectType({ description: 'Base html element' })
 @SimpleModel('elements', { allowMixed: typegoose.Severity.ALLOW })
 @typegoose.index({ parent: 1 })
 export class ElementSchema extends BaseSchema {
@@ -27,7 +28,7 @@ export class ElementSchema extends BaseSchema {
 
   @typegoose.prop()
   @Exclude()
-  ownBy: mongoose.Types.ObjectId;
+  owners: string[];
 
   @typegoose.prop()
   @Expose()
@@ -42,12 +43,15 @@ export class ElementSchema extends BaseSchema {
 
   @typegoose.prop()
   @Expose()
-  @Field({ description: 'Element type' })
+  @Field(() => ElementType, { description: 'Element type' })
   type: ElementType;
 
   @typegoose.prop()
   @Expose()
-  @Field({ description: 'Additional properties', nullable: true })
+  @Field(() => GraphQLJSON, {
+    description: 'Additional properties',
+    nullable: true,
+  })
   @IsObject()
   props?: Record<string, unknown>;
 }

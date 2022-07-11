@@ -61,7 +61,7 @@ export class GqlPagesResolver {
     @AccountActiveOrg() organizationId: string,
     @Args('siteId', new ParamValidationPipe([ObjectIdParamValidation]))
     siteId: string,
-    @Args('pageId', new ParamValidationPipe([ObjectIdParamValidation]))
+    @Args('id', new ParamValidationPipe([ObjectIdParamValidation]))
     pageId: string,
   ): Promise<PageUpdatedResponse> {
     const result = await resolveRpcRequest(
@@ -90,7 +90,7 @@ export class GqlPagesResolver {
     @AccountActiveOrg() organizationId: string,
     @Args('siteId', new ParamValidationPipe([ObjectIdParamValidation]))
     siteId: string,
-    @Args('pageId', new ParamValidationPipe([ObjectIdParamValidation]))
+    @Args('id', new ParamValidationPipe([ObjectIdParamValidation]))
     pageId: string,
     @Args('input', new ParamValidationPipe([EmptyObjectValidation]))
     input: UpdatePageInput,
@@ -119,7 +119,7 @@ export class GqlPagesResolver {
 
   @Query(() => [PageSchema])
   @UseGuards(GqlAuthGuard)
-  async getPageList(
+  async pageList(
     @AccountActiveOrg() organizationId: string,
     @Args('siteId', new ParamValidationPipe([ObjectIdParamValidation]))
     siteId: string,
@@ -136,11 +136,11 @@ export class GqlPagesResolver {
 
   @Query(() => PageSchema)
   @UseGuards(GqlAuthGuard)
-  async getPage(
+  async page(
     @AccountActiveOrg() organizationId: string,
     @Args('siteId', new ParamValidationPipe([ObjectIdParamValidation]))
     siteId: string,
-    @Args('pageId', new ParamValidationPipe([ObjectIdParamValidation]))
+    @Args('id', new ParamValidationPipe([ObjectIdParamValidation]))
     pageId: string,
   ): Promise<Page> {
     const result = await resolveRpcRequest(

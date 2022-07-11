@@ -26,12 +26,12 @@ export class DeleteElementHandler
   ) {}
 
   async execute(command: DeleteElementCommand): Promise<DeleteElementResponse> {
-    const { elementId, ownerId, requestedUserId } = command.request;
+    const { elementId, owners, requestedUserId } = command.request;
     const _id = toObjectId(elementId);
-    const ownBy = toObjectId(ownerId);
-    const result = await this.Elements.findOneAndDelete({ _id, ownBy })
+    const result = await this.Elements.findOneAndDelete({ _id, owners })
       .lean()
       .orFail();
+
     const serialized = ElementTransformer.fromEntity(result).proto;
 
     this.eventBus.publish(

@@ -2,6 +2,8 @@ import { Global, Module, ModuleMetadata } from '@nestjs/common';
 
 import { ComponentSchema } from './components/schema';
 import { ComponentsModel } from './components';
+import { ElementSchema } from './elements/schema';
+import { ElementsModel } from './elements';
 import { PageSchema } from './pages/schema';
 import { PagesModel } from './pages';
 import { SiteSchema } from './sites/schema';
@@ -12,12 +14,18 @@ const ModelProviders: ModuleMetadata['providers'] = [
   SitesModel,
   PagesModel,
   ComponentsModel,
+  ElementsModel,
 ];
 
 @Global()
 @Module({
   imports: [
-    TypegooseModule.forFeature([SiteSchema, PageSchema, ComponentSchema]),
+    TypegooseModule.forFeature([
+      SiteSchema,
+      PageSchema,
+      ComponentSchema,
+      ElementSchema,
+    ]),
   ],
   providers: [...ModelProviders],
   exports: [...ModelProviders],

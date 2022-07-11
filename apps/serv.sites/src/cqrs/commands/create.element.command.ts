@@ -26,14 +26,13 @@ export class CreateElementHandler
   ) {}
 
   async execute(command: CreateElementCommand): Promise<CreateElementResponse> {
-    const { ownerId, requestedUserId, props, type, isRoot, parent } =
+    const { owners, requestedUserId, props, type, isRoot, parent } =
       command.request;
 
-    const ownBy = toObjectId(ownerId);
     const updatedBy = toObjectId(requestedUserId);
     const result = await this.Elements.create({
+      owners,
       parent,
-      ownBy,
       updatedBy,
       props,
       type,

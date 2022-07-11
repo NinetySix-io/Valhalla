@@ -19,7 +19,7 @@ describe('Lib:: makeElementTrees', () => {
       isRoot: prop.isRoot,
       type: prop.type,
       parent: prop.parent,
-      ownBy: owner,
+      owners: [''],
       createdAt: new Date(),
       updatedAt: new Date(),
       updatedBy: owner,

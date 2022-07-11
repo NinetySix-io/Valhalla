@@ -5,12 +5,13 @@ import {
   typegoose,
 } from '@valhalla/serv.core';
 import { Exclude, Expose } from 'class-transformer';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { IsUrl, MaxLength, MinLength } from 'class-validator';
 
 import { EditStatus } from '@app/protobuf';
-import { Field } from '@nestjs/graphql';
 import mongoose from 'mongoose';
 
+@ObjectType({ description: 'Use to group multiple elements together' })
 @SimpleModel('components', {
   allowMixed: typegoose.Severity.ALLOW,
 })
@@ -19,7 +20,7 @@ import mongoose from 'mongoose';
 export class ComponentSchema extends BaseSchema {
   @typegoose.prop()
   @Expose()
-  @Field({ description: 'Edit status' })
+  @Field(() => EditStatus, { description: 'Edit status' })
   status: EditStatus;
 
   @typegoose.prop()

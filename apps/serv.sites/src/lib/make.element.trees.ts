@@ -29,8 +29,7 @@ export function makeElementTrees(
     return cacheMap[elementId];
   }
 
-  for (const elementIndex in elementList) {
-    const target = elementList[elementIndex];
+  for (const target of elementList) {
     const element = grabAndCache(target);
     if (target.isRoot) {
       tree.push(element);

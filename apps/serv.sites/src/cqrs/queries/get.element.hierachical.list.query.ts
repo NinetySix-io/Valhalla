@@ -3,9 +3,9 @@ import {
   GetElementHierarchicalListResponse,
 } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { ElementsModel } from '@app/entities/elements';
+import { RpcHandler } from '@valhalla/serv.core';
 import { makeElementTrees } from '@app/lib/make.element.trees';
 
 export class GetElementHierarchicalListQuery implements IQuery {
@@ -26,9 +26,8 @@ export class GetElementHierarchicalListHandler
   async execute(
     command: GetElementHierarchicalListQuery,
   ): Promise<GetElementHierarchicalListResponse> {
-    const { ownerId } = command.request;
-    const ownBy = toObjectId(ownerId);
-    const result = await this.Elements.find({ ownBy }).lean();
+    const { owners } = command.request;
+    const result = await this.Elements.find({ owners }).lean();
     const hierarchical = makeElementTrees(result);
     return { elements: hierarchical };
   }

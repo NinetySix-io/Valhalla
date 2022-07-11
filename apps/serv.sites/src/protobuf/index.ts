@@ -116,7 +116,7 @@ export interface Component {
 
 export interface Element {
   id: string;
-  ownBy: string;
+  owners: string[];
   parent: string;
   updatedBy: string;
   type: ElementType;
@@ -163,7 +163,7 @@ export interface Site {
 export interface CreateElementRequest {
   parent: string;
   requestedUserId: string;
-  ownerId: string;
+  owners: string[];
   type: ElementType;
   isRoot?: boolean | undefined;
   props?: { [key: string]: any };
@@ -176,7 +176,7 @@ export interface CreateElementResponse {
 export interface UpdateElementRequest {
   elementId: string;
   requestedUserId: string;
-  ownerId: string;
+  owners: string[];
   type?: string | undefined;
   parent?: string | undefined;
   props?: { [key: string]: any };
@@ -189,7 +189,7 @@ export interface UpdateElementResponse {
 export interface DeleteElementRequest {
   elementId: string;
   requestedUserId: string;
-  ownerId: string;
+  owners: string[];
 }
 
 export interface DeleteElementResponse {
@@ -197,7 +197,7 @@ export interface DeleteElementResponse {
 }
 
 export interface GetElementFlatListRequest {
-  ownerId: string;
+  owners: string[];
 }
 
 export interface GetElementFlatListResponse {
@@ -205,7 +205,7 @@ export interface GetElementFlatListResponse {
 }
 
 export interface GetElementHierarchicalListRequest {
-  ownerId: string;
+  owners: string[];
 }
 
 export interface GetElementHierarchicalListResponse {
@@ -215,8 +215,8 @@ export interface GetElementHierarchicalListResponse {
 export interface CreateComponentRequest {
   requestedUserId: string;
   ownerId: string;
-  status: EditStatus;
   name: string;
+  status?: EditStatus | undefined;
 }
 
 export interface CreateComponentResponse {
@@ -269,7 +269,7 @@ export interface GetComponentListRequest {
 }
 
 export interface GetComponentListResponse {
-  result: Component[];
+  componentList: Component[];
 }
 
 /**

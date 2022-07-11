@@ -33,7 +33,7 @@ export class GqlSitesResolver {
     @Args('input') input: CreateSiteInput,
   ): Promise<SiteUpdatedResponse> {
     const result = await resolveRpcRequest(
-      await this.rpcClient.createSite({
+      this.rpcClient.createSite({
         name: input.name,
         ownerId: orgId,
         requestedUserId: account.id,
@@ -53,7 +53,7 @@ export class GqlSitesResolver {
     @AccountActiveOrg() orgId: string,
     @Args('input', new ParamValidationPipe([EmptyObjectValidation]))
     input: UpdateSiteInput,
-    @Args('siteId', new ParamValidationPipe([ObjectIdParamValidation]))
+    @Args('id', new ParamValidationPipe([ObjectIdParamValidation]))
     siteId: string,
   ): Promise<SiteUpdatedResponse> {
     const result = await resolveRpcRequest(
@@ -77,8 +77,8 @@ export class GqlSitesResolver {
 
   @Query(() => [SiteSchema])
   @UseGuards(GqlAuthGuard)
-  async getSiteList(@AccountActiveOrg() orgId: string): Promise<Site[]> {
-    const { sites } = await resolveRpcRequest(
+  async siteList(@AccountActiveOrg() orgId: string): Promise<Site[]> {
+    const result = await resolveRpcRequest(
       this.rpcClient.getSiteList({
         query: {
           $case: 'ownerId',
@@ -87,27 +87,27 @@ export class GqlSitesResolver {
       }),
     );
 
-    return sites;
+    return result.sites;
   }
 
   @Query(() => SiteSchema)
   @UseGuards(GqlAuthGuard)
-  async getSite(
+  async site(
     @AccountActiveOrg() orgId: string,
-    @Args('siteId', new ParamValidationPipe([ObjectIdParamValidation]))
+    @Args('id', new ParamValidationPipe([ObjectIdParamValidation]))
     siteId: string,
   ): Promise<Site> {
-    const { site } = await resolveRpcRequest(
+    const result = await resolveRpcRequest(
       this.rpcClient.getSite({
         ownerId: orgId,
         siteId,
       }),
     );
 
-    if (!site) {
+    if (!result.site) {
       throw new NotFoundException('Site not found!');
     }
 
-    return site;
+    return result.site;
   }
 }

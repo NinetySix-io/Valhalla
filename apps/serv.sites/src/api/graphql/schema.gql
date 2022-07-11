@@ -22,6 +22,44 @@ directive @inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUM
 
 directive @override(from: String!) on FIELD_DEFINITION
 
+"""Use to group multiple elements together"""
+type ComponentSchema {
+  """Date entity was created"""
+  createdAt: DateTime!
+
+  """Date entity was updated"""
+  updatedAt: DateTime!
+
+  """Identifier of the entity"""
+  id: ID!
+
+  """Edit status"""
+  status: EditStatus!
+
+  """Account ID"""
+  createdBy: String!
+
+  """Account ID"""
+  updatedBy: String!
+
+  """Component's name"""
+  name: String!
+
+  """Thumbnail URI"""
+  thumbnailUrl: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+enum EditStatus {
+  ACTIVE
+  DRAFT
+  ARCHIVED
+}
+
 type PageSchema {
   """Date entity was created"""
   createdAt: DateTime!
@@ -36,7 +74,7 @@ type PageSchema {
   slug: String
 
   """Edit status"""
-  status: String!
+  status: EditStatus!
 
   """Page title"""
   title: String!
@@ -54,10 +92,116 @@ type PageSchema {
   updatedBy: String!
 }
 
+"""Base html element"""
+type ElementSchema {
+  """Date entity was created"""
+  createdAt: DateTime!
+
+  """Date entity was updated"""
+  updatedAt: DateTime!
+
+  """Identifier of the entity"""
+  id: ID!
+
+  """When is root, parent is not an element"""
+  isRoot: Boolean
+
+  """Parent of element"""
+  parent: String!
+  updatedBy: String!
+
+  """Element type"""
+  type: ElementType!
+
+  """Additional properties"""
+  props: JSON
+}
+
+enum ElementType {
+  meta
+  style
+  link
+  title
+  address
+  article
+  aside
+  footer
+  header
+  h1
+  h2
+  h3
+  h4
+  h5
+  h6
+  main
+  nav
+  section
+  blockquote
+  dd
+  div
+  dl
+  dt
+  figcaption
+  figure
+  hr
+  li
+  menu
+  ol
+  p
+  pre
+  ul
+  a
+  abbr
+  b
+  bdi
+  bdo
+  br
+  cite
+  code
+  data
+  dfn
+  em
+  i
+  kbd
+  mark
+  q
+  rp
+  rt
+  ruby
+  s
+  samp
+  small
+  span
+  strong
+  sub
+  sup
+  time
+  u
+  var
+  wbr
+  area
+  audio
+  img
+  map
+  track
+  video
+  embed
+  iframe
+  object
+  picture
+  portal
+  source
+  svg
+  math
+  canvas
+  noscript
+  script
+}
+
 """
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
-scalar DateTime
+scalar JSON
 
 type SiteSchema {
   """Date entity was created"""
@@ -94,12 +238,23 @@ enum SiteStatus {
   SUSPENDED
 }
 
+type HierarchicalElementResponse {
+  """Identifier of the entity"""
+  id: ID!
+
+  """Element type"""
+  type: ElementType!
+
+  """Additional properties"""
+  props: JSON
+}
+
 type PageUpdatedResponse {
   """Identifier of the entity"""
   id: ID!
 
   """Edit status"""
-  status: String!
+  status: EditStatus!
 }
 
 type SiteUpdatedResponse {
@@ -111,19 +266,38 @@ type SiteUpdatedResponse {
 }
 
 type Query {
-  getSiteList: [SiteSchema!]!
-  getSite(siteId: String!): SiteSchema!
-  getPageList(siteId: String!): [PageSchema!]!
-  getPage(siteId: String!, pageId: String!): PageSchema!
+  siteList: [SiteSchema!]!
+  site(id: String!): SiteSchema!
+  pageList(siteId: String!): [PageSchema!]!
+  page(siteId: String!, id: String!): PageSchema!
+  component(id: String!): ComponentSchema!
+  componentList: [ComponentSchema!]!
+  flatElementList(filter: PageContextInput!): [ElementSchema!]!
+  hierarchicalElementList(filter: PageContextInput!): [HierarchicalElementResponse!]!
+}
+
+input PageContextInput {
+  """Site ID"""
+  siteId: String!
+
+  """Page ID"""
+  pageId: String!
 }
 
 type Mutation {
   createSite(input: CreateSiteInput!): SiteUpdatedResponse!
-  updateSite(input: UpdateSiteInput!, siteId: String!): SiteUpdatedResponse!
+  updateSite(input: UpdateSiteInput!, id: String!): SiteUpdatedResponse!
   createPage(siteId: String!, input: CreatePageInput!): PageUpdatedResponse!
-  deletePage(siteId: String!, pageId: String!): PageUpdatedResponse!
-  updatePage(siteId: String!, pageId: String!, input: UpdatePageInput!): PageUpdatedResponse!
+  deletePage(siteId: String!, id: String!): PageUpdatedResponse!
+  updatePage(siteId: String!, id: String!, input: UpdatePageInput!): PageUpdatedResponse!
   getOrCreateFirstPage(siteId: String!): PageSchema!
+  createComponent(input: CreateComponentInput!): ComponentSchema!
+  updateComponent(id: String!, input: UpdateComponentInput!): Boolean!
+  deleteComponent(id: String!): Boolean!
+  archiveComponent(id: String!): Boolean!
+  createElement(input: CreateElementInput!): String!
+  updateElement(id: String!, input: UpdateElementInput!): Boolean!
+  deleteElement(id: String!, input: DeleteElementInput!): Boolean!
 }
 
 input CreateSiteInput {
@@ -150,6 +324,61 @@ input UpdatePageInput {
 
   """Page description"""
   description: String
+}
+
+input CreateComponentInput {
+  """Component's name"""
+  name: String!
+}
+
+input UpdateComponentInput {
+  """Component's name"""
+  name: String
+}
+
+input CreateElementInput {
+  """Site ID"""
+  siteId: String!
+
+  """Page ID"""
+  pageId: String!
+
+  """When is root, parent is not an element"""
+  isRoot: Boolean
+
+  """Parent of element"""
+  parent: String!
+
+  """Element type"""
+  type: ElementType!
+
+  """Additional properties"""
+  props: JSON
+}
+
+input UpdateElementInput {
+  """Parent of element"""
+  parent: String
+
+  """Element type"""
+  type: ElementType
+
+  """Additional properties"""
+  props: JSON
+
+  """Site ID"""
+  siteId: String!
+
+  """Page ID"""
+  pageId: String!
+}
+
+input DeleteElementInput {
+  """Site ID"""
+  siteId: String!
+
+  """Page ID"""
+  pageId: String!
 }
 
 scalar link__Import

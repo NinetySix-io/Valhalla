@@ -1,16 +1,5 @@
 version: "3.9"
 services:
-  # eventstore:
-  #   container_name: eventstore-node
-  #   ports:
-  #     - "2113:2113"
-  #     - "1113:1113"
-  #   image: eventstore/eventstore:release-5.0.8
-  #   labels:
-  #     kompose.service.type: nodeport
-  #     kompose.service.expose: "true"
-  #     kompose.image-pull-policy: "Always"
-
   consul:
     container_name: valhalla-consul
     ports:

@@ -162,7 +162,7 @@ message Component {
 
 message Element {
   string id = 1;
-  string ownBy = 2;
+  repeated string owners = 2;
   string parent = 3;
   string updatedBy = 4;
   ElementType type = 5;
@@ -213,7 +213,7 @@ message Site {
 message CreateElementRequest {
   string parent = 1;
   string requestedUserId = 2;
-  string ownerId = 3;
+  repeated string owners = 3;
   ElementType type = 4;
   optional bool isRoot = 5;
   optional google.protobuf.Struct props = 6;
@@ -226,7 +226,7 @@ message CreateElementResponse {
 message UpdateElementRequest {
   string elementId = 1;
   string requestedUserId = 2;
-  string ownerId = 3;
+  repeated string owners = 3;
   optional string type = 4;
   optional string parent = 5;
   optional google.protobuf.Struct props = 6;
@@ -239,7 +239,7 @@ message UpdateElementResponse {
 message DeleteElementRequest {
   string elementId = 1;
   string requestedUserId = 2;
-  string ownerId = 3;
+  repeated string owners = 3;
 }
 
 message DeleteElementResponse {
@@ -247,7 +247,7 @@ message DeleteElementResponse {
 }
 
 message GetElementFlatListRequest {
-  string ownerId = 1;
+  repeated string owners = 3;
 }
 
 message GetElementFlatListResponse {
@@ -255,7 +255,7 @@ message GetElementFlatListResponse {
 }
 
 message GetElementHierarchicalListRequest {
-  string ownerId = 1;
+  repeated string owners = 3;
 }
 
 message GetElementHierarchicalListResponse {
@@ -265,9 +265,8 @@ message GetElementHierarchicalListResponse {
 message CreateComponentRequest {
   string requestedUserId = 1;
   string ownerId = 2;
-
-  EditStatus status = 3;
   string name = 4;
+  optional EditStatus status = 3;
 }
 
 message CreateComponentResponse {
@@ -321,7 +320,7 @@ message GetComponentListRequest {
 }
 
 message GetComponentListResponse {
-  repeated Component result = 1;
+  repeated Component componentList = 1;
 }
 
 // -----------------------------

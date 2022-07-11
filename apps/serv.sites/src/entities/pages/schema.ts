@@ -42,7 +42,7 @@ export class PageSchema extends BaseSchema {
 
   @typegoose.prop()
   @Expose()
-  @Field({ description: 'Edit status' })
+  @Field(() => EditStatus, { description: 'Edit status' })
   status: EditStatus;
 
   @typegoose.prop()
