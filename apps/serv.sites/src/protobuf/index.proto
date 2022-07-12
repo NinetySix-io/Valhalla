@@ -32,6 +32,7 @@ service SitesService {
   rpc GetComponent(GetComponentRequest) returns (GetComponentResponse) {}
   rpc GetComponentList(GetComponentListRequest) returns (GetComponentListResponse) {}
   rpc CreateComponent(CreateComponentRequest) returns (CreateComponentResponse) {}
+  rpc CloneComponent(CloneComponentRequest) returns (CloneComponentResponse) {}
   rpc UpdateComponent(UpdateComponentRequest) returns (UpdateComponentResponse) {}
   rpc DeleteComponent(DeleteComponentRequest) returns (DeleteComponentResponse) {}
   rpc ArchiveComponent(ArchiveComponentRequest) returns (ArchiveComponentResponse) {}
@@ -41,9 +42,12 @@ service SitesService {
   // -----------------------------
   rpc GetElementFlatList(GetElementFlatListRequest) returns (GetElementFlatListResponse) {}
   rpc GetElementHierarchicalList(GetElementHierarchicalListRequest) returns (GetElementHierarchicalListResponse) {}
-  rpc CreateElement(CreateElementRequest) returns(CreateElementResponse) {}
-  rpc UpdateElement(UpdateElementRequest) returns(UpdateElementResponse) {}
-  rpc DeleteElement(DeleteElementRequest) returns(DeleteElementResponse) {}
+  rpc CreateElement(CreateElementRequest) returns (CreateElementResponse) {}
+  rpc CreateManyElements(CreateManyElementsRequest) returns (CreateManyElementsResponse) {}
+  rpc CreateElementsFromComponent(CreateElementsFromComponentRequest) returns (CreateElementsFromComponentResponse) {}
+  rpc UpdateElement(UpdateElementRequest) returns (UpdateElementResponse) {}
+  rpc DeleteElement(DeleteElementRequest) returns (DeleteElementResponse) {}
+  rpc DeleteManyElements(DeleteManyElementsRequest) returns (DeleteManyElementsResponse) {}
 }
 
 // -----------------------------
@@ -207,8 +211,36 @@ message Site {
 }
 
 // -----------------------------
-// COMPONENTS
+// Elements
 // -----------------------------
+
+message CreateManyElementsRequest {
+  repeated CreateElementRequest elements = 1;
+}
+
+message CreateManyElementsResponse {
+}
+
+message CreateElementsFromComponentRequest {
+  string componentId = 1;
+  string parent = 2;
+  repeated string owners = 3;
+  string requestedUserId = 4;
+  string componentOwnerId = 5;
+}
+
+message CreateElementsFromComponentResponse {
+}
+
+message DeleteManyElementsRequest {
+  string requestedUserId = 1;
+  repeated string elementIdList = 2;
+  repeated string owners = 3;
+}
+
+message DeleteManyElementsResponse {
+
+}
 
 message CreateElementRequest {
   string parent = 1;
@@ -260,6 +292,23 @@ message GetElementHierarchicalListRequest {
 
 message GetElementHierarchicalListResponse {
   repeated HierarchicalElement elements = 1;
+}
+
+
+// -----------------------------
+// COMPONENTS
+// -----------------------------
+
+message CloneComponentRequest {
+  string componentId = 1;
+  string requestedUserId = 2;
+  string ownerId = 3;
+  optional string name = 4;
+  optional EditStatus status = 5;
+}
+
+message CloneComponentResponse {
+  string componentId = 1;
 }
 
 message CreateComponentRequest {

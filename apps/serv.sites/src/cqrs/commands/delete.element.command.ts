@@ -36,7 +36,7 @@ export class DeleteElementHandler
 
     this.eventBus.publish(
       new ElementDeletedEvent({
-        ...serialized,
+        elementId,
         deletedBy: requestedUserId,
       }),
     );

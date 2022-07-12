@@ -160,6 +160,30 @@ export interface Site {
   updatedAt?: Date;
 }
 
+export interface CreateManyElementsRequest {
+  elements: CreateElementRequest[];
+}
+
+export interface CreateManyElementsResponse {}
+
+export interface CreateElementsFromComponentRequest {
+  componentId: string;
+  parent: string;
+  owners: string[];
+  requestedUserId: string;
+  componentOwnerId: string;
+}
+
+export interface CreateElementsFromComponentResponse {}
+
+export interface DeleteManyElementsRequest {
+  requestedUserId: string;
+  elementIdList: string[];
+  owners: string[];
+}
+
+export interface DeleteManyElementsResponse {}
+
 export interface CreateElementRequest {
   parent: string;
   requestedUserId: string;
@@ -210,6 +234,18 @@ export interface GetElementHierarchicalListRequest {
 
 export interface GetElementHierarchicalListResponse {
   elements: HierarchicalElement[];
+}
+
+export interface CloneComponentRequest {
+  componentId: string;
+  requestedUserId: string;
+  ownerId: string;
+  name?: string | undefined;
+  status?: EditStatus | undefined;
+}
+
+export interface CloneComponentResponse {
+  componentId: string;
 }
 
 export interface CreateComponentRequest {
@@ -461,6 +497,10 @@ export interface SitesServiceClient {
     request: CreateComponentRequest
   ): Observable<CreateComponentResponse>;
 
+  cloneComponent(
+    request: CloneComponentRequest
+  ): Observable<CloneComponentResponse>;
+
   updateComponent(
     request: UpdateComponentRequest
   ): Observable<UpdateComponentResponse>;
@@ -491,6 +531,14 @@ export interface SitesServiceClient {
     request: CreateElementRequest
   ): Observable<CreateElementResponse>;
 
+  createManyElements(
+    request: CreateManyElementsRequest
+  ): Observable<CreateManyElementsResponse>;
+
+  createElementsFromComponent(
+    request: CreateElementsFromComponentRequest
+  ): Observable<CreateElementsFromComponentResponse>;
+
   updateElement(
     request: UpdateElementRequest
   ): Observable<UpdateElementResponse>;
@@ -498,6 +546,10 @@ export interface SitesServiceClient {
   deleteElement(
     request: DeleteElementRequest
   ): Observable<DeleteElementResponse>;
+
+  deleteManyElements(
+    request: DeleteManyElementsRequest
+  ): Observable<DeleteManyElementsResponse>;
 }
 
 export interface SitesServiceController {
@@ -618,6 +670,13 @@ export interface SitesServiceController {
     | Observable<CreateComponentResponse>
     | CreateComponentResponse;
 
+  cloneComponent(
+    request: CloneComponentRequest
+  ):
+    | Promise<CloneComponentResponse>
+    | Observable<CloneComponentResponse>
+    | CloneComponentResponse;
+
   updateComponent(
     request: UpdateComponentRequest
   ):
@@ -666,6 +725,20 @@ export interface SitesServiceController {
     | Observable<CreateElementResponse>
     | CreateElementResponse;
 
+  createManyElements(
+    request: CreateManyElementsRequest
+  ):
+    | Promise<CreateManyElementsResponse>
+    | Observable<CreateManyElementsResponse>
+    | CreateManyElementsResponse;
+
+  createElementsFromComponent(
+    request: CreateElementsFromComponentRequest
+  ):
+    | Promise<CreateElementsFromComponentResponse>
+    | Observable<CreateElementsFromComponentResponse>
+    | CreateElementsFromComponentResponse;
+
   updateElement(
     request: UpdateElementRequest
   ):
@@ -679,6 +752,13 @@ export interface SitesServiceController {
     | Promise<DeleteElementResponse>
     | Observable<DeleteElementResponse>
     | DeleteElementResponse;
+
+  deleteManyElements(
+    request: DeleteManyElementsRequest
+  ):
+    | Promise<DeleteManyElementsResponse>
+    | Observable<DeleteManyElementsResponse>
+    | DeleteManyElementsResponse;
 }
 
 export function SitesServiceControllerMethods() {
@@ -699,14 +779,18 @@ export function SitesServiceControllerMethods() {
       "getComponent",
       "getComponentList",
       "createComponent",
+      "cloneComponent",
       "updateComponent",
       "deleteComponent",
       "archiveComponent",
       "getElementFlatList",
       "getElementHierarchicalList",
       "createElement",
+      "createManyElements",
+      "createElementsFromComponent",
       "updateElement",
       "deleteElement",
+      "deleteManyElements",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(

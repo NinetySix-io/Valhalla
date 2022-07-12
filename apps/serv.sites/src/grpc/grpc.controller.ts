@@ -3,10 +3,16 @@ import {
   ArchiveComponentResponse,
   ArchivePageRequest,
   ArchivePageResponse,
+  CloneComponentRequest,
+  CloneComponentResponse,
   CreateComponentRequest,
   CreateComponentResponse,
   CreateElementRequest,
   CreateElementResponse,
+  CreateElementsFromComponentRequest,
+  CreateElementsFromComponentResponse,
+  CreateManyElementsRequest,
+  CreateManyElementsResponse,
   CreatePageRequest,
   CreatePageResponse,
   CreateSiteRequest,
@@ -15,6 +21,8 @@ import {
   DeleteComponentResponse,
   DeleteElementRequest,
   DeleteElementResponse,
+  DeleteManyElementsRequest,
+  DeleteManyElementsResponse,
   DeletePageRequest,
   DeletePageResponse,
   GetComponentListRequest,
@@ -51,13 +59,17 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { ArchiveComponentCommand } from '@app/cqrs/commands/archive.component.command';
 import { ArchivePageCommand } from '@app/cqrs/commands/archive.page.command';
+import { CloneComponentCommand } from '@app/cqrs/commands/clone.component.command';
 import { Controller } from '@nestjs/common';
 import { CreateComponentCommand } from '@app/cqrs/commands/create.component.command';
 import { CreateElementCommand } from '@app/cqrs/commands/create.element.command';
+import { CreateElementsFromComponentCommand } from '@app/cqrs/commands/create.elements.from.component.command';
+import { CreateManyElementsCommand } from '@app/cqrs/commands/create.many.elements.command';
 import { CreatePageCommand } from '@app/cqrs/commands/create.page.command';
 import { CreateSiteCommand } from '@app/cqrs/commands/create.site.command';
 import { DeleteComponentCommand } from '@app/cqrs/commands/delete.component.command';
 import { DeleteElementCommand } from '@app/cqrs/commands/delete.element.command';
+import { DeleteManyElementsCommand } from '@app/cqrs/commands/delete.many.elements.command';
 import { DeletePageCommand } from '@app/cqrs/commands/delete.page.command';
 import { GetComponentListQuery } from '@app/cqrs/queries/get.component.list.query';
 import { GetComponentQuery } from '@app/cqrs/queries/get.component.query';
@@ -83,6 +95,40 @@ export class gRpcController implements SitesServiceController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
+  createManyElements(
+    request: CreateManyElementsRequest,
+  ):
+    | CreateManyElementsResponse
+    | Promise<CreateManyElementsResponse>
+    | Observable<CreateManyElementsResponse> {
+    return this.commandBus.execute(new CreateManyElementsCommand(request));
+  }
+  cloneComponent(
+    request: CloneComponentRequest,
+  ):
+    | CloneComponentResponse
+    | Promise<CloneComponentResponse>
+    | Observable<CloneComponentResponse> {
+    return this.commandBus.execute(new CloneComponentCommand(request));
+  }
+  createElementsFromComponent(
+    request: CreateElementsFromComponentRequest,
+  ):
+    | CreateElementsFromComponentResponse
+    | Promise<CreateElementsFromComponentResponse>
+    | Observable<CreateElementsFromComponentResponse> {
+    return this.commandBus.execute(
+      new CreateElementsFromComponentCommand(request),
+    );
+  }
+  deleteManyElements(
+    request: DeleteManyElementsRequest,
+  ):
+    | DeleteManyElementsResponse
+    | Promise<DeleteManyElementsResponse>
+    | Observable<DeleteManyElementsResponse> {
+    return this.commandBus.execute(new DeleteManyElementsCommand(request));
+  }
   getElementFlatList(
     request: GetElementFlatListRequest,
   ):

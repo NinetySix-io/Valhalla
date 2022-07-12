@@ -5,7 +5,6 @@ import mongoose, { FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
 import { AnyParamConstructor } from '@typegoose/typegoose/lib/types';
 import { BaseSchema } from './base.schema';
 import { InternalServerErrorException } from '@nestjs/common';
-import { toObjectId } from '../lib';
 import { tryNice } from 'try-nice';
 
 export type ModelType<TModel extends BaseSchema> = ReturnModelType<
@@ -51,18 +50,28 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
     return this._model.find(filter);
   }
 
-  /**
-   * It creates a new document in the database using the `_model` property of the class
-   * @param item - CreatePayload<TModel>
-   * @returns The creation of the item.
-   */
+  /* Creating a single item. */
   async create(item: CreatePayload<TModel>) {
-    const [creation, error] = await tryNice(() =>
-      this._model.create({
-        _id: toObjectId(),
-        ...item,
-      }),
-    );
+    const [result] = await this._create([item]);
+    return result;
+  }
+
+  /**
+   * It creates many items.
+   * @param items - CreatePayload<TModel>
+   * @returns An array of the created items.
+   */
+  async createMany(items: CreatePayload<TModel>[]) {
+    return this._create(items);
+  }
+
+  /**
+   * It creates a new document in the database
+   * @param {CreatePayload<TModel>[]} item - CreatePayload<TModel>[]
+   * @returns The creation of the document.
+   */
+  private async _create(item: CreatePayload<TModel>[]) {
+    const [creation, error] = await tryNice(() => this._model.create(item));
 
     if (error) {
       throw new InternalServerErrorException(error, error.errmsg);
