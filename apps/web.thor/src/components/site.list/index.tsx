@@ -21,7 +21,7 @@ export const SiteList: React.FC<Props> = () => {
 
   return (
     <Container>
-      {sites.data?.getSiteList.map((site) => (
+      {sites.data?.siteList.map((site) => (
         <Link
           passHref
           key={site.id}

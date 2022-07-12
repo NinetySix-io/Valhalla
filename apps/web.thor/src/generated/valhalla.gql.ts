@@ -16,6 +16,8 @@ export type Scalars = {
   _FieldSet: any;
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: Date;
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSON: any;
 };
 
 export type AccessTokenQuery = {
@@ -87,6 +89,47 @@ export type AuthResponse = {
   readonly accountId: Scalars['String'];
 };
 
+/** Use to group multiple elements together */
+export type ComponentSchema = {
+  readonly __typename?: 'ComponentSchema';
+  /** Date entity was created */
+  readonly createdAt: Scalars['DateTime'];
+  /** Account ID */
+  readonly createdBy: Scalars['String'];
+  /** Identifier of the entity */
+  readonly id: Scalars['ID'];
+  /** Component's name */
+  readonly name: Scalars['String'];
+  /** Edit status */
+  readonly status: EditStatus;
+  /** Thumbnail URI */
+  readonly thumbnailUrl?: Maybe<Scalars['String']>;
+  /** Date entity was updated */
+  readonly updatedAt: Scalars['DateTime'];
+  /** Account ID */
+  readonly updatedBy: Scalars['String'];
+};
+
+export type CreateComponentInput = {
+  /** Component's name */
+  readonly name: Scalars['String'];
+};
+
+export type CreateElementInput = {
+  /** When is root, parent is not an element */
+  readonly isRoot?: InputMaybe<Scalars['Boolean']>;
+  /** Page ID */
+  readonly pageId: Scalars['String'];
+  /** Parent of element */
+  readonly parent: Scalars['String'];
+  /** Additional properties */
+  readonly props?: InputMaybe<Scalars['JSON']>;
+  /** Site ID */
+  readonly siteId: Scalars['String'];
+  /** Element type */
+  readonly type: ElementType;
+};
+
 export type CreateOrganizationInput = {
   /** Name of the organization */
   readonly name: Scalars['String'];
@@ -104,6 +147,130 @@ export type CreateSiteInput = {
   readonly name: Scalars['String'];
 };
 
+export type DeleteElementInput = {
+  /** Page ID */
+  readonly pageId: Scalars['String'];
+  /** Site ID */
+  readonly siteId: Scalars['String'];
+};
+
+export enum EditStatus {
+  ACTIVE = 'ACTIVE',
+  ARCHIVED = 'ARCHIVED',
+  DRAFT = 'DRAFT'
+}
+
+/** Base html element */
+export type ElementSchema = {
+  readonly __typename?: 'ElementSchema';
+  /** Date entity was created */
+  readonly createdAt: Scalars['DateTime'];
+  /** Identifier of the entity */
+  readonly id: Scalars['ID'];
+  /** When is root, parent is not an element */
+  readonly isRoot?: Maybe<Scalars['Boolean']>;
+  /** Parent of element */
+  readonly parent: Scalars['String'];
+  /** Additional properties */
+  readonly props?: Maybe<Scalars['JSON']>;
+  /** Element type */
+  readonly type: ElementType;
+  /** Date entity was updated */
+  readonly updatedAt: Scalars['DateTime'];
+  readonly updatedBy: Scalars['String'];
+};
+
+export enum ElementType {
+  A = 'a',
+  ABBR = 'abbr',
+  ADDRESS = 'address',
+  AREA = 'area',
+  ARTICLE = 'article',
+  ASIDE = 'aside',
+  AUDIO = 'audio',
+  B = 'b',
+  BDI = 'bdi',
+  BDO = 'bdo',
+  BLOCKQUOTE = 'blockquote',
+  BR = 'br',
+  CANVAS = 'canvas',
+  CITE = 'cite',
+  CODE = 'code',
+  DATA = 'data',
+  DD = 'dd',
+  DFN = 'dfn',
+  DIV = 'div',
+  DL = 'dl',
+  DT = 'dt',
+  EM = 'em',
+  EMBED = 'embed',
+  FIGCAPTION = 'figcaption',
+  FIGURE = 'figure',
+  FOOTER = 'footer',
+  H1 = 'h1',
+  H2 = 'h2',
+  H3 = 'h3',
+  H4 = 'h4',
+  H5 = 'h5',
+  H6 = 'h6',
+  HEADER = 'header',
+  HR = 'hr',
+  I = 'i',
+  IFRAME = 'iframe',
+  IMG = 'img',
+  KBD = 'kbd',
+  LI = 'li',
+  LINK = 'link',
+  MAIN = 'main',
+  MAP = 'map',
+  MARK = 'mark',
+  MATH = 'math',
+  MENU = 'menu',
+  META = 'meta',
+  NAV = 'nav',
+  NOSCRIPT = 'noscript',
+  OBJECT = 'object',
+  OL = 'ol',
+  P = 'p',
+  PICTURE = 'picture',
+  PORTAL = 'portal',
+  PRE = 'pre',
+  Q = 'q',
+  RP = 'rp',
+  RT = 'rt',
+  RUBY = 'ruby',
+  S = 's',
+  SAMP = 'samp',
+  SCRIPT = 'script',
+  SECTION = 'section',
+  SMALL = 'small',
+  SOURCE = 'source',
+  SPAN = 'span',
+  STRONG = 'strong',
+  STYLE = 'style',
+  SUB = 'sub',
+  SUP = 'sup',
+  SVG = 'svg',
+  TIME = 'time',
+  TITLE = 'title',
+  TRACK = 'track',
+  U = 'u',
+  UL = 'ul',
+  VAR = 'var',
+  VIDEO = 'video',
+  WBR = 'wbr'
+}
+
+export type HierarchicalElementResponse = {
+  readonly __typename?: 'HierarchicalElementResponse';
+  /** Identifier of the entity */
+  readonly id: Scalars['ID'];
+  /** Additional properties */
+  readonly props?: Maybe<Scalars['JSON']>;
+  /** Element type */
+  readonly type: ElementType;
+};
+
 export type LoginWithVerificationInput = {
   /** Username */
   readonly username: Scalars['String'];
@@ -119,12 +286,17 @@ export type Mutation = {
   readonly addEmailToAccount: Scalars['Boolean'];
   /** Add phone number to account */
   readonly addPhoneToAccount: Scalars['Boolean'];
+  readonly archiveComponent: Scalars['Boolean'];
   /** Archive an organization */
   readonly archiveOrganization: Scalars['String'];
+  readonly createComponent: ComponentSchema;
+  readonly createElement: Scalars['String'];
   /** Create an organization */
   readonly createOrganization: OrganizationSchema;
   readonly createPage: PageUpdatedResponse;
   readonly createSite: SiteUpdatedResponse;
+  readonly deleteComponent: Scalars['Boolean'];
+  readonly deleteElement: Scalars['Boolean'];
   readonly deletePage: PageUpdatedResponse;
   readonly getOrCreateFirstPage: PageSchema;
   /** Login to account with verification code */
@@ -143,6 +315,8 @@ export type Mutation = {
   readonly sendVerificationCode: Scalars['String'];
   /** Update account */
   readonly updateAccount: Scalars['Boolean'];
+  readonly updateComponent: Scalars['Boolean'];
+  readonly updateElement: Scalars['Boolean'];
   readonly updatePage: PageUpdatedResponse;
   readonly updateSite: SiteUpdatedResponse;
 };
@@ -158,8 +332,23 @@ export type MutationAddPhoneToAccountArgs = {
 };
 
 
+export type MutationArchiveComponentArgs = {
+  id: Scalars['String'];
+};
+
+
 export type MutationArchiveOrganizationArgs = {
   orgId: Scalars['String'];
+};
+
+
+export type MutationCreateComponentArgs = {
+  input: CreateComponentInput;
+};
+
+
+export type MutationCreateElementArgs = {
+  input: CreateElementInput;
 };
 
 
@@ -179,8 +368,19 @@ export type MutationCreateSiteArgs = {
 };
 
 
+export type MutationDeleteComponentArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationDeleteElementArgs = {
+  id: Scalars['String'];
+  input: DeleteElementInput;
+};
+
+
 export type MutationDeletePageArgs = {
-  pageId: Scalars['String'];
+  id: Scalars['String'];
   siteId: Scalars['String'];
 };
 
@@ -225,16 +425,28 @@ export type MutationUpdateAccountArgs = {
 };
 
 
+export type MutationUpdateComponentArgs = {
+  id: Scalars['String'];
+  input: UpdateComponentInput;
+};
+
+
+export type MutationUpdateElementArgs = {
+  id: Scalars['String'];
+  input: UpdateElementInput;
+};
+
+
 export type MutationUpdatePageArgs = {
+  id: Scalars['String'];
   input: UpdatePageInput;
-  pageId: Scalars['String'];
   siteId: Scalars['String'];
 };
 
 
 export type MutationUpdateSiteArgs = {
+  id: Scalars['String'];
   input: UpdateSiteInput;
-  siteId: Scalars['String'];
 };
 
 export enum OrgMemberRole {
@@ -321,6 +533,13 @@ export enum OrganizationStatus {
   SUSPENDED = 'SUSPENDED'
 }
 
+export type PageContextInput = {
+  /** Page ID */
+  readonly pageId: Scalars['String'];
+  /** Site ID */
+  readonly siteId: Scalars['String'];
+};
+
 export type PageSchema = {
   readonly __typename?: 'PageSchema';
   /** Date entity was created */
@@ -335,8 +554,8 @@ export type PageSchema = {
   readonly isLoneTitle?: Maybe<Scalars['Boolean']>;
   /** Page url */
   readonly slug?: Maybe<Scalars['String']>;
-  /** Page deployment status */
-  readonly status: Scalars['String'];
+  /** Edit status */
+  readonly status: EditStatus;
   /** Page title */
   readonly title: Scalars['String'];
   /** Date entity was updated */
@@ -349,8 +568,8 @@ export type PageUpdatedResponse = {
   readonly __typename?: 'PageUpdatedResponse';
   /** Identifier of the entity */
   readonly id: Scalars['ID'];
-  /** Page deployment status */
-  readonly status: Scalars['String'];
+  /** Edit status */
+  readonly status: EditStatus;
 };
 
 export type Query = {
@@ -359,10 +578,10 @@ export type Query = {
   readonly accessToken: TokenResponse;
   /** Get current logged in user information */
   readonly account: AccountSchema;
-  readonly getPage: PageSchema;
-  readonly getPageList: ReadonlyArray<PageSchema>;
-  readonly getSite: SiteSchema;
-  readonly getSiteList: ReadonlyArray<SiteSchema>;
+  readonly component: ComponentSchema;
+  readonly componentList: ReadonlyArray<ComponentSchema>;
+  readonly flatElementList: ReadonlyArray<ElementSchema>;
+  readonly hierarchicalElementList: ReadonlyArray<HierarchicalElementResponse>;
   /** Get current organization */
   readonly organization: ReadonlyArray<OrganizationSchema>;
   /** Find organization by slug */
@@ -371,8 +590,12 @@ export type Query = {
   readonly organizationMembership: OrgMemberSchema;
   /** Get current user's organizations memberships */
   readonly organizations: ReadonlyArray<OrganizationSchema>;
+  readonly page: PageSchema;
+  readonly pageList: ReadonlyArray<PageSchema>;
   /** Get current session user */
   readonly session: SessionResponse;
+  readonly site: SiteSchema;
+  readonly siteList: ReadonlyArray<SiteSchema>;
   /** Validate verification code */
   readonly validateVerificationCode: Scalars['Boolean'];
 };
@@ -383,24 +606,39 @@ export type QueryAccessTokenArgs = {
 };
 
 
-export type QueryGetPageArgs = {
-  pageId: Scalars['String'];
-  siteId: Scalars['String'];
+export type QueryComponentArgs = {
+  id: Scalars['String'];
 };
 
 
-export type QueryGetPageListArgs = {
-  siteId: Scalars['String'];
+export type QueryFlatElementListArgs = {
+  filter: PageContextInput;
 };
 
 
-export type QueryGetSiteArgs = {
-  siteId: Scalars['String'];
+export type QueryHierarchicalElementListArgs = {
+  filter: PageContextInput;
 };
 
 
 export type QueryOrganizationBySlugArgs = {
   slug: Scalars['String'];
+};
+
+
+export type QueryPageArgs = {
+  id: Scalars['String'];
+  siteId: Scalars['String'];
+};
+
+
+export type QueryPageListArgs = {
+  siteId: Scalars['String'];
+};
+
+
+export type QuerySiteArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -489,6 +727,24 @@ export type UpdateAccountInput = {
   readonly lastName?: InputMaybe<Scalars['String']>;
 };
 
+export type UpdateComponentInput = {
+  /** Component's name */
+  readonly name?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateElementInput = {
+  /** Page ID */
+  readonly pageId: Scalars['String'];
+  /** Parent of element */
+  readonly parent?: InputMaybe<Scalars['String']>;
+  /** Additional properties */
+  readonly props?: InputMaybe<Scalars['JSON']>;
+  /** Site ID */
+  readonly siteId: Scalars['String'];
+  /** Element type */
+  readonly type?: InputMaybe<ElementType>;
+};
+
 export type UpdatePageInput = {
   /** Page description */
   readonly description?: InputMaybe<Scalars['String']>;
@@ -573,6 +829,86 @@ export type GetAccountQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetAccountQuery = { readonly __typename?: 'Query', readonly account: { readonly __typename?: 'AccountSchema', readonly firstName: string, readonly lastName: string, readonly displayName: string } };
 
+export type GetComponentQueryVariables = Exact<{
+  componentId: Scalars['String'];
+}>;
+
+
+export type GetComponentQuery = { readonly __typename?: 'Query', readonly component: { readonly __typename?: 'ComponentSchema', readonly id: string, readonly name: string, readonly status: EditStatus, readonly updatedBy: string, readonly thumbnailUrl?: string | null, readonly updatedAt: Date } };
+
+export type GetComponentListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetComponentListQuery = { readonly __typename?: 'Query', readonly componentList: ReadonlyArray<{ readonly __typename?: 'ComponentSchema', readonly id: string, readonly name: string, readonly thumbnailUrl?: string | null }> };
+
+export type CreateComponentMutationVariables = Exact<{
+  input: CreateComponentInput;
+}>;
+
+
+export type CreateComponentMutation = { readonly __typename?: 'Mutation', readonly createComponent: { readonly __typename?: 'ComponentSchema', readonly id: string } };
+
+export type UpdateComponentMutationVariables = Exact<{
+  componentId: Scalars['String'];
+  input: UpdateComponentInput;
+}>;
+
+
+export type UpdateComponentMutation = { readonly __typename?: 'Mutation', readonly updateComponent: boolean };
+
+export type ArchiveComponentMutationVariables = Exact<{
+  componentId: Scalars['String'];
+}>;
+
+
+export type ArchiveComponentMutation = { readonly __typename?: 'Mutation', readonly archiveComponent: boolean };
+
+export type DeleteComponentMutationVariables = Exact<{
+  componentId: Scalars['String'];
+}>;
+
+
+export type DeleteComponentMutation = { readonly __typename?: 'Mutation', readonly deleteComponent: boolean };
+
+export type GetFlatElementListQueryVariables = Exact<{
+  siteId: Scalars['String'];
+  pageId: Scalars['String'];
+}>;
+
+
+export type GetFlatElementListQuery = { readonly __typename?: 'Query', readonly flatElementList: ReadonlyArray<{ readonly __typename?: 'ElementSchema', readonly id: string, readonly parent: string, readonly type: ElementType, readonly props?: any | null }> };
+
+export type GetHierarchicalElementListQueryVariables = Exact<{
+  siteId: Scalars['String'];
+  pageId: Scalars['String'];
+}>;
+
+
+export type GetHierarchicalElementListQuery = { readonly __typename?: 'Query', readonly hierarchicalElementList: ReadonlyArray<{ readonly __typename?: 'HierarchicalElementResponse', readonly type: ElementType, readonly props?: any | null }> };
+
+export type CreateElementMutationVariables = Exact<{
+  payload: CreateElementInput;
+}>;
+
+
+export type CreateElementMutation = { readonly __typename?: 'Mutation', readonly createElement: string };
+
+export type UpdateElementMutationVariables = Exact<{
+  elementId: Scalars['String'];
+  payload: UpdateElementInput;
+}>;
+
+
+export type UpdateElementMutation = { readonly __typename?: 'Mutation', readonly updateElement: boolean };
+
+export type DeleteElementMutationVariables = Exact<{
+  elementId: Scalars['String'];
+  payload: DeleteElementInput;
+}>;
+
+
+export type DeleteElementMutation = { readonly __typename?: 'Mutation', readonly deleteElement: boolean };
+
 export type GetOrgMembershipQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -622,7 +958,7 @@ export type GetPageListQueryVariables = Exact<{
 }>;
 
 
-export type GetPageListQuery = { readonly __typename?: 'Query', readonly getPageList: ReadonlyArray<{ readonly __typename?: 'PageSchema', readonly id: string, readonly title: string, readonly status: string }> };
+export type GetPageListQuery = { readonly __typename?: 'Query', readonly pageList: ReadonlyArray<{ readonly __typename?: 'PageSchema', readonly id: string, readonly title: string, readonly status: EditStatus }> };
 
 export type GetPageQueryVariables = Exact<{
   siteId: Scalars['String'];
@@ -630,7 +966,7 @@ export type GetPageQueryVariables = Exact<{
 }>;
 
 
-export type GetPageQuery = { readonly __typename?: 'Query', readonly getPage: { readonly __typename?: 'PageSchema', readonly id: string, readonly title: string, readonly status: string, readonly isLoneTitle?: boolean | null, readonly description?: string | null, readonly createdAt: Date, readonly updatedAt: Date, readonly createdBy: string, readonly updatedBy: string } };
+export type GetPageQuery = { readonly __typename?: 'Query', readonly page: { readonly __typename?: 'PageSchema', readonly id: string, readonly title: string, readonly status: EditStatus, readonly isLoneTitle?: boolean | null, readonly description?: string | null, readonly createdAt: Date, readonly updatedAt: Date, readonly createdBy: string, readonly updatedBy: string } };
 
 export type CreatePageMutationVariables = Exact<{
   siteId: Scalars['String'];
@@ -638,7 +974,7 @@ export type CreatePageMutationVariables = Exact<{
 }>;
 
 
-export type CreatePageMutation = { readonly __typename?: 'Mutation', readonly createPage: { readonly __typename?: 'PageUpdatedResponse', readonly id: string, readonly status: string } };
+export type CreatePageMutation = { readonly __typename?: 'Mutation', readonly createPage: { readonly __typename?: 'PageUpdatedResponse', readonly id: string, readonly status: EditStatus } };
 
 export type UpdatePageMutationVariables = Exact<{
   siteId: Scalars['String'];
@@ -647,7 +983,7 @@ export type UpdatePageMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePageMutation = { readonly __typename?: 'Mutation', readonly updatePage: { readonly __typename?: 'PageUpdatedResponse', readonly status: string } };
+export type UpdatePageMutation = { readonly __typename?: 'Mutation', readonly updatePage: { readonly __typename?: 'PageUpdatedResponse', readonly status: EditStatus } };
 
 export type DeletePageMutationVariables = Exact<{
   siteId: Scalars['String'];
@@ -655,7 +991,7 @@ export type DeletePageMutationVariables = Exact<{
 }>;
 
 
-export type DeletePageMutation = { readonly __typename?: 'Mutation', readonly deletePage: { readonly __typename?: 'PageUpdatedResponse', readonly status: string } };
+export type DeletePageMutation = { readonly __typename?: 'Mutation', readonly deletePage: { readonly __typename?: 'PageUpdatedResponse', readonly status: EditStatus } };
 
 export type GetFirstPageMutationVariables = Exact<{
   siteId: Scalars['String'];
@@ -679,14 +1015,14 @@ export type GetAccessTokenQuery = { readonly __typename?: 'Query', readonly acce
 export type GetSitesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSitesQuery = { readonly __typename?: 'Query', readonly getSiteList: ReadonlyArray<{ readonly __typename?: 'SiteSchema', readonly id: string, readonly name: string, readonly status: SiteStatus }> };
+export type GetSitesQuery = { readonly __typename?: 'Query', readonly siteList: ReadonlyArray<{ readonly __typename?: 'SiteSchema', readonly id: string, readonly name: string, readonly status: SiteStatus }> };
 
-export type GetSiteByIdQueryVariables = Exact<{
+export type GetSiteQueryVariables = Exact<{
   siteId: Scalars['String'];
 }>;
 
 
-export type GetSiteByIdQuery = { readonly __typename?: 'Query', readonly getSite: { readonly __typename?: 'SiteSchema', readonly id: string, readonly name: string, readonly updatedAt: Date } };
+export type GetSiteQuery = { readonly __typename?: 'Query', readonly site: { readonly __typename?: 'SiteSchema', readonly id: string, readonly name: string, readonly updatedAt: Date } };
 
 export type CreateSiteMutationVariables = Exact<{
   name: Scalars['String'];
@@ -995,6 +1331,392 @@ export type GetAccountQueryResult = Apollo.QueryResult<GetAccountQuery, GetAccou
 export function refetchGetAccountQuery(variables?: GetAccountQueryVariables) {
       return { query: GetAccountDocument, variables: variables }
     }
+export const GetComponentDocument = gql`
+    query getComponent($componentId: String!) {
+  component(id: $componentId) {
+    id
+    name
+    status
+    updatedBy
+    thumbnailUrl
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useGetComponentQuery__
+ *
+ * To run a query within a React component, call `useGetComponentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetComponentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetComponentQuery({
+ *   variables: {
+ *      componentId: // value for 'componentId'
+ *   },
+ * });
+ */
+export function useGetComponentQuery(baseOptions: Apollo.QueryHookOptions<GetComponentQuery, GetComponentQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetComponentQuery, GetComponentQueryVariables>(GetComponentDocument, options);
+      }
+export function useGetComponentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetComponentQuery, GetComponentQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetComponentQuery, GetComponentQueryVariables>(GetComponentDocument, options);
+        }
+export type GetComponentQueryHookResult = ReturnType<typeof useGetComponentQuery>;
+export type GetComponentLazyQueryHookResult = ReturnType<typeof useGetComponentLazyQuery>;
+export type GetComponentQueryResult = Apollo.QueryResult<GetComponentQuery, GetComponentQueryVariables>;
+export function refetchGetComponentQuery(variables: GetComponentQueryVariables) {
+      return { query: GetComponentDocument, variables: variables }
+    }
+export const GetComponentListDocument = gql`
+    query getComponentList {
+  componentList {
+    id
+    name
+    thumbnailUrl
+  }
+}
+    `;
+
+/**
+ * __useGetComponentListQuery__
+ *
+ * To run a query within a React component, call `useGetComponentListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetComponentListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetComponentListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetComponentListQuery(baseOptions?: Apollo.QueryHookOptions<GetComponentListQuery, GetComponentListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetComponentListQuery, GetComponentListQueryVariables>(GetComponentListDocument, options);
+      }
+export function useGetComponentListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetComponentListQuery, GetComponentListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetComponentListQuery, GetComponentListQueryVariables>(GetComponentListDocument, options);
+        }
+export type GetComponentListQueryHookResult = ReturnType<typeof useGetComponentListQuery>;
+export type GetComponentListLazyQueryHookResult = ReturnType<typeof useGetComponentListLazyQuery>;
+export type GetComponentListQueryResult = Apollo.QueryResult<GetComponentListQuery, GetComponentListQueryVariables>;
+export function refetchGetComponentListQuery(variables?: GetComponentListQueryVariables) {
+      return { query: GetComponentListDocument, variables: variables }
+    }
+export const CreateComponentDocument = gql`
+    mutation createComponent($input: CreateComponentInput!) {
+  createComponent(input: $input) {
+    id
+  }
+}
+    `;
+export type CreateComponentMutationFn = Apollo.MutationFunction<CreateComponentMutation, CreateComponentMutationVariables>;
+
+/**
+ * __useCreateComponentMutation__
+ *
+ * To run a mutation, you first call `useCreateComponentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateComponentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createComponentMutation, { data, loading, error }] = useCreateComponentMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateComponentMutation(baseOptions?: Apollo.MutationHookOptions<CreateComponentMutation, CreateComponentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateComponentMutation, CreateComponentMutationVariables>(CreateComponentDocument, options);
+      }
+export type CreateComponentMutationHookResult = ReturnType<typeof useCreateComponentMutation>;
+export type CreateComponentMutationResult = Apollo.MutationResult<CreateComponentMutation>;
+export type CreateComponentMutationOptions = Apollo.BaseMutationOptions<CreateComponentMutation, CreateComponentMutationVariables>;
+export const UpdateComponentDocument = gql`
+    mutation updateComponent($componentId: String!, $input: UpdateComponentInput!) {
+  updateComponent(id: $componentId, input: $input)
+}
+    `;
+export type UpdateComponentMutationFn = Apollo.MutationFunction<UpdateComponentMutation, UpdateComponentMutationVariables>;
+
+/**
+ * __useUpdateComponentMutation__
+ *
+ * To run a mutation, you first call `useUpdateComponentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateComponentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateComponentMutation, { data, loading, error }] = useUpdateComponentMutation({
+ *   variables: {
+ *      componentId: // value for 'componentId'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateComponentMutation(baseOptions?: Apollo.MutationHookOptions<UpdateComponentMutation, UpdateComponentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateComponentMutation, UpdateComponentMutationVariables>(UpdateComponentDocument, options);
+      }
+export type UpdateComponentMutationHookResult = ReturnType<typeof useUpdateComponentMutation>;
+export type UpdateComponentMutationResult = Apollo.MutationResult<UpdateComponentMutation>;
+export type UpdateComponentMutationOptions = Apollo.BaseMutationOptions<UpdateComponentMutation, UpdateComponentMutationVariables>;
+export const ArchiveComponentDocument = gql`
+    mutation archiveComponent($componentId: String!) {
+  archiveComponent(id: $componentId)
+}
+    `;
+export type ArchiveComponentMutationFn = Apollo.MutationFunction<ArchiveComponentMutation, ArchiveComponentMutationVariables>;
+
+/**
+ * __useArchiveComponentMutation__
+ *
+ * To run a mutation, you first call `useArchiveComponentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useArchiveComponentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [archiveComponentMutation, { data, loading, error }] = useArchiveComponentMutation({
+ *   variables: {
+ *      componentId: // value for 'componentId'
+ *   },
+ * });
+ */
+export function useArchiveComponentMutation(baseOptions?: Apollo.MutationHookOptions<ArchiveComponentMutation, ArchiveComponentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ArchiveComponentMutation, ArchiveComponentMutationVariables>(ArchiveComponentDocument, options);
+      }
+export type ArchiveComponentMutationHookResult = ReturnType<typeof useArchiveComponentMutation>;
+export type ArchiveComponentMutationResult = Apollo.MutationResult<ArchiveComponentMutation>;
+export type ArchiveComponentMutationOptions = Apollo.BaseMutationOptions<ArchiveComponentMutation, ArchiveComponentMutationVariables>;
+export const DeleteComponentDocument = gql`
+    mutation deleteComponent($componentId: String!) {
+  deleteComponent(id: $componentId)
+}
+    `;
+export type DeleteComponentMutationFn = Apollo.MutationFunction<DeleteComponentMutation, DeleteComponentMutationVariables>;
+
+/**
+ * __useDeleteComponentMutation__
+ *
+ * To run a mutation, you first call `useDeleteComponentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteComponentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteComponentMutation, { data, loading, error }] = useDeleteComponentMutation({
+ *   variables: {
+ *      componentId: // value for 'componentId'
+ *   },
+ * });
+ */
+export function useDeleteComponentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteComponentMutation, DeleteComponentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteComponentMutation, DeleteComponentMutationVariables>(DeleteComponentDocument, options);
+      }
+export type DeleteComponentMutationHookResult = ReturnType<typeof useDeleteComponentMutation>;
+export type DeleteComponentMutationResult = Apollo.MutationResult<DeleteComponentMutation>;
+export type DeleteComponentMutationOptions = Apollo.BaseMutationOptions<DeleteComponentMutation, DeleteComponentMutationVariables>;
+export const GetFlatElementListDocument = gql`
+    query getFlatElementList($siteId: String!, $pageId: String!) {
+  flatElementList(filter: {pageId: $pageId, siteId: $siteId}) {
+    id
+    parent
+    type
+    props
+  }
+}
+    `;
+
+/**
+ * __useGetFlatElementListQuery__
+ *
+ * To run a query within a React component, call `useGetFlatElementListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFlatElementListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFlatElementListQuery({
+ *   variables: {
+ *      siteId: // value for 'siteId'
+ *      pageId: // value for 'pageId'
+ *   },
+ * });
+ */
+export function useGetFlatElementListQuery(baseOptions: Apollo.QueryHookOptions<GetFlatElementListQuery, GetFlatElementListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetFlatElementListQuery, GetFlatElementListQueryVariables>(GetFlatElementListDocument, options);
+      }
+export function useGetFlatElementListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFlatElementListQuery, GetFlatElementListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetFlatElementListQuery, GetFlatElementListQueryVariables>(GetFlatElementListDocument, options);
+        }
+export type GetFlatElementListQueryHookResult = ReturnType<typeof useGetFlatElementListQuery>;
+export type GetFlatElementListLazyQueryHookResult = ReturnType<typeof useGetFlatElementListLazyQuery>;
+export type GetFlatElementListQueryResult = Apollo.QueryResult<GetFlatElementListQuery, GetFlatElementListQueryVariables>;
+export function refetchGetFlatElementListQuery(variables: GetFlatElementListQueryVariables) {
+      return { query: GetFlatElementListDocument, variables: variables }
+    }
+export const GetHierarchicalElementListDocument = gql`
+    query getHierarchicalElementList($siteId: String!, $pageId: String!) {
+  hierarchicalElementList(filter: {pageId: $pageId, siteId: $siteId}) {
+    type
+    props
+  }
+}
+    `;
+
+/**
+ * __useGetHierarchicalElementListQuery__
+ *
+ * To run a query within a React component, call `useGetHierarchicalElementListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetHierarchicalElementListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetHierarchicalElementListQuery({
+ *   variables: {
+ *      siteId: // value for 'siteId'
+ *      pageId: // value for 'pageId'
+ *   },
+ * });
+ */
+export function useGetHierarchicalElementListQuery(baseOptions: Apollo.QueryHookOptions<GetHierarchicalElementListQuery, GetHierarchicalElementListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetHierarchicalElementListQuery, GetHierarchicalElementListQueryVariables>(GetHierarchicalElementListDocument, options);
+      }
+export function useGetHierarchicalElementListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetHierarchicalElementListQuery, GetHierarchicalElementListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetHierarchicalElementListQuery, GetHierarchicalElementListQueryVariables>(GetHierarchicalElementListDocument, options);
+        }
+export type GetHierarchicalElementListQueryHookResult = ReturnType<typeof useGetHierarchicalElementListQuery>;
+export type GetHierarchicalElementListLazyQueryHookResult = ReturnType<typeof useGetHierarchicalElementListLazyQuery>;
+export type GetHierarchicalElementListQueryResult = Apollo.QueryResult<GetHierarchicalElementListQuery, GetHierarchicalElementListQueryVariables>;
+export function refetchGetHierarchicalElementListQuery(variables: GetHierarchicalElementListQueryVariables) {
+      return { query: GetHierarchicalElementListDocument, variables: variables }
+    }
+export const CreateElementDocument = gql`
+    mutation createElement($payload: CreateElementInput!) {
+  createElement(input: $payload)
+}
+    `;
+export type CreateElementMutationFn = Apollo.MutationFunction<CreateElementMutation, CreateElementMutationVariables>;
+
+/**
+ * __useCreateElementMutation__
+ *
+ * To run a mutation, you first call `useCreateElementMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateElementMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createElementMutation, { data, loading, error }] = useCreateElementMutation({
+ *   variables: {
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useCreateElementMutation(baseOptions?: Apollo.MutationHookOptions<CreateElementMutation, CreateElementMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateElementMutation, CreateElementMutationVariables>(CreateElementDocument, options);
+      }
+export type CreateElementMutationHookResult = ReturnType<typeof useCreateElementMutation>;
+export type CreateElementMutationResult = Apollo.MutationResult<CreateElementMutation>;
+export type CreateElementMutationOptions = Apollo.BaseMutationOptions<CreateElementMutation, CreateElementMutationVariables>;
+export const UpdateElementDocument = gql`
+    mutation updateElement($elementId: String!, $payload: UpdateElementInput!) {
+  updateElement(id: $elementId, input: $payload)
+}
+    `;
+export type UpdateElementMutationFn = Apollo.MutationFunction<UpdateElementMutation, UpdateElementMutationVariables>;
+
+/**
+ * __useUpdateElementMutation__
+ *
+ * To run a mutation, you first call `useUpdateElementMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateElementMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateElementMutation, { data, loading, error }] = useUpdateElementMutation({
+ *   variables: {
+ *      elementId: // value for 'elementId'
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useUpdateElementMutation(baseOptions?: Apollo.MutationHookOptions<UpdateElementMutation, UpdateElementMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateElementMutation, UpdateElementMutationVariables>(UpdateElementDocument, options);
+      }
+export type UpdateElementMutationHookResult = ReturnType<typeof useUpdateElementMutation>;
+export type UpdateElementMutationResult = Apollo.MutationResult<UpdateElementMutation>;
+export type UpdateElementMutationOptions = Apollo.BaseMutationOptions<UpdateElementMutation, UpdateElementMutationVariables>;
+export const DeleteElementDocument = gql`
+    mutation deleteElement($elementId: String!, $payload: DeleteElementInput!) {
+  deleteElement(id: $elementId, input: $payload)
+}
+    `;
+export type DeleteElementMutationFn = Apollo.MutationFunction<DeleteElementMutation, DeleteElementMutationVariables>;
+
+/**
+ * __useDeleteElementMutation__
+ *
+ * To run a mutation, you first call `useDeleteElementMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteElementMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteElementMutation, { data, loading, error }] = useDeleteElementMutation({
+ *   variables: {
+ *      elementId: // value for 'elementId'
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useDeleteElementMutation(baseOptions?: Apollo.MutationHookOptions<DeleteElementMutation, DeleteElementMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteElementMutation, DeleteElementMutationVariables>(DeleteElementDocument, options);
+      }
+export type DeleteElementMutationHookResult = ReturnType<typeof useDeleteElementMutation>;
+export type DeleteElementMutationResult = Apollo.MutationResult<DeleteElementMutation>;
+export type DeleteElementMutationOptions = Apollo.BaseMutationOptions<DeleteElementMutation, DeleteElementMutationVariables>;
 export const GetOrgMembershipDocument = gql`
     query getOrgMembership {
   organizationMembership {
@@ -1255,7 +1977,7 @@ export type RestoreOrganizationMutationResult = Apollo.MutationResult<RestoreOrg
 export type RestoreOrganizationMutationOptions = Apollo.BaseMutationOptions<RestoreOrganizationMutation, RestoreOrganizationMutationVariables>;
 export const GetPageListDocument = gql`
     query getPageList($siteId: String!) {
-  getPageList(siteId: $siteId) {
+  pageList(siteId: $siteId) {
     id
     title
     status
@@ -1295,7 +2017,7 @@ export function refetchGetPageListQuery(variables: GetPageListQueryVariables) {
     }
 export const GetPageDocument = gql`
     query getPage($siteId: String!, $pageId: String!) {
-  getPage(siteId: $siteId, pageId: $pageId) {
+  page(siteId: $siteId, id: $pageId) {
     id
     title
     status
@@ -1377,7 +2099,7 @@ export type CreatePageMutationResult = Apollo.MutationResult<CreatePageMutation>
 export type CreatePageMutationOptions = Apollo.BaseMutationOptions<CreatePageMutation, CreatePageMutationVariables>;
 export const UpdatePageDocument = gql`
     mutation updatePage($siteId: String!, $pageId: String!, $input: UpdatePageInput!) {
-  updatePage(siteId: $siteId, pageId: $pageId, input: $input) {
+  updatePage(siteId: $siteId, id: $pageId, input: $input) {
     status
   }
 }
@@ -1412,7 +2134,7 @@ export type UpdatePageMutationResult = Apollo.MutationResult<UpdatePageMutation>
 export type UpdatePageMutationOptions = Apollo.BaseMutationOptions<UpdatePageMutation, UpdatePageMutationVariables>;
 export const DeletePageDocument = gql`
     mutation deletePage($siteId: String!, $pageId: String!) {
-  deletePage(siteId: $siteId, pageId: $pageId) {
+  deletePage(siteId: $siteId, id: $pageId) {
     status
   }
 }
@@ -1555,7 +2277,7 @@ export function refetchGetAccessTokenQuery(variables?: GetAccessTokenQueryVariab
     }
 export const GetSitesDocument = gql`
     query getSites {
-  getSiteList {
+  siteList {
     id
     name
     status
@@ -1592,9 +2314,9 @@ export type GetSitesQueryResult = Apollo.QueryResult<GetSitesQuery, GetSitesQuer
 export function refetchGetSitesQuery(variables?: GetSitesQueryVariables) {
       return { query: GetSitesDocument, variables: variables }
     }
-export const GetSiteByIdDocument = gql`
-    query getSiteById($siteId: String!) {
-  getSite(siteId: $siteId) {
+export const GetSiteDocument = gql`
+    query getSite($siteId: String!) {
+  site(id: $siteId) {
     id
     name
     updatedAt
@@ -1603,34 +2325,34 @@ export const GetSiteByIdDocument = gql`
     `;
 
 /**
- * __useGetSiteByIdQuery__
+ * __useGetSiteQuery__
  *
- * To run a query within a React component, call `useGetSiteByIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetSiteByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetSiteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSiteQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetSiteByIdQuery({
+ * const { data, loading, error } = useGetSiteQuery({
  *   variables: {
  *      siteId: // value for 'siteId'
  *   },
  * });
  */
-export function useGetSiteByIdQuery(baseOptions: Apollo.QueryHookOptions<GetSiteByIdQuery, GetSiteByIdQueryVariables>) {
+export function useGetSiteQuery(baseOptions: Apollo.QueryHookOptions<GetSiteQuery, GetSiteQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetSiteByIdQuery, GetSiteByIdQueryVariables>(GetSiteByIdDocument, options);
+        return Apollo.useQuery<GetSiteQuery, GetSiteQueryVariables>(GetSiteDocument, options);
       }
-export function useGetSiteByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSiteByIdQuery, GetSiteByIdQueryVariables>) {
+export function useGetSiteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSiteQuery, GetSiteQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetSiteByIdQuery, GetSiteByIdQueryVariables>(GetSiteByIdDocument, options);
+          return Apollo.useLazyQuery<GetSiteQuery, GetSiteQueryVariables>(GetSiteDocument, options);
         }
-export type GetSiteByIdQueryHookResult = ReturnType<typeof useGetSiteByIdQuery>;
-export type GetSiteByIdLazyQueryHookResult = ReturnType<typeof useGetSiteByIdLazyQuery>;
-export type GetSiteByIdQueryResult = Apollo.QueryResult<GetSiteByIdQuery, GetSiteByIdQueryVariables>;
-export function refetchGetSiteByIdQuery(variables: GetSiteByIdQueryVariables) {
-      return { query: GetSiteByIdDocument, variables: variables }
+export type GetSiteQueryHookResult = ReturnType<typeof useGetSiteQuery>;
+export type GetSiteLazyQueryHookResult = ReturnType<typeof useGetSiteLazyQuery>;
+export type GetSiteQueryResult = Apollo.QueryResult<GetSiteQuery, GetSiteQueryVariables>;
+export function refetchGetSiteQuery(variables: GetSiteQueryVariables) {
+      return { query: GetSiteDocument, variables: variables }
     }
 export const CreateSiteDocument = gql`
     mutation createSite($name: String!) {
@@ -1667,7 +2389,7 @@ export type CreateSiteMutationResult = Apollo.MutationResult<CreateSiteMutation>
 export type CreateSiteMutationOptions = Apollo.BaseMutationOptions<CreateSiteMutation, CreateSiteMutationVariables>;
 export const UpdateSiteDocument = gql`
     mutation updateSite($siteId: String!, $name: String!) {
-  updateSite(input: {name: $name}, siteId: $siteId) {
+  updateSite(input: {name: $name}, id: $siteId) {
     id
     status
   }

@@ -1,0 +1,27 @@
+query getFlatElementList($siteId: String!, $pageId: String!) {
+  flatElementList(filter: { pageId: $pageId, siteId: $siteId }) {
+    id
+    parent
+    type
+    props
+  }
+}
+
+query getHierarchicalElementList($siteId: String!, $pageId: String!) {
+  hierarchicalElementList(filter: { pageId: $pageId, siteId: $siteId }) {
+    type
+    props
+  }
+}
+
+mutation createElement($payload: CreateElementInput!) {
+  createElement(input: $payload)
+}
+
+mutation updateElement($elementId: String!, $payload: UpdateElementInput!) {
+  updateElement(id: $elementId, input: $payload)
+}
+
+mutation deleteElement($elementId: String!, $payload: DeleteElementInput!) {
+  deleteElement(id: $elementId, input: $payload)
+}

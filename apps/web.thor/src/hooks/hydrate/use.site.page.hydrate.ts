@@ -25,7 +25,7 @@ export function useSitePageHydrate() {
   return {
     error,
     loading,
-    data: data?.getPage,
+    data: data?.page,
     refetch,
   };
 }

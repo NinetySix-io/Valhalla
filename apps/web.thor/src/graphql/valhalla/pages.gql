@@ -1,5 +1,5 @@
 query getPageList($siteId: String!) {
-  getPageList(siteId: $siteId) {
+  pageList(siteId: $siteId) {
     id
     title
     status
@@ -7,7 +7,7 @@ query getPageList($siteId: String!) {
 }
 
 query getPage($siteId: String!, $pageId: String!) {
-  getPage(siteId: $siteId, pageId: $pageId) {
+  page(siteId: $siteId, id: $pageId) {
     id
     title
     status
@@ -32,13 +32,13 @@ mutation updatePage(
   $pageId: String!
   $input: UpdatePageInput!
 ) {
-  updatePage(siteId: $siteId, pageId: $pageId, input: $input) {
+  updatePage(siteId: $siteId, id: $pageId, input: $input) {
     status
   }
 }
 
 mutation deletePage($siteId: String!, $pageId: String!) {
-  deletePage(siteId: $siteId, pageId: $pageId) {
+  deletePage(siteId: $siteId, id: $pageId) {
     status
   }
 }

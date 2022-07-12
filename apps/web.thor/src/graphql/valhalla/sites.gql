@@ -1,13 +1,13 @@
 query getSites {
-  getSiteList {
+  siteList {
     id
     name
     status
   }
 }
 
-query getSiteById($siteId: String!) {
-  getSite(siteId: $siteId) {
+query getSite($siteId: String!) {
+  site(id: $siteId) {
     id
     name
     updatedAt
@@ -21,7 +21,7 @@ mutation createSite($name: String!) {
 }
 
 mutation updateSite($siteId: String!, $name: String!) {
-  updateSite(input: { name: $name }, siteId: $siteId) {
+  updateSite(input: { name: $name }, id: $siteId) {
     id
     status
   }

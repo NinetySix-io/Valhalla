@@ -1,4 +1,4 @@
-import { useGetSiteByIdQuery } from '@app/generated/valhalla.gql';
+import { useGetSiteQuery } from '@app/generated/valhalla.gql';
 import { useSingleRouterQuery } from '../use.single.router.query';
 
 /**
@@ -15,7 +15,7 @@ export function useSiteId() {
  */
 export function useSiteHydrate() {
   const siteId = useSiteId();
-  const { loading, refetch, data, error } = useGetSiteByIdQuery({
+  const { loading, refetch, data, error } = useGetSiteQuery({
     variables: {
       siteId,
     },
@@ -25,6 +25,6 @@ export function useSiteHydrate() {
     error,
     loading,
     refetch,
-    data: data?.getSite,
+    data: data?.site,
   };
 }
