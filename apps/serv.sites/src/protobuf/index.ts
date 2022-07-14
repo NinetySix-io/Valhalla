@@ -22,84 +22,13 @@ export enum EditStatus {
 }
 
 export enum ElementType {
-  meta = "meta",
-  style = "style",
-  link = "link",
-  title = "title",
-  address = "address",
-  article = "article",
-  aside = "aside",
-  footer = "footer",
-  header = "header",
-  h1 = "h1",
-  h2 = "h2",
-  h3 = "h3",
-  h4 = "h4",
-  h5 = "h5",
-  h6 = "h6",
-  main = "main",
-  nav = "nav",
-  section = "section",
-  blockquote = "blockquote",
-  dd = "dd",
-  div = "div",
-  dl = "dl",
-  dt = "dt",
-  figcaption = "figcaption",
-  figure = "figure",
-  hr = "hr",
-  li = "li",
-  menu = "menu",
-  ol = "ol",
-  p = "p",
-  pre = "pre",
-  ul = "ul",
-  a = "a",
-  abbr = "abbr",
-  b = "b",
-  bdi = "bdi",
-  bdo = "bdo",
-  br = "br",
-  cite = "cite",
-  code = "code",
-  data = "data",
-  dfn = "dfn",
-  em = "em",
-  i = "i",
-  kbd = "kbd",
-  mark = "mark",
-  q = "q",
-  rp = "rp",
-  rt = "rt",
-  ruby = "ruby",
-  s = "s",
-  samp = "samp",
-  small = "small",
-  span = "span",
-  strong = "strong",
-  sub = "sub",
-  sup = "sup",
-  time = "time",
-  u = "u",
-  var = "var",
-  wbr = "wbr",
-  area = "area",
-  audio = "audio",
-  img = "img",
-  map = "map",
-  track = "track",
-  video = "video",
-  embed = "embed",
-  iframe = "iframe",
-  object = "object",
-  picture = "picture",
-  portal = "portal",
-  source = "source",
-  svg = "svg",
-  math = "math",
-  canvas = "canvas",
-  noscript = "noscript",
-  script = "script",
+  TEXT = "TEXT",
+  BUTTON = "BUTTON",
+  CONTAINER = "CONTAINER",
+  IMAGE = "IMAGE",
+  VIDEO = "VIDEO",
+  SELECT = "SELECT",
+  LINK = "LINK",
 }
 
 export interface Component {
@@ -114,16 +43,76 @@ export interface Component {
   createdAt?: Date;
 }
 
-export interface Element {
+export interface TextElement {
   id: string;
-  owners: string[];
   parent: string;
-  updatedBy: string;
-  type: ElementType;
-  isRoot?: boolean | undefined;
-  props?: { [key: string]: any };
+  owners: string[];
   createdAt?: Date;
   updatedAt?: Date;
+}
+
+export interface ButtonElement {
+  id: string;
+  parent: string;
+  owners: string[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface ContainerElement {
+  id: string;
+  parent: string;
+  owners: string[];
+  isRoot?: boolean | undefined;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface LinkElement {
+  id: string;
+  parent: string;
+  owners: string[];
+  url: string;
+  isNewTab: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface ImageElement {
+  id: string;
+  parent: string;
+  resource: string;
+  owners: string[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface VideoElement {
+  id: string;
+  parent: string;
+  resource: string;
+  owners: string[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface SelectElement {
+  id: string;
+  parent: string;
+  resource: string;
+  owners: string[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface Element {
+  element?:
+    | { $case: "Text"; Text: TextElement }
+    | { $case: "Button"; Button: ButtonElement }
+    | { $case: "Container"; Container: ContainerElement }
+    | { $case: "Link"; Link: LinkElement }
+    | { $case: "Image"; Image: ImageElement }
+    | { $case: "Video"; Video: VideoElement };
 }
 
 export interface HierarchicalElement {
@@ -160,21 +149,33 @@ export interface Site {
   updatedAt?: Date;
 }
 
-export interface CreateManyElementsRequest {
-  elements: CreateElementRequest[];
-}
+export interface CreateButtonRequest {}
 
-export interface CreateManyElementsResponse {}
+export interface UpdateButtonRequest {}
 
-export interface CreateElementsFromComponentRequest {
-  componentId: string;
-  parent: string;
-  owners: string[];
-  requestedUserId: string;
-  componentOwnerId: string;
-}
+export interface CreateTextRequest {}
 
-export interface CreateElementsFromComponentResponse {}
+export interface UpdateTextRequest {}
+
+export interface CreateContainerRequest {}
+
+export interface UpdateContainerRequest {}
+
+export interface CreateImageRequest {}
+
+export interface UpdateImageRequest {}
+
+export interface CreateLinkRequest {}
+
+export interface UpdateLinkRequest {}
+
+export interface CreateVideoRequest {}
+
+export interface UpdateVideoRequest {}
+
+export interface CreateSelectRequest {}
+
+export interface UpdateSelectRequest {}
 
 export interface DeleteManyElementsRequest {
   requestedUserId: string;
@@ -183,32 +184,6 @@ export interface DeleteManyElementsRequest {
 }
 
 export interface DeleteManyElementsResponse {}
-
-export interface CreateElementRequest {
-  parent: string;
-  requestedUserId: string;
-  owners: string[];
-  type: ElementType;
-  isRoot?: boolean | undefined;
-  props?: { [key: string]: any };
-}
-
-export interface CreateElementResponse {
-  element?: Element;
-}
-
-export interface UpdateElementRequest {
-  elementId: string;
-  requestedUserId: string;
-  owners: string[];
-  type?: string | undefined;
-  parent?: string | undefined;
-  props?: { [key: string]: any };
-}
-
-export interface UpdateElementResponse {
-  element?: Element;
-}
 
 export interface DeleteElementRequest {
   elementId: string;
@@ -527,22 +502,6 @@ export interface SitesServiceClient {
     request: GetElementHierarchicalListRequest
   ): Observable<GetElementHierarchicalListResponse>;
 
-  createElement(
-    request: CreateElementRequest
-  ): Observable<CreateElementResponse>;
-
-  createManyElements(
-    request: CreateManyElementsRequest
-  ): Observable<CreateManyElementsResponse>;
-
-  createElementsFromComponent(
-    request: CreateElementsFromComponentRequest
-  ): Observable<CreateElementsFromComponentResponse>;
-
-  updateElement(
-    request: UpdateElementRequest
-  ): Observable<UpdateElementResponse>;
-
   deleteElement(
     request: DeleteElementRequest
   ): Observable<DeleteElementResponse>;
@@ -550,6 +509,38 @@ export interface SitesServiceClient {
   deleteManyElements(
     request: DeleteManyElementsRequest
   ): Observable<DeleteManyElementsResponse>;
+
+  createButton(request: CreateButtonRequest): Observable<ButtonElement>;
+
+  updateButton(request: UpdateButtonRequest): Observable<ButtonElement>;
+
+  createText(request: CreateTextRequest): Observable<TextElement>;
+
+  updateTExt(request: UpdateTextRequest): Observable<TextElement>;
+
+  createContainer(
+    request: CreateContainerRequest
+  ): Observable<ContainerElement>;
+
+  updateContainer(
+    request: UpdateContainerRequest
+  ): Observable<ContainerElement>;
+
+  createImage(request: CreateImageRequest): Observable<ImageElement>;
+
+  updateImage(request: UpdateImageRequest): Observable<ImageElement>;
+
+  createVideo(request: CreateVideoRequest): Observable<VideoElement>;
+
+  updateVideo(request: UpdateVideoRequest): Observable<VideoElement>;
+
+  createSelect(request: CreateSelectRequest): Observable<SelectElement>;
+
+  updateSelect(request: UpdateSelectRequest): Observable<SelectElement>;
+
+  createLink(request: CreateLinkRequest): Observable<LinkElement>;
+
+  updateLink(request: UpdateLinkRequest): Observable<LinkElement>;
 }
 
 export interface SitesServiceController {
@@ -718,34 +709,6 @@ export interface SitesServiceController {
     | Observable<GetElementHierarchicalListResponse>
     | GetElementHierarchicalListResponse;
 
-  createElement(
-    request: CreateElementRequest
-  ):
-    | Promise<CreateElementResponse>
-    | Observable<CreateElementResponse>
-    | CreateElementResponse;
-
-  createManyElements(
-    request: CreateManyElementsRequest
-  ):
-    | Promise<CreateManyElementsResponse>
-    | Observable<CreateManyElementsResponse>
-    | CreateManyElementsResponse;
-
-  createElementsFromComponent(
-    request: CreateElementsFromComponentRequest
-  ):
-    | Promise<CreateElementsFromComponentResponse>
-    | Observable<CreateElementsFromComponentResponse>
-    | CreateElementsFromComponentResponse;
-
-  updateElement(
-    request: UpdateElementRequest
-  ):
-    | Promise<UpdateElementResponse>
-    | Observable<UpdateElementResponse>
-    | UpdateElementResponse;
-
   deleteElement(
     request: DeleteElementRequest
   ):
@@ -759,6 +722,68 @@ export interface SitesServiceController {
     | Promise<DeleteManyElementsResponse>
     | Observable<DeleteManyElementsResponse>
     | DeleteManyElementsResponse;
+
+  createButton(
+    request: CreateButtonRequest
+  ): Promise<ButtonElement> | Observable<ButtonElement> | ButtonElement;
+
+  updateButton(
+    request: UpdateButtonRequest
+  ): Promise<ButtonElement> | Observable<ButtonElement> | ButtonElement;
+
+  createText(
+    request: CreateTextRequest
+  ): Promise<TextElement> | Observable<TextElement> | TextElement;
+
+  updateTExt(
+    request: UpdateTextRequest
+  ): Promise<TextElement> | Observable<TextElement> | TextElement;
+
+  createContainer(
+    request: CreateContainerRequest
+  ):
+    | Promise<ContainerElement>
+    | Observable<ContainerElement>
+    | ContainerElement;
+
+  updateContainer(
+    request: UpdateContainerRequest
+  ):
+    | Promise<ContainerElement>
+    | Observable<ContainerElement>
+    | ContainerElement;
+
+  createImage(
+    request: CreateImageRequest
+  ): Promise<ImageElement> | Observable<ImageElement> | ImageElement;
+
+  updateImage(
+    request: UpdateImageRequest
+  ): Promise<ImageElement> | Observable<ImageElement> | ImageElement;
+
+  createVideo(
+    request: CreateVideoRequest
+  ): Promise<VideoElement> | Observable<VideoElement> | VideoElement;
+
+  updateVideo(
+    request: UpdateVideoRequest
+  ): Promise<VideoElement> | Observable<VideoElement> | VideoElement;
+
+  createSelect(
+    request: CreateSelectRequest
+  ): Promise<SelectElement> | Observable<SelectElement> | SelectElement;
+
+  updateSelect(
+    request: UpdateSelectRequest
+  ): Promise<SelectElement> | Observable<SelectElement> | SelectElement;
+
+  createLink(
+    request: CreateLinkRequest
+  ): Promise<LinkElement> | Observable<LinkElement> | LinkElement;
+
+  updateLink(
+    request: UpdateLinkRequest
+  ): Promise<LinkElement> | Observable<LinkElement> | LinkElement;
 }
 
 export function SitesServiceControllerMethods() {
@@ -785,12 +810,22 @@ export function SitesServiceControllerMethods() {
       "archiveComponent",
       "getElementFlatList",
       "getElementHierarchicalList",
-      "createElement",
-      "createManyElements",
-      "createElementsFromComponent",
-      "updateElement",
       "deleteElement",
       "deleteManyElements",
+      "createButton",
+      "updateButton",
+      "createText",
+      "updateTExt",
+      "createContainer",
+      "updateContainer",
+      "createImage",
+      "updateImage",
+      "createVideo",
+      "updateVideo",
+      "createSelect",
+      "updateSelect",
+      "createLink",
+      "updateLink",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(

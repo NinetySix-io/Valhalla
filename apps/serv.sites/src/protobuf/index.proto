@@ -42,12 +42,23 @@ service SitesService {
   // -----------------------------
   rpc GetElementFlatList(GetElementFlatListRequest) returns (GetElementFlatListResponse) {}
   rpc GetElementHierarchicalList(GetElementHierarchicalListRequest) returns (GetElementHierarchicalListResponse) {}
-  rpc CreateElement(CreateElementRequest) returns (CreateElementResponse) {}
-  rpc CreateManyElements(CreateManyElementsRequest) returns (CreateManyElementsResponse) {}
-  rpc CreateElementsFromComponent(CreateElementsFromComponentRequest) returns (CreateElementsFromComponentResponse) {}
-  rpc UpdateElement(UpdateElementRequest) returns (UpdateElementResponse) {}
   rpc DeleteElement(DeleteElementRequest) returns (DeleteElementResponse) {}
   rpc DeleteManyElements(DeleteManyElementsRequest) returns (DeleteManyElementsResponse) {}
+
+  rpc CreateButton(CreateButtonRequest) returns (ButtonElement) {}
+  rpc UpdateButton(UpdateButtonRequest) returns (ButtonElement) {}
+  rpc CreateText(CreateTextRequest) returns (TextElement) {}
+  rpc UpdateTExt(UpdateTextRequest) returns (TextElement) {}
+  rpc CreateContainer(CreateContainerRequest) returns (ContainerElement) {}
+  rpc UpdateContainer(UpdateContainerRequest) returns (ContainerElement) {}
+  rpc CreateImage(CreateImageRequest) returns (ImageElement) {}
+  rpc UpdateImage(UpdateImageRequest) returns (ImageElement) {}
+  rpc CreateVideo(CreateVideoRequest) returns (VideoElement) {}
+  rpc UpdateVideo(UpdateVideoRequest) returns (VideoElement) {}
+  rpc CreateSelect(CreateSelectRequest) returns (SelectElement) {}
+  rpc UpdateSelect(UpdateSelectRequest) returns (SelectElement) {}
+  rpc CreateLink(CreateLinkRequest) returns (LinkElement) {}
+  rpc UpdateLink(UpdateLinkRequest) returns (LinkElement) {}
 }
 
 // -----------------------------
@@ -66,86 +77,13 @@ enum EditStatus {
 }
 
 enum ElementType {
-  meta = 0;
-  style = 1;
-  link = 2;
-  title = 3;
-  address = 4;
-  article = 5;
-  aside = 6;
-  footer = 7;
-  header = 8;
-  h1 = 9;
-  h2 = 10;
-  h3 = 11;
-  h4 = 12;
-  h5 = 13;
-  h6 = 14;
-  main = 15;
-  nav = 16;
-  section = 17;
-
-  blockquote = 18;
-  dd = 19;
-  div = 20;
-  dl = 21;
-  dt = 22;
-  figcaption = 23;
-  figure = 24;
-  hr = 25;
-  li = 26;
-  menu = 27;
-  ol = 28;
-  p = 29;
-  pre = 30;
-  ul = 31;
-
-  a = 32;
-  abbr = 33;
-  b = 34;
-  bdi = 35;
-  bdo = 36;
-  br = 37;
-  cite = 38;
-  code = 39;
-  data = 40;
-  dfn = 41;
-  em = 42;
-  i = 43;
-  kbd = 44;
-  mark = 45;
-  q = 46;
-  rp = 47;
-  rt = 48;
-  ruby = 49;
-  s = 50;
-  samp = 51;
-  small = 52;
-  span = 53;
-  strong = 54;
-  sub = 55;
-  sup = 56;
-  time = 57;
-  u = 58;
-  var = 59;
-  wbr = 60;
-  area = 61;
-  audio = 62;
-  img = 63;
-  map = 64;
-  track = 65;
-  video = 66;
-  embed = 67;
-  iframe = 68;
-  object = 69;
-  picture = 70;
-  portal = 71;
-  source = 72;
-  svg = 73;
-  math = 74;
-  canvas = 75;
-  noscript = 76;
-  script = 77;
+  TEXT = 0;
+  BUTTON = 1;
+  CONTAINER = 2;
+  IMAGE = 3;
+  VIDEO = 4;
+  SELECT = 5;
+  LINK = 6;
 }
 
 // -----------------------------
@@ -164,16 +102,77 @@ message Component {
   google.protobuf.Timestamp createdAt = 9;
 }
 
-message Element {
+message TextElement {
   string id = 1;
-  repeated string owners = 2;
-  string parent = 3;
-  string updatedBy = 4;
-  ElementType type = 5;
-  optional bool isRoot = 6;
-  google.protobuf.Struct props = 7;
+  string parent = 2;
+  repeated string owners = 3;
   google.protobuf.Timestamp createdAt = 8;
   google.protobuf.Timestamp updatedAt = 9;
+}
+
+message ButtonElement {
+  string id = 1;
+  string parent = 2;
+  repeated string owners = 3;
+  google.protobuf.Timestamp createdAt = 8;
+  google.protobuf.Timestamp updatedAt = 9;
+}
+
+message ContainerElement {
+  string id = 1;
+  string parent = 2;
+  repeated string owners = 3;
+  optional bool isRoot = 4;
+  google.protobuf.Timestamp createdAt = 8;
+  google.protobuf.Timestamp updatedAt = 9;
+}
+
+message LinkElement {
+  string id = 1;
+  string parent = 2;
+  repeated string owners = 3;
+  string url = 4;
+  string isNewTab = 5;
+  google.protobuf.Timestamp createdAt = 8;
+  google.protobuf.Timestamp updatedAt = 9;
+}
+
+message ImageElement {
+  string id = 1;
+  string parent = 2;
+  string resource = 3;
+  repeated string owners = 4;
+  google.protobuf.Timestamp createdAt = 8;
+  google.protobuf.Timestamp updatedAt = 9;
+}
+
+message VideoElement {
+  string id = 1;
+  string parent = 3;
+  string resource = 4;
+  repeated string owners = 2;
+  google.protobuf.Timestamp createdAt = 8;
+  google.protobuf.Timestamp updatedAt = 9;
+}
+
+message SelectElement {
+  string id = 1;
+  string parent = 3;
+  string resource = 4;
+  repeated string owners = 2;
+  google.protobuf.Timestamp createdAt = 8;
+  google.protobuf.Timestamp updatedAt = 9;
+}
+
+message Element {
+  oneof element {
+    TextElement Text = 1;
+    ButtonElement Button = 2;
+    ContainerElement Container = 3;
+    LinkElement Link = 4;
+    ImageElement Image = 5;
+    VideoElement Video = 6;
+  }
 }
 
 message HierarchicalElement {
@@ -214,22 +213,61 @@ message Site {
 // Elements
 // -----------------------------
 
-message CreateManyElementsRequest {
-  repeated CreateElementRequest elements = 1;
+message CreateButtonRequest {
+
 }
 
-message CreateManyElementsResponse {
+message UpdateButtonRequest {
+
 }
 
-message CreateElementsFromComponentRequest {
-  string componentId = 1;
-  string parent = 2;
-  repeated string owners = 3;
-  string requestedUserId = 4;
-  string componentOwnerId = 5;
+message CreateTextRequest {
+
 }
 
-message CreateElementsFromComponentResponse {
+
+message UpdateTextRequest {
+
+}
+
+message CreateContainerRequest {
+
+}
+
+message UpdateContainerRequest {
+
+}
+
+message CreateImageRequest {
+
+}
+
+message UpdateImageRequest {
+
+}
+
+message CreateLinkRequest {
+
+}
+
+message UpdateLinkRequest {
+
+}
+
+message CreateVideoRequest {
+
+}
+
+message UpdateVideoRequest {
+
+}
+
+message CreateSelectRequest {
+
+}
+
+message UpdateSelectRequest {
+
 }
 
 message DeleteManyElementsRequest {
@@ -239,33 +277,6 @@ message DeleteManyElementsRequest {
 }
 
 message DeleteManyElementsResponse {
-
-}
-
-message CreateElementRequest {
-  string parent = 1;
-  string requestedUserId = 2;
-  repeated string owners = 3;
-  ElementType type = 4;
-  optional bool isRoot = 5;
-  optional google.protobuf.Struct props = 6;
-}
-
-message CreateElementResponse {
-  Element element = 1;
-}
-
-message UpdateElementRequest {
-  string elementId = 1;
-  string requestedUserId = 2;
-  repeated string owners = 3;
-  optional string type = 4;
-  optional string parent = 5;
-  optional google.protobuf.Struct props = 6;
-}
-
-message UpdateElementResponse {
-  Element element = 1;
 }
 
 message DeleteElementRequest {
@@ -293,7 +304,6 @@ message GetElementHierarchicalListRequest {
 message GetElementHierarchicalListResponse {
   repeated HierarchicalElement elements = 1;
 }
-
 
 // -----------------------------
 // COMPONENTS
