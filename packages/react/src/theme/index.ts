@@ -21,6 +21,7 @@ export const theme = responsiveFontSizes(
           },
           root: {
             borderRadius: BORDER_RADIUS,
+            minWidth: 'initial',
           },
         },
       },
@@ -75,6 +76,9 @@ export const theme = responsiveFontSizes(
       },
       secondary: {
         main: '#19857b',
+      },
+      action: {
+        active: 'rgb(2, 122, 255)',
       },
       error: {
         main: red.A400,

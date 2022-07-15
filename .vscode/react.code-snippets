@@ -10,11 +10,7 @@
     "body": [
       "import * as React from 'react';",
       "",
-      "import { cProps } from '@valhalla/react'",
-      "",
-      "type Props = cProps;",
-      "",
-      "export const $1: React.FC<Props> = () => {",
+      "export const $1: React.FC = () => {",
       "\treturn <div></div>;",
       "};",
       ""

@@ -1,10 +1,16 @@
 import { Severity, modelOptions } from '@typegoose/typegoose';
 
 import { ICustomOptions } from '@typegoose/typegoose/lib/types';
+import { SchemaOptions } from 'mongoose';
 
 export function SimpleModel(
   collection: string,
-  options: ICustomOptions = {},
+  {
+    schema = {},
+    ...options
+  }: ICustomOptions & {
+    schema?: SchemaOptions;
+  } = {},
 ): ClassDecorator {
   return function (target) {
     return modelOptions({
@@ -21,6 +27,7 @@ export function SimpleModel(
         toObject: {
           virtuals: true,
         },
+        ...schema,
       },
     })(target);
   };

@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import {
   Button,
-  ListItemIcon,
   ListItemText,
   Menu,
   MenuItem,
@@ -11,7 +10,6 @@ import {
 } from '@mui/material';
 import { ScreenSize, SiteEditorSlice } from '@app/redux/slices/editor';
 
-import { ScreenSizeIcon } from '@app/components/screen.size';
 import { useAnchor } from '@app/hooks/dom/use.anchor';
 import { useDispatch } from 'react-redux';
 import { useReduxSelector } from '@app/redux/hooks';
@@ -34,9 +32,7 @@ export const SizesRadio: React.FC = () => {
 
   return (
     <Container>
-      <Button onMouseEnter={anchor.setAnchor}>
-        <ScreenSizeIcon value={active} />
-      </Button>
+      <Button onMouseEnter={anchor.setAnchor}>{ScreenSize[active]}</Button>
       <Menu
         open={anchor.isActive}
         onClose={anchor.remove}
@@ -60,9 +56,6 @@ export const SizesRadio: React.FC = () => {
             selected={active === item.value}
             onClick={() => handleSelect(item.value)}
           >
-            <ListItemIcon>
-              <ScreenSizeIcon value={item.value} />
-            </ListItemIcon>
             <ListItemText>{item.label}</ListItemText>
           </MenuItem>
         ))}

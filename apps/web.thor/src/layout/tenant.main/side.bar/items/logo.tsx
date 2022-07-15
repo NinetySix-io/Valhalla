@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import { Logo, cProps } from '@valhalla/react';
 import { Typography, styled } from '@mui/material';
 
 import Link from 'next/link';
 import { SidebarItem } from './base';
+import { cProps } from '@valhalla/react';
 
 type Props = cProps;
 
@@ -16,7 +16,7 @@ const Title = styled(Typography)`
 export const LogoItem: React.FC<Props> = (props) => {
   return (
     <Link href="/" passHref>
-      <SidebarItem {...props} icon={<Logo size={25} />}>
+      <SidebarItem {...props}>
         <Title variant="h6">NinetySix</Title>
       </SidebarItem>
     </Link>

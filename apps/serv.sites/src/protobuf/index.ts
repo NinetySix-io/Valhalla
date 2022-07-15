@@ -21,14 +21,29 @@ export enum EditStatus {
   ARCHIVED = "ARCHIVED",
 }
 
+export enum HTMLType {
+  div = "div",
+  button = "button",
+}
+
 export enum ElementType {
-  TEXT = "TEXT",
-  BUTTON = "BUTTON",
-  CONTAINER = "CONTAINER",
-  IMAGE = "IMAGE",
-  VIDEO = "VIDEO",
-  SELECT = "SELECT",
-  LINK = "LINK",
+  Text = "Text",
+  Input = "Input",
+  Box = "Box",
+  Image = "Image",
+  Video = "Video",
+  Link = "Link",
+}
+
+export interface LinkAction {
+  href: string;
+  target: string;
+}
+
+export interface Style {}
+
+export interface Action {
+  action?: { $case: "link"; link: LinkAction };
 }
 
 export interface Component {
@@ -43,29 +58,31 @@ export interface Component {
   createdAt?: Date;
 }
 
+export interface InputElement {
+  id: string;
+  parent: string;
+  owners: string[];
+  style?: Style;
+  after?: string | undefined;
+}
+
 export interface TextElement {
   id: string;
   parent: string;
   owners: string[];
-  createdAt?: Date;
-  updatedAt?: Date;
+  text: string;
+  style?: Style;
+  after?: string | undefined;
 }
 
-export interface ButtonElement {
-  id: string;
-  parent: string;
-  owners: string[];
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-export interface ContainerElement {
+export interface BoxElement {
   id: string;
   parent: string;
   owners: string[];
   isRoot?: boolean | undefined;
-  createdAt?: Date;
-  updatedAt?: Date;
+  style?: Style;
+  htmlType?: HTMLType | undefined;
+  after?: string | undefined;
 }
 
 export interface LinkElement {
@@ -74,8 +91,8 @@ export interface LinkElement {
   owners: string[];
   url: string;
   isNewTab: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  style?: Style;
+  after?: string | undefined;
 }
 
 export interface ImageElement {
@@ -83,33 +100,24 @@ export interface ImageElement {
   parent: string;
   resource: string;
   owners: string[];
-  createdAt?: Date;
-  updatedAt?: Date;
+  style?: Style;
+  after?: string | undefined;
 }
 
 export interface VideoElement {
   id: string;
+  owners: string[];
   parent: string;
   resource: string;
-  owners: string[];
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-export interface SelectElement {
-  id: string;
-  parent: string;
-  resource: string;
-  owners: string[];
-  createdAt?: Date;
-  updatedAt?: Date;
+  style?: Style;
+  after?: string | undefined;
 }
 
 export interface Element {
   element?:
     | { $case: "Text"; Text: TextElement }
-    | { $case: "Button"; Button: ButtonElement }
-    | { $case: "Container"; Container: ContainerElement }
+    | { $case: "Input"; Input: InputElement }
+    | { $case: "Box"; Box: BoxElement }
     | { $case: "Link"; Link: LinkElement }
     | { $case: "Image"; Image: ImageElement }
     | { $case: "Video"; Video: VideoElement };
@@ -149,17 +157,47 @@ export interface Site {
   updatedAt?: Date;
 }
 
-export interface CreateButtonRequest {}
+export interface CreatedElementResponse {
+  elementId: string;
+}
 
-export interface UpdateButtonRequest {}
+export interface UpdatedElementResponse {}
 
-export interface CreateTextRequest {}
+export interface CreateTextRequest {
+  owners: string[];
+  requestedUserId: string;
+  parent: string;
+  style?: Style | undefined;
+  text: string;
+  after?: string | undefined;
+}
 
-export interface UpdateTextRequest {}
+export interface UpdateTextRequest {
+  owners: string[];
+  requestedUserId: string;
+  elementId: string;
+  style?: Style | undefined;
+  text?: string | undefined;
+  after?: string | undefined;
+}
 
-export interface CreateContainerRequest {}
+export interface CreateBoxRequest {
+  owners: string[];
+  requestedUserId: string;
+  parent: string;
+  style?: Style | undefined;
+  htmlType?: HTMLType | undefined;
+  after?: string | undefined;
+}
 
-export interface UpdateContainerRequest {}
+export interface UpdateBoxRequest {
+  owners: string[];
+  requestedUserId: string;
+  elementId: string;
+  style?: Style | undefined;
+  htmlType?: HTMLType | undefined;
+  after?: string | undefined;
+}
 
 export interface CreateImageRequest {}
 
@@ -191,9 +229,7 @@ export interface DeleteElementRequest {
   owners: string[];
 }
 
-export interface DeleteElementResponse {
-  element?: Element;
-}
+export interface DeleteElementResponse {}
 
 export interface GetElementFlatListRequest {
   owners: string[];
@@ -510,37 +546,33 @@ export interface SitesServiceClient {
     request: DeleteManyElementsRequest
   ): Observable<DeleteManyElementsResponse>;
 
-  createButton(request: CreateButtonRequest): Observable<ButtonElement>;
+  createText(request: CreateTextRequest): Observable<CreatedElementResponse>;
 
-  updateButton(request: UpdateButtonRequest): Observable<ButtonElement>;
+  updateText(request: UpdateTextRequest): Observable<UpdatedElementResponse>;
 
-  createText(request: CreateTextRequest): Observable<TextElement>;
+  createBox(request: CreateBoxRequest): Observable<CreatedElementResponse>;
 
-  updateTExt(request: UpdateTextRequest): Observable<TextElement>;
+  updateBox(request: UpdateBoxRequest): Observable<UpdatedElementResponse>;
 
-  createContainer(
-    request: CreateContainerRequest
-  ): Observable<ContainerElement>;
+  createImage(request: CreateImageRequest): Observable<CreatedElementResponse>;
 
-  updateContainer(
-    request: UpdateContainerRequest
-  ): Observable<ContainerElement>;
+  updateImage(request: UpdateImageRequest): Observable<UpdatedElementResponse>;
 
-  createImage(request: CreateImageRequest): Observable<ImageElement>;
+  createVideo(request: CreateVideoRequest): Observable<CreatedElementResponse>;
 
-  updateImage(request: UpdateImageRequest): Observable<ImageElement>;
+  updateVideo(request: UpdateVideoRequest): Observable<UpdatedElementResponse>;
 
-  createVideo(request: CreateVideoRequest): Observable<VideoElement>;
+  createSelect(
+    request: CreateSelectRequest
+  ): Observable<CreatedElementResponse>;
 
-  updateVideo(request: UpdateVideoRequest): Observable<VideoElement>;
+  updateSelect(
+    request: UpdateSelectRequest
+  ): Observable<UpdatedElementResponse>;
 
-  createSelect(request: CreateSelectRequest): Observable<SelectElement>;
+  createLink(request: CreateLinkRequest): Observable<CreatedElementResponse>;
 
-  updateSelect(request: UpdateSelectRequest): Observable<SelectElement>;
-
-  createLink(request: CreateLinkRequest): Observable<LinkElement>;
-
-  updateLink(request: UpdateLinkRequest): Observable<LinkElement>;
+  updateLink(request: UpdateLinkRequest): Observable<UpdatedElementResponse>;
 }
 
 export interface SitesServiceController {
@@ -723,67 +755,89 @@ export interface SitesServiceController {
     | Observable<DeleteManyElementsResponse>
     | DeleteManyElementsResponse;
 
-  createButton(
-    request: CreateButtonRequest
-  ): Promise<ButtonElement> | Observable<ButtonElement> | ButtonElement;
-
-  updateButton(
-    request: UpdateButtonRequest
-  ): Promise<ButtonElement> | Observable<ButtonElement> | ButtonElement;
-
   createText(
     request: CreateTextRequest
-  ): Promise<TextElement> | Observable<TextElement> | TextElement;
+  ):
+    | Promise<CreatedElementResponse>
+    | Observable<CreatedElementResponse>
+    | CreatedElementResponse;
 
-  updateTExt(
+  updateText(
     request: UpdateTextRequest
-  ): Promise<TextElement> | Observable<TextElement> | TextElement;
-
-  createContainer(
-    request: CreateContainerRequest
   ):
-    | Promise<ContainerElement>
-    | Observable<ContainerElement>
-    | ContainerElement;
+    | Promise<UpdatedElementResponse>
+    | Observable<UpdatedElementResponse>
+    | UpdatedElementResponse;
 
-  updateContainer(
-    request: UpdateContainerRequest
+  createBox(
+    request: CreateBoxRequest
   ):
-    | Promise<ContainerElement>
-    | Observable<ContainerElement>
-    | ContainerElement;
+    | Promise<CreatedElementResponse>
+    | Observable<CreatedElementResponse>
+    | CreatedElementResponse;
+
+  updateBox(
+    request: UpdateBoxRequest
+  ):
+    | Promise<UpdatedElementResponse>
+    | Observable<UpdatedElementResponse>
+    | UpdatedElementResponse;
 
   createImage(
     request: CreateImageRequest
-  ): Promise<ImageElement> | Observable<ImageElement> | ImageElement;
+  ):
+    | Promise<CreatedElementResponse>
+    | Observable<CreatedElementResponse>
+    | CreatedElementResponse;
 
   updateImage(
     request: UpdateImageRequest
-  ): Promise<ImageElement> | Observable<ImageElement> | ImageElement;
+  ):
+    | Promise<UpdatedElementResponse>
+    | Observable<UpdatedElementResponse>
+    | UpdatedElementResponse;
 
   createVideo(
     request: CreateVideoRequest
-  ): Promise<VideoElement> | Observable<VideoElement> | VideoElement;
+  ):
+    | Promise<CreatedElementResponse>
+    | Observable<CreatedElementResponse>
+    | CreatedElementResponse;
 
   updateVideo(
     request: UpdateVideoRequest
-  ): Promise<VideoElement> | Observable<VideoElement> | VideoElement;
+  ):
+    | Promise<UpdatedElementResponse>
+    | Observable<UpdatedElementResponse>
+    | UpdatedElementResponse;
 
   createSelect(
     request: CreateSelectRequest
-  ): Promise<SelectElement> | Observable<SelectElement> | SelectElement;
+  ):
+    | Promise<CreatedElementResponse>
+    | Observable<CreatedElementResponse>
+    | CreatedElementResponse;
 
   updateSelect(
     request: UpdateSelectRequest
-  ): Promise<SelectElement> | Observable<SelectElement> | SelectElement;
+  ):
+    | Promise<UpdatedElementResponse>
+    | Observable<UpdatedElementResponse>
+    | UpdatedElementResponse;
 
   createLink(
     request: CreateLinkRequest
-  ): Promise<LinkElement> | Observable<LinkElement> | LinkElement;
+  ):
+    | Promise<CreatedElementResponse>
+    | Observable<CreatedElementResponse>
+    | CreatedElementResponse;
 
   updateLink(
     request: UpdateLinkRequest
-  ): Promise<LinkElement> | Observable<LinkElement> | LinkElement;
+  ):
+    | Promise<UpdatedElementResponse>
+    | Observable<UpdatedElementResponse>
+    | UpdatedElementResponse;
 }
 
 export function SitesServiceControllerMethods() {
@@ -812,12 +866,10 @@ export function SitesServiceControllerMethods() {
       "getElementHierarchicalList",
       "deleteElement",
       "deleteManyElements",
-      "createButton",
-      "updateButton",
       "createText",
-      "updateTExt",
-      "createContainer",
-      "updateContainer",
+      "updateText",
+      "createBox",
+      "updateBox",
       "createImage",
       "updateImage",
       "createVideo",

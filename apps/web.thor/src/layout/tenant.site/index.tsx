@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import { BaseLayout } from '../base';
 import { Layout } from '@app/types/next';
 import { LoadingBlock } from '@app/components/loading.block';

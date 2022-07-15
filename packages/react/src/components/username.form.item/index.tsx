@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import { FaSolid, Icon } from '../icons';
 import {
   IconButton,
   InputAdornment,
@@ -93,17 +92,13 @@ export const UsernameFormItem: ComponentType = ({
               ) {
                 endAdornment = (
                   <InputAdornment position="end">
-                    <IconButton onClick={onSubmitUsername}>
-                      <Icon icon={FaSolid.faArrowRightToBracket} height={15} />
-                    </IconButton>
+                    <IconButton onClick={onSubmitUsername}>S</IconButton>
                   </InputAdornment>
                 );
               } else if (withClear && control.value) {
                 endAdornment = (
                   <InputAdornment position="end">
-                    <IconButton onClick={handleClear}>
-                      <Icon icon={FaSolid.faTimes} height={15} />
-                    </IconButton>
+                    <IconButton onClick={handleClear}>X</IconButton>
                   </InputAdornment>
                 );
               }

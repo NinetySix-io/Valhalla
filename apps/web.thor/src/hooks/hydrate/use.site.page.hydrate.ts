@@ -5,7 +5,7 @@ import { useSiteId } from './use.site.hydrate';
 /**
  * Get `pageId` query from router
  */
-export function useSitePageQuery() {
+export function useSitePageId() {
   return useSingleRouterQuery('pageId');
 }
 
@@ -13,7 +13,7 @@ export function useSitePageQuery() {
  * Get page data from router query
  */
 export function useSitePageHydrate() {
-  const pageId = useSitePageQuery();
+  const pageId = useSitePageId();
   const siteId = useSiteId();
   const { loading, refetch, data, error } = useGetPageQuery({
     variables: {

@@ -1,4 +1,4 @@
-import { ElementSchema } from '@app/entities/elements/schema';
+import { ElementSchema } from '@app/entities/elements/schemas/element.schema';
 import { ElementType } from '@app/protobuf';
 import { makeElementTrees } from '../make.element.trees';
 import { toObjectId } from '@valhalla/serv.core';
@@ -30,25 +30,25 @@ describe('Lib:: makeElementTrees', () => {
     createSeed({
       _id: parent1,
       isRoot: true,
-      type: ElementType.a,
+      type: ElementType.Box,
       parent: '',
     }),
     createSeed({
       _id: leaf1,
       isRoot: false,
-      type: ElementType.a,
+      type: ElementType.Box,
       parent: parent1.toHexString(),
     }),
     createSeed({
       _id: leafEnd,
       isRoot: false,
-      type: ElementType.a,
+      type: ElementType.Box,
       parent: leaf1.toHexString(),
     }),
     createSeed({
       _id: parent2,
       isRoot: true,
-      type: ElementType.a,
+      type: ElementType.Box,
       parent: '',
     }),
   ];

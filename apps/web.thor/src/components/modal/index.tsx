@@ -12,9 +12,9 @@ import {
   css,
   styled,
 } from '@mui/material';
-import { FaSolid, Icon, cProps } from '@valhalla/react';
 
 import { LoadingButton } from '@mui/lab';
+import { cProps } from '@valhalla/react';
 
 const Body = styled(Box)``;
 
@@ -86,7 +86,7 @@ export const Modal: React.FC<Props> = ({
             <Title variant="h4">{title}</Title>
             {withCloseBtn && (
               <CloseBtn size="small" disabled={loading} onClick={onClose}>
-                <Icon icon={FaSolid.faTimes} size="xs" />
+                Close
               </CloseBtn>
             )}
           </Header>

@@ -15,13 +15,14 @@ export function useSiteId() {
  */
 export function useSiteHydrate() {
   const siteId = useSiteId();
-  const { loading, refetch, data, error } = useGetSiteQuery({
+  const { loading, refetch, data, error, called } = useGetSiteQuery({
     variables: {
       siteId,
     },
   });
 
   return {
+    called,
     error,
     loading,
     refetch,

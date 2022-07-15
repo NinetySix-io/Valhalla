@@ -8,7 +8,6 @@ import { DeleteElementRequest, DeleteElementResponse } from '@app/protobuf';
 import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { ElementDeletedEvent } from '../events/element.deleted.event';
-import { ElementTransformer } from '@app/entities/elements/transformer';
 import { ElementsModel } from '@app/entities/elements';
 
 export class DeleteElementCommand implements ICommand {
@@ -28,11 +27,7 @@ export class DeleteElementHandler
   async execute(command: DeleteElementCommand): Promise<DeleteElementResponse> {
     const { elementId, owners, requestedUserId } = command.request;
     const _id = toObjectId(elementId);
-    const result = await this.Elements.findOneAndDelete({ _id, owners })
-      .lean()
-      .orFail();
-
-    const serialized = ElementTransformer.fromEntity(result).proto;
+    await this.Elements.findOneAndDelete({ _id, owners }).lean().orFail();
 
     this.eventBus.publish(
       new ElementDeletedEvent({
@@ -41,6 +36,6 @@ export class DeleteElementHandler
       }),
     );
 
-    return { element: serialized };
+    return {};
   }
 }

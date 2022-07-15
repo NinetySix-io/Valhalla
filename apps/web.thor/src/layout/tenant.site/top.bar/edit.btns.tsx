@@ -1,20 +1,18 @@
 import * as React from 'react';
 
-import { FaSolid, cProps } from '@valhalla/react';
+import { Button, ButtonGroup } from '@mui/material';
 
-import { IconBtn } from './icon.btn';
+import { cProps } from '@valhalla/react';
 
 type Props = cProps;
 
 export const EditButtons: React.FC<Props> = () => {
   return (
     <React.Fragment>
-      <IconBtn rotation={270} icon={FaSolid.faArrowTurnUp} tip="Step Back" />
-      <IconBtn
-        rotation={270}
-        icon={FaSolid.faArrowTurnDown}
-        tip="Step Forward"
-      />
+      <ButtonGroup size="small">
+        <Button>Backward</Button>
+        <Button>Forward</Button>
+      </ButtonGroup>
     </React.Fragment>
   );
 };

@@ -1,5 +1,5 @@
+import { ElementIdCtxInput } from './ctx.input';
 import { InputType } from '@nestjs/graphql';
-import { PageContextInput } from './page.ctx.input';
 
 @InputType()
-export class DeleteElementInput extends PageContextInput {}
+export class DeleteElementInput extends ElementIdCtxInput {}

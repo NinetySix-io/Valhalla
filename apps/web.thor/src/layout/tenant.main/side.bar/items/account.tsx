@@ -1,20 +1,15 @@
 import * as React from 'react';
 
-import { FaReg, cProps } from '@valhalla/react';
-
 import Link from 'next/link';
 import { SidebarItem } from './base';
+import { cProps } from '@valhalla/react';
 
 type Props = cProps;
 
 export const AccountItem: React.FC<Props> = (props) => {
   return (
     <Link href="/me" passHref>
-      <SidebarItem
-        {...props}
-        icon={FaReg.faUser}
-        popoverContent={<div>test</div>}
-      >
+      <SidebarItem {...props} popoverContent={<div>test</div>}>
         Account
       </SidebarItem>
     </Link>

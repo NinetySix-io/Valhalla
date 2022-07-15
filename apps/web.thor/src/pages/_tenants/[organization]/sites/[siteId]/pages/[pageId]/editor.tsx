@@ -1,3 +1,4 @@
+import { PageEditor } from '@app/components/page.editor';
 import { TenantSiteLayout } from '@app/layout/tenant.site';
 import { View } from '@app/types/next';
 import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
@@ -7,7 +8,7 @@ import { withOrgContext } from '@app/next/plugins/presets/with.org.context';
 import { withRedux } from '@app/next/plugins/presets/with.redux';
 
 const PageEditorView: View = () => {
-  return <div>editor</div>;
+  return <PageEditor />;
 };
 
 export const getStaticPaths = makeTenantStaticPaths();

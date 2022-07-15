@@ -14,7 +14,7 @@ import {
 
 import { IncomingHttpHeaders } from 'http';
 import { authRedirectLink } from './auth.redirect.link';
-import { createHttpLink } from './http.link';
+import { buildHttpLink } from './http.link';
 
 export class TemporaryApolloClient extends ApolloClient<NormalizedCacheObject> {
   constructor(options: {
@@ -24,7 +24,7 @@ export class TemporaryApolloClient extends ApolloClient<NormalizedCacheObject> {
     super({
       link: ApolloLink.from([
         authRedirectLink,
-        createHttpLink(options.uri, options.headers as Record<string, string>),
+        buildHttpLink(options.uri, options.headers as Record<string, string>),
       ]),
       uri: options.uri,
       cache: new InMemoryCache(),

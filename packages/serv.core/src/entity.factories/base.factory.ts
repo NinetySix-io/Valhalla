@@ -24,6 +24,16 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
   }
 
   /**
+   * It takes an object and returns a new object with the same properties, but with the values
+   * converted to the correct type
+   * @param {object} obj - The object to be hydrated.
+   * @returns The hydrated object.
+   */
+  hydrate(obj: object) {
+    return this._model.hydrate(obj);
+  }
+
+  /**
    * Find a document by its id.
    * @param {string | mongoose.Types.ObjectId} id - string | mongoose.Types.ObjectId
    * @returns The model is being returned.
@@ -46,8 +56,11 @@ export abstract class BaseFactory<TModel extends BaseSchema> {
    * @param filter - FilterQuery<DocumentType<TModel>>
    * @returns A promise that resolves to an array of documents.
    */
-  find(filter: FilterQuery<DocumentType<TModel>>) {
-    return this._model.find(filter);
+  find(
+    filter: FilterQuery<DocumentType<TModel>>,
+    options?: QueryOptions<DocumentType<TModel>>,
+  ) {
+    return this._model.find(filter, null, options);
   }
 
   /* Creating a single item. */

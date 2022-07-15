@@ -5,18 +5,19 @@ import {
   ArchivePageResponse,
   CloneComponentRequest,
   CloneComponentResponse,
+  CreateBoxRequest,
   CreateComponentRequest,
   CreateComponentResponse,
-  CreateElementRequest,
-  CreateElementResponse,
-  CreateElementsFromComponentRequest,
-  CreateElementsFromComponentResponse,
-  CreateManyElementsRequest,
-  CreateManyElementsResponse,
+  CreateImageRequest,
+  CreateLinkRequest,
   CreatePageRequest,
   CreatePageResponse,
+  CreateSelectRequest,
   CreateSiteRequest,
   CreateSiteResponse,
+  CreateTextRequest,
+  CreateVideoRequest,
+  CreatedElementResponse,
   DeleteComponentRequest,
   DeleteComponentResponse,
   DeleteElementRequest,
@@ -46,14 +47,19 @@ import {
   SitesServiceController,
   SuspendSiteRequest,
   SuspendSiteResponse,
+  UpdateBoxRequest,
   UpdateComponentRequest,
   UpdateComponentResponse,
-  UpdateElementRequest,
-  UpdateElementResponse,
+  UpdateImageRequest,
+  UpdateLinkRequest,
   UpdatePageRequest,
   UpdatePageResponse,
+  UpdateSelectRequest,
   UpdateSiteRequest,
   UpdateSiteResponse,
+  UpdateTextRequest,
+  UpdateVideoRequest,
+  UpdatedElementResponse,
 } from '@app/protobuf';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
@@ -61,12 +67,11 @@ import { ArchiveComponentCommand } from '@app/cqrs/commands/archive.component.co
 import { ArchivePageCommand } from '@app/cqrs/commands/archive.page.command';
 import { CloneComponentCommand } from '@app/cqrs/commands/clone.component.command';
 import { Controller } from '@nestjs/common';
+import { CreateBoxCommand } from '@app/cqrs/commands/create.box.command';
 import { CreateComponentCommand } from '@app/cqrs/commands/create.component.command';
-import { CreateElementCommand } from '@app/cqrs/commands/create.element.command';
-import { CreateElementsFromComponentCommand } from '@app/cqrs/commands/create.elements.from.component.command';
-import { CreateManyElementsCommand } from '@app/cqrs/commands/create.many.elements.command';
 import { CreatePageCommand } from '@app/cqrs/commands/create.page.command';
 import { CreateSiteCommand } from '@app/cqrs/commands/create.site.command';
+import { CreateTextCommand } from '@app/cqrs/commands/create.text.command';
 import { DeleteComponentCommand } from '@app/cqrs/commands/delete.component.command';
 import { DeleteElementCommand } from '@app/cqrs/commands/delete.element.command';
 import { DeleteManyElementsCommand } from '@app/cqrs/commands/delete.many.elements.command';
@@ -74,7 +79,7 @@ import { DeletePageCommand } from '@app/cqrs/commands/delete.page.command';
 import { GetComponentListQuery } from '@app/cqrs/queries/get.component.list.query';
 import { GetComponentQuery } from '@app/cqrs/queries/get.component.query';
 import { GetElementFlatListQuery } from '@app/cqrs/queries/get.element.flat.list.query';
-import { GetElementHierarchicalListQuery } from '@app/cqrs/queries/get.element.hierachical.list.query';
+import { GetElementHierarchicalListQuery } from '@app/cqrs/queries/get.element.hierarchical.list.query';
 import { GetOrCreateFirstPageCommand } from '@app/cqrs/commands/get.or.create.first.page.command';
 import { GetPageListQuery } from '@app/cqrs/queries/get.page.list.query';
 import { GetPageQuery } from '@app/cqrs/queries/get.page.query';
@@ -83,10 +88,11 @@ import { GetSiteQuery } from '@app/cqrs/queries/get.site.query';
 import { GrpcClass } from '@valhalla/serv.core';
 import { Observable } from 'rxjs';
 import { SuspendSiteCommand } from '@app/cqrs/commands/suspend.site.command';
+import { UpdateBoxCommand } from '@app/cqrs/commands/update.box.command';
 import { UpdateComponentCommand } from '@app/cqrs/commands/update.component.command';
-import { UpdateElementCommand } from '@app/cqrs/commands/update.element.command';
 import { UpdatePageCommand } from '@app/cqrs/commands/update.page.command';
 import { UpdateSiteCommand } from '@app/cqrs/commands/update.site.command';
+import { UpdateTextCommand } from '@app/cqrs/commands/update.text.command';
 
 @Controller()
 @GrpcClass(SITES_SERVICE_NAME)
@@ -95,14 +101,103 @@ export class gRpcController implements SitesServiceController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
-  createManyElements(
-    request: CreateManyElementsRequest,
+  createBox(
+    request: CreateBoxRequest,
   ):
-    | CreateManyElementsResponse
-    | Promise<CreateManyElementsResponse>
-    | Observable<CreateManyElementsResponse> {
-    return this.commandBus.execute(new CreateManyElementsCommand(request));
+    | CreatedElementResponse
+    | Promise<CreatedElementResponse>
+    | Observable<CreatedElementResponse> {
+    return this.commandBus.execute(new CreateBoxCommand(request));
   }
+  updateBox(
+    request: UpdateBoxRequest,
+  ):
+    | UpdatedElementResponse
+    | Promise<UpdatedElementResponse>
+    | Observable<UpdatedElementResponse> {
+    return this.commandBus.execute(new UpdateBoxCommand(request));
+  }
+  createText(
+    request: CreateTextRequest,
+  ):
+    | CreatedElementResponse
+    | Promise<CreatedElementResponse>
+    | Observable<CreatedElementResponse> {
+    return this.commandBus.execute(new CreateTextCommand(request));
+  }
+  updateText(
+    request: UpdateTextRequest,
+  ):
+    | UpdatedElementResponse
+    | Promise<UpdatedElementResponse>
+    | Observable<UpdatedElementResponse> {
+    return this.commandBus.execute(new UpdateTextCommand(request));
+  }
+  createImage(
+    request: CreateImageRequest,
+  ):
+    | CreatedElementResponse
+    | Promise<CreatedElementResponse>
+    | Observable<CreatedElementResponse> {
+    throw new Error('Method not implemented.');
+  }
+  updateImage(
+    request: UpdateImageRequest,
+  ):
+    | UpdatedElementResponse
+    | Promise<UpdatedElementResponse>
+    | Observable<UpdatedElementResponse> {
+    throw new Error('Method not implemented.');
+  }
+  createVideo(
+    request: CreateVideoRequest,
+  ):
+    | CreatedElementResponse
+    | Promise<CreatedElementResponse>
+    | Observable<CreatedElementResponse> {
+    throw new Error('Method not implemented.');
+  }
+  updateVideo(
+    request: UpdateVideoRequest,
+  ):
+    | UpdatedElementResponse
+    | Promise<UpdatedElementResponse>
+    | Observable<UpdatedElementResponse> {
+    throw new Error('Method not implemented.');
+  }
+  createSelect(
+    request: CreateSelectRequest,
+  ):
+    | CreatedElementResponse
+    | Promise<CreatedElementResponse>
+    | Observable<CreatedElementResponse> {
+    throw new Error('Method not implemented.');
+  }
+  updateSelect(
+    request: UpdateSelectRequest,
+  ):
+    | UpdatedElementResponse
+    | Promise<UpdatedElementResponse>
+    | Observable<UpdatedElementResponse> {
+    throw new Error('Method not implemented.');
+  }
+  createLink(
+    request: CreateLinkRequest,
+  ):
+    | CreatedElementResponse
+    | Promise<CreatedElementResponse>
+    | Observable<CreatedElementResponse> {
+    throw new Error('Method not implemented.');
+  }
+  updateLink(
+    request: UpdateLinkRequest,
+  ):
+    | UpdatedElementResponse
+    | Promise<UpdatedElementResponse>
+    | Observable<UpdatedElementResponse> {
+    throw new Error('Method not implemented.');
+  }
+
   cloneComponent(
     request: CloneComponentRequest,
   ):
@@ -110,16 +205,6 @@ export class gRpcController implements SitesServiceController {
     | Promise<CloneComponentResponse>
     | Observable<CloneComponentResponse> {
     return this.commandBus.execute(new CloneComponentCommand(request));
-  }
-  createElementsFromComponent(
-    request: CreateElementsFromComponentRequest,
-  ):
-    | CreateElementsFromComponentResponse
-    | Promise<CreateElementsFromComponentResponse>
-    | Observable<CreateElementsFromComponentResponse> {
-    return this.commandBus.execute(
-      new CreateElementsFromComponentCommand(request),
-    );
   }
   deleteManyElements(
     request: DeleteManyElementsRequest,
@@ -144,22 +229,6 @@ export class gRpcController implements SitesServiceController {
     | Promise<GetElementHierarchicalListResponse>
     | Observable<GetElementHierarchicalListResponse> {
     return this.queryBus.execute(new GetElementHierarchicalListQuery(request));
-  }
-  createElement(
-    request: CreateElementRequest,
-  ):
-    | CreateElementResponse
-    | Promise<CreateElementResponse>
-    | Observable<CreateElementResponse> {
-    return this.commandBus.execute(new CreateElementCommand(request));
-  }
-  updateElement(
-    request: UpdateElementRequest,
-  ):
-    | UpdateElementResponse
-    | Promise<UpdateElementResponse>
-    | Observable<UpdateElementResponse> {
-    return this.commandBus.execute(new UpdateElementCommand(request));
   }
   deleteElement(
     request: DeleteElementRequest,

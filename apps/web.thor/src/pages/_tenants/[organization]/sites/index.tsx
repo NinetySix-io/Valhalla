@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { Button, styled } from '@mui/material';
-import { FaSolid, Icon } from '@valhalla/react';
 
 import { CreateSiteModal } from '@app/components/site.create.modal';
 import { SiteList } from '@app/components/site.list';
@@ -22,10 +21,7 @@ const SiteListView: View = () => {
 
   return (
     <Container>
-      <Button onClick={() => setAddingSite(true)}>
-        <Icon icon={FaSolid.faPlus} />
-        Add Site
-      </Button>
+      <Button onClick={() => setAddingSite(true)}>Add Site</Button>
       <SiteList />
       <CreateSiteModal isOpen={addingSite} onFinish={() => sites.refetch()} />
     </Container>

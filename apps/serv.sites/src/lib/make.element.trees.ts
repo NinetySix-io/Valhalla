@@ -1,4 +1,4 @@
-import { ElementSchema } from '@app/entities/elements/schema';
+import { ElementSchema } from '@app/entities/elements/schemas/element.schema';
 import { HierarchicalElement } from '@app/protobuf';
 
 /**
@@ -21,9 +21,10 @@ export function makeElementTrees(
     }
 
     if (typeof element !== 'string') {
-      cacheMap[element.id].id = element.id;
-      cacheMap[element.id].props = element.props;
-      cacheMap[element.id].type = element.type;
+      const { id, type, ...props } = element;
+      cacheMap[id].id = id;
+      cacheMap[id].props = props;
+      cacheMap[id].type = type;
     }
 
     return cacheMap[elementId];

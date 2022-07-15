@@ -1,18 +1,15 @@
 import * as React from 'react';
 
-import { FaReg, cProps } from '@valhalla/react';
-
 import Link from 'next/link';
 import { SidebarItem } from './base';
+import { cProps } from '@valhalla/react';
 
 type Props = cProps;
 
 export const SitesItem: React.FC<Props> = (props) => {
   return (
     <Link href="/sites" passHref>
-      <SidebarItem {...props} icon={FaReg.faWindowMaximize}>
-        Sites
-      </SidebarItem>
+      <SidebarItem {...props}>Sites</SidebarItem>
     </Link>
   );
 };

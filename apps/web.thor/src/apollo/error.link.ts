@@ -8,17 +8,27 @@ import { onError } from '@apollo/client/link/error';
  * It will intercept any errors from the GraphQL server, and if the error is a 401, it will attempt to
  * get a new access token and retry the request
  */
-export const getErrorLink = (options?: { headers: Record<string, string> }) => {
+export const buildErrorLink = (options?: {
+  headers: Record<string, string>;
+  organizationId?: string;
+  onAccessToken?: (accessToken: string) => void;
+}) => {
   return onError(({ graphQLErrors, operation, forward }) => {
     if (graphQLErrors) {
       for (const error of graphQLErrors) {
         const extensions = error.extensions as ModGraphQLErrorExtensions;
         const statusCode = extensions.response?.statusCode;
         if (statusCode === 401) {
-          const headers = options.headers ?? {};
-          return fromPromise(getAccessToken({ headers }))
+          const headers = options?.headers ?? {};
+          return fromPromise(
+            getAccessToken({
+              headers,
+              organizationId: options?.organizationId,
+            }),
+          )
             .filter((value) => !isNil(value))
             .flatMap((accessToken) => {
+              options?.onAccessToken(accessToken.value);
               operation.setContext({
                 accessToken,
                 headers: {

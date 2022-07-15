@@ -1,5 +1,4 @@
 import { Box, Button } from '@mui/material';
-import { FaSolid, Icon } from '@valhalla/react';
 
 import { BaseLayout } from '@app/layout/base';
 import { FormContainer } from '@app/components/form.container';
@@ -35,12 +34,7 @@ const AuthView: View<Props> = ({ query }) => {
             query,
           })}
         >
-          <Button
-            fullWidth
-            variant="outlined"
-            className={cx(styles.button)}
-            startIcon={<Icon icon={FaSolid.faUser} />}
-          >
+          <Button fullWidth variant="outlined" className={cx(styles.button)}>
             Login with Email/Phone
           </Button>
         </NextLink>

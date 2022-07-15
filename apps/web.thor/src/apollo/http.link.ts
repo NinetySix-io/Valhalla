@@ -5,7 +5,7 @@ import { createHttpLink as createApolloHttpLink } from '@apollo/client';
  * @param headers - Record<string, string> = {}
  * @returns A function that returns a link.
  */
-export const createHttpLink = (
+export const buildHttpLink = (
   uri: string,
   headers: Record<string, string> = {},
 ) => {

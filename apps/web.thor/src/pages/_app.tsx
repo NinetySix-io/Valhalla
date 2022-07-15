@@ -30,7 +30,7 @@ export default function App({ Component, ...props }: AppProps) {
   const Page = Component as View;
   const Layout = Page.Layout ?? BaseLayout;
   const isProtected = !Page.isUnprotected;
-  const apolloClient = useApollo(pageProps);
+  const apolloClient = useApollo(pageProps, store);
 
   return (
     <CacheProvider value={clientSideEmotionCache}>

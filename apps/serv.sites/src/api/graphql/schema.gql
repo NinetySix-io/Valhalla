@@ -92,116 +92,30 @@ type PageSchema {
   updatedBy: String!
 }
 
-"""Base html element"""
-type ElementSchema {
-  """Date entity was created"""
-  createdAt: DateTime!
+type DirectionalSchema {
+  """Left side"""
+  left: String
 
-  """Date entity was updated"""
-  updatedAt: DateTime!
+  """Right side"""
+  right: String
 
-  """Identifier of the entity"""
-  id: ID!
+  """Top side"""
+  top: String
 
-  """When is root, parent is not an element"""
-  isRoot: Boolean
-
-  """Parent of element"""
-  parent: String!
-  updatedBy: String!
-
-  """Element type"""
-  type: ElementType!
-
-  """Additional properties"""
-  props: JSON
+  """Bottom side"""
+  bottom: String
 }
 
-enum ElementType {
-  meta
-  style
-  link
-  title
-  address
-  article
-  aside
-  footer
-  header
-  h1
-  h2
-  h3
-  h4
-  h5
-  h6
-  main
-  nav
-  section
-  blockquote
-  dd
-  div
-  dl
-  dt
-  figcaption
-  figure
-  hr
-  li
-  menu
-  ol
-  p
-  pre
-  ul
-  a
-  abbr
-  b
-  bdi
-  bdo
-  br
-  cite
-  code
-  data
-  dfn
-  em
-  i
-  kbd
-  mark
-  q
-  rp
-  rt
-  ruby
-  s
-  samp
-  small
-  span
-  strong
-  sub
-  sup
-  time
-  u
-  var
-  wbr
-  area
-  audio
-  img
-  map
-  track
-  video
-  embed
-  iframe
-  object
-  picture
-  portal
-  source
-  svg
-  math
-  canvas
-  noscript
-  script
-}
+type StyleSchema {
+  """Padding"""
+  padding: DirectionalSchema!
 
-"""
-The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-"""
-scalar JSON
+  """Margin"""
+  margin: DirectionalSchema!
+
+  """Border radius"""
+  borderRadius: DirectionalSchema!
+}
 
 type SiteSchema {
   """Date entity was created"""
@@ -238,17 +152,6 @@ enum SiteStatus {
   SUSPENDED
 }
 
-type HierarchicalElementResponse {
-  """Identifier of the entity"""
-  id: ID!
-
-  """Element type"""
-  type: ElementType!
-
-  """Additional properties"""
-  props: JSON
-}
-
 type PageUpdatedResponse {
   """Identifier of the entity"""
   id: ID!
@@ -272,8 +175,81 @@ type Query {
   page(siteId: String!, id: String!): PageSchema!
   component(id: String!): ComponentSchema!
   componentList: [ComponentSchema!]!
-  flatElementList(filter: PageContextInput!): [ElementSchema!]!
-  hierarchicalElementList(filter: PageContextInput!): [HierarchicalElementResponse!]!
+  flatElementList(filter: PageContextInput!): [ElementUnion!]!
+}
+
+union ElementUnion = BoxElementSchema | TextElementSchema
+
+type BoxElementSchema {
+  """Date entity was created"""
+  createdAt: DateTime!
+
+  """Date entity was updated"""
+  updatedAt: DateTime!
+
+  """Identifier of the entity"""
+  id: ID!
+
+  """When is root, parent is not an element"""
+  isRoot: Boolean
+
+  """Parent of element"""
+  parent: String!
+  updatedBy: String!
+
+  """Element type"""
+  type: ElementType!
+
+  """Element style"""
+  style: StyleSchema
+
+  """Positional"""
+  after: String
+  htmlType: HTMLType!
+}
+
+enum ElementType {
+  Text
+  Input
+  Box
+  Image
+  Video
+  Link
+}
+
+enum HTMLType {
+  div
+  button
+}
+
+type TextElementSchema {
+  """Date entity was created"""
+  createdAt: DateTime!
+
+  """Date entity was updated"""
+  updatedAt: DateTime!
+
+  """Identifier of the entity"""
+  id: ID!
+
+  """When is root, parent is not an element"""
+  isRoot: Boolean
+
+  """Parent of element"""
+  parent: String!
+  updatedBy: String!
+
+  """Element type"""
+  type: ElementType!
+
+  """Element style"""
+  style: StyleSchema
+
+  """Positional"""
+  after: String
+
+  """Text"""
+  text: String!
 }
 
 input PageContextInput {
@@ -295,9 +271,11 @@ type Mutation {
   updateComponent(id: String!, input: UpdateComponentInput!): Boolean!
   deleteComponent(id: String!): Boolean!
   archiveComponent(id: String!): Boolean!
-  createElement(input: CreateElementInput!): String!
-  updateElement(id: String!, input: UpdateElementInput!): Boolean!
-  deleteElement(id: String!, input: DeleteElementInput!): Boolean!
+  deleteElement(input: DeleteElementInput!): Boolean!
+  createBox(input: CreateBoxInput!): String!
+  updateBox(input: UpdateBoxInput!): Boolean!
+  createText(input: CreateTextInput!): String!
+  updateText(input: UpdateTextInput!): Boolean!
 }
 
 input CreateSiteInput {
@@ -336,49 +314,77 @@ input UpdateComponentInput {
   name: String
 }
 
-input CreateElementInput {
-  """Site ID"""
-  siteId: String!
-
-  """Page ID"""
-  pageId: String!
-
-  """When is root, parent is not an element"""
-  isRoot: Boolean
-
-  """Parent of element"""
+input DeleteElementInput {
+  """Element context"""
+  ctx: PageContextInput!
+  style: StyleInput
   parent: String!
 
-  """Element type"""
-  type: ElementType!
-
-  """Additional properties"""
-  props: JSON
+  """Element ID"""
+  elementId: String!
 }
 
-input UpdateElementInput {
-  """Parent of element"""
-  parent: String
-
-  """Element type"""
-  type: ElementType
-
-  """Additional properties"""
-  props: JSON
-
-  """Site ID"""
-  siteId: String!
-
-  """Page ID"""
-  pageId: String!
+input StyleInput {
+  top: DirectionalInput
+  bottom: DirectionalInput
+  left: DirectionalInput
+  right: DirectionalInput
 }
 
-input DeleteElementInput {
-  """Site ID"""
-  siteId: String!
+input DirectionalInput {
+  """Left side"""
+  left: String
 
-  """Page ID"""
-  pageId: String!
+  """Right side"""
+  right: String
+
+  """Top side"""
+  top: String
+
+  """Bottom side"""
+  bottom: String
+}
+
+input CreateBoxInput {
+  """Element context"""
+  ctx: PageContextInput!
+  style: StyleInput
+  parent: String!
+  htmlType: HTMLType
+}
+
+input UpdateBoxInput {
+  """Element context"""
+  ctx: PageContextInput!
+  style: StyleInput
+  parent: String!
+
+  """Element ID"""
+  elementId: String!
+  htmlType: HTMLType
+}
+
+input CreateTextInput {
+  """Element context"""
+  ctx: PageContextInput!
+  style: StyleInput
+  parent: String!
+
+  """Text"""
+  text: String!
+}
+
+input UpdateTextInput {
+  """Element context"""
+  ctx: PageContextInput!
+  style: StyleInput
+  parent: String!
+
+  """Element ID"""
+  elementId: String!
+
+  """Text"""
+  text: String
 }
 
 scalar link__Import

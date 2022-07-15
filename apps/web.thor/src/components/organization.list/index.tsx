@@ -3,20 +3,19 @@ import * as React from 'react';
 import {
   Box,
   Button,
-  IconButton,
   Stack,
   Typography,
   css,
   styled,
   useTheme,
 } from '@mui/material';
-import { FaSolid, Icon, cProps } from '@valhalla/react';
 
 import { DynamicOrganizationCreateModal } from '../organization.create.modal/dynamic';
 import { Environment } from '@app/env';
 import Link from 'next/link';
 import { OrganizationLogo } from '../organization.logo';
 import { Section } from '../section';
+import { cProps } from '@valhalla/react';
 import { useGetOrgsMembershipListQuery } from '@app/generated/valhalla.gql';
 
 const CreateButton = styled(Button)(
@@ -65,9 +64,9 @@ export const OrganizationList: React.FC<Props> = () => {
       <Section
         title="Organizations"
         actions={
-          <IconButton size="small" onClick={() => organizations.refetch()}>
-            <Icon fontSize={12} icon={FaSolid.faRotate} />
-          </IconButton>
+          <Button size="small" onClick={() => organizations.refetch()}>
+            Reload
+          </Button>
         }
       >
         <Stack
@@ -78,7 +77,7 @@ export const OrganizationList: React.FC<Props> = () => {
           justifyContent="flex-start"
         >
           <CreateButton variant="outlined" onClick={() => setCreating(true)}>
-            <Icon fontSize={30} icon={FaSolid.faPlus} />
+            Create
           </CreateButton>
           {organizations.data?.organizations.map((org) => (
             <Link

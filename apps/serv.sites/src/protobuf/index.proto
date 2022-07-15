@@ -44,21 +44,18 @@ service SitesService {
   rpc GetElementHierarchicalList(GetElementHierarchicalListRequest) returns (GetElementHierarchicalListResponse) {}
   rpc DeleteElement(DeleteElementRequest) returns (DeleteElementResponse) {}
   rpc DeleteManyElements(DeleteManyElementsRequest) returns (DeleteManyElementsResponse) {}
-
-  rpc CreateButton(CreateButtonRequest) returns (ButtonElement) {}
-  rpc UpdateButton(UpdateButtonRequest) returns (ButtonElement) {}
-  rpc CreateText(CreateTextRequest) returns (TextElement) {}
-  rpc UpdateTExt(UpdateTextRequest) returns (TextElement) {}
-  rpc CreateContainer(CreateContainerRequest) returns (ContainerElement) {}
-  rpc UpdateContainer(UpdateContainerRequest) returns (ContainerElement) {}
-  rpc CreateImage(CreateImageRequest) returns (ImageElement) {}
-  rpc UpdateImage(UpdateImageRequest) returns (ImageElement) {}
-  rpc CreateVideo(CreateVideoRequest) returns (VideoElement) {}
-  rpc UpdateVideo(UpdateVideoRequest) returns (VideoElement) {}
-  rpc CreateSelect(CreateSelectRequest) returns (SelectElement) {}
-  rpc UpdateSelect(UpdateSelectRequest) returns (SelectElement) {}
-  rpc CreateLink(CreateLinkRequest) returns (LinkElement) {}
-  rpc UpdateLink(UpdateLinkRequest) returns (LinkElement) {}
+  rpc CreateText(CreateTextRequest) returns (CreatedElementResponse) {}
+  rpc UpdateText(UpdateTextRequest) returns (UpdatedElementResponse) {}
+  rpc CreateBox(CreateBoxRequest) returns (CreatedElementResponse) {}
+  rpc UpdateBox(UpdateBoxRequest) returns (UpdatedElementResponse) {}
+  rpc CreateImage(CreateImageRequest) returns (CreatedElementResponse) {}
+  rpc UpdateImage(UpdateImageRequest) returns (UpdatedElementResponse) {}
+  rpc CreateVideo(CreateVideoRequest) returns (CreatedElementResponse) {}
+  rpc UpdateVideo(UpdateVideoRequest) returns (UpdatedElementResponse) {}
+  rpc CreateSelect(CreateSelectRequest) returns (CreatedElementResponse) {}
+  rpc UpdateSelect(UpdateSelectRequest) returns (UpdatedElementResponse) {}
+  rpc CreateLink(CreateLinkRequest) returns (CreatedElementResponse) {}
+  rpc UpdateLink(UpdateLinkRequest) returns (UpdatedElementResponse) {}
 }
 
 // -----------------------------
@@ -76,19 +73,38 @@ enum EditStatus {
   ARCHIVED = 2;
 }
 
+enum HTMLType {
+  div = 0;
+  button = 1;
+}
+
 enum ElementType {
-  TEXT = 0;
-  BUTTON = 1;
-  CONTAINER = 2;
-  IMAGE = 3;
-  VIDEO = 4;
-  SELECT = 5;
-  LINK = 6;
+  Text = 0;
+  Input = 1;
+  Box = 2;
+  Image = 3;
+  Video = 4;
+  Link = 6;
 }
 
 // -----------------------------
 // Entity
 // -----------------------------
+
+message LinkAction {
+  string href = 1;
+  string target = 2;
+}
+
+message Style {
+
+}
+
+message Action {
+  oneof action {
+    LinkAction link = 1;
+  }
+}
 
 message Component {
   string id = 1;
@@ -102,29 +118,31 @@ message Component {
   google.protobuf.Timestamp createdAt = 9;
 }
 
+message InputElement {
+  string id = 1;
+  string parent = 2;
+  repeated string owners = 3;
+  Style style = 4;
+  optional string after = 9;
+}
+
 message TextElement {
   string id = 1;
   string parent = 2;
   repeated string owners = 3;
-  google.protobuf.Timestamp createdAt = 8;
-  google.protobuf.Timestamp updatedAt = 9;
+  string text = 4;
+  Style style = 5;
+  optional string after = 9;
 }
 
-message ButtonElement {
-  string id = 1;
-  string parent = 2;
-  repeated string owners = 3;
-  google.protobuf.Timestamp createdAt = 8;
-  google.protobuf.Timestamp updatedAt = 9;
-}
-
-message ContainerElement {
+message BoxElement {
   string id = 1;
   string parent = 2;
   repeated string owners = 3;
   optional bool isRoot = 4;
-  google.protobuf.Timestamp createdAt = 8;
-  google.protobuf.Timestamp updatedAt = 9;
+  Style style = 5;
+  optional HTMLType htmlType = 6;
+  optional string after = 9;
 }
 
 message LinkElement {
@@ -133,8 +151,8 @@ message LinkElement {
   repeated string owners = 3;
   string url = 4;
   string isNewTab = 5;
-  google.protobuf.Timestamp createdAt = 8;
-  google.protobuf.Timestamp updatedAt = 9;
+  Style style = 6;
+  optional string after = 9;
 }
 
 message ImageElement {
@@ -142,33 +160,24 @@ message ImageElement {
   string parent = 2;
   string resource = 3;
   repeated string owners = 4;
-  google.protobuf.Timestamp createdAt = 8;
-  google.protobuf.Timestamp updatedAt = 9;
+  Style style = 5;
+  optional string after = 9;
 }
 
 message VideoElement {
   string id = 1;
+  repeated string owners = 2;
   string parent = 3;
   string resource = 4;
-  repeated string owners = 2;
-  google.protobuf.Timestamp createdAt = 8;
-  google.protobuf.Timestamp updatedAt = 9;
-}
-
-message SelectElement {
-  string id = 1;
-  string parent = 3;
-  string resource = 4;
-  repeated string owners = 2;
-  google.protobuf.Timestamp createdAt = 8;
-  google.protobuf.Timestamp updatedAt = 9;
+  Style style = 5;
+  optional string after = 9;
 }
 
 message Element {
   oneof element {
     TextElement Text = 1;
-    ButtonElement Button = 2;
-    ContainerElement Container = 3;
+    InputElement Input = 2;
+    BoxElement Box = 3;
     LinkElement Link = 4;
     ImageElement Image = 5;
     VideoElement Video = 6;
@@ -213,29 +222,48 @@ message Site {
 // Elements
 // -----------------------------
 
-message CreateButtonRequest {
-
+message CreatedElementResponse {
+  string elementId = 1;
 }
 
-message UpdateButtonRequest {
+message UpdatedElementResponse {
 
 }
 
 message CreateTextRequest {
-
+  repeated string owners = 1;
+  string requestedUserId = 2;
+  string parent = 3;
+  optional Style style = 4;
+  string text = 5;
+  optional string after = 9;
 }
-
 
 message UpdateTextRequest {
-
+  repeated string owners = 1;
+  string requestedUserId = 2;
+  string elementId = 3;
+  optional Style style = 4;
+  optional string text = 5;
+  optional string after = 9;
 }
 
-message CreateContainerRequest {
-
+message CreateBoxRequest {
+  repeated string owners = 1;
+  string requestedUserId = 2;
+  string parent = 3;
+  optional Style style = 4;
+  optional HTMLType htmlType = 5;
+  optional string after = 9;
 }
 
-message UpdateContainerRequest {
-
+message UpdateBoxRequest {
+  repeated string owners = 1;
+  string requestedUserId = 2;
+  string elementId = 3;
+  optional Style style = 4;
+  optional HTMLType htmlType = 5;
+  optional string after = 9;
 }
 
 message CreateImageRequest {
@@ -286,7 +314,6 @@ message DeleteElementRequest {
 }
 
 message DeleteElementResponse {
-  Element element = 1;
 }
 
 message GetElementFlatListRequest {

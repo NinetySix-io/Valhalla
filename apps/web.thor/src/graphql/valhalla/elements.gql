@@ -1,27 +1,88 @@
+fragment Directional on DirectionalSchema {
+  top
+  bottom
+  left
+  right
+}
+
+fragment Style on StyleSchema {
+  margin {
+    ...Directional
+  }
+  padding {
+    ...Directional
+  }
+  borderRadius {
+    ...Directional
+  }
+}
+
 query getFlatElementList($siteId: String!, $pageId: String!) {
   flatElementList(filter: { pageId: $pageId, siteId: $siteId }) {
-    id
-    parent
-    type
-    props
+    __typename
+    ... on BoxElementSchema {
+      id
+      isRoot
+      htmlType
+      style {
+        ...Style
+      }
+    }
+    ... on TextElementSchema {
+      text
+      id
+      style {
+        ...Style
+      }
+    }
   }
 }
 
-query getHierarchicalElementList($siteId: String!, $pageId: String!) {
-  hierarchicalElementList(filter: { pageId: $pageId, siteId: $siteId }) {
-    type
-    props
-  }
+mutation createBox(
+  $ctx: PageContextInput!
+  $style: StyleInput
+  $parent: String!
+  $htmlType: HTMLType
+) {
+  createBox(
+    input: { parent: $parent, ctx: $ctx, style: $style, htmlType: $htmlType }
+  )
 }
 
-mutation createElement($payload: CreateElementInput!) {
-  createElement(input: $payload)
+mutation updateBox(
+  $elementId: String!
+  $ctx: PageContextInput!
+  $style: StyleInput
+  $parent: String!
+) {
+  updateBox(
+    input: { elementId: $elementId, parent: $parent, ctx: $ctx, style: $style }
+  )
 }
 
-mutation updateElement($elementId: String!, $payload: UpdateElementInput!) {
-  updateElement(id: $elementId, input: $payload)
+mutation createText(
+  $ctx: PageContextInput!
+  $style: StyleInput
+  $parent: String!
+  $text: String!
+) {
+  createText(input: { text: $text, parent: $parent, ctx: $ctx, style: $style })
 }
 
-mutation deleteElement($elementId: String!, $payload: DeleteElementInput!) {
-  deleteElement(id: $elementId, input: $payload)
+mutation updateText(
+  $ctx: PageContextInput!
+  $style: StyleInput
+  $text: String
+  $parent: String!
+  $elementId: String!
+) {
+  updateText(
+    input: {
+      text: $text
+      style: $style
+      ctx: $ctx
+      elementId: $elementId
+      parent: $parent
+    }
+  )
 }

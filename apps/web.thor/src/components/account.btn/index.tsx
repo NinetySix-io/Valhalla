@@ -5,13 +5,12 @@ import {
   Box,
   Divider,
   IconButton,
-  ListItemIcon,
   Menu,
   MenuItem,
   Typography,
 } from '@mui/material';
-import { FaSolid, Icon, cProps } from '@valhalla/react';
 
+import { cProps } from '@valhalla/react';
 import { useGetAccountQuery } from '@app/generated/valhalla.gql';
 import { useLogout } from '@app/hooks/use.logout';
 
@@ -43,9 +42,6 @@ export const AccountBtn: React.FC<Props> = () => {
         </MenuItem>
         <Divider />
         <MenuItem onClick={logout.execute} disabled={logout.loading}>
-          <ListItemIcon>
-            <Icon icon={FaSolid.faArrowRightFromBracket} />
-          </ListItemIcon>
           Logout
         </MenuItem>
       </Menu>
