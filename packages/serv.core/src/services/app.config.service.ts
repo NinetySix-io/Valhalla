@@ -13,7 +13,6 @@ export class ServAppConfigService {
 
   /**
    * The function returns the value of the `service.discoveryHost` key from the `boot` object
-   * @returns The hostname of the service discovery server.
    */
   get host(): string {
     return this.boot.get('service.discoveryHost');
@@ -22,7 +21,6 @@ export class ServAppConfigService {
   /**
    * The function returns the value of the environment variable PORT, or the value of the service.port
    * property in the config.yaml file
-   * @returns The port number of the service.
    */
   private get port(): number {
     return Number(process.env.PORT) || this.boot.get('service.port');
@@ -30,7 +28,6 @@ export class ServAppConfigService {
 
   /**
    * It returns the value of the `service.tags` key from the `boot` object
-   * @returns The tags property is being returned.
    */
   get tags(): string[] {
     return this.boot.get('service.tags');
@@ -46,7 +43,6 @@ export class ServAppConfigService {
 
   /**
    * It returns the host and port of the gRpc server.
-   * @returns The gRpcUrl property is being returned.
    */
   get gRpcUrl(): string {
     return `${this.host}:${this.grpcPort}`;
@@ -54,7 +50,6 @@ export class ServAppConfigService {
 
   /**
    * It returns the rest url
-   * @returns The restUrl property is being returned.
    */
   get restUrl(): string {
     return `${this.host}:${this.restPort}`;
@@ -62,7 +57,6 @@ export class ServAppConfigService {
 
   /**
    * It checks if the tags array includes the string 'graphql'
-   * @returns A boolean value.
    */
   get hasGraphql(): boolean {
     return this.tags.includes('graphql');

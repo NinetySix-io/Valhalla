@@ -28,8 +28,6 @@ export class AccessProvisionService {
 
   /**
    * Find a refresh token by its value
-   * @param {string} refreshToken - The refresh token that was sent to the client.
-   * @returns The refresh token
    */
   findRefreshToken(refreshToken: string) {
     return this.refreshTokens.findById(refreshToken);
@@ -37,8 +35,6 @@ export class AccessProvisionService {
 
   /**
    * It deletes the refresh token from the database
-   * @param {string} refreshToken - The refresh token to revoke.
-   * @returns The content of the refresh token.
    */
   async revokeRefreshToken(refreshToken: string) {
     const tokenId = toObjectId(refreshToken);
@@ -49,9 +45,6 @@ export class AccessProvisionService {
   /**
    * It creates a new refresh token, deletes all other refresh tokens for the account, and then creates
    * a new access token
-   * @param {Account} account - Account - This is the account object that was passed in from the login
-   * method.
-   * @returns An object with the refreshToken, accessToken
    */
   async createRefreshToken(account: Account) {
     const accountId = toObjectId(account.id);
@@ -79,8 +72,6 @@ export class AccessProvisionService {
 
   /**
    * It takes a refresh token, finds the account associated with it, and generates a new access token
-   * @param {string} refreshToken - The refresh token that was sent to the client.
-   * @returns An object with the access token and the access token expiry date.
    */
   async renewAccessToken(
     refreshToken: string,
@@ -98,8 +89,6 @@ export class AccessProvisionService {
 
   /**
    * It decodes the access token and returns the decoded data
-   * @param {string} accessToken - The access token to decode.
-   * @returns The JwtContent interface is being returned.
    */
   decodeAccessToken(accessToken: string): JwtContent {
     const data = this.jwtService.decode(accessToken) as JwtContent;
@@ -112,8 +101,6 @@ export class AccessProvisionService {
 
   /**
    * It creates a JWT access token for the given account
-   * @param account - Pick<Account, 'id' | 'displayName'>
-   * @returns A string
    */
   async createAccessToken(
     account: JwtContent['account'],

@@ -11,7 +11,6 @@ let _store: ReturnType<typeof _makeStore>;
 /**
  * If we're in development mode and the redux logger is not disabled, then we'll use the redux logger.
  * Otherwise, we'll return an empty array
- * @returns An array of middlewares.
  */
 function getMiddlewares() {
   if (
@@ -34,7 +33,6 @@ function getMiddlewares() {
 /**
  * It creates a Redux store and it uses the `withHydration` function to hydrate
  * the store with the initial state from the server
- * @returns A function that returns a store.
  */
 function _makeStore() {
   return configureStore({
@@ -52,7 +50,6 @@ function _makeStore() {
 
 /**
  * If the store hasn't been created yet, create it and return it. Otherwise, return the existing store.
- * @returns A function that returns a store.
  */
 export function makeStore() {
   if (!_store) {
@@ -64,7 +61,6 @@ export function makeStore() {
 
 /**
  * It returns the store
- * @returns The store object.
  */
 export function getStore(): undefined | Store {
   return _store;

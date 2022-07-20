@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /**
- * @param meta
- * @returns
  */
 export function getIdentityFromCtx(meta: any) {
   const gMap = meta.getMap();

@@ -9,8 +9,6 @@ import { isEmail, isPhoneNumber } from '@valhalla/utilities';
 
 /**
  * Hook to facilitate login in
- * @param type
- * @returns
  */
 export function useLogin() {
   const username = React.useRef<string>();

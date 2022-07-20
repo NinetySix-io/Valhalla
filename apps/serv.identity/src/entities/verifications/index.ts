@@ -18,9 +18,6 @@ export class VerificationsModel extends BaseFactory<VerificationSchema> {
   /**
    * It takes a raw password and a hashed password and returns a promise that resolves to true if the
    * raw password matches the hashed password
-   * @param {string} raw - The raw password that the user entered.
-   * @param {string} hashed - The hashed password that was stored in the database.
-   * @returns A promise that resolves to a boolean.
    */
   validateCode(raw: string, hashed: string): Promise<boolean> {
     return compare(raw, hashed);
@@ -28,9 +25,6 @@ export class VerificationsModel extends BaseFactory<VerificationSchema> {
 
   /**
    * It creates a new verification code for a user, hashes it, and saves it to the database
-   * @param owner - The owner of the verification code.
-   * @param {Date} expiresAt - Date = dayjs().add(10, 'minutes').toDate(),
-   * @returns A new verification code
    */
   async generate(
     expiresAt: Date = dayjs().add(10, 'minutes').toDate(),

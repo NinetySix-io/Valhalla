@@ -3,7 +3,6 @@ import { useSingleRouterQuery } from '../use.single.router.query';
 
 /**
  * It returns the siteId from the URL query string
- * @returns A string or undefined
  */
 export function useSiteId() {
   return useSingleRouterQuery('siteId');
@@ -11,7 +10,6 @@ export function useSiteId() {
 
 /**
  * It returns the site data for the current site
- * @returns The site object
  */
 export function useSiteHydrate() {
   const siteId = useSiteId();

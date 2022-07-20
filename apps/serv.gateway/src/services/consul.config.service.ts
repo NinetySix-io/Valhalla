@@ -34,7 +34,6 @@ export class ConsulConfigService implements OnModuleInit {
 
   /**
    * It returns an array of services that have the `graphql` tag
-   * @returns An array of services that have the graphql tag.
    */
   get graphqlServices() {
     return this.services.filter((service) =>

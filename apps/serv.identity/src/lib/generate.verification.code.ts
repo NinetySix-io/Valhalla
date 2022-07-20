@@ -6,9 +6,6 @@ function generateDevCode(length: number) {
 
 /**
  * It generates a random verification code of a given length
- *
- * @param {number} length - The length of the verification code.
- * @param {VerificationCodeGeneratorOption} options - VerificationCodeGeneratorOption
  */
 export function generateVerificationCode(length: number) {
   if (isDev()) {

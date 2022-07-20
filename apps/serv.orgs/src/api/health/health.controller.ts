@@ -21,7 +21,6 @@ export class HealthController {
 
   /**
    * It returns a function that checks the health of the gRPC service
-   * @returns A function that returns a promise that resolves to a HealthIndicatorResult
    */
   private checkGrpc(): HealthIndicatorFunction {
     return () =>

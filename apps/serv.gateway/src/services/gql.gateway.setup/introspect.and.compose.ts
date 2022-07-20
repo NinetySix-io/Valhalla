@@ -54,8 +54,6 @@ export class IntrospectAndCompose implements SupergraphManager {
 
   /**
    * It initializes the state of the hook, and returns a function that can be used to clean up the hook
-   * @param {SupergraphSdlHookOptions}  - `update`: a function that takes a string and returns a
-   * promise that resolves to a string. This function is used to update the supergraph's schema.
    */
   public async initialize({
     update,
@@ -108,7 +106,6 @@ export class IntrospectAndCompose implements SupergraphManager {
 
   /**
    * It takes a list of subgraphs, fetches their SDLs, and then creates a supergraph SDL from them
-   * @returns The supergraph SDL
    */
   private async updateSupergraphSdl() {
     this.buildSubgraph();
@@ -151,8 +148,6 @@ export class IntrospectAndCompose implements SupergraphManager {
 
   /**
    * It takes a list of subgraphs, and returns a list of subgraphs that are valid
-   * @param subgraphs - ServiceDefinitionUpdate['serviceDefinitions']
-   * @returns An array of service definitions.
    */
   private filterInvalidSubgraphs(
     subgraphs: ServiceDefinitionUpdate['serviceDefinitions'] = [],
@@ -176,8 +171,6 @@ export class IntrospectAndCompose implements SupergraphManager {
 
   /**
    * It takes a list of subgraphs and returns a supergraph
-   * @param subgraphs - ServiceDefinitionUpdate['serviceDefinitions']
-   * @returns The supergraphSdl is being returned.
    */
   private createSupergraphFromSubgraphList(
     subgraphs: ServiceDefinitionUpdate['serviceDefinitions'] = [],

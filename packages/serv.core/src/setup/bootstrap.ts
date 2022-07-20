@@ -13,9 +13,6 @@ import { loadDotEnv } from '../lib';
 
 /**
  * It creates a NestJS application, sets up the ServCore module, and returns the application
- * @param AppModule - The NestJS application module
- * @param options - {
- * @returns The app is being returned.
  */
 export async function bootstrapApplication(
   AppModule: { new (): unknown },

@@ -32,8 +32,6 @@ export const EmptyObjectValidation: ValidatorOption<object> = {
 /**
  * It takes an array of validators and returns a validator that will validate if any of the validators
  * in the array validate
- * @param {ValidatorOption[]} validators - ValidatorOption[]
- * @returns A function that takes in a value and returns a boolean
  */
 export function OrValidation<T>(
   validators: ValidatorOption<T>[],
@@ -54,8 +52,6 @@ export function OrValidation<T>(
 /**
  * It takes an array of validators and returns a validator that runs all of them and returns true if
  * all of them return true
- * @param {ValidatorOption[]} validators - ValidatorOption[]
- * @returns A function that takes in an array of validators and returns a validator option.
  */
 export function AndValidation<T>(
   validators: ValidatorOption<T>[],

@@ -5,8 +5,6 @@ import { merge } from 'merge-anything';
 
 /**
  * Hydrate redux state when action `HYDRATE` is provided
- * @param reducers
- * @returns
  */
 export function withHydration<S, A extends Action>(
   reducers: Reducer<CombinedState<S>, A>,

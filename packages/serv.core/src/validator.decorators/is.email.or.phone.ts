@@ -7,8 +7,6 @@ import {
 
 /**
  * It's a decorator that validates a string property to be either an email or a phone number
- * @param {ValidationOptions} validationOptions - ValidationOptions = {}
- * @returns A function that takes an object and a property name and returns a decorator.
  */
 export function IsEmailOrPhone(
   validationOptions: ValidationOptions = {},

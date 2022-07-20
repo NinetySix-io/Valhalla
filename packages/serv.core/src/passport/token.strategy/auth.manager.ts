@@ -32,8 +32,6 @@ export class AuthManager {
 
   /**
    * It returns the access token from the request
-   * @param request - FastifyRequest<object>
-   * @returns The access token from the request.
    */
   static getAccessTokenFromRequest(request: FastifyRequest<object>) {
     return (
@@ -65,7 +63,6 @@ export class AuthManager {
 
   /**
    * It sets the access token in the response header
-   * @param {string} accessToken - The access token to be set in the response header.
    */
   setAccessToken(accessToken: string) {
     this.reply.header(AuthManager.accessTokenKey, accessToken);
@@ -73,7 +70,6 @@ export class AuthManager {
 
   /**
    * It returns the cookies from the request object
-   * @returns The cookies object from the request object.
    */
   get cookies() {
     return this.request.cookies;
@@ -81,7 +77,6 @@ export class AuthManager {
 
   /**
    * It gets the refresh token from the cookie
-   * @returns The refresh token from the cookie.
    */
   getRefreshToken() {
     return this.cookies?.[AuthManager.refreshTokenKey];
@@ -89,7 +84,6 @@ export class AuthManager {
 
   /**
    * It returns the value of the access token key in the request header
-   * @returns The access token from the request header.
    */
   getAccessToken() {
     return this.request.headers[AuthManager.accessTokenKey];

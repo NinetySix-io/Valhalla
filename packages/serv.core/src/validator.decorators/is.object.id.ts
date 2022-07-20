@@ -4,8 +4,6 @@ import { mongoose } from '@typegoose/typegoose';
 
 /**
  * It's a decorator that validates a property to be a valid MongoDB ObjectId
- * @param {ValidationOptions} [validationOptions] - ValidationOptions
- * @returns A function that takes an object and a property name and returns a decorator.
  */
 export function IsObjectId(
   validationOptions: ValidationOptions = {},

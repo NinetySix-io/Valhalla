@@ -60,8 +60,6 @@ export class TracerInterceptor implements NestInterceptor {
   /**
    * It returns the name of the service and the name of the RPC method if the context is an RPC call,
    * otherwise it returns the type of the context
-   * @param {ExecutionContext} context - ExecutionContext
-   * @returns The service name and the rpc name.
    */
   private getCallPoint(context: ExecutionContext): string | undefined {
     const type = this.getContextType(context);
@@ -83,8 +81,6 @@ export class TracerInterceptor implements NestInterceptor {
   /**
    * It returns the type of the context, which is either the type of the context or the string
    * 'graphql'
-   * @param {ExecutionContext} context - ExecutionContext
-   * @returns The type of the context.
    */
   private getContextType(context: ExecutionContext) {
     return context.getType<ContextType | 'graphql'>();
@@ -93,8 +89,6 @@ export class TracerInterceptor implements NestInterceptor {
   /**
    * If the context is an RPC call, then we get the traceId from the metadata. If it's not an RPC call,
    * then we generate a new traceId
-   * @param {ExecutionContext} context - ExecutionContext: The context of the current request.
-   * @returns [traceId, isParent]
    */
   private getTraceId(context: ExecutionContext): [string, boolean] {
     let traceId = String(toObjectId());

@@ -41,9 +41,6 @@ export abstract class SubgraphsProvider implements OnModuleInit {
   /**
    * If the service address is the same as the devHost, then we'll use the address 'http://0.0.0.0'
    * instead
-   * @param {IServiceServer} service - IServiceServer - this is the service object that is passed in
-   * from the service.json file.
-   * @returns The service domain is being returned.
    */
   private resolveServiceDomain(service: IServiceServer): string {
     const address = isDev() ? 'http://0.0.0.0' : service.address;
@@ -54,8 +51,6 @@ export abstract class SubgraphsProvider implements OnModuleInit {
 
   /**
    * It takes a list of service names, and returns a list of service endpoints
-   * @param {string[]} serviceNames - The list of services that you want to build subgraphs for.
-   * @returns The subgraphs are being returned.
    */
   private buildSubgraphs(serviceNames: string[]) {
     const currentSubgraphMap = keyBy(
@@ -104,7 +99,6 @@ export abstract class SubgraphsProvider implements OnModuleInit {
   /**
    * > It returns the subgraphs if they've already been built, otherwise it builds them and returns the
    * result
-   * @returns An array of ServiceEndpointDefinition objects.
    */
   get subgraphs(): ServiceEndpointDefinition[] {
     return this._subgraphs;

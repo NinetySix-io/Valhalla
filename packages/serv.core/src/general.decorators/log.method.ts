@@ -9,8 +9,6 @@ export type LogMethodOption = {
 /**
  * It takes a function and returns a new function that does the same thing as the original function,
  * but also logs the function name and arguments
- * @param {LogMethodOption} [option] - LogMethodOption
- * @returns A method decorator.
  */
 export function LogMethod(option?: LogMethodOption) {
   const logger = option?.logger ?? new Logger(LogMethod.name);
