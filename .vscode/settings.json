@@ -58,5 +58,7 @@
   "docwriter.progress.trackMethods": false,
   "docwriter.progress.trackFunctions": false,
   "powermode.enabled": false,
-  "powermode.presets": "particles"
+  "powermode.presets": "particles",
+  "javascript.suggest.jsdoc.generateReturns": false,
+  "typescript.suggest.jsdoc.generateReturns": false
 }

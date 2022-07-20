@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { Typography, css, styled } from '@mui/material';
 
+import { ELEMENT } from './constants';
 import { useDrop } from 'react-dnd';
 
 const Container = styled('div')(
@@ -17,7 +18,7 @@ export const DropZone: React.FC = () => {
   const [drops, setDrops] = React.useState<DropItem[]>([]);
   const [, drop] = useDrop(
     () => ({
-      accept: 'element',
+      accept: ELEMENT,
       drop(item: { id: string }, monitor) {
         if (!monitor.didDrop()) {
           setDrops((d) => [...d, item]);

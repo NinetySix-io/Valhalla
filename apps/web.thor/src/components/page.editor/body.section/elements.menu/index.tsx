@@ -1,10 +1,11 @@
 import * as React from 'react';
 
 import { Button, Popover, Stack, TextField, css, styled } from '@mui/material';
-import { ElementMenuGroup, ElementMenuGroupItem } from './group';
 import { activeSection, isDragging } from '../atoms';
 
 import { EditorMenu } from '../../menu';
+import { ElementMenuGroup } from './group';
+import { ElementMenuGroupItem } from './item';
 import { useAtom } from 'jotai';
 import { useDragDropManager } from 'react-dnd';
 
