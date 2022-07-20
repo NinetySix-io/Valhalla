@@ -70,7 +70,7 @@ const MenuArea = styled('div', {
 
 type Props = cProps<{ sectionId: string }>;
 
-export const Section: React.FC<Props> = ({ sectionId }) => {
+export const BodySectionItem: React.FC<Props> = ({ sectionId }) => {
   const [active, setActiveBlock] = useAtom(activeSection);
   const isMobile = useReduxSelector(
     (state) => state.SiteEditor.size !== ScreenSize.DESKTOP,

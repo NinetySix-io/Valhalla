@@ -1,13 +1,14 @@
 import * as React from 'react';
 
-import { Button, css, styled } from '@mui/material';
-import { ScreenSize, SiteEditorSlice } from '@app/redux/slices/editor';
+import { css, styled } from '@mui/material';
 
+import { BodySection } from './body.section';
 import { DndProvider } from 'react-dnd';
+import { FooterSection } from './footer.section';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { Section } from './section';
+import { HeaderSection } from './header.section';
+import { ScreenSize } from '@app/redux/slices/editor';
 import { cProps } from '@valhalla/react';
-import { useDispatch } from 'react-redux';
 import { useReduxSelector } from '@app/redux/hooks';
 
 type Props = cProps;
@@ -19,6 +20,7 @@ const Container = styled('div')(
     align-items: center;
     width: 100%;
     flex-grow: 1;
+    overflow: auto;
   `,
 );
 
@@ -32,11 +34,13 @@ const Content = styled('div')<{ size: ScreenSize }>(
     ${size === ScreenSize.DESKTOP &&
     css`
       width: 100%;
+      height: 100%;
     `}
     ${size === ScreenSize.MOBILE &&
     css`
       margin-top: ${theme.spacing(1)};
       width: 400px;
+      min-height: 844px;
       outline: solid thin ${theme.palette.grey[200]};
       border-radius: ${theme.shape.borderRadius};
     `}
@@ -44,6 +48,7 @@ const Content = styled('div')<{ size: ScreenSize }>(
     css`
       margin-top: ${theme.spacing(1)};
       width: 820px;
+      min-height: 1180px;
       outline: solid thin ${theme.palette.grey[200]};
       border-radius: ${theme.shape.borderRadius};
     `}
@@ -51,31 +56,17 @@ const Content = styled('div')<{ size: ScreenSize }>(
 );
 
 export const PageEditor: React.FC<Props> = () => {
-  const dispatch = useDispatch();
-  const sections = useReduxSelector((state) => state.SiteEditor.sections);
   const size = useReduxSelector((state) => state.SiteEditor.size);
 
-  function getWrapper(children: React.ReactNode) {
-    return (
-      <Container>
-        <DndProvider backend={HTML5Backend}>
-          <Content size={size}>{children}</Content>
-        </DndProvider>
-      </Container>
-    );
-  }
-
-  if (sections.length === 0) {
-    return getWrapper(
-      <Button onClick={() => dispatch(SiteEditorSlice.actions.addSection())}>
-        Add Section
-      </Button>,
-    );
-  }
-
-  return getWrapper(
-    sections.map((section) => (
-      <Section key={section.id} sectionId={section.id} />
-    )),
+  return (
+    <Container>
+      <DndProvider backend={HTML5Backend}>
+        <Content size={size}>
+          <HeaderSection />
+          <BodySection />
+          <FooterSection />
+        </Content>
+      </DndProvider>
+    </Container>
   );
 };
