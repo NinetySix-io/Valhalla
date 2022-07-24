@@ -1,12 +1,13 @@
 import * as React from 'react';
 
 import { Button, Popover, Stack, TextField, css, styled } from '@mui/material';
-import { activeSection, isDragging } from '../atoms';
+import { useIsDragging, useIsSectionActive } from '../context';
 
 import { EditorMenu } from '../../menu';
 import { ElementMenuGroup } from './group';
 import { ElementMenuGroupItem } from './item';
-import { useAtom } from 'jotai';
+import { SiteEditorSlice } from '@app/redux/slices/editor';
+import { useDispatch } from 'react-redux';
 import { useDragDropManager } from 'react-dnd';
 
 const Container = styled(Stack)(
@@ -16,17 +17,18 @@ const Container = styled(Stack)(
   `,
 );
 
-type Props = {
-  sectionId: string;
-} & Pick<React.ComponentProps<typeof EditorMenu>, 'style' | 'placement'>;
+type Props = Pick<
+  React.ComponentProps<typeof EditorMenu>,
+  'style' | 'placement'
+>;
 
-export const ElementsMenu: React.FC<Props> = ({ sectionId, ...props }) => {
-  const [active, setActive] = useAtom(activeSection);
-  const [isActivelyDragging, setIsActivelyDragging] = useAtom(isDragging);
+export const ElementsMenu: React.FC<Props> = (props) => {
+  const dispatch = useDispatch();
+  const isDragging = useIsDragging();
+  const [menuVisible, setMenuVisible] = React.useState(false);
   const manager = useDragDropManager();
   const anchor = React.useRef<HTMLDivElement>();
-  const [menuVisible, setMenuVisible] = React.useState(false);
-  const isVisible = active === sectionId;
+  const isVisible = useIsSectionActive();
 
   function openMenu() {
     setMenuVisible(true);
@@ -39,20 +41,20 @@ export const ElementsMenu: React.FC<Props> = ({ sectionId, ...props }) => {
   React.useEffect(() => {
     const monitor = manager.getMonitor();
     const unsubscribe = monitor.subscribeToStateChange(() => {
-      setIsActivelyDragging(monitor.isDragging());
+      dispatch(SiteEditorSlice.actions.setIsDragging(monitor.isDragging()));
     });
 
     return () => {
       unsubscribe?.();
     };
-  }, [manager, setIsActivelyDragging]);
+  }, [manager, dispatch]);
 
   React.useEffect(() => {
-    if (isActivelyDragging) {
+    if (isDragging) {
       setMenuVisible(false);
-      setActive(null);
+      dispatch(SiteEditorSlice.actions.setActiveSection(null));
     }
-  }, [isActivelyDragging, setMenuVisible, setActive]);
+  }, [isDragging, setMenuVisible, dispatch]);
 
   return (
     <EditorMenu {...props} open={isVisible} containerRef={anchor}>

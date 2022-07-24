@@ -34,7 +34,7 @@
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
-    "@mui/lab": "5.0.0-alpha.81",
+    "@mui/lab": "5.0.0-alpha.91",
     "@mui/material": "^5.7.0",
     "@react-hook/async": "^3.1.1",
     "@react-hook/change": "^1.0.0",

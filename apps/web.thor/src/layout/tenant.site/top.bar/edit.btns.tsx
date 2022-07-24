@@ -9,8 +9,8 @@ type Props = cProps;
 export const EditButtons: React.FC<Props> = () => {
   return (
     <Stack direction="row" spacing={1}>
-      <Button size="small">Backward</Button>
-      <Button size="small">Forward</Button>
+      <Button size="small">Undo</Button>
+      <Button size="small">Redo</Button>
     </Stack>
   );
 };

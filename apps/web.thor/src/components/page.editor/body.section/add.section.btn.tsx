@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { Button, css, styled } from '@mui/material';
+import { useIsSectionActive, useSectionId } from './context';
 
 import { SiteEditorSlice } from '@app/redux/slices/editor';
 import { cProps } from '@valhalla/react';
@@ -32,16 +33,12 @@ const ActionBtn = styled(Button, {
 
 type Props = cProps<{
   align: 'top' | 'bottom';
-  sectionId: string;
-  visible?: boolean;
 }>;
 
-export const AddSectionBtn: React.FC<Props> = ({
-  align,
-  sectionId,
-  visible = false,
-}) => {
+export const AddSectionBtn: React.FC<Props> = ({ align }) => {
+  const sectionId = useSectionId();
   const dispatch = useDispatch();
+  const visible = useIsSectionActive();
 
   function handleClick() {
     dispatch(

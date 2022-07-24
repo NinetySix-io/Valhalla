@@ -14,11 +14,14 @@ type Section = {
 
 type State = {
   size: ScreenSize;
+  activeSection?: string;
+  isDragging: boolean;
   sections: Section[];
 };
 
 const initialState: State = {
   size: ScreenSize.DESKTOP,
+  isDragging: false,
   sections: [],
 };
 
@@ -26,6 +29,12 @@ export const SiteEditorSlice = createSlice({
   name: 'SiteEditor',
   initialState,
   reducers: {
+    setIsDragging(state, action: PayloadAction<State['isDragging']>) {
+      state.isDragging = action.payload;
+    },
+    setActiveSection(state, action: PayloadAction<State['activeSection']>) {
+      state.activeSection = action.payload;
+    },
     setSize(state, action: PayloadAction<State['size']>) {
       state.size = action.payload;
     },

@@ -1,12 +1,11 @@
 import * as React from 'react';
 
 import { Button, Divider, Popover, Stack, css, styled } from '@mui/material';
+import { useIsSectionActive, useSectionId } from '../context';
 
 import { EditorMenu } from '../../menu';
 import { SectionMenuContent } from './content';
 import { SiteEditorSlice } from '@app/redux/slices/editor';
-import { activeSection } from '../atoms';
-import { useAtomValue } from 'jotai';
 import { useDispatch } from 'react-redux';
 
 const ActionBtn = styled(Button)(
@@ -16,14 +15,16 @@ const ActionBtn = styled(Button)(
   `,
 );
 
-type Props = {
-  sectionId: string;
-} & Pick<React.ComponentProps<typeof EditorMenu>, 'style' | 'placement'>;
+type Props = Pick<
+  React.ComponentProps<typeof EditorMenu>,
+  'style' | 'placement'
+>;
 
-export const SectionMenu: React.FC<Props> = ({ sectionId, ...props }) => {
+export const SectionMenu: React.FC<Props> = (props) => {
   const dispatch = useDispatch();
-  const isVisible = useAtomValue(activeSection) === sectionId;
   const anchor = React.useRef<HTMLDivElement>();
+  const isVisible = useIsSectionActive();
+  const sectionId = useSectionId();
   const [menuVisible, setMenuVisible] = React.useState(false);
 
   function handleDelete() {

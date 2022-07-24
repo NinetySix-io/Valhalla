@@ -1,17 +1,17 @@
 import * as React from 'react';
 
-import { activeSection, isDragging } from './atoms';
+import { ScreenSize, SiteEditorSlice } from '@app/redux/slices/editor';
+import { SectionIdContext, useIsDragging } from './context';
 import { css, styled } from '@mui/material';
-import { useAtom, useAtomValue } from 'jotai';
 
 import { AddSectionBtn } from './add.section.btn';
 import { DropZone } from './drop.zone';
 import { ElementsMenu } from './elements.menu';
-import { ScreenSize } from '@app/redux/slices/editor';
 import { SectionMenu } from './section.menu';
 import { cProps } from '@valhalla/react';
 import { makeFilter } from '@app/lib/make.filter';
 import { throttle } from '@valhalla/utilities';
+import { useDispatch } from 'react-redux';
 import { useReduxSelector } from '@app/redux/hooks';
 
 const Container = styled('div', {
@@ -71,35 +71,41 @@ const MenuArea = styled('div', {
 type Props = cProps<{ sectionId: string }>;
 
 export const BodySectionItem: React.FC<Props> = ({ sectionId }) => {
-  const [active, setActiveBlock] = useAtom(activeSection);
+  const dispatch = useDispatch();
+  const activeSection = useReduxSelector((s) => s.SiteEditor.activeSection);
+  const isActive = activeSection === sectionId;
+  const isDragging = useIsDragging();
   const isMobile = useReduxSelector(
     (state) => state.SiteEditor.size !== ScreenSize.DESKTOP,
   );
-  const isActivelyDragging = useAtomValue(isDragging);
-  const isHover = active === sectionId;
   const handleHover = throttle(
-    () => !isActivelyDragging && setActiveBlock(sectionId),
+    () =>
+      !isDragging &&
+      dispatch(SiteEditorSlice.actions.setActiveSection(sectionId)),
     100,
   );
 
-  const handleLeave = () => isHover && setActiveBlock(null);
+  const handleLeave = () =>
+    isActive && dispatch(SiteEditorSlice.actions.setActiveSection(null));
 
   return (
-    <Container
-      onMouseEnter={handleHover}
-      onMouseLeave={handleLeave}
-      onClick={handleHover}
-      isHover={isHover}
-    >
-      <AddSectionBtn align="top" sectionId={sectionId} visible={isHover} />
-      <AddSectionBtn align="bottom" sectionId={sectionId} visible={isHover} />
-      <Content>
-        <MenuArea isMobile={isMobile}>
-          <ElementsMenu sectionId={sectionId} placement="left-start" />
-          <SectionMenu sectionId={sectionId} placement="right-start" />
-        </MenuArea>
-        <DropZone />
-      </Content>
-    </Container>
+    <SectionIdContext.Provider value={sectionId}>
+      <Container
+        onMouseEnter={handleHover}
+        onMouseLeave={handleLeave}
+        onClick={handleHover}
+        isHover={isActive}
+      >
+        <AddSectionBtn align="top" />
+        <AddSectionBtn align="bottom" />
+        <Content>
+          <MenuArea isMobile={isMobile}>
+            <ElementsMenu placement="left-start" />
+            <SectionMenu placement="right-start" />
+          </MenuArea>
+          <DropZone />
+        </Content>
+      </Container>
+    </SectionIdContext.Provider>
   );
 };
