@@ -6,7 +6,7 @@ import {
   OrganizationPlan,
   useCreateOrganizationMutation,
 } from '@app/generated/valhalla.gql';
-import { Form, cProps } from '@valhalla/react';
+import { Form, cProps } from '@valhalla/web.react';
 import { FormModal, FormModalProps } from '../modal.form';
 
 type Payload = CreateOrganizationMutationVariables;

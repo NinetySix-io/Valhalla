@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Logo as NinetySixLogo, cProps } from '@valhalla/react';
+import { Logo as NinetySixLogo, cProps } from '@valhalla/web.react';
 
 import { useReduxSelector } from '@app/redux/hooks';
 

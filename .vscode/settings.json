@@ -12,7 +12,6 @@
     "Cqrs",
     "errmsg",
     "fastify",
-    "fontawesome",
     "fortawesome",
     "inapp",
     "Loadbalance",
@@ -60,5 +59,10 @@
   "powermode.enabled": false,
   "powermode.presets": "particles",
   "javascript.suggest.jsdoc.generateReturns": false,
-  "typescript.suggest.jsdoc.generateReturns": false
+  "typescript.suggest.jsdoc.generateReturns": false,
+  "editor.tabCompletion": "on",
+  "diffEditor.codeLens": true,
+  "docwriter.hotkey.mac": "⌥ + .",
+  "typescript.suggest.enabled": true,
+  "javascript.suggest.enabled": true
 }

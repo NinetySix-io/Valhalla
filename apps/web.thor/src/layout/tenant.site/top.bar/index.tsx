@@ -6,7 +6,7 @@ import { EditButtons } from './edit.btns';
 import { FinishBtn } from './finish.btn';
 import { Meta } from './meta';
 import { SizesRadio } from './sizes.radio';
-import { cProps } from '@valhalla/react';
+import { cProps } from '@valhalla/web.react';
 
 type Props = cProps;
 

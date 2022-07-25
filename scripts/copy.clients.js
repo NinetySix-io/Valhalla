@@ -43,6 +43,7 @@ const loader = {
 @Injectable()
 export class ${startCase}RpcClientService extends MetadataProvider<${startCase}ServiceClient> {
   @RpcClient({
+    url: undefined,
     package: service,
     service,
     protoPath,
@@ -51,6 +52,7 @@ export class ${startCase}RpcClientService extends MetadataProvider<${startCase}S
   public readonly client!: GrpcClient;
 
   @Service(${allCaps}_SERVICE_NAME, {
+    url: undefined,
     package: service,
     service,
     protoPath,

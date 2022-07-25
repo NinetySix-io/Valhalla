@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Form, cProps } from '@valhalla/react';
+import { Form, cProps } from '@valhalla/web.react';
 
 import { FormModal } from '../modal.form';
 import { TextField } from '@mui/material';

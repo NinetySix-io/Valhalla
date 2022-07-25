@@ -4,7 +4,7 @@ import { AppBar, Box, Container, Toolbar } from '@mui/material';
 
 import { AccountBtn } from '@app/components/account.btn';
 import { Logo } from '@app/components/logo';
-import { cProps } from '@valhalla/react';
+import { cProps } from '@valhalla/web.react';
 
 type Props = cProps;
 

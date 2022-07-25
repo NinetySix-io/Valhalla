@@ -1,7 +1,7 @@
 import { Button, Grid, css, styled } from '@mui/material';
 
-import { ELEMENT } from '../../constants';
-import { SectionDrop } from '@app/redux/slices/editor';
+import { BUILDER_ELEMENT } from '../../constants';
+import { BuilderElement } from '../../types';
 import { useDrag } from 'react-dnd';
 
 const Item = styled(Button)(
@@ -12,16 +12,17 @@ const Item = styled(Button)(
 
 type Props = {
   children: string;
-  type: string;
+  element: BuilderElement;
 };
 
-export const ElementMenuGroupItem: React.FC<Props> = ({ children, type }) => {
-  const [, drag] = useDrag<Omit<SectionDrop, 'id'>>(() => ({
-    type: ELEMENT,
-    item: {
-      type,
-    },
-  }));
+export const ElementMenuGroupItem: React.FC<Props> = ({
+  children,
+  element,
+}) => {
+  const [, drag] = useDrag({
+    type: BUILDER_ELEMENT,
+    item: element,
+  });
 
   return (
     <Grid item md={6}>

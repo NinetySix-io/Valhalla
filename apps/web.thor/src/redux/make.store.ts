@@ -1,34 +1,8 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-
 import { Environment } from '@app/env';
-import { MetaSlice } from './slices/meta';
-import { SiteEditorSlice } from './slices/editor';
-import { TenantSlice } from './slices/tenant';
-import { withHydration } from './utils/with.hydration';
+import { configureStore } from '@reduxjs/toolkit';
+import { reducer } from './reducers';
 
 let _store: ReturnType<typeof _makeStore>;
-
-/**
- * If we're in development mode and the redux logger is not disabled, then we'll use the redux logger.
- * Otherwise, we'll return an empty array
- */
-function getMiddlewares() {
-  if (
-    Environment.isDev &&
-    !Environment.DISABLE_REDUX_LOGGER &&
-    !Environment.isServer
-  ) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const createLogger = require('redux-logger').createLogger;
-    return [
-      createLogger({
-        collapsed: false,
-      }),
-    ];
-  } else {
-    return [];
-  }
-}
 
 /**
  * It creates a Redux store and it uses the `withHydration` function to hydrate
@@ -37,14 +11,7 @@ function getMiddlewares() {
 function _makeStore() {
   return configureStore({
     devTools: Environment.isDev,
-    middleware: getMiddlewares(),
-    reducer: withHydration(
-      combineReducers({
-        [MetaSlice.name]: MetaSlice.reducer,
-        [TenantSlice.name]: TenantSlice.reducer,
-        [SiteEditorSlice.name]: SiteEditorSlice.reducer,
-      }),
-    ),
+    reducer,
   });
 }
 
@@ -54,6 +21,18 @@ function _makeStore() {
 export function makeStore() {
   if (!_store) {
     _store = _makeStore();
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (!Environment.isServer && module.hot) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      module.hot.accept('./reducers', () => {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const nextRootReducer = require('./reducers').reducer;
+        _store.replaceReducer(nextRootReducer);
+      });
+    }
   }
 
   return _store;

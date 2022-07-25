@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Button } from '@mui/material';
-import { cProps } from '@valhalla/react';
+import { cProps } from '@valhalla/web.react';
 
 type Props = cProps;
 

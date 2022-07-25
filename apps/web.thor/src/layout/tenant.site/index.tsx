@@ -4,7 +4,7 @@ import { BaseLayout } from '../base';
 import { Layout } from '@app/types/next';
 import { LoadingBlock } from '@app/components/loading.block';
 import { TopBar } from './top.bar';
-import { cProps } from '@valhalla/react';
+import { cProps } from '@valhalla/web.react';
 import { styled } from '@mui/material';
 import { useSiteHydrate } from '@app/hooks/hydrate/use.site.hydrate';
 import { useTenantSEO } from '@app/hooks/use.tenant.seo.title';

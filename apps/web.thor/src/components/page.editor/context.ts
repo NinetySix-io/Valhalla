@@ -9,17 +9,27 @@ export function useSectionId() {
   return React.useContext(SectionIdContext);
 }
 
-export function useActiveSection() {
+export function useActiveSectionId() {
   return useReduxSelector((state) => state.SiteEditor.activeSection);
 }
 
-export function useActiveDrop() {
-  return useReduxSelector((state) => state.SiteEditor.activeDrop);
+export function useActiveElement() {
+  return useReduxSelector((state) => state.SiteEditor.activeElement);
+}
+
+export function useActiveSection() {
+  return useReduxSelector((state) =>
+    !state.SiteEditor.activeSection
+      ? undefined
+      : state.SiteEditor.sections.find(
+          (section) => section.id === state.SiteEditor.activeSection,
+        ),
+  );
 }
 
 export function useIsSectionActive() {
   const sectionId = useSectionId();
-  const activeSection = useActiveSection();
+  const activeSection = useActiveSectionId();
   return sectionId === activeSection;
 }
 

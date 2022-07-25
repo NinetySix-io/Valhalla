@@ -28,6 +28,7 @@ export class OrgsRpcClientService extends MetadataProvider<OrgsServiceClient> {
     service,
     protoPath,
     loader,
+    url: undefined,
   })
   public readonly client!: GrpcClient;
 
@@ -36,6 +37,7 @@ export class OrgsRpcClientService extends MetadataProvider<OrgsServiceClient> {
     service,
     protoPath,
     loader,
+    url: undefined,
   })
   public _svc!: OrgsServiceClient;
 

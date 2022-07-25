@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Box, TextField } from '@mui/material';
-import { Form, UsernameFormItem, useChange } from '@valhalla/react';
+import { Form, UsernameFormItem, useChange } from '@valhalla/web.react';
 
 import { BaseLayout } from '@app/layout/base';
 import { FormContainer } from '@app/components/form.container';

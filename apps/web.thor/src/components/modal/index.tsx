@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 
 import { LoadingButton } from '@mui/lab';
-import { cProps } from '@valhalla/react';
+import { cProps } from '@valhalla/web.react';
 
 const Body = styled(Box)``;
 

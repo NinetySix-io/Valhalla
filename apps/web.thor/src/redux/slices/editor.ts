@@ -1,6 +1,9 @@
+import {
+  BuilderElement,
+  BuilderElementWithId,
+} from '@app/components/page.editor/types';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { XYCoord } from 'react-dnd';
 import { swapArrayIndex } from '@app/lib/array';
 
 export enum ScreenSize {
@@ -9,24 +12,19 @@ export enum ScreenSize {
   TABLET = 820,
 }
 
-export type SectionDrop = {
-  id: string;
-  type: string;
-  position?: {
-    xAxis: number;
-    yAxis: number;
-  };
-};
-
 export type Section = {
   id: string;
-  children: Array<SectionDrop>;
+  children: Array<BuilderElementWithId>;
+  config: {
+    rowsCount: number;
+  };
 };
 
 type State = {
   size: ScreenSize;
+  cellSize?: number;
   activeSection?: string;
-  activeDrop?: string;
+  activeElement?: string;
   isDragging: boolean;
   sections: Section[];
 };
@@ -47,23 +45,24 @@ export const SiteEditorSlice = createSlice({
     setActiveSection(state, action: PayloadAction<State['activeSection']>) {
       state.activeSection = action.payload;
     },
-    setActiveDrop(state, action: PayloadAction<State['activeDrop']>) {
-      state.activeDrop = action.payload;
+    setActiveElement(state, action: PayloadAction<State['activeElement']>) {
+      state.activeElement = action.payload;
     },
     setSize(state, action: PayloadAction<State['size']>) {
       state.size = action.payload;
     },
-    updateDropPosition(
+    setCellSize(state, action: PayloadAction<State['cellSize']>) {
+      state.cellSize = action.payload;
+    },
+    updateElementPosition(
       state,
       action: PayloadAction<{
-        dropId: string;
+        elementId: string;
         sectionId: string;
-        delta: XYCoord;
       }>,
     ) {
-      const target = state.sections.find(
-        (section) => section.id === action.payload.sectionId,
-      );
+      const { sectionId } = action.payload;
+      const target = state.sections.find((section) => section.id === sectionId);
 
       if (target) {
         // target.children = target.children;
@@ -71,28 +70,25 @@ export const SiteEditorSlice = createSlice({
 
       return state;
     },
-    addDrop(
+    addElement(
       state,
       action: PayloadAction<{
-        type: string;
         sectionId: string;
-        delta: XYCoord;
+        element: BuilderElement;
       }>,
     ) {
-      const target = state.sections.find(
-        (section) => section.id === action.payload.sectionId,
-      );
-
+      const { element, sectionId } = action.payload;
+      const target = state.sections.find((section) => section.id === sectionId);
       if (target) {
         target.children.push({
           id: new Date().valueOf().toString(),
-          type: action.payload.type,
+          ...element,
         });
       }
     },
-    removeDrop(
+    removeElement(
       state,
-      action: PayloadAction<{ dropId: string; sectionId: string }>,
+      action: PayloadAction<{ elementId: string; sectionId: string }>,
     ) {
       const target = state.sections.find(
         (section) => section.id === action.payload.sectionId,
@@ -100,7 +96,7 @@ export const SiteEditorSlice = createSlice({
 
       if (target) {
         target.children = target.children.filter(
-          (drop) => drop.id !== action.payload.dropId,
+          (element) => element.id !== action.payload.elementId,
         );
       }
     },
@@ -123,6 +119,9 @@ export const SiteEditorSlice = createSlice({
       const newSection: Section = {
         id: new Date().valueOf().toString(),
         children: [],
+        config: {
+          rowsCount: 10,
+        },
       };
 
       if (!action.payload) {

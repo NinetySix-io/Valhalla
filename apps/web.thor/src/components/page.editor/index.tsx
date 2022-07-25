@@ -8,7 +8,7 @@ import { FooterSection } from './footer.section';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { HeaderSection } from './header.section';
 import { ScreenSize } from '@app/redux/slices/editor';
-import { cProps } from '@valhalla/react';
+import { cProps } from '@valhalla/web.react';
 import { useReduxSelector } from '@app/redux/hooks';
 
 type Props = cProps;

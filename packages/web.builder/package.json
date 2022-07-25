@@ -1,0 +1,48 @@
+{
+  "name": "@valhalla/web.builder",
+  "version": "1.0.0",
+  "main": "./src",
+  "types": "./src",
+  "private": true,
+  "scripts": {
+    "lint": "eslint",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "dev": "npm run storybook"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.9",
+    "@storybook/addon-actions": "^6.5.9",
+    "@storybook/addon-console": "^1.2.3",
+    "@storybook/addon-essentials": "^6.5.9",
+    "@storybook/addon-interactions": "^6.5.9",
+    "@storybook/addon-links": "^6.5.9",
+    "@storybook/react": "^6.5.9",
+    "@storybook/testing-library": "0.0.13",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "@valhalla/config": "workspace:*",
+    "@valhalla/tsconfig": "workspace:*",
+    "@valhalla/utilities": "workspace:*",
+    "@valhalla/web.react": "workspace:*",
+    "autoprefixer": "^10.4.7",
+    "babel-loader": "^8.2.5",
+    "postcss": "^8.4.14",
+    "typescript": "^4.7.4",
+    "webpack": "^5.74.0"
+  },
+  "dependencies": {
+    "@emotion/cache": "^11.9.3",
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@mui/lab": "5.0.0-alpha.92",
+    "@mui/material": "^5.9.2",
+    "next": "12.2.3",
+    "react": "^18.2.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
+    "react-dom": "^18.2.0",
+    "react-merge-refs": "^2.0.1",
+    "use-resize-observer": "^9.0.2"
+  }
+}

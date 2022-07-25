@@ -1,12 +1,11 @@
 import * as React from 'react';
 
 import { Divider, List, css, styled } from '@mui/material';
-import { cProps, useDebounce } from '@valhalla/react';
+import { cProps, makeFilterProps, useDebounce } from '@valhalla/web.react';
 
 import { AccountItem } from './items/account';
 import { LogoItem } from './items/logo';
 import { SitesItem } from './items/sites';
-import { makeFilter } from '@app/lib/make.filter';
 
 const Container = styled('div')(
   ({ theme }) => css`
@@ -21,9 +20,10 @@ const Container = styled('div')(
   `,
 );
 
-const Content = styled('div', {
-  shouldForwardProp: makeFilter(['expanded', 'initialWidth']),
-})<{
+const Content = styled(
+  'div',
+  makeFilterProps(['expanded', 'initialWidth']),
+)<{
   expanded?: boolean;
   initialWidth: number;
 }>(

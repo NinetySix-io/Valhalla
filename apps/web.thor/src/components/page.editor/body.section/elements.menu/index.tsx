@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { BUTTON_ELEMENT, TEXT_ELEMENT } from '../../constants';
 import { Button, Popover, Stack, TextField, css, styled } from '@mui/material';
 
 import { EditorMenu } from '../../menu';
@@ -26,7 +27,7 @@ export const ElementsMenu: React.FC<Props> = ({ isVisible, ...props }) => {
   const isDragging = useIsDragging();
   const [menuVisible, setMenuVisible] = React.useState(false);
   const manager = useDragDropManager();
-  const anchor = React.useRef<HTMLDivElement>();
+  const anchor = React.useRef<HTMLDivElement>(null);
 
   function openMenu() {
     setMenuVisible(true);
@@ -50,9 +51,8 @@ export const ElementsMenu: React.FC<Props> = ({ isVisible, ...props }) => {
   React.useEffect(() => {
     if (isDragging) {
       setMenuVisible(false);
-      dispatch(SiteEditorSlice.actions.setActiveSection(null));
     }
-  }, [isDragging, setMenuVisible, dispatch]);
+  }, [isDragging, setMenuVisible]);
 
   return (
     <EditorMenu {...props} open={isVisible} containerRef={anchor}>
@@ -77,12 +77,12 @@ export const ElementsMenu: React.FC<Props> = ({ isVisible, ...props }) => {
         <Container direction="column" spacing={2.5}>
           <TextField autoFocus size="small" placeholder="Search" />
           <ElementMenuGroup title="Primitives">
-            <ElementMenuGroupItem type="text">Text</ElementMenuGroupItem>
-            <ElementMenuGroupItem type="button">Button</ElementMenuGroupItem>
-            <ElementMenuGroupItem type="image">Image</ElementMenuGroupItem>
-            <ElementMenuGroupItem type="video">Video</ElementMenuGroupItem>
-            <ElementMenuGroupItem type="gallery">Gallery</ElementMenuGroupItem>
-            <ElementMenuGroupItem type="line">Line</ElementMenuGroupItem>
+            <ElementMenuGroupItem element={TEXT_ELEMENT}>
+              Text
+            </ElementMenuGroupItem>
+            <ElementMenuGroupItem element={BUTTON_ELEMENT}>
+              Button
+            </ElementMenuGroupItem>
           </ElementMenuGroup>
         </Container>
       </Popover>

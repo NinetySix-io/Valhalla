@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Button, Typography, styled } from '@mui/material';
 
 import Link from 'next/link';
-import { cProps } from '@valhalla/react';
+import { cProps } from '@valhalla/web.react';
 import { makeSitePath } from '@app/lib/router.utils/path.builder';
 import { useGetSitesQuery } from '@app/generated/valhalla.gql';
 

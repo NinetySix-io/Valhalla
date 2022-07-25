@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { cProps } from '@valhalla/react';
+import { cProps } from '@valhalla/web.react';
 import { useGetAccountQuery } from '@app/generated/valhalla.gql';
 import { useLogout } from '@app/hooks/use.logout';
 

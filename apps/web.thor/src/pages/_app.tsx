@@ -7,7 +7,7 @@ import {
   WithSEO,
   createEmotionCache,
   theme,
-} from '@valhalla/react';
+} from '@valhalla/web.react';
 
 import { ApolloProvider } from '@apollo/client';
 import { AuthRedirectProvider } from '@app/components/auth.redirect.provider';

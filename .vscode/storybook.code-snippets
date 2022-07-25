@@ -1,6 +1,6 @@
 {
   "Storybook Component": {
-    "prefix": "sc",
+    "prefix": "sbc",
     "description": "Storybook component template",
     "body": [
       "import * as React from 'react';",
@@ -19,7 +19,7 @@
     ]
   },
   "Storybook Component With Template": {
-    "prefix": "sct",
+    "prefix": "sbct",
     "description": "Storybook component template with template",
     "body": [
       "import * as React from 'react';",

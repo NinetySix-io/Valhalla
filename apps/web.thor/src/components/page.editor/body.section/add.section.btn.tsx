@@ -3,13 +3,17 @@ import * as React from 'react';
 import { Button, css, styled } from '@mui/material';
 
 import { SiteEditorSlice } from '@app/redux/slices/editor';
-import { makeFilter } from '@app/lib/make.filter';
+import { makeFilterProps } from '@valhalla/web.react';
 import { useDispatch } from 'react-redux';
 import { useSectionId } from '../context';
 
-const ActionBtn = styled(Button, {
-  shouldForwardProp: makeFilter(['align', 'visible']),
-})<{ align?: Props['align']; visible?: boolean }>(
+const ActionBtn = styled(
+  Button,
+  makeFilterProps(['align', 'visible']),
+)<{
+  align?: Props['align'];
+  visible?: boolean;
+}>(
   ({ align, visible }) => css`
     display: ${visible ? 'initial' : 'none'};
     position: absolute;

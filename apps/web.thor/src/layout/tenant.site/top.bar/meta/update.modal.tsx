@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Form, cProps } from '@valhalla/react';
+import { Form, cProps } from '@valhalla/web.react';
 import { PageSchema, useUpdatePageMutation } from '@app/generated/valhalla.gql';
 
 import { FormModal } from '@app/components/modal.form';

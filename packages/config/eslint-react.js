@@ -32,6 +32,7 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   rules: {
+    'react/react-in-jsx-scope': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@next/next/no-html-link-for-pages': 'off',
     'react/prop-types': 'off',

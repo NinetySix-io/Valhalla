@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Grid, Stack, Typography, css, styled } from '@mui/material';
 
-import { cProps } from '@valhalla/react';
+import { cProps } from '@valhalla/web.react';
 
 const Container = styled(Stack)(() => css``);
 

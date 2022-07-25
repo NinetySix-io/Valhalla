@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import Document, { Head, Html, Main, NextScript } from 'next/document';
-import { SiteFavicon, createEmotionCache, theme } from '@valhalla/react';
+import { SiteFavicon, createEmotionCache, theme } from '@valhalla/web.react';
 
 import createEmotionServer from '@emotion/server/create-instance';
 

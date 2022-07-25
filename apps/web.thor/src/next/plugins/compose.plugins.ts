@@ -1,4 +1,4 @@
-import { GetServerSideProps, GetStaticProps } from '@valhalla/react';
+import { GetServerSideProps, GetStaticProps } from '@valhalla/web.react';
 import { OnPagePropsCb, PluginCtx } from './types';
 
 import { GetServerSidePropsContext } from 'next';

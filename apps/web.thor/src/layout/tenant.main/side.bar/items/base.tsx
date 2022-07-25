@@ -8,7 +8,7 @@ import {
   styled,
 } from '@mui/material';
 
-import { useDebounce } from '@valhalla/react';
+import { useDebounce } from '@valhalla/web.react';
 
 const Container = styled(ListItemButton)(
   ({ theme }) => css`

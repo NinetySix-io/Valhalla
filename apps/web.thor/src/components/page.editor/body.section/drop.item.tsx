@@ -1,55 +1,33 @@
 import * as React from 'react';
 
-import { DropIdContext, useActiveDrop, useSectionId } from '../context';
-import {
-  Menu,
-  MenuItem,
-  Typography,
-  css,
-  styled,
-  useTheme,
-} from '@mui/material';
-import { SectionDrop, SiteEditorSlice } from '@app/redux/slices/editor';
+import { BuilderElement, BuilderElementWithId } from '../types';
+import { DropIdContext, useActiveElement, useSectionId } from '../context';
+import { Menu, MenuItem, Typography, useTheme } from '@mui/material';
 import { XYCoord, useDrag } from 'react-dnd';
 import { batch, useDispatch } from 'react-redux';
+import { isNil, omit } from '@valhalla/utilities';
 
-import { ELEMENT } from '../constants';
+import { BUILDER_ELEMENT } from '../constants';
+import { Drop } from '@valhalla/web.builder';
 import { Key } from 'ts-key-enum';
-import { isNil } from '@valhalla/utilities';
-import { makeFilter } from '@app/lib/make.filter';
+import { SiteEditorSlice } from '@app/redux/slices/editor';
 import { useKeyPressEvent } from 'react-use';
 
-const Container = styled('div', {
-  shouldForwardProp: makeFilter(['isActive']),
-})<{ isActive: boolean }>(
-  ({ theme, isActive }) => css`
-    padding: ${theme.spacing(1)};
-    outline: solid 2px ${isActive ? theme.palette.common.black : 'transparent'};
-
-    :hover {
-      cursor: grab;
-      outline-color: ${theme.palette.common.black};
-    }
-  `,
-);
-
 type Props = {
-  value: SectionDrop;
+  value: BuilderElementWithId;
 };
 
-export const DropItem: React.FC<Props> = ({ value: { id: dropId, type } }) => {
+export const DropItem: React.FC<Props> = ({ value: element }) => {
   const sectionId = useSectionId();
-  const activeDrop = useActiveDrop();
+  const active = useActiveElement();
   const dispatch = useDispatch();
   const theme = useTheme();
-  const isActive = activeDrop === dropId;
+  const isActive = active === element.id;
   const [ctxMenuPos, setCtxMenuPos] = React.useState<XYCoord>();
 
-  const [, drag] = useDrag<Omit<SectionDrop, 'id'>>(() => ({
-    type: ELEMENT,
-    item: {
-      type,
-    },
+  const [, drag] = useDrag<BuilderElement>(() => ({
+    type: BUILDER_ELEMENT,
+    item: omit(element, ['id']),
   }));
 
   function handleDelete() {
@@ -58,15 +36,20 @@ export const DropItem: React.FC<Props> = ({ value: { id: dropId, type } }) => {
     }
 
     batch(() => {
-      dispatch(SiteEditorSlice.actions.setActiveDrop(null));
-      dispatch(SiteEditorSlice.actions.removeDrop({ sectionId, dropId }));
+      dispatch(SiteEditorSlice.actions.setActiveElement(null));
+      dispatch(
+        SiteEditorSlice.actions.removeElement({
+          sectionId,
+          elementId: element.id,
+        }),
+      );
     });
   }
 
   function markActive(event?: React.MouseEvent<HTMLElement, MouseEvent>) {
     event?.preventDefault();
-    if (!event || event.currentTarget.id === dropId) {
-      dispatch(SiteEditorSlice.actions.setActiveDrop(dropId));
+    if (!event || event.currentTarget.id === element.id) {
+      dispatch(SiteEditorSlice.actions.setActiveElement(element.id));
     }
   }
 
@@ -88,24 +71,28 @@ export const DropItem: React.FC<Props> = ({ value: { id: dropId, type } }) => {
   });
 
   return (
-    <DropIdContext.Provider value={dropId}>
-      <Container
-        id={dropId}
+    <DropIdContext.Provider value={element.id}>
+      <Drop.Item
+        x={{ start: 1, end: 2 }}
+        y={{ start: 1, end: 3 }}
+        id={element.id}
         ref={drag}
         onContextMenu={handleContextMenu}
         onClick={markActive}
         isActive={isActive}
       >
-        <Typography>{type.toUpperCase()}</Typography>
-      </Container>
+        <Typography>{element.type.toUpperCase()}</Typography>
+      </Drop.Item>
       <Menu
         open={!isNil(ctxMenuPos)}
         onClose={disposeContextMenu}
         anchorReference="anchorPosition"
-        anchorPosition={{
-          top: ctxMenuPos?.y,
-          left: ctxMenuPos?.x,
-        }}
+        anchorPosition={
+          ctxMenuPos && {
+            top: ctxMenuPos?.y,
+            left: ctxMenuPos?.x,
+          }
+        }
       >
         <MenuItem
           style={{ color: theme.palette.error.main }}

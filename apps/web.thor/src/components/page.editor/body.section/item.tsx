@@ -3,25 +3,27 @@ import * as React from 'react';
 import { ScreenSize, SiteEditorSlice } from '@app/redux/slices/editor';
 import {
   SectionIdContext,
-  useActiveDrop,
-  useActiveSection,
+  useActiveElement,
+  useActiveSectionId,
   useIsDragging,
 } from '../context';
+import { cProps, makeFilterProps } from '@valhalla/web.react';
 import { css, styled } from '@mui/material';
 
 import { AddSectionBtn } from './add.section.btn';
 import { DropZone } from './drop.zone';
 import { ElementsMenu } from './elements.menu';
 import { SectionMenu } from './section.menu';
-import { cProps } from '@valhalla/react';
-import { makeFilter } from '@app/lib/make.filter';
 import { throttle } from '@valhalla/utilities';
 import { useDispatch } from 'react-redux';
 import { useReduxSelector } from '@app/redux/hooks';
 
-const Container = styled('section', {
-  shouldForwardProp: makeFilter(['isHover']),
-})<{ isHover: boolean }>(
+const Container = styled(
+  'section',
+  makeFilterProps(['isHover']),
+)<{
+  isHover: boolean;
+}>(
   ({ theme, isHover }) => css`
     width: 100%;
     position: relative;
@@ -38,9 +40,12 @@ const Container = styled('section', {
   `,
 );
 
-const MenuArea = styled('div', {
-  shouldForwardProp: makeFilter(['isMobile']),
-})<{ isMobile: boolean }>(
+const MenuArea = styled(
+  'div',
+  makeFilterProps(['isMobile']),
+)<{
+  isMobile: boolean;
+}>(
   ({ theme, isMobile }) => css`
     position: absolute;
     display: flex;
@@ -73,18 +78,17 @@ type Props = cProps<{
 
 export const BodySectionItem: React.FC<Props> = ({ sectionId }) => {
   const dispatch = useDispatch();
-  const activeSection = useActiveSection();
-  const activeDrop = useActiveDrop();
-  const isActive = !activeDrop && activeSection === sectionId;
+  const activeSection = useActiveSectionId();
+  const active = useActiveElement();
+  const isActive = !active && activeSection === sectionId;
   const isDragging = useIsDragging();
+  const shouldDisplayHelpers = !isDragging && isActive;
   const isMobile = useReduxSelector(
     (state) => state.SiteEditor.size < ScreenSize.DESKTOP,
   );
 
   const markActive = throttle(() => {
-    if (!isDragging) {
-      dispatch(SiteEditorSlice.actions.setActiveSection(sectionId));
-    }
+    dispatch(SiteEditorSlice.actions.setActiveSection(sectionId));
   }, 100);
 
   const handleClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -95,13 +99,13 @@ export const BodySectionItem: React.FC<Props> = ({ sectionId }) => {
     }
 
     if (target.id === sectionId || target.parentElement.id === sectionId) {
-      dispatch(SiteEditorSlice.actions.setActiveDrop(null));
+      dispatch(SiteEditorSlice.actions.setActiveElement(null));
       markActive();
     }
   };
 
   const handleHover = () => {
-    if (!activeDrop) {
+    if (!active) {
       markActive();
     }
   };
@@ -121,11 +125,17 @@ export const BodySectionItem: React.FC<Props> = ({ sectionId }) => {
         onClick={handleClick}
         isHover={isActive}
       >
-        <AddSectionBtn align="top" isVisible={isActive} />
-        <AddSectionBtn align="bottom" isVisible={isActive} />
+        <AddSectionBtn align="top" isVisible={shouldDisplayHelpers} />
+        <AddSectionBtn align="bottom" isVisible={shouldDisplayHelpers} />
         <MenuArea isMobile={isMobile}>
-          <ElementsMenu placement="left-start" isVisible={isActive} />
-          <SectionMenu placement="right-start" isVisible={isActive} />
+          <ElementsMenu
+            placement="left-start"
+            isVisible={shouldDisplayHelpers}
+          />
+          <SectionMenu
+            placement="right-start"
+            isVisible={shouldDisplayHelpers}
+          />
         </MenuArea>
         <DropZone />
       </Container>

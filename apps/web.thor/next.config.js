@@ -1,6 +1,9 @@
 const config = require('dotenv').config().parsed;
 const { pick } = require('@valhalla/utilities');
-const withTM = require('next-transpile-modules')(['@valhalla/react']);
+const withTM = require('next-transpile-modules')([
+  '@valhalla/web.react',
+  '@valhalla/web.builder',
+]);
 const withPlugins = require('next-compose-plugins');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',

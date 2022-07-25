@@ -4,7 +4,7 @@ import { Typography, css, styled } from '@mui/material';
 
 import { Menu } from './menu';
 import { MetaUpdateModal } from './update.modal';
-import { cProps } from '@valhalla/react';
+import { cProps } from '@valhalla/web.react';
 import { useAnchor } from '@app/hooks/dom/use.anchor';
 import { useSitePageHydrate } from '@app/hooks/hydrate/use.site.page.hydrate';
 

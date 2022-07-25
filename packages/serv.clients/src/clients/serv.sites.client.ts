@@ -28,6 +28,7 @@ export class SitesRpcClientService extends MetadataProvider<SitesServiceClient> 
     service,
     protoPath,
     loader,
+    url: undefined,
   })
   public readonly client!: GrpcClient;
 
@@ -36,6 +37,7 @@ export class SitesRpcClientService extends MetadataProvider<SitesServiceClient> 
     service,
     protoPath,
     loader,
+    url: undefined,
   })
   public _svc!: SitesServiceClient;
 
