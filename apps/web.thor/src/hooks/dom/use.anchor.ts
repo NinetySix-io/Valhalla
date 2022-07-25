@@ -7,6 +7,7 @@ export function useAnchor<T extends HTMLElement>() {
   const [anchor, _setAnchor] = React.useState<T>(null);
 
   function setAnchor(event: React.MouseEvent<T, MouseEvent>) {
+    event.preventDefault();
     _setAnchor(event.currentTarget);
   }
 

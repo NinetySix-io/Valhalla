@@ -1,12 +1,12 @@
 import * as React from 'react';
 
 import { Button, Divider, Popover, Stack, css, styled } from '@mui/material';
-import { useIsSectionActive, useSectionId } from '../context';
 
 import { EditorMenu } from '../../menu';
 import { SectionMenuContent } from './content';
 import { SiteEditorSlice } from '@app/redux/slices/editor';
 import { useDispatch } from 'react-redux';
+import { useSectionId } from '../../context';
 
 const ActionBtn = styled(Button)(
   ({ theme }) => css`
@@ -15,15 +15,13 @@ const ActionBtn = styled(Button)(
   `,
 );
 
-type Props = Pick<
-  React.ComponentProps<typeof EditorMenu>,
-  'style' | 'placement'
->;
+type Props = {
+  isVisible: boolean;
+} & Pick<React.ComponentProps<typeof EditorMenu>, 'style' | 'placement'>;
 
-export const SectionMenu: React.FC<Props> = (props) => {
+export const SectionMenu: React.FC<Props> = ({ isVisible, ...props }) => {
   const dispatch = useDispatch();
   const anchor = React.useRef<HTMLDivElement>();
-  const isVisible = useIsSectionActive();
   const sectionId = useSectionId();
   const [menuVisible, setMenuVisible] = React.useState(false);
 

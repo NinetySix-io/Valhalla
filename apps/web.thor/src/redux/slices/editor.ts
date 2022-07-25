@@ -1,20 +1,32 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
+import { XYCoord } from 'react-dnd';
 import { swapArrayIndex } from '@app/lib/array';
 
 export enum ScreenSize {
-  DESKTOP,
-  MOBILE,
-  TABLET,
+  DESKTOP = 1200,
+  MOBILE = 400,
+  TABLET = 820,
 }
 
-type Section = {
+export type SectionDrop = {
   id: string;
+  type: string;
+  position?: {
+    xAxis: number;
+    yAxis: number;
+  };
+};
+
+export type Section = {
+  id: string;
+  children: Array<SectionDrop>;
 };
 
 type State = {
   size: ScreenSize;
   activeSection?: string;
+  activeDrop?: string;
   isDragging: boolean;
   sections: Section[];
 };
@@ -35,8 +47,62 @@ export const SiteEditorSlice = createSlice({
     setActiveSection(state, action: PayloadAction<State['activeSection']>) {
       state.activeSection = action.payload;
     },
+    setActiveDrop(state, action: PayloadAction<State['activeDrop']>) {
+      state.activeDrop = action.payload;
+    },
     setSize(state, action: PayloadAction<State['size']>) {
       state.size = action.payload;
+    },
+    updateDropPosition(
+      state,
+      action: PayloadAction<{
+        dropId: string;
+        sectionId: string;
+        delta: XYCoord;
+      }>,
+    ) {
+      const target = state.sections.find(
+        (section) => section.id === action.payload.sectionId,
+      );
+
+      if (target) {
+        // target.children = target.children;
+      }
+
+      return state;
+    },
+    addDrop(
+      state,
+      action: PayloadAction<{
+        type: string;
+        sectionId: string;
+        delta: XYCoord;
+      }>,
+    ) {
+      const target = state.sections.find(
+        (section) => section.id === action.payload.sectionId,
+      );
+
+      if (target) {
+        target.children.push({
+          id: new Date().valueOf().toString(),
+          type: action.payload.type,
+        });
+      }
+    },
+    removeDrop(
+      state,
+      action: PayloadAction<{ dropId: string; sectionId: string }>,
+    ) {
+      const target = state.sections.find(
+        (section) => section.id === action.payload.sectionId,
+      );
+
+      if (target) {
+        target.children = target.children.filter(
+          (drop) => drop.id !== action.payload.dropId,
+        );
+      }
     },
     deleteSection(state, action: PayloadAction<string>) {
       const target = action.payload;
@@ -56,6 +122,7 @@ export const SiteEditorSlice = createSlice({
     ) {
       const newSection: Section = {
         id: new Date().valueOf().toString(),
+        children: [],
       };
 
       if (!action.payload) {

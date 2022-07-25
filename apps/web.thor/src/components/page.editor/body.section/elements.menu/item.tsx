@@ -1,6 +1,7 @@
 import { Button, Grid, css, styled } from '@mui/material';
 
-import { ELEMENT } from '../constants';
+import { ELEMENT } from '../../constants';
+import { SectionDrop } from '@app/redux/slices/editor';
 import { useDrag } from 'react-dnd';
 
 const Item = styled(Button)(
@@ -9,12 +10,16 @@ const Item = styled(Button)(
   `,
 );
 
-type Props = { children: string };
-export const ElementMenuGroupItem: React.FC<Props> = ({ children }) => {
-  const [, drag] = useDrag(() => ({
+type Props = {
+  children: string;
+  type: string;
+};
+
+export const ElementMenuGroupItem: React.FC<Props> = ({ children, type }) => {
+  const [, drag] = useDrag<Omit<SectionDrop, 'id'>>(() => ({
     type: ELEMENT,
     item: {
-      id: children,
+      type,
     },
   }));
 
