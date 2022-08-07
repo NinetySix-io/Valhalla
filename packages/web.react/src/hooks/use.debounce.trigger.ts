@@ -12,7 +12,7 @@ type UseDebounceReturn = [() => boolean | null, () => void];
  * @param {DependencyList} deps - DependencyList = []
  * @returns An array of two elements.
  */
-export default function useDebounceTrigger<Fn extends () => void>(
+export function useDebounceTrigger<Fn extends () => void>(
   fn: Fn,
   ms = 0,
   deps: DependencyList = [],

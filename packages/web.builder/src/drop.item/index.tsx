@@ -3,11 +3,14 @@ import * as React from 'react';
 import { css, styled } from '@mui/material';
 import { focusedElementAtom, useScopeAtomMutate, useZoneId } from '../context';
 
-import { DroppedItem } from '../types';
+import type { Direction } from 're-resizable/lib/resizer';
+import type { DroppedElement } from '../types';
+import type { NumberSize } from 're-resizable';
+import { Resizable } from 're-resizable';
 import { makeFilterProps } from '@valhalla/web.react';
 import { mergeRefs } from 'react-merge-refs';
 import { useDrag } from 'react-dnd';
-import { useGridArea } from '../hooks/use.grid.area';
+import { useElementGridArea } from '../hooks/use.element';
 
 const Container = styled(
   'div',
@@ -35,6 +38,10 @@ const Container = styled(
       ${isFocus
         ? css`
             border-color: ${mainColor};
+
+            &:hover {
+              cursor: auto;
+            }
           `
         : css`
             &:hover {
@@ -71,25 +78,16 @@ type Props = React.PropsWithoutRef<JSX.IntrinsicElements['div']> & {
   focusColor?: string;
   onFocusChange?: (isActive: boolean) => void;
   children?: React.ReactNode;
-  element: DroppedItem;
+  element: DroppedElement;
 };
 
 export const DropItem = React.forwardRef<HTMLDivElement, Props>(
   ({ element, focusColor, children, ...props }, ref) => {
     const zoneId = useZoneId();
-    const gridArea = useGridArea(element);
+    const gridArea = useElementGridArea(element);
     const container = React.useRef<HTMLDivElement>();
     const setFocus = useScopeAtomMutate(focusedElementAtom);
     const [isFocus, setIsFocus] = React.useState(false);
-    const [{ isDragging }, drag] = useDrag({
-      type: zoneId,
-      item: element,
-      collect(monitor) {
-        return {
-          isDragging: monitor.isDragging(),
-        };
-      },
-    });
 
     function handleLoseFocus() {
       setFocus(null);
@@ -103,8 +101,55 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
       }
     }
 
+    function handleResize(
+      _e: MouseEvent | TouchEvent,
+      _direction: Direction,
+      _ref: HTMLElement,
+      dimension: NumberSize,
+    ) {
+      // eslint-disable-next-line no-console
+      console.log('handleResize', dimension);
+    }
+
+    const [{ isDragging }, drag] = useDrag(
+      {
+        type: zoneId,
+        item: element,
+        end() {
+          handleFocus();
+        },
+        collect(monitor) {
+          return {
+            isDragging: monitor.isDragging(),
+          };
+        },
+      },
+      [zoneId],
+    );
+
     if (isDragging) {
       return <div ref={drag} />;
+    } else if (isFocus) {
+      return (
+        <Container
+          {...props}
+          tabIndex={0}
+          color={focusColor}
+          ref={mergeRefs([ref, container])}
+          onMouseUp={handleFocus}
+          onBlur={handleLoseFocus}
+          label={element.type.toUpperCase()}
+          gridArea={gridArea}
+          isFocus={isFocus}
+        >
+          <Resizable
+            size={{ width: '100%', height: '100%' }}
+            onResize={handleResize}
+          >
+            {children}
+          </Resizable>
+        </Container>
+      );
     }
 
     return (
@@ -112,11 +157,7 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
         {...props}
         tabIndex={0}
         color={focusColor}
-        ref={
-          isFocus
-            ? mergeRefs([ref, container])
-            : mergeRefs([ref, drag, container])
-        }
+        ref={mergeRefs([ref, drag, container])}
         onMouseUp={handleFocus}
         onBlur={handleLoseFocus}
         label={element.type.toUpperCase()}

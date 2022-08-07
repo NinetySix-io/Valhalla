@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { Droppable, DroppedItem } from '../types';
+import type { Droppable, DroppedElement } from '../types';
 
 import { DropItem } from '../drop.item';
 import { ElementFactory } from '../element.factory';
 
 type Props<T extends Droppable> = {
-  element: DroppedItem<T>;
+  element: DroppedElement<T>;
 };
 
 function Item<T extends Droppable>({ element }: Props<T>) {

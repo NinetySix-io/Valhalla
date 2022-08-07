@@ -1,9 +1,10 @@
 import * as React from 'react';
 
-import { DndProvider, DropTargetMonitor } from 'react-dnd';
-import { DroppableElement, DroppedItem } from '../../types';
+import type { DroppableElement, DroppedElement } from '../../types';
 
-import { ComponentMeta } from '@storybook/react';
+import type { ComponentMeta } from '@storybook/react';
+import { DndProvider } from 'react-dnd';
+import type { DropTargetMonitor } from 'react-dnd';
 import { DropZone } from '../index';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { styled } from '@mui/material';
@@ -25,7 +26,7 @@ const Template: React.FC<Props> = ({ value, onUpdateItem, ...props }) => {
   const [items, setItems] = React.useState(value);
 
   function handleUpdateItem(
-    item: DroppedItem,
+    item: DroppedElement,
     monitor: DropTargetMonitor<DroppableElement, unknown>,
   ) {
     onUpdateItem?.(item, monitor);
@@ -53,18 +54,17 @@ const Template: React.FC<Props> = ({ value, onUpdateItem, ...props }) => {
 
 export const Default = Template.bind({});
 const args: Props = {
-  accepts: 'element',
   rowsCount: 20,
   columnsCount: 20,
   value: [
     {
       id: uniqueId('item'),
       type: 'text',
-      value: '<p>test</>',
-      topLeftX: 0,
-      topLeftY: 0,
-      widthPct: 20,
-      heightPct: 20,
+      value: '<span>test<span/>',
+      x: 1,
+      y: 1,
+      xSpan: 3,
+      ySpan: 1,
     },
   ],
 };

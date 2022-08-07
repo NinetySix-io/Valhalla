@@ -6,9 +6,9 @@ import {
   useScopeAtomValue,
   useZoneId,
 } from '../context';
+import { useDebounceTrigger, useThrottleTrigger } from '@valhalla/web.react';
 
-import useDebounceTrigger from '@valhalla/web.react/src/hooks/use.debounce.trigger';
-import { useThrottleTrigger } from '@valhalla/web.react/src';
+import { isNil } from '@valhalla/utilities';
 
 type Props = {
   onElementFocus?: (elementId: string | undefined, zoneId: string) => void;
@@ -20,17 +20,21 @@ export function DropZoneCallbackManager({ onElementFocus, onDragging }: Props) {
   const isDragging = useScopeAtomValue(isDraggingOverAtom);
   const focusedElement = useScopeAtomValue(focusedElementAtom);
 
-  useDebounceTrigger(() => onElementFocus?.(focusedElement, zoneId), 200, [
-    onElementFocus,
-    focusedElement,
-    zoneId,
-  ]);
+  useDebounceTrigger(
+    () => {
+      !isNil(focusedElement) && onElementFocus?.(focusedElement, zoneId);
+    },
+    200,
+    [onElementFocus, focusedElement, zoneId],
+  );
 
-  useThrottleTrigger(() => onDragging?.(isDragging, zoneId), 200, [
-    onDragging,
-    isDragging,
-    zoneId,
-  ]);
+  useThrottleTrigger(
+    () => {
+      !isNil(isDragging) && onDragging?.(isDragging, zoneId);
+    },
+    200,
+    [onDragging, isDragging, zoneId],
+  );
 
   return <React.Fragment />;
 }

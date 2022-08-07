@@ -1,16 +1,10 @@
 import * as React from 'react';
 
-import {
-  Atom,
-  WritableAtom,
-  atom,
-  useAtom,
-  useAtomValue,
-  useSetAtom,
-} from 'jotai';
+import type { Atom, WritableAtom } from 'jotai';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 
-import { GridAreaElement } from '../hooks/use.grid.area';
-import { Scope } from 'jotai/core/atom';
+import type { GridAreaElement } from '../hooks/use.element';
+import type { Scope } from 'jotai/core/atom';
 
 export const ZoneIdContext = React.createContext('');
 
@@ -26,11 +20,11 @@ export function useZoneId() {
 // Atom
 // -----------------------------
 
-export const cellSizeAtom = atom(0);
+export const cellSizeAtom = atom(null as number);
 export const containerAtom = atom(null as HTMLDivElement);
-export const focusedElementAtom = atom('');
+export const focusedElementAtom = atom(null as string);
 export const draggingElementAtom = atom(null as GridAreaElement);
-export const isDraggingOverAtom = atom(false);
+export const isDraggingOverAtom = atom(null as boolean);
 
 export function useScopeAtom<
   Value,

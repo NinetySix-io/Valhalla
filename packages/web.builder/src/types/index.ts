@@ -4,15 +4,15 @@ import { ValueOf } from '@valhalla/utilities';
 export type DroppableElement = ValueOf<BuilderElement>;
 
 export type Droppable<T extends DroppableElement = DroppableElement> = T & {
-  widthPct: number;
-  heightPct: number;
+  xSpan: number;
+  ySpan: number;
   canResize?: boolean;
 };
 
-export type DroppedItem<T extends Droppable = Droppable> = T & {
+export type DroppedElement<T extends Droppable = Droppable> = T & {
   id: string;
-  topLeftX: number;
-  topLeftY: number;
+  x: number;
+  y: number;
 };
 
 export type DropCandidate<T extends Droppable = Droppable> = T;

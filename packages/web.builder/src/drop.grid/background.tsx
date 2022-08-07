@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import {
+  cellSizeAtom,
   containerAtom,
   draggingElementAtom,
   isDraggingOverAtom,
@@ -10,9 +11,10 @@ import {
 import { css, styled } from '@mui/material';
 
 import { Droppable } from '../types';
+import { calculateElementPosition } from '../lib/calculate.element.position';
 import { makeFilterProps } from '@valhalla/web.react';
 import { useDragDropManager } from 'react-dnd';
-import { useGridArea } from '../hooks/use.grid.area';
+import { useElementGridArea } from '../hooks/use.element';
 
 const Container = styled(
   'div',
@@ -65,7 +67,8 @@ export const Background: React.FC = () => {
   const container = useScopeAtomValue(containerAtom);
   const [isOver, setIsOver] = useScopeAtom(isDraggingOverAtom);
   const [element, setElement] = useScopeAtom(draggingElementAtom);
-  const elementGridArea = useGridArea(element);
+  const elementGridArea = useElementGridArea(element);
+  const cellSize = useScopeAtomValue(cellSizeAtom);
 
   const handleOffsetChange = React.useCallback(() => {
     const nextOffset = monitor.getSourceClientOffset();
@@ -77,12 +80,11 @@ export const Background: React.FC = () => {
     setElement(
       !nextOffset || !nextElement
         ? null
-        : {
-            widthPct: nextElement.widthPct,
-            heightPct: nextElement.heightPct,
-            topLeftX: nextOffset.x,
-            topLeftY: nextOffset.y,
-          },
+        : Object.assign(
+            {},
+            nextElement,
+            calculateElementPosition(nextOffset, cellSize),
+          ),
     );
 
     setIsOver(() =>
@@ -91,7 +93,7 @@ export const Background: React.FC = () => {
         : containerYAxisStart <= nextOffset.y &&
           containerYAxisEnd >= nextOffset.y,
     );
-  }, [monitor, container, setElement, setIsOver]);
+  }, [monitor, container, cellSize, setElement, setIsOver]);
 
   React.useEffect(() => {
     const unsubscribe = monitor.subscribeToOffsetChange(handleOffsetChange);
