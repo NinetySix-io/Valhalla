@@ -1,6 +1,6 @@
 {
   "extends": "../tsconfig/react-library.json",
-  "include": ["**/*.ts", "src/index.tsx"],
+  "include": ["**/*.ts", "src/index.tsx", "src/drop.zone/callback.manager.tsx"],
   "exclude": [
     "dist",
     "build",

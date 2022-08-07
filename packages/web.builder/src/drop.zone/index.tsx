@@ -1,46 +1,50 @@
 import * as React from 'react';
 
 import { ConnectableElement, DropTargetMonitor, useDrop } from 'react-dnd';
-import { DropCandidate, DropType, Droppable, DroppedItem } from '../types';
+import { DropCandidate, Droppable, DroppedItem } from '../types';
+import { ZoneIdContext, useZoneId } from '../context';
 
 import { DropGrid } from '../drop.grid';
+import { DropZoneCallbackManager } from './callback.manager';
 import { DropZoneItem } from './item';
-import { ZoneIdContext } from '../context';
 import { cProps } from '@valhalla/web.react';
 import { mergeRefs } from 'react-merge-refs';
 import { uniqueId } from '@valhalla/utilities';
 import { useDropDimension } from '../hooks/use.dimension';
 
-type Props<T extends Droppable> = cProps<{
-  accepts: DropType;
-  rowsCount: number;
-  columnsCount: number;
-  onDrop?: (
-    item: DropCandidate<T> | DroppedItem<T>,
-    monitor: DropTargetMonitor,
-  ) => void;
-  onAddItem?: (
-    item: Omit<DroppedItem<T>, 'id'>,
-    monitor: DropTargetMonitor,
-  ) => void;
-  onUpdateItem?: (item: DroppedItem<T>, monitor: DropTargetMonitor) => void;
-  value?: Array<DroppedItem>;
-}>;
+type Props<T extends Droppable> = cProps<
+  {
+    rowsCount: number;
+    columnsCount: number;
+    onDrop?: (
+      item: DropCandidate<T> | DroppedItem<T>,
+      monitor: DropTargetMonitor,
+    ) => void;
+    onAddItem?: (
+      item: Omit<DroppedItem<T>, 'id'>,
+      monitor: DropTargetMonitor,
+    ) => void;
+    onUpdateItem?: (item: DroppedItem<T>, monitor: DropTargetMonitor) => void;
+    value?: Array<DroppedItem>;
+  } & React.ComponentProps<typeof DropZoneCallbackManager>
+>;
 
 function DropZoneContent<T extends Droppable>({
-  accepts,
+  id,
   rowsCount,
   columnsCount,
+  onElementFocus,
   onDrop,
   onAddItem,
   onUpdateItem,
   value,
   ...props
 }: Props<T>) {
+  const zoneId = useZoneId();
   const dimensionRef = useDropDimension(columnsCount);
 
   const [, drop] = useDrop<DroppedItem<T>>(() => ({
-    accept: accepts,
+    accept: zoneId,
     drop(item, monitor) {
       const offset = monitor.getSourceClientOffset();
       const nextItem = { ...item };
@@ -59,6 +63,7 @@ function DropZoneContent<T extends Droppable>({
   return (
     <DropGrid
       {...props}
+      id={id}
       rowsCount={rowsCount}
       columnsCount={columnsCount}
       ref={mergeRefs<ConnectableElement | HTMLDivElement | undefined>([
@@ -66,8 +71,9 @@ function DropZoneContent<T extends Droppable>({
         dimensionRef,
       ])}
     >
+      <DropZoneCallbackManager onElementFocus={onElementFocus} />
       {value?.map((element) => (
-        <DropZoneItem key={element.id} element={element} accepts={accepts} />
+        <DropZoneItem key={element.id} element={element} />
       ))}
     </DropGrid>
   );

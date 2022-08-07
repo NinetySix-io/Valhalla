@@ -14,6 +14,14 @@ import { Scope } from 'jotai/core/atom';
 
 export const ZoneIdContext = React.createContext('');
 
+/**
+ * UseZoneId returns the value of the ZoneIdContext.
+ * @returns The ZoneIdContext
+ */
+export function useZoneId() {
+  return React.useContext(ZoneIdContext);
+}
+
 // -----------------------------
 // Atom
 // -----------------------------
@@ -29,12 +37,12 @@ export function useScopeAtom<
   Update,
   Result extends void | Promise<void>,
 >(atom: WritableAtom<Value, Update, Result>, scope?: Scope) {
-  const currentZone = React.useContext(ZoneIdContext);
+  const currentZone = useZoneId();
   return useAtom(atom, scope ?? currentZone);
 }
 
 export function useScopeAtomValue<Value>(atom: Atom<Value>, scope?: Scope) {
-  const currentZone = React.useContext(ZoneIdContext);
+  const currentZone = useZoneId();
   return useAtomValue(atom, scope ?? currentZone);
 }
 
@@ -43,6 +51,6 @@ export function useScopeAtomMutate<
   Update,
   Result extends void | Promise<void>,
 >(atom: WritableAtom<Value, Update, Result>, scope?: Scope) {
-  const currentZone = React.useContext(ZoneIdContext);
+  const currentZone = useZoneId();
   return useSetAtom(atom, scope ?? currentZone);
 }

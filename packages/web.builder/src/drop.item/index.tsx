@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import { DropType, DroppedItem } from '../types';
 import { css, styled } from '@mui/material';
-import { focusedElementAtom, useScopeAtomMutate } from '../context';
+import { focusedElementAtom, useScopeAtomMutate, useZoneId } from '../context';
 
+import { DroppedItem } from '../types';
 import { makeFilterProps } from '@valhalla/web.react';
 import { mergeRefs } from 'react-merge-refs';
 import { useDrag } from 'react-dnd';
@@ -68,7 +68,6 @@ const Container = styled(
 );
 
 type Props = React.PropsWithoutRef<JSX.IntrinsicElements['div']> & {
-  dropType: DropType;
   focusColor?: string;
   onFocusChange?: (isActive: boolean) => void;
   children?: React.ReactNode;
@@ -76,13 +75,14 @@ type Props = React.PropsWithoutRef<JSX.IntrinsicElements['div']> & {
 };
 
 export const DropItem = React.forwardRef<HTMLDivElement, Props>(
-  ({ element, focusColor, children, dropType, ...props }, ref) => {
+  ({ element, focusColor, children, ...props }, ref) => {
+    const zoneId = useZoneId();
     const gridArea = useGridArea(element);
     const container = React.useRef<HTMLDivElement>();
     const setFocus = useScopeAtomMutate(focusedElementAtom);
     const [isFocus, setIsFocus] = React.useState(false);
     const [{ isDragging }, drag] = useDrag({
-      type: dropType,
+      type: zoneId,
       item: element,
       collect(monitor) {
         return {

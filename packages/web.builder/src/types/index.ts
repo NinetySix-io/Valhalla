@@ -16,5 +16,3 @@ export type DroppedItem<T extends Droppable = Droppable> = T & {
 };
 
 export type DropCandidate<T extends Droppable = Droppable> = T;
-
-export type DropType<T extends string | symbol = string | symbol> = T;
