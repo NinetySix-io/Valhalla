@@ -9,3 +9,8 @@ export const parameters = {
     },
   },
 };
+
+if (process.env.NODE_ENV !== 'production') {
+  const whyDidYouRender = require('@welldone-software/why-did-you-render');
+  whyDidYouRender(require('react'), {});
+}

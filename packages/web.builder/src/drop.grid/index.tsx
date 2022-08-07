@@ -1,11 +1,10 @@
 import * as React from 'react';
 
+import { cellSizeAtom, useScopeAtomValue } from '../context';
 import { css, styled } from '@mui/material';
 
 import { Background } from './background';
 import { makeFilterProps } from '@valhalla/web.react';
-import { mergeRefs } from 'react-merge-refs';
-import { useCellSize } from '../context';
 
 const Container = styled(
   'div',
@@ -39,8 +38,7 @@ export const DropGrid = React.forwardRef<HTMLDivElement, Props>(
     { style, rowsCount, columnsCount, children, dotWidth = 3, ...props },
     ref,
   ) => {
-    const cellSize = useCellSize();
-    const container = React.useRef<HTMLDivElement>();
+    const cellSize = useScopeAtomValue(cellSizeAtom);
 
     return (
       <Container
@@ -50,7 +48,7 @@ export const DropGrid = React.forwardRef<HTMLDivElement, Props>(
         columnsCount={columnsCount}
         patternSize={dotWidth}
         cellSize={cellSize}
-        ref={mergeRefs([container, ref])}
+        ref={ref}
       >
         <Background />
         {children}

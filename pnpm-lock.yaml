@@ -658,6 +658,7 @@ importers:
       '@types/lodash.pick': ^4.4.7
       '@types/lodash.pickby': ^4.6.7
       '@types/lodash.throttle': ^4.1.7
+      '@types/lodash.uniqueid': ^4.0.7
       '@valhalla/config': workspace:*
       '@valhalla/tsconfig': workspace:*
       add: ^2.0.6
@@ -671,6 +672,7 @@ importers:
       lodash.pick: ^4.4.0
       lodash.pickby: ^4.6.0
       lodash.throttle: ^4.1.1
+      lodash.uniqueid: ^4.0.1
       pnpm: ^7.1.9
       slugify: ^1.6.5
       superstruct: ^0.15.4
@@ -685,6 +687,7 @@ importers:
       lodash.pick: 4.4.0
       lodash.pickby: 4.6.0
       lodash.throttle: 4.1.1
+      lodash.uniqueid: 4.0.1
       slugify: 1.6.5
       superstruct: 0.15.5
     devDependencies:
@@ -697,6 +700,7 @@ importers:
       '@types/lodash.pick': 4.4.7
       '@types/lodash.pickby': 4.6.7
       '@types/lodash.throttle': 4.1.7
+      '@types/lodash.uniqueid': 4.0.7
       '@valhalla/config': link:../config
       '@valhalla/tsconfig': link:../tsconfig
       add: 2.0.6
@@ -725,8 +729,10 @@ importers:
       '@valhalla/tsconfig': workspace:*
       '@valhalla/utilities': workspace:*
       '@valhalla/web.react': workspace:*
+      '@welldone-software/why-did-you-render': ^7.0.1
       autoprefixer: ^10.4.7
       babel-loader: ^8.2.5
+      jotai: ^1.7.7
       next: 12.2.3
       postcss: ^8.4.14
       react: ^18.2.0
@@ -743,6 +749,7 @@ importers:
       '@emotion/styled': 11.9.3_y2x62d5bbinncmisoeyv36jqse
       '@mui/lab': 5.0.0-alpha.92_gipb7ypjxo5vbq6tgp3f6qlcuu
       '@mui/material': 5.9.2_bl6qrq6463ovzmqn4cmwv7vydq
+      jotai: 1.7.7_lxeixztqul6ae7cp3cpkyxlhzm
       next: 12.2.3_qugu52izettqdqqm5qcjcltcia
       react: 18.2.0
       react-dnd: 16.0.1_3hx2ussxxho4jajbwrd6gq34qe
@@ -765,6 +772,7 @@ importers:
       '@valhalla/tsconfig': link:../tsconfig
       '@valhalla/utilities': link:../utilities
       '@valhalla/web.react': link:../web.react
+      '@welldone-software/why-did-you-render': 7.0.1_react@18.2.0
       autoprefixer: 10.4.7_postcss@8.4.14
       babel-loader: 8.2.5_y3lv6tn6yokher4u7xj4j22px4
       postcss: 8.4.14
@@ -8369,6 +8377,12 @@ packages:
       '@types/lodash': 4.14.182
     dev: true
 
+  /@types/lodash.uniqueid/4.0.7:
+    resolution: {integrity: sha512-ipMGW5nR+DTR6U5O08k1Ufr1F9iH+F3p7bhdwsnq6V6nCn/HgMq22UalDq4n91+03+pHFKyeXV1Y7vdJrm7S4g==}
+    dependencies:
+      '@types/lodash': 4.14.182
+    dev: true
+
   /@types/lodash/4.14.182:
     resolution: {integrity: sha512-/THyiqyQAP9AfARo4pF+aCGcyiQ94tX/Is2I7HofNRqoYLgN1PBoOWu2/zTA5zMxzP5EFutMtWtGAFRKUe961Q==}
     dev: true
@@ -15479,6 +15493,44 @@ packages:
       '@panva/asn1.js': 1.0.0
     dev: false
 
+  /jotai/1.7.7_lxeixztqul6ae7cp3cpkyxlhzm:
+    resolution: {integrity: sha512-UK1fzkR2vq62rUL7iHlMkjkKj49AEU9iOm2xwfgPAeMJ8GIzKrEiKQC81w+O4dlNCjmCIi9UVkV75dADqccVCw==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      '@babel/core': '*'
+      '@babel/template': '*'
+      '@tanstack/query-core': '*'
+      '@urql/core': '*'
+      immer: '*'
+      optics-ts: '*'
+      react: '>=16.8'
+      valtio: '*'
+      wonka: '*'
+      xstate: '*'
+    peerDependenciesMeta:
+      '@babel/core':
+        optional: true
+      '@babel/template':
+        optional: true
+      '@tanstack/query-core':
+        optional: true
+      '@urql/core':
+        optional: true
+      immer:
+        optional: true
+      optics-ts:
+        optional: true
+      valtio:
+        optional: true
+      wonka:
+        optional: true
+      xstate:
+        optional: true
+    dependencies:
+      '@babel/core': 7.18.9
+      react: 18.2.0
+    dev: false
+
   /js-cookie/2.2.1:
     resolution: {integrity: sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==}
     dev: false
@@ -16009,6 +16061,10 @@ packages:
   /lodash.uniq/4.5.0:
     resolution: {integrity: sha512-xfBaXQd9ryd9dlSDvnvI0lvxfLJlYAZzXomUYzLKtUeOQvOP5piqAWuGtrhWeqaXK9hhoM/iyJc5AV+XfsX3HQ==}
     dev: true
+
+  /lodash.uniqueid/4.0.1:
+    resolution: {integrity: sha512-GQQWaIeGlL6DIIr06kj1j6sSmBxyNMwI8kaX9aKpHR/XsMTiaXDVPNPAkiboOTK9OJpTJF/dXT3xYoFQnj386Q==}
+    dev: false
 
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}

@@ -10,10 +10,6 @@
     "**/*.stories.tsx"
   ],
   "compilerOptions": {
-    "lib": ["DOM"],
-    "baseUrl": "./",
-    "paths": {
-      "@package/*": ["src/*"]
-    }
+    "lib": ["DOM"]
   }
 }

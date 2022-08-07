@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { useCellSize, useDropContainer } from '../context';
+import { cellSizeAtom, containerAtom, useScopeAtomValue } from '../context';
 
 import { DroppedItem } from '../types';
 
@@ -36,8 +36,8 @@ function getGridAreaStr(start: [number, number], end: [number, number]) {
  * @returns A string that represents the grid area.
  */
 export function useGridArea(element: GridAreaElement) {
-  const container = useDropContainer();
-  const cellSize = useCellSize();
+  const container = useScopeAtomValue(containerAtom);
+  const cellSize = useScopeAtomValue(cellSizeAtom);
   const [gridArea, setGridArea] = React.useState<string>();
 
   React.useEffect(() => {

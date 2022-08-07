@@ -1,3 +1,5 @@
+/// <reference types="@welldone-software/why-did-you-render" />
+
 declare module '*.svg' {
   const content: string;
   export default content;

@@ -7,6 +7,7 @@ import { ComponentMeta } from '@storybook/react';
 import { DropZone } from '../index';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { styled } from '@mui/material';
+import { uniqueId } from '@valhalla/utilities';
 
 type ComponentType = typeof DropZone;
 type Props = React.ComponentProps<ComponentType>;
@@ -20,7 +21,7 @@ const Container = styled('div')`
   padding: 10px;
 `;
 
-const Template = ({ value, onUpdateItem, ...props }: Props) => {
+const Template: React.FC<Props> = ({ value, onUpdateItem, ...props }) => {
   const [items, setItems] = React.useState(value);
 
   function handleUpdateItem(
@@ -57,7 +58,7 @@ const args: Props = {
   columnsCount: 20,
   value: [
     {
-      id: new Date().valueOf().toString(),
+      id: uniqueId('item'),
       type: 'text',
       value: '<p>test</>',
       topLeftX: 0,

@@ -1,13 +1,15 @@
+import * as React from 'react';
+
 import { ConnectableElement, DropTargetMonitor, useDrop } from 'react-dnd';
 import { DropCandidate, DropType, Droppable, DroppedItem } from '../types';
 
-import { DropDimensionCtx } from '../context';
 import { DropGrid } from '../drop.grid';
-import { DropItem } from '../drop.item';
-import { ElementFactory } from '../element.factory';
+import { DropZoneItem } from './item';
+import { ZoneIdContext } from '../context';
 import { cProps } from '@valhalla/web.react';
 import { mergeRefs } from 'react-merge-refs';
-import { useDropDimension } from '../hooks/use.cell.size';
+import { uniqueId } from '@valhalla/utilities';
+import { useDropDimension } from '../hooks/use.dimension';
 
 type Props<T extends Droppable> = cProps<{
   accepts: DropType;
@@ -25,7 +27,7 @@ type Props<T extends Droppable> = cProps<{
   value?: Array<DroppedItem>;
 }>;
 
-export function DropZone<T extends Droppable>({
+function DropZoneContent<T extends Droppable>({
   accepts,
   rowsCount,
   columnsCount,
@@ -35,11 +37,7 @@ export function DropZone<T extends Droppable>({
   value,
   ...props
 }: Props<T>) {
-  const {
-    ref: dimensionRef,
-    cellSize,
-    container,
-  } = useDropDimension(columnsCount);
+  const dimensionRef = useDropDimension(columnsCount);
 
   const [, drop] = useDrop<DroppedItem<T>>(() => ({
     accept: accepts,
@@ -59,22 +57,28 @@ export function DropZone<T extends Droppable>({
   }));
 
   return (
-    <DropDimensionCtx.Provider value={{ cellSize: cellSize, container }}>
-      <DropGrid
-        {...props}
-        rowsCount={rowsCount}
-        columnsCount={columnsCount}
-        ref={mergeRefs<ConnectableElement | HTMLDivElement | undefined>([
-          drop,
-          dimensionRef,
-        ])}
-      >
-        {value?.map((element) => (
-          <DropItem key={element.id} dropType={accepts} element={element}>
-            <ElementFactory value={element} />
-          </DropItem>
-        ))}
-      </DropGrid>
-    </DropDimensionCtx.Provider>
+    <DropGrid
+      {...props}
+      rowsCount={rowsCount}
+      columnsCount={columnsCount}
+      ref={mergeRefs<ConnectableElement | HTMLDivElement | undefined>([
+        drop,
+        dimensionRef,
+      ])}
+    >
+      {value?.map((element) => (
+        <DropZoneItem key={element.id} element={element} accepts={accepts} />
+      ))}
+    </DropGrid>
+  );
+}
+
+export function DropZone<T extends Droppable>({ id, ...props }: Props<T>) {
+  const zoneId = React.useRef(uniqueId('zone')).current;
+
+  return (
+    <ZoneIdContext.Provider value={id || zoneId}>
+      <DropZoneContent {...props} />
+    </ZoneIdContext.Provider>
   );
 }

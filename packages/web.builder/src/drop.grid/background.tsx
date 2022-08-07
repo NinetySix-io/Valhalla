@@ -1,12 +1,18 @@
 import * as React from 'react';
 
-import { GridAreaElement, useGridArea } from '../hooks/use.grid.area';
+import {
+  containerAtom,
+  draggingElementAtom,
+  isDraggingOverAtom,
+  useScopeAtom,
+  useScopeAtomValue,
+} from '../context';
 import { css, styled } from '@mui/material';
 
 import { Droppable } from '../types';
 import { makeFilterProps } from '@valhalla/web.react';
 import { useDragDropManager } from 'react-dnd';
-import { useDropContainer } from '../context';
+import { useGridArea } from '../hooks/use.grid.area';
 
 const Container = styled(
   'div',
@@ -56,9 +62,9 @@ const Highlighter = styled(
 
 export const Background: React.FC = () => {
   const monitor = useDragDropManager().getMonitor();
-  const container = useDropContainer();
-  const [isOver, setIsOver] = React.useState(false);
-  const [element, setElement] = React.useState<GridAreaElement>();
+  const container = useScopeAtomValue(containerAtom);
+  const [isOver, setIsOver] = useScopeAtom(isDraggingOverAtom);
+  const [element, setElement] = useScopeAtom(draggingElementAtom);
   const elementGridArea = useGridArea(element);
 
   const handleOffsetChange = React.useCallback(() => {
@@ -85,7 +91,7 @@ export const Background: React.FC = () => {
         : containerYAxisStart <= nextOffset.y &&
           containerYAxisEnd >= nextOffset.y,
     );
-  }, [monitor, container, setElement]);
+  }, [monitor, container, setElement, setIsOver]);
 
   React.useEffect(() => {
     const unsubscribe = monitor.subscribeToOffsetChange(handleOffsetChange);

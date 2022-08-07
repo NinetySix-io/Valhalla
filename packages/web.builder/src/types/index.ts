@@ -6,6 +6,7 @@ export type DroppableElement = ValueOf<BuilderElement>;
 export type Droppable<T extends DroppableElement = DroppableElement> = T & {
   widthPct: number;
   heightPct: number;
+  canResize?: boolean;
 };
 
 export type DroppedItem<T extends Droppable = Droppable> = T & {
