@@ -48,6 +48,7 @@ const args: Props = {
   showGrid: true,
   columnsCount: 24,
   rowsCount: 10,
+  dotWidth: 3,
 };
 
 Default.args = args;
