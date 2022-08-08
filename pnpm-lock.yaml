@@ -725,7 +725,6 @@ importers:
       '@storybook/testing-library': 0.0.13
       '@types/react': ^18.0.15
       '@types/react-dom': ^18.0.6
-      '@types/react-resizable': ^3.0.2
       '@valhalla/config': workspace:*
       '@valhalla/tsconfig': workspace:*
       '@valhalla/utilities': workspace:*
@@ -771,7 +770,6 @@ importers:
       '@storybook/testing-library': 0.0.13_biqbaboplfbrettd7655fr4n2y
       '@types/react': 18.0.15
       '@types/react-dom': 18.0.6
-      '@types/react-resizable': 3.0.2
       '@valhalla/config': link:../config
       '@valhalla/tsconfig': link:../tsconfig
       '@valhalla/utilities': link:../utilities
@@ -794,6 +792,7 @@ importers:
       '@react-hook/async': ^3.1.1
       '@react-hook/change': ^1.0.0
       '@react-hook/debounce': ^4.0.0
+      '@react-hook/event': ^1.2.6
       '@react-hook/throttle': ^2.2.0
       '@storybook/addon-actions': ^6.5.9
       '@storybook/addon-console': ^1.2.3
@@ -828,6 +827,7 @@ importers:
       '@react-hook/async': 3.1.1_react@18.2.0
       '@react-hook/change': 1.0.0_react@18.2.0
       '@react-hook/debounce': 4.0.0_react@18.2.0
+      '@react-hook/event': 1.2.6_react@18.2.0
       '@react-hook/throttle': 2.2.0_react@18.2.0
       next: 12.2.3_qugu52izettqdqqm5qcjcltcia
       next-seo: 5.5.0_53oqlnqnxhbetdy4ljlkkvmoby
@@ -6474,6 +6474,14 @@ packages:
       react: 18.2.0
     dev: false
 
+  /@react-hook/event/1.2.6_react@18.2.0:
+    resolution: {integrity: sha512-JUL5IluaOdn5w5Afpe/puPa1rj8X6udMlQ9dt4hvMuKmTrBS1Ya6sb4sVgvfe2eU4yDuOfAhik8xhbcCekbg9Q==}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      react: 18.2.0
+    dev: false
+
   /@react-hook/latest/1.0.3_react@18.2.0:
     resolution: {integrity: sha512-dy6duzl+JnAZcDbNTfmaP3xHiKtbXYOaz3G51MGVljh548Y8MWzTr+PHLOfvpypEVW9zwvl+VyKjbWKEVbV1Rg==}
     peerDependencies:
@@ -8507,12 +8515,6 @@ packages:
     dependencies:
       '@types/react': 18.0.15
     dev: false
-
-  /@types/react-resizable/3.0.2:
-    resolution: {integrity: sha512-4rHjZDQmSpFqRlNzlcnF5tpOG5fBcMuDlvD+qT3XHAJLKGx/FC3iDQ9li9tHW53ecWwZzHTPCGvz5vNWQN+v/Q==}
-    dependencies:
-      '@types/react': 18.0.15
-    dev: true
 
   /@types/react-syntax-highlighter/11.0.5:
     resolution: {integrity: sha512-VIOi9i2Oj5XsmWWoB72p3KlZoEbdRAcechJa8Ztebw7bDl2YmR+odxIqhtJGp1q2EozHs02US+gzxJ9nuf56qg==}
