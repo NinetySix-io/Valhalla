@@ -13,7 +13,7 @@ import { DropGrid } from '../drop.grid';
 import { DropZoneCallbackManager } from './callback.manager';
 import { DropZoneItem } from './item';
 import { cProps } from '@valhalla/web.react';
-import { calculateElementPosition } from '../lib/calculate.element.position';
+import { getPosition } from '../lib/get.position';
 import { mergeRefs } from 'react-merge-refs';
 import { uniqueId } from '@valhalla/utilities';
 import { useDrop } from 'react-dnd';
@@ -33,7 +33,7 @@ type Props<T extends Droppable> = cProps<
     ) => void;
     onUpdateItem?: (
       item: DroppedElement<T>,
-      monitor: DropTargetMonitor,
+      monitor?: DropTargetMonitor,
     ) => void;
     value?: Array<DroppedElement>;
   } & React.ComponentProps<typeof DropZoneCallbackManager>
@@ -60,8 +60,9 @@ function DropZoneContent<T extends Droppable, E extends DroppedElement<T>>({
       accept: zoneId,
       drop(item, monitor) {
         const offset = monitor.getSourceClientOffset();
-        const nextPos = calculateElementPosition(offset, cellSize);
-        const nextItem = { ...item, ...nextPos };
+        const nextX = getPosition(offset.x, cellSize);
+        const nextY = getPosition(offset.y, cellSize);
+        const nextItem = { ...item, x: nextX, y: nextY };
 
         onDrop?.(nextItem, monitor);
         if ('id' in item) {
@@ -71,14 +72,7 @@ function DropZoneContent<T extends Droppable, E extends DroppedElement<T>>({
         }
       },
     }),
-    [
-      cellSize,
-      zoneId,
-      calculateElementPosition,
-      onUpdateItem,
-      onAddItem,
-      onDrop,
-    ],
+    [cellSize, zoneId, getPosition, onUpdateItem, onAddItem, onDrop],
   );
 
   return (
@@ -97,7 +91,11 @@ function DropZoneContent<T extends Droppable, E extends DroppedElement<T>>({
         onDragging={onDragging}
       />
       {value?.map((element) => (
-        <DropZoneItem key={element.id} element={element} />
+        <DropZoneItem
+          key={element.id}
+          element={element}
+          onChange={(nextEl) => onUpdateItem(nextEl as DroppedElement<T>)}
+        />
       ))}
     </DropGrid>
   );

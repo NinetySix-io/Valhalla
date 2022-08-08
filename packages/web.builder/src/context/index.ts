@@ -24,7 +24,7 @@ export const cellSizeAtom = atom(null as number);
 export const containerAtom = atom(null as HTMLDivElement);
 export const focusedElementAtom = atom(null as string);
 export const draggingElementAtom = atom(null as GridAreaElement);
-export const isDraggingOverAtom = atom(null as boolean);
+export const gridVisibleAtom = atom(null as boolean);
 
 export function useScopeAtom<
   Value,

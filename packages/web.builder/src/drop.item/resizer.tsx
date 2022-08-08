@@ -1,120 +1,121 @@
 import * as React from 'react';
 
-import {
-  cProps,
-  makeFilterProps,
-  useEvent,
-  useThrottleCallback,
-} from '@valhalla/web.react';
+import { cProps, makeFilterProps, useEvent } from '@valhalla/web.react';
 import { css, styled } from '@mui/material';
+import {
+  isPointingDown,
+  isPointingLeft,
+  isPointingRight,
+  isPointingUp,
+} from './direction.guide';
 
+import { DIRECTION } from './directions';
+import { Size } from '../types';
 import { isNil } from '@valhalla/utilities';
-
-enum DIRECTION {
-  TOP,
-  BOTTOM,
-  LEFT,
-  RIGHT,
-  TOP_LEFT,
-  TOP_RIGHT,
-  BOTTOM_LEFT,
-  BOTTOM_RIGHT,
-}
-
-type Props = cProps<{
-  disabled?: boolean | Array<DIRECTION>;
-  children?: React.ReactNode;
-  minHeight?: number;
-  minWidth?: number;
-  onResize?: (value: Location) => void;
-}>;
-
-type ResizerType = React.FC<Props> & {
-  DIRECTION: typeof DIRECTION;
-};
 
 const Container = styled('div')(
   () => css`
     --pt: 4px;
-    --mg: calc(-1.5 * var(--pt));
+    --mg: calc(-1 * var(--pt));
+    --cg: calc(2 * var(--mg));
+    --cw: calc(2 * var(--pt));
     position: relative;
+    height: 100%;
+    width: 100%;
   `,
 );
 
-const Marker = styled(
+const Corner = styled(
   'div',
-  makeFilterProps(['cursor', 'top', 'bottom', 'left', 'right', 'absolute']),
+  makeFilterProps(['direction']),
 )<{
-  cursor: React.CSSProperties['cursor'];
-  top?: number;
-  bottom?: number;
-  right?: number;
-  left?: number;
-  absolute?: boolean;
+  direction:
+    | DIRECTION.BOTTOM_LEFT
+    | DIRECTION.BOTTOM_RIGHT
+    | DIRECTION.TOP_LEFT
+    | DIRECTION.TOP_RIGHT;
 }>(
-  ({ theme, cursor, top, bottom, left, right, absolute }) => css`
-    min-width: var(--pt);
-    min-height: var(--pt);
-    max-width: var(--pt);
-    max-height: var(--pt);
+  ({ theme, direction }) => css`
+    height: var(--cw);
+    width: var(--cw);
     z-index: 1;
-    border-radius: 50%;
-    border: solid 3px ${theme.palette.primary.main};
-    cursor: ${cursor};
+    border: solid 2px ${theme.palette.primary.main};
+    position: absolute;
+    transition: transform 0.2s;
 
-    ${absolute &&
+    &:active,
+    &:hover {
+      transform: scale(3);
+    }
+
+    ${direction === DIRECTION.BOTTOM_RIGHT &&
     css`
-      position: absolute;
+      cursor: se-resize;
+      bottom: var(--cg);
+      right: var(--cg);
+      border-left: none;
+      border-top: none;
     `}
 
-    ${!isNil(top) &&
+    ${direction === DIRECTION.BOTTOM_LEFT &&
     css`
-      top: ${top};
+      cursor: sw-resize;
+      bottom: var(--cg);
+      left: var(--cg);
+      border-right: none;
+      border-top: none;
     `}
 
-    ${!isNil(bottom) &&
+    ${direction === DIRECTION.TOP_RIGHT &&
     css`
-      bottom: ${bottom};
+      cursor: ne-resize;
+      right: var(--cg);
+      top: var(--cg);
+      border-left: none;
+      border-bottom: none;
     `}
 
-    ${!isNil(left) &&
-    css`
-      left: ${left};
-    `}
 
-    ${!isNil(right) &&
+    ${direction === DIRECTION.TOP_LEFT &&
     css`
-      right: ${right};
+      cursor: nw-resize;
+      left: var(--cg);
+      top: var(--cg);
+      border-right: none;
+      border-bottom: none;
     `}
   `,
 );
 
-const HorizontalHandler = styled(
+const HorizontalBar = styled(
   'div',
   makeFilterProps(['direction']),
 )<{ direction: DIRECTION.TOP | DIRECTION.BOTTOM }>(
   ({ direction }) => css`
     position: absolute;
-    left: 0;
-    right: 0;
+    left: var(--mg);
+    right: var(--mg);
     display: flex;
     flex-direction: row;
     justify-content: center;
     user-select: none;
+    height: var(--pt);
 
     ${direction === DIRECTION.TOP &&
     css`
       top: var(--mg);
+      cursor: n-resize;
     `}
 
     ${direction === DIRECTION.BOTTOM &&
     css`
       bottom: var(--mg);
+      cursor: s-resize;
     `}
   `,
 );
 
-const VerticalHandler = styled(
+const VerticalBar = styled(
   'div',
   makeFilterProps(['direction']),
 )<{
@@ -123,120 +124,108 @@ const VerticalHandler = styled(
   ({ direction }) => css`
     position: absolute;
     user-select: none;
-    top: 0;
-    bottom: 0;
     display: flex;
+    top: var(--mg);
+    bottom: var(--mg);
     flex-direction: column;
     justify-content: center;
+    width: var(--pt);
 
     ${direction === DIRECTION.LEFT &&
     css`
       left: var(--mg);
+      cursor: w-resize;
     `}
 
     ${direction === DIRECTION.RIGHT &&
     css`
       right: var(--mg);
+      cursor: e-resize;
     `}
   `,
 );
 
-type Location = {
-  top: number;
-  left: number;
-  width: number;
-  height: number;
+type ResizerType = React.FC<Props> & {
+  DIRECTION: typeof DIRECTION;
 };
 
-type TempStyle = Location & {
-  position?: React.CSSProperties['position'];
+type Position = Size & {
+  x: number;
+  y: number;
 };
+
+type Props = cProps<{
+  disabled?: boolean | Array<DIRECTION>;
+  children?: React.ReactNode;
+  minHeight?: number;
+  minWidth?: number;
+  maxHeight?: number;
+  maxWidth?: number;
+  onResizeStart?: (direction: DIRECTION) => void;
+  onResizeFinish?: (direction: DIRECTION, value: Size, original: Size) => void;
+  onResize?: (direction: DIRECTION, value: Size, original: Size) => void;
+}>;
 
 export const Resizer: ResizerType = ({
+  onResizeFinish,
+  onResize,
+  onResizeStart,
   disabled,
   children,
-  minHeight = 0,
-  minWidth = 0,
-  onResize,
+  minHeight = 10,
+  minWidth = 10,
+  maxWidth,
+  maxHeight,
   ...props
 }) => {
   const container = React.useRef<HTMLDivElement>(null);
+  const original = React.useRef<Position>();
   const active = React.useRef<DIRECTION>();
-  const [tempStyle, setTempStyle] = React.useState<TempStyle>();
-  const handleResize = useThrottleCallback(
-    (clientX: number, clientY: number) => {
-      if (!tempStyle) {
-        return;
-      }
+  const [resizePos, setResizePos] = React.useState<Position>();
 
-      setTempStyle((current) => {
-        if (!current) {
-          return current;
-        }
+  function handleResize(clientX: number, clientY: number) {
+    const direction = active.current;
+    const { x: oX, y: oY, width: oW, height: oH } = original.current;
+    const result: Size = { width: oW, height: oH };
 
-        const direction = active.current;
-        const nextStyle = { ...current };
+    if (isPointingRight(direction)) {
+      result.width = oW + (clientX - oX);
+    }
 
-        if (
-          direction === DIRECTION.RIGHT ||
-          direction === DIRECTION.TOP_RIGHT ||
-          direction === DIRECTION.BOTTOM_RIGHT
-        ) {
-          const diff = current.left + current.width - clientX;
-          const nextWidth = current.width - diff;
-          nextStyle.width = nextWidth;
-        }
+    if (isPointingLeft(direction)) {
+      result.width = oX - clientX + oW;
+    }
 
-        if (
-          direction === DIRECTION.LEFT ||
-          direction === DIRECTION.TOP_LEFT ||
-          direction === DIRECTION.BOTTOM_LEFT
-        ) {
-          const nextWidth = Math.max(
-            current.left - clientX + current.width,
-            minWidth,
-          );
+    if (isPointingDown(direction)) {
+      result.height = oH + (clientY - oY);
+    }
 
-          const nextLeft =
-            nextWidth === minWidth ? current.left + current.width : clientX;
+    if (isPointingUp(direction)) {
+      result.height = oH - clientY + oY;
+    }
 
-          nextStyle.width = nextWidth;
-          nextStyle.left = nextLeft;
-        }
+    const nextWidth = Math.min(
+      Math.max(result.width, minWidth),
+      maxWidth ?? Infinity,
+    );
 
-        if (
-          direction === DIRECTION.BOTTOM ||
-          direction === DIRECTION.BOTTOM_LEFT ||
-          direction === DIRECTION.BOTTOM_RIGHT
-        ) {
-          const diff = current.top + current.height - clientY;
-          const nextHeight = current.height - diff;
+    const nextHeight = Math.min(
+      Math.max(result.height, minHeight),
+      maxHeight ?? Infinity,
+    );
 
-          nextStyle.height = nextHeight;
-        }
+    const nextSize: Size = {
+      width: nextWidth,
+      height: nextHeight,
+    };
 
-        if (
-          direction === DIRECTION.TOP ||
-          direction === DIRECTION.TOP_LEFT ||
-          direction === DIRECTION.TOP_RIGHT
-        ) {
-          const nextHeight = Math.max(
-            current.height - clientY + current.top,
-            minHeight,
-          );
+    onResize?.(direction, nextSize, original.current);
 
-          const nextTop =
-            nextHeight === minHeight ? current.top + current.height : clientY;
-
-          nextStyle.height = nextHeight;
-          nextStyle.top = nextTop;
-        }
-
-        return nextStyle;
-      });
-    },
-    100,
-  );
+    setResizePos((current) => ({
+      ...current,
+      ...nextSize,
+    }));
+  }
 
   function handleMouseMove(event: MouseEvent) {
     if (!isNil(active.current)) {
@@ -244,38 +233,44 @@ export const Resizer: ResizerType = ({
     }
   }
 
-  function handleTouchMove(event: TouchEvent) {
-    if (!isNil(active.current)) {
-      handleResize(event.touches[0].clientX, event.touches[0].clientY);
-    }
-  }
-
-  function markActive(direction: DIRECTION) {
-    if (!container.current) {
-      return;
-    }
+  function markActive(
+    direction: DIRECTION,
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) {
+    const { clientWidth, clientHeight, offsetTop, offsetLeft } =
+      container.current;
 
     active.current = direction;
+    original.current = {
+      x: event.clientX,
+      y: event.clientY,
+      width: clientWidth,
+      height: clientHeight,
+    };
 
-    setTempStyle({
-      position: 'fixed',
-      top: container.current.offsetTop,
-      left: container.current.offsetLeft,
-      width: container.current.clientWidth,
-      height: container.current.clientHeight,
+    onResizeStart?.(direction);
+    setResizePos({
+      width: clientWidth,
+      height: clientHeight,
+      y: offsetTop,
+      x: offsetLeft,
     });
   }
 
   function markInactive() {
-    active.current = undefined;
-    tempStyle && onResize?.(tempStyle);
-    setTempStyle(undefined);
-  }
+    if (resizePos && onResizeFinish) {
+      const size: Size = {
+        width: resizePos.width,
+        height: resizePos.height,
+      };
 
-  useEvent(window, 'mouseup', markInactive);
-  useEvent(window, 'mousemove', handleMouseMove);
-  useEvent(window, 'touchend', markInactive);
-  useEvent(window, 'touchmove', handleTouchMove);
+      onResizeFinish(active.current, size, original.current);
+    }
+
+    original.current = undefined;
+    active.current = undefined;
+    setResizePos(undefined);
+  }
 
   function getHandler(direction: DIRECTION) {
     const isDisabled =
@@ -287,77 +282,39 @@ export const Resizer: ResizerType = ({
       HTMLDivElement
     > = {
       key: DIRECTION[direction],
-      onMouseDown: () => markActive(direction),
-      onTouchStart: () => markActive(direction),
+      onMouseDown: (event) => markActive(direction, event),
     };
 
-    if (isDisabled) {
+    if (
+      isDisabled ||
+      (Number.isInteger(active.current) && active.current !== direction)
+    ) {
       return null;
-    } else if (direction === DIRECTION.TOP) {
-      return (
-        <HorizontalHandler direction={DIRECTION.TOP} {...commonProps}>
-          <Marker cursor="n-resize" />
-        </HorizontalHandler>
-      );
-    } else if (direction === DIRECTION.BOTTOM) {
-      return (
-        <HorizontalHandler direction={DIRECTION.BOTTOM} {...commonProps}>
-          <Marker cursor="s-resize" />
-        </HorizontalHandler>
-      );
-    } else if (direction === DIRECTION.LEFT) {
-      return (
-        <VerticalHandler direction={DIRECTION.LEFT} {...commonProps}>
-          <Marker cursor="w-resize" />
-        </VerticalHandler>
-      );
-    } else if (direction === DIRECTION.RIGHT) {
-      return (
-        <VerticalHandler direction={DIRECTION.RIGHT} {...commonProps}>
-          <Marker cursor="e-resize" />
-        </VerticalHandler>
-      );
-    } else if (direction === DIRECTION.TOP_LEFT) {
-      return (
-        <Marker {...commonProps} absolute cursor="nw-resize" top={0} left={0} />
-      );
-    } else if (direction === DIRECTION.TOP_RIGHT) {
-      return (
-        <Marker
-          {...commonProps}
-          absolute
-          cursor="ne-resize"
-          top={0}
-          right={0}
-        />
-      );
-    } else if (direction === DIRECTION.BOTTOM_LEFT) {
-      return (
-        <Marker
-          {...commonProps}
-          absolute
-          cursor="sw-resize"
-          bottom={0}
-          left={0}
-        />
-      );
-    } else if (direction === DIRECTION.BOTTOM_RIGHT) {
-      return (
-        <Marker
-          {...commonProps}
-          absolute
-          cursor="se-resize"
-          bottom={0}
-          right={0}
-        />
-      );
+    } else if (direction === DIRECTION.TOP || direction === DIRECTION.BOTTOM) {
+      return <HorizontalBar {...commonProps} direction={direction} />;
+    } else if (direction === DIRECTION.LEFT || direction === DIRECTION.RIGHT) {
+      return <VerticalBar {...commonProps} direction={direction} />;
+    } else {
+      return <Corner {...commonProps} direction={direction} />;
     }
-
-    return null;
   }
 
+  useEvent(window, 'mouseup', markInactive);
+  useEvent(window, 'mousemove', handleMouseMove);
+
+  const resizeStyle: React.CSSProperties = !resizePos
+    ? undefined
+    : {
+        height: resizePos.height,
+        width: resizePos.width,
+      };
+
   return (
-    <Container {...props} style={tempStyle ?? props.style} ref={container}>
+    <Container
+      {...props}
+      ref={container}
+      style={Object.assign({}, props.style, resizeStyle)}
+    >
       {[
         DIRECTION.TOP,
         DIRECTION.BOTTOM,

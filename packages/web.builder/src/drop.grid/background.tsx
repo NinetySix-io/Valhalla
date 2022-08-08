@@ -4,14 +4,14 @@ import {
   cellSizeAtom,
   containerAtom,
   draggingElementAtom,
-  isDraggingOverAtom,
+  gridVisibleAtom,
   useScopeAtom,
   useScopeAtomValue,
 } from '../context';
 import { css, styled } from '@mui/material';
 
 import { Droppable } from '../types';
-import { calculateElementPosition } from '../lib/calculate.element.position';
+import { getPosition } from '../lib/get.position';
 import { makeFilterProps } from '@valhalla/web.react';
 import { useDragDropManager } from 'react-dnd';
 import { useElementGridArea } from '../hooks/use.element';
@@ -65,7 +65,7 @@ const Highlighter = styled(
 export const Background: React.FC = () => {
   const monitor = useDragDropManager().getMonitor();
   const container = useScopeAtomValue(containerAtom);
-  const [isOver, setIsOver] = useScopeAtom(isDraggingOverAtom);
+  const [isVisible, setIsVisible] = useScopeAtom(gridVisibleAtom);
   const [element, setElement] = useScopeAtom(draggingElementAtom);
   const elementGridArea = useElementGridArea(element);
   const cellSize = useScopeAtomValue(cellSizeAtom);
@@ -77,23 +77,23 @@ export const Background: React.FC = () => {
     const containerYAxisStart = containerBound.y;
     const containerYAxisEnd = containerYAxisStart + containerBound.height;
 
-    setElement(
-      !nextOffset || !nextElement
-        ? null
-        : Object.assign(
-            {},
-            nextElement,
-            calculateElementPosition(nextOffset, cellSize),
-          ),
-    );
+    if (!nextOffset || !nextElement) {
+      setElement(null);
+    } else {
+      setElement({
+        ...nextElement,
+        x: getPosition(nextOffset.x, cellSize),
+        y: getPosition(nextOffset.y, cellSize),
+      });
+    }
 
-    setIsOver(() =>
+    setIsVisible(() =>
       !nextOffset
         ? false
         : containerYAxisStart <= nextOffset.y &&
           containerYAxisEnd >= nextOffset.y,
     );
-  }, [monitor, container, cellSize, setElement, setIsOver]);
+  }, [monitor, container, cellSize, setElement, setIsVisible]);
 
   React.useEffect(() => {
     const unsubscribe = monitor.subscribeToOffsetChange(handleOffsetChange);
@@ -104,8 +104,8 @@ export const Background: React.FC = () => {
 
   return (
     <React.Fragment>
-      <Highlighter isVisible={isOver} gridArea={elementGridArea} />
-      <Container isVisible={isOver} />
+      <Highlighter isVisible={isVisible} gridArea={elementGridArea} />
+      <Container isVisible={isVisible} />
     </React.Fragment>
   );
 };

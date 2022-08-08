@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import {
   ZoneIdContext,
-  isDraggingOverAtom,
+  gridVisibleAtom,
   useScopeAtomMutate,
 } from '../../context';
 
@@ -23,11 +23,11 @@ const Meta: ComponentMeta<ComponentType> = {
 
 const Content: React.FC<Props> = ({ showGrid, ...props }) => {
   const ref = useDropDimension(props.columnsCount);
-  const setIsOver = useScopeAtomMutate(isDraggingOverAtom);
+  const setGridVisible = useScopeAtomMutate(gridVisibleAtom);
 
   React.useEffect(() => {
-    setIsOver(showGrid);
-  }, [showGrid, setIsOver]);
+    setGridVisible(showGrid);
+  }, [showGrid, setGridVisible]);
 
   return <DropGrid {...props} ref={ref} />;
 };

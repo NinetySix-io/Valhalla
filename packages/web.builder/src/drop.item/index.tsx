@@ -1,12 +1,19 @@
 import * as React from 'react';
 
+import type { DroppedElement, Size } from '../types';
+import {
+  cellSizeAtom,
+  focusedElementAtom,
+  gridVisibleAtom,
+  useScopeAtomMutate,
+  useScopeAtomValue,
+  useZoneId,
+} from '../context';
 import { css, styled } from '@mui/material';
-import { focusedElementAtom, useScopeAtomMutate, useZoneId } from '../context';
 
-import type { Direction } from 're-resizable/lib/resizer';
-import type { DroppedElement } from '../types';
-import type { NumberSize } from 're-resizable';
-import { Resizable } from 're-resizable';
+import { DIRECTION } from './directions';
+import { Resizer } from './resizer';
+import { calculateResize } from '../lib/calculate.resize';
 import { makeFilterProps } from '@valhalla/web.react';
 import { mergeRefs } from 'react-merge-refs';
 import { useDrag } from 'react-dnd';
@@ -74,19 +81,25 @@ const Container = styled(
   },
 );
 
-type Props = React.PropsWithoutRef<JSX.IntrinsicElements['div']> & {
+type Props = Omit<
+  React.PropsWithoutRef<JSX.IntrinsicElements['div']>,
+  'onChange'
+> & {
   focusColor?: string;
   onFocusChange?: (isActive: boolean) => void;
   children?: React.ReactNode;
   element: DroppedElement;
+  onChange?: (element: DroppedElement) => void;
 };
 
 export const DropItem = React.forwardRef<HTMLDivElement, Props>(
-  ({ element, focusColor, children, ...props }, ref) => {
+  ({ element, focusColor, children, onChange, ...props }, ref) => {
+    const container = React.useRef<HTMLDivElement>();
     const zoneId = useZoneId();
     const gridArea = useElementGridArea(element);
-    const container = React.useRef<HTMLDivElement>();
+    const cellSize = useScopeAtomValue(cellSizeAtom);
     const setFocus = useScopeAtomMutate(focusedElementAtom);
+    const setGridVisible = useScopeAtomMutate(gridVisibleAtom);
     const [isFocus, setIsFocus] = React.useState(false);
 
     function handleLoseFocus() {
@@ -101,14 +114,15 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
       }
     }
 
-    function handleResize(
-      _e: MouseEvent | TouchEvent,
-      _direction: Direction,
-      _ref: HTMLElement,
-      dimension: NumberSize,
-    ) {
-      // eslint-disable-next-line no-console
-      console.log('handleResize', dimension);
+    function handleResize(direction: DIRECTION, nextSize: Size) {
+      onChange?.(
+        calculateResize({
+          cellSize,
+          direction,
+          element,
+          nextSize,
+        }),
+      );
     }
 
     const [{ isDragging }, drag] = useDrag(
@@ -124,7 +138,7 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
           };
         },
       },
-      [zoneId],
+      [zoneId, element],
     );
 
     if (isDragging) {
@@ -142,12 +156,15 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
           gridArea={gridArea}
           isFocus={isFocus}
         >
-          <Resizable
-            size={{ width: '100%', height: '100%' }}
+          <Resizer
+            minWidth={cellSize}
+            minHeight={cellSize}
             onResize={handleResize}
+            onResizeStart={() => setGridVisible(true)}
+            onResizeFinish={() => setGridVisible(false)}
           >
             {children}
-          </Resizable>
+          </Resizer>
         </Container>
       );
     }
