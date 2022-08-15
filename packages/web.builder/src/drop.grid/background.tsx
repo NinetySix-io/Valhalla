@@ -1,20 +1,9 @@
 import * as React from 'react';
 
-import {
-  cellSizeAtom,
-  containerAtom,
-  draggingElementAtom,
-  gridVisibleAtom,
-  useScopeAtom,
-  useScopeAtomValue,
-} from '../context';
 import { css, styled } from '@mui/material';
+import { gridVisibleAtom, useScopeAtomValue } from '../context';
 
-import { Droppable } from '../types';
-import { getPosition } from '../lib/get.position';
 import { makeFilterProps } from '@valhalla/web.react';
-import { useDragDropManager } from 'react-dnd';
-import { useElementGridArea } from '../hooks/use.element';
 
 const Container = styled(
   'div',
@@ -39,73 +28,7 @@ const Container = styled(
   `,
 );
 
-const Highlighter = styled(
-  'div',
-  makeFilterProps(['gridArea', 'isVisible']),
-)<{
-  gridArea: string;
-  isVisible: boolean;
-}>(({ theme, gridArea, isVisible }) => {
-  return css`
-    transition: all 0.2s;
-    border: solid 3px transparent;
-
-    ${isVisible && gridArea
-      ? css`
-          z-index: -1;
-          grid-area: ${gridArea};
-          border-color: ${theme.palette.primary.main};
-        `
-      : css`
-          display: none;
-        `}
-  `;
-});
-
 export const Background: React.FC = () => {
-  const monitor = useDragDropManager().getMonitor();
-  const container = useScopeAtomValue(containerAtom);
-  const [isVisible, setIsVisible] = useScopeAtom(gridVisibleAtom);
-  const [element, setElement] = useScopeAtom(draggingElementAtom);
-  const elementGridArea = useElementGridArea(element);
-  const cellSize = useScopeAtomValue(cellSizeAtom);
-
-  const handleOffsetChange = React.useCallback(() => {
-    const nextOffset = monitor.getSourceClientOffset();
-    const nextElement: Droppable = monitor.getItem();
-    const containerBound = container.getBoundingClientRect();
-    const containerYAxisStart = containerBound.y;
-    const containerYAxisEnd = containerYAxisStart + containerBound.height;
-
-    if (!nextOffset || !nextElement) {
-      setElement(null);
-    } else {
-      setElement({
-        ...nextElement,
-        x: getPosition(nextOffset.x, cellSize),
-        y: getPosition(nextOffset.y, cellSize),
-      });
-    }
-
-    setIsVisible(() =>
-      !nextOffset
-        ? false
-        : containerYAxisStart <= nextOffset.y &&
-          containerYAxisEnd >= nextOffset.y,
-    );
-  }, [monitor, container, cellSize, setElement, setIsVisible]);
-
-  React.useEffect(() => {
-    const unsubscribe = monitor.subscribeToOffsetChange(handleOffsetChange);
-    return () => {
-      unsubscribe();
-    };
-  }, [monitor, handleOffsetChange]);
-
-  return (
-    <React.Fragment>
-      <Highlighter isVisible={isVisible} gridArea={elementGridArea} />
-      <Container isVisible={isVisible} />
-    </React.Fragment>
-  );
+  const isVisible = useScopeAtomValue(gridVisibleAtom);
+  return <Container isVisible={isVisible} />;
 };

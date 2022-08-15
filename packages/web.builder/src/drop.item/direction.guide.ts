@@ -1,6 +1,6 @@
 import { DIRECTION } from './directions';
 
-export function isPointingLeft(
+export function isLeft(
   direction: DIRECTION,
 ): direction is DIRECTION.LEFT | DIRECTION.BOTTOM_LEFT | DIRECTION.TOP_LEFT {
   return (
@@ -10,7 +10,7 @@ export function isPointingLeft(
   );
 }
 
-export function isPointingRight(
+export function isRight(
   direction: DIRECTION,
 ): direction is DIRECTION.RIGHT | DIRECTION.TOP_RIGHT | DIRECTION.BOTTOM_RIGHT {
   return (
@@ -20,7 +20,7 @@ export function isPointingRight(
   );
 }
 
-export function isPointingUp(
+export function isUp(
   direction: DIRECTION,
 ): direction is DIRECTION.TOP | DIRECTION.TOP_LEFT | DIRECTION.TOP_RIGHT {
   return (
@@ -30,7 +30,7 @@ export function isPointingUp(
   );
 }
 
-export function isPointingDown(
+export function isDown(
   direction: DIRECTION,
 ): direction is
   | DIRECTION.BOTTOM
@@ -41,4 +41,12 @@ export function isPointingDown(
     direction === DIRECTION.BOTTOM_LEFT ||
     direction === DIRECTION.BOTTOM_RIGHT
   );
+}
+
+export function isHorizontal(direction: DIRECTION) {
+  return isLeft(direction) || isRight(direction);
+}
+
+export function isVertical(direction: DIRECTION) {
+  return isUp(direction) || isDown(direction);
 }

@@ -4,6 +4,7 @@ import { cellSizeAtom, useScopeAtomValue } from '../context';
 import { css, styled } from '@mui/material';
 
 import { Background } from './background';
+import { DragShadow } from './drag.shadow';
 import { makeFilterProps } from '@valhalla/web.react';
 
 const Container = styled(
@@ -51,6 +52,7 @@ export const DropGrid = React.forwardRef<HTMLDivElement, Props>(
         ref={ref}
       >
         <Background />
+        <DragShadow />
         {children}
       </Container>
     );

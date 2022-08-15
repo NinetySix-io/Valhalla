@@ -25,9 +25,10 @@ const Component: React.FC = () => {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    border: 'solid thin #ccc',
   });
 
-  function handleResize(direction: DIRECTION, nextSize: Size) {
+  function handleResize(_direction: DIRECTION, nextSize: Size) {
     setSize((current) => ({
       ...current,
       ...nextSize,
@@ -39,7 +40,7 @@ const Component: React.FC = () => {
       minHeight={minHeight}
       minWidth={minWidth}
       style={size}
-      onResizeFinish={handleResize}
+      onResize={handleResize}
     >
       test
     </Resizer>

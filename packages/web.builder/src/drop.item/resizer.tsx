@@ -1,47 +1,54 @@
 import * as React from 'react';
 
-import { cProps, makeFilterProps, useEvent } from '@valhalla/web.react';
 import { css, styled } from '@mui/material';
-import {
-  isPointingDown,
-  isPointingLeft,
-  isPointingRight,
-  isPointingUp,
-} from './direction.guide';
+import { isDown, isLeft, isRight, isUp } from './direction.guide';
+import { makeFilterProps, useEvent } from '@valhalla/web.react';
 
 import { DIRECTION } from './directions';
 import { Size } from '../types';
 import { isNil } from '@valhalla/utilities';
+import { mergeRefs } from 'react-merge-refs';
 
 const Container = styled('div')(
   () => css`
     --pt: 4px;
-    --mg: calc(-1 * var(--pt));
+    --mg: calc(-1 * (var(--pt) / 2));
     --cg: calc(2 * var(--mg));
     --cw: calc(2 * var(--pt));
     position: relative;
     height: 100%;
     width: 100%;
+
+    &:hover,
+    &:focus {
+      > * {
+        visibility: visible;
+      }
+    }
   `,
 );
 
 const Corner = styled(
   'div',
-  makeFilterProps(['direction']),
+  makeFilterProps(['direction', 'isVisible']),
 )<{
+  isVisible?: boolean;
   direction:
     | DIRECTION.BOTTOM_LEFT
     | DIRECTION.BOTTOM_RIGHT
     | DIRECTION.TOP_LEFT
     | DIRECTION.TOP_RIGHT;
 }>(
-  ({ theme, direction }) => css`
+  ({ theme, direction, isVisible }) => css`
     height: var(--cw);
     width: var(--cw);
     z-index: 1;
+    visibility: ${isVisible ? 'visible' : 'hidden'};
     border: solid 2px ${theme.palette.primary.main};
     position: absolute;
-    transition: transform 0.2s;
+    transition: ${theme.transitions.create(['transform', 'visibility'], {
+      duration: theme.transitions.duration.shortest,
+    })};
 
     &:active,
     &:hover {
@@ -99,7 +106,8 @@ const HorizontalBar = styled(
     flex-direction: row;
     justify-content: center;
     user-select: none;
-    height: var(--pt);
+    height: var(--cw);
+    visibility: hidden;
 
     ${direction === DIRECTION.TOP &&
     css`
@@ -130,6 +138,7 @@ const VerticalBar = styled(
     flex-direction: column;
     justify-content: center;
     width: var(--pt);
+    visibility: visible;
 
     ${direction === DIRECTION.LEFT &&
     css`
@@ -145,16 +154,15 @@ const VerticalBar = styled(
   `,
 );
 
-type ResizerType = React.FC<Props> & {
-  DIRECTION: typeof DIRECTION;
-};
-
 type Position = Size & {
   x: number;
   y: number;
 };
 
-type Props = cProps<{
+type Props = React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
+> & {
   disabled?: boolean | Array<DIRECTION>;
   children?: React.ReactNode;
   minHeight?: number;
@@ -164,170 +172,167 @@ type Props = cProps<{
   onResizeStart?: (direction: DIRECTION) => void;
   onResizeFinish?: (direction: DIRECTION, value: Size, original: Size) => void;
   onResize?: (direction: DIRECTION, value: Size, original: Size) => void;
-}>;
-
-export const Resizer: ResizerType = ({
-  onResizeFinish,
-  onResize,
-  onResizeStart,
-  disabled,
-  children,
-  minHeight = 10,
-  minWidth = 10,
-  maxWidth,
-  maxHeight,
-  ...props
-}) => {
-  const container = React.useRef<HTMLDivElement>(null);
-  const original = React.useRef<Position>();
-  const active = React.useRef<DIRECTION>();
-  const [resizePos, setResizePos] = React.useState<Position>();
-
-  function handleResize(clientX: number, clientY: number) {
-    const direction = active.current;
-    const { x: oX, y: oY, width: oW, height: oH } = original.current;
-    const result: Size = { width: oW, height: oH };
-
-    if (isPointingRight(direction)) {
-      result.width = oW + (clientX - oX);
-    }
-
-    if (isPointingLeft(direction)) {
-      result.width = oX - clientX + oW;
-    }
-
-    if (isPointingDown(direction)) {
-      result.height = oH + (clientY - oY);
-    }
-
-    if (isPointingUp(direction)) {
-      result.height = oH - clientY + oY;
-    }
-
-    const nextWidth = Math.min(
-      Math.max(result.width, minWidth),
-      maxWidth ?? Infinity,
-    );
-
-    const nextHeight = Math.min(
-      Math.max(result.height, minHeight),
-      maxHeight ?? Infinity,
-    );
-
-    const nextSize: Size = {
-      width: nextWidth,
-      height: nextHeight,
-    };
-
-    onResize?.(direction, nextSize, original.current);
-
-    setResizePos((current) => ({
-      ...current,
-      ...nextSize,
-    }));
-  }
-
-  function handleMouseMove(event: MouseEvent) {
-    if (!isNil(active.current)) {
-      handleResize(event.clientX, event.clientY);
-    }
-  }
-
-  function markActive(
-    direction: DIRECTION,
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ) {
-    const { clientWidth, clientHeight, offsetTop, offsetLeft } =
-      container.current;
-
-    active.current = direction;
-    original.current = {
-      x: event.clientX,
-      y: event.clientY,
-      width: clientWidth,
-      height: clientHeight,
-    };
-
-    onResizeStart?.(direction);
-    setResizePos({
-      width: clientWidth,
-      height: clientHeight,
-      y: offsetTop,
-      x: offsetLeft,
-    });
-  }
-
-  function markInactive() {
-    if (resizePos && onResizeFinish) {
-      const size: Size = {
-        width: resizePos.width,
-        height: resizePos.height,
-      };
-
-      onResizeFinish(active.current, size, original.current);
-    }
-
-    original.current = undefined;
-    active.current = undefined;
-    setResizePos(undefined);
-  }
-
-  function getHandler(direction: DIRECTION) {
-    const isDisabled =
-      disabled === true ||
-      (Array.isArray(disabled) && disabled.includes(direction));
-
-    const commonProps: React.DetailedHTMLProps<
-      React.HTMLAttributes<HTMLDivElement>,
-      HTMLDivElement
-    > = {
-      key: DIRECTION[direction],
-      onMouseDown: (event) => markActive(direction, event),
-    };
-
-    if (
-      isDisabled ||
-      (Number.isInteger(active.current) && active.current !== direction)
-    ) {
-      return null;
-    } else if (direction === DIRECTION.TOP || direction === DIRECTION.BOTTOM) {
-      return <HorizontalBar {...commonProps} direction={direction} />;
-    } else if (direction === DIRECTION.LEFT || direction === DIRECTION.RIGHT) {
-      return <VerticalBar {...commonProps} direction={direction} />;
-    } else {
-      return <Corner {...commonProps} direction={direction} />;
-    }
-  }
-
-  useEvent(window, 'mouseup', markInactive);
-  useEvent(window, 'mousemove', handleMouseMove);
-
-  const resizeStyle: React.CSSProperties = !resizePos
-    ? undefined
-    : {
-        height: resizePos.height,
-        width: resizePos.width,
-      };
-
-  return (
-    <Container
-      {...props}
-      ref={container}
-      style={Object.assign({}, props.style, resizeStyle)}
-    >
-      {[
-        DIRECTION.TOP,
-        DIRECTION.BOTTOM,
-        DIRECTION.LEFT,
-        DIRECTION.RIGHT,
-        DIRECTION.TOP_LEFT,
-        DIRECTION.TOP_RIGHT,
-        DIRECTION.BOTTOM_LEFT,
-        DIRECTION.BOTTOM_RIGHT,
-      ].map(getHandler)}
-      {children}
-    </Container>
-  );
 };
 
-Resizer.DIRECTION = DIRECTION;
+export const Resizer = React.forwardRef<HTMLDivElement, Props>(
+  (
+    {
+      onResizeFinish,
+      onResize,
+      onResizeStart,
+      disabled,
+      children,
+      minHeight = 10,
+      minWidth = 10,
+      maxWidth,
+      maxHeight,
+      style,
+      ...props
+    },
+    ref,
+  ) => {
+    const container = React.useRef<HTMLDivElement>(null);
+    const original = React.useRef<Position>();
+    const sizing = React.useRef<Size>();
+    const [active, setActive] = React.useState<DIRECTION>();
+
+    function handleResize(clientX: number, clientY: number) {
+      const direction = active;
+      const { x: oX, y: oY, width: oW, height: oH } = original.current;
+      const result: Size = { width: oW, height: oH };
+
+      if (isRight(direction)) {
+        result.width = oW + (clientX - oX);
+      }
+
+      if (isLeft(direction)) {
+        result.width = oX - clientX + oW;
+      }
+
+      if (isDown(direction)) {
+        result.height = oH + (clientY - oY);
+      }
+
+      if (isUp(direction)) {
+        result.height = oH - clientY + oY;
+      }
+
+      const nextWidth = Math.min(
+        Math.max(result.width, minWidth),
+        maxWidth ?? Infinity,
+      );
+
+      const nextHeight = Math.min(
+        Math.max(result.height, minHeight),
+        maxHeight ?? Infinity,
+      );
+
+      sizing.current = {
+        width: nextWidth,
+        height: nextHeight,
+      };
+
+      onResize?.(direction, sizing.current, original.current);
+    }
+
+    function handleMouseMove(event: MouseEvent) {
+      if (!isNil(active)) {
+        handleResize(event.clientX, event.clientY);
+      }
+    }
+
+    function markActive(
+      direction: DIRECTION,
+      event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    ) {
+      event.preventDefault();
+      const { clientWidth, clientHeight } = container.current;
+
+      setActive(direction);
+      sizing.current = {
+        width: clientWidth,
+        height: clientHeight,
+      };
+
+      original.current = {
+        x: event.clientX,
+        y: event.clientY,
+        width: clientWidth,
+        height: clientHeight,
+      };
+
+      onResizeStart?.(direction);
+    }
+
+    function markInactive() {
+      if (sizing.current && onResizeFinish) {
+        onResizeFinish(active, sizing.current, original.current);
+      }
+
+      original.current = undefined;
+      sizing.current = undefined;
+      setActive(undefined);
+    }
+
+    function getHandler(direction: DIRECTION) {
+      const isDisabled =
+        disabled === true ||
+        (Array.isArray(disabled) && disabled.includes(direction));
+
+      const commonProps: React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLDivElement>,
+        HTMLDivElement
+      > = {
+        key: DIRECTION[direction],
+        onMouseDown: (event) => markActive(direction, event),
+      };
+
+      if (isDisabled || (Number.isInteger(active) && active !== direction)) {
+        return null;
+      } else if (
+        direction === DIRECTION.TOP ||
+        direction === DIRECTION.BOTTOM
+      ) {
+        return <HorizontalBar {...commonProps} direction={direction} />;
+      } else if (
+        direction === DIRECTION.LEFT ||
+        direction === DIRECTION.RIGHT
+      ) {
+        return <VerticalBar {...commonProps} direction={direction} />;
+      } else {
+        return (
+          <Corner
+            {...commonProps}
+            direction={direction}
+            isVisible={active === direction}
+          />
+        );
+      }
+    }
+
+    useEvent(window, 'mouseup', markInactive);
+    useEvent(window, 'mousemove', handleMouseMove);
+
+    return (
+      <Container
+        {...props}
+        ref={mergeRefs([ref, container])}
+        style={Object.assign({}, style)}
+      >
+        {[
+          DIRECTION.TOP,
+          DIRECTION.BOTTOM,
+          DIRECTION.LEFT,
+          DIRECTION.RIGHT,
+          DIRECTION.TOP_LEFT,
+          DIRECTION.TOP_RIGHT,
+          DIRECTION.BOTTOM_LEFT,
+          DIRECTION.BOTTOM_RIGHT,
+        ].map(getHandler)}
+        {children}
+      </Container>
+    );
+  },
+);
+
+Resizer.displayName = 'Resizer';

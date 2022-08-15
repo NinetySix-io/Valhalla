@@ -14,15 +14,18 @@ import { css, styled } from '@mui/material';
 import { DIRECTION } from './directions';
 import { Resizer } from './resizer';
 import { calculateResize } from '../lib/calculate.resize';
+import clsx from 'clsx';
+import { getEmptyImage } from 'react-dnd-html5-backend';
 import { makeFilterProps } from '@valhalla/web.react';
 import { mergeRefs } from 'react-merge-refs';
 import { useDrag } from 'react-dnd';
 import { useElementGridArea } from '../hooks/use.element';
+import { useTemporalCache } from '../hooks/use.cache';
 
 const Container = styled(
-  'div',
-  makeFilterProps(['label', 'gridArea', 'isFocus']),
-)<{ label: string; gridArea: string; isFocus: boolean }>(
+  Resizer,
+  makeFilterProps(['label', 'gridArea', 'isFocus', 'color']),
+)<{ label: string; gridArea: string; isFocus: boolean; color: string }>(
   ({ theme, color, label, gridArea, isFocus }) => {
     const mainColor: string = color ?? theme.palette.primary.main;
     const textColor: string = theme.palette.getContrastText(mainColor);
@@ -38,7 +41,6 @@ const Container = styled(
       border: solid 3px transparent;
       margin-right: calc(-1 * (var(--pt-w) + 0.5 * var(--pt-w)));
       margin-bottom: calc(-1 * (var(--pt-w) + 0.5 * var(--pt-w)));
-      transition: all 0.2s;
       grid-area: ${gridArea};
       z-index: auto;
 
@@ -95,12 +97,16 @@ type Props = Omit<
 export const DropItem = React.forwardRef<HTMLDivElement, Props>(
   ({ element, focusColor, children, onChange, ...props }, ref) => {
     const container = React.useRef<HTMLDivElement>();
+    const draggingRef = React.useRef(false);
     const zoneId = useZoneId();
-    const gridArea = useElementGridArea(element);
     const cellSize = useScopeAtomValue(cellSizeAtom);
     const setFocus = useScopeAtomMutate(focusedElementAtom);
     const setGridVisible = useScopeAtomMutate(gridVisibleAtom);
     const [isFocus, setIsFocus] = React.useState(false);
+    const [isResizing, setIsResizing] = React.useState(false);
+    const [cacheElement, setElement] = useTemporalCache(element);
+    const gridArea = useElementGridArea(cacheElement);
+    const showOutline = isFocus || isResizing;
 
     function handleLoseFocus() {
       setFocus(null);
@@ -108,13 +114,29 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
     }
 
     function handleFocus() {
-      if (!isFocus) {
-        setIsFocus(true);
-        setFocus(element.id);
-      }
+      setIsFocus(true);
+      setFocus(element.id);
     }
 
     function handleResize(direction: DIRECTION, nextSize: Size) {
+      setElement(
+        calculateResize({
+          cellSize,
+          direction,
+          element,
+          nextSize,
+        }),
+      );
+    }
+
+    function handleResizeStart() {
+      setIsResizing(true);
+      setGridVisible(true);
+    }
+
+    function handleResizeEnd(direction: DIRECTION, nextSize: Size) {
+      setIsResizing(false);
+      setGridVisible(false);
       onChange?.(
         calculateResize({
           cellSize,
@@ -125,7 +147,7 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
       );
     }
 
-    const [{ isDragging }, drag] = useDrag(
+    const [{ isDragging }, drag, preview] = useDrag(
       {
         type: zoneId,
         item: element,
@@ -141,45 +163,40 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
       [zoneId, element],
     );
 
+    React.useEffect(() => {
+      preview(getEmptyImage());
+    }, [preview]);
+
+    React.useEffect(() => {
+      setGridVisible(isDragging);
+      if (draggingRef.current && !isDragging && container.current) {
+        container.current.focus();
+      }
+
+      draggingRef.current = isDragging;
+    }, [isDragging, setGridVisible]);
+
     if (isDragging) {
       return <div ref={drag} />;
-    } else if (isFocus) {
-      return (
-        <Container
-          {...props}
-          tabIndex={0}
-          color={focusColor}
-          ref={mergeRefs([ref, container])}
-          onMouseUp={handleFocus}
-          onBlur={handleLoseFocus}
-          label={element.type.toUpperCase()}
-          gridArea={gridArea}
-          isFocus={isFocus}
-        >
-          <Resizer
-            minWidth={cellSize}
-            minHeight={cellSize}
-            onResize={handleResize}
-            onResizeStart={() => setGridVisible(true)}
-            onResizeFinish={() => setGridVisible(false)}
-          >
-            {children}
-          </Resizer>
-        </Container>
-      );
     }
 
     return (
       <Container
         {...props}
+        className={clsx(props.className)}
         tabIndex={0}
         color={focusColor}
-        ref={mergeRefs([ref, drag, container])}
+        ref={mergeRefs([ref, container, isResizing ? undefined : drag])}
         onMouseUp={handleFocus}
         onBlur={handleLoseFocus}
         label={element.type.toUpperCase()}
         gridArea={gridArea}
-        isFocus={isFocus}
+        isFocus={showOutline}
+        minWidth={cellSize}
+        minHeight={cellSize}
+        onResize={handleResize}
+        onResizeStart={handleResizeStart}
+        onResizeFinish={handleResizeEnd}
       >
         {children}
       </Container>

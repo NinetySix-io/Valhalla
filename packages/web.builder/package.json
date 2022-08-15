@@ -42,6 +42,7 @@
     "@emotion/styled": "^11.9.3",
     "@mui/lab": "5.0.0-alpha.92",
     "@mui/material": "^5.9.2",
+    "clsx": "^1.1.1",
     "jotai": "^1.7.7",
     "next": "12.2.3",
     "re-resizable": "^6.9.9",

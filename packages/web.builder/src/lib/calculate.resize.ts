@@ -1,5 +1,5 @@
 import { DroppedElement, Size } from '../types';
-import { isPointingLeft, isPointingUp } from '../drop.item/direction.guide';
+import { isLeft, isUp } from '../drop.item/direction.guide';
 
 import { DIRECTION } from '../drop.item/directions';
 import { getPosition } from './get.position';
@@ -21,11 +21,11 @@ export function calculateResize({
   const nextXSpan = getPosition(nextSize.width, cellSize);
   const nextYSpan = getPosition(nextSize.height, cellSize);
 
-  if (isPointingLeft(direction)) {
+  if (isLeft(direction)) {
     nextElement.x = Math.max(1, element.x - (nextXSpan - element.xSpan));
   }
 
-  if (isPointingUp(direction)) {
+  if (isUp(direction)) {
     nextElement.y = Math.max(1, element.y - (nextYSpan - element.ySpan));
   }
 

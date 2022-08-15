@@ -733,6 +733,7 @@ importers:
       '@welldone-software/why-did-you-render': ^7.0.1
       autoprefixer: ^10.4.7
       babel-loader: ^8.2.5
+      clsx: ^1.1.1
       jest: ^28.1.0
       jotai: ^1.7.7
       next: 12.2.3
@@ -753,6 +754,7 @@ importers:
       '@emotion/styled': 11.9.3_y2x62d5bbinncmisoeyv36jqse
       '@mui/lab': 5.0.0-alpha.92_gipb7ypjxo5vbq6tgp3f6qlcuu
       '@mui/material': 5.9.2_bl6qrq6463ovzmqn4cmwv7vydq
+      clsx: 1.2.1
       jotai: 1.7.7_lxeixztqul6ae7cp3cpkyxlhzm
       next: 12.2.3_qugu52izettqdqqm5qcjcltcia
       re-resizable: 6.9.9_biqbaboplfbrettd7655fr4n2y
