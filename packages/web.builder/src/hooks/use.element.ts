@@ -30,7 +30,10 @@ export function useElementGridArea(element: GridAreaElement) {
         element.x,
         element.y + element.ySpan,
         element.x + element.xSpan,
-      ].join(' / '),
+      ]
+        // grid starts at index 1, not 0
+        .map((pos) => pos + 1)
+        .join(' / '),
     );
   }, [element, cellSize, container]);
 

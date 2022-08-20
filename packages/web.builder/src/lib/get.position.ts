@@ -8,10 +8,10 @@ import { clampCell } from './clamp';
  */
 export function getPosition(value: number, cellSize: number): number {
   if (!value) {
-    return 1;
+    return 0;
   }
 
   const clampedValue = clampCell(value, cellSize);
   const norm = clampedValue / cellSize;
-  return Math.round(norm) || 1;
+  return Math.max(Math.round(norm), 0);
 }

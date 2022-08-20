@@ -15,7 +15,7 @@ function useClamp(max: number) {
   const cellSize = useScopeAtomValue(cellSizeAtom);
   return React.useCallback(
     (position: number, span: number) => {
-      const floor = 1;
+      const floor = 0;
       const ceil = max - span;
       return clamp(getPosition(position, cellSize), [floor, ceil]);
     },

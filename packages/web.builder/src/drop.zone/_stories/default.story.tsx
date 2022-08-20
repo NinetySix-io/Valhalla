@@ -27,7 +27,7 @@ const Template: React.FC<Props> = ({ value, onUpdateItem, ...props }) => {
 
   function handleUpdateItem(
     item: DroppedElement,
-    monitor: DropTargetMonitor<DroppableElement, unknown>,
+    monitor?: DropTargetMonitor<DroppableElement, unknown>,
   ) {
     onUpdateItem?.(item, monitor);
 
