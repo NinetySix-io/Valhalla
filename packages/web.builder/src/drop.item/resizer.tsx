@@ -13,9 +13,8 @@ const Container = styled('div')(
   () => css`
     --pt: 4px;
     --mg: calc(-1 * (var(--pt) / 2));
-    --cg: calc(2 * var(--mg));
+    --cg: calc(3 * var(--mg));
     --cw: calc(2 * var(--pt));
-    position: relative;
     height: 100%;
     width: 100%;
 
@@ -46,7 +45,7 @@ const Corner = styled(
     visibility: ${isVisible ? 'visible' : 'hidden'};
     border: solid 2px ${theme.palette.primary.main};
     position: absolute;
-    transition: ${theme.transitions.create(['transform', 'visibility'], {
+    transition: ${theme.transitions.create(['transform'], {
       duration: theme.transitions.duration.shortest,
     })};
 

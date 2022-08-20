@@ -3,11 +3,12 @@ import * as React from 'react';
 import type { ConnectableElement, DropTargetMonitor } from 'react-dnd';
 import type { DropCandidate, Droppable, DroppedElement } from '../types';
 import {
-  ZoneIdContext,
+  ZoneContext,
   cellSizeAtom,
   useScopeAtomValue,
   useZoneId,
 } from '../context';
+import { useCellClampX, useCellClampY } from '../hooks/use.cell.clamp';
 
 import { DropGrid } from '../drop.grid';
 import { DropZoneCallbackManager } from './callback.manager';
@@ -41,8 +42,6 @@ type Props<T extends Droppable> = cProps<
 
 function DropZoneContent<T extends Droppable, E extends DroppedElement<T>>({
   id,
-  rowsCount,
-  columnsCount,
   onElementFocus,
   onDragging,
   onDrop,
@@ -50,18 +49,20 @@ function DropZoneContent<T extends Droppable, E extends DroppedElement<T>>({
   onUpdateItem,
   value,
   ...props
-}: Props<T>) {
+}: Omit<Props<T>, 'columnsCount' | 'rowsCount'>) {
   const zoneId = useZoneId();
-  const dimensionRef = useDropDimension(columnsCount);
+  const dimensionRef = useDropDimension();
   const cellSize = useScopeAtomValue(cellSizeAtom);
+  const clampX = useCellClampX();
+  const clampY = useCellClampY();
 
   const [, drop] = useDrop<E>(
     () => ({
       accept: zoneId,
       drop(item, monitor) {
         const offset = monitor.getSourceClientOffset();
-        const nextX = getPosition(offset.x, cellSize);
-        const nextY = getPosition(offset.y, cellSize);
+        const nextX = clampX(offset.x, item.xSpan);
+        const nextY = clampY(offset.y, item.ySpan);
         const nextItem = { ...item, x: nextX, y: nextY };
 
         onDrop?.(nextItem, monitor);
@@ -72,15 +73,22 @@ function DropZoneContent<T extends Droppable, E extends DroppedElement<T>>({
         }
       },
     }),
-    [cellSize, zoneId, getPosition, onUpdateItem, onAddItem, onDrop],
+    [
+      cellSize,
+      zoneId,
+      getPosition,
+      onUpdateItem,
+      onAddItem,
+      onDrop,
+      clampX,
+      clampY,
+    ],
   );
 
   return (
     <DropGrid
       {...props}
       id={id}
-      rowsCount={rowsCount}
-      columnsCount={columnsCount}
       ref={mergeRefs<ConnectableElement | HTMLDivElement | undefined>([
         drop,
         dimensionRef,
@@ -101,12 +109,23 @@ function DropZoneContent<T extends Droppable, E extends DroppedElement<T>>({
   );
 }
 
-export function DropZone<T extends Droppable>({ id, ...props }: Props<T>) {
+export function DropZone<T extends Droppable>({
+  id,
+  columnsCount,
+  rowsCount,
+  ...props
+}: Props<T>) {
   const zoneId = React.useRef(uniqueId('zone')).current;
 
   return (
-    <ZoneIdContext.Provider value={id || zoneId}>
+    <ZoneContext.Provider
+      value={{
+        id: id || zoneId,
+        columnsCount,
+        rowsCount,
+      }}
+    >
       <DropZoneContent {...props} />
-    </ZoneIdContext.Provider>
+    </ZoneContext.Provider>
   );
 }

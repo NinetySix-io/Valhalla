@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { cellSizeAtom, useScopeAtomValue } from '../context';
+import { cellSizeAtom, useScopeAtomValue, useZoneContext } from '../context';
 import { css, styled } from '@mui/material';
 
 import { Background } from './background';
@@ -28,18 +28,14 @@ const Container = styled(
 );
 
 type Props = React.PropsWithoutRef<JSX.IntrinsicElements['div']> & {
-  rowsCount: number;
-  columnsCount: number;
   color?: React.CSSProperties['color'];
   dotWidth?: number;
 };
 
 export const DropGrid = React.forwardRef<HTMLDivElement, Props>(
-  (
-    { style, rowsCount, columnsCount, children, dotWidth = 3, ...props },
-    ref,
-  ) => {
+  ({ style, children, dotWidth = 3, ...props }, ref) => {
     const cellSize = useScopeAtomValue(cellSizeAtom);
+    const { rowsCount, columnsCount } = useZoneContext();
 
     return (
       <Container

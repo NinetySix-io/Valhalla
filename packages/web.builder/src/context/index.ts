@@ -6,14 +6,22 @@ import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import type { GridAreaElement } from '../hooks/use.element';
 import type { Scope } from 'jotai/core/atom';
 
-export const ZoneIdContext = React.createContext('');
+export const ZoneContext = React.createContext({
+  id: undefined as string,
+  rowsCount: 0,
+  columnsCount: 0,
+});
+
+export function useZoneContext() {
+  return React.useContext(ZoneContext);
+}
 
 /**
  * UseZoneId returns the value of the ZoneIdContext.
  * @returns The ZoneIdContext
  */
 export function useZoneId() {
-  return React.useContext(ZoneIdContext);
+  return useZoneContext().id;
 }
 
 // -----------------------------

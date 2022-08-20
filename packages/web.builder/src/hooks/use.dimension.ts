@@ -1,12 +1,18 @@
 import * as React from 'react';
 
-import { cellSizeAtom, containerAtom, useScopeAtomMutate } from '../context';
+import {
+  cellSizeAtom,
+  containerAtom,
+  useScopeAtomMutate,
+  useZoneContext,
+} from '../context';
 
 import { mergeRefs } from 'react-merge-refs';
 import useResizeObserver from 'use-resize-observer';
 
-export function useDropDimension(columnsCount: number) {
+export function useDropDimension() {
   const hasContainer = React.useRef(false);
+  const columnsCount = useZoneContext().columnsCount;
   const _setContainer = useScopeAtomMutate(containerAtom);
   const setCellSize = useScopeAtomMutate(cellSizeAtom);
 

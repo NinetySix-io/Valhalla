@@ -1,4 +1,4 @@
-import { clamp } from './clamp';
+import { clampCell } from './clamp';
 
 /**
  * Take size value and cellSize then clamp it into position
@@ -11,7 +11,7 @@ export function getPosition(value: number, cellSize: number): number {
     return 1;
   }
 
-  const clampedValue = clamp(value, cellSize);
+  const clampedValue = clampCell(value, cellSize);
   const norm = clampedValue / cellSize;
   return Math.round(norm) || 1;
 }

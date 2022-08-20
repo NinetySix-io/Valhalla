@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import {
-  cellSizeAtom,
   containerAtom,
   draggingElementAtom,
   gridVisibleAtom,
@@ -9,9 +8,9 @@ import {
   useScopeAtomValue,
 } from '../context';
 import { css, styled } from '@mui/material';
+import { useCellClampX, useCellClampY } from '../hooks/use.cell.clamp';
 
 import { Droppable } from '../types';
-import { getPosition } from '../lib/get.position';
 import { makeFilterProps } from '@valhalla/web.react/src';
 import { useDragDropManager } from 'react-dnd';
 import { useElementGridArea } from '../hooks/use.element';
@@ -45,8 +44,9 @@ export const DragShadow: React.FC = () => {
   const gridIsVisible = useScopeAtomValue(gridVisibleAtom);
   const [isVisible, setIsVisible] = React.useState(false);
   const [element, setElement] = useScopeAtom(draggingElementAtom);
+  const clampX = useCellClampX();
+  const clampY = useCellClampY();
   const gridArea = useElementGridArea(element);
-  const cellSize = useScopeAtomValue(cellSizeAtom);
 
   const handleOffsetChange = React.useCallback(() => {
     const monitor = manager.getMonitor();
@@ -61,8 +61,8 @@ export const DragShadow: React.FC = () => {
     } else {
       setElement({
         ...nextElement,
-        x: getPosition(nextOffset.x, cellSize),
-        y: getPosition(nextOffset.y, cellSize),
+        x: clampX(nextOffset.x, nextElement.xSpan),
+        y: clampY(nextOffset.y, nextElement.ySpan),
       });
     }
 
@@ -72,7 +72,7 @@ export const DragShadow: React.FC = () => {
         : containerYAxisStart <= nextOffset.y &&
           containerYAxisEnd >= nextOffset.y,
     );
-  }, [manager, container, cellSize, setElement, setIsVisible]);
+  }, [manager, container, clampX, clampY, setElement, setIsVisible]);
 
   React.useEffect(() => {
     const unsubscribe = manager
