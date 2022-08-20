@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {
-  ZoneIdContext,
+  ZoneContext,
   gridVisibleAtom,
   useScopeAtomMutate,
 } from '../../context';
@@ -14,7 +14,11 @@ import { uniqueId } from '@valhalla/utilities';
 import { useDropDimension } from '../../hooks/use.dimension';
 
 type ComponentType = typeof DropGrid;
-type Props = React.ComponentProps<ComponentType> & { showGrid: boolean };
+type Props = React.ComponentProps<ComponentType> & {
+  showGrid: boolean;
+  columnsCount: number;
+  rowsCount: number;
+};
 
 const Meta: ComponentMeta<ComponentType> = {
   title: 'Components/DropGrid',
@@ -22,7 +26,7 @@ const Meta: ComponentMeta<ComponentType> = {
 };
 
 const Content: React.FC<Props> = ({ showGrid, ...props }) => {
-  const ref = useDropDimension(props.columnsCount);
+  const ref = useDropDimension();
   const setGridVisible = useScopeAtomMutate(gridVisibleAtom);
 
   React.useEffect(() => {
@@ -36,9 +40,15 @@ const Template: React.FC<Props> = (props) => {
   const zoneId = React.useRef(uniqueId()).current;
   return (
     <DndProvider backend={HTML5Backend}>
-      <ZoneIdContext.Provider value={zoneId}>
+      <ZoneContext.Provider
+        value={{
+          id: zoneId,
+          columnsCount: props.columnsCount,
+          rowsCount: props.rowsCount,
+        }}
+      >
         <Content {...props} />
-      </ZoneIdContext.Provider>
+      </ZoneContext.Provider>
     </DndProvider>
   );
 };
