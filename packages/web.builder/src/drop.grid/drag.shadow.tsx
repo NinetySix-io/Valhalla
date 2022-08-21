@@ -9,9 +9,10 @@ import {
 } from '../context';
 import { useCellClampX, useCellClampY } from '../hooks/use.cell.clamp';
 
-import { Droppable } from '../types';
+import { DroppedElement } from '../types';
+import { builderEvents } from '../lib/events';
 import { makeFilterProps } from '@valhalla/web.react/src';
-import { useDragDropManager } from 'react-dnd';
+import { useDragMonitorOffset } from '../hooks/use.drag.monitor';
 import { useElementGridArea } from '../hooks/use.element';
 
 const Container = styled(
@@ -40,17 +41,20 @@ const Container = styled(
 export const DragShadow: React.FC = () => {
   const clampX = useCellClampX();
   const clampY = useCellClampY();
-  const manager = useDragDropManager();
   const gridIsVisible = useScopeAtomValue(gridVisibleAtom);
   const [isVisible, setIsVisible] = React.useState(false);
   const [element, setElement] = useScopeAtom(draggingElementAtom);
   const gridArea = useElementGridArea(element);
-  const handleOffsetChange = React.useCallback(() => {
-    const monitor = manager.getMonitor();
+
+  useDragMonitorOffset((monitor) => {
     const nextOffset = monitor.getSourceClientOffset();
-    const nextElement: Droppable = monitor.getItem();
+    const nextElement: DroppedElement = monitor.getItem();
 
     if (!nextOffset || !nextElement) {
+      if (element) {
+        builderEvents.emit('itemUpdate', element);
+      }
+
       setIsVisible(false);
       setElement(null);
     } else {
@@ -61,17 +65,7 @@ export const DragShadow: React.FC = () => {
         y: clampY(nextOffset.y, nextElement.ySpan),
       });
     }
-  }, [manager, clampX, clampY, setElement, setIsVisible]);
-
-  React.useEffect(() => {
-    const unsubscribe = manager
-      .getMonitor()
-      .subscribeToOffsetChange(handleOffsetChange);
-
-    return () => {
-      unsubscribe();
-    };
-  }, [manager, handleOffsetChange]);
+  });
 
   return (
     <Container isVisible={gridIsVisible && isVisible} gridArea={gridArea} />

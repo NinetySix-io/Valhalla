@@ -13,6 +13,7 @@ import { css, styled } from '@mui/material';
 
 import { DIRECTION } from './directions';
 import { Resizer } from './resizer';
+import { builderEvents } from '../lib/events';
 import { calculateResize } from '../lib/calculate.resize';
 import clsx from 'clsx';
 import { getEmptyImage } from 'react-dnd-html5-backend';
@@ -91,11 +92,10 @@ type Props = Omit<
   onFocusChange?: (isActive: boolean) => void;
   children?: React.ReactNode;
   element: DroppedElement;
-  onChange?: (element: DroppedElement) => void;
 };
 
 export const DropItem = React.forwardRef<HTMLDivElement, Props>(
-  ({ element, focusColor, children, onChange, ...props }, ref) => {
+  ({ element, focusColor, children, ...props }, ref) => {
     const container = React.useRef<HTMLDivElement>();
     const draggingRef = React.useRef(false);
     const zoneId = useZoneId();
@@ -137,7 +137,8 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
     function handleResizeEnd(direction: DIRECTION, nextSize: Size) {
       setIsResizing(false);
       setGridVisible(false);
-      onChange?.(
+      builderEvents.emit(
+        'itemUpdate',
         calculateResize({
           cellSize,
           direction,

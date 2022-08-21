@@ -11,7 +11,7 @@ import { getPosition } from '../lib/get.position';
  * @param {number} max - The maximum value that the position can be.
  * @returns A function that takes a position and span and returns a clamped position.
  */
-function useClamp(max: number) {
+export function useCellClamp(max: number) {
   const cellSize = useScopeAtomValue(cellSizeAtom);
   return React.useCallback(
     (position: number, span: number) => {
@@ -24,9 +24,9 @@ function useClamp(max: number) {
 }
 
 export function useCellClampX() {
-  return useClamp(useZoneContext().columnsCount);
+  return useCellClamp(useZoneContext().columnsCount);
 }
 
 export function useCellClampY() {
-  return useClamp(useZoneContext().rowsCount);
+  return useCellClamp(useZoneContext().rowsCount);
 }

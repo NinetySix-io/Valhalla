@@ -1,44 +1,31 @@
 import * as React from 'react';
 
-import type { ConnectableElement, DropTargetMonitor } from 'react-dnd';
-import type { DropCandidate, Droppable, DroppedElement } from '../types';
-import {
-  ZoneContext,
-  cellSizeAtom,
-  useScopeAtomValue,
-  useZoneId,
-} from '../context';
-import { useCellClampX, useCellClampY } from '../hooks/use.cell.clamp';
+import type { Droppable, DroppedElement } from '../types';
+import { ZoneContext, useZoneId } from '../context';
 
+import type { ConnectableElement } from 'react-dnd';
 import { DropGrid } from '../drop.grid';
-import { DropZoneCallbackManager } from './callback.manager';
 import { DropZoneItem } from './item';
 import { cProps } from '@valhalla/web.react';
-import { getPosition } from '../lib/get.position';
 import { mergeRefs } from 'react-merge-refs';
 import { uniqueId } from '@valhalla/utilities';
+import { useAddElement } from '../hooks/events/use.add.element';
+import { useBuilderEvents } from '../hooks/events/use.builder.events';
 import { useDrop } from 'react-dnd';
 import { useDropDimension } from '../hooks/use.dimension';
+import { useUpdateElement } from '../hooks/events/use.update.element';
 
-type Props<T extends Droppable> = cProps<
-  {
-    rowsCount: number;
-    columnsCount: number;
-    onDrop?: (
-      item: DropCandidate<T> | DroppedElement<T>,
-      monitor: DropTargetMonitor,
-    ) => void;
-    onAddItem?: (
-      item: Omit<DroppedElement<T>, 'id'>,
-      monitor: DropTargetMonitor,
-    ) => void;
-    onUpdateItem?: (
-      item: DroppedElement<T>,
-      monitor?: DropTargetMonitor,
-    ) => void;
-    value?: Array<DroppedElement>;
-  } & React.ComponentProps<typeof DropZoneCallbackManager>
->;
+type Props<T extends Droppable> = cProps<{
+  rowsCount: number;
+  columnsCount: number;
+  onDrop?: (item: DroppedElement<T> | Omit<DroppedElement<T>, 'id'>) => void;
+  onAddItem?: (item: Omit<DroppedElement<T>, 'id'>) => void;
+  onUpdateItem?: (item: DroppedElement<T>) => void;
+  onRowExpand?: (rowsCount: number) => void;
+  onElementFocus?: (elementId: string | undefined, zoneId: string) => void;
+  onDragging?: (isDragging: boolean, zoneId: string) => void;
+  value?: Array<DroppedElement>;
+}>;
 
 function DropZoneContent<T extends Droppable, E extends DroppedElement<T>>({
   id,
@@ -47,43 +34,35 @@ function DropZoneContent<T extends Droppable, E extends DroppedElement<T>>({
   onDrop,
   onAddItem,
   onUpdateItem,
+  onRowExpand,
   value,
   ...props
 }: Omit<Props<T>, 'columnsCount' | 'rowsCount'>) {
   const zoneId = useZoneId();
   const dimensionRef = useDropDimension();
-  const cellSize = useScopeAtomValue(cellSizeAtom);
-  const clampX = useCellClampX();
-  const clampY = useCellClampY();
+  const [, drop] = useDrop<E>(() => ({ accept: zoneId }), [zoneId]);
 
-  const [, drop] = useDrop<E>(
-    () => ({
-      accept: zoneId,
-      drop(item, monitor) {
-        const offset = monitor.getSourceClientOffset();
-        const nextX = clampX(offset.x, item.xSpan);
-        const nextY = clampY(offset.y, item.ySpan);
-        const nextItem = { ...item, x: nextX, y: nextY };
-
-        onDrop?.(nextItem, monitor);
-        if ('id' in item) {
-          onUpdateItem?.(nextItem, monitor);
-        } else {
-          onAddItem?.(nextItem, monitor);
-        }
-      },
-    }),
-    [
-      cellSize,
-      zoneId,
-      getPosition,
-      onUpdateItem,
-      onAddItem,
-      onDrop,
-      clampX,
-      clampY,
-    ],
+  useBuilderEvents('elementDragging', (element) =>
+    onDragging?.(element.isDragging, zoneId),
   );
+
+  useBuilderEvents('elementFocus', (element) =>
+    onElementFocus?.(element.elementId, zoneId),
+  );
+
+  useBuilderEvents('gridRowsUpdate', (nextRowsCount) =>
+    onRowExpand?.(nextRowsCount),
+  );
+
+  useUpdateElement<T>((element) => {
+    onDrop?.(element);
+    onUpdateItem?.(element);
+  });
+
+  useAddElement<T>((element) => {
+    onDrop?.(element);
+    onAddItem?.(element);
+  });
 
   return (
     <DropGrid
@@ -94,10 +73,6 @@ function DropZoneContent<T extends Droppable, E extends DroppedElement<T>>({
         dimensionRef,
       ])}
     >
-      <DropZoneCallbackManager
-        onElementFocus={onElementFocus}
-        onDragging={onDragging}
-      />
       {value?.map((element) => (
         <DropZoneItem
           key={element.id}

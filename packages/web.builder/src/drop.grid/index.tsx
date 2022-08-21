@@ -5,6 +5,7 @@ import { css, styled } from '@mui/material';
 
 import { Background } from './background';
 import { DragShadow } from './drag.shadow';
+import { Resizer } from './resizer';
 import { makeFilterProps } from '@valhalla/web.react';
 
 const Container = styled(
@@ -49,6 +50,7 @@ export const DropGrid = React.forwardRef<HTMLDivElement, Props>(
       >
         <Background />
         <DragShadow />
+        <Resizer />
         {children}
       </Container>
     );

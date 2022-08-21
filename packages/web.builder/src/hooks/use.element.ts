@@ -4,17 +4,10 @@ import { cellSizeAtom, containerAtom, useScopeAtomValue } from '../context';
 
 import type { DroppedElement } from '../types';
 
-export type GridAreaElement = Pick<
-  DroppedElement,
-  'x' | 'y' | 'xSpan' | 'ySpan'
->;
-
 /**
  * It takes a grid area element and returns a string that can be used as the `grid-area` CSS property
- * @param {GridAreaElement} element - The element that we want to calculate the grid area for.
- * @returns A string that represents the grid area.
  */
-export function useElementGridArea(element: GridAreaElement) {
+export function useElementGridArea(element: DroppedElement) {
   const container = useScopeAtomValue(containerAtom);
   const cellSize = useScopeAtomValue(cellSizeAtom);
   const [gridArea, setGridArea] = React.useState<string>();

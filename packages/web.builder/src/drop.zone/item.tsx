@@ -10,13 +10,9 @@ type Props<T extends Droppable> = {
   onChange?: (element: DroppedElement<T>) => void;
 };
 
-function Item<T extends Droppable>({ element, onChange }: Props<T>) {
+function Item<T extends Droppable>({ element }: Props<T>) {
   return (
-    <DropItem
-      key={element.id}
-      element={element}
-      onChange={(el) => onChange(el as DroppedElement<T>)}
-    >
+    <DropItem key={element.id} element={element}>
       <ElementFactory value={element} />
     </DropItem>
   );

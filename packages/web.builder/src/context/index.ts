@@ -3,7 +3,7 @@ import * as React from 'react';
 import type { Atom, WritableAtom } from 'jotai';
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 
-import type { GridAreaElement } from '../hooks/use.element';
+import { DroppedElement } from '../types';
 import type { Scope } from 'jotai/core/atom';
 
 export const ZoneContext = React.createContext({
@@ -31,7 +31,7 @@ export function useZoneId() {
 export const cellSizeAtom = atom(null as number);
 export const containerAtom = atom(null as HTMLDivElement);
 export const focusedElementAtom = atom(null as string);
-export const draggingElementAtom = atom(null as GridAreaElement);
+export const draggingElementAtom = atom(null as DroppedElement);
 export const gridVisibleAtom = atom(null as boolean);
 
 export function useScopeAtom<

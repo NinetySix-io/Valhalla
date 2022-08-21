@@ -1,11 +1,9 @@
 import * as React from 'react';
 
-import type { DroppableElement, DroppedElement } from '../../types';
-
 import type { ComponentMeta } from '@storybook/react';
 import { DndProvider } from 'react-dnd';
-import type { DropTargetMonitor } from 'react-dnd';
 import { DropZone } from '../index';
+import type { DroppedElement } from '../../types';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { styled } from '@mui/material';
 import { uniqueId } from '@valhalla/utilities';
@@ -24,12 +22,14 @@ const Container = styled('div')`
 
 const Template: React.FC<Props> = ({ value, onUpdateItem, ...props }) => {
   const [items, setItems] = React.useState(value);
+  const [rows, setRows] = React.useState(props.rowsCount);
 
-  function handleUpdateItem(
-    item: DroppedElement,
-    monitor?: DropTargetMonitor<DroppableElement, unknown>,
-  ) {
-    onUpdateItem?.(item, monitor);
+  function handleRowsUpdate(value: number) {
+    setRows(value);
+  }
+
+  function handleUpdateItem(item: DroppedElement) {
+    onUpdateItem?.(item);
 
     if (!items) {
       return;
@@ -46,7 +46,13 @@ const Template: React.FC<Props> = ({ value, onUpdateItem, ...props }) => {
   return (
     <DndProvider backend={HTML5Backend}>
       <Container>
-        <DropZone {...props} value={items} onUpdateItem={handleUpdateItem} />
+        <DropZone
+          {...props}
+          rowsCount={rows}
+          value={items}
+          onUpdateItem={handleUpdateItem}
+          onRowExpand={handleRowsUpdate}
+        />
       </Container>
     </DndProvider>
   );
