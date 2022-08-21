@@ -3,6 +3,7 @@ import * as React from 'react';
 import {
   cellSizeAtom,
   containerAtom,
+  useScopeAtom,
   useScopeAtomMutate,
   useZoneContext,
 } from '../context';
@@ -13,20 +14,22 @@ import useResizeObserver from 'use-resize-observer';
 export function useDropDimension() {
   const hasContainer = React.useRef(false);
   const columnsCount = useZoneContext().columnsCount;
-  const _setContainer = useScopeAtomMutate(containerAtom);
+  const [container, setContainer] = useScopeAtom(containerAtom);
   const setCellSize = useScopeAtomMutate(cellSizeAtom);
 
-  const handleAdjustment = (width: number) => {
-    React.startTransition(() => {
-      setCellSize(width / columnsCount);
-    });
-  };
+  const handleAdjustment = React.useCallback(
+    (width: number) => {
+      React.startTransition(() => {
+        setCellSize(width / columnsCount);
+      });
+    },
+    [columnsCount, setCellSize],
+  );
 
-  const setContainer = (containerElement: HTMLDivElement) => {
+  const _setContainer = (containerElement: HTMLDivElement) => {
     if (containerElement && !hasContainer.current) {
       hasContainer.current = true;
-      _setContainer(containerElement);
-      handleAdjustment(containerElement.clientWidth);
+      setContainer(containerElement);
     }
   };
 
@@ -36,5 +39,11 @@ export function useDropDimension() {
     },
   });
 
-  return mergeRefs([setContainer, observerRef]);
+  React.useEffect(() => {
+    if (container) {
+      handleAdjustment(container.clientWidth);
+    }
+  }, [container, handleAdjustment]);
+
+  return mergeRefs([_setContainer, observerRef]);
 }

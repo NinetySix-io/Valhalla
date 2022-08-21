@@ -61,7 +61,7 @@ const Template: React.FC<Props> = ({ value, onUpdateItem, ...props }) => {
 export const Default = Template.bind({});
 const args: Props = {
   rowsCount: 10,
-  columnsCount: 20,
+  columnsCount: 24,
   value: [
     {
       id: uniqueId('item'),

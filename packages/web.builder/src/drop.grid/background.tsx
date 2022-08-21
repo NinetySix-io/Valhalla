@@ -10,10 +10,11 @@ const Container = styled(
   makeFilterProps(['isVisible']),
 )<{ isVisible: boolean }>(
   ({ theme, isVisible }) => css`
-    --bg-pos: calc(var(--cs) + var(--pt-w));
+    --bg-pos: calc((var(--cs) / 2) + var(--pt-w));
     --bg-color: ${theme.palette.grey[600]};
     opacity: ${isVisible ? 0.5 : 0};
-    width: 100%;
+    margin-left: var(--cs);
+    width: calc(100% - var(--cs) - var(--pt-w) / 2);
     height: 100%;
     transition: all 0.2s;
     transition-timing-function: ease;
@@ -28,7 +29,25 @@ const Container = styled(
   `,
 );
 
+const Divider = styled('div')<{ isVisible: boolean }>(
+  ({ theme, isVisible }) => css`
+    opacity: ${isVisible ? 0.5 : 0};
+    position: absolute;
+    z-index: -1;
+    border: dashed 1px ${theme.palette.primary.main};
+    left: calc(50% + (var(--pt-w) / 3));
+    height: 100%;
+    top: 0px;
+    bottom: 0px;
+  `,
+);
+
 export const Background: React.FC = () => {
   const isVisible = useScopeAtomValue(gridVisibleAtom);
-  return <Container isVisible={isVisible} />;
+  return (
+    <React.Fragment>
+      <Container isVisible={isVisible} />
+      <Divider isVisible={isVisible} />
+    </React.Fragment>
+  );
 };

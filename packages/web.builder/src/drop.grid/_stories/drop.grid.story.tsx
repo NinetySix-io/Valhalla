@@ -1,37 +1,28 @@
 import * as React from 'react';
 
-import {
-  ZoneContext,
-  gridVisibleAtom,
-  useScopeAtomMutate,
-} from '../../context';
+import { ZoneContext, gridVisibleAtom, useScopeAtom } from '../../context';
+import { pick, uniqueId } from '@valhalla/utilities';
 
-import { ComponentMeta } from '@storybook/react';
 import { DndProvider } from 'react-dnd';
 import { DropGrid } from '../index';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { uniqueId } from '@valhalla/utilities';
+import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
+import { storiesOf } from '@storybook/react';
 import { useDropDimension } from '../../hooks/use.dimension';
 
 type ComponentType = typeof DropGrid;
 type Props = React.ComponentProps<ComponentType> & {
-  showGrid: boolean;
   columnsCount: number;
   rowsCount: number;
 };
 
-const Meta: ComponentMeta<ComponentType> = {
-  title: 'Components/DropGrid',
-  component: DropGrid,
-};
-
-const Content: React.FC<Props> = ({ showGrid, ...props }) => {
+const Content: React.FC<Props> = (props) => {
   const ref = useDropDimension();
-  const setGridVisible = useScopeAtomMutate(gridVisibleAtom);
+  const [, showGrid] = useScopeAtom(gridVisibleAtom);
 
   React.useEffect(() => {
-    setGridVisible(showGrid);
-  }, [showGrid, setGridVisible]);
+    showGrid(true);
+  }, [showGrid]);
 
   return <DropGrid {...props} ref={ref} />;
 };
@@ -53,14 +44,21 @@ const Template: React.FC<Props> = (props) => {
   );
 };
 
-export const Default = Template.bind({});
-const args: Props = {
-  showGrid: true,
-  columnsCount: 24,
-  rowsCount: 10,
-  dotWidth: 3,
-};
-
-Default.args = args;
-
-export default Meta;
+storiesOf('Components/DropGrid', module)
+  .add('Desktop', () => <Template columnsCount={24} rowsCount={10} />)
+  .add('Tablet', () => <Template columnsCount={14} rowsCount={10} />, {
+    viewport: {
+      defaultViewport: 'ipad',
+      viewports: pick(INITIAL_VIEWPORTS, ['ipad', 'ipad10p', 'ipad12p']),
+    },
+  })
+  .add('Mobile', () => <Template columnsCount={8} rowsCount={10} />, {
+    viewport: {
+      defaultViewport: 'iphonex',
+      viewports: pick(INITIAL_VIEWPORTS, [
+        'iphonex',
+        'iphonexr',
+        'iphonexsmax',
+      ]),
+    },
+  });

@@ -49,7 +49,6 @@ const Container = styled(
 
     ${isDragging &&
     css`
-      border-width: 2px;
       border-color: ${theme.palette.grey[500]} !important;
     `}
 
@@ -168,7 +167,7 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
         collect(monitor) {
           return {
             isDragging: monitor.isDragging(),
-            hasItem: !!monitor.getItem(),
+            hasItem: monitor.getItem()?.id === element.id,
           };
         },
       },

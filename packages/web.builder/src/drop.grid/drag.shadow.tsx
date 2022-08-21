@@ -1,12 +1,13 @@
 import * as React from 'react';
 
-import { css, styled } from '@mui/material';
 import {
+  cellSizeAtom,
   draggingElementAtom,
   gridVisibleAtom,
   useScopeAtom,
   useScopeAtomValue,
 } from '../context';
+import { css, styled } from '@mui/material';
 import { useCellClampX, useCellClampY } from '../hooks/use.cell.clamp';
 
 import { DroppedElement } from '../types';
@@ -25,6 +26,9 @@ const Container = styled(
   ({ theme, isVisible, gridArea }) => css`
     transition: all 0.2s;
     border: solid 3px transparent;
+    margin-left: calc(var(--pt-w) * 0.5);
+    margin-right: calc(var(--pt-w) / -1);
+    margin-bottom: calc(var(--pt-w) * -2);
 
     ${isVisible && gridArea
       ? css`
@@ -45,6 +49,7 @@ export const DragShadow: React.FC = () => {
   const [isVisible, setIsVisible] = React.useState(false);
   const [element, setElement] = useScopeAtom(draggingElementAtom);
   const gridArea = useElementGridArea(element);
+  const cellSize = useScopeAtomValue(cellSizeAtom);
 
   useDragMonitorOffset((monitor) => {
     const nextOffset = monitor.getSourceClientOffset();
@@ -58,11 +63,13 @@ export const DragShadow: React.FC = () => {
       setIsVisible(false);
       setElement(null);
     } else {
+      // offset so it will be centered
+      const offset = cellSize / 2;
       setIsVisible(true);
       setElement({
         ...nextElement,
-        x: clampX(nextOffset.x, nextElement.xSpan),
-        y: clampY(nextOffset.y, nextElement.ySpan),
+        x: clampX(nextOffset.x - offset, nextElement.xSpan),
+        y: clampY(nextOffset.y - offset, nextElement.ySpan),
       });
     }
   });
