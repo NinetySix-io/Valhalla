@@ -28,19 +28,11 @@ const Template: React.FC<Props> = ({ value, onUpdateItem, ...props }) => {
     setRows(value);
   }
 
-  function handleUpdateItem(item: DroppedElement) {
-    onUpdateItem?.(item);
-
-    if (!items) {
-      return;
-    }
-
-    const index = items?.findIndex((i) => i.id === item.id);
-    if (index >= 0) {
-      const nextItems = [...items];
-      nextItems[index] = item;
-      setItems(nextItems);
-    }
+  function handleUpdateItem(nextItem: DroppedElement) {
+    onUpdateItem?.(nextItem);
+    setItems((items) =>
+      items?.map((item) => (item.id === nextItem.id ? nextItem : item)),
+    );
   }
 
   return (

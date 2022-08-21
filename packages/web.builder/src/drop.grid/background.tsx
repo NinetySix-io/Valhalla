@@ -31,7 +31,7 @@ const Container = styled(
 
 const Divider = styled('div')<{ isVisible: boolean }>(
   ({ theme, isVisible }) => css`
-    opacity: ${isVisible ? 0.5 : 0};
+    opacity: ${isVisible ? 0.4 : 0};
     position: absolute;
     z-index: -1;
     border: dashed 1px ${theme.palette.primary.main};
