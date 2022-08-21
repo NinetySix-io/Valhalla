@@ -44,8 +44,6 @@ const Container = styled(
   return css`
     position: relative;
     border: solid 3px transparent;
-    margin-right: calc(-1 * (var(--pt-w) + 0.5 * var(--pt-w)));
-    margin-bottom: calc(-1 * (var(--pt-w) + 0.5 * var(--pt-w)));
     grid-area: ${gridArea};
     z-index: auto;
 
