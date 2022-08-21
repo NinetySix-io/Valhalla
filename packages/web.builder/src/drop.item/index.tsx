@@ -16,7 +16,6 @@ import { Resizer } from './resizer';
 import { builderEvents } from '../lib/events';
 import { calculateResize } from '../lib/calculate.resize';
 import clsx from 'clsx';
-import { getEmptyImage } from 'react-dnd-html5-backend';
 import { makeFilterProps } from '@valhalla/web.react';
 import { mergeRefs } from 'react-merge-refs';
 import { useDrag } from 'react-dnd';
@@ -25,40 +24,53 @@ import { useTemporalCache } from '../hooks/use.cache';
 
 const Container = styled(
   Resizer,
-  makeFilterProps(['label', 'gridArea', 'isFocus', 'color']),
-)<{ label: string; gridArea: string; isFocus: boolean; color: string }>(
-  ({ theme, color, label, gridArea, isFocus }) => {
-    const mainColor: string = color ?? theme.palette.primary.main;
-    const textColor: string = theme.palette.getContrastText(mainColor);
+  makeFilterProps(['label', 'gridArea', 'isFocus', 'color', 'isDragging']),
+)<{
+  label: string;
+  gridArea: string;
+  isFocus: boolean;
+  color: string;
+  isDragging: boolean;
+}>(({ theme, color, label, gridArea, isFocus, isDragging }) => {
+  const mainColor: string = color ?? theme.palette.primary.main;
+  const textColor: string = theme.palette.getContrastText(mainColor);
 
-    if (!gridArea) {
-      return css`
-        display: none;
-      `;
-    }
-
+  if (!gridArea) {
     return css`
-      position: relative;
-      border: solid 3px transparent;
-      margin-right: calc(-1 * (var(--pt-w) + 0.5 * var(--pt-w)));
-      margin-bottom: calc(-1 * (var(--pt-w) + 0.5 * var(--pt-w)));
-      grid-area: ${gridArea};
-      z-index: auto;
+      display: none;
+    `;
+  }
 
-      ${isFocus
-        ? css`
+  return css`
+    position: relative;
+    border: solid 3px transparent;
+    margin-right: calc(-1 * (var(--pt-w) + 0.5 * var(--pt-w)));
+    margin-bottom: calc(-1 * (var(--pt-w) + 0.5 * var(--pt-w)));
+    grid-area: ${gridArea};
+    z-index: auto;
+
+    ${isDragging &&
+    css`
+      border-width: 2px;
+      border-color: ${theme.palette.grey[500]} !important;
+    `}
+
+    ${isFocus
+      ? css`
+          border-color: ${mainColor};
+
+          &:hover {
+            cursor: auto;
+          }
+        `
+      : css`
+          &:hover {
+            cursor: grab;
             border-color: ${mainColor};
 
-            &:hover {
-              cursor: auto;
-            }
-          `
-        : css`
-            &:hover {
-              cursor: grab;
-              border-color: ${mainColor};
-
-              /* LABEL */
+            /* LABEL */
+            ${!isDragging &&
+            css`
               &:before {
                 content: '${label}';
                 top: -20px;
@@ -78,11 +90,11 @@ const Container = styled(
                 flex-direction: column;
                 justify-content: center;
               }
-            }
-          `}
-    `;
-  },
-);
+            `}
+          }
+        `}
+  `;
+});
 
 type Props = Omit<
   React.PropsWithoutRef<JSX.IntrinsicElements['div']>,
@@ -148,7 +160,7 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
       );
     }
 
-    const [{ isDragging }, drag, preview] = useDrag(
+    const [{ isDragging, hasItem }, drag, preview] = useDrag(
       {
         type: zoneId,
         item: element,
@@ -158,15 +170,12 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
         collect(monitor) {
           return {
             isDragging: monitor.isDragging(),
+            hasItem: !!monitor.getItem(),
           };
         },
       },
       [zoneId, element],
     );
-
-    React.useEffect(() => {
-      preview(getEmptyImage());
-    }, [preview]);
 
     React.useEffect(() => {
       setGridVisible(isDragging);
@@ -178,7 +187,7 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
     }, [isDragging, setGridVisible]);
 
     if (isDragging) {
-      return <div ref={drag} />;
+      return null;
     }
 
     return (
@@ -187,7 +196,14 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
         className={clsx(props.className)}
         tabIndex={0}
         color={focusColor}
-        ref={mergeRefs([ref, container, isResizing ? undefined : drag])}
+        ref={mergeRefs([
+          ref,
+          container,
+          preview,
+          isResizing ? undefined : drag,
+        ])}
+        isDragging={hasItem}
+        disableResize={hasItem}
         onMouseUp={handleFocus}
         onBlur={handleLoseFocus}
         label={element.type.toUpperCase()}

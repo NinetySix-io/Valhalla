@@ -162,7 +162,7 @@ type Props = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
 > & {
-  disabled?: boolean | Array<DIRECTION>;
+  disableResize?: boolean | Array<DIRECTION>;
   children?: React.ReactNode;
   minHeight?: number;
   minWidth?: number;
@@ -179,7 +179,7 @@ export const Resizer = React.forwardRef<HTMLDivElement, Props>(
       onResizeFinish,
       onResize,
       onResizeStart,
-      disabled,
+      disableResize,
       children,
       minHeight = 10,
       minWidth = 10,
@@ -275,8 +275,8 @@ export const Resizer = React.forwardRef<HTMLDivElement, Props>(
 
     function getHandler(direction: DIRECTION) {
       const isDisabled =
-        disabled === true ||
-        (Array.isArray(disabled) && disabled.includes(direction));
+        disableResize === true ||
+        (Array.isArray(disableResize) && disableResize.includes(direction));
 
       const commonProps: React.DetailedHTMLProps<
         React.HTMLAttributes<HTMLDivElement>,
