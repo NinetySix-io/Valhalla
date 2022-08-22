@@ -18,9 +18,8 @@ import { useUpdateElement } from '../hooks/events/use.update.element';
 type Props<T extends Droppable> = cProps<{
   rowsCount: number;
   columnsCount: number;
-  onDrop?: (item: DroppedElement<T> | Omit<DroppedElement<T>, 'id'>) => void;
   onAddItem?: (item: Omit<DroppedElement<T>, 'id'>) => void;
-  onUpdateItem?: (item: DroppedElement<T>) => void;
+  onUpdateItems?: (item: DroppedElement<T>[]) => void;
   onRowExpand?: (rowsCount: number) => void;
   onElementFocus?: (elementId: string | undefined, zoneId: string) => void;
   onDragging?: (isDragging: boolean, zoneId: string) => void;
@@ -31,9 +30,8 @@ function DropZoneContent<T extends Droppable, E extends DroppedElement<T>>({
   id,
   onElementFocus,
   onDragging,
-  onDrop,
   onAddItem,
-  onUpdateItem,
+  onUpdateItems,
   onRowExpand,
   value,
   ...props
@@ -54,13 +52,11 @@ function DropZoneContent<T extends Droppable, E extends DroppedElement<T>>({
     onRowExpand?.(nextRowsCount),
   );
 
-  useUpdateElement<T>((element) => {
-    onDrop?.(element);
-    onUpdateItem?.(element);
+  useUpdateElement<T>((elements) => {
+    onUpdateItems?.(elements);
   });
 
   useAddElement<T>((element) => {
-    onDrop?.(element);
     onAddItem?.(element);
   });
 
@@ -74,11 +70,7 @@ function DropZoneContent<T extends Droppable, E extends DroppedElement<T>>({
       ])}
     >
       {value?.map((element) => (
-        <DropZoneItem
-          key={element.id}
-          element={element}
-          onChange={(nextEl) => onUpdateItem(nextEl as DroppedElement<T>)}
-        />
+        <DropZoneItem key={element.id} element={element} />
       ))}
     </DropGrid>
   );

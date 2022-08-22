@@ -2,8 +2,9 @@ import { DroppedElement } from '../../types';
 import { EventsRegistry } from './registry';
 
 export type BuilderEvents = {
-  itemUpdate: DroppedElement | Omit<DroppedElement, 'id'>;
   gridRowsUpdate: number;
+  elementAdded: Omit<DroppedElement, 'id'>;
+  elementsUpdated: DroppedElement[];
   elementFocus: { elementId: string };
   elementDragging: { isDragging: boolean };
 };

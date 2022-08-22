@@ -57,7 +57,9 @@ export const DragShadow: React.FC = () => {
 
     if (!nextOffset || !nextElement) {
       if (element) {
-        builderEvents.emit('itemUpdate', element);
+        !element.id
+          ? builderEvents.emit('elementAdded', element)
+          : builderEvents.emit('elementsUpdated', [element]);
       }
 
       setIsVisible(false);

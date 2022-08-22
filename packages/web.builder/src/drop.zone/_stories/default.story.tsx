@@ -20,7 +20,7 @@ const Container = styled('div')`
   padding: 10px;
 `;
 
-const Template: React.FC<Props> = ({ value, onUpdateItem, ...props }) => {
+const Template: React.FC<Props> = ({ value, onUpdateItems, ...props }) => {
   const [items, setItems] = React.useState(value);
   const [rows, setRows] = React.useState(props.rowsCount);
 
@@ -28,10 +28,10 @@ const Template: React.FC<Props> = ({ value, onUpdateItem, ...props }) => {
     setRows(value);
   }
 
-  function handleUpdateItem(nextItem: DroppedElement) {
-    onUpdateItem?.(nextItem);
+  function handleUpdateItems(nextItems: DroppedElement[]) {
+    onUpdateItems?.(nextItems);
     setItems((items) =>
-      items?.map((item) => (item.id === nextItem.id ? nextItem : item)),
+      items?.map((item) => nextItems.find((nI) => nI.id === item.id) ?? item),
     );
   }
 
@@ -42,7 +42,7 @@ const Template: React.FC<Props> = ({ value, onUpdateItem, ...props }) => {
           {...props}
           rowsCount={rows}
           value={items}
-          onUpdateItem={handleUpdateItem}
+          onUpdateItems={handleUpdateItems}
           onRowExpand={handleRowsUpdate}
         />
       </Container>

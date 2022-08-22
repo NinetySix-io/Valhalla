@@ -146,15 +146,14 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
     function handleResizeEnd(direction: DIRECTION, nextSize: Size) {
       setIsResizing(false);
       setGridVisible(false);
-      builderEvents.emit(
-        'itemUpdate',
+      builderEvents.emit('elementsUpdated', [
         calculateResize({
           cellSize,
           direction,
           element,
           nextSize,
         }),
-      );
+      ]);
     }
 
     const [{ isDragging, hasItem }, drag, preview] = useDrag(

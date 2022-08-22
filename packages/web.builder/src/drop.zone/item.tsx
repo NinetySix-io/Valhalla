@@ -7,7 +7,6 @@ import { ElementFactory } from '../element.factory';
 
 type Props<T extends Droppable> = {
   element: DroppedElement<T>;
-  onChange?: (element: DroppedElement<T>) => void;
 };
 
 function Item<T extends Droppable>({ element }: Props<T>) {
