@@ -16,6 +16,7 @@ import { Resizer } from './resizer';
 import { builderEvents } from '../lib/events';
 import { calculateResize } from '../lib/calculate.resize';
 import clsx from 'clsx';
+import { getEmptyImage } from 'react-dnd-html5-backend';
 import { makeFilterProps } from '@valhalla/web.react';
 import { mergeRefs } from 'react-merge-refs';
 import { useDrag } from 'react-dnd';
@@ -43,18 +44,18 @@ const Container = styled(
 
   return css`
     position: relative;
-    border: solid 3px transparent;
+    outline: solid 3px transparent;
     grid-area: ${gridArea};
     z-index: auto;
 
     ${isDragging &&
     css`
-      border-color: ${theme.palette.grey[500]} !important;
+      outline-color: ${theme.palette.grey[500]} !important;
     `}
 
     ${isFocus
       ? css`
-          border-color: ${mainColor};
+          outline-color: ${mainColor};
 
           &:hover {
             cursor: auto;
@@ -63,7 +64,7 @@ const Container = styled(
       : css`
           &:hover {
             cursor: grab;
-            border-color: ${mainColor};
+            outline-color: ${mainColor};
 
             /* LABEL */
             ${!isDragging &&
@@ -174,6 +175,10 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
     );
 
     React.useEffect(() => {
+      preview(getEmptyImage());
+    }, [preview]);
+
+    React.useEffect(() => {
       setGridVisible(isDragging);
       if (draggingRef.current && !isDragging && container.current) {
         container.current.focus();
@@ -192,12 +197,7 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
         className={clsx(props.className)}
         tabIndex={0}
         color={focusColor}
-        ref={mergeRefs([
-          ref,
-          container,
-          preview,
-          isResizing ? undefined : drag,
-        ])}
+        ref={mergeRefs([ref, container, isResizing ? undefined : drag])}
         isDragging={hasItem}
         disableResize={hasItem}
         onMouseUp={handleFocus}

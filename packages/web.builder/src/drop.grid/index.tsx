@@ -4,6 +4,7 @@ import { cellSizeAtom, useScopeAtomValue, useZoneContext } from '../context';
 import { css, styled } from '@mui/material';
 
 import { Background } from './background';
+import { DragLayer } from './drag.layer';
 import { DragShadow } from './drag.shadow';
 import { Resizer } from './resizer';
 import { makeFilterProps } from '@valhalla/web.react';
@@ -34,7 +35,7 @@ type Props = React.PropsWithoutRef<JSX.IntrinsicElements['div']> & {
 };
 
 export const DropGrid = React.forwardRef<HTMLDivElement, Props>(
-  ({ style, children, dotWidth = 3, ...props }, ref) => {
+  ({ style, children, dotWidth = 1, ...props }, ref) => {
     const cellSize = useScopeAtomValue(cellSizeAtom);
     const { rowsCount, columnsCount } = useZoneContext();
 
@@ -50,6 +51,7 @@ export const DropGrid = React.forwardRef<HTMLDivElement, Props>(
       >
         <Background />
         <DragShadow />
+        <DragLayer />
         <Resizer />
         {children}
       </Container>
