@@ -11,9 +11,8 @@ const Container = styled(
 )<{ isVisible: boolean }>(
   ({ theme, isVisible }) => css`
     --bg-pos: calc((var(--cs) / 2) + var(--pt-w));
-    --bg-color: ${theme.palette.grey[600]};
+    --bg-color: ${theme.palette.grey[400]};
     opacity: ${isVisible ? 0.5 : 0};
-    margin-left: var(--cs);
     width: calc(100% - var(--cs) - var(--pt-w) / 2);
     height: 100%;
     transition: all 0.2s;
@@ -22,9 +21,12 @@ const Container = styled(
     top: 0;
     left: 0;
     z-index: -1;
-    background: radial-gradient(var(--bg-color) var(--pt-w), transparent 3px),
-      radial-gradient(var(--bg-color) var(--pt-w), transparent 3px), #fff;
-    background-position: var(--bg-pos) var(--bg-pos);
+    border-right: solid thin var(--bg-color);
+    background-image: linear-gradient(
+        var(--bg-color) var(--pt-w),
+        transparent 1px
+      ),
+      linear-gradient(to right, var(--bg-color) var(--pt-w), transparent 1px);
     background-size: var(--cs) var(--cs);
   `,
 );
