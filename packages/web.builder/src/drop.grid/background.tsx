@@ -22,6 +22,7 @@ const Container = styled(
     left: 0;
     z-index: -1;
     border-right: solid thin var(--bg-color);
+    border-bottom: solid thin var(--bg-color);
     background-image: linear-gradient(
         var(--bg-color) var(--pt-w),
         transparent 1px
