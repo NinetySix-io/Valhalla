@@ -30,9 +30,7 @@ const Template: React.FC<Props> = ({ value, onUpdateItems, ...props }) => {
 
   function handleUpdateItems(nextItems: DroppedElement[]) {
     onUpdateItems?.(nextItems);
-    setItems((items) =>
-      items?.map((item) => nextItems.find((nI) => nI.id === item.id) ?? item),
-    );
+    setItems(nextItems);
   }
 
   return (

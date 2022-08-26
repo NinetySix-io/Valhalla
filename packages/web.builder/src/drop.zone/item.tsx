@@ -11,7 +11,7 @@ type Props<T extends Droppable> = {
 
 function Item<T extends Droppable>({ element }: Props<T>) {
   return (
-    <DropItem key={element.id} element={element}>
+    <DropItem key={element.id} element={element as DroppedElement}>
       <ElementFactory value={element} />
     </DropItem>
   );

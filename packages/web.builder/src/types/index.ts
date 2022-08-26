@@ -14,10 +14,16 @@ export type Droppable<T extends DroppableElement = DroppableElement> = T & {
   canResize?: boolean;
 };
 
-export type DroppedElement<T extends Droppable = Droppable> = T & {
-  id: string;
+export type DroppedPosition = {
+  xSpan: number;
+  ySpan: number;
   x: number;
   y: number;
 };
+
+export type DroppedElement<T extends Droppable = Droppable> = T &
+  DroppedPosition & {
+    id: string;
+  };
 
 export type DropCandidate<T extends Droppable = Droppable> = T;

@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { css, styled } from '@mui/material';
+import { gridVisibleAtom, useScopeAtomMutate } from '../context';
 
 import { Droppable } from '../types';
 import { ElementFactory } from '../element.factory';
@@ -23,12 +24,17 @@ const Container = styled(
 );
 
 export const DragLayer: React.FC = () => {
+  const setGridIsVisible = useScopeAtomMutate(gridVisibleAtom);
   const { isDragging, item, currentOffset } = useDragLayer((monitor) => ({
     item: monitor.getItem(),
     itemType: monitor.getItemType(),
     currentOffset: monitor.getSourceClientOffset(),
     isDragging: monitor.isDragging(),
   }));
+
+  React.useEffect(() => {
+    setGridIsVisible(isDragging);
+  }, [isDragging, setGridIsVisible]);
 
   if (!isDragging || !currentOffset) {
     return null;

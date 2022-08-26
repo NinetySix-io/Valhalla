@@ -4,7 +4,8 @@
     "**/*.ts",
     "src/index.tsx",
     "src/drop.zone/callback.manager.tsx",
-    "src/resizable/_stories/default.story.tsx"
+    "src/resizable/_stories/default.story.tsx",
+    "src/drop.zone/multi.drag.overlay.tsx"
   ],
   "exclude": [
     "dist",

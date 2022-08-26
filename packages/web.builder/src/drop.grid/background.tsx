@@ -32,7 +32,10 @@ const Container = styled(
   `,
 );
 
-const Divider = styled('div')<{ isVisible: boolean }>(
+const Divider = styled(
+  'div',
+  makeFilterProps(['isVisible']),
+)<{ isVisible: boolean }>(
   ({ theme, isVisible }) => css`
     opacity: ${isVisible ? 0.4 : 0};
     position: absolute;
