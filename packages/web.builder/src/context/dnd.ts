@@ -6,8 +6,6 @@ import {
 } from 'react-dnd';
 import { Droppable, DroppedElement } from '../types';
 
-import React from 'react';
-import { getEmptyImage } from 'react-dnd-html5-backend';
 import { useZoneId } from '.';
 
 /**
@@ -57,9 +55,5 @@ export function useScopeDrag<
     [zoneId, element],
   );
 
-  React.useEffect(() => {
-    preview(getEmptyImage());
-  }, [preview]);
-
-  return [drag, collected] as const;
+  return [drag, collected, preview] as const;
 }

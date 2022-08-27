@@ -60,6 +60,11 @@ const Container = styled(
       outline: none;
     `}
 
+    ${isDragging &&
+    css`
+      outline-color: transparent !important;
+    `}
+
     ${isFocus
       ? css`
           outline-color: ${mainColor};
@@ -71,11 +76,12 @@ const Container = styled(
       : css`
           &:hover {
             cursor: grab;
-            outline-color: ${mainColor};
 
             /* LABEL */
             ${!isDragging &&
             css`
+              outline-color: transparent;
+
               &:before {
                 content: '${label}';
                 top: -20px;
@@ -178,7 +184,7 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
       ]);
     }
 
-    const [drag, { isDragging, hasItem }] = useScopeDrag(element, {
+    const [drag, { isDragging, hasItem }, preview] = useScopeDrag(element, {
       end() {
         focus();
       },
@@ -199,7 +205,12 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
         {...props}
         tabIndex={0}
         color={focusColor}
-        ref={mergeRefs([ref, container, isResizing ? undefined : drag])}
+        ref={mergeRefs([
+          ref,
+          container,
+          preview,
+          isResizing ? undefined : drag,
+        ])}
         isDragging={hasItem && !isMultiCarry}
         disableResize={hasItem || isMultiCarry}
         onMouseDown={handleMouseDown}

@@ -74,20 +74,21 @@ export const DragShadow: React.FC = () => {
       cache.current = [];
       setElement(undefined);
     } else {
-      setIsVisible(true);
+      // drag preview seems to capture the outline
+      // setting the timeout is a hacky fix
+      // TODO: find a better solution
+      setTimeout(() => {
+        setIsVisible(true);
+      }, 100);
 
       // offset so it will be centered
       const offset = cellSize / 2;
       const nextX = clampX(nextOffset.x - offset, draggingElement.xSpan);
       const nextY = clampY(nextOffset.y - offset, draggingElement.ySpan);
-      if (!isMultiDrag) {
-        const nextElement = {
-          ...draggingElement,
-          x: nextX,
-          y: nextY,
-        };
+      const nextElement = { ...draggingElement, x: nextX, y: nextY };
+      setElement(nextElement);
 
-        setElement(nextElement);
+      if (!isMultiDrag) {
         cache.current = [nextElement];
       } else {
         const diffX = nextX - draggingElement.x;
@@ -99,14 +100,6 @@ export const DragShadow: React.FC = () => {
             x: item.x + diffX,
             y: item.y + diffY,
           };
-        });
-
-        setElement({
-          ...draggingElement,
-          x: nextX,
-          y: nextY,
-          type: 'box',
-          id: draggingElement.id,
         });
       }
     }
