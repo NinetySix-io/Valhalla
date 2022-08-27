@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import {
   cellSizeAtom,
-  useScopeAtomMutate,
   useScopeAtomValue,
   useScopeAtomValueFetch,
 } from '../context';
@@ -48,7 +47,6 @@ export const DragShadow: React.FC = () => {
   const clampY = useCellClampY();
   const [isVisible, setIsVisible] = React.useState(false);
   const [element, setElement] = React.useState<DroppedElement>();
-  const setDragCarry = useScopeAtomMutate(dragCarryAtom);
   const getDragCarry = useScopeAtomValueFetch(dragCarryAtom);
   const cellSize = useScopeAtomValue(cellSizeAtom);
   const cache = React.useRef<DroppedElement[]>([]);
@@ -90,7 +88,7 @@ export const DragShadow: React.FC = () => {
         };
 
         setElement(nextElement);
-        setDragCarry([nextElement]);
+        cache.current = [nextElement];
       } else {
         const diffX = nextX - draggingElement.x;
         const diffY = nextY - draggingElement.y;
