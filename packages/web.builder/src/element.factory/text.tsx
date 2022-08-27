@@ -8,5 +8,6 @@ type Props = {
 };
 
 export const TextElement: React.FC<Props> = ({ value }) => {
+  // skipcq: JS-0440
   return <div dangerouslySetInnerHTML={{ __html: value.value }} />;
 };
