@@ -8,8 +8,6 @@ import { getPosition } from '../lib/get.position';
 /**
  * It takes a maximum value and returns a function that takes a position and span and returns a clamped
  * position
- * @param {number} max - The maximum value that the position can be.
- * @returns A function that takes a position and span and returns a clamped position.
  */
 export function useCellClamp(max: number) {
   const cellSize = useScopeAtomValue(cellSizeAtom);

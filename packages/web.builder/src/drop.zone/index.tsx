@@ -5,15 +5,19 @@ import { cProps, useEvent } from '@valhalla/web.react';
 import { uniqBy, uniqueId } from '@valhalla/utilities';
 
 import type { ConnectableElement } from 'react-dnd';
+import { DragLayer } from './drag.layer';
+import { DragShadow } from './drag.shadow';
 import { DropGrid } from '../drop.grid';
 import { DropZoneItem } from './item';
 import type { DroppedElement } from '../types';
 import { MultiDragOverlay } from './multi.drag.overlay';
+import { Resizer } from '../drop.item/resizer';
 import { dragCarryAtom } from '../context/drag.carry';
 import { focusedElementAtom } from '../context/focus.element';
 import { mergeRefs } from 'react-merge-refs';
 import { useAddElement } from '../hooks/events/use.add.element';
 import { useBuilderEvents } from '../hooks/events/use.builder.events';
+import { useDragOverflowListener } from '../hooks/use.drag.overflow.listener';
 import { useDropDimension } from '../hooks/use.dimension';
 import { useListenToShiftKey } from '../context/shift.key.pressed';
 import { useScopeDrop } from '../context/dnd';
@@ -47,6 +51,7 @@ function DropZoneContent({
   const setDragCarry = useScopeAtomMutate(dragCarryAtom);
   const [, drop] = useScopeDrop();
 
+  useDragOverflowListener();
   useListenToShiftKey();
 
   useEvent(container.current, 'mouseup', (event) => {
@@ -99,6 +104,9 @@ function DropZoneContent({
         container,
       ])}
     >
+      <DragShadow />
+      <DragLayer />
+      <Resizer />
       {value?.map((element) => (
         <DropZoneItem key={element.id} element={element} />
       ))}

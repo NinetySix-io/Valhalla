@@ -3,8 +3,8 @@ import * as React from 'react';
 import { css, styled } from '@mui/material';
 
 import { dragCarryAtom } from '../context/drag.carry';
-import { getElementGridArea } from '../hooks/use.element';
-import { getOutlinedPosition } from '../lib/merge.elements';
+import { getGridArea } from '../hooks/use.element';
+import { getMaxBBox } from '../lib/get.max.bbox';
 import { makeFilterProps } from '@valhalla/web.react/src';
 import { uniqueId } from '@valhalla/utilities';
 import { useScopeAtom } from '../context';
@@ -33,11 +33,11 @@ const key = uniqueId('drag-overlay');
 export const MultiDragOverlay: React.FC & { key: string } = () => {
   const [dragCarry] = useScopeAtom(dragCarryAtom);
   const isMultiDrag = dragCarry.length > 1;
-  const element = getOutlinedPosition(dragCarry);
+  const bbox = getMaxBBox(dragCarry);
 
   const [drag, { isDragging }] = useScopeDrag(
     {
-      ...element,
+      ...bbox,
       id: key,
       type: 'box',
     },
@@ -54,7 +54,7 @@ export const MultiDragOverlay: React.FC & { key: string } = () => {
     return null;
   }
 
-  return <DraggableBox ref={drag} gridArea={getElementGridArea(element)} />;
+  return <DraggableBox ref={drag} gridArea={getGridArea(bbox)} />;
 };
 
 MultiDragOverlay.key = key;

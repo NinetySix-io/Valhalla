@@ -4,7 +4,7 @@ import { isEmpty } from '@valhalla/utilities';
 /**
  * It returns the largest rectangle that contains all the elements
  */
-export function getOutlinedPosition(
+export function getMaxBBox(
   elements: DroppedPosition[],
 ): DroppedPosition | null {
   if (isEmpty(elements)) {

@@ -5,7 +5,7 @@ describe('lib::getPosition', () => {
 
   it('get min correctly', () => {
     const input = 0;
-    expect(getPosition(input, cellSize)).toBe(1);
+    expect(getPosition(input, cellSize)).toBe(0);
   });
 
   it('get correctly', () => {

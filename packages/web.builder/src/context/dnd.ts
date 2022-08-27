@@ -10,6 +10,11 @@ import React from 'react';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { useZoneId } from '.';
 
+/**
+ * `useScopeDrop` is a hook that returns a `useDrop` hook that accepts only elements that have the same
+ * zone id as the current zone
+ * @returns A function that takes a callback and returns a function that takes an array of elements.
+ */
 export function useScopeDrop<
   T extends Droppable,
   E extends DroppedElement<T>,
@@ -18,6 +23,12 @@ export function useScopeDrop<
   return useDrop<E>(() => ({ accept: zoneId }), [zoneId]);
 }
 
+/**
+ * It's a wrapper around `useDrag` that automatically sets the `type` to the current zone ID
+ * @param {DragObject} element - The element that is being dragged.
+ * @param param - FactoryOrInstance<
+ * @returns [drag, collected] as const;
+ */
 export function useScopeDrag<
   T extends Droppable,
   DragObject extends DroppedElement<T> = DroppedElement<T>,

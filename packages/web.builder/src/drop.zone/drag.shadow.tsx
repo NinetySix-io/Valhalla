@@ -12,7 +12,7 @@ import { DroppedElement } from '../types';
 import { MultiDragOverlay } from '../drop.zone/multi.drag.overlay';
 import { builderEvents } from '../lib/events';
 import { dragCarryAtom } from '../context/drag.carry';
-import { getElementGridArea } from '../hooks/use.element';
+import { getGridArea } from '../hooks/use.element';
 import { makeFilterProps } from '@valhalla/web.react/src';
 import { useDragMonitorOffset } from '../hooks/use.drag.monitor';
 
@@ -64,15 +64,15 @@ export const DragShadow: React.FC = () => {
       // There can only be one added at a time
       if (!isMultiDrag && element && !element.id) {
         builderEvents.emit('elementAdded', {
-          type: draggingElement.type,
           ...element,
+          type: draggingElement.type,
         });
       } else if (cache.current.length > 0) {
         builderEvents.emit('elementsUpdated', cache.current);
       }
 
       cache.current = [];
-      setElement(null);
+      setElement(undefined);
     } else {
       setIsVisible(true);
 
@@ -116,7 +116,5 @@ export const DragShadow: React.FC = () => {
     return null;
   }
 
-  return (
-    <Container isVisible={isVisible} gridArea={getElementGridArea(element)} />
-  );
+  return <Container isVisible={isVisible} gridArea={getGridArea(element)} />;
 };

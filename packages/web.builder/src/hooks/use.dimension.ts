@@ -11,6 +11,10 @@ import {
 import { mergeRefs } from 'react-merge-refs';
 import useResizeObserver from 'use-resize-observer';
 
+/**
+ * It sets the container element, and then uses a resize observer to adjust the cell size when the
+ * container is resized
+ */
 export function useDropDimension() {
   const hasContainer = React.useRef(false);
   const columnsCount = useZoneContext().columnsCount;

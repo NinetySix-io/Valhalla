@@ -9,7 +9,7 @@ import { cellSizeAtom, containerAtom, useScopeAtomValue } from '../context';
  * @param {DroppedElement} element - DroppedElement
  * @returns A string of the grid area of the element.
  */
-export function getElementGridArea(element: DroppedPosition) {
+export function getGridArea(element: DroppedPosition) {
   return (
     [element.y, element.x, element.y + element.ySpan, element.x + element.xSpan]
       // grid starts at index 1, not 0
@@ -31,7 +31,7 @@ export function useElementGridArea(element: DroppedElement) {
       return;
     }
 
-    setGridArea(getElementGridArea(element));
+    setGridArea(getGridArea(element));
   }, [element, cellSize, container]);
 
   return gridArea;
