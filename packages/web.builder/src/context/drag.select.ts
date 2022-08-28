@@ -1,9 +1,13 @@
 import * as React from 'react';
 
+import { useScopeAtomMutate, useScopeAtomValue } from '.';
+
 import { XYCoord } from 'react-dnd';
 import { atom } from 'jotai';
-import { useEvent } from '@valhalla/web.react/src';
-import { useScopeAtomMutate } from '.';
+import { boxToRect } from '../lib/rectangle/box.to.rect';
+import { htmlToRect } from '../lib/rectangle/html.to.rect';
+import { isTouching } from '../lib/rectangle/collision';
+import { useEvent } from '@valhalla/web.react';
 
 /**
  * This atom records the context in which the user mousedown and start dragging
@@ -29,13 +33,18 @@ export function useDragSelectHighlight() {
   }
 
   function getCoordinates(event: MouseEvent): XYCoord {
-    return { x: event.clientX, y: event.clientY };
+    return {
+      x: event.clientX,
+      y: event.clientY,
+    };
   }
 
   useEvent(window, 'mousedown', (event) => {
     if (isSameRef(event.target)) {
-      const coordinates = getCoordinates(event);
-      mutate({ start: coordinates, end: coordinates });
+      mutate({
+        start: getCoordinates(event),
+        end: getCoordinates(event),
+      });
     }
   });
 
@@ -55,4 +64,32 @@ export function useDragSelectHighlight() {
   });
 
   return ref;
+}
+
+/**
+ * UseDragHighLightBox returns a box object that represents the current drag selection box.
+ */
+export function useDragHighLightBox() {
+  const mouse = useScopeAtomValue(dragSelectHighlightAtom);
+  if (!mouse) {
+    return null;
+  }
+
+  const width = Math.abs(mouse.end.x - mouse.start.x);
+  const height = Math.abs(mouse.end.y - mouse.start.y);
+  const left = mouse.end.x - mouse.start.x < 0 ? mouse.end.x : mouse.start.x;
+  const top = mouse.end.y - mouse.start.y < 0 ? mouse.end.y : mouse.start.y;
+  return {
+    left,
+    top,
+    width,
+    height,
+  };
+}
+
+export function useElementDragHighlight(element?: HTMLElement): boolean {
+  const box = useDragHighLightBox();
+  return box && element
+    ? isTouching(boxToRect(box), htmlToRect(element))
+    : false;
 }

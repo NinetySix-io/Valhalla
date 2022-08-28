@@ -736,6 +736,7 @@ importers:
       '@storybook/react': ^6.5.9
       '@storybook/testing-library': 0.0.13
       '@types/jest': ^28.1.4
+      '@types/lodash.inrange': ^3.3.7
       '@types/react': ^18.0.15
       '@types/react-dom': ^18.0.6
       '@valhalla/config': workspace:*
@@ -748,6 +749,7 @@ importers:
       clsx: ^1.1.1
       jest: ^28.1.0
       jotai: ^1.7.7
+      lodash.inrange: ^3.3.6
       next: 12.2.3
       optics-ts: ^2.3.0
       postcss: ^8.4.14
@@ -767,6 +769,7 @@ importers:
       '@mui/material': 5.9.2_bl6qrq6463ovzmqn4cmwv7vydq
       clsx: 1.2.1
       jotai: 1.7.7_ar3w3qm3y6brkc52g4ejgbdid4
+      lodash.inrange: 3.3.6
       next: 12.2.3_qugu52izettqdqqm5qcjcltcia
       optics-ts: 2.3.0
       react: 18.2.0
@@ -786,6 +789,7 @@ importers:
       '@storybook/react': 6.5.9_ai4vc7qeqxun337cdwurlefvdu
       '@storybook/testing-library': 0.0.13_biqbaboplfbrettd7655fr4n2y
       '@types/jest': 28.1.4
+      '@types/lodash.inrange': 3.3.7
       '@types/react': 18.0.15
       '@types/react-dom': 18.0.6
       '@valhalla/config': link:../config
@@ -9205,6 +9209,12 @@ packages:
       '@types/lodash': 4.14.182
     dev: true
 
+  /@types/lodash.inrange/3.3.7:
+    resolution: {integrity: sha512-P5T6gGPBIIwKvOQRLD+TWA28K/JXxqWqyZYIr4L9a2LIsRUC8WblTgNMOjFBfrUWFn83XIANj3pDd1uECJYtrA==}
+    dependencies:
+      '@types/lodash': 4.14.182
+    dev: true
+
   /@types/lodash.isempty/4.4.7:
     resolution: {integrity: sha512-YOzlpoIn9jrfHzjIukKnu9Le3tmi+0PhUdOt2rMpJW/4J6jX7s0HeBatXdh9QckLga8qt4EKBxVIEqtEq6pzLg==}
     dependencies:
@@ -16949,6 +16959,10 @@ packages:
 
   /lodash.includes/4.3.0:
     resolution: {integrity: sha512-W3Bx6mdkRTGtlJISOvVD/lbqjTlPPUDTMnlXZFnVwi9NKJ6tiAk6LVdlhZMm17VZisqhKcgzpO5Wz91PCt5b0w==}
+
+  /lodash.inrange/3.3.6:
+    resolution: {integrity: sha512-NqOT/CVclLZKet0ALwg1joQ/XnfxePGf8L9WKvzOcTDAI0axG3Ej24qDGwLk0ejN4AVfFvs6vY5AWBB53o5piw==}
+    dev: false
 
   /lodash.isboolean/3.0.3:
     resolution: {integrity: sha512-Bz5mupy2SVbPHURB98VAcw+aHh4vRV5IPNhILUCsOzRmsTmSQ17jIuqopAentWoehktxGd9e/hbIXq980/1QJg==}
