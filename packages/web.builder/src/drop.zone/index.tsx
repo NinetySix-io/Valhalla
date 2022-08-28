@@ -5,6 +5,7 @@ import { cProps, useEvent } from '@valhalla/web.react';
 import { uniqBy, uniqueId } from '@valhalla/utilities';
 
 import type { ConnectableElement } from 'react-dnd';
+import { DragHighlighter } from './drag.highlighter';
 import { DragLayer } from './drag.layer';
 import { DragShadow } from './drag.shadow';
 import { DropGrid } from '../drop.grid';
@@ -18,6 +19,7 @@ import { mergeRefs } from 'react-merge-refs';
 import { useAddElement } from '../hooks/events/use.add.element';
 import { useBuilderEvents } from '../hooks/events/use.builder.events';
 import { useDragOverflowListener } from '../hooks/use.drag.overflow.listener';
+import { useDragSelectHighlight } from '../context/drag.select';
 import { useDropDimension } from '../hooks/use.dimension';
 import { useListenToShiftKey } from '../context/shift.key.pressed';
 import { useScopeDrop } from '../context/dnd';
@@ -47,6 +49,7 @@ function DropZoneContent({
   const zoneId = useZoneId();
   const container = React.useRef<HTMLDivElement>();
   const dimensionRef = useDropDimension();
+  const highlightRef = useDragSelectHighlight();
   const setFocusedElement = useScopeAtomMutate(focusedElementAtom);
   const setDragCarry = useScopeAtomMutate(dragCarryAtom);
   const [, drop] = useScopeDrop();
@@ -101,6 +104,7 @@ function DropZoneContent({
       ref={mergeRefs<ConnectableElement | HTMLDivElement | undefined>([
         drop,
         dimensionRef,
+        highlightRef,
         container,
       ])}
     >
@@ -111,6 +115,7 @@ function DropZoneContent({
         <DropZoneItem key={element.id} element={element} />
       ))}
       <MultiDragOverlay />
+      <DragHighlighter />
     </DropGrid>
   );
 }

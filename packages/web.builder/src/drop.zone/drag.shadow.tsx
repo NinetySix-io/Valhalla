@@ -79,7 +79,7 @@ export const DragShadow: React.FC = () => {
       // TODO: find a better solution
       setTimeout(() => {
         setIsVisible(true);
-      }, 100);
+      }, 50);
 
       // offset so it will be centered
       const offset = cellSize / 2;
