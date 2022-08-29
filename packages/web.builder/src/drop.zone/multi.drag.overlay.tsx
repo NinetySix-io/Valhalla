@@ -7,7 +7,7 @@ import { getGridArea } from '../hooks/use.element';
 import { getMaxBBox } from '../lib/get.max.bbox';
 import { makeFilterProps } from '@valhalla/web.react/src';
 import { uniqueId } from '@valhalla/utilities';
-import { useScopeAtom } from '../context';
+import { useScopeAtomValue } from '../context';
 import { useScopeDrag } from '../context/dnd';
 
 const DraggableBox = styled(
@@ -31,9 +31,10 @@ const DraggableBox = styled(
 
 const key = uniqueId('drag-overlay');
 export const MultiDragOverlay: React.FC & { key: string } = () => {
-  const [dragCarry] = useScopeAtom(dragCarryAtom);
-  const isMultiDrag = dragCarry.length > 1;
-  const bbox = getMaxBBox(dragCarry);
+  const dragCarry = useScopeAtomValue(dragCarryAtom);
+  const carries = Object.values(dragCarry);
+  const isMultiDrag = carries.length > 1;
+  const bbox = getMaxBBox(carries);
 
   const [drag, { isDragging }] = useScopeDrag(
     {

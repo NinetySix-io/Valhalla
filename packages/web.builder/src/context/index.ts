@@ -36,7 +36,8 @@ export function useZoneId() {
 export const cellSizeAtom = atom(null as number);
 export const containerAtom = atom(null as HTMLDivElement);
 export const draggingElementAtom = atom(null as DroppedElement);
-export const gridVisibleAtom = atom(null as boolean);
+export const gridVisibleAtom = atom(false);
+export const isDraggingAtom = atom(false);
 
 /**
  * `useScopeAtom` is a hook that returns a `useAtom` hook that uses the current zone as the scope if no

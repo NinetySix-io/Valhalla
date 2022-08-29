@@ -18,7 +18,7 @@ import { focusedElementAtom } from '../context/focus.element';
 import { isNil } from '@valhalla/utilities';
 import { makeFilterProps } from '@valhalla/web.react';
 import { mergeRefs } from 'react-merge-refs';
-import { useElementDragHighlight } from '../context/drag.select';
+import { useDroppedElementRegister } from '../context/dropped.elements';
 import { useElementGridArea } from '../hooks/use.element';
 import { useScopeDrag } from '../context/dnd';
 import { useShiftKeyStateFetch } from '../context/shift.key.pressed';
@@ -130,16 +130,18 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
     const gridArea = useElementGridArea(cacheElement);
     const getIsShiftKeyDown = useShiftKeyStateFetch();
     const dragCarryMutate = useDragCarryMutate(element);
-    const { isBeingCarry, isMultiCarry } = useDragCarryState(element);
-    const isInHighlightBox = useElementDragHighlight(container.current);
+    const { isBeingCarry, isMultiCarry, isMultiDragging } =
+      useDragCarryState(element);
+
+    useDroppedElementRegister(element, container.current);
+
     // TODO: probably optimize this because it will
     // rerender when it doesn't need to.
     // It should really only rerender when it
     // is focused or when it lost focus
     const isFocus = focusedElement?.id === element.id;
     const hasFocus = !isNil(focusedElement);
-    const showOutline =
-      isFocus || isResizing || isBeingCarry || isInHighlightBox;
+    const showOutline = isFocus || isResizing || isBeingCarry;
 
     async function handleMouseDown() {
       const isShiftKeyDown = await getIsShiftKeyDown();
@@ -199,7 +201,7 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
       },
     });
 
-    if (isDragging) {
+    if (isDragging || isMultiDragging) {
       return null;
     }
 

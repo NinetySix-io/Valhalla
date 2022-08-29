@@ -1,13 +1,15 @@
 import * as React from 'react';
 
-import { useScopeAtomMutate, useScopeAtomValue } from '.';
+import { DragCarry, dragCarryAtom } from './drag.carry';
+import { useEvent, useThrottleCallback } from '@valhalla/web.react';
+import { useScopeAtomMutate, useScopeAtomValueFetch } from './index';
 
 import { XYCoord } from 'react-dnd';
 import { atom } from 'jotai';
-import { boxToRect } from '../lib/rectangle/box.to.rect';
+import { dragToRect } from '../lib/rectangle/drag.to.rect';
+import { droppedElementsAtom } from './dropped.elements';
 import { htmlToRect } from '../lib/rectangle/html.to.rect';
 import { isTouching } from '../lib/rectangle/collision';
-import { useEvent } from '@valhalla/web.react';
 
 /**
  * This atom records the context in which the user mousedown and start dragging
@@ -16,7 +18,7 @@ import { useEvent } from '@valhalla/web.react';
 export const dragSelectHighlightAtom = atom(
   null as {
     start: XYCoord;
-    end: XYCoord;
+    end?: XYCoord;
   },
 );
 
@@ -26,6 +28,25 @@ export const dragSelectHighlightAtom = atom(
 export function useDragSelectHighlight() {
   const ref = React.useRef<HTMLDivElement>();
   const mutate = useScopeAtomMutate(dragSelectHighlightAtom);
+  const getDroppedElements = useScopeAtomValueFetch(droppedElementsAtom);
+  const setDragCarry = useScopeAtomMutate(dragCarryAtom);
+
+  const processHighlightedElements = useThrottleCallback(
+    async (start: XYCoord, end: XYCoord) => {
+      const dragBox = dragToRect(start, end);
+      const elements = await getDroppedElements();
+      const nextCarry: DragCarry = {};
+      for (const key in elements) {
+        const value = elements[key];
+        if (isTouching(dragBox, htmlToRect(value.ref))) {
+          nextCarry[value.element.id] = value.element;
+        }
+      }
+
+      setDragCarry(nextCarry);
+    },
+    100,
+  );
 
   function isSameRef(target: EventTarget): target is HTMLElement {
     const element = target as HTMLElement;
@@ -43,53 +64,26 @@ export function useDragSelectHighlight() {
     if (isSameRef(event.target)) {
       mutate({
         start: getCoordinates(event),
-        end: getCoordinates(event),
       });
     }
   });
 
-  useEvent(window, 'mouseup', () => {
+  useEvent(window, 'mouseup', async () => {
     mutate(null);
   });
 
   useEvent(window, 'mousemove', (event) => {
-    mutate((current) =>
-      !current
-        ? null
-        : {
-            ...current,
-            end: getCoordinates(event),
-          },
-    );
+    mutate((current) => {
+      if (current) {
+        const start = current.start;
+        const end = getCoordinates(event);
+        processHighlightedElements(start, end);
+        return { start, end };
+      }
+
+      return current;
+    });
   });
 
   return ref;
-}
-
-/**
- * UseDragHighLightBox returns a box object that represents the current drag selection box.
- */
-export function useDragHighLightBox() {
-  const mouse = useScopeAtomValue(dragSelectHighlightAtom);
-  if (!mouse) {
-    return null;
-  }
-
-  const width = Math.abs(mouse.end.x - mouse.start.x);
-  const height = Math.abs(mouse.end.y - mouse.start.y);
-  const left = mouse.end.x - mouse.start.x < 0 ? mouse.end.x : mouse.start.x;
-  const top = mouse.end.y - mouse.start.y < 0 ? mouse.end.y : mouse.start.y;
-  return {
-    left,
-    top,
-    width,
-    height,
-  };
-}
-
-export function useElementDragHighlight(element?: HTMLElement): boolean {
-  const box = useDragHighLightBox();
-  return box && element
-    ? isTouching(boxToRect(box), htmlToRect(element))
-    : false;
 }

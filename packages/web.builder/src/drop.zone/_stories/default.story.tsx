@@ -62,15 +62,15 @@ const args: Props = {
       xSpan: 3,
       ySpan: 1,
     },
-    // {
-    //   id: uniqueId('item'),
-    //   type: 'text',
-    //   value: '<span>test 2<span/>',
-    //   x: 0,
-    //   y: 0,
-    //   xSpan: 3,
-    //   ySpan: 3,
-    // },
+    {
+      id: uniqueId('item'),
+      type: 'text',
+      value: '<span>test 2<span/>',
+      x: 0,
+      y: 0,
+      xSpan: 3,
+      ySpan: 3,
+    },
   ],
 };
 

@@ -6,7 +6,7 @@ import {
 } from 'react-dnd';
 import { Droppable, DroppedElement } from '../types';
 
-import { useZoneId } from '.';
+import { useZoneId } from './index';
 
 /**
  * `useScopeDrop` is a hook that returns a `useDrop` hook that accepts only elements that have the same

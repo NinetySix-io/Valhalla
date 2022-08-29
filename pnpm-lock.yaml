@@ -737,6 +737,7 @@ importers:
       '@storybook/testing-library': 0.0.13
       '@types/jest': ^28.1.4
       '@types/lodash.inrange': ^3.3.7
+      '@types/lodash.keyby': ^4.6.7
       '@types/react': ^18.0.15
       '@types/react-dom': ^18.0.6
       '@valhalla/config': workspace:*
@@ -747,9 +748,11 @@ importers:
       autoprefixer: ^10.4.7
       babel-loader: ^8.2.5
       clsx: ^1.1.1
+      immer: ^9.0.15
       jest: ^28.1.0
       jotai: ^1.7.7
       lodash.inrange: ^3.3.6
+      lodash.keyby: ^4.6.0
       next: 12.2.3
       optics-ts: ^2.3.0
       postcss: ^8.4.14
@@ -768,8 +771,10 @@ importers:
       '@emotion/styled': 11.9.3_y2x62d5bbinncmisoeyv36jqse
       '@mui/material': 5.9.2_bl6qrq6463ovzmqn4cmwv7vydq
       clsx: 1.2.1
-      jotai: 1.7.7_ar3w3qm3y6brkc52g4ejgbdid4
+      immer: 9.0.15
+      jotai: 1.7.7_g2tvoag6yffowi53uf3ndtbhy4
       lodash.inrange: 3.3.6
+      lodash.keyby: 4.6.0
       next: 12.2.3_qugu52izettqdqqm5qcjcltcia
       optics-ts: 2.3.0
       react: 18.2.0
@@ -790,6 +795,7 @@ importers:
       '@storybook/testing-library': 0.0.13_biqbaboplfbrettd7655fr4n2y
       '@types/jest': 28.1.4
       '@types/lodash.inrange': 3.3.7
+      '@types/lodash.keyby': 4.6.7
       '@types/react': 18.0.15
       '@types/react-dom': 18.0.6
       '@valhalla/config': link:../config
@@ -16451,7 +16457,7 @@ packages:
       '@panva/asn1.js': 1.0.0
     dev: false
 
-  /jotai/1.7.7_ar3w3qm3y6brkc52g4ejgbdid4:
+  /jotai/1.7.7_g2tvoag6yffowi53uf3ndtbhy4:
     resolution: {integrity: sha512-UK1fzkR2vq62rUL7iHlMkjkKj49AEU9iOm2xwfgPAeMJ8GIzKrEiKQC81w+O4dlNCjmCIi9UVkV75dADqccVCw==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
@@ -16486,6 +16492,7 @@ packages:
         optional: true
     dependencies:
       '@babel/core': 7.18.9
+      immer: 9.0.15
       optics-ts: 2.3.0
       react: 18.2.0
     dev: false

@@ -1,7 +1,11 @@
 import * as React from 'react';
 
 import { css, styled } from '@mui/material';
-import { gridVisibleAtom, useScopeAtomMutate } from '../../context';
+import {
+  gridVisibleAtom,
+  isDraggingAtom,
+  useScopeAtomMutate,
+} from '../../context';
 
 import { Droppable } from '../../types';
 import { makeFilterProps } from '@valhalla/web.react/src';
@@ -29,6 +33,7 @@ const Container = styled(Positioner)(
 
 export const DragLayer: React.FC = () => {
   const setGridIsVisible = useScopeAtomMutate(gridVisibleAtom);
+  const setIsDragging = useScopeAtomMutate(isDraggingAtom);
   const { isDragging, currentOffset, item } = useDragLayer((monitor) => ({
     item: monitor.getItem(),
     itemType: monitor.getItemType(),
@@ -38,7 +43,8 @@ export const DragLayer: React.FC = () => {
 
   React.useEffect(() => {
     setGridIsVisible(isDragging);
-  }, [isDragging, setGridIsVisible]);
+    setIsDragging(isDragging);
+  }, [isDragging, setGridIsVisible, setIsDragging]);
 
   if (!isDragging || !currentOffset) {
     return null;

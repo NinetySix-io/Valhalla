@@ -1,7 +1,6 @@
 import * as React from 'react';
 
-import { ZoneContext, useScopeAtomMutate, useZoneId } from '../context';
-import { cProps, useEvent } from '@valhalla/web.react';
+import { ZoneContext, useZoneId } from '../context';
 import { uniqBy, uniqueId } from '@valhalla/utilities';
 
 import type { ConnectableElement } from 'react-dnd';
@@ -13,16 +12,17 @@ import { DropZoneItem } from './item';
 import type { DroppedElement } from '../types';
 import { MultiDragOverlay } from './multi.drag.overlay';
 import { Resizer } from '../drop.item/resizer';
-import { dragCarryAtom } from '../context/drag.carry';
-import { focusedElementAtom } from '../context/focus.element';
+import { cProps } from '@valhalla/web.react';
 import { mergeRefs } from 'react-merge-refs';
 import { useAddElement } from '../hooks/events/use.add.element';
 import { useBuilderEvents } from '../hooks/events/use.builder.events';
+import { useContainerClick } from './hooks/use.container.click';
 import { useDragOverflowListener } from '../hooks/use.drag.overflow.listener';
 import { useDragSelectHighlight } from '../context/drag.select';
 import { useDropDimension } from '../hooks/use.dimension';
 import { useListenToShiftKey } from '../context/shift.key.pressed';
 import { useScopeDrop } from '../context/dnd';
+import { useSyncDragCarry } from './hooks/use.sync.drag.carry';
 import { useUpdateElement } from '../hooks/events/use.update.element';
 
 type Props = cProps<{
@@ -50,24 +50,12 @@ function DropZoneContent({
   const container = React.useRef<HTMLDivElement>();
   const dimensionRef = useDropDimension();
   const highlightRef = useDragSelectHighlight();
-  const setFocusedElement = useScopeAtomMutate(focusedElementAtom);
-  const setDragCarry = useScopeAtomMutate(dragCarryAtom);
   const [, drop] = useScopeDrop();
 
   useDragOverflowListener();
   useListenToShiftKey();
-
-  useEvent(container.current, 'mouseup', (event) => {
-    /**
-     * If clicking outside of the element, in this case, the zone,
-     * it would lose focus
-     */
-    const target = event.target as HTMLElement;
-    if (container.current.isSameNode(target)) {
-      setFocusedElement(undefined);
-      setDragCarry([]);
-    }
-  });
+  useContainerClick(container.current);
+  useSyncDragCarry(value);
 
   useBuilderEvents('elementDragging', (element) =>
     onDragging?.(element.isDragging, zoneId),
@@ -88,14 +76,6 @@ function DropZoneContent({
   useAddElement((element) => {
     onAddItem?.(element);
   });
-
-  React.useEffect(() => {
-    setDragCarry((current) =>
-      current
-        .map((element) => value?.find((item) => item.id === element.id))
-        .filter((element) => element !== undefined),
-    );
-  }, [value, setDragCarry]);
 
   return (
     <DropGrid

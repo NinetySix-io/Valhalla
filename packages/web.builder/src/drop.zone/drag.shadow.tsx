@@ -94,7 +94,7 @@ export const DragShadow: React.FC = () => {
         const diffX = nextX - draggingElement.x;
         const diffY = nextY - draggingElement.y;
         const dragCarry = await getDragCarry();
-        cache.current = dragCarry.map((item): DroppedElement => {
+        cache.current = Object.values(dragCarry).map((item): DroppedElement => {
           return {
             ...item,
             x: item.x + diffX,
