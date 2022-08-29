@@ -4,7 +4,7 @@ import { Logger } from '@nestjs/common';
 import { ModuleMetadata } from '@nestjs/common';
 import { Provider } from '@nestjs/common';
 import fs from 'fs';
-import { isEmpty } from '@valhalla/utilities';
+import isEmpty from 'lodash.isempty';
 import path from 'path';
 import { promisify } from 'util';
 

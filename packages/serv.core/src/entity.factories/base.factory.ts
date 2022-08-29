@@ -1,5 +1,4 @@
 import { DocumentType, ReturnModelType } from '@typegoose/typegoose';
-import { OmitRecursively, isNil, omitBy } from '@valhalla/utilities';
 import mongoose, {
   FilterQuery,
   QueryOptions,
@@ -10,6 +9,9 @@ import mongoose, {
 import { AnyParamConstructor } from '@typegoose/typegoose/lib/types';
 import { BaseSchema } from './base.schema';
 import { InternalServerErrorException } from '@nestjs/common';
+import { OmitRecursively } from '@valhalla/utilities';
+import isNil from 'lodash.isnil';
+import omitBy from 'lodash.omitby';
 import { tryNice } from 'try-nice';
 
 export type ModelType<TModel extends BaseSchema> = ReturnModelType<

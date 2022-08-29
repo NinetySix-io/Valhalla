@@ -1,7 +1,7 @@
 import { isEmail, isPhoneNumber } from 'class-validator';
 
 import { ValidatorOption } from './types';
-import { isEmpty } from '@valhalla/utilities';
+import isEmpty from 'lodash.isempty';
 import { isObjectIdOrHexString } from 'mongoose';
 
 export const EmailParamValidation: ValidatorOption<string> = {

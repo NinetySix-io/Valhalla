@@ -1,7 +1,8 @@
 import { Logger } from '@nestjs/common';
 import dotenv from 'dotenv';
-import { isEmpty } from '@valhalla/utilities';
+import isEmpty from 'lodash.isempty';
 import path from 'path';
+
 /**
  * It loads the .env file from the root of the project, if it exists
  */
