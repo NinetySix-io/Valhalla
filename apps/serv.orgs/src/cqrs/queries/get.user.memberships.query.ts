@@ -8,7 +8,7 @@ import { OrgMembersModel } from '@app/entities/org.members';
 import { OrganizationTransformer } from '@app/entities/organizations/transformer';
 import { OrganizationsModel } from '@app/entities/organizations';
 import { RpcHandler } from '@valhalla/serv.core';
-import { isEmpty } from '@valhalla/utilities';
+import isEmpty from 'lodash.isempty';
 
 export class GetUserMembershipsQuery implements IQuery {
   constructor(public readonly request: GetUserMembershipsRequest) {}

@@ -6,7 +6,7 @@ import { FilterQuery } from 'mongoose';
 import { OrganizationSchema } from '@app/entities/organizations/schema';
 import { OrganizationTransformer } from '@app/entities/organizations/transformer';
 import { OrganizationsModel } from '@app/entities/organizations';
-import { isEmpty } from '@valhalla/utilities';
+import isEmpty from 'lodash.isempty';
 
 export class GetOrgQuery implements IQuery {
   constructor(public readonly request: GetOrgRequest) {}
