@@ -650,69 +650,21 @@ importers:
   packages/utilities:
     specifiers:
       '@nestjs/cli': ^8.2.5
-      '@types/lodash.compact': ^3.0.7
-      '@types/lodash.debounce': ^4.0.7
-      '@types/lodash.isempty': ^4.4.7
-      '@types/lodash.maxby': ^4.6.7
-      '@types/lodash.minby': ^4.6.7
-      '@types/lodash.omit': ^4.5.7
-      '@types/lodash.omitby': ^4.6.7
-      '@types/lodash.pick': ^4.4.7
-      '@types/lodash.pickby': ^4.6.7
-      '@types/lodash.throttle': ^4.1.7
-      '@types/lodash.uniqby': ^4.7.7
-      '@types/lodash.uniqueid': ^4.0.7
       '@valhalla/config': workspace:*
       '@valhalla/tsconfig': workspace:*
       add: ^2.0.6
       class-validator: ^0.13.2
       jest: ^28.1.0
-      lodash.compact: ^3.0.1
-      lodash.debounce: ^4.0.8
-      lodash.isempty: ^4.4.0
-      lodash.maxby: ^4.6.0
-      lodash.minby: ^4.6.0
-      lodash.omit: ^4.5.0
-      lodash.omitby: ^4.6.0
-      lodash.pick: ^4.4.0
-      lodash.pickby: ^4.6.0
-      lodash.throttle: ^4.1.1
-      lodash.uniqby: ^4.7.0
-      lodash.uniqueid: ^4.0.1
       pnpm: ^7.1.9
       slugify: ^1.6.5
       superstruct: ^0.15.4
       typescript: ^4.7.4
     dependencies:
       class-validator: 0.13.2
-      lodash.compact: 3.0.1
-      lodash.debounce: 4.0.8
-      lodash.isempty: 4.4.0
-      lodash.maxby: 4.6.0
-      lodash.minby: 4.6.0
-      lodash.omit: 4.5.0
-      lodash.omitby: 4.6.0
-      lodash.pick: 4.4.0
-      lodash.pickby: 4.6.0
-      lodash.throttle: 4.1.1
-      lodash.uniqby: 4.7.0
-      lodash.uniqueid: 4.0.1
       slugify: 1.6.5
       superstruct: 0.15.5
     devDependencies:
       '@nestjs/cli': 8.2.8
-      '@types/lodash.compact': 3.0.7
-      '@types/lodash.debounce': 4.0.7
-      '@types/lodash.isempty': 4.4.7
-      '@types/lodash.maxby': 4.6.7
-      '@types/lodash.minby': 4.6.7
-      '@types/lodash.omit': 4.5.7
-      '@types/lodash.omitby': 4.6.7
-      '@types/lodash.pick': 4.4.7
-      '@types/lodash.pickby': 4.6.7
-      '@types/lodash.throttle': 4.1.7
-      '@types/lodash.uniqby': 4.7.7
-      '@types/lodash.uniqueid': 4.0.7
       '@valhalla/config': link:../config
       '@valhalla/tsconfig': link:../tsconfig
       add: 2.0.6
@@ -9217,18 +9169,6 @@ packages:
       '@types/lodash': 4.14.182
     dev: true
 
-  /@types/lodash.compact/3.0.7:
-    resolution: {integrity: sha512-yHP+S4QY9C/OLWc+Ei7A1rdwGcBgwFOaW20eZU8qA42dNRwUWnGltDAmKg5ICVGrgJKTokv0gsz1dsQl1gKA2w==}
-    dependencies:
-      '@types/lodash': 4.14.182
-    dev: true
-
-  /@types/lodash.debounce/4.0.7:
-    resolution: {integrity: sha512-X1T4wMZ+gT000M2/91SYj0d/7JfeNZ9PeeOldSNoE/lunLeQXKvkmIumI29IaKMotU/ln/McOIvgzZcQ/3TrSA==}
-    dependencies:
-      '@types/lodash': 4.14.182
-    dev: true
-
   /@types/lodash.isempty/4.4.7:
     resolution: {integrity: sha512-YOzlpoIn9jrfHzjIukKnu9Le3tmi+0PhUdOt2rMpJW/4J6jX7s0HeBatXdh9QckLga8qt4EKBxVIEqtEq6pzLg==}
     dependencies:
@@ -9247,44 +9187,14 @@ packages:
       '@types/lodash': 4.14.182
     dev: true
 
-  /@types/lodash.maxby/4.6.7:
-    resolution: {integrity: sha512-IEAUqiNm6L+dKSAx1StBfl+EUT3kMoLKDslTOxzkTlb2HYldIqcQOgavuRdqlTI2yKzSVRZM2ZZbRvKuEpaQaQ==}
-    dependencies:
-      '@types/lodash': 4.14.182
-    dev: true
-
-  /@types/lodash.minby/4.6.7:
-    resolution: {integrity: sha512-xTsh2c3zn711K0SjV5v9jndFBToyQqCaXoA6oLezfzRauR8RPypBOm0qXqfOLCjgFaBWSyYh6EWEBveVI58Dyg==}
-    dependencies:
-      '@types/lodash': 4.14.182
-    dev: true
-
   /@types/lodash.omit/4.5.7:
     resolution: {integrity: sha512-6q6cNg0tQ6oTWjSM+BcYMBhan54P/gLqBldG4AuXd3nKr0oeVekWNS4VrNEu3BhCSDXtGapi7zjhnna0s03KpA==}
     dependencies:
       '@types/lodash': 4.14.182
     dev: true
 
-  /@types/lodash.omitby/4.6.7:
-    resolution: {integrity: sha512-gxxisaIRA49gLXRdORTVTb/3iq1sUGDG2LfLwldKEICC+xhJ4OELb/FNRYkKGTB0O+h6pQWhebvYSXXik8/vdg==}
-    dependencies:
-      '@types/lodash': 4.14.182
-    dev: true
-
   /@types/lodash.pick/4.4.7:
     resolution: {integrity: sha512-HgdyKz7/1+oeoVzbpu1XiX/Bti9AUksHtOILH38T07aKvqoirzcdOsrO2+Yg3L51Hv/8m1MetvHZEUGeABiTiQ==}
-    dependencies:
-      '@types/lodash': 4.14.182
-    dev: true
-
-  /@types/lodash.pickby/4.6.7:
-    resolution: {integrity: sha512-4ebXRusuLflfscbD0PUX4eVknDHD9Yf+uMtBIvA/hrnTqeAzbuHuDjvnYriLjUrI9YrhCPVKUf4wkRSXJQ6gig==}
-    dependencies:
-      '@types/lodash': 4.14.182
-    dev: true
-
-  /@types/lodash.throttle/4.1.7:
-    resolution: {integrity: sha512-znwGDpjCHQ4FpLLx19w4OXDqq8+OvREa05H89obtSyXyOFKL3dDjCslsmfBz0T2FU8dmf5Wx1QvogbINiGIu9g==}
     dependencies:
       '@types/lodash': 4.14.182
     dev: true
@@ -16965,12 +16875,9 @@ packages:
     resolution: {integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==}
     dev: false
 
-  /lodash.compact/3.0.1:
-    resolution: {integrity: sha512-2ozeiPi+5eBXW1CLtzjk8XQFhQOEMwwfxblqeq6EGyTxZJ1bPATqilY0e6g2SLQpP4KuMeuioBhEnWz5Pr7ICQ==}
-    dev: false
-
   /lodash.debounce/4.0.8:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
+    dev: true
 
   /lodash.get/4.4.2:
     resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
@@ -17006,10 +16913,6 @@ packages:
     resolution: {integrity: sha512-PRe4Cn20oJM2Sn6ljcZMeKgyhTHpzvzFmdsp9rK+6K0eJs6Tws0MqgGFpfX/o2HjcoQcBny1Eik9W7BnVTzjIQ==}
     dev: false
 
-  /lodash.maxby/4.6.0:
-    resolution: {integrity: sha512-QfTqQTwzmKxLy7VZlbx2M/ipWv8DCQ2F5BI/MRxLharOQ5V78yMSuB+JE+EuUM22txYfj09R2Q7hUlEYj7KdNg==}
-    dev: false
-
   /lodash.memoize/4.1.2:
     resolution: {integrity: sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag==}
     dev: true
@@ -17017,16 +16920,8 @@ packages:
   /lodash.merge/4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
 
-  /lodash.minby/4.6.0:
-    resolution: {integrity: sha512-/BQsNmceLCn6priGkiihvV5w/G9da7tqI6Wb4rS+PeaZcsFOv4PjNRs9/3ZQPY1sqpfhRtJQkAYLiaohlTUt0g==}
-    dev: false
-
   /lodash.omit/4.5.0:
     resolution: {integrity: sha512-XeqSp49hNGmlkj2EJlfrQFIzQ6lXdNro9sddtQzcJY8QaoC2GO0DT7xaIokHeyM+mIT0mPMlPvkYzg2xCuHdZg==}
-    dev: false
-
-  /lodash.omitby/4.6.0:
-    resolution: {integrity: sha512-5OrRcIVR75M288p4nbI2WLAf3ndw2GD9fyNv3Bc15+WCxJDdZ4lYndSxGd7hnG6PVjiJTeJE2dHEGhIuKGicIQ==}
     dev: false
 
   /lodash.once/4.1.1:
@@ -17034,17 +16929,10 @@ packages:
 
   /lodash.pick/4.4.0:
     resolution: {integrity: sha512-hXt6Ul/5yWjfklSGvLQl8vM//l3FtyHZeuelpzK6mm99pNvN9yTDruNZPEJZD1oWrqo+izBmB7oUfWgcCX7s4Q==}
-
-  /lodash.pickby/4.6.0:
-    resolution: {integrity: sha512-AZV+GsS/6ckvPOVQPXSiFFacKvKB4kOQu6ynt9wz0F3LO4R9Ij4K1ddYsIytDpSgLz88JHd9P+oaLeej5/Sl7Q==}
-    dev: false
+    dev: true
 
   /lodash.sortby/4.7.0:
     resolution: {integrity: sha512-HDWXG8isMntAyRF5vZ7xKuEvOhT4AhlRt/3czTSjvGUxjYCBVRQY48ViDHyfYz9VIoBkW4TMGQNapx+l3RUwdA==}
-    dev: false
-
-  /lodash.throttle/4.1.1:
-    resolution: {integrity: sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==}
     dev: false
 
   /lodash.uniq/4.5.0:
