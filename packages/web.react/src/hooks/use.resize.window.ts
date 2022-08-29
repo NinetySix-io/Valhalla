@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { debounce } from '@valhalla/utilities';
+import debounce from 'lodash.debounce';
 
 /**
  * Hook for window resize event

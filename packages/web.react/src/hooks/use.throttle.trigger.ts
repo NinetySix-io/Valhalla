@@ -1,6 +1,6 @@
 import React, { DependencyList } from 'react';
 
-import { throttle } from '@valhalla/utilities';
+import throttle from 'lodash.throttle';
 
 export const useThrottleTrigger = (
   fn: () => void,
