@@ -1,8 +1,8 @@
-import { isEmpty, isNil } from '@valhalla/utilities';
-
 import { DroppedElement } from '../../types';
 import React from 'react';
 import { dragCarryAtom } from '../../context/drag.carry';
+import isEmpty from 'lodash.isempty';
+import isNil from 'lodash.isnil';
 import keyBy from 'lodash.keyby';
 import { useScopeAtomMutate } from '../../context';
 

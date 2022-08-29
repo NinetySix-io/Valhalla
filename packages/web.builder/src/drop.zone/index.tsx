@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { ZoneContext, useZoneId } from '../context';
-import { uniqBy, uniqueId } from '@valhalla/utilities';
 
 import type { ConnectableElement } from 'react-dnd';
 import { DragHighlighter } from './drag.highlighter';
@@ -14,6 +13,8 @@ import { MultiDragOverlay } from './multi.drag.overlay';
 import { Resizer } from '../drop.item/resizer';
 import { cProps } from '@valhalla/web.react';
 import { mergeRefs } from 'react-merge-refs';
+import uniqueBy from 'lodash.uniqby';
+import uniqueId from 'lodash.uniqueid';
 import { useAddElement } from '../hooks/events/use.add.element';
 import { useBuilderEvents } from '../hooks/events/use.builder.events';
 import { useContainerClick } from './hooks/use.container.click';
@@ -70,7 +71,7 @@ function DropZoneContent({
   );
 
   useUpdateElement((elements) => {
-    onUpdateItems?.(uniqBy(elements.concat(value), (element) => element.id));
+    onUpdateItems?.(uniqueBy(elements.concat(value), (element) => element.id));
   });
 
   useAddElement((element) => {

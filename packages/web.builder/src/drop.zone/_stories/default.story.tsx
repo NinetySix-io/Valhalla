@@ -6,7 +6,7 @@ import { DropZone } from '../index';
 import type { DroppedElement } from '../../types';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { styled } from '@mui/material';
-import { uniqueId } from '@valhalla/utilities';
+import uniqueId from 'lodash.uniqueid';
 
 type ComponentType = typeof DropZone;
 type Props = React.ComponentProps<ComponentType>;

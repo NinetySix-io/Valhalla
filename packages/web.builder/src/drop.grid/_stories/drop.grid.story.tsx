@@ -1,13 +1,14 @@
 import * as React from 'react';
 
 import { ZoneContext, gridVisibleAtom, useScopeAtom } from '../../context';
-import { pick, uniqueId } from '@valhalla/utilities';
 
 import { DndProvider } from 'react-dnd';
 import { DropGrid } from '../index';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
+import pick from 'lodash.pick';
 import { storiesOf } from '@storybook/react';
+import uniqueId from 'lodash.uniqueid';
 import { useDropDimension } from '../../hooks/use.dimension';
 
 type ComponentType = typeof DropGrid;

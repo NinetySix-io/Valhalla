@@ -1,5 +1,5 @@
 import { DroppedPosition } from '../types';
-import { isEmpty } from '@valhalla/utilities';
+import isEmpty from 'lodash.isempty';
 
 /**
  * It returns the largest rectangle that contains all the elements

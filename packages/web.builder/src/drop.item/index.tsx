@@ -15,7 +15,7 @@ import { Resizer } from './resizer';
 import { builderEvents } from '../lib/events';
 import { calculateResize } from '../lib/calculate.resize';
 import { focusedElementAtom } from '../context/focus.element';
-import { isNil } from '@valhalla/utilities';
+import isNil from 'lodash.isnil';
 import { makeFilterProps } from '@valhalla/web.react';
 import { mergeRefs } from 'react-merge-refs';
 import { useDroppedElementRegister } from '../context/dropped.elements';

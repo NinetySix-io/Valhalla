@@ -6,7 +6,7 @@ import { makeFilterProps, useEvent } from '@valhalla/web.react';
 
 import { DIRECTION } from './directions';
 import { Size } from '../types';
-import { isNil } from '@valhalla/utilities';
+import isNil from 'lodash.isnil';
 import { mergeRefs } from 'react-merge-refs';
 
 const Container = styled('div')(

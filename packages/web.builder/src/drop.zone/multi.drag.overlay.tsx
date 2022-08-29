@@ -6,7 +6,7 @@ import { dragCarryAtom } from '../context/drag.carry';
 import { getGridArea } from '../hooks/use.element';
 import { getMaxBBox } from '../lib/get.max.bbox';
 import { makeFilterProps } from '@valhalla/web.react/src';
-import { uniqueId } from '@valhalla/utilities';
+import uniqueId from 'lodash.uniqueid';
 import { useScopeAtomValue } from '../context';
 import { useScopeDrag } from '../context/dnd';
 

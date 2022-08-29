@@ -2,7 +2,7 @@ import { isDraggingAtom, useScopeAtomMutate, useScopeAtomValue } from '.';
 
 import { DroppedElement } from '../types';
 import { atom } from 'jotai';
-import { omit } from '@valhalla/utilities';
+import omit from 'lodash.omit';
 
 export type DragCarry = Record<DroppedElement['id'], DroppedElement>;
 export const dragCarryAtom = atom({} as DragCarry);

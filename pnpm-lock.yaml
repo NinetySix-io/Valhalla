@@ -736,8 +736,13 @@ importers:
       '@storybook/react': ^6.5.9
       '@storybook/testing-library': 0.0.13
       '@types/jest': ^28.1.4
-      '@types/lodash.inrange': ^3.3.7
+      '@types/lodash.isempty': ^4.4.7
+      '@types/lodash.isnil': ^4.0.7
       '@types/lodash.keyby': ^4.6.7
+      '@types/lodash.omit': ^4.5.7
+      '@types/lodash.pick': ^4.4.7
+      '@types/lodash.uniqby': ^4.7.7
+      '@types/lodash.uniqueid': ^4.0.7
       '@types/react': ^18.0.15
       '@types/react-dom': ^18.0.6
       '@valhalla/config': workspace:*
@@ -747,14 +752,16 @@ importers:
       '@welldone-software/why-did-you-render': ^7.0.1
       autoprefixer: ^10.4.7
       babel-loader: ^8.2.5
-      clsx: ^1.1.1
-      immer: ^9.0.15
       jest: ^28.1.0
       jotai: ^1.7.7
-      lodash.inrange: ^3.3.6
+      lodash.isempty: ^4.4.0
+      lodash.isnil: ^4.0.0
       lodash.keyby: ^4.6.0
+      lodash.omit: ^4.5.0
+      lodash.pick: ^4.4.0
+      lodash.uniqby: ^4.7.0
+      lodash.uniqueid: ^4.0.1
       next: 12.2.3
-      optics-ts: ^2.3.0
       postcss: ^8.4.14
       react: ^18.2.0
       react-dnd: ^16.0.1
@@ -770,13 +777,14 @@ importers:
       '@emotion/react': 11.9.3_szkdlbnthht4v3jvm76fn7u6na
       '@emotion/styled': 11.9.3_y2x62d5bbinncmisoeyv36jqse
       '@mui/material': 5.9.2_bl6qrq6463ovzmqn4cmwv7vydq
-      clsx: 1.2.1
-      immer: 9.0.15
-      jotai: 1.7.7_g2tvoag6yffowi53uf3ndtbhy4
-      lodash.inrange: 3.3.6
+      jotai: 1.7.7_lxeixztqul6ae7cp3cpkyxlhzm
+      lodash.isempty: 4.4.0
+      lodash.isnil: 4.0.0
       lodash.keyby: 4.6.0
+      lodash.omit: 4.5.0
+      lodash.uniqby: 4.7.0
+      lodash.uniqueid: 4.0.1
       next: 12.2.3_qugu52izettqdqqm5qcjcltcia
-      optics-ts: 2.3.0
       react: 18.2.0
       react-dnd: 16.0.1_3hx2ussxxho4jajbwrd6gq34qe
       react-dnd-html5-backend: 16.0.1
@@ -794,8 +802,13 @@ importers:
       '@storybook/react': 6.5.9_ai4vc7qeqxun337cdwurlefvdu
       '@storybook/testing-library': 0.0.13_biqbaboplfbrettd7655fr4n2y
       '@types/jest': 28.1.4
-      '@types/lodash.inrange': 3.3.7
+      '@types/lodash.isempty': 4.4.7
+      '@types/lodash.isnil': 4.0.7
       '@types/lodash.keyby': 4.6.7
+      '@types/lodash.omit': 4.5.7
+      '@types/lodash.pick': 4.4.7
+      '@types/lodash.uniqby': 4.7.7
+      '@types/lodash.uniqueid': 4.0.7
       '@types/react': 18.0.15
       '@types/react-dom': 18.0.6
       '@valhalla/config': link:../config
@@ -806,6 +819,7 @@ importers:
       autoprefixer: 10.4.7_postcss@8.4.14
       babel-loader: 8.2.5_y3lv6tn6yokher4u7xj4j22px4
       jest: 28.1.2
+      lodash.pick: 4.4.0
       postcss: 8.4.14
       ts-jest: 28.0.8_mxban53brdvjhgsk3oxkfydet4
       typescript: 4.8.2
@@ -9215,14 +9229,14 @@ packages:
       '@types/lodash': 4.14.182
     dev: true
 
-  /@types/lodash.inrange/3.3.7:
-    resolution: {integrity: sha512-P5T6gGPBIIwKvOQRLD+TWA28K/JXxqWqyZYIr4L9a2LIsRUC8WblTgNMOjFBfrUWFn83XIANj3pDd1uECJYtrA==}
+  /@types/lodash.isempty/4.4.7:
+    resolution: {integrity: sha512-YOzlpoIn9jrfHzjIukKnu9Le3tmi+0PhUdOt2rMpJW/4J6jX7s0HeBatXdh9QckLga8qt4EKBxVIEqtEq6pzLg==}
     dependencies:
       '@types/lodash': 4.14.182
     dev: true
 
-  /@types/lodash.isempty/4.4.7:
-    resolution: {integrity: sha512-YOzlpoIn9jrfHzjIukKnu9Le3tmi+0PhUdOt2rMpJW/4J6jX7s0HeBatXdh9QckLga8qt4EKBxVIEqtEq6pzLg==}
+  /@types/lodash.isnil/4.0.7:
+    resolution: {integrity: sha512-jMMa3G3nJCk+agAWJmrmpr4dYurU6F5SdhQuouhFxKE3mdmqI0lLAI6G72NBW+sxfLVnxZymjqj5nRwonqASZw==}
     dependencies:
       '@types/lodash': 4.14.182
     dev: true
@@ -16457,7 +16471,7 @@ packages:
       '@panva/asn1.js': 1.0.0
     dev: false
 
-  /jotai/1.7.7_g2tvoag6yffowi53uf3ndtbhy4:
+  /jotai/1.7.7_lxeixztqul6ae7cp3cpkyxlhzm:
     resolution: {integrity: sha512-UK1fzkR2vq62rUL7iHlMkjkKj49AEU9iOm2xwfgPAeMJ8GIzKrEiKQC81w+O4dlNCjmCIi9UVkV75dADqccVCw==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
@@ -16492,8 +16506,6 @@ packages:
         optional: true
     dependencies:
       '@babel/core': 7.18.9
-      immer: 9.0.15
-      optics-ts: 2.3.0
       react: 18.2.0
     dev: false
 
@@ -16967,10 +16979,6 @@ packages:
   /lodash.includes/4.3.0:
     resolution: {integrity: sha512-W3Bx6mdkRTGtlJISOvVD/lbqjTlPPUDTMnlXZFnVwi9NKJ6tiAk6LVdlhZMm17VZisqhKcgzpO5Wz91PCt5b0w==}
 
-  /lodash.inrange/3.3.6:
-    resolution: {integrity: sha512-NqOT/CVclLZKet0ALwg1joQ/XnfxePGf8L9WKvzOcTDAI0axG3Ej24qDGwLk0ejN4AVfFvs6vY5AWBB53o5piw==}
-    dev: false
-
   /lodash.isboolean/3.0.3:
     resolution: {integrity: sha512-Bz5mupy2SVbPHURB98VAcw+aHh4vRV5IPNhILUCsOzRmsTmSQ17jIuqopAentWoehktxGd9e/hbIXq980/1QJg==}
 
@@ -16980,6 +16988,10 @@ packages:
 
   /lodash.isinteger/4.0.4:
     resolution: {integrity: sha512-DBwtEWN2caHQ9/imiNeEA5ys1JoRtRfY3d7V9wkqtbycnAmTvRRmbHKDV4a0EYc678/dia0jrte4tjYwVBaZUA==}
+
+  /lodash.isnil/4.0.0:
+    resolution: {integrity: sha512-up2Mzq3545mwVnMhTDMdfoG1OurpA/s5t88JmQX809eH3C8491iu2sfKhTfhQtKY78oPNhiaHJUpT/dUDAAtng==}
+    dev: false
 
   /lodash.isnumber/3.0.3:
     resolution: {integrity: sha512-QYqzpfwO3/CWf3XP+Z+tkQsfaLL/EnUlXWVkIk5FUPc4sBdTehEqZONuyRt2P67PXAk+NXmTBcc97zw9t1FQrw==}
@@ -17022,7 +17034,6 @@ packages:
 
   /lodash.pick/4.4.0:
     resolution: {integrity: sha512-hXt6Ul/5yWjfklSGvLQl8vM//l3FtyHZeuelpzK6mm99pNvN9yTDruNZPEJZD1oWrqo+izBmB7oUfWgcCX7s4Q==}
-    dev: false
 
   /lodash.pickby/4.6.0:
     resolution: {integrity: sha512-AZV+GsS/6ckvPOVQPXSiFFacKvKB4kOQu6ynt9wz0F3LO4R9Ij4K1ddYsIytDpSgLz88JHd9P+oaLeej5/Sl7Q==}
@@ -18501,10 +18512,6 @@ packages:
       object-hash: 2.2.0
       oidc-token-hash: 5.0.1
       p-any: 3.0.0
-    dev: false
-
-  /optics-ts/2.3.0:
-    resolution: {integrity: sha512-iu6//uEMAKsowlq7hd8pNTc43KOjxMPW60BBA8DIt0q311iiOaWPilMHGOyCDvQ7llRutwlCkGX6e4HnUD0ARg==}
     dev: false
 
   /optimism/0.16.1:
