@@ -11,7 +11,7 @@ import { OrgsRpcClientService } from '@valhalla/serv.clients';
 import { RefreshTokensModel } from '@app/entities/refresh.tokens';
 import { ServOrgs } from '@valhalla/serv.clients';
 import dayjs from 'dayjs';
-import { isNil } from '@valhalla/utilities';
+import isNil from 'lodash.isnil';
 import ms from 'ms';
 
 @Injectable()
