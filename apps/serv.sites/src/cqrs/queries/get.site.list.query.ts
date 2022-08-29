@@ -6,7 +6,7 @@ import { FilterQuery } from 'mongoose';
 import { SiteSchema } from '@app/entities/sites/schema';
 import { SiteTransformer } from '@app/entities/sites/transformer';
 import { SitesModel } from '@app/entities/sites';
-import { isEmpty } from '@valhalla/utilities';
+import isEmpty from 'lodash.isempty';
 
 export class GetSiteListQuery implements IQuery {
   constructor(public readonly request: GetSiteListRequest) {}
