@@ -68,14 +68,14 @@ export class CqrsProviderModule {
       .join('');
   }
 
-  private static async getCommandHandlers(cqrsDir: string) {
+  private static getCommandHandlers(cqrsDir: string) {
     return this.getCqrsModule(cqrsDir, 'commands', (module, fileName) => {
       const property = this.fileNameToGrpcFn('command', fileName);
       return module[property + 'Handler'];
     });
   }
 
-  private static async getQueryHandlers(cqrsDir: string) {
+  private static getQueryHandlers(cqrsDir: string) {
     return this.getCqrsModule(cqrsDir, 'queries', (module, fileName) => {
       const property = this.fileNameToGrpcFn('query', fileName);
       return module[property + 'Handler'];
