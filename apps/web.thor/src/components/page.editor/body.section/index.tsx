@@ -4,7 +4,7 @@ import { Button, css, styled } from '@mui/material';
 
 import { BodySectionItem } from './item';
 import { SiteEditorSlice } from '@app/redux/slices/editor';
-import { isEmpty } from '@valhalla/utilities';
+import isEmpty from 'lodash.isempty';
 import { useDispatch } from 'react-redux';
 import { useReduxSelector } from '@app/redux/hooks';
 

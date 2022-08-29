@@ -14,7 +14,7 @@ import { AddSectionBtn } from './add.section.btn';
 import { DropZone } from './drop.zone';
 import { ElementsMenu } from './elements.menu';
 import { SectionMenu } from './section.menu';
-import { throttle } from '@valhalla/utilities';
+import throttle from 'lodash.throttle';
 import { useDispatch } from 'react-redux';
 import { useReduxSelector } from '@app/redux/hooks';
 

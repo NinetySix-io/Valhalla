@@ -1,7 +1,7 @@
 import { ModGraphQLErrorExtensions } from '@app/types/apollo';
 import { fromPromise } from '@apollo/client';
 import { getAccessToken } from '@app/lib/access.token';
-import { isNil } from '@valhalla/utilities';
+import isNil from 'lodash.isnil';
 import { onError } from '@apollo/client/link/error';
 
 /**

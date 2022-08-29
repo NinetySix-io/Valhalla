@@ -5,12 +5,13 @@ import { DropIdContext, useActiveElement, useSectionId } from '../context';
 import { Menu, MenuItem, Typography, useTheme } from '@mui/material';
 import { XYCoord, useDrag } from 'react-dnd';
 import { batch, useDispatch } from 'react-redux';
-import { isNil, omit } from '@valhalla/utilities';
 
 import { BUILDER_ELEMENT } from '../constants';
 import { Drop } from '@valhalla/web.builder';
 import { Key } from 'ts-key-enum';
 import { SiteEditorSlice } from '@app/redux/slices/editor';
+import isNil from 'lodash.isnil';
+import omit from 'lodash.omit';
 import { useKeyPressEvent } from 'react-use';
 
 type Props = {

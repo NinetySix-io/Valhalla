@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 
 import { cProps } from '@valhalla/web.react';
-import { isEmpty } from '@valhalla/utilities';
+import isEmpty from 'lodash.isempty';
 
 type Props = cProps & {
   title: string;
