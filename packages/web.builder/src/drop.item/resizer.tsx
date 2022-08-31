@@ -162,6 +162,7 @@ type Props = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
 > & {
+  alwaysVisible?: boolean;
   disableResize?: boolean | Array<DIRECTION>;
   children?: React.ReactNode;
   minHeight?: number;
@@ -185,6 +186,7 @@ export const Resizer = React.forwardRef<HTMLDivElement, Props>(
       minWidth = 10,
       maxWidth,
       maxHeight,
+      alwaysVisible,
       style,
       ...props
     },
@@ -303,7 +305,7 @@ export const Resizer = React.forwardRef<HTMLDivElement, Props>(
           <Corner
             {...commonProps}
             direction={direction}
-            isVisible={active === direction}
+            isVisible={alwaysVisible || active === direction}
           />
         );
       }

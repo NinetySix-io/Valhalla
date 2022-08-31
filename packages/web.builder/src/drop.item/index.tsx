@@ -77,12 +77,11 @@ const Container = styled(
       : css`
           &:hover {
             cursor: grab;
+            outline-color: ${mainColor};
 
             /* LABEL */
             ${!isDragging &&
             css`
-              outline-color: transparent;
-
               &:before {
                 content: '${label}';
                 top: -20px;
@@ -216,6 +215,7 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
           preview,
           isResizing ? undefined : drag,
         ])}
+        alwaysVisible={showOutline}
         isDragging={hasItem && !isMultiCarry}
         disableResize={hasItem || isMultiCarry}
         onMouseDown={handleMouseDown}
