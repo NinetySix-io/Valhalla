@@ -37,7 +37,7 @@ export function useDragSelectHighlight() {
       const elements = await getDroppedElements();
       const nextCarry: DragCarry = {};
       for (const value of Object.values(elements)) {
-        if (isTouching(dragBox, htmlToRect(value.ref))) {
+        if (value.ref && isTouching(dragBox, htmlToRect(value.ref))) {
           nextCarry[value.element.id] = value.element;
         }
       }
