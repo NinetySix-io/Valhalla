@@ -1,12 +1,13 @@
 import { Account, FindAccountRequest } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { RpcHandler, toObjectId } from '@valhalla/serv.core';
-import { SStruct, isEmpty } from '@valhalla/utilities';
 
 import { AccountSchema } from '@app/entities/accounts/schema';
 import { AccountTransformer } from '@app/entities/accounts/transformer';
 import { AccountsModel } from '@app/entities/accounts';
 import { FilterQuery } from 'mongoose';
+import Struct from 'superstruct';
+import isEmpty from 'lodash.isempty';
 
 export class FindAccountQuery implements IQuery {
   constructor(public readonly request: FindAccountRequest) {}
@@ -20,13 +21,13 @@ export class FindAccountHandler
   constructor(private readonly accounts: AccountsModel) {}
 
   private validateRequest(request: FindAccountRequest) {
-    const query: SStruct.Describe<FindAccountRequest> = SStruct.object({
-      accountId: SStruct.optional(SStruct.string()),
-      phone: SStruct.optional(SStruct.string()),
-      email: SStruct.optional(SStruct.string()),
+    const query: Struct.Describe<FindAccountRequest> = Struct.object({
+      accountId: Struct.optional(Struct.string()),
+      phone: Struct.optional(Struct.string()),
+      email: Struct.optional(Struct.string()),
     });
 
-    return SStruct.create(request, query);
+    return Struct.create(request, query);
   }
 
   private buildFilter(request: FindAccountRequest): FilterQuery<AccountSchema> {

@@ -24,7 +24,6 @@
   },
   "dependencies": {
     "class-validator": "^0.13.2",
-    "slugify": "^1.6.5",
-    "superstruct": "^0.15.4"
+    "slugify": "^1.6.5"
   }
 }

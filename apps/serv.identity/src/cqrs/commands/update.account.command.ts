@@ -10,8 +10,8 @@ import { AccountTransformer } from '@app/entities/accounts/transformer';
 import { AccountUpdatedEvent } from '../events/account.updated.event';
 import { AccountsModel } from '@app/entities/accounts';
 import { RpcHandler } from '@valhalla/serv.core';
-import { SStruct } from '@valhalla/utilities';
-import { isEmpty } from 'class-validator';
+import Struct from 'superstruct';
+import isEmpty from 'lodash.isempty';
 
 export class UpdateAccountCommand implements ICommand {
   constructor(public readonly request: UpdateAccountRequest) {}
@@ -28,13 +28,13 @@ export class UpdateAccountHandler
   ) {}
 
   private validateRequest(data: Partial<UpdateAccountRequest>) {
-    const schema: SStruct.Describe<typeof data> = SStruct.object({
-      displayName: SStruct.optional(SStruct.string()),
-      firstName: SStruct.optional(SStruct.string()),
-      lastName: SStruct.optional(SStruct.string()),
+    const schema: Struct.Describe<typeof data> = Struct.object({
+      displayName: Struct.optional(Struct.string()),
+      firstName: Struct.optional(Struct.string()),
+      lastName: Struct.optional(Struct.string()),
     });
 
-    const payload = SStruct.create(data, schema);
+    const payload = Struct.create(data, schema);
     if (isEmpty(payload)) {
       throw new Error('Must specified at least 1 property');
     }

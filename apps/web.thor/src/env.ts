@@ -1,14 +1,15 @@
-import { SStruct, buildEnvironment } from '@valhalla/utilities';
+import Struct from 'superstruct';
+import { buildEnvironment } from '@valhalla/utilities';
 
-const schema = SStruct.create(
+const schema = Struct.create(
   {
     SERVER: process.env.SERVER,
     IS_DEV: process.env.IS_DEV,
   },
-  SStruct.object({
-    SERVER: SStruct.string(),
-    IS_DEV: SStruct.any(),
-    DISABLE_REDUX_LOGGER: SStruct.any(),
+  Struct.object({
+    SERVER: Struct.string(),
+    IS_DEV: Struct.any(),
+    DISABLE_REDUX_LOGGER: Struct.any(),
   }),
 );
 
