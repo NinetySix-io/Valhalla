@@ -68,5 +68,6 @@
   "diffEditor.codeLens": true,
   "docwriter.hotkey.mac": "⌥ + .",
   "typescript.suggest.enabled": true,
-  "javascript.suggest.enabled": true
+  "javascript.suggest.enabled": true,
+  "editor.formatOnSave": true
 }

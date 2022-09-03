@@ -10,6 +10,13 @@
     "plugins": [
       {
         "name": "typescript-styled-plugin"
+      },
+      {
+        "name": "typescript-plugin-css-modules",
+        "options": {
+          "camelCase": "dashes",
+          "customMatcher": "\\.m\\.css$"
+        }
       }
     ]
   }

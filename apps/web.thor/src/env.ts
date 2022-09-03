@@ -1,19 +1,10 @@
-import Struct from 'superstruct';
 import { buildEnvironment } from '@valhalla/utilities';
 
-const schema = Struct.create(
-  {
-    SERVER: process.env.SERVER,
-    IS_DEV: process.env.IS_DEV,
-  },
-  Struct.object({
-    SERVER: Struct.string(),
-    IS_DEV: Struct.any(),
-    DISABLE_REDUX_LOGGER: Struct.any(),
-  }),
-);
-
-export class Environment extends buildEnvironment(schema) {
+export class Environment extends buildEnvironment({
+  SERVER: process.env.SERVER,
+  IS_DEV: process.env.IS_DEV,
+  DISABLE_REDUX_LOGGER: process.env.DISABLE_REDUX_LOGGER,
+}) {
   static get isServer() {
     return typeof window === 'undefined';
   }
