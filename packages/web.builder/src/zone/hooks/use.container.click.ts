@@ -1,15 +1,16 @@
-import { dragCarryAtom } from '../../context/drag.carry';
 import { focusedElementAtom } from '../../context/focus.element';
+import { selectionsAtom } from '../../context/selections';
 import { useEvent } from '@valhalla/web.react/src';
 import { useScopeAtomMutate } from '../../context';
 
 /**
- * It listens to the mouseup event on the container, and if the target is the container, it clears the
- * focused element and the drag carry
+ * It sets the focused element to undefined and the selections to an empty object when the user clicks
+ * outside of the zone
+ * @param {HTMLDivElement} container - HTMLDivElement
  */
 export function useContainerClick(container: HTMLDivElement) {
   const setFocusedElement = useScopeAtomMutate(focusedElementAtom);
-  const setDragCarry = useScopeAtomMutate(dragCarryAtom);
+  const setSelections = useScopeAtomMutate(selectionsAtom);
 
   useEvent(container, 'mouseup', (event) => {
     /**
@@ -19,7 +20,7 @@ export function useContainerClick(container: HTMLDivElement) {
     const target = event.target as HTMLElement;
     if (container.isSameNode(target)) {
       setFocusedElement(undefined);
-      setDragCarry({});
+      setSelections({});
     }
   });
 }

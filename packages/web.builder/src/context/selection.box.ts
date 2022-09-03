@@ -1,21 +1,19 @@
 import * as React from 'react';
 
-import { DragCarry, dragCarryAtom } from './drag.carry';
+import { Selections, selectionsAtom } from './selections';
 import { useEvent, useThrottleCallback } from '@valhalla/web.react';
 import { useScopeAtomMutate, useScopeAtomValueFetch } from './index';
 
+import { Rectangle } from '../lib/rectangle';
 import { XYCoord } from 'react-dnd';
 import { atom } from 'jotai';
-import { dragToRect } from '../lib/rectangle/drag.to.rect';
 import { droppedElementsAtom } from './dropped.elements';
-import { htmlToRect } from '../lib/rectangle/html.to.rect';
-import { isTouching } from '../lib/rectangle/collision';
 
 /**
  * This atom records the context in which the user mousedown and start dragging
  * until mouse up to highlight
  */
-export const dragSelectHighlightAtom = atom(
+export const selectionBoxAtom = atom(
   null as {
     start: XYCoord;
     end?: XYCoord;
@@ -25,24 +23,26 @@ export const dragSelectHighlightAtom = atom(
 /**
  * Listen to mouse activity and set the state of drag select
  */
-export function useDragSelectHighlight() {
+export function useSelectionBoxFocus() {
   const ref = React.useRef<HTMLDivElement>();
-  const mutate = useScopeAtomMutate(dragSelectHighlightAtom);
+  const mutate = useScopeAtomMutate(selectionBoxAtom);
   const getDroppedElements = useScopeAtomValueFetch(droppedElementsAtom);
-  const setDragCarry = useScopeAtomMutate(dragCarryAtom);
+  const setSelections = useScopeAtomMutate(selectionsAtom);
 
   const processHighlightedElements = useThrottleCallback(
     async (start: XYCoord, end: XYCoord) => {
-      const dragBox = dragToRect(start, end);
+      const dragBox = Rectangle.fromCoordinates(start, end);
       const elements = await getDroppedElements();
-      const nextCarry: DragCarry = {};
+      const next: Selections = {};
       for (const value of Object.values(elements)) {
-        if (value.ref && isTouching(dragBox, htmlToRect(value.ref))) {
-          nextCarry[value.element.id] = value.element;
+        if (!value.ref) {
+          continue;
+        } else if (dragBox.isTouching(Rectangle.fromHtmlElement(value.ref))) {
+          next[value.element.id] = value.element;
         }
       }
 
-      setDragCarry(nextCarry);
+      setSelections(next);
     },
     100,
   );
@@ -77,7 +77,10 @@ export function useDragSelectHighlight() {
         const start = current.start;
         const end = getCoordinates(event);
         processHighlightedElements(start, end);
-        return { start, end };
+        return {
+          start,
+          end,
+        };
       }
 
       return current;

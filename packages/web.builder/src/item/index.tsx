@@ -8,7 +8,6 @@ import {
   useScopeAtomValue,
 } from '../context';
 import { css, styled } from '@mui/material';
-import { useDragCarryMutate, useDragCarryState } from '../context/drag.carry';
 
 import { DIRECTION } from './directions';
 import { Resizer } from './resizer';
@@ -21,6 +20,7 @@ import { mergeRefs } from 'react-merge-refs';
 import { useDroppedElementRegister } from '../context/dropped.elements';
 import { useElementGridArea } from '../hooks/use.element';
 import { useScopeDrag } from '../context/dnd';
+import { useSelections } from '../context/selections';
 import { useShiftKeyStateFetch } from '../context/shift.key.pressed';
 import { useTemporalCache } from '../hooks/use.cache';
 
@@ -32,7 +32,7 @@ const Container = styled(
     'isFocus',
     'color',
     'isDragging',
-    'isMultiCarry',
+    'isMultiSelected',
   ]),
 )<{
   label: string;
@@ -40,72 +40,74 @@ const Container = styled(
   isFocus: boolean;
   color: string;
   isDragging: boolean;
-  isMultiCarry: boolean;
-}>(({ theme, color, label, gridArea, isFocus, isDragging, isMultiCarry }) => {
-  const mainColor: string = color ?? theme.palette.primary.main;
-  const textColor: string = theme.palette.getContrastText(mainColor);
+  isMultiSelected: boolean;
+}>(
+  ({ theme, color, label, gridArea, isFocus, isDragging, isMultiSelected }) => {
+    const mainColor: string = color ?? theme.palette.primary.main;
+    const textColor: string = theme.palette.getContrastText(mainColor);
 
-  if (!gridArea) {
+    if (!gridArea) {
+      return css`
+        display: none;
+      `;
+    }
+
     return css`
-      display: none;
-    `;
-  }
+      position: relative;
+      outline: solid 3px transparent;
+      grid-area: ${gridArea};
+      z-index: auto;
+      ${isMultiSelected &&
+      css`
+        outline: none;
+      `}
 
-  return css`
-    position: relative;
-    outline: solid 3px transparent;
-    grid-area: ${gridArea};
-    z-index: auto;
-    ${isMultiCarry &&
-    css`
-      outline: none;
-    `}
-
-    ${isDragging &&
-    css`
-      outline-color: transparent !important;
-    `}
+      ${isDragging &&
+      css`
+        outline-color: transparent !important;
+      `}
 
     ${isFocus
-      ? css`
-          outline-color: ${mainColor};
-
-          &:hover {
-            cursor: auto;
-          }
-        `
-      : css`
-          &:hover {
-            cursor: grab;
+        ? css`
             outline-color: ${mainColor};
 
-            /* LABEL */
-            ${!isDragging &&
-            css`
-              &:before {
-                content: '${label}';
-                top: -20px;
-                left: -3px;
-                height: 18px;
-                overflow: hidden;
-                height: max-content;
-                font-size: ${theme.typography.caption.fontSize};
-                padding: 2px ${theme.spacing(1)};
-                background-color: ${mainColor};
-                border-top-left-radius: 3px;
-                border-top-right-radius: 3px;
-                font-family: ${theme.typography.fontFamily};
-                position: absolute;
-                color: ${textColor};
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-              }
-            `}
-          }
-        `}
-  `;
-});
+            &:hover {
+              cursor: auto;
+            }
+          `
+        : css`
+            &:hover {
+              cursor: grab;
+              outline-color: ${mainColor};
+
+              /* LABEL */
+              ${!isDragging &&
+              css`
+                &:before {
+                  content: '${label}';
+                  top: -20px;
+                  left: -3px;
+                  height: 18px;
+                  overflow: hidden;
+                  height: max-content;
+                  font-size: ${theme.typography.caption.fontSize};
+                  padding: 2px ${theme.spacing(1)};
+                  background-color: ${mainColor};
+                  border-top-left-radius: 3px;
+                  border-top-right-radius: 3px;
+                  font-family: ${theme.typography.fontFamily};
+                  position: absolute;
+                  color: ${textColor};
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                }
+              `}
+            }
+          `}
+    `;
+  },
+);
 
 type Props = Omit<
   React.PropsWithoutRef<JSX.IntrinsicElements['div']>,
@@ -128,11 +130,7 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
     const [cacheElement, setElement] = useTemporalCache(element);
     const gridArea = useElementGridArea(cacheElement);
     const getIsShiftKeyDown = useShiftKeyStateFetch();
-    const dragCarryMutate = useDragCarryMutate(element);
-    const { isBeingCarry, isMultiCarry, isMultiDragging } =
-      useDragCarryState(element);
-
-    useDroppedElementRegister(element, container.current);
+    const selection = useSelections(element);
 
     // TODO: probably optimize this because it will
     // rerender when it doesn't need to.
@@ -140,7 +138,9 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
     // is focused or when it lost focus
     const isFocus = focusedElement?.id === element.id;
     const hasFocus = !isNil(focusedElement);
-    const showOutline = isFocus || isResizing || isBeingCarry;
+    const showOutline = isFocus || isResizing || selection.isBeingSelected;
+
+    useDroppedElementRegister(element, container.current);
 
     async function handleMouseDown() {
       const isShiftKeyDown = await getIsShiftKeyDown();
@@ -148,14 +148,14 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
         setFocusedElement(element);
       }
 
-      if (!isBeingCarry) {
-        dragCarryMutate.add(isShiftKeyDown);
+      if (!selection.isBeingSelected) {
+        selection.add(isShiftKeyDown);
       }
     }
 
     function handleMouseUp() {
-      if (!isMultiCarry && !isFocus) {
-        dragCarryMutate.remove();
+      if (!selection.isMultiSelected && !isFocus) {
+        selection.remove();
       }
     }
 
@@ -200,7 +200,7 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
       },
     });
 
-    if (isDragging || isMultiDragging) {
+    if (isDragging || selection.isMultiDragging) {
       return null;
     }
 
@@ -216,8 +216,8 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
           isResizing ? undefined : drag,
         ])}
         alwaysVisible={showOutline}
-        isDragging={hasItem && !isMultiCarry}
-        disableResize={hasItem || isMultiCarry}
+        isDragging={hasItem && !selection.isMultiSelected}
+        disableResize={hasItem || selection.isMultiSelected}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         label={element.type.toUpperCase()}
@@ -228,7 +228,7 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
         onResize={handleResize}
         onResizeStart={handleResizeStart}
         onResizeFinish={handleResizeEnd}
-        isMultiCarry={isMultiCarry}
+        isMultiSelected={selection.isMultiSelected}
       >
         {children}
       </Container>

@@ -2,10 +2,10 @@ import * as React from 'react';
 
 import { css, styled } from '@mui/material';
 
-import { dragCarryAtom } from '../context/drag.carry';
 import { getGridArea } from '../hooks/use.element';
 import { getMaxBBox } from '../lib/get.max.bbox';
 import { makeFilterProps } from '@valhalla/web.react/src';
+import { selectionsAtom } from '../context/selections';
 import uniqueId from 'lodash.uniqueid';
 import { useScopeAtomValue } from '../context';
 import { useScopeDrag } from '../context/dnd';
@@ -31,10 +31,10 @@ const DraggableBox = styled(
 
 const key = uniqueId('drag-overlay');
 export const MultiDragOverlay: React.FC & { key: string } = () => {
-  const dragCarry = useScopeAtomValue(dragCarryAtom);
-  const carries = Object.values(dragCarry);
-  const isMultiDrag = carries.length > 1;
-  const bbox = getMaxBBox(carries);
+  const selections = useScopeAtomValue(selectionsAtom);
+  const list = Object.values(selections);
+  const isMultiDrag = list.length > 1;
+  const bbox = getMaxBBox(list);
 
   const [drag, { isDragging }] = useScopeDrag(
     {

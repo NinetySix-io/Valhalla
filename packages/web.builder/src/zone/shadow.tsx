@@ -11,9 +11,9 @@ import { useCellClampX, useCellClampY } from '../hooks/use.cell.clamp';
 import { DroppedElement } from '../types';
 import { MultiDragOverlay } from './multi.drag.overlay';
 import { builderEvents } from '../lib/events';
-import { dragCarryAtom } from '../context/drag.carry';
 import { getGridArea } from '../hooks/use.element';
 import { makeFilterProps } from '@valhalla/web.react/src';
+import { selectionsAtom } from '../context/selections';
 import { useDragMonitorOffset } from '../hooks/use.drag.monitor';
 
 const Container = styled(
@@ -47,7 +47,7 @@ export const DragShadow: React.FC = () => {
   const clampY = useCellClampY();
   const [isVisible, setIsVisible] = React.useState(false);
   const [element, setElement] = React.useState<DroppedElement>();
-  const getDragCarry = useScopeAtomValueFetch(dragCarryAtom);
+  const getSelectons = useScopeAtomValueFetch(selectionsAtom);
   const cellSize = useScopeAtomValue(cellSizeAtom);
   const cache = React.useRef<DroppedElement[]>([]);
 
@@ -93,14 +93,16 @@ export const DragShadow: React.FC = () => {
       } else {
         const diffX = nextX - draggingElement.x;
         const diffY = nextY - draggingElement.y;
-        const dragCarry = await getDragCarry();
-        cache.current = Object.values(dragCarry).map((item): DroppedElement => {
-          return {
-            ...item,
-            x: item.x + diffX,
-            y: item.y + diffY,
-          };
-        });
+        const selections = await getSelectons();
+        cache.current = Object.values(selections).map(
+          (item): DroppedElement => {
+            return {
+              ...item,
+              x: item.x + diffX,
+              y: item.y + diffY,
+            };
+          },
+        );
       }
     }
   });

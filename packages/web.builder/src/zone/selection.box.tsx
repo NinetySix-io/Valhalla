@@ -2,10 +2,9 @@ import * as React from 'react';
 
 import { css, styled } from '@mui/material';
 
-import { Rectangle } from '../lib/rectangle/types';
-import { dragSelectHighlightAtom } from '../context/drag.select';
-import { dragToRect } from '../lib/rectangle/drag.to.rect';
+import { Rectangle } from '../lib/rectangle';
 import { makeFilterProps } from '@valhalla/web.react/src';
+import { selectionBoxAtom } from '../context/selection.box';
 import { useScopeAtomValue } from '../context';
 
 const Box = styled(
@@ -33,16 +32,21 @@ const Container = styled('div')(
   `,
 );
 
-export const DragHighlighter: React.FC = () => {
-  const mouse = useScopeAtomValue(dragSelectHighlightAtom);
+export const SelectionBox: React.FC = () => {
+  const mouse = useScopeAtomValue(selectionBoxAtom);
+  const rect = mouse?.end
+    ? Rectangle.fromCoordinates(mouse.start, mouse.end)
+    : null;
 
-  if (!mouse?.end) {
+  const minSize = 2;
+
+  if (!rect || (rect.width < minSize && rect.height < minSize)) {
     return null;
   }
 
   return (
     <Container>
-      <Box rectangle={dragToRect(mouse.start, mouse.end)} />
+      <Box rectangle={rect} />
     </Container>
   );
 };

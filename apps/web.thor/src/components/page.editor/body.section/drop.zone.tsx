@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import { calculateSpan, selectSection } from '../selectors';
 import { css, styled } from '@mui/material';
 
 import { BUILDER_ELEMENT } from '../constants';
@@ -9,6 +8,7 @@ import { DropGrid } from './drop.grid';
 import { DropItem } from './drop.item';
 import { SiteEditorSlice } from '@app/redux/slices/editor';
 import { mergeRefs } from 'react-merge-refs';
+import { selectSection } from '../selectors';
 import { useDispatch } from 'react-redux';
 import { useDrop } from 'react-dnd';
 import { useReduxSelector } from '@app/redux/hooks';
@@ -29,16 +29,12 @@ export const DropZone: React.FC = () => {
   const dispatch = useDispatch();
   const container = React.useRef<HTMLDivElement>();
   const sectionElements = useReduxSelector(selectSection(sectionId))?.children;
-  const calculatePos = useReduxSelector(calculateSpan(sectionId));
 
   const [, drop] = useDrop<BuilderElementWithId>(
     () => ({
       accept: BUILDER_ELEMENT,
       drop(item, monitor) {
         if (!monitor.didDrop()) {
-          const parent = container.current;
-          const r = calculatePos(item, monitor.getClientOffset());
-
           if (item.id) {
             dispatch(
               SiteEditorSlice.actions.updateElementPosition({

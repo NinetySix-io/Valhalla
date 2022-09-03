@@ -12,6 +12,10 @@ function handleEvent<K extends readonly KeyCode[]>(
   event: KeyboardEvent,
   cb: CallBack,
 ) {
+  if (!cb) {
+    return;
+  }
+
   for (const key of keys) {
     if (event.code.startsWith(key)) {
       cb(event);

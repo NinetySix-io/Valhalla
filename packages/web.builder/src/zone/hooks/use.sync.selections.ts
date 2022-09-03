@@ -1,23 +1,16 @@
 import { DroppedElement } from '../../types';
 import React from 'react';
-import { dragCarryAtom } from '../../context/drag.carry';
 import isEmpty from 'lodash.isempty';
 import isNil from 'lodash.isnil';
 import keyBy from 'lodash.keyby';
+import { selectionsAtom } from '../../context/selections';
 import { useScopeAtomMutate } from '../../context';
 
-/**
- * "It sets the drag carry atom to the value of the passed in array, but only if the drag carry atom is
- * empty."
- *
- * The drag carry atom is a map of the elements that are currently being dragged. The value passed in
- * is an array of the elements that are currently being dragged
- */
-export function useSyncDragCarry(value: Array<DroppedElement>) {
-  const setDragCarry = useScopeAtomMutate(dragCarryAtom);
+export function useSyncSelections(value: Array<DroppedElement>) {
+  const setSelections = useScopeAtomMutate(selectionsAtom);
 
   React.useEffect(() => {
-    setDragCarry((current) =>
+    setSelections((current) =>
       isEmpty(current)
         ? current
         : keyBy(
