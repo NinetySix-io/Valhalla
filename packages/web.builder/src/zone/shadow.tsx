@@ -9,7 +9,7 @@ import { css, styled } from '@mui/material';
 import { useCellClampX, useCellClampY } from '../hooks/use.cell.clamp';
 
 import { DroppedElement } from '../types';
-import { MultiDragOverlay } from '../drop.zone/multi.drag.overlay';
+import { MultiDragOverlay } from './multi.drag.overlay';
 import { builderEvents } from '../lib/events';
 import { dragCarryAtom } from '../context/drag.carry';
 import { getGridArea } from '../hooks/use.element';

@@ -3,14 +3,14 @@ import * as React from 'react';
 import { ZoneContext, useZoneId } from '../context';
 
 import type { ConnectableElement } from 'react-dnd';
-import { DragHighlighter } from './drag.highlighter';
+import { DragHighlighter } from './highlighter';
 import { DragLayer } from './drag.layer';
-import { DragShadow } from './drag.shadow';
-import { DropGrid } from '../drop.grid';
+import { DragShadow } from './shadow';
+import { DropGrid } from '../grid';
 import { DropZoneItem } from './item';
 import type { DroppedElement } from '../types';
 import { MultiDragOverlay } from './multi.drag.overlay';
-import { Resizer } from '../drop.item/resizer';
+import { Resizer } from '../item/resizer';
 import { cProps } from '@valhalla/web.react';
 import { mergeRefs } from 'react-merge-refs';
 import uniqueBy from 'lodash.uniqby';

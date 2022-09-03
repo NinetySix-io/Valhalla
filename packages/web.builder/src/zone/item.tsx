@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import type { Droppable, DroppedElement } from '../types';
 
-import { DropItem } from '../drop.item';
+import { DropItem } from '../item';
 import { ElementFactory } from '../element.factory';
 
 type Props<T extends Droppable> = {

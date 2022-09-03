@@ -1,2 +1,2 @@
-export * from './drop.zone';
+export * from './zone';
 export * from './types';
