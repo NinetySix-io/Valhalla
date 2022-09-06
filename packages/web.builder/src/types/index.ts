@@ -1,5 +1,5 @@
-import { BuilderElement } from './elements';
-import { ValueOf } from '@valhalla/utilities';
+import type { BuilderElement } from './elements';
+import type { ValueOf } from '@valhalla/utilities';
 
 export type DroppableElement = ValueOf<BuilderElement>;
 

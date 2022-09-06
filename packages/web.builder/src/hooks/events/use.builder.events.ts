@@ -1,5 +1,5 @@
-import { BuilderEvents, builderEvents } from '../../lib/events';
-
+import type { BuilderEvents } from '../../lib/events';
+import { builderEvents } from '../../lib/events';
 import { useSubscription } from '../use.subscription';
 
 /**

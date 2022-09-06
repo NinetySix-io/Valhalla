@@ -2,9 +2,9 @@ import * as React from 'react';
 
 import { css, styled } from '@mui/material';
 
-import { DIRECTION } from '../directions';
+import type { DIRECTION } from '../directions';
 import { Resizer } from '../resizer';
-import { Size } from '../../types';
+import type { Size } from '../../types';
 import { storiesOf } from '@storybook/react';
 
 const Container = styled('div')(
@@ -26,6 +26,7 @@ const Component: React.FC = () => {
     justifyContent: 'center',
     alignItems: 'center',
     border: 'solid thin #ccc',
+    position: 'relative',
   });
 
   function handleResize(_direction: DIRECTION, nextSize: Size) {
@@ -41,6 +42,7 @@ const Component: React.FC = () => {
       minWidth={minWidth}
       style={size}
       onResize={handleResize}
+      alwaysVisible
     >
       test
     </Resizer>

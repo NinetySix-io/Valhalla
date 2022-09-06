@@ -1,6 +1,10 @@
 import * as React from 'react';
 
-import { cellSizeAtom, useScopeAtomValue, useZoneContext } from '../context';
+import {
+  useColumnsCount,
+  useRowsCount,
+  useStore,
+} from '../context/scope.provider';
 
 import { clamp } from '../lib/clamp';
 import { getPosition } from '../lib/get.position';
@@ -10,7 +14,9 @@ import { getPosition } from '../lib/get.position';
  * position
  */
 export function useCellClamp(max: number) {
-  const cellSize = useScopeAtomValue(cellSizeAtom);
+  const store = useStore();
+  const cellSize = store.useSelect((state) => state.cellSize);
+
   return React.useCallback(
     (position: number, span: number) => {
       const floor = 0;
@@ -22,9 +28,11 @@ export function useCellClamp(max: number) {
 }
 
 export function useCellClampX() {
-  return useCellClamp(useZoneContext().columnsCount);
+  const columnsCount = useColumnsCount();
+  return useCellClamp(columnsCount);
 }
 
 export function useCellClampY() {
-  return useCellClamp(useZoneContext().rowsCount);
+  const rowsCount = useRowsCount();
+  return useCellClamp(rowsCount);
 }

@@ -1,7 +1,7 @@
 import { builderEvents } from '../lib/events';
 import { useCellClamp } from './use.cell.clamp';
+import { useColumnsCount } from '../context/scope.provider';
 import { useDragMonitorOffset } from './use.drag.monitor';
-import { useZoneContext } from '../context';
 
 /**
  * "When the user drags a cell, if the mouse is over the bottom of the grid, then increase the number
@@ -13,13 +13,13 @@ import { useZoneContext } from '../context';
  */
 export function useDragOverflowListener() {
   const cellClamp = useCellClamp(Infinity);
-  const current = useZoneContext().rowsCount;
+  const rowsCount = useColumnsCount();
 
   useDragMonitorOffset((monitor) => {
     const offset = monitor.getSourceClientOffset();
     if (offset) {
       const nextRows = cellClamp(offset.y, 0);
-      if (nextRows > current) {
+      if (nextRows > rowsCount) {
         builderEvents.emit('gridRowsUpdate', nextRows);
       }
     }

@@ -1,4 +1,4 @@
-import { DroppedPosition } from '../types';
+import type { DroppedPosition } from '../types';
 import isEmpty from 'lodash.isempty';
 
 /**

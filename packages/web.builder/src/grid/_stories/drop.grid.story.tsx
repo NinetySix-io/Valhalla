@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { ZoneContext, gridVisibleAtom, useScopeAtom } from '../../context';
+import { ScopeProvider, useStore } from '../../context/scope.provider';
 
 import { DndProvider } from 'react-dnd';
 import { DropGrid } from '../index';
@@ -8,7 +8,6 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import pick from 'lodash.pick';
 import { storiesOf } from '@storybook/react';
-import uniqueId from 'lodash.uniqueid';
 import { useDropDimension } from '../../hooks/use.dimension';
 
 type ComponentType = typeof DropGrid;
@@ -17,30 +16,32 @@ type Props = React.ComponentProps<ComponentType> & {
   rowsCount: number;
 };
 
-const Content: React.FC<Props> = (props) => {
+const Content: React.FC<Props> = ({ columnsCount, rowsCount, ...props }) => {
+  const zoneId = React.useId();
+  const store = useStore();
   const ref = useDropDimension();
-  const [, showGrid] = useScopeAtom(gridVisibleAtom);
 
   React.useEffect(() => {
-    showGrid(true);
-  }, [showGrid]);
+    store.actions.props.replace({
+      zoneId,
+      columnsCount,
+      rowsCount,
+    });
+  }, [columnsCount, rowsCount, zoneId, store]);
+
+  React.useEffect(() => {
+    store.actions.isGridVisible.update(true);
+  }, [store]);
 
   return <DropGrid {...props} ref={ref} />;
 };
 
 const Template: React.FC<Props> = (props) => {
-  const zoneId = React.useRef(uniqueId()).current;
   return (
     <DndProvider backend={HTML5Backend}>
-      <ZoneContext.Provider
-        value={{
-          id: zoneId,
-          columnsCount: props.columnsCount,
-          rowsCount: props.rowsCount,
-        }}
-      >
+      <ScopeProvider>
         <Content {...props} />
-      </ZoneContext.Provider>
+      </ScopeProvider>
     </DndProvider>
   );
 };

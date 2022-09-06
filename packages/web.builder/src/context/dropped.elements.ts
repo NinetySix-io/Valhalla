@@ -1,40 +1,22 @@
-import * as React from 'react';
+import { createStore, withImmer } from 'tiamut';
 
-import { DroppedElement } from '../types';
-import { atom } from 'jotai';
-import { useScopeAtomMutate } from '.';
+import type { DroppedElement } from '../types';
 
-export const droppedElementsAtom = atom(
-  {} as Record<
-    string,
-    {
-      element: DroppedElement;
-      ref: HTMLElement;
-    }
-  >,
+export type DroppedElementWithRef = {
+  element: DroppedElement;
+  ref: HTMLElement;
+};
+
+export const droppedElements = createStore(
+  withImmer({
+    initialState: {} as Record<string, DroppedElementWithRef>,
+    actions: {
+      addElement(state, item: DroppedElementWithRef) {
+        state[item.element.id] = item;
+      },
+      removeElement(state, elementId: string) {
+        delete state[elementId];
+      },
+    },
+  }),
 );
-
-export function useDroppedElementRegister(
-  element: DroppedElement,
-  ref: HTMLElement,
-) {
-  const previous = React.useRef<DroppedElement>();
-  const setElements = useScopeAtomMutate(droppedElementsAtom);
-
-  React.useEffect(() => {
-    const previousId = previous.current?.id;
-    const currentId = element.id;
-    const isSameId = previousId === currentId;
-
-    setElements((current) => {
-      const next = { ...current, [currentId]: { element, ref } };
-      if (previousId && !isSameId) {
-        delete next[previousId];
-      }
-
-      return next;
-    });
-
-    previous.current = element;
-  }, [element, ref, setElements]);
-}

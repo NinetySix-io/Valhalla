@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 import { css, styled } from '@mui/material';
-import { gridVisibleAtom, useScopeAtomValue } from '../context';
 
 import { makeFilterProps } from '@valhalla/web.react';
+import { useStore } from '../context/scope.provider';
 
 const Container = styled(
   'div',
@@ -49,7 +49,9 @@ const Divider = styled(
 );
 
 export const Background: React.FC = () => {
-  const isVisible = useScopeAtomValue(gridVisibleAtom);
+  const store = useStore();
+  const isVisible = store.useSelect((state) => state.isGridVisible);
+
   return (
     <React.Fragment>
       <Container isVisible={isVisible} />

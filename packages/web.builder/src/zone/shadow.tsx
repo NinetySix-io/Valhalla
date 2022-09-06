@@ -1,20 +1,15 @@
 import * as React from 'react';
 
-import {
-  cellSizeAtom,
-  useScopeAtomValue,
-  useScopeAtomValueFetch,
-} from '../context';
 import { css, styled } from '@mui/material';
 import { useCellClampX, useCellClampY } from '../hooks/use.cell.clamp';
 
-import { DroppedElement } from '../types';
+import type { DroppedElement } from '../types';
 import { MultiDragOverlay } from './multi.drag.overlay';
 import { builderEvents } from '../lib/events';
 import { getGridArea } from '../hooks/use.element';
 import { makeFilterProps } from '@valhalla/web.react/src';
-import { selectionsAtom } from '../context/selections';
 import { useDragMonitorOffset } from '../hooks/use.drag.monitor';
+import { useStore } from '../context/scope.provider';
 
 const Container = styled(
   'div',
@@ -43,12 +38,12 @@ const Container = styled(
 );
 
 export const DragShadow: React.FC = () => {
+  const store = useStore();
   const clampX = useCellClampX();
   const clampY = useCellClampY();
   const [isVisible, setIsVisible] = React.useState(false);
   const [element, setElement] = React.useState<DroppedElement>();
-  const getSelectons = useScopeAtomValueFetch(selectionsAtom);
-  const cellSize = useScopeAtomValue(cellSizeAtom);
+  const cellSize = store.useSelect((state) => state.cellSize);
   const cache = React.useRef<DroppedElement[]>([]);
 
   useDragMonitorOffset(async (monitor) => {
@@ -93,7 +88,7 @@ export const DragShadow: React.FC = () => {
       } else {
         const diffX = nextX - draggingElement.x;
         const diffY = nextY - draggingElement.y;
-        const selections = await getSelectons();
+        const selections = store.getState().selections;
         cache.current = Object.values(selections).map(
           (item): DroppedElement => {
             return {

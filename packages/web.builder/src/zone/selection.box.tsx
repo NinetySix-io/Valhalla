@@ -4,8 +4,7 @@ import { css, styled } from '@mui/material';
 
 import { Rectangle } from '../lib/rectangle';
 import { makeFilterProps } from '@valhalla/web.react/src';
-import { selectionBoxAtom } from '../context/selection.box';
-import { useScopeAtomValue } from '../context';
+import { useStore } from '../context/scope.provider';
 
 const Box = styled(
   'div',
@@ -33,7 +32,8 @@ const Container = styled('div')(
 );
 
 export const SelectionBox: React.FC = () => {
-  const mouse = useScopeAtomValue(selectionBoxAtom);
+  const store = useStore();
+  const mouse = store.useSelect((state) => state.selectionBox);
   const rect = mouse?.end
     ? Rectangle.fromCoordinates(mouse.start, mouse.end)
     : null;

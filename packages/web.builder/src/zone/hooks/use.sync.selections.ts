@@ -1,16 +1,16 @@
-import { DroppedElement } from '../../types';
+import type { DroppedElement } from '../../types';
 import React from 'react';
 import isEmpty from 'lodash.isempty';
 import isNil from 'lodash.isnil';
 import keyBy from 'lodash.keyby';
-import { selectionsAtom } from '../../context/selections';
-import { useScopeAtomMutate } from '../../context';
+import { useStore } from '../../context/scope.provider';
 
 export function useSyncSelections(value: Array<DroppedElement>) {
-  const setSelections = useScopeAtomMutate(selectionsAtom);
+  const store = useStore();
 
   React.useEffect(() => {
-    setSelections((current) =>
+    const current = store.getState().selections;
+    store.actions.selections.replace(
       isEmpty(current)
         ? current
         : keyBy(
@@ -18,6 +18,5 @@ export function useSyncSelections(value: Array<DroppedElement>) {
             (item) => item.id,
           ),
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  }, [store, value]);
 }

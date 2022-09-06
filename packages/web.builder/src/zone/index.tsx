@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { ZoneContext, useZoneId } from '../context';
+import { ScopeProvider, useZoneId } from '../context/scope.provider';
 
 import type { ConnectableElement } from 'react-dnd';
 import { DragLayer } from './drag.layer';
@@ -11,11 +11,10 @@ import type { DroppedElement } from '../types';
 import { MultiDragOverlay } from './multi.drag.overlay';
 import { Resizer } from '../item/resizer';
 import { SelectionBox } from './selection.box';
-import { cProps } from '@valhalla/web.react';
+import type { cProps } from '@valhalla/web.react';
 import isNil from 'lodash.isnil';
 import { mergeRefs } from 'react-merge-refs';
 import uniqueBy from 'lodash.uniqby';
-import uniqueId from 'lodash.uniqueid';
 import { useAddElement } from '../hooks/events/use.add.element';
 import { useBuilderEvents } from '../hooks/events/use.builder.events';
 import { useContainerClick } from './hooks/use.container.click';
@@ -23,12 +22,13 @@ import { useDeleteFocusElement } from './hooks/keys.events/use.delete.focus.elem
 import { useDragOverflowListener } from '../hooks/use.drag.overflow.listener';
 import { useDropDimension } from '../hooks/use.dimension';
 import { useListenToShiftKey } from '../context/shift.key.pressed';
-import { useScopeDrop } from '../context/dnd';
-import { useSelectionBoxFocus } from '../context/selection.box';
+import { useScopeDrop } from '../hooks/use.dnd';
+import { useSelectionBoxFocus } from '../context/hooks/use.selection.box.focus';
 import { useSyncSelections } from './hooks/use.sync.selections';
 import { useUpdateElement } from '../hooks/events/use.update.element';
 
 type Props = cProps<{
+  zoneId: string;
   rowsCount: number;
   columnsCount: number;
   onAddItem?: (item: Omit<DroppedElement, 'id'>) => void;
@@ -40,15 +40,13 @@ type Props = cProps<{
 }>;
 
 function DropZoneContent({
-  id,
   onElementFocus,
   onDragging,
   onAddItem,
   onUpdateItems,
   onRowExpand,
   value,
-  ...props
-}: Omit<Props, 'columnsCount' | 'rowsCount'>) {
+}: Omit<Props, 'zoneId' | 'columnsCount' | 'rowsCount'>) {
   const zoneId = useZoneId();
   const container = React.useRef<HTMLDivElement>();
   const dimensionRef = useDropDimension();
@@ -72,6 +70,7 @@ function DropZoneContent({
     onRowExpand?.(nextRowsCount),
   );
 
+  //TODO: Fix this
   useDeleteFocusElement((elements) => {
     onUpdateItems(value.filter((item) => isNil(elements[item.id])));
   });
@@ -86,8 +85,7 @@ function DropZoneContent({
 
   return (
     <DropGrid
-      {...props}
-      id={id}
+      id={zoneId}
       ref={mergeRefs<ConnectableElement | HTMLDivElement | undefined>([
         drop,
         dimensionRef,
@@ -107,18 +105,13 @@ function DropZoneContent({
   );
 }
 
-export function DropZone({ id, columnsCount, rowsCount, ...props }: Props) {
-  const zoneId = React.useRef(uniqueId('zone')).current;
+export function DropZone({ zoneId: id, ...props }: Props) {
+  const randId = React.useId();
+  const zoneId = id ?? randId;
 
   return (
-    <ZoneContext.Provider
-      value={{
-        id: id || zoneId,
-        columnsCount,
-        rowsCount,
-      }}
-    >
+    <ScopeProvider zoneId={zoneId} {...props}>
       <DropZoneContent {...props} />
-    </ZoneContext.Provider>
+    </ScopeProvider>
   );
 }

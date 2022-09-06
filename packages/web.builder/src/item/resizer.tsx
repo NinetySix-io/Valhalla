@@ -5,7 +5,7 @@ import { isDown, isLeft, isRight, isUp } from './direction.guide';
 import { makeFilterProps, useEvent } from '@valhalla/web.react';
 
 import { DIRECTION } from './directions';
-import { Size } from '../types';
+import type { Size } from '../types';
 import isNil from 'lodash.isnil';
 import { mergeRefs } from 'react-merge-refs';
 
@@ -315,11 +315,7 @@ export const Resizer = React.forwardRef<HTMLDivElement, Props>(
     useEvent(window, 'mousemove', handleMouseMove);
 
     return (
-      <Container
-        {...props}
-        ref={mergeRefs([ref, container])}
-        style={Object.assign({}, style)}
-      >
+      <Container {...props} ref={mergeRefs([ref, container])} style={style}>
         {[
           DIRECTION.TOP,
           DIRECTION.BOTTOM,

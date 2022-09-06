@@ -1,26 +1,22 @@
 import { KeyCode, useOneOfKeyPressed } from '@valhalla/web.react';
-import { useScopeAtomMutate, useScopeAtomValueFetch } from '.';
 
-import { atom } from 'jotai';
+import { createStore } from 'tiamut';
 
-const shiftKeyPressedAtom = atom(false);
+export const isShiftKeyPressed = createStore({
+  initialState: false,
+  actions: {},
+});
 
 /**
  * It listens to the Shift key and updates the `shiftKeyPressedAtom` accordingly
  */
 export function useListenToShiftKey() {
-  const setShiftKeyState = useScopeAtomMutate(shiftKeyPressedAtom);
-
   useOneOfKeyPressed([KeyCode.Shift, KeyCode.Command], {
     onKeyDown() {
-      setShiftKeyState(true);
+      isShiftKeyPressed.setState(true);
     },
     onKeyUp() {
-      setShiftKeyState(false);
+      isShiftKeyPressed.setState(false);
     },
   });
-}
-
-export function useShiftKeyStateFetch() {
-  return useScopeAtomValueFetch(shiftKeyPressedAtom);
 }

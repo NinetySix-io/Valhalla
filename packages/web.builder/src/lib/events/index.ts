@@ -1,4 +1,4 @@
-import { DroppedElement } from '../../types';
+import type { DroppedElement } from '../../types';
 import { EventsRegistry } from './registry';
 
 export type BuilderEvents = {

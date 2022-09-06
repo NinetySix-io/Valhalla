@@ -1,7 +1,8 @@
 import * as React from 'react';
 
 import type { DroppedElement, DroppedPosition } from '../types';
-import { cellSizeAtom, containerAtom, useScopeAtomValue } from '../context';
+
+import { useStore } from '../context/scope.provider';
 
 /**
  * It takes a DroppedElement and returns a string that represents the grid area that the element should
@@ -22,8 +23,9 @@ export function getGridArea(element: DroppedPosition) {
  * It takes a grid area element and returns a string that can be used as the `grid-area` CSS property
  */
 export function useElementGridArea(element: DroppedElement) {
-  const container = useScopeAtomValue(containerAtom);
-  const cellSize = useScopeAtomValue(cellSizeAtom);
+  const store = useStore();
+  const container = store.useSelect((state) => state.containerElement);
+  const cellSize = store.useSelect((state) => state.cellSize);
   const [gridArea, setGridArea] = React.useState<string>();
 
   React.useEffect(() => {

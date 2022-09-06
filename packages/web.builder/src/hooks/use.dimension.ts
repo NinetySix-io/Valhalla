@@ -1,12 +1,6 @@
 import * as React from 'react';
 
-import {
-  cellSizeAtom,
-  containerAtom,
-  useScopeAtom,
-  useScopeAtomMutate,
-  useZoneContext,
-} from '../context';
+import { useColumnsCount, useStore } from '../context/scope.provider';
 
 import { mergeRefs } from 'react-merge-refs';
 import useResizeObserver from 'use-resize-observer';
@@ -17,23 +11,24 @@ import useResizeObserver from 'use-resize-observer';
  */
 export function useDropDimension() {
   const hasContainer = React.useRef(false);
-  const columnsCount = useZoneContext().columnsCount;
-  const [container, setContainer] = useScopeAtom(containerAtom);
-  const setCellSize = useScopeAtomMutate(cellSizeAtom);
+  const store = useStore();
+  const columnsCount = useColumnsCount();
+  const container = store.useSelect((state) => state.containerElement);
 
   const handleAdjustment = React.useCallback(
     (width: number) => {
-      React.startTransition(() => {
-        setCellSize(width / columnsCount);
-      });
+      const nextCellSize = width / columnsCount;
+      if (store.getState().cellSize !== nextCellSize) {
+        store.actions.cellSize.replace(nextCellSize);
+      }
     },
-    [columnsCount, setCellSize],
+    [columnsCount, store],
   );
 
   const _setContainer = (containerElement: HTMLDivElement) => {
     if (containerElement && !hasContainer.current) {
       hasContainer.current = true;
-      setContainer(containerElement);
+      store.actions.containerElement.replace(containerElement);
     }
   };
 

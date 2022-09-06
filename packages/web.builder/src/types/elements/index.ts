@@ -1,5 +1,5 @@
-import { IBase } from './base';
-import { IText } from './text';
+import type { IBase } from './base';
+import type { IText } from './text';
 
 export type BuilderElement = {
   Text: IText;

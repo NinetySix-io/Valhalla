@@ -5,10 +5,9 @@ import { css, styled } from '@mui/material';
 import { getGridArea } from '../hooks/use.element';
 import { getMaxBBox } from '../lib/get.max.bbox';
 import { makeFilterProps } from '@valhalla/web.react/src';
-import { selectionsAtom } from '../context/selections';
 import uniqueId from 'lodash.uniqueid';
-import { useScopeAtomValue } from '../context';
-import { useScopeDrag } from '../context/dnd';
+import { useScopeDrag } from '../hooks/use.dnd';
+import { useStore } from '../context/scope.provider';
 
 const DraggableBox = styled(
   'div',
@@ -31,10 +30,11 @@ const DraggableBox = styled(
 
 const key = uniqueId('drag-overlay');
 export const MultiDragOverlay: React.FC & { key: string } = () => {
-  const selections = useScopeAtomValue(selectionsAtom);
-  const list = Object.values(selections);
-  const isMultiDrag = list.length > 1;
-  const bbox = getMaxBBox(list);
+  const store = useStore();
+  const isMultiDrag = store.usePreselect.isMultiDrag();
+  const bbox = store.useSelect((state) =>
+    getMaxBBox(Object.values(state.selections)),
+  );
 
   const [drag, { isDragging }] = useScopeDrag(
     {

@@ -5,7 +5,9 @@
     "src/index.tsx",
     "src/drop.zone/callback.manager.tsx",
     "src/resizable/_stories/default.story.tsx",
-    "src/drop.zone/multi.drag.overlay.tsx"
+    "src/drop.zone/multi.drag.overlay.tsx",
+    "src/context/v2/index.tsx",
+    "src/context/store.ts"
   ],
   "exclude": [
     "dist",

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Droppable, DroppableElement } from '../types';
+import type { Droppable, DroppableElement } from '../types';
 
 import { TextElement } from './text';
 

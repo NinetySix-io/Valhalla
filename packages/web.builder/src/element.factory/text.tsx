@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { BuilderElement } from '../types/elements';
-import { Droppable } from '../types';
+import type { BuilderElement } from '../types/elements';
+import type { Droppable } from '../types';
 
 type Props = {
   value: Droppable<BuilderElement['Text']>;

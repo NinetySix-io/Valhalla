@@ -1,4 +1,4 @@
-import { IBase } from './base';
+import type { IBase } from './base';
 
 export type IText = IBase<
   'text',

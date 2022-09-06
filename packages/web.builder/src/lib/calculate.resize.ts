@@ -1,7 +1,7 @@
-import { DroppedElement, Size } from '../types';
+import type { DroppedElement, Size } from '../types';
 import { isLeft, isUp } from '../item/direction.guide';
 
-import { DIRECTION } from '../item/directions';
+import type { DIRECTION } from '../item/directions';
 import { getPosition } from './get.position';
 
 type Param = {

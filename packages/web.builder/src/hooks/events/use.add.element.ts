@@ -1,4 +1,4 @@
-import { DroppedElement } from '../../types';
+import type { DroppedElement } from '../../types';
 import { useBuilderEvents } from './use.builder.events';
 
 /**

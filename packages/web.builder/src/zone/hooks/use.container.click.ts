@@ -1,7 +1,5 @@
-import { focusedElementAtom } from '../../context/focus.element';
-import { selectionsAtom } from '../../context/selections';
-import { useEvent } from '@valhalla/web.react/src';
-import { useScopeAtomMutate } from '../../context';
+import { useEvent } from '@valhalla/web.react';
+import { useStore } from '../../context/scope.provider';
 
 /**
  * It sets the focused element to undefined and the selections to an empty object when the user clicks
@@ -9,8 +7,9 @@ import { useScopeAtomMutate } from '../../context';
  * @param {HTMLDivElement} container - HTMLDivElement
  */
 export function useContainerClick(container: HTMLDivElement) {
-  const setFocusedElement = useScopeAtomMutate(focusedElementAtom);
-  const setSelections = useScopeAtomMutate(selectionsAtom);
+  const store = useStore();
+  // const setFocusedElement = useScopeAtomMutate(focusedElementAtom);
+  // const setSelections = useScopeAtomMutate(selectionsAtom);
 
   useEvent(container, 'mouseup', (event) => {
     /**
@@ -19,8 +18,8 @@ export function useContainerClick(container: HTMLDivElement) {
      */
     const target = event.target as HTMLElement;
     if (container.isSameNode(target)) {
-      setFocusedElement(undefined);
-      setSelections({});
+      store.actions.focusedElement.clear();
+      store.actions.selections.clear();
     }
   });
 }

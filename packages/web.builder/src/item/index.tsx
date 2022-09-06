@@ -1,27 +1,20 @@
 import * as React from 'react';
 
 import type { DroppedElement, Size } from '../types';
-import {
-  cellSizeAtom,
-  gridVisibleAtom,
-  useScopeAtomMutate,
-  useScopeAtomValue,
-} from '../context';
 import { css, styled } from '@mui/material';
 
-import { DIRECTION } from './directions';
+import type { DIRECTION } from './directions';
 import { Resizer } from './resizer';
 import { builderEvents } from '../lib/events';
 import { calculateResize } from '../lib/calculate.resize';
-import { focusedElementAtom } from '../context/focus.element';
 import isNil from 'lodash.isnil';
 import { makeFilterProps } from '@valhalla/web.react';
 import { mergeRefs } from 'react-merge-refs';
-import { useDroppedElementRegister } from '../context/dropped.elements';
+import { useDroppedElementRegister } from '../context/hooks/use.dropped.element.register';
 import { useElementGridArea } from '../hooks/use.element';
-import { useScopeDrag } from '../context/dnd';
-import { useSelections } from '../context/selections';
-import { useShiftKeyStateFetch } from '../context/shift.key.pressed';
+import { useScopeDrag } from '../hooks/use.dnd';
+import { useSelections } from '../context/hooks/use.selections';
+import { useStore } from '../context/scope.provider';
 import { useTemporalCache } from '../hooks/use.cache';
 
 const Container = styled(
@@ -121,15 +114,13 @@ type Props = Omit<
 
 export const DropItem = React.forwardRef<HTMLDivElement, Props>(
   ({ element, focusColor, children, ...props }, ref) => {
+    const store = useStore();
     const container = React.useRef<HTMLDivElement>();
-    const cellSize = useScopeAtomValue(cellSizeAtom);
-    const setGridVisible = useScopeAtomMutate(gridVisibleAtom);
-    const focusedElement = useScopeAtomValue(focusedElementAtom);
-    const setFocusedElement = useScopeAtomMutate(focusedElementAtom);
+    const cellSize = store.useSelect((state) => state.cellSize);
+    const focusedElement = store.useSelect((state) => state.focusedElement);
     const [isResizing, setIsResizing] = React.useState(false);
     const [cacheElement, setElement] = useTemporalCache(element);
     const gridArea = useElementGridArea(cacheElement);
-    const getIsShiftKeyDown = useShiftKeyStateFetch();
     const selection = useSelections(element);
 
     // TODO: probably optimize this because it will
@@ -143,9 +134,9 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
     useDroppedElementRegister(element, container.current);
 
     async function handleMouseDown() {
-      const isShiftKeyDown = await getIsShiftKeyDown();
+      const isShiftKeyDown = store.getState().isShiftKeyPressed;
       if (!isShiftKeyDown || !hasFocus) {
-        setFocusedElement(element);
+        store.actions.focusedElement.replace(element);
       }
 
       if (!selection.isBeingSelected) {
@@ -172,12 +163,12 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
 
     function handleResizeStart() {
       setIsResizing(true);
-      setGridVisible(true);
+      store.actions.isGridVisible.update(true);
     }
 
     function handleResizeEnd(direction: DIRECTION, nextSize: Size) {
       setIsResizing(false);
-      setGridVisible(false);
+      store.actions.isGridVisible.update(false);
       builderEvents.emit('elementsUpdated', [
         calculateResize({
           cellSize,
@@ -190,7 +181,7 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
 
     const [drag, { isDragging, hasItem }, preview] = useScopeDrag(element, {
       end() {
-        focus();
+        store.actions.focusedElement.replace(element);
       },
       collect(monitor) {
         return {

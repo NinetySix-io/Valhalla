@@ -1,2 +1,6 @@
-/* eslint-disable */
-module.exports = require("../config/eslint-react");
+module.exports = {
+  extends: '../config/eslint-react',
+  rules: {
+    '@typescript-eslint/consistent-type-imports': 'error',
+  },
+};

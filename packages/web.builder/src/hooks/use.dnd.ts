@@ -1,12 +1,8 @@
-import {
-  DragSourceHookSpec,
-  FactoryOrInstance,
-  useDrag,
-  useDrop,
-} from 'react-dnd';
-import { Droppable, DroppedElement } from '../types';
+import type { DragSourceHookSpec, FactoryOrInstance } from 'react-dnd';
+import type { Droppable, DroppedElement } from '../types';
+import { useDrag, useDrop } from 'react-dnd';
 
-import { useZoneId } from './index';
+import { useZoneId } from '../context/scope.provider';
 
 /**
  * `useScopeDrop` is a hook that returns a `useDrop` hook that accepts only elements that have the same
