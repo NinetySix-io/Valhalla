@@ -1,10 +1,10 @@
 import * as React from 'react';
 
 import { css, styled } from '@mui/material';
-import { useScope, useStore } from '../context/scope.provider';
 
 import { Background } from './background';
 import { makeFilterProps } from '@valhalla/web.react';
+import { useScope } from '../context/scope.provider';
 
 const Container = styled(
   'div',
@@ -33,9 +33,9 @@ type Props = React.PropsWithoutRef<JSX.IntrinsicElements['div']> & {
 
 export const DropGrid = React.forwardRef<HTMLDivElement, Props>(
   ({ style, children, dotWidth = 1, ...props }, ref) => {
-    const store = useStore();
-    const cellSize = store.useSelect((state) => state.cellSize);
     const scope = useScope();
+    const store = scope.store;
+    const cellSize = store.useSelect((state) => state.cellSize);
 
     return (
       <Container

@@ -33,10 +33,5 @@ export function makeStore() {
     },
   );
 
-  //TODO: fix this???
-  store.subscribe((c, p, a) => {
-    // console.log({ c, p, a });
-  });
-
   return store;
 }
