@@ -70,7 +70,6 @@ function DropZoneContent({
     onRowExpand?.(nextRowsCount),
   );
 
-  //TODO: Fix this
   useDeleteFocusElement((elements) => {
     onUpdateItems(value.filter((item) => isNil(elements[item.id])));
   });
