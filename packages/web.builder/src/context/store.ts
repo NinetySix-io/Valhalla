@@ -11,27 +11,18 @@ import { selectionBox } from './selection.box';
 import { selections } from './selections';
 
 export function makeStore() {
-  const store = createCombinedStoresHook(
-    {
-      isShiftKeyPressed,
-      isDragging,
-      selections,
-      selectionBox,
-      focusedElement,
-      droppedElements,
-      cellSize,
-      isGridVisible,
-      draggingElement,
-      containerElement,
-    },
-    {
-      selectors: {
-        isMultiDrag(state) {
-          return Object.values(state.selections).length > 1;
-        },
-      },
-    },
-  );
+  const store = createCombinedStoresHook({
+    isShiftKeyPressed,
+    isDragging,
+    selections,
+    selectionBox,
+    focusedElement,
+    droppedElements,
+    cellSize,
+    isGridVisible,
+    draggingElement,
+    containerElement,
+  });
 
   return store;
 }

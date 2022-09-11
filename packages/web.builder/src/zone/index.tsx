@@ -1,20 +1,17 @@
 import * as React from 'react';
 
+import type { AddedElement, DroppedElement } from '../types';
 import { ScopeProvider, useZoneId } from '../context/scope.provider';
 
 import type { ConnectableElement } from 'react-dnd';
 import { DragLayer } from './drag.layer';
 import { DragShadow } from './shadow';
 import { DropGrid } from '../grid';
-import { DropZoneItem } from './item';
-import type { DroppedElement } from '../types';
+import type { DropItem } from '../item';
 import { MultiDragOverlay } from './multi.drag.overlay';
 import { Resizer } from '../item/resizer';
 import { SelectionBox } from './selection.box';
-import type { cProps } from '@valhalla/web.react';
-import isNil from 'lodash.isnil';
 import { mergeRefs } from 'react-merge-refs';
-import uniqueBy from 'lodash.uniqby';
 import { useAddElement } from '../hooks/events/use.add.element';
 import { useBuilderEvents } from '../hooks/events/use.builder.events';
 import { useContainerClick } from './hooks/use.container.click';
@@ -25,19 +22,19 @@ import { useListenToShiftKey } from '../context/shift.key.pressed';
 import { useScopeDrop } from '../hooks/use.dnd';
 import { useSelectionBoxFocus } from '../context/hooks/use.selection.box.focus';
 import { useSyncSelections } from './hooks/use.sync.selections';
-import { useUpdateElement } from '../hooks/events/use.update.element';
 
-type Props = cProps<{
-  zoneId: string;
+type Props = {
+  zoneId?: string;
   rowsCount: number;
   columnsCount: number;
-  onAddItem?: (item: Omit<DroppedElement, 'id'>) => void;
-  onUpdateItems?: (item: DroppedElement[]) => void;
+  onAddItem?: (element: AddedElement) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onUpdateItems?: (nextElements: DroppedElement<any>[]) => void;
   onRowExpand?: (rowsCount: number) => void;
   onElementFocus?: (elementId: string | undefined, zoneId: string) => void;
   onDragging?: (isDragging: boolean, zoneId: string) => void;
-  value?: Array<DroppedElement>;
-}>;
+  children?: Array<React.ReactElement<React.ComponentProps<typeof DropItem>>>;
+};
 
 function DropZoneContent({
   onElementFocus,
@@ -45,7 +42,7 @@ function DropZoneContent({
   onAddItem,
   onUpdateItems,
   onRowExpand,
-  value,
+  children,
 }: Omit<Props, 'zoneId' | 'columnsCount' | 'rowsCount'>) {
   const zoneId = useZoneId();
   const container = React.useRef<HTMLDivElement>();
@@ -55,8 +52,10 @@ function DropZoneContent({
 
   useDragOverflowListener();
   useListenToShiftKey();
+  useSyncSelections();
   useContainerClick(container.current);
-  useSyncSelections(value);
+  useDeleteFocusElement(onUpdateItems);
+  useAddElement(onAddItem);
 
   useBuilderEvents('elementDragging', (element) =>
     onDragging?.(element.isDragging, zoneId),
@@ -69,18 +68,6 @@ function DropZoneContent({
   useBuilderEvents('gridRowsUpdate', (nextRowsCount) =>
     onRowExpand?.(nextRowsCount),
   );
-
-  useDeleteFocusElement((elements) => {
-    onUpdateItems(value.filter((item) => isNil(elements[item.id])));
-  });
-
-  useUpdateElement((elements) => {
-    onUpdateItems?.(uniqueBy(elements.concat(value), (element) => element.id));
-  });
-
-  useAddElement((element) => {
-    onAddItem?.(element);
-  });
 
   return (
     <DropGrid
@@ -95,11 +82,9 @@ function DropZoneContent({
       <DragShadow />
       <DragLayer />
       <Resizer />
-      {value?.map((element) => (
-        <DropZoneItem key={element.id} element={element} />
-      ))}
       <MultiDragOverlay />
       <SelectionBox />
+      {children}
     </DropGrid>
   );
 }

@@ -1,22 +1,35 @@
 import { KeyCode, useOneOfKeyPressed } from '@valhalla/web.react';
 
-import type { Selections } from '../../../context/selections';
-import isEmpty from 'lodash.isempty';
+import type { DroppedElement } from '../../../types';
 import { useStore } from '../../../context/scope.provider';
 
 /**
- * "It calls a callback when the user presses the delete key and there are elements selected."
+ * It deletes the selected elements from the store
  */
 export function useDeleteFocusElement(
-  callback: (elements: Selections) => void,
+  onDelete?: (next: DroppedElement[], deleted: DroppedElement[]) => void,
 ) {
   const store = useStore();
 
   useOneOfKeyPressed([KeyCode.Delete, KeyCode.Backspace], {
     onKeyDown() {
-      if (!isEmpty(store.getState().selections) && callback) {
-        callback(store.getState().selections);
+      if (!onDelete) {
+        return;
       }
+
+      const selections = store.getState().selections;
+      const onDeck = store.getState().droppedElements;
+      const next: DroppedElement[] = [];
+      const deleted: DroppedElement[] = [];
+      for (const elementId of Object.keys(onDeck)) {
+        if (selections[elementId]) {
+          deleted.push(selections[elementId]);
+        } else {
+          next.push(onDeck[elementId].element);
+        }
+      }
+
+      onDelete(next, deleted);
     },
   });
 }

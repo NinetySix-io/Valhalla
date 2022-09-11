@@ -2,7 +2,7 @@ import type { DroppedElement } from '../types';
 import { createStore } from 'tiamut';
 
 export const focusedElement = createStore({
-  initialState: null as DroppedElement | null,
+  initialState: undefined as DroppedElement | undefined,
   actions: {
     clear() {
       return null;

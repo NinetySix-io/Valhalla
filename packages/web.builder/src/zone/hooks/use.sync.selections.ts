@@ -1,22 +1,25 @@
-import type { DroppedElement } from '../../types';
 import React from 'react';
+import type { Selections } from '../../context/selections';
 import isEmpty from 'lodash.isempty';
 import isNil from 'lodash.isnil';
-import keyBy from 'lodash.keyby';
 import { useStore } from '../../context/scope.provider';
 
-export function useSyncSelections(value: Array<DroppedElement>) {
+export function useSyncSelections() {
   const store = useStore();
+  const elements = store.useSelect((state) => state.droppedElements);
 
   React.useEffect(() => {
     const current = store.getState().selections;
-    store.actions.selections.replace(
-      isEmpty(current)
-        ? current
-        : keyBy(
-            value.filter((item) => !isNil(current[item.id])),
-            (item) => item.id,
-          ),
-    );
-  }, [store, value]);
+    if (!isEmpty(current)) {
+      // Remove invalid selections
+      const nextSelections: Selections = {};
+      for (const key of Object.keys(current)) {
+        if (!isNil(elements[key])) {
+          nextSelections[key] = elements[key].element;
+        }
+      }
+
+      store.actions.selections.replace(nextSelections);
+    }
+  }, [store, elements]);
 }

@@ -102,10 +102,8 @@ const Container = styled(
   },
 );
 
-type Props = Omit<
-  React.PropsWithoutRef<JSX.IntrinsicElements['div']>,
-  'onChange'
-> & {
+type Props = {
+  onFocus?: () => void;
   focusColor?: string;
   onFocusChange?: (isActive: boolean) => void;
   children?: React.ReactNode;
@@ -113,28 +111,36 @@ type Props = Omit<
 };
 
 export const DropItem = React.forwardRef<HTMLDivElement, Props>(
-  ({ element, focusColor, children, ...props }, ref) => {
+  ({ element, focusColor, children, onFocus, ...props }, ref) => {
     const store = useStore();
     const container = React.useRef<HTMLDivElement>();
     const cellSize = store.useSelect((state) => state.cellSize);
-    const focusedElement = store.useSelect((state) => state.focusedElement);
     const [isResizing, setIsResizing] = React.useState(false);
     const [cacheElement, setElement] = useTemporalCache(element);
     const gridArea = useElementGridArea(cacheElement);
     const selection = useSelections(element);
+    const isFocus = store.useSelect(
+      (state) => state.focusedElement?.id === element.id,
+    );
+
+    useDroppedElementRegister(element, container.current);
+
+    React.useEffect(() => {
+      if (isFocus && onFocus) {
+        onFocus();
+      }
+    }, [onFocus, isFocus]);
 
     // TODO: probably optimize this because it will
     // rerender when it doesn't need to.
     // It should really only rerender when it
     // is focused or when it lost focus
-    const isFocus = focusedElement?.id === element.id;
-    const hasFocus = !isNil(focusedElement);
     const showOutline = isFocus || isResizing || selection.isBeingSelected;
-
-    useDroppedElementRegister(element, container.current);
 
     async function handleMouseDown() {
       const isShiftKeyDown = store.getState().isShiftKeyPressed;
+      const hasFocus = !isNil(store.getState().focusedElement);
+
       if (!isShiftKeyDown || !hasFocus) {
         store.actions.focusedElement.replace(element);
       }
@@ -226,5 +232,3 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
     );
   },
 );
-
-DropItem.displayName = 'DropItem';

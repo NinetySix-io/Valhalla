@@ -8,11 +8,7 @@ import { useStore } from '../scope.provider';
 export function useSelections(element: DroppedElement) {
   const store = useStore();
   const selections = store.useSelect((state) => state.selections);
-  const isDragging = store.useSelect(
-    (state) => state.isDragging,
-    (p, c) => p.isDragging === c.isDragging,
-  );
-
+  const isDragging = store.useSelect((state) => state.isDragging);
   const selectionList = Object.values(selections);
   const isBeingSelected = selectionList.some((item) => item.id === element.id);
   const isMultiSelected = selectionList.length > 1;

@@ -1,9 +1,10 @@
-import type { DroppedElement } from '../../types';
+import type { AddedElement, DroppedElement } from '../../types';
+
 import { EventsRegistry } from './registry';
 
 export type BuilderEvents = {
   gridRowsUpdate: number;
-  elementAdded: Omit<DroppedElement, 'id'>;
+  elementAdded: AddedElement;
   elementsUpdated: DroppedElement[];
   elementFocus: { elementId: string };
   elementDragging: { isDragging: boolean };

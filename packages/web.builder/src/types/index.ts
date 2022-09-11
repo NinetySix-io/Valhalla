@@ -1,14 +1,14 @@
-import type { BuilderElement } from './elements';
-import type { ValueOf } from '@valhalla/utilities';
-
-export type DroppableElement = ValueOf<BuilderElement>;
-
 export type Size = {
   width: number;
   height: number;
 };
 
-export type Droppable<T extends DroppableElement = DroppableElement> = T & {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Droppable<
+  T extends object = object,
+  Type extends string = string,
+> = T & {
+  type: Type;
   xSpan: number;
   ySpan: number;
   canResize?: boolean;
@@ -26,4 +26,5 @@ export type DroppedElement<T extends Droppable = Droppable> = T &
     id: string;
   };
 
+export type AddedElement<T extends Droppable = Droppable> = T & DroppedPosition;
 export type DropCandidate<T extends Droppable = Droppable> = T;
