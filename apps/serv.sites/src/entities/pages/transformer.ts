@@ -20,13 +20,13 @@ export class PageTransformer extends PageSchema {
       slug: this.slug,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      updatedBy: this.updatedBy.toHexString(),
-      createdBy: this.createdBy.toHexString(),
+      updatedBy: this.updatedBy.toString(),
+      createdBy: this.createdBy.toString(),
       isLoneTitle: this.isLoneTitle,
       title: this.title,
       description: this.description,
-      ownBy: this.ownBy.toHexString(),
-      site: this.site.toHexString(),
+      ownBy: this.ownBy.toString(),
+      site: this.site.toString(),
       status: this.status,
     };
   }

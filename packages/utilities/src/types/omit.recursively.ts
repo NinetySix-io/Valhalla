@@ -5,8 +5,11 @@ type Id<T> = {} & { [P in keyof T]: T[P] };
 
 type ObjectId = { _bsontype: 'ObjectID' };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type OmitDistributive<T, K extends PropertyKey> = T extends any
+type OmitDistributive<
+  T extends BasicObject,
+  K extends PropertyKey,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+> = T extends any
   ? T extends object
     ? T extends ObjectId | Date
       ? T

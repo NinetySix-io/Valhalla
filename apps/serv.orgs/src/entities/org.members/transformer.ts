@@ -11,14 +11,14 @@ export class OrgMemberTransformer extends OrgMemberSchema {
   get proto(): MemberProto {
     return {
       id: this.id,
-      organization: this.organization.toHexString(),
-      user: this.user.toHexString(),
-      invitedBy: this.invitedBy?.toHexString(),
+      organization: this.organization.toString(),
+      user: this.user.toString(),
+      invitedBy: this.invitedBy?.toString(),
       role: this.role,
       status: this.status,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      updatedBy: this.updatedBy.toHexString(),
+      updatedBy: this.updatedBy.toString(),
       profileImageUrl: this.profileImageUrl,
     };
   }

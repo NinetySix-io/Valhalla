@@ -57,7 +57,7 @@
     "long": "^5.2.0",
     "moment": "^2.29.3",
     "mongodb": "4.5.0",
-    "mongoose": "~6.4.2",
+    "mongoose": "^6.5.5",
     "nestjs-typegoose": "^7.1.38",
     "passport": "^0.6.0",
     "passport-custom": "^1.1.1",

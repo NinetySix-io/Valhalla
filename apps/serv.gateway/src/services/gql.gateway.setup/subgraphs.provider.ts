@@ -55,7 +55,7 @@ export abstract class SubgraphsProvider implements OnModuleInit {
   private buildSubgraphs(serviceNames: string[]) {
     const currentSubgraphMap = keyBy(
       this._subgraphs ?? [],
-      (graph) => graph.name,
+      (graph: ServiceEndpointDefinition) => graph.name,
     );
 
     const newGraphConfigs: string[] = [];

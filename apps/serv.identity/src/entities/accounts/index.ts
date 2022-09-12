@@ -28,6 +28,9 @@ export class AccountsModel extends BaseFactory<AccountSchema> {
       },
       {
         $pull: {
+          // TODO: Fix this
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           emails: {
             value: email,
             isVerified: false,
@@ -54,6 +57,9 @@ export class AccountsModel extends BaseFactory<AccountSchema> {
       },
       {
         $pull: {
+          // TODO: Fix this
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           phones: {
             value: phone,
             isVerified: false,

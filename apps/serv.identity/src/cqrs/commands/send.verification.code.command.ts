@@ -37,7 +37,7 @@ export class SendVerificationCodeHandler
         channel,
         destination,
         expiresAt: verification.expiresAt,
-        owner: verification.owner?.toHexString(),
+        owner: verification.owner?.toString(),
         verificationId: verification.id,
       }),
 

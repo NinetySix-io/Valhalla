@@ -14,7 +14,7 @@ describe('Lib:: makeElementTrees', () => {
     prop: Pick<ElementSchema, '_id' | 'isRoot' | 'type' | 'parent'>,
   ): ElementSchema {
     return {
-      id: prop._id.toHexString(),
+      id: prop._id.toString(),
       _id: prop._id,
       isRoot: prop.isRoot,
       type: prop.type,
@@ -37,13 +37,13 @@ describe('Lib:: makeElementTrees', () => {
       _id: leaf1,
       isRoot: false,
       type: ElementType.Box,
-      parent: parent1.toHexString(),
+      parent: parent1.toString(),
     }),
     createSeed({
       _id: leafEnd,
       isRoot: false,
       type: ElementType.Box,
-      parent: leaf1.toHexString(),
+      parent: leaf1.toString(),
     }),
     createSeed({
       _id: parent2,

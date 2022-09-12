@@ -29,6 +29,7 @@
     "allowUnusedLabels": false,
     "noImplicitOverride": true,
     "noImplicitReturns": false,
-    "noImplicitThis": true
+    "noImplicitThis": true,
+    "preserveSymlinks": true
   }
 }

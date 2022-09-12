@@ -64,7 +64,7 @@ export async function loadServicesFromRemoteEndpoint({
       });
 
       if (errors) {
-        throw new Error(errors?.map((e) => e.message).join('\n'));
+        throw new Error(errors?.map((e: Error) => e.message).join('\n'));
       } else if (!data) {
         throw new Error('Unable to resolve schema');
       }

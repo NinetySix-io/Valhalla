@@ -38,7 +38,7 @@ export class LogoutHandler
       );
 
       if (token) {
-        const event = new AccountLoggedOutEvent(token.account.toHexString());
+        const event = new AccountLoggedOutEvent(token.account.toString());
         this.eventBus.publish(event);
       }
     }

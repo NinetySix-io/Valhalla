@@ -33,7 +33,7 @@ export class ServCoreSetup {
 
     this.microServices.grpc = true;
     const options: GrpcOptions['options'] = {
-      ...this.grpc,
+      ...this.grpc!,
       url: this.config.gRpcUrl,
     };
 

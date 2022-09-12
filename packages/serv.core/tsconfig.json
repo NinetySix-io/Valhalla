@@ -4,10 +4,7 @@
     "target": "ESNext",
     "module": "commonjs",
     "outDir": "./dist",
-    "rootDir": "./src",
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "preserveSymlinks": true
+    "rootDir": "./src"
   },
   "extends": "../tsconfig/base.json",
   "exclude": ["dist", "build", "node_modules", ".eslintrc.js"],
