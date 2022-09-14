@@ -11,6 +11,7 @@ import { Logger } from '@nestjs/common';
 import { ServiceDefinition } from '@apollo/federation-internals';
 import { ServiceDefinitionUpdate } from '@apollo/gateway/dist/config';
 import { parse } from 'graphql';
+import { HeadersInit } from './types';
 
 export type Service = ServiceEndpointDefinition & {
   dataSource: GraphQLDataSource;
