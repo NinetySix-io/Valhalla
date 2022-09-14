@@ -137,7 +137,7 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
     // is focused or when it lost focus
     const showOutline = isFocus || isResizing || selection.isBeingSelected;
 
-    async function handleMouseDown() {
+    function handleMouseDown() {
       const isShiftKeyDown = store.getState().isShiftKeyPressed;
       const hasFocus = !isNil(store.getState().focusedElement);
 
