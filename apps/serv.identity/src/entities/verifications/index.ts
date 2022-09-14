@@ -2,7 +2,7 @@ import { BootConfigService } from '@app/services/boot.config.service';
 import { Injectable } from '@nestjs/common';
 import { BaseFactory, ModelType } from '@valhalla/serv.core';
 import { compare, hash } from 'bcryptjs';
-import { InjectModel } from 'nestjs-typegoose';
+import { InjectModel } from 'kindagoose';
 import { VerificationSchema } from './schema';
 import dayjs from 'dayjs';
 

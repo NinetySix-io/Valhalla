@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from 'nestjs-typegoose';
+import { InjectModel } from 'kindagoose';
 import { BaseFactory, ModelType } from '@valhalla/serv.core';
 import { SiteSchema } from './schema';
 

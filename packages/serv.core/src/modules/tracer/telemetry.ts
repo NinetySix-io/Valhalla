@@ -1,7 +1,7 @@
 import { ContextType, ExecutionContext, Logger } from '@nestjs/common';
 
+import dayjs from 'dayjs';
 import { makeTag } from '@valhalla/utilities';
-import moment from 'moment';
 
 export class Telemetry {
   private readonly logger = new Logger(Telemetry.name);
@@ -27,11 +27,7 @@ export class Telemetry {
   private get durationTag() {
     return makeTag(
       'Duration',
-      this.endTime
-        ? moment
-            .duration(moment(this.endTime).diff(this.startTime))
-            .asMilliseconds() + 'ms'
-        : '???',
+      this.endTime ? dayjs(this.endTime).diff(this.startTime) + 'ms' : '???',
     );
   }
 

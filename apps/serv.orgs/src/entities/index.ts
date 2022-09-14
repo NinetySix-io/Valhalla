@@ -1,10 +1,10 @@
 import { Global, Module, ModuleMetadata } from '@nestjs/common';
 
+import { KindagooseModule } from 'kindagoose';
 import { OrgMemberSchema } from './org.members/schema';
 import { OrgMembersModel } from './org.members';
 import { OrganizationSchema } from './organizations/schema';
 import { OrganizationsModel } from './organizations';
-import { TypegooseModule } from 'nestjs-typegoose';
 
 const ModelProviders: ModuleMetadata['providers'] = [
   OrganizationsModel,
@@ -13,7 +13,7 @@ const ModelProviders: ModuleMetadata['providers'] = [
 
 @Global()
 @Module({
-  imports: [TypegooseModule.forFeature([OrganizationSchema, OrgMemberSchema])],
+  imports: [KindagooseModule.forFeature([OrganizationSchema, OrgMemberSchema])],
   providers: [...ModelProviders],
   exports: [...ModelProviders],
 })

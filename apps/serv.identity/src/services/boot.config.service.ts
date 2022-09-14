@@ -6,6 +6,10 @@ import ms from 'ms';
 
 @Injectable()
 export class BootConfigService extends ServAppConfigService {
+  get mongodbUri(): string {
+    return this.boot.get('mongodb.uri');
+  }
+
   get passwordExpires(): string {
     return this.boot.get('app.passwordExpires', '1h');
   }
