@@ -1,0 +1,10 @@
+{
+  "name": "@valhalla/web.hydration",
+  "version": "1.0.0",
+  "main": "./src",
+  "types": "./src",
+  "private": true,
+  "scripts": {},
+  "devDependencies": {},
+  "dependencies": {}
+}
