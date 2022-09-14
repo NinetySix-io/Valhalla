@@ -22,13 +22,17 @@ export const AccountBtn: React.FC<Props> = () => {
   const isOpen = Boolean(anchor);
   const account = useGetAccountQuery().data?.account;
 
+  function handleClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    setAnchor(event.currentTarget);
+  }
+
   if (!account) {
     return null;
   }
 
   return (
     <Box>
-      <IconButton onClick={(e) => setAnchor(e.currentTarget)} size="small">
+      <IconButton onClick={handleClick} size="small">
         <Avatar variant="rounded">{account.firstName[0].toUpperCase()}</Avatar>
       </IconButton>
       <Menu
