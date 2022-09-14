@@ -3,6 +3,7 @@
   "display": "React Library",
   "extends": "./base.json",
   "compilerOptions": {
+    "preserveSymlinks": false,
     "isolatedModules": false,
     "lib": ["ES2015"],
     "module": "ESNext",
