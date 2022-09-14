@@ -25,7 +25,7 @@ export const OrganizationLogo: React.FC<Props> = ({
       alignItems="center"
     >
       {organization.logoUrl ? (
-        <Image alt={alt} src={organization.logoUrl} />
+        <Image alt={alt} src={organization.logoUrl} layout="fill" />
       ) : (
         <Typography variant="h1" component="h6">
           {organization.name[0]}

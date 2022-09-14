@@ -1,5 +1,5 @@
 const config = require('dotenv').config().parsed;
-const pick = require('lodash.pick')
+const pick = require('lodash.pick');
 const withTM = require('next-transpile-modules')([
   '@valhalla/web.react',
   '@valhalla/web.builder',

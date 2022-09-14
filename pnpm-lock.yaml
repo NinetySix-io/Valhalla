@@ -379,6 +379,7 @@ importers:
       '@storybook/testing-library': 0.0.13
       '@types/cookie': ^0.5.1
       '@types/js-cookie': ^3.0.2
+      '@types/lodash.compact': ^3.0.7
       '@types/lodash.isempty': ^4.4.7
       '@types/lodash.isnil': ^4.0.7
       '@types/lodash.omit': ^4.5.7
@@ -407,6 +408,7 @@ importers:
       graphql-tag: ^2.12.6
       isomorphic-unfetch: ^3.1.0
       js-cookie: ^3.0.1
+      lodash.compact: ^3.0.1
       lodash.isempty: ^4.4.0
       lodash.isnil: ^4.0.0
       lodash.omit: ^4.5.0
@@ -453,6 +455,7 @@ importers:
       graphql-tag: 2.12.6_graphql@16.6.0
       isomorphic-unfetch: 3.1.0
       js-cookie: 3.0.1
+      lodash.compact: 3.0.1
       lodash.isempty: 4.4.0
       lodash.isnil: 4.0.0
       lodash.omit: 4.5.0
@@ -495,6 +498,7 @@ importers:
       '@storybook/testing-library': 0.0.13_biqbaboplfbrettd7655fr4n2y
       '@types/cookie': 0.5.1
       '@types/js-cookie': 3.0.2
+      '@types/lodash.compact': 3.0.7
       '@types/lodash.isempty': 4.4.7
       '@types/lodash.isnil': 4.0.7
       '@types/lodash.omit': 4.5.7
@@ -8410,6 +8414,12 @@ packages:
 
   /@types/lodash.camelcase/4.3.7:
     resolution: {integrity: sha512-Nfi6jpo9vuEOSIJP+mpbTezKyEt75DQlbwjiDvs/JctWkbnHDoyQo5lWqdvgNiJmVUjcmkfvlrvSEgJYvurOKg==}
+    dependencies:
+      '@types/lodash': 4.14.184
+    dev: true
+
+  /@types/lodash.compact/3.0.7:
+    resolution: {integrity: sha512-yHP+S4QY9C/OLWc+Ei7A1rdwGcBgwFOaW20eZU8qA42dNRwUWnGltDAmKg5ICVGrgJKTokv0gsz1dsQl1gKA2w==}
     dependencies:
       '@types/lodash': 4.14.184
     dev: true
@@ -16330,6 +16340,10 @@ packages:
 
   /lodash.clonedeep/4.5.0:
     resolution: {integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==}
+    dev: false
+
+  /lodash.compact/3.0.1:
+    resolution: {integrity: sha512-2ozeiPi+5eBXW1CLtzjk8XQFhQOEMwwfxblqeq6EGyTxZJ1bPATqilY0e6g2SLQpP4KuMeuioBhEnWz5Pr7ICQ==}
     dev: false
 
   /lodash.debounce/4.0.8:
