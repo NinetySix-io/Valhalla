@@ -14,6 +14,7 @@ import { Logger } from '@nestjs/common';
 import { composeServices } from '@apollo/composition';
 import fs from 'fs';
 import path from 'path';
+import { HeadersInit } from './types';
 
 export interface IntrospectAndComposeOptions {
   subgraphs: ServiceEndpointDefinition[] | (() => ServiceEndpointDefinition[]);
