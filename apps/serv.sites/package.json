@@ -31,7 +31,6 @@
     "@nestjs/cqrs": "^8.0.4",
     "@nestjs/graphql": "^10.0.11",
     "@nestjs/microservices": "^8.4.4",
-    "@nestjs/platform-fastify": "^8.4.4",
     "@nestjs/terminus": "^8.0.6",
     "@valhalla/serv.clients": "workspace:*",
     "@valhalla/serv.core": "workspace:*",

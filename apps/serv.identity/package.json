@@ -23,7 +23,7 @@
     "proto:generate": "node ../../scripts/generate.proto"
   },
   "dependencies": {
-    "@apollo/subgraph": "^2.0.2",
+    "@apollo/subgraph": "^2.1.1",
     "@nestcloud2/boot": "^0.8.5",
     "@nestcloud2/common": "^0.8.5",
     "@nestcloud2/config": "^0.8.5",
@@ -36,7 +36,6 @@
     "@nestjs/jwt": "^8.0.0",
     "@nestjs/microservices": "^8.4.4",
     "@nestjs/passport": "^8.2.1",
-    "@nestjs/platform-fastify": "^8.4.4",
     "@nestjs/terminus": "^8.0.6",
     "@valhalla/serv.clients": "workspace:*",
     "@valhalla/serv.core": "workspace:*",
@@ -48,7 +47,6 @@
     "class-validator": "^0.13.2",
     "dayjs": "^1.11.5",
     "dotenv": "^16.0.2",
-    "fastify": "^3.29.0",
     "graphql": "^16.6.0",
     "jsonwebtoken": "^8.5.1",
     "kindagoose": "^1.2.4",
@@ -59,7 +57,7 @@
     "nest-cookies": "^1.2.2",
     "passport": "^0.6.0",
     "passport-custom": "^1.1.1",
-    "protobufjs": "^6.11.2",
+    "protobufjs": "^7.1.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.5.6",
     "superstruct": "^0.16.0",
