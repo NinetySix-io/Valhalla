@@ -21,7 +21,7 @@ This is a monorepo on top of turborepo
 
 ### Notes
 
-- Never do `import type`, this causes app to not work properly
+- Never do `import type` in serv apps, this causes app to not work properly
 
 #### Prerequisite
 
