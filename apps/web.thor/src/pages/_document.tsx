@@ -81,6 +81,7 @@ Doc.getInitialProps = async (ctx) => {
     <style
       data-emotion={`${style.key} ${style.ids.join(' ')}`}
       key={style.key}
+      // skipcq: JS-0440
       dangerouslySetInnerHTML={{ __html: style.css }}
     />
   ));

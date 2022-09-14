@@ -59,6 +59,7 @@ const Template: React.FC<Props> = ({
               onFocus={() => onFocus?.(item)}
             >
               <div
+                // skipcq: JS-0440
                 dangerouslySetInnerHTML={{
                   __html: item.value,
                 }}

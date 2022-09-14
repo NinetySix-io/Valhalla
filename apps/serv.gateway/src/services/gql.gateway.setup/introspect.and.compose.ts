@@ -180,9 +180,9 @@ export class IntrospectAndCompose implements SupergraphManager {
 
     if (compositionResult.errors) {
       const { errors } = compositionResult;
+      const messages = errors.map((e) => '\t' + e.message).join('\n');
       throw Error(
-        "A valid schema couldn't be composed. The following composition errors were found:\n" +
-          errors.map((e) => '\t' + e.message).join('\n'),
+        `A valid schema couldn't be composed. The following composition errors were found:\n${messages}`,
       );
     } else {
       const { supergraphSdl } = compositionResult;

@@ -15,7 +15,7 @@ export function useSelectionBoxFocus() {
   const ref = React.useRef<HTMLDivElement>();
 
   const processHighlightedElements = useThrottleCallback(
-    async (start: XYCoord, end: XYCoord) => {
+    (start: XYCoord, end: XYCoord) => {
       const dragBox = Rectangle.fromCoordinates(start, end);
       const elements = store.getState().droppedElements;
       const next: Selections = {};
@@ -51,7 +51,7 @@ export function useSelectionBoxFocus() {
     }
   });
 
-  useEvent(window, 'mouseup', async () => {
+  useEvent(window, 'mouseup', () => {
     store.actions.selectionBox.clear();
   });
 

@@ -232,3 +232,5 @@ export const DropItem = React.forwardRef<HTMLDivElement, Props>(
     );
   },
 );
+
+DropItem.displayName = 'DropItem';

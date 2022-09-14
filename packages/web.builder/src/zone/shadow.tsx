@@ -46,7 +46,7 @@ export const DragShadow: React.FC = () => {
   const cellSize = store.useSelect((state) => state.cellSize);
   const cache = React.useRef<DroppedElement[]>([]);
 
-  useDragMonitorOffset(async (monitor) => {
+  useDragMonitorOffset((monitor) => {
     const nextOffset = monitor.getSourceClientOffset();
     const draggingElement: DroppedElement = monitor.getItem();
     const isMultiDrag =
