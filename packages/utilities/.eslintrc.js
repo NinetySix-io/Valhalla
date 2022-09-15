@@ -1,2 +1,6 @@
-/* eslint-disable */
-module.exports = require("../config/eslint-preset");
+module.exports = {
+  extends: ['../config/eslint-preset'],
+  rules: {
+    '@typescript-eslint/consistent-type-imports': 'error',
+  },
+};
