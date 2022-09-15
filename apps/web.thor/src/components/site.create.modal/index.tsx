@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-import { Form, cProps } from '@valhalla/web.react';
+import type { cProps } from '@valhalla/web.react';
+import { Form } from '@valhalla/web.react';
 
 import { FormModal } from '../modal.form';
 import { TextField } from '@mui/material';
@@ -33,7 +34,7 @@ export const CreateSiteModal: React.FC<Props> = ({
     form.resetFields();
   }
 
-  async function handleFinish(payload: FormPayload) {
+  async function handleSubmit(payload: FormPayload) {
     await createSite({
       variables: {
         name: payload.name,
@@ -50,8 +51,7 @@ export const CreateSiteModal: React.FC<Props> = ({
       open={isOpen}
       loading={loading}
       onClose={handleClose}
-      onSubmit={form.submit}
-      onFinish={handleFinish}
+      onSubmit={handleSubmit}
       withCancel
     >
       <Form.Item name="name" rules={[{ required: true, message: 'Required!' }]}>

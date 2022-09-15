@@ -1,7 +1,7 @@
 import { Button, Grid, css, styled } from '@mui/material';
 
 import { BUILDER_ELEMENT } from '../../constants';
-import { BuilderElement } from '../../types';
+import type { BuilderElement } from '../../types';
 import { useDrag } from 'react-dnd';
 
 const Item = styled(Button)(

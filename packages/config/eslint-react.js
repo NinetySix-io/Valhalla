@@ -38,6 +38,7 @@ module.exports = {
     'react/prop-types': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
     'no-inline-styles/no-inline-styles': 'error',
-    'react/display-name': ['off']
+    'react/display-name': ['off'],
+    '@typescript-eslint/consistent-type-imports': 'error',
   },
 };

@@ -1,4 +1,4 @@
-import {
+import type {
   GetServerSidePropsContext,
   GetServerSidePropsResult,
   GetStaticPropsContext,
@@ -6,11 +6,11 @@ import {
   PreviewData,
 } from 'next';
 
-import { AppPropsType } from 'next/dist/shared/lib/utils';
-import { BasicObject } from '@valhalla/utilities';
-import { NextSeoProps } from 'next-seo';
-import { ParsedUrlQuery } from 'querystring';
-import { Router } from 'next/router';
+import type { AppPropsType } from 'next/dist/shared/lib/utils';
+import type { BasicObject } from '@valhalla/utilities';
+import type { NextSeoProps } from 'next-seo';
+import type { ParsedUrlQuery } from 'querystring';
+import type { Router } from 'next/router';
 
 export type WithSEO<P> = P & {
   SEO?: NextSeoProps;
@@ -38,4 +38,4 @@ export type GetStaticProps<
   | Promise<GetStaticPropsResult<WithSEO<P>>>
   | GetStaticPropsResult<WithSEO<P>>;
 
-export type AppProps = AppPropsType<Router, WithSEO<unknown>>;
+export type AppProps<T = object> = AppPropsType<Router, WithSEO<unknown> & T>;

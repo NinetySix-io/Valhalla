@@ -2,7 +2,7 @@ import { Button, Stack, Typography } from '@mui/material';
 
 import { BaseLayout } from '@app/layout/base';
 import Link from 'next/link';
-import { View } from '@app/types/next';
+import type { View } from '@app/types/next';
 
 const HomeView: View = () => {
   return (

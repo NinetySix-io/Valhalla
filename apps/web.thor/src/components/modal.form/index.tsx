@@ -1,7 +1,9 @@
 import * as React from 'react';
 
-import { Box, BoxProps } from '@mui/material';
-import { Form, FormProps } from '@valhalla/web.react';
+import type { BoxProps } from '@mui/material';
+import { Box } from '@mui/material';
+import type { FormProps } from '@valhalla/web.react';
+import { Form } from '@valhalla/web.react';
 
 import { Modal } from '@app/components/modal';
 import { tryNice } from 'try-nice';

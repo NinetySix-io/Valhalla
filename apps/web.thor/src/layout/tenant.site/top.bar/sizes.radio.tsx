@@ -2,17 +2,15 @@ import * as React from 'react';
 
 import {
   Button,
+  css,
   ListItemText,
   Menu,
   MenuItem,
-  css,
   styled,
 } from '@mui/material';
-import { ScreenSize, SiteEditorSlice } from '@app/redux/slices/editor';
 
+import { EditorStore, ScreenSize } from '@app/components/page.editor/store';
 import { useAnchor } from '@app/hooks/dom/use.anchor';
-import { useDispatch } from 'react-redux';
-import { useReduxSelector } from '@app/redux/hooks';
 
 const Container = styled('div')(
   ({ theme }) => css`
@@ -21,12 +19,11 @@ const Container = styled('div')(
 );
 
 export const SizesRadio: React.FC = () => {
-  const dispatch = useDispatch();
   const anchor = useAnchor();
-  const active = useReduxSelector((state) => state.SiteEditor.size);
+  const active = EditorStore.useSelect((state) => state.size);
 
   function handleSelect(value: ScreenSize) {
-    dispatch(SiteEditorSlice.actions.setSize(value));
+    EditorStore.actions.setSize(value);
     anchor.remove();
   }
 

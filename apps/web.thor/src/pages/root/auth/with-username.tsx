@@ -6,7 +6,7 @@ import { Form, UsernameFormItem, useChange } from '@valhalla/web.react';
 import { BaseLayout } from '@app/layout/base';
 import { FormContainer } from '@app/components/form.container';
 import { LoadingButton } from '@mui/lab';
-import { View } from '@app/types/next';
+import type { View } from '@app/types/next';
 import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
 import { isEmail } from '@valhalla/utilities';
 import { useLogin } from '@app/graphql/valhalla/hooks/user.login';

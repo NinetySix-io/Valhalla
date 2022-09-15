@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { useReduxSelector } from '@app/redux/hooks';
+import { EditorStore } from './store';
 
 export const SectionIdContext = React.createContext<string>('');
 export const DropIdContext = React.createContext<string>('');
@@ -10,20 +10,18 @@ export function useSectionId() {
 }
 
 export function useActiveSectionId() {
-  return useReduxSelector((state) => state.SiteEditor.activeSection);
+  return EditorStore.useSelect((state) => state.activeSection);
 }
 
 export function useActiveElement() {
-  return useReduxSelector((state) => state.SiteEditor.activeElement);
+  return EditorStore.useSelect((state) => state.activeElement);
 }
 
 export function useActiveSection() {
-  return useReduxSelector((state) =>
-    !state.SiteEditor.activeSection
+  return EditorStore.useSelect((state) =>
+    !state.activeSection
       ? undefined
-      : state.SiteEditor.sections.find(
-          (section) => section.id === state.SiteEditor.activeSection,
-        ),
+      : state.sections.find((section) => section.id === state.activeSection),
   );
 }
 
@@ -34,5 +32,5 @@ export function useIsSectionActive() {
 }
 
 export function useIsDragging() {
-  return useReduxSelector((state) => state.SiteEditor.isDragging);
+  return EditorStore.useSelect((state) => state.isDragging);
 }

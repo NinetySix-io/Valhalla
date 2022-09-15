@@ -1,5 +1,5 @@
 import { Environment } from '@app/env';
-import { UrlObject } from 'url';
+import type { UrlObject } from 'url';
 
 export const RETURN_TO = 'return_to' as const;
 

@@ -1,5 +1,5 @@
 import { useGetOrgMembershipQuery } from '@app/generated/valhalla.gql';
-import { useReduxSelector } from '@app/redux/hooks';
+import { TenantStore } from '@app/global.store/tenant';
 import { useSingleRouterQuery } from '../use.single.router.query';
 
 /**
@@ -26,5 +26,5 @@ export function useOrgMembershipHydrate() {
  * Hook to get organization context
  */
 export function useOrgCtx() {
-  return useReduxSelector((state) => state.Tenant.organization);
+  return TenantStore.useSelect((state) => state.organization);
 }

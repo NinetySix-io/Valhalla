@@ -3,7 +3,6 @@ import { buildEnvironment } from '@valhalla/utilities';
 export class Environment extends buildEnvironment({
   SERVER: process.env.SERVER,
   IS_DEV: process.env.IS_DEV,
-  DISABLE_REDUX_LOGGER: process.env.DISABLE_REDUX_LOGGER,
 }) {
   static get isServer() {
     return typeof window === 'undefined';
@@ -19,10 +18,6 @@ export class Environment extends buildEnvironment({
 
   static get IS_DEV() {
     return Boolean(this.variables.IS_DEV);
-  }
-
-  static get DISABLE_REDUX_LOGGER() {
-    return Boolean(this.variables.DISABLE_REDUX_LOGGER);
   }
 
   static get domain() {

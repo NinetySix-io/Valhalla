@@ -1,12 +1,8 @@
-import {
-  FindOrganizationBySlugDocument,
-  FindOrganizationBySlugQuery,
-} from '@app/generated/valhalla.gql';
+import type { FindOrganizationBySlugQuery } from '@app/generated/valhalla.gql';
+import { FindOrganizationBySlugDocument } from '@app/generated/valhalla.gql';
 
-import { ApolloClient } from '@apollo/client';
+import type { ApolloClient } from '@apollo/client';
 import { NextPluginError } from '../errors';
-import { Store } from '@app/redux';
-import { TenantSlice } from '@app/redux/slices/tenant';
 import { createNextPlugin } from '../create.plugin';
 import { tryNice } from 'try-nice';
 
@@ -15,7 +11,7 @@ import { tryNice } from 'try-nice';
  */
 export const withOrgContext = createNextPlugin<
   {
-    reduxStore?: Store;
+    // reduxStore?: never;
     apolloClient?: ApolloClient<unknown>;
     organization: FindOrganizationBySlugQuery['organizationBySlug'];
   },
@@ -45,9 +41,9 @@ export const withOrgContext = createNextPlugin<
   }
 
   ctx.organization = result.data.organizationBySlug;
-  ctx.reduxStore?.dispatch(
-    TenantSlice.actions.setOrganization(ctx.organization),
-  );
+  // ctx.reduxStore?.dispatch(
+  //   TenantSlice.actions.setOrganization(ctx.organization),
+  // );
 
   return ctx;
 });

@@ -1,8 +1,23 @@
-import { NextRequest, NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 const isDev = Boolean(process.env.IS_DEV);
 const SERVER = process.env.SERVER;
 const GQL_SERVER = SERVER + '/graphql';
+
+export const config = {
+  matcher: [
+    /*
+     * Match all paths except for:
+     * 1. /api routes
+     * 2. /_next (Next.js internals)
+     * 3. /fonts (inside /public)
+     * 4. /examples (inside /public)
+     * 5. all root files inside /public (e.g. /favicon.ico)
+     */
+    '/((?!_next|fonts|examples|[\\w-]+\\.\\w+).*)',
+  ],
+};
 
 export default function middleware(req: NextRequest) {
   const port = 3005;

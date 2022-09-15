@@ -1,10 +1,10 @@
-import {
+import type {
   GetServerSidePropsContext,
   GetStaticPropsContext,
   PreviewData,
   Redirect,
 } from 'next';
-import { ParsedUrlQuery } from 'querystring';
+import type { ParsedUrlQuery } from 'querystring';
 
 export type OnPagePropsCb = (props: object) => object;
 

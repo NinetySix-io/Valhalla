@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import Link from 'next/link';
 import { SidebarItem } from './base';
-import { cProps } from '@valhalla/web.react';
+import type { cProps } from '@valhalla/web.react';
 
 type Props = cProps;
 

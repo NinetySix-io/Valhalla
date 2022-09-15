@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Box } from '@mui/material';
-import { cProps } from '@valhalla/web.react';
+import type { cProps } from '@valhalla/web.react';
 
 type Props = cProps;
 

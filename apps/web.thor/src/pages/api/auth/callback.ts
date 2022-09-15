@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import {
   SSO_REDIRECT_RETURN,
   SSO_REFRESH_TOKEN,

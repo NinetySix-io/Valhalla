@@ -1,5 +1,4 @@
-import { ApolloClient } from '@apollo/client';
-import { Store } from '@app/redux';
+import type { ApolloClient } from '@apollo/client';
 import { createApolloClient } from '@app/apollo/create.client';
 import { createNextPlugin } from '../create.plugin';
 
@@ -8,7 +7,7 @@ import { createNextPlugin } from '../create.plugin';
  */
 export const withApollo = createNextPlugin<{
   apolloClient: ApolloClient<unknown>;
-  reduxStore: Store;
+  // reduxStore: any;
 }>((ctx) => {
   const headers = ctx.isSsr
     ? (ctx.ssrCtx.req.headers as Record<string, string>)
@@ -16,7 +15,8 @@ export const withApollo = createNextPlugin<{
 
   const apolloClient = createApolloClient({
     headers,
-    getAccessToken: () => ctx.reduxStore.getState().Meta.accessToken,
+    //TODO: state
+    getAccessToken: () => null,
   });
 
   ctx.apolloClient = apolloClient;

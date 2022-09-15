@@ -3,10 +3,8 @@ import * as React from 'react';
 import { Button, css, styled } from '@mui/material';
 
 import { BodySectionItem } from './item';
-import { SiteEditorSlice } from '@app/redux/slices/editor';
 import isEmpty from 'lodash.isempty';
-import { useDispatch } from 'react-redux';
-import { useReduxSelector } from '@app/redux/hooks';
+import { EditorStore } from '../store';
 
 const Container = styled('div')(
   () => css`
@@ -18,13 +16,12 @@ const Container = styled('div')(
 );
 
 export const BodySection: React.FC = () => {
-  const dispatch = useDispatch();
-  const sections = useReduxSelector((state) => state.SiteEditor.sections);
+  const sections = EditorStore.useSelect((state) => state.sections);
 
   if (isEmpty(sections)) {
     return (
       <Container>
-        <Button onClick={() => dispatch(SiteEditorSlice.actions.addSection())}>
+        <Button onClick={() => EditorStore.actions.addSection()}>
           Add Section
         </Button>
       </Container>

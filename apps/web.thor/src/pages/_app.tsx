@@ -1,36 +1,34 @@
 import '@app/scripts/mui.classnames';
 import '@app/scripts/wdyr';
 
-import {
-  AppProps,
-  SiteFavicon,
-  WithSEO,
-  createEmotionCache,
-  theme,
-} from '@valhalla/web.react';
+import type { AppProps, WithSEO } from '@valhalla/web.react';
+import { createEmotionCache, SiteFavicon, theme } from '@valhalla/web.react';
 
+import type { NormalizedCacheObject } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client';
+import { useApollo } from '@app/apollo/use.apollo';
 import { AuthRedirectProvider } from '@app/components/auth.redirect.provider';
 import { BaseLayout } from '@app/layout/base';
+import type { View } from '@app/types/next/page';
 import { CacheProvider } from '@emotion/react';
 import CssBaseline from '@mui/material/CssBaseline';
-import Head from 'next/head';
-import { Provider as ReduxProvider } from 'react-redux';
 import { ThemeProvider } from '@mui/material/styles';
-import { View } from '@app/types/next/page';
-import { useApollo } from '@app/apollo/use.apollo';
-import { useReduxHydration } from '@app/redux/with.redux';
+import Head from 'next/head';
 
 const clientSideEmotionCache = createEmotionCache();
 
-export default function App({ Component, ...props }: AppProps) {
-  const store = useReduxHydration(props);
+export default function App({
+  Component,
+  ...props
+}: AppProps<{
+  apolloState: NormalizedCacheObject;
+}>) {
   const pageProps = props.pageProps;
   const SEO: WithSEO<unknown>['SEO'] = pageProps?.SEO;
   const Page = Component as View;
   const Layout = Page.Layout ?? BaseLayout;
   const isProtected = !Page.isUnprotected;
-  const apolloClient = useApollo(pageProps, store);
+  const apolloClient = useApollo(pageProps);
 
   return (
     <CacheProvider value={clientSideEmotionCache}>
@@ -40,15 +38,13 @@ export default function App({ Component, ...props }: AppProps) {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <ReduxProvider store={store}>
-          <ApolloProvider client={apolloClient}>
-            <AuthRedirectProvider isProtected={isProtected}>
-              <Layout SEO={SEO}>
-                <Page {...pageProps} />
-              </Layout>
-            </AuthRedirectProvider>
-          </ApolloProvider>
-        </ReduxProvider>
+        <ApolloProvider client={apolloClient}>
+          <AuthRedirectProvider isProtected={isProtected}>
+            <Layout SEO={SEO}>
+              <Page {...pageProps} />
+            </Layout>
+          </AuthRedirectProvider>
+        </ApolloProvider>
       </ThemeProvider>
     </CacheProvider>
   );

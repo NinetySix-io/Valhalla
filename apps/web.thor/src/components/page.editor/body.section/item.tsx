@@ -1,22 +1,20 @@
 import * as React from 'react';
 
-import { ScreenSize, SiteEditorSlice } from '@app/redux/slices/editor';
 import {
   SectionIdContext,
   useActiveElement,
   useActiveSectionId,
   useIsDragging,
 } from '../context';
-import { cProps, makeFilterProps } from '@valhalla/web.react';
+import type { cProps } from '@valhalla/web.react';
+import { makeFilterProps } from '@valhalla/web.react';
 import { css, styled } from '@mui/material';
 
 import { AddSectionBtn } from './add.section.btn';
-import { DropZone } from './drop.zone';
 import { ElementsMenu } from './elements.menu';
 import { SectionMenu } from './section.menu';
 import throttle from 'lodash.throttle';
-import { useDispatch } from 'react-redux';
-import { useReduxSelector } from '@app/redux/hooks';
+import { EditorStore, ScreenSize } from '../store';
 
 const Container = styled(
   'section',
@@ -77,18 +75,17 @@ type Props = cProps<{
 }>;
 
 export const BodySectionItem: React.FC<Props> = ({ sectionId }) => {
-  const dispatch = useDispatch();
   const activeSection = useActiveSectionId();
   const active = useActiveElement();
   const isActive = !active && activeSection === sectionId;
   const isDragging = useIsDragging();
   const shouldDisplayHelpers = !isDragging && isActive;
-  const isMobile = useReduxSelector(
-    (state) => state.SiteEditor.size < ScreenSize.DESKTOP,
+  const isMobile = EditorStore.useSelect(
+    (state) => state.size < ScreenSize.DESKTOP,
   );
 
   const markActive = throttle(() => {
-    dispatch(SiteEditorSlice.actions.setActiveSection(sectionId));
+    EditorStore.actions.setActiveSection(sectionId);
   }, 100);
 
   const handleClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -99,7 +96,7 @@ export const BodySectionItem: React.FC<Props> = ({ sectionId }) => {
     }
 
     if (target.id === sectionId || target.parentElement.id === sectionId) {
-      dispatch(SiteEditorSlice.actions.setActiveElement(null));
+      EditorStore.actions.setActiveElement(null);
       markActive();
     }
   };
@@ -112,7 +109,7 @@ export const BodySectionItem: React.FC<Props> = ({ sectionId }) => {
 
   function handleLeave() {
     if (isActive) {
-      dispatch(SiteEditorSlice.actions.setActiveSection(null));
+      EditorStore.actions.setActiveSection(null);
     }
   }
 
@@ -137,7 +134,7 @@ export const BodySectionItem: React.FC<Props> = ({ sectionId }) => {
             isVisible={shouldDisplayHelpers}
           />
         </MenuArea>
-        <DropZone />
+        {/* <DropZone /> */}
       </Container>
     </SectionIdContext.Provider>
   );

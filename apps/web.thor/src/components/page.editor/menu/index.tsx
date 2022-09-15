@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-import { Fade, Paper, Popper, PopperProps, css, styled } from '@mui/material';
+import type { PopperProps } from '@mui/material';
+import { Fade, Paper, Popper, css, styled } from '@mui/material';
 
 const Marker = styled('div')(() => css``);
 

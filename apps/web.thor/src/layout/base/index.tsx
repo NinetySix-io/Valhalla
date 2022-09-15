@@ -1,8 +1,9 @@
 import * as React from 'react';
 
-import { Container, styled } from '@mui/material';
+import type { Container } from '@mui/material';
+import { styled } from '@mui/material';
 
-import { Layout } from '@app/types/next';
+import type { Layout } from '@app/types/next';
 import { NextSeo } from 'next-seo';
 
 const Wrapper = styled('div')`

@@ -366,7 +366,6 @@ importers:
       '@mui/lab': 5.0.0-alpha.99
       '@mui/material': ^5.10.5
       '@next/bundle-analyzer': ^12.3.0
-      '@reduxjs/toolkit': ^1.8.5
       '@storybook/addon-actions': ^6.5.12
       '@storybook/addon-console': ^1.2.3
       '@storybook/addon-essentials': ^6.5.12
@@ -417,7 +416,6 @@ importers:
       merge-anything: ^5.0.4
       next: 12.3.0
       next-compose-plugins: ^2.2.1
-      next-redux-wrapper: 8.0.0
       next-seo: ^5.5.0
       next-transpile-modules: ^9.0.0
       react: ^18.2.0
@@ -425,11 +423,10 @@ importers:
       react-dnd-html5-backend: ^16.0.1
       react-dom: ^18.2.0
       react-merge-refs: ^2.0.1
-      react-redux: ^8.0.2
       react-use: ^17.4.0
-      redux: ^4.2.0
       rimraf: ^3.0.2
       storybook-addon-next-router: ^4.0.0
+      tiamut: ^1.2.2
       try-nice: ^4.0.4
       typescript: ^4.8.3
       typescript-plugin-css-modules: ^3.4.0
@@ -442,7 +439,6 @@ importers:
       '@faker-js/faker': 7.5.0
       '@mui/lab': 5.0.0-alpha.99_tirxtp2um5uo2dmuyw4cewlzpq
       '@mui/material': 5.10.5_af5ln35zuaotaffazii6n6bke4
-      '@reduxjs/toolkit': 1.8.5_kkwg4cbsojnjnupd3btipussee
       '@valhalla/utilities': link:../../packages/utilities
       '@valhalla/web.builder': link:../../packages/web.builder
       '@valhalla/web.react': link:../../packages/web.react
@@ -463,16 +459,14 @@ importers:
       lodash.throttle: 4.1.1
       merge-anything: 5.0.4
       next: 12.3.0_vyk55zyolcaieh7zfm7nf7uva4
-      next-redux-wrapper: 8.0.0_co3hp2p6t2jaxv577bbc6x7mte
       next-seo: 5.5.0_c3hne4hwj64hb7tofigd3bvkji
       react: 18.2.0
       react-dnd: 16.0.1_qwravoh5geot5nrl3riagcuhi4
       react-dnd-html5-backend: 16.0.1
       react-dom: 18.2.0_react@18.2.0
       react-merge-refs: 2.0.1
-      react-redux: 8.0.2_3scyx54fe4cnnff6navzqxutae
       react-use: 17.4.0_biqbaboplfbrettd7655fr4n2y
-      redux: 4.2.0
+      tiamut: 1.2.2_react@18.2.0
       try-nice: 4.0.4
     devDependencies:
       '@babel/core': 7.19.0
@@ -838,6 +832,15 @@ importers:
       ts-jest: 29.0.1_on4dqcho5ngwz3ibqrowkmecea
       typescript: 4.8.3
       webpack: 5.74.0
+
+  packages/web.hydration:
+    specifiers:
+      eslint: ^8.23.1
+      next: 12.3.0
+    dependencies:
+      next: 12.3.0_biqbaboplfbrettd7655fr4n2y
+    devDependencies:
+      eslint: 8.23.1
 
   packages/web.react:
     specifiers:
@@ -5955,25 +5958,6 @@ packages:
       '@redis/client': 1.3.0
     dev: false
 
-  /@reduxjs/toolkit/1.8.5_kkwg4cbsojnjnupd3btipussee:
-    resolution: {integrity: sha512-f4D5EXO7A7Xq35T0zRbWq5kJQyXzzscnHKmjnu2+37B3rwHU6mX9PYlbfXdnxcY6P/7zfmjhgan0Z+yuOfeBmA==}
-    peerDependencies:
-      react: ^16.9.0 || ^17.0.0 || ^18
-      react-redux: ^7.2.1 || ^8.0.2
-    peerDependenciesMeta:
-      react:
-        optional: true
-      react-redux:
-        optional: true
-    dependencies:
-      immer: 9.0.15
-      react: 18.2.0
-      react-redux: 8.0.2_3scyx54fe4cnnff6navzqxutae
-      redux: 4.2.0
-      redux-thunk: 2.4.1_redux@4.2.0
-      reselect: 4.1.6
-    dev: false
-
   /@remix-run/node/1.4.3_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-2x3BQ2qrA1v4Viu+GYMNMxxflnT5QcyOsPNCNvLjLm4o1pODHxYmp+2TEcZRgDqSTXgA7PNYlsEgG0BN/T33QA==}
     dependencies:
@@ -8319,13 +8303,6 @@ packages:
       '@types/unist': 2.0.6
     dev: true
 
-  /@types/hoist-non-react-statics/3.3.1:
-    resolution: {integrity: sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==}
-    dependencies:
-      '@types/react': 18.0.20
-      hoist-non-react-statics: 3.3.2
-    dev: false
-
   /@types/html-minifier-terser/5.1.2:
     resolution: {integrity: sha512-h4lTMgMJctJybDp8CQrxTUiiYmedihHWkjnF/8Pxseu2S6Nlfcy8kwboQ8yejh456rP2yWoEVm1sS/FVsfM48w==}
     dev: true
@@ -8572,6 +8549,7 @@ packages:
     resolution: {integrity: sha512-/5OFZgfIPSwy+YuIBP/FgJnQnsxhZhjjrnxudMddeblOouIodEQ75X14Rr4wGSG/bknL+Omy9iWlLo1u/9GzAA==}
     dependencies:
       '@types/react': 18.0.20
+    dev: true
 
   /@types/react-is/17.0.3:
     resolution: {integrity: sha512-aBTIWg1emtu95bLTLx0cpkxwGW3ueZv71nE2YFBpL8k/z5czEW8yYpOo8Dp+UUAFAtKwNaOsh/ioSeQnWlZcfw==}
@@ -8644,10 +8622,6 @@ packages:
   /@types/unist/2.0.6:
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
     dev: true
-
-  /@types/use-sync-external-store/0.0.3:
-    resolution: {integrity: sha512-EwmlvuaxPNej9+T4v5AuBPJa2x2UOJVdjCtDHgcDqitUeOtjnJKJ+apYjVcAoBEMjKW1VVFGZLUb5+qqa09XFA==}
-    dev: false
 
   /@types/uuid/8.3.4:
     resolution: {integrity: sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==}
@@ -14508,10 +14482,6 @@ packages:
     dev: true
     optional: true
 
-  /immer/9.0.15:
-    resolution: {integrity: sha512-2eB/sswms9AEUSkOm4SbV5Y7Vmt/bKRwByd52jfLkW4OLYeaTP3EEiJ9agqU0O/tq6Dk62Zfj+TJSqfm1rLVGQ==}
-    dev: false
-
   /immutable/3.7.6:
     resolution: {integrity: sha512-AizQPcaofEtO11RZhPPHBOJRdo/20MKQF9mBLnVkBoyHi1/zXK8fzVdnEpSV9gxqtnh6Qomfp3F0xT5qP/vThw==}
     engines: {node: '>=0.8.0'}
@@ -17187,18 +17157,6 @@ packages:
     resolution: {integrity: sha512-OjJ+fV15FXO2uQXQagLD4C0abYErBjyjE0I0FHpOEIB8upw0hg1ldFP6cqHTJBH1cZqy96OeR3u1dJ+Ez2D4Bg==}
     dev: true
 
-  /next-redux-wrapper/8.0.0_co3hp2p6t2jaxv577bbc6x7mte:
-    resolution: {integrity: sha512-zKRdpvDeqNXQr1j5DUWwsB2fz6XpHR32iy2qJGItTKLsbLB9GvtxDL9b4mFCfhDvnzy5dw97UqMjWDpFY8h0zA==}
-    peerDependencies:
-      next: '>=9'
-      react: '*'
-      react-redux: '*'
-    dependencies:
-      next: 12.3.0_vyk55zyolcaieh7zfm7nf7uva4
-      react: 18.2.0
-      react-redux: 8.0.2_3scyx54fe4cnnff6navzqxutae
-    dev: false
-
   /next-seo/5.5.0_c3hne4hwj64hb7tofigd3bvkji:
     resolution: {integrity: sha512-5ouBHFtx8YrSDW44lj0qIEQ+oMcz6stgoITB+SqHUZbhgizoJsyLmq73gJ0lxtEKpcN8vG2QgRIJfdb8OAPChw==}
     peerDependencies:
@@ -19025,40 +18983,6 @@ packages:
     resolution: {integrity: sha512-pywF6oouJWuqL26xV3OruRSIqai31R9SdJX/I3gP2q8jLxUnA1IwXcLW8werUHLZOrp4N7YOeQNZrh/BKrHI4A==}
     dev: false
 
-  /react-redux/8.0.2_3scyx54fe4cnnff6navzqxutae:
-    resolution: {integrity: sha512-nBwiscMw3NoP59NFCXFf02f8xdo+vSHT/uZ1ldDwF7XaTpzm+Phk97VT4urYBl5TYAPNVaFm12UHAEyzkpNzRA==}
-    peerDependencies:
-      '@types/react': ^16.8 || ^17.0 || ^18.0
-      '@types/react-dom': ^16.8 || ^17.0 || ^18.0
-      react: ^16.8 || ^17.0 || ^18.0
-      react-dom: ^16.8 || ^17.0 || ^18.0
-      react-native: '>=0.59'
-      redux: ^4
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-      '@types/react-dom':
-        optional: true
-      react-dom:
-        optional: true
-      react-native:
-        optional: true
-      redux:
-        optional: true
-    dependencies:
-      '@babel/runtime': 7.19.0
-      '@types/hoist-non-react-statics': 3.3.1
-      '@types/react': 18.0.20
-      '@types/react-dom': 18.0.6
-      '@types/use-sync-external-store': 0.0.3
-      hoist-non-react-statics: 3.3.2
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-      react-is: 18.2.0
-      redux: 4.2.0
-      use-sync-external-store: 1.2.0_react@18.2.0
-    dev: false
-
   /react-refresh/0.11.0:
     resolution: {integrity: sha512-F27qZr8uUqwhWZboondsPx8tnC3Ct3SxZA3V5WyEvujRyyNv0VYPhoBg1gZ8/MV5tubQp76Trw8lTv9hzRBa+A==}
     engines: {node: '>=0.10.0'}
@@ -19286,14 +19210,6 @@ packages:
       '@redis/json': 1.0.4_@redis+client@1.3.0
       '@redis/search': 1.1.0_@redis+client@1.3.0
       '@redis/time-series': 1.0.3_@redis+client@1.3.0
-    dev: false
-
-  /redux-thunk/2.4.1_redux@4.2.0:
-    resolution: {integrity: sha512-OOYGNY5Jy2TWvTL1KgAlVy6dcx3siPJ1wTq741EPyUKfn6W6nChdICjZwCd0p8AZBs5kWpZlbkXW2nE/zjUa+Q==}
-    peerDependencies:
-      redux: ^4
-    dependencies:
-      redux: 4.2.0
     dev: false
 
   /redux/4.2.0:
@@ -19549,10 +19465,6 @@ packages:
   /require-main-filename/2.0.0:
     resolution: {integrity: sha512-NKN5kMDylKuldxYLSUfrbo5Tuzh4hd+2E8NPPX02mZtn1VuREQToYe/ZdlJy+J3uCpfaiGF05e7B8W0iXbQHmg==}
     dev: true
-
-  /reselect/4.1.6:
-    resolution: {integrity: sha512-ZovIuXqto7elwnxyXbBtCPo9YFEr3uJqj2rRbcOOog1bmu2Ag85M4hixSwFWyaBMKXNgvPaJ9OSu9SkBPIeJHQ==}
-    dev: false
 
   /reserved-words/0.1.2:
     resolution: {integrity: sha512-0S5SrIUJ9LfpbVl4Yzij6VipUdafHrOTzvmfazSw/jeZrZtQK303OPZW+obtkaw7jQlTQppy0UvZWm9872PbRw==}

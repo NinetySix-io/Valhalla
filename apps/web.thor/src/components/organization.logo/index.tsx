@@ -3,8 +3,8 @@ import * as React from 'react';
 import { Box, Typography } from '@mui/material';
 
 import Image from 'next/image';
-import { OrganizationSchema } from '@app/generated/valhalla.gql';
-import { cProps } from '@valhalla/web.react';
+import type { OrganizationSchema } from '@app/generated/valhalla.gql';
+import type { cProps } from '@valhalla/web.react';
 
 type Props = cProps<{
   organization: Pick<OrganizationSchema, 'name' | 'logoUrl'>;

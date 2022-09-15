@@ -1,5 +1,5 @@
-import { ParsedUrlQuery } from 'querystring';
-import { PluginCtx } from './types';
+import type { ParsedUrlQuery } from 'querystring';
+import type { PluginCtx } from './types';
 
 /**
  * Helper to create next plugin

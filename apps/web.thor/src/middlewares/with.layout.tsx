@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Layout, View } from '@app/types/next';
+import type { Layout, View } from '@app/types/next';
 
 /**
  * Compose component with layout prop

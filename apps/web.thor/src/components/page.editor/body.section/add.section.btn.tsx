@@ -2,10 +2,9 @@ import * as React from 'react';
 
 import { Button, css, styled } from '@mui/material';
 
-import { SiteEditorSlice } from '@app/redux/slices/editor';
 import { makeFilterProps } from '@valhalla/web.react';
-import { useDispatch } from 'react-redux';
 import { useSectionId } from '../context';
+import { EditorStore } from '../store';
 
 const ActionBtn = styled(
   Button,
@@ -41,15 +40,12 @@ type Props = {
 
 export const AddSectionBtn: React.FC<Props> = ({ align, isVisible }) => {
   const sectionId = useSectionId();
-  const dispatch = useDispatch();
 
   function handleClick() {
-    dispatch(
-      SiteEditorSlice.actions.addSection({
-        anchorSection: sectionId,
-        isBefore: align === 'top',
-      }),
-    );
+    EditorStore.actions.addSection({
+      anchorSection: sectionId,
+      isBefore: align === 'top',
+    });
   }
 
   return (

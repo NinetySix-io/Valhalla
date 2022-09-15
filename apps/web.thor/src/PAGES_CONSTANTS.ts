@@ -1,4 +1,4 @@
-import { ValueOf } from '@app/types/value.of';
+import type { ValueOf } from '@app/types/value.of';
 
 export const HOME = '/';
 export const ME = '/me';

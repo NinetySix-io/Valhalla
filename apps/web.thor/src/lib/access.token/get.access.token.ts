@@ -1,11 +1,9 @@
-import {
-  GetAccessTokenQuery,
-  refetchGetAccessTokenQuery,
-} from '@app/generated/valhalla.gql';
+import type { GetAccessTokenQuery } from '@app/generated/valhalla.gql';
+import { refetchGetAccessTokenQuery } from '@app/generated/valhalla.gql';
 
-import { ApolloClient } from '@apollo/client';
+import type { ApolloClient } from '@apollo/client';
 import { Environment } from '@app/env';
-import { IncomingHttpHeaders } from 'http';
+import type { IncomingHttpHeaders } from 'http';
 import { TemporaryApolloClient } from '@app/apollo/temp.client';
 
 /**

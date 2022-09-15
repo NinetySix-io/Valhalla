@@ -1,11 +1,11 @@
 import { css, styled } from '@mui/material';
 
 import { BaseLayout } from '../base';
-import { Layout } from '@app/types/next';
+import type { Layout } from '@app/types/next';
 import { LayoutBody } from '@app/layout/base/body';
 import { LoadingBlock } from '@app/components/loading.block';
 import { Sidebar } from './side.bar';
-import { cProps } from '@valhalla/web.react';
+import type { cProps } from '@valhalla/web.react';
 import { useOrgMembershipHydrate } from '@app/hooks/hydrate/use.org.hydrate';
 import { useTenantSEO } from '@app/hooks/use.tenant.seo.title';
 

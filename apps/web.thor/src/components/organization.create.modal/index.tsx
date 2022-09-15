@@ -1,13 +1,15 @@
 import * as React from 'react';
 
 import { Alert, TextField } from '@mui/material';
+import type { CreateOrganizationMutationVariables } from '@app/generated/valhalla.gql';
 import {
-  CreateOrganizationMutationVariables,
   OrganizationPlan,
   useCreateOrganizationMutation,
 } from '@app/generated/valhalla.gql';
-import { Form, cProps } from '@valhalla/web.react';
-import { FormModal, FormModalProps } from '../modal.form';
+import type { cProps } from '@valhalla/web.react';
+import { Form } from '@valhalla/web.react';
+import type { FormModalProps } from '../modal.form';
+import { FormModal } from '../modal.form';
 
 type Payload = CreateOrganizationMutationVariables;
 type Props = cProps<
@@ -48,8 +50,7 @@ export const OrganizationCreateModal: React.FC<Props> = ({
       loading={loading}
       title="Create Org"
       form={form}
-      onSubmit={form.submit}
-      onFinish={handleSubmit}
+      onSubmit={handleSubmit}
       onClose={onClose}
     >
       <Form.Item

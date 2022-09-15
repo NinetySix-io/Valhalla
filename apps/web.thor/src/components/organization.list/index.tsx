@@ -15,7 +15,7 @@ import { Environment } from '@app/env';
 import Link from 'next/link';
 import { OrganizationLogo } from '../organization.logo';
 import { Section } from '../section';
-import { cProps } from '@valhalla/web.react';
+import type { cProps } from '@valhalla/web.react';
 import { useGetOrgsMembershipListQuery } from '@app/generated/valhalla.gql';
 
 const CreateButton = styled(Button)(

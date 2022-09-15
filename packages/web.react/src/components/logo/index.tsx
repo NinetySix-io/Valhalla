@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import Image from 'next/image';
-import { cProps } from '../../types';
+import type { cProps } from '../../types';
 import { useDarkMode } from '../../hooks/use.dark.mode';
 
 type Props = cProps<

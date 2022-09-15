@@ -1,6 +1,5 @@
-import { ButtonBuilderElement, TextBuilderElement } from './types';
-
-import { ScreenSize } from '@app/redux/slices/editor';
+import { ScreenSize } from './store';
+import type { ButtonBuilderElement, TextBuilderElement } from './types';
 
 export const BUILDER_ELEMENT = 'BUILDER_ELEMENT' as const;
 

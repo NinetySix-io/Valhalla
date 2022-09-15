@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import Link from 'next/link';
 import { TenantMainLayout } from '@app/layout/tenant.main';
-import { View } from '@app/types/next';
+import type { View } from '@app/types/next';
 import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
 import { getSingleUse } from '@app/lib/get.single.use';
 import { makeSitePath } from '@app/lib/router.utils/path.builder';

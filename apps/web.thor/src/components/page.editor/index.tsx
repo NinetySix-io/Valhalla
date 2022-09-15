@@ -7,9 +7,8 @@ import { DndProvider } from 'react-dnd';
 import { FooterSection } from './footer.section';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { HeaderSection } from './header.section';
-import { ScreenSize } from '@app/redux/slices/editor';
-import { cProps } from '@valhalla/web.react';
-import { useReduxSelector } from '@app/redux/hooks';
+import type { cProps } from '@valhalla/web.react';
+import { EditorStore, ScreenSize } from './store';
 
 type Props = cProps;
 
@@ -58,7 +57,7 @@ const Content = styled('div')<{ size: ScreenSize }>(
 );
 
 export const PageEditor: React.FC<Props> = () => {
-  const size = useReduxSelector((state) => state.SiteEditor.size);
+  const size = EditorStore.useSelect((state) => state.size);
 
   return (
     <Container>

@@ -6,10 +6,9 @@ import { Button, Popover, Stack, TextField, css, styled } from '@mui/material';
 import { EditorMenu } from '../../menu';
 import { ElementMenuGroup } from './group';
 import { ElementMenuGroupItem } from './item';
-import { SiteEditorSlice } from '@app/redux/slices/editor';
-import { useDispatch } from 'react-redux';
 import { useDragDropManager } from 'react-dnd';
 import { useIsDragging } from '../../context';
+import { EditorStore } from '../../store';
 
 const Container = styled(Stack)(
   ({ theme }) => css`
@@ -23,7 +22,6 @@ type Props = {
 } & Pick<React.ComponentProps<typeof EditorMenu>, 'style' | 'placement'>;
 
 export const ElementsMenu: React.FC<Props> = ({ isVisible, ...props }) => {
-  const dispatch = useDispatch();
   const isDragging = useIsDragging();
   const [menuVisible, setMenuVisible] = React.useState(false);
   const manager = useDragDropManager();
@@ -40,13 +38,13 @@ export const ElementsMenu: React.FC<Props> = ({ isVisible, ...props }) => {
   React.useEffect(() => {
     const monitor = manager.getMonitor();
     const unsubscribe = monitor.subscribeToStateChange(() => {
-      dispatch(SiteEditorSlice.actions.setIsDragging(monitor.isDragging()));
+      EditorStore.actions.setIsDragging(monitor.isDragging());
     });
 
     return () => {
       unsubscribe?.();
     };
-  }, [manager, dispatch]);
+  }, [manager]);
 
   React.useEffect(() => {
     if (isDragging) {

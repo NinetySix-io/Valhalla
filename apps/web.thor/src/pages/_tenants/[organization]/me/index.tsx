@@ -1,5 +1,5 @@
 import { TenantMainLayout } from '@app/layout/tenant.main';
-import { View } from '@app/types/next';
+import type { View } from '@app/types/next';
 import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
 import { makeTenantStaticPaths } from '@app/next/tenant/make.static.paths';
 import { withApollo } from '@app/next/plugins/presets/with.apollo';

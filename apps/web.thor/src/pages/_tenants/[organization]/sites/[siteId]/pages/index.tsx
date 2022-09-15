@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { View } from '@app/types/next';
+import type { View } from '@app/types/next';
 import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
 import { makePageEditorPath } from '@app/lib/router.utils/path.builder';
 import { makeTenantStaticPaths } from '@app/next/tenant/make.static.paths';

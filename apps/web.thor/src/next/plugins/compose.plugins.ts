@@ -1,8 +1,8 @@
-import { GetServerSideProps, GetStaticProps } from '@valhalla/web.react';
-import { OnPagePropsCb, PluginCtx } from './types';
+import type { GetServerSideProps, GetStaticProps } from '@valhalla/web.react';
+import type { OnPagePropsCb, PluginCtx } from './types';
 
-import { GetServerSidePropsContext } from 'next';
-import { IntersectionOfArrayFnReturn } from '@app/types/intersection.of.array.fn.return';
+import type { GetServerSidePropsContext } from 'next';
+import type { IntersectionOfArrayFnReturn } from '@app/types/intersection.of.array.fn.return';
 import { merge } from 'merge-anything';
 
 /**

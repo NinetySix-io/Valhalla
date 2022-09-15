@@ -1,6 +1,6 @@
 import { TenantMainLayout } from '@app/layout/tenant.main';
-import { View } from '@app/types/next';
-import { cProps } from '@valhalla/web.react';
+import type { View } from '@app/types/next';
+import type { cProps } from '@valhalla/web.react';
 import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
 import { makeTenantStaticPaths } from '@app/next/tenant/make.static.paths';
 import { useOrgCtx } from '@app/hooks/hydrate/use.org.hydrate';

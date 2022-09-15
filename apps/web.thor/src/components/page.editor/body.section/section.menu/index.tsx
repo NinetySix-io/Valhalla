@@ -4,9 +4,8 @@ import { Button, Divider, Popover, Stack, css, styled } from '@mui/material';
 
 import { EditorMenu } from '../../menu';
 import { SectionMenuContent } from './content';
-import { SiteEditorSlice } from '@app/redux/slices/editor';
-import { useDispatch } from 'react-redux';
 import { useSectionId } from '../../context';
+import { EditorStore } from '../../store';
 
 const ActionBtn = styled(Button)(
   ({ theme }) => css`
@@ -20,21 +19,20 @@ type Props = {
 } & Pick<React.ComponentProps<typeof EditorMenu>, 'style' | 'placement'>;
 
 export const SectionMenu: React.FC<Props> = ({ isVisible, ...props }) => {
-  const dispatch = useDispatch();
   const anchor = React.useRef<HTMLDivElement>();
   const sectionId = useSectionId();
   const [menuVisible, setMenuVisible] = React.useState(false);
 
   function handleDelete() {
-    dispatch(SiteEditorSlice.actions.deleteSection(sectionId));
+    EditorStore.actions.deleteSection(sectionId);
   }
 
   function moveUp() {
-    dispatch(SiteEditorSlice.actions.moveSectionUp(sectionId));
+    EditorStore.actions.moveSectionUp(sectionId);
   }
 
   function moveDown() {
-    dispatch(SiteEditorSlice.actions.moveSectionDown(sectionId));
+    EditorStore.actions.moveSectionDown(sectionId);
   }
 
   function openMenu() {

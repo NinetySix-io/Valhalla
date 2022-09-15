@@ -1,4 +1,4 @@
-import { PageSchema, SiteSchema } from '@app/generated/valhalla.gql';
+import type { PageSchema, SiteSchema } from '@app/generated/valhalla.gql';
 
 export function makePageEditorPath(props: {
   siteId: SiteSchema['id'];

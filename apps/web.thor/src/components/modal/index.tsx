@@ -1,10 +1,10 @@
 import * as React from 'react';
 
+import type { ModalProps } from '@mui/material';
 import {
   Box,
   Button,
   IconButton,
-  ModalProps,
   Modal as MuiModal,
   Paper,
   Stack,
@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 
 import { LoadingButton } from '@mui/lab';
-import { cProps } from '@valhalla/web.react';
+import type { cProps } from '@valhalla/web.react';
 
 const Body = styled(Box)``;
 
