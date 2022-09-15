@@ -1,16 +1,12 @@
 import * as React from 'react';
 
-import {
-  IconButton,
-  InputAdornment,
-  TextField,
-  TextFieldProps,
-} from '@mui/material';
+import type { TextFieldProps } from '@mui/material';
+import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { isEmail, isPhoneNumber } from '@valhalla/utilities';
 
 import { Form } from '../form';
-import { Rule } from 'rc-field-form/es/interface';
-import { cProps } from '../../types';
+import type { Rule } from 'rc-field-form/es/interface';
+import type { cProps } from '../../types';
 
 type Props = cProps<
   {

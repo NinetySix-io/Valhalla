@@ -1,8 +1,8 @@
+import { SiteFavicon } from '@app/components/site.favicon';
 import '@app/scripts/mui.classnames';
 import '@app/scripts/wdyr';
-
 import type { AppProps, WithSEO } from '@valhalla/web.react';
-import { createEmotionCache, SiteFavicon, theme } from '@valhalla/web.react';
+import { createEmotionCache, theme } from '@valhalla/web.react';
 
 import type { NormalizedCacheObject } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client';

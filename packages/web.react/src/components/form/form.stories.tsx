@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Button, Grid, TextField, Typography } from '@mui/material';
 
-import { ComponentMeta } from '@storybook/react';
+import type { ComponentMeta } from '@storybook/react';
 import { Form } from './index';
 
 type ComponentType = typeof Form;

@@ -1,10 +1,10 @@
 import * as React from 'react';
 
 import { Box, Typography, css, styled } from '@mui/material';
-import { FormInstance, Meta } from 'rc-field-form/es/interface';
+import type { FormInstance, Meta } from 'rc-field-form/es/interface';
 
 import { Field } from 'rc-field-form';
-import { FieldProps } from 'rc-field-form/es/Field';
+import type { FieldProps } from 'rc-field-form/es/Field';
 
 type Props<T, P> = Omit<FieldProps, 'children'> & {
   label?: React.ReactNode;

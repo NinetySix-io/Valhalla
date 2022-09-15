@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 
 export type cProps<
   T extends Record<string, unknown> = Record<string, unknown>,

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { KeyCode } from './keys.enum';
+import type { KeyCode } from './keys.enum';
 import { useWindowEvent } from '../use.window.event';
 
 export * from './keys.enum';

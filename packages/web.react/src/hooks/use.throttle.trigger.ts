@@ -1,4 +1,5 @@
-import React, { DependencyList } from 'react';
+import type { DependencyList } from 'react';
+import React from 'react';
 
 import throttle from 'lodash.throttle';
 

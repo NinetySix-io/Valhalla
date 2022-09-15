@@ -1,4 +1,4 @@
-import { StyledOptions } from '@emotion/styled';
+import type { StyledOptions } from '@emotion/styled';
 
 export function makeFilterProps(
   keys: string[],

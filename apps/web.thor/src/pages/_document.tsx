@@ -1,9 +1,8 @@
 import * as React from 'react';
 
-import Document, { Head, Html, Main, NextScript } from 'next/document';
-import { SiteFavicon, createEmotionCache, theme } from '@valhalla/web.react';
-
 import createEmotionServer from '@emotion/server/create-instance';
+import { createEmotionCache, theme } from '@valhalla/web.react';
+import Document, { Head, Html, Main, NextScript } from 'next/document';
 
 export default class Doc extends Document<{
   emotionStyleTags: React.ReactNode;
@@ -12,8 +11,6 @@ export default class Doc extends Document<{
     return (
       <Html lang="en">
         <Head>
-          {/* PWA primary color */}
-          <SiteFavicon />
           <meta name="theme-color" content={theme.palette.primary.main} />
           <link rel="shortcut icon" href="/static/favicon.ico" />
           <link
