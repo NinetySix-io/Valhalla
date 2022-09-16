@@ -6,7 +6,7 @@ import { AccountSchema } from '@app/entities/accounts/schema';
 import { AccountTransformer } from '@app/entities/accounts/transformer';
 import { AccountsModel } from '@app/entities/accounts';
 import { FilterQuery } from 'mongoose';
-import Struct from 'superstruct';
+import * as Struct from 'superstruct';
 import isEmpty from 'lodash.isempty';
 
 export class FindAccountQuery implements IQuery {

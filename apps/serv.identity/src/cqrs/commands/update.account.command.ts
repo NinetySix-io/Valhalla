@@ -10,7 +10,7 @@ import { AccountTransformer } from '@app/entities/accounts/transformer';
 import { AccountUpdatedEvent } from '../events/account.updated.event';
 import { AccountsModel } from '@app/entities/accounts';
 import { RpcHandler } from '@valhalla/serv.core';
-import Struct from 'superstruct';
+import * as Struct from 'superstruct';
 import isEmpty from 'lodash.isempty';
 
 export class UpdateAccountCommand implements ICommand {

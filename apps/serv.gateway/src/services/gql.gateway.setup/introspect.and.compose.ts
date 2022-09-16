@@ -125,11 +125,9 @@ export class IntrospectAndCompose implements SupergraphManager {
       },
     });
 
-    if (!result.serviceDefinitions?.length) {
+    if (result.serviceDefinitions.length === 0) {
       return this.fallbackSupergraphSdl;
-    }
-
-    if (!result.isNewSchema) {
+    } else if (!result.isNewSchema) {
       return null;
     }
 
@@ -177,7 +175,6 @@ export class IntrospectAndCompose implements SupergraphManager {
     subgraphs: ServiceDefinitionUpdate['serviceDefinitions'] = [],
   ) {
     const compositionResult = composeServices(subgraphs);
-
     if (compositionResult.errors) {
       const { errors } = compositionResult;
       const messages = errors.map((e) => '\t' + e.message).join('\n');
@@ -194,6 +191,8 @@ export class IntrospectAndCompose implements SupergraphManager {
    * It tries to update the supergraph SDL, and if it succeeds, it calls the update function
    */
   async rebuildSupergraphSdl() {
+    this.logger.debug('Rebuilding supergraph');
+
     try {
       const maybeNewSupergraphSdl = await this.updateSupergraphSdl();
       if (maybeNewSupergraphSdl) {

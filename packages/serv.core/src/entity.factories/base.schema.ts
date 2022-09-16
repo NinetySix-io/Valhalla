@@ -26,7 +26,6 @@ export class BaseSchema {
   updatedAt!: Date;
 
   @Field(() => ID, { description: 'Identifier of the entity' })
-  @Directive('@external')
   @Expose()
   get id() {
     return String(this._id);
