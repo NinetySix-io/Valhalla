@@ -9,7 +9,7 @@ import { makeTenantStaticPaths } from '@app/next/tenant/make.static.paths';
 import { useRouter } from 'next/router';
 import { withApollo } from '@app/next/plugins/presets/with.apollo';
 import { withOrgContext } from '@app/next/plugins/presets/with.org.context';
-import { withRedux } from '@app/next/plugins/presets/with.redux';
+import { withGlobalStore } from '@app/next/plugins/presets/with.global.store';
 
 const SiteView: View = () => {
   const router = useRouter();
@@ -35,7 +35,7 @@ const SiteView: View = () => {
 export const getStaticPaths = makeTenantStaticPaths();
 export const getStaticProps = composeNextPlugins([
   withApollo,
-  withRedux,
+  withGlobalStore,
   withOrgContext,
 ]);
 

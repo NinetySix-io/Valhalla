@@ -6,7 +6,7 @@ import { makeTenantStaticPaths } from '@app/next/tenant/make.static.paths';
 import { useOrgCtx } from '@app/hooks/hydrate/use.org.hydrate';
 import { withApollo } from '@app/next/plugins/presets/with.apollo';
 import { withOrgContext } from '@app/next/plugins/presets/with.org.context';
-import { withRedux } from '@app/next/plugins/presets/with.redux';
+import { withGlobalStore } from '@app/next/plugins/presets/with.global.store';
 
 type Props = cProps;
 
@@ -17,7 +17,7 @@ const OrganizationView: View<Props> = () => {
 
 export const getStaticPaths = makeTenantStaticPaths();
 export const getStaticProps = composeNextPlugins(
-  [withApollo, withRedux, withOrgContext],
+  [withApollo, withGlobalStore, withOrgContext],
   () => {
     return {
       props: {

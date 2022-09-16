@@ -11,7 +11,7 @@ import { makeTenantStaticPaths } from '@app/next/tenant/make.static.paths';
 import { useGetSitesQuery } from '@app/generated/valhalla.gql';
 import { withApollo } from '@app/next/plugins/presets/with.apollo';
 import { withOrgContext } from '@app/next/plugins/presets/with.org.context';
-import { withRedux } from '@app/next/plugins/presets/with.redux';
+import { withGlobalStore } from '@app/next/plugins/presets/with.global.store';
 
 const Container = styled('div')``;
 
@@ -31,7 +31,7 @@ const SiteListView: View = () => {
 export const getStaticPaths = makeTenantStaticPaths();
 export const getStaticProps = composeNextPlugins([
   withApollo,
-  withRedux,
+  withGlobalStore,
   withOrgContext,
 ]);
 

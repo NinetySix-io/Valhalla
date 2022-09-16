@@ -1,6 +1,7 @@
 import { SiteFavicon } from '@app/components/site.favicon';
 import '@app/scripts/mui.classnames';
 import '@app/scripts/wdyr';
+import * as React from 'react';
 import type { AppProps, WithSEO } from '@valhalla/web.react';
 import { createEmotionCache, theme } from '@valhalla/web.react';
 
@@ -29,6 +30,10 @@ export default function App({
   const Layout = Page.Layout ?? BaseLayout;
   const isProtected = !Page.isUnprotected;
   const apolloClient = useApollo(pageProps);
+
+  React.useEffect(() => {
+    console.log({ props });
+  }, [props]);
 
   return (
     <CacheProvider value={clientSideEmotionCache}>

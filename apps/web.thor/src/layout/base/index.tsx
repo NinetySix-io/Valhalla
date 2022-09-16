@@ -26,7 +26,7 @@ type Props = React.ComponentProps<typeof Container>;
 export const BaseLayout: Layout<Props> = ({ SEO, children, ...props }) => {
   return (
     <Wrapper {...props}>
-      <NextSeo {...SEO} />
+      <NextSeo titleTemplate="%s | NinetySix" {...SEO} />
       {children}
     </Wrapper>
   );

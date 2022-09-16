@@ -88,7 +88,7 @@ export const UsernameFormItem: ComponentType = ({
               ) {
                 endAdornment = (
                   <InputAdornment position="end">
-                    <IconButton onClick={onSubmitUsername}>S</IconButton>
+                    <IconButton onClick={onSubmitUsername}>Go</IconButton>
                   </InputAdornment>
                 );
               } else if (withClear && control.value) {

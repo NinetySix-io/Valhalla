@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 import { useSiteHydrate } from '@app/hooks/hydrate/use.site.hydrate';
 import { withApollo } from '@app/next/plugins/presets/with.apollo';
 import { withOrgContext } from '@app/next/plugins/presets/with.org.context';
-import { withRedux } from '@app/next/plugins/presets/with.redux';
+import { withGlobalStore } from '@app/next/plugins/presets/with.global.store';
 
 const PageListView: View = () => {
   const router = useRouter();
@@ -44,7 +44,7 @@ const PageListView: View = () => {
 
 export const getStaticPaths = makeTenantStaticPaths();
 export const getStaticProps = composeNextPlugins([
-  withRedux,
+  withGlobalStore,
   withApollo,
   withOrgContext,
 ]);

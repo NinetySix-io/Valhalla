@@ -3,6 +3,7 @@ import { Button, Stack, Typography } from '@mui/material';
 import { BaseLayout } from '@app/layout/base';
 import Link from 'next/link';
 import type { View } from '@app/types/next';
+import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
 
 const HomeView: View = () => {
   return (
@@ -14,6 +15,17 @@ const HomeView: View = () => {
     </Stack>
   );
 };
+
+export const getStaticProps = composeNextPlugins([], () => {
+  return {
+    props: {
+      SEO: {
+        title: 'NinetySix',
+        titleTemplate: '%s',
+      },
+    },
+  };
+});
 
 HomeView.Layout = BaseLayout;
 

@@ -5,13 +5,14 @@ import type { ApolloClient } from '@apollo/client';
 import { NextPluginError } from '../errors';
 import { createNextPlugin } from '../create.plugin';
 import { tryNice } from 'try-nice';
+import type { GlobalStore } from './with.global.store';
 
 /**
  * Plugin to hydrate organization from params
  */
 export const withOrgContext = createNextPlugin<
   {
-    // reduxStore?: never;
+    globalStore: GlobalStore;
     apolloClient?: ApolloClient<unknown>;
     organization: FindOrganizationBySlugQuery['organizationBySlug'];
   },
@@ -41,9 +42,6 @@ export const withOrgContext = createNextPlugin<
   }
 
   ctx.organization = result.data.organizationBySlug;
-  // ctx.reduxStore?.dispatch(
-  //   TenantSlice.actions.setOrganization(ctx.organization),
-  // );
-
+  ctx.globalStore.actions.Tenant.setOrganization(ctx.organization);
   return ctx;
 });
