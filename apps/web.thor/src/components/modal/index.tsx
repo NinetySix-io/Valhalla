@@ -47,7 +47,7 @@ const Content = styled(Paper)(
 );
 
 type ActionProps =
-  | true
+  | boolean
   | {
       label: string;
     };
@@ -86,7 +86,7 @@ export const Modal: React.FC<Props> = ({
             <Title variant="h4">{title}</Title>
             {withCloseBtn && (
               <CloseBtn size="small" disabled={loading} onClick={onClose}>
-                Close
+                X
               </CloseBtn>
             )}
           </Header>
