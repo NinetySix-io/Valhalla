@@ -27,7 +27,7 @@ export class ServCoreSetup {
    * It connects the gRPC server to the NestJS application
    */
   private connectRpcServer(): void {
-    if (isNil(this.grpc) || isEmpty(this.grpc)) {
+    if (!this.grpc) {
       return;
     }
 
