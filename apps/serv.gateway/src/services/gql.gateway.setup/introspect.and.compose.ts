@@ -191,8 +191,6 @@ export class IntrospectAndCompose implements SupergraphManager {
    * It tries to update the supergraph SDL, and if it succeeds, it calls the update function
    */
   async rebuildSupergraphSdl() {
-    this.logger.debug('Rebuilding supergraph');
-
     try {
       const maybeNewSupergraphSdl = await this.updateSupergraphSdl();
       if (maybeNewSupergraphSdl) {
