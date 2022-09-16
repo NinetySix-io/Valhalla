@@ -1,11 +1,10 @@
-import { GrpcOptions, Transport } from '@nestjs/microservices';
 import { INestApplication, Logger } from '@nestjs/common';
+import { GrpcOptions, Transport } from '@nestjs/microservices';
 
-import { BOOT } from '@nestcloud2/common';
 import { Boot } from '@nestcloud2/boot';
-import { ServAppConfigService } from '../services';
+import { BOOT } from '@nestcloud2/common';
 import isEmpty from 'lodash.isempty';
-import isNil from 'lodash.isnil';
+import { ServAppConfigService } from '../services';
 
 export class ServCoreSetup {
   app: INestApplication;

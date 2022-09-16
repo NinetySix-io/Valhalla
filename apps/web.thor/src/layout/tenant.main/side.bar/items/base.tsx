@@ -78,3 +78,5 @@ export const SidebarItem: React.FC<Props> = React.forwardRef(
     );
   },
 );
+
+SidebarItem.displayName = 'SidebarItem';
