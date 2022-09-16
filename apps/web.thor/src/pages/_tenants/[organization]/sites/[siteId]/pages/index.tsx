@@ -1,15 +1,14 @@
 import * as React from 'react';
 
-import type { View } from '@app/types/next';
-import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
-import { makePageEditorPath } from '@app/lib/router.utils/path.builder';
-import { makeTenantStaticPaths } from '@app/next/tenant/make.static.paths';
 import { useGetFirstPageMutation } from '@app/generated/valhalla.gql';
-import { useRouter } from 'next/router';
 import { useSiteHydrate } from '@app/hooks/hydrate/use.site.hydrate';
+import { makePageEditorPath } from '@app/lib/router.utils/path.builder';
+import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
 import { withApollo } from '@app/next/plugins/presets/with.apollo';
 import { withOrgContext } from '@app/next/plugins/presets/with.org.context';
-import { withGlobalStore } from '@app/next/plugins/presets/with.global.store';
+import { makeTenantStaticPaths } from '@app/next/tenant/make.static.paths';
+import type { View } from '@app/types/next';
+import { useRouter } from 'next/router';
 
 const PageListView: View = () => {
   const router = useRouter();
@@ -43,10 +42,6 @@ const PageListView: View = () => {
 };
 
 export const getStaticPaths = makeTenantStaticPaths();
-export const getStaticProps = composeNextPlugins([
-  withGlobalStore,
-  withApollo,
-  withOrgContext,
-]);
+export const getStaticProps = composeNextPlugins([withApollo, withOrgContext]);
 
 export default PageListView;

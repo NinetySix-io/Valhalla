@@ -1,9 +1,5 @@
-import {
-  ApolloClient,
-  ApolloLink,
-  InMemoryCache,
-  NormalizedCacheObject,
-} from '@apollo/client';
+import type { NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient, ApolloLink, InMemoryCache } from '@apollo/client';
 
 import { Environment } from '@app/env';
 import { authRedirectLink } from './auth.redirect.link';
@@ -25,13 +21,9 @@ export function createApolloClient(
   > &
     Pick<Parameters<typeof buildAuthLink>[0], 'getAccessToken'>,
 ) {
-  const authLink = buildAuthLink({ getAccessToken: options.getAccessToken });
+  const authLink = buildAuthLink(options);
+  const errorLink = buildErrorLink(options);
   const httpLink = buildHttpLink(Environment.GQL_SERVER, options?.headers);
-  const errorLink = buildErrorLink({
-    organizationId: options.organizationId,
-    headers: options.headers,
-    onAccessToken: options.onAccessToken,
-  });
 
   const links = [authLink, authRedirectLink, errorLink, httpLink];
   if (options?.withLogger && Environment.isDev && !Environment.isServer) {
@@ -42,6 +34,6 @@ export function createApolloClient(
   return new ApolloClient({
     ssrMode: Environment.isServer,
     link: ApolloLink.from(links),
-    cache: new InMemoryCache().restore(options.initialState),
+    cache: new InMemoryCache().restore(options?.initialState),
   });
 }

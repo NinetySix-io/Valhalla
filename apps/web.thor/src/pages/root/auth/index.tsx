@@ -29,7 +29,6 @@ const AuthView: View<Props> = ({ query }) => {
     >
       <FormContainer title="Continue">
         <NextLink
-          passHref
           href={buildReturnableUrl(SSO_PAGES.WITH_USERNAME, {
             query,
           })}

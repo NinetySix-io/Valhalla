@@ -1,7 +1,8 @@
 import * as React from 'react';
 
 import { Divider, List, css, styled } from '@mui/material';
-import { cProps, makeFilterProps, useDebounce } from '@valhalla/web.react';
+import type { cProps } from '@valhalla/web.react';
+import { makeFilterProps, useDebounce } from '@valhalla/web.react';
 
 import { AccountItem } from './items/account';
 import { LogoItem } from './items/logo';

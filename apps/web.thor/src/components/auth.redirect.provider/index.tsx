@@ -22,9 +22,7 @@ export const AuthRedirectProvider: React.FC<Props> = ({
   const router = useRouter();
   const tenant = useOrgQuery();
   const redirected = React.useRef(false);
-  const shouldRedirect = MetaStore.useSelect(
-    (state) => state.requireAuth && !Environment.isServer,
-  );
+  const shouldRedirect = MetaStore.useSelect((state) => state.requireAuth);
 
   if (
     !Environment.isServer &&

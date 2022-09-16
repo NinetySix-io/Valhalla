@@ -22,13 +22,7 @@ export const SiteList: React.FC<Props> = () => {
   return (
     <Container>
       {sites.data?.siteList.map((site) => (
-        <Link
-          passHref
-          key={site.id}
-          href={{
-            pathname: makeSitePath(site.id),
-          }}
-        >
+        <Link passHref key={site.id} href={{ pathname: makeSitePath(site.id) }}>
           <SiteCard>
             <Typography>{site.name}</Typography>
           </SiteCard>

@@ -8,7 +8,7 @@ export const authRedirectLink = new ApolloLink((operation, forward) => {
     if (data.errors) {
       for (const error of data.errors) {
         const extensions = error.extensions as ModGraphQLErrorExtensions;
-        if (extensions.response.statusCode === 403) {
+        if ([403].includes(extensions.response.statusCode)) {
           if (!Environment.isServer) {
             MetaStore.actions.setRequireAuth(true);
           }

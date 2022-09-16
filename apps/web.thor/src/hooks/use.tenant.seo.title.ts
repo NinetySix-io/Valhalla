@@ -1,11 +1,11 @@
-import { NextSeoProps } from 'next-seo';
+import type { NextSeoProps } from 'next-seo';
 import { useOrgCtx } from './hydrate/use.org.hydrate';
 
 /**
  * Hook to transform seo for tenant
  */
 export function useTenantSEO(SEO: NextSeoProps): NextSeoProps {
-  const organization = useOrgCtx().name;
+  const organization = useOrgCtx()?.name;
 
   return {
     ...SEO,

@@ -1,8 +1,7 @@
 import { SiteFavicon } from '@app/components/site.favicon';
 import '@app/scripts/mui.classnames';
 import '@app/scripts/wdyr';
-import * as React from 'react';
-import type { AppProps, WithSEO } from '@valhalla/web.react';
+import type { AppProps } from '@valhalla/web.react';
 import { createEmotionCache, theme } from '@valhalla/web.react';
 
 import type { NormalizedCacheObject } from '@apollo/client';
@@ -15,25 +14,22 @@ import { CacheProvider } from '@emotion/react';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import Head from 'next/head';
+import type { BasicObject } from '@valhalla/utilities';
+import { useTenantHydrate } from '@app/hooks/hydrate/use.tenant.hydrate';
 
 const clientSideEmotionCache = createEmotionCache();
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function App({
   Component,
-  ...props
-}: AppProps<{
-  apolloState: NormalizedCacheObject;
-}>) {
-  const pageProps = props.pageProps;
-  const SEO: WithSEO<unknown>['SEO'] = pageProps?.SEO;
+  pageProps,
+}: AppProps<{ apolloState: NormalizedCacheObject } & BasicObject>) {
+  useTenantHydrate(pageProps);
+
   const Page = Component as View;
   const Layout = Page.Layout ?? BaseLayout;
   const isProtected = !Page.isUnprotected;
   const apolloClient = useApollo(pageProps);
-
-  React.useEffect(() => {
-    console.log({ props });
-  }, [props]);
 
   return (
     <CacheProvider value={clientSideEmotionCache}>
@@ -45,7 +41,7 @@ export default function App({
         <CssBaseline />
         <ApolloProvider client={apolloClient}>
           <AuthRedirectProvider isProtected={isProtected}>
-            <Layout SEO={SEO}>
+            <Layout SEO={pageProps?.SEO}>
               <Page {...pageProps} />
             </Layout>
           </AuthRedirectProvider>

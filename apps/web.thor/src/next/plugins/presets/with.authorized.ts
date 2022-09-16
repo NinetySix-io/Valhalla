@@ -10,7 +10,7 @@ export const withAuthorizedRedirect = createNextPlugin((ctx) => {
 
   const ssrCtx = ctx.ssrCtx;
   const refreshToken = ssrCtx.req.cookies[REFRESH_TOKEN_KEY];
-  if (!refreshToken) {
+  if (refreshToken) {
     const query = ssrCtx.query as Record<string, string>;
     const params = new URLSearchParams(query);
 
