@@ -6,9 +6,9 @@ import {
 } from '@app/lib/router.utils/sso.redirect';
 
 import { Environment } from '@app/env';
+import { MetaStore } from '@app/global.store/meta';
 import { useOrgQuery } from '@app/hooks/hydrate/use.org.hydrate';
 import { useRouter } from 'next/router';
-import { MetaStore } from '@app/global.store/meta';
 
 type Props = {
   isProtected?: boolean;

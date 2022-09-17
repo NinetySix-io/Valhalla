@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { RouterContext } from 'next/dist/shared/lib/router-context'; // next 12
+import { MockedProvider } from '@apollo/client/testing';
+import { RouterContext } from 'next/dist/shared/lib/router-context';
 
 export const parameters = {
   actions: {
@@ -16,6 +16,12 @@ export const parameters = {
       date: /Date$/,
     },
   },
+  /**
+   * @see https://storybook.js.org/addons/storybook-addon-apollo-client
+   */
+  apolloClient: {
+    MockedProvider,
+  },
   nextRouter: {
     /**
      * @see https://storybook.js.org/addons/storybook-addon-next-router
@@ -23,10 +29,3 @@ export const parameters = {
     Provider: RouterContext.Provider,
   },
 };
-
-import * as NextImage from 'next/image';
-
-Object.defineProperty(NextImage, 'default', {
-  configurable: true,
-  value: (props) => <img {...props} />,
-});

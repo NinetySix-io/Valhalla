@@ -1,11 +1,20 @@
 import { OrganizationLogo } from './index';
-import { storiesOf } from '@storybook/react';
 import { faker } from '@faker-js/faker';
+import { storiesOf } from '@storybook/react';
 
-storiesOf('Components/Organization/Logo', module).add('Default', () => (
-  <OrganizationLogo
-    organization={{
-      name: faker.company.name(),
-    }}
-  />
-));
+storiesOf('Components/Organization/Logo', module)
+  .add('With Logo', () => (
+    <OrganizationLogo
+      organization={{
+        name: faker.company.name(),
+        logoUrl: faker.image.business(),
+      }}
+    />
+  ))
+  .add('Without Logo', () => (
+    <OrganizationLogo
+      organization={{
+        name: faker.company.name(),
+      }}
+    />
+  ));

@@ -1,6 +1,6 @@
+import { Logo } from './index';
 import { MetaStore } from '@app/global.store/meta';
 import { storiesOf } from '@storybook/react';
-import { Logo } from './index';
 import { styled } from '@mui/material';
 
 const StyledLogo = styled(Logo)`

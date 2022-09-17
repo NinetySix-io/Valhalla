@@ -15,7 +15,7 @@ import { Environment } from '@app/env';
 import Link from 'next/link';
 import { OrganizationLogo } from '../organization.logo';
 import { Section } from '../section';
-import type { cProps } from '@valhalla/web.react';
+import isNil from 'lodash.isnil';
 import { useGetOrgsMembershipListQuery } from '@app/generated/valhalla.gql';
 
 const CreateButton = styled(Button)(
@@ -32,26 +32,30 @@ const CreateButton = styled(Button)(
   `,
 );
 
-const OrgCard = styled(Button)`
+const OrgCard = styled(Button)<{ hasLogo: boolean }>`
   height: 150px;
   width: 300px;
   min-width: 250px;
   aspect-ratio: 2;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  border-color: ${(p) =>
+    p.hasLogo ? 'transparent' : p.theme.palette.grey[500]};
 `;
 
 const OrgLogo = styled(OrganizationLogo)`
   flex-grow: 1;
 `;
 
-const OrgMeta = styled(Box)``;
+const OrgMeta = styled(Box)`
+  max-width: 100%;
+`;
 
-type Props = cProps;
-
-export const OrganizationList: React.FC<Props> = () => {
+export const OrganizationList: React.FC = () => {
   const [creating, setCreating] = React.useState(false);
   const organizations = useGetOrgsMembershipListQuery();
+
   const theme = useTheme();
 
   return (
@@ -85,10 +89,17 @@ export const OrganizationList: React.FC<Props> = () => {
               key={org.id}
               href={Environment.getTenantUrl(org.slug)}
             >
-              <OrgCard variant="outlined">
+              <OrgCard variant="outlined" hasLogo={!isNil(org.logoUrl)}>
                 <OrgLogo organization={org} />
                 <OrgMeta>
-                  <Typography>{org.name}</Typography>
+                  <Typography
+                    overflow="hidden"
+                    whiteSpace="nowrap"
+                    textOverflow="ellipsis"
+                    align="center"
+                  >
+                    {org.name}
+                  </Typography>
                 </OrgMeta>
               </OrgCard>
             </Link>

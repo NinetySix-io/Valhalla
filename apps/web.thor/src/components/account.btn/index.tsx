@@ -10,13 +10,10 @@ import {
   Typography,
 } from '@mui/material';
 
-import type { cProps } from '@valhalla/web.react';
 import { useGetAccountQuery } from '@app/generated/valhalla.gql';
 import { useLogout } from '@app/hooks/use.logout';
 
-type Props = cProps;
-
-export const AccountBtn: React.FC<Props> = () => {
+export const AccountBtn: React.FC = () => {
   const [anchor, setAnchor] = React.useState<HTMLElement>();
   const logout = useLogout();
   const isOpen = Boolean(anchor);

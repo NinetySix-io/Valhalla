@@ -1,8 +1,9 @@
 import * as React from 'react';
 
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Modal } from './index';
 import { Button, Typography } from '@mui/material';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
+
+import { Modal } from './index';
 import { styled } from '@mui/material';
 
 type ComponentType = typeof Modal;
