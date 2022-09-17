@@ -1,11 +1,8 @@
 import * as React from 'react';
 
 import { Button } from '@mui/material';
-import { cProps } from '@valhalla/web.react';
 
-type Props = cProps;
-
-export const FinishBtn: React.FC<Props> = () => {
+export const FinishBtn: React.FC = () => {
   return (
     <Button variant="contained" size="small">
       Done

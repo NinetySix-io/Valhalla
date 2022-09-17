@@ -2,14 +2,15 @@ import * as React from 'react';
 
 import {
   Button,
-  css,
   ListItemText,
   Menu,
   MenuItem,
+  css,
   styled,
 } from '@mui/material';
 
-import { EditorStore, ScreenSize } from '@app/components/page.editor/store';
+import { EditorStore } from '@app/components/page.editor/store';
+import { ScreenSize } from '@app/components/page.editor/constants';
 import { useAnchor } from '@app/hooks/dom/use.anchor';
 
 const Container = styled('div')(

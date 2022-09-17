@@ -4,11 +4,11 @@ import { BUTTON_ELEMENT, TEXT_ELEMENT } from '../../constants';
 import { Button, Popover, Stack, TextField, css, styled } from '@mui/material';
 
 import { EditorMenu } from '../../menu';
+import { EditorStore } from '../../store';
 import { ElementMenuGroup } from './group';
 import { ElementMenuGroupItem } from './item';
 import { useDragDropManager } from 'react-dnd';
 import { useIsDragging } from '../../context';
-import { EditorStore } from '../../store';
 
 const Container = styled(Stack)(
   ({ theme }) => css`
@@ -25,7 +25,7 @@ export const ElementsMenu: React.FC<Props> = ({ isVisible, ...props }) => {
   const isDragging = useIsDragging();
   const [menuVisible, setMenuVisible] = React.useState(false);
   const manager = useDragDropManager();
-  const anchor = React.useRef<HTMLDivElement>(null);
+  const anchor = React.useRef<HTMLDivElement>(undefined);
 
   function openMenu() {
     setMenuVisible(true);

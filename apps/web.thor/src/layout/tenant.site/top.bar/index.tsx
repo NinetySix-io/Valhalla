@@ -6,9 +6,6 @@ import { EditButtons } from './edit.btns';
 import { FinishBtn } from './finish.btn';
 import { Meta } from './meta';
 import { SizesRadio } from './sizes.radio';
-import { cProps } from '@valhalla/web.react';
-
-type Props = cProps;
 
 const Container = styled('div')(
   ({ theme }) => css`
@@ -54,7 +51,7 @@ const Divider = styled(MuiDivider)(
   `,
 );
 
-export const TopBar: React.FC<Props> = () => {
+export const TopBar: React.FC = () => {
   return (
     <Container>
       <Left>

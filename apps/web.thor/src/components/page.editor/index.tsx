@@ -4,32 +4,22 @@ import { css, styled } from '@mui/material';
 
 import { BodySection } from './body.section';
 import { DndProvider } from 'react-dnd';
-import { FooterSection } from './footer.section';
+import { EditorStore } from './store';
+import { EmptyContent } from './empty';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { HeaderSection } from './header.section';
-import type { cProps } from '@valhalla/web.react';
-import { EditorStore, ScreenSize } from './store';
+import { ScreenSize } from './constants';
+import isEmpty from 'lodash.isempty';
 
-type Props = cProps;
-
-const Container = styled('div')(
-  () => css`
+const Container = styled('div')<{ size: ScreenSize }>(
+  ({ theme, size }) => css`
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
     flex-grow: 1;
     overflow: auto;
-  `,
-);
-
-const Content = styled('div')<{ size: ScreenSize }>(
-  ({ theme, size }) => css`
     transition: all 0.5s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
+    align-self: center;
 
     ${size === ScreenSize.DESKTOP &&
     css`
@@ -45,28 +35,36 @@ const Content = styled('div')<{ size: ScreenSize }>(
       margin: ${theme.spacing(1)} 0;
     `}
 
-    ${size === ScreenSize.MOBILE &&
+      ${size === ScreenSize.MOBILE &&
     css`
       min-height: 844px;
     `}
-    ${size === ScreenSize.TABLET &&
+
+      ${size === ScreenSize.TABLET &&
     css`
       min-height: 1180px;
-    `}
+    `};
   `,
 );
 
-export const PageEditor: React.FC<Props> = () => {
+export const PageEditor: React.FC = () => {
   const size = EditorStore.useSelect((state) => state.size);
+  const sections = EditorStore.useSelect((state) => state.sections);
+
+  if (isEmpty(sections)) {
+    return (
+      <Container size={size}>
+        <EmptyContent />
+      </Container>
+    );
+  }
 
   return (
-    <Container>
+    <Container size={size}>
       <DndProvider backend={HTML5Backend}>
-        <Content size={size}>
-          <HeaderSection />
-          <BodySection />
-          <FooterSection />
-        </Content>
+        {sections.map((section) => (
+          <BodySection key={section.id} sectionId={section.id} />
+        ))}
       </DndProvider>
     </Container>
   );

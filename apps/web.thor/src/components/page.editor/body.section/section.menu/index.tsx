@@ -3,9 +3,9 @@ import * as React from 'react';
 import { Button, Divider, Popover, Stack, css, styled } from '@mui/material';
 
 import { EditorMenu } from '../../menu';
-import { SectionMenuContent } from './content';
-import { useSectionId } from '../../context';
 import { EditorStore } from '../../store';
+import { SectionMenuContent } from './content';
+import { useSectionId } from '../scope.provider';
 
 const ActionBtn = styled(Button)(
   ({ theme }) => css`

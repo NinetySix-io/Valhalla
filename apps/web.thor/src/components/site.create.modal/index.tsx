@@ -1,10 +1,9 @@
 import * as React from 'react';
 
-import type { cProps } from '@valhalla/web.react';
 import { Form } from '@valhalla/web.react';
-
 import { FormModal } from '../modal.form';
 import { TextField } from '@mui/material';
+import type { cProps } from '@valhalla/web.react';
 import { useCreateSiteMutation } from '@app/generated/valhalla.gql';
 
 type Props = cProps<{
@@ -49,6 +48,7 @@ export const CreateSiteModal: React.FC<Props> = ({
     <FormModal
       title="Add Site"
       open={isOpen}
+      form={form}
       loading={loading}
       onClose={handleClose}
       onSubmit={handleSubmit}

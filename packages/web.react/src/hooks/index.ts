@@ -5,3 +5,6 @@ export * from './use.debounce.trigger';
 export * from './use.throttle.trigger';
 export * from './react.hooks';
 export * from './use.keys.pressed';
+export * from './use.subscription';
+export * from './use.targeted.click';
+export * from './use.temporal';

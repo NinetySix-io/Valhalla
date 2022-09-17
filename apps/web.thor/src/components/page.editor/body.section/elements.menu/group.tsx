@@ -2,11 +2,9 @@ import * as React from 'react';
 
 import { Grid, Stack, Typography, css, styled } from '@mui/material';
 
-import type { cProps } from '@valhalla/web.react';
-
 const Container = styled(Stack)(() => css``);
 
-type Props = cProps<{ title: string }>;
+type Props = React.PropsWithChildren<{ title: string }>;
 
 export const ElementMenuGroup: React.FC<Props> = ({ title, children }) => {
   return (

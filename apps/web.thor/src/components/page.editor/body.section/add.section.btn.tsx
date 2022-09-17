@@ -2,9 +2,9 @@ import * as React from 'react';
 
 import { Button, css, styled } from '@mui/material';
 
-import { makeFilterProps } from '@valhalla/web.react';
-import { useSectionId } from '../context';
 import { EditorStore } from '../store';
+import { makeFilterProps } from '@valhalla/web.react';
+import { useSectionId } from './scope.provider';
 
 const ActionBtn = styled(
   Button,

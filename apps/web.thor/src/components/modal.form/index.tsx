@@ -1,14 +1,13 @@
 import * as React from 'react';
 
-import type { BoxProps } from '@mui/material';
 import { Box } from '@mui/material';
-import type { FormProps } from '@valhalla/web.react';
+import type { BoxProps } from '@mui/material';
 import { Form } from '@valhalla/web.react';
-
+import type { FormProps } from '@valhalla/web.react';
 import { Modal } from '@app/components/modal';
 import { tryNice } from 'try-nice';
 
-type Props<T> = Pick<FormProps<T>, 'form'> &
+type Props<T> = Required<Pick<FormProps<T>, 'form'>> &
   Pick<
     React.ComponentProps<typeof Modal>,
     'withCancel' | 'onClose' | 'open' | 'title' | 'loading' | 'withCloseBtn'

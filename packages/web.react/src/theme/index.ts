@@ -14,6 +14,11 @@ export const theme = responsiveFontSizes(
     },
     spacing: 10,
     components: {
+      MuiButtonBase: {
+        defaultProps: {
+          disableRipple: true,
+        },
+      },
       MuiButton: {
         styleOverrides: {
           endIcon: {

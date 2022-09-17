@@ -1,8 +1,8 @@
 import { Button, Grid, css, styled } from '@mui/material';
 
-import { BUILDER_ELEMENT } from '../../constants';
-import type { BuilderElement } from '../../types';
+import type { MenuElement } from '../../types';
 import { useDrag } from 'react-dnd';
+import { useSectionId } from '../scope.provider';
 
 const Item = styled(Button)(
   () => css`
@@ -12,15 +12,16 @@ const Item = styled(Button)(
 
 type Props = {
   children: string;
-  element: BuilderElement;
+  element: MenuElement;
 };
 
 export const ElementMenuGroupItem: React.FC<Props> = ({
   children,
   element,
 }) => {
+  const sectionId = useSectionId();
   const [, drag] = useDrag({
-    type: BUILDER_ELEMENT,
+    type: sectionId,
     item: element,
   });
 

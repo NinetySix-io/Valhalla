@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-import { MenuProps, Menu as MuiMenu } from '@mui/material';
+import type { MenuProps } from '@mui/material';
+import { Menu as MuiMenu } from '@mui/material';
 
 type Props = MenuProps;
 

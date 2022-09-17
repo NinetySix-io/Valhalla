@@ -1,8 +1,12 @@
-import { ScreenSize } from './store';
-import type { ButtonBuilderElement, TextBuilderElement } from './types';
+import type { MenuElement } from './types';
 
-export const BUILDER_ELEMENT = 'BUILDER_ELEMENT' as const;
+export enum ScreenSize {
+  DESKTOP = 1200,
+  MOBILE = 400,
+  TABLET = 820,
+}
 
+//TODO: move this server side
 export const SCREEN_SIZE_CONFIG = {
   [ScreenSize.DESKTOP]: {
     columns: 24,
@@ -15,14 +19,14 @@ export const SCREEN_SIZE_CONFIG = {
   },
 } as const;
 
-export const TEXT_ELEMENT: TextBuilderElement = {
+export const TEXT_ELEMENT: MenuElement = {
   type: 'Text',
-  width: 20,
-  height: 10,
+  xSpan: 3,
+  ySpan: 1,
 };
 
-export const BUTTON_ELEMENT: ButtonBuilderElement = {
+export const BUTTON_ELEMENT: MenuElement = {
   type: 'Button',
-  width: 10,
-  height: 5,
+  xSpan: 3,
+  ySpan: 1,
 };

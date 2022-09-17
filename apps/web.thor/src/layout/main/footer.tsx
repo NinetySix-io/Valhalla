@@ -1,10 +1,7 @@
 import * as React from 'react';
 
 import { Box } from '@mui/material';
-import type { cProps } from '@valhalla/web.react';
 
-type Props = cProps;
-
-export const Footer: React.FC<Props> = () => {
+export const Footer: React.FC = () => {
   return <Box maxWidth="xl">footer</Box>;
 };

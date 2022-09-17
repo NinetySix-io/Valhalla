@@ -27,29 +27,22 @@ function handleEvent<K extends readonly KeyCode[]>(
 /**
  * It takes an array of key codes and a callback function, and calls the callback function when any of
  * the keys are pressed
- * @param {K} keys - K - The keys that you want to listen for.
- * @param callback - (event: KeyboardEvent) => void
  */
 export function useOneOfKeyPressed<K extends readonly KeyCode[]>(
   keys: K,
-  callbacks: {
-    onKeyDown?: CallBack;
-    onKeyUp?: CallBack;
-  },
+  onKeyAction: (state: 'keydown' | 'keyup') => void,
 ) {
   useWindowEvent('keydown', (event) => {
-    handleEvent(keys, event, callbacks.onKeyDown);
+    handleEvent(keys, event, () => onKeyAction('keydown'));
   });
 
   useWindowEvent('keyup', (event) => {
-    handleEvent(keys, event, callbacks.onKeyUp);
+    handleEvent(keys, event, () => onKeyAction('keyup'));
   });
 }
 
 /**
  * It calls a callback when a set of keys are pressed
- * @param {K} keys - K - an array of key codes that you want to listen for.
- * @param callback - () => void
  */
 export function useKeysPressed<K extends readonly KeyCode[]>(
   keys: K,

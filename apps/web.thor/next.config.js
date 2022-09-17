@@ -1,9 +1,6 @@
 const config = require('dotenv').config().parsed;
 const pick = require('lodash.pick');
-const withTM = require('next-transpile-modules')([
-  '@valhalla/web.react',
-  '@valhalla/web.builder',
-]);
+const withTM = require('next-transpile-modules')(['@valhalla/web.react']);
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });

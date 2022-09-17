@@ -1,5 +1,5 @@
-import { ApolloError } from '@apollo/client';
-import { ModGraphQLErrorExtensions } from '@app/types/apollo';
+import type { ApolloError } from '@apollo/client';
+import type { ModGraphQLErrorExtensions } from '@app/types/apollo';
 
 const EXPIRED_REFRESH_TOKEN_CODE = 403 as const;
 const EXPIRED_ACCESS_TOKEN_CODE = 401 as const;

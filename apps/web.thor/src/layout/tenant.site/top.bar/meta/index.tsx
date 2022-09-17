@@ -4,7 +4,6 @@ import { Typography, css, styled } from '@mui/material';
 
 import { Menu } from './menu';
 import { MetaUpdateModal } from './update.modal';
-import { cProps } from '@valhalla/web.react';
 import { useAnchor } from '@app/hooks/dom/use.anchor';
 import { useSitePageHydrate } from '@app/hooks/hydrate/use.site.page.hydrate';
 
@@ -28,9 +27,7 @@ const Content = styled('button')(
   `,
 );
 
-type Props = cProps;
-
-export const Meta: React.FC<Props> = () => {
+export const Meta: React.FC = () => {
   const anchor = useAnchor();
   const page = useSitePageHydrate();
   const [updating, setUpdating] = React.useState(false);

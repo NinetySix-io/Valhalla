@@ -1,5 +1,4 @@
 import '@app/scripts/mui.classnames';
-import '@app/scripts/wdyr';
 
 import { createEmotionCache, theme } from '@valhalla/web.react';
 
@@ -17,9 +16,10 @@ import type { View } from '@app/types/next/page';
 import { useApollo } from '@app/apollo/use.apollo';
 import { useTenantHydrate } from '@app/hooks/hydrate/use.tenant.hydrate';
 
+// import '@app/scripts/wdyr';
+
 const clientSideEmotionCache = createEmotionCache();
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function App({
   Component,
   pageProps,

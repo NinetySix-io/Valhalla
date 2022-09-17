@@ -1,18 +1,16 @@
-import {
+import type {
   ApolloCache,
-  ApolloClient,
-  ApolloLink,
   ApolloQueryResult,
   DefaultContext,
   FetchResult,
-  InMemoryCache,
   MutationOptions,
   NormalizedCacheObject,
   OperationVariables,
   QueryOptions,
 } from '@apollo/client';
+import { ApolloClient, ApolloLink, InMemoryCache } from '@apollo/client';
 
-import { IncomingHttpHeaders } from 'http';
+import type { IncomingHttpHeaders } from 'http';
 import { authRedirectLink } from './auth.redirect.link';
 import { buildHttpLink } from './http.link';
 

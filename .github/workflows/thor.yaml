@@ -64,6 +64,9 @@ jobs:
         with:
           eslint: true
 
+      - name: Test
+        run: npm run test
+
       # - name: Test
       #   run: pnpm run test
 
