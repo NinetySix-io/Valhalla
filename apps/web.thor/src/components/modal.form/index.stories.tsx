@@ -1,9 +1,12 @@
 import { Button, TextField } from '@mui/material';
 import * as React from 'react';
-import { storiesOf } from '@storybook/react';
+import { addDecorator, storiesOf } from '@storybook/react';
 import { FormModal } from './index';
 import { Form } from '@valhalla/web.react';
 import { action } from '@storybook/addon-actions';
+import { withPerformance } from 'storybook-addon-performance';
+
+addDecorator(withPerformance);
 
 storiesOf('Components/Modal Form', module)
   .addParameters({ layout: 'centered' })
