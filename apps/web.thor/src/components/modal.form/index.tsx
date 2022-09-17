@@ -45,7 +45,7 @@ export function FormModal<T>({
     if (error) {
       onError?.(error);
     } else {
-      onSuccess();
+      onSuccess?.();
       closeOnSuccess && onClose?.();
     }
   }

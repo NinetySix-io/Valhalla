@@ -1,7 +1,9 @@
 import * as React from 'react';
 
-import { Form, cProps } from '@valhalla/web.react';
-import { PageSchema, useUpdatePageMutation } from '@app/generated/valhalla.gql';
+import type { cProps } from '@valhalla/web.react';
+import { Form } from '@valhalla/web.react';
+import type { PageSchema } from '@app/generated/valhalla.gql';
+import { useUpdatePageMutation } from '@app/generated/valhalla.gql';
 
 import { FormModal } from '@app/components/modal.form';
 import { TextField } from '@mui/material';
