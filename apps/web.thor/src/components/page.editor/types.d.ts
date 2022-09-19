@@ -5,7 +5,7 @@ export type BaseElement<Type extends string = string, P = unknown> = {
   canResize?: boolean;
   xSpan: number;
   ySpan: number;
-  props: P;
+  props?: P;
 };
 
 export type DroppedPosition = {

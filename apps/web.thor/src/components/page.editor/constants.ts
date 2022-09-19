@@ -1,10 +1,13 @@
 import type { MenuElement } from './types';
+import uniqueId from 'lodash.uniqueid';
 
 export enum ScreenSize {
   DESKTOP = 1200,
   MOBILE = 400,
   TABLET = 820,
 }
+
+export const TEMP_ITEM = uniqueId('TEMP');
 
 //TODO: move this server side
 export const SCREEN_SIZE_CONFIG = {

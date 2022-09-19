@@ -3,6 +3,8 @@ import * as React from 'react';
 import type { DroppedElement, MenuElement } from '../../../types';
 import { css, styled } from '@mui/material';
 
+import { TEMP_ITEM } from '@app/components/page.editor/constants';
+import isNil from 'lodash.isnil';
 import { makeFilterProps } from '@valhalla/web.react';
 import { useDragLayer } from 'react-dnd';
 import { useSectionStore } from '../../scope.provider';
@@ -38,6 +40,11 @@ export const DragLayer: React.FC = () => {
   React.useEffect(() => {
     if (store.getState().dragging?.id !== item?.id) {
       store.actions.setDragging(item);
+    } else if (!isNil(item)) {
+      store.actions.setDragging({
+        id: TEMP_ITEM,
+        ...item,
+      });
     }
   }, [item, store]);
 
