@@ -19,7 +19,7 @@ const AddSectionBtn = styled(Button)(
 );
 
 export const EmptyContent: React.FC = () => {
-  async function handleAddSection() {
+  function handleAddSection() {
     EditorStore.actions.addSection(makeSection());
   }
 

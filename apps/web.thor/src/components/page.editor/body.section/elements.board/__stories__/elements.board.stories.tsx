@@ -52,13 +52,19 @@ const Board: React.FC<{ section: Section }> = ({ section }) => {
 storiesOf('NinetySix/Page Editor', module)
   .addDecorator(DndDecorator)
   .addDecorator(SectionsDecorator(2))
-  .add('Board', () => <Board section={EditorStore.getState().sections[0]} />)
-  .add('Board with multiple sections', () => (
-    <React.Fragment>
-      {EditorStore.getState().sections.map((section) => (
-        <Wrapper key={section.id}>
-          <Board section={section} />
-        </Wrapper>
-      ))}
-    </React.Fragment>
-  ));
+  .add('Board', () => {
+    const section = EditorStore.useSelect((state) => state.sections[0]);
+    return <Board section={section} />;
+  })
+  .add('Board with multiple sections', () => {
+    const sections = EditorStore.useSelect((state) => state.sections);
+    return (
+      <React.Fragment>
+        {sections.map((section) => (
+          <Wrapper key={section.id}>
+            <Board section={section} />
+          </Wrapper>
+        ))}
+      </React.Fragment>
+    );
+  });
