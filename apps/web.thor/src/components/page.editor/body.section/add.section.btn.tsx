@@ -14,7 +14,6 @@ const ActionBtn = styled(
   visible?: boolean;
 }>(
   ({ align, visible }) => css`
-    display: ${visible ? 'initial' : 'none'};
     position: absolute;
     margin: auto;
     align-self: center;
@@ -24,11 +23,17 @@ const ActionBtn = styled(
       transform: scale(1.2);
     }
 
+    ${!visible &&
+    css`
+      opacity: 0;
+    `}
+
     ${align === 'top' &&
     css`
       top: 0;
       margin-top: -15px;
     `}
+
     ${align === 'bottom' &&
     css`
       bottom: 0;
