@@ -170,3 +170,5 @@ export const BodySection: React.FC<Props> = React.memo(({ sectionId }) => {
     </SectionProvider>
   );
 });
+
+BodySection.displayName = 'BodySection';

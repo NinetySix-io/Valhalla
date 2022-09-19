@@ -52,3 +52,5 @@ export const ElementsBoardGrid = React.forwardRef<
     </Container>
   );
 });
+
+ElementsBoardGrid.displayName = 'ElementsBoardGrid';
