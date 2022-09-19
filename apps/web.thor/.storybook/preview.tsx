@@ -1,3 +1,5 @@
+import '@storybook/addon-console';
+
 import { MockedProvider } from '@apollo/client/testing';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
 

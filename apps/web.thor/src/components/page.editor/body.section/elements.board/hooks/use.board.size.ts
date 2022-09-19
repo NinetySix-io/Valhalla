@@ -33,7 +33,7 @@ export function useBoardSize() {
 
   const { ref: observerRef } = useResizeObserver({
     onResize: (size) => {
-      handleAdjustment(size.width);
+      requestAnimationFrame(() => handleAdjustment(size.width));
     },
   });
 

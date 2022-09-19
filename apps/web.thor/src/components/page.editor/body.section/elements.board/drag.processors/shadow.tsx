@@ -100,13 +100,11 @@ export const DragShadow: React.FC = () => {
         const { selections, elements } = store.getState();
         cache.current = selections
           .map((selectedId) => elements[selectedId].getElement())
-          .map((element): DroppedElement => {
-            return {
-              ...element,
-              x: element.x + diffX,
-              y: element.y + diffY,
-            };
-          });
+          .map<DroppedElement>((element) => ({
+            ...element,
+            x: element.x + diffX,
+            y: element.y + diffY,
+          }));
       }
     }
   });

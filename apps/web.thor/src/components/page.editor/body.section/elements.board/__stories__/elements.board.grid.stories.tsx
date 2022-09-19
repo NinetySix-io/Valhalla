@@ -18,17 +18,20 @@ const StyledBoard = styled(ElementsBoardGrid)(
 storiesOf('NinetySix/Page Editor', module)
   .addDecorator(SectionsDecorator(1))
   .add('Grid', () => {
-    const section = last(EditorStore.getState().sections);
-    const store = useSectionStore();
     const sizeRef = useBoardSize();
-    store.actions.setDragging({
-      id: 'element',
-      type: '',
-      x: 0,
-      y: 0,
-      xSpan: 0,
-      ySpan: 0,
-    });
+    const store = useSectionStore();
+    const section = last(EditorStore.getState().sections);
+
+    React.useMemo(() => {
+      store.actions.setDragging({
+        id: 'element',
+        type: '',
+        x: 0,
+        y: 0,
+        xSpan: 0,
+        ySpan: 0,
+      });
+    }, [store]);
 
     return (
       <SectionProvider sectionId={section.id} config={section.config}>

@@ -3,6 +3,7 @@ import * as React from 'react';
 import { EditorStore, makeSection } from '@app/components/page.editor/store';
 
 import type { DecoratorFn } from '@storybook/react';
+import { faker } from '@faker-js/faker';
 import uniqueId from 'lodash.uniqueid';
 
 export const SectionsDecorator = (sectionsCount = 1): DecoratorFn => {
@@ -20,23 +21,24 @@ export const SectionsDecorator = (sectionsCount = 1): DecoratorFn => {
       for (let count = 0; count < sectionsCount; count++) {
         const section = makeSection();
         EditorStore.actions.addSection(section);
-
-        EditorStore.actions.addElement(section.id, {
-          id: uniqueId(),
-          type: 'Text',
-          x: 4,
-          y: 5,
-          xSpan: 3,
-          ySpan: 1,
-        });
-
-        EditorStore.actions.addElement(section.id, {
-          id: uniqueId(),
-          type: 'Text',
-          x: 0,
-          y: 0,
-          xSpan: 3,
-          ySpan: 3,
+        Array.from({
+          length: faker.datatype.number({
+            min: 1,
+            max: 5,
+          }),
+        }).forEach(() => {
+          const id = uniqueId();
+          EditorStore.actions.addElement(section.id, {
+            id,
+            type: 'Text',
+            x: faker.datatype.number({ min: 0, max: 10 }),
+            y: faker.datatype.number({ min: 0, max: 10 }),
+            xSpan: faker.datatype.number({ min: 1, max: 5 }),
+            ySpan: faker.datatype.number({ min: 1, max: 5 }),
+            props: {
+              value: `<span>element-${id}</span>`,
+            },
+          });
         });
       }
     }, []);

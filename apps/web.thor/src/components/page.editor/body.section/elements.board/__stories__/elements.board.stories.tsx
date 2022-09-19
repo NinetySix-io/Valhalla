@@ -49,14 +49,14 @@ const Board: React.FC<{ section: Section }> = ({ section }) => {
   );
 };
 
-storiesOf('NinetySix/Page Editor', module)
+storiesOf('NinetySix/Page Editor/Board', module)
   .addDecorator(DndDecorator)
   .addDecorator(SectionsDecorator(2))
-  .add('Board', () => {
+  .add('Default', () => {
     const section = EditorStore.useSelect((state) => state.sections[0]);
     return <Board section={section} />;
   })
-  .add('Board with multiple sections', () => {
+  .add('With Sections', () => {
     const sections = EditorStore.useSelect((state) => state.sections);
     return (
       <React.Fragment>

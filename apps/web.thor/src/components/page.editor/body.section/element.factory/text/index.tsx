@@ -7,5 +7,11 @@ export type Props = {
 };
 
 export const TextItem: React.FC<Props> = ({ element }) => {
-  return <div>text</div>;
+  return (
+    <div
+      dangerouslySetInnerHTML={{
+        __html: element.props.value,
+      }}
+    />
+  );
 };
