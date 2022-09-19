@@ -82,6 +82,9 @@ export const BodySection: React.FC<Props> = React.memo(({ sectionId }) => {
   const isActive = !active && activeSection === sectionId;
   const isDragging = useIsDragging();
   const shouldDisplayHelpers = !isDragging && isActive;
+  const isFirstSection = EditorStore.useSelect(
+    (state) => state.sections.findIndex(compareById(sectionId)) === 0,
+  );
   const sectionElements = EditorStore.useSelect(
     (state) => state.sections.find(compareById(sectionId)).children,
   );
@@ -130,8 +133,6 @@ export const BodySection: React.FC<Props> = React.memo(({ sectionId }) => {
         onClick={handleClick}
         isHover={isActive}
       >
-        <AddSectionBtn align="top" isVisible={shouldDisplayHelpers} />
-        <AddSectionBtn align="bottom" isVisible={shouldDisplayHelpers} />
         <MenuArea isMobile={isMobile}>
           <ElementsMenu
             placement="left-start"
@@ -166,6 +167,11 @@ export const BodySection: React.FC<Props> = React.memo(({ sectionId }) => {
             </ElementsBoard.Item>
           ))}
         </ElementsBoard>
+        <AddSectionBtn
+          align="top"
+          isVisible={shouldDisplayHelpers && !isFirstSection}
+        />
+        <AddSectionBtn align="bottom" isVisible={shouldDisplayHelpers} />
       </Container>
     </SectionProvider>
   );
