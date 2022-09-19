@@ -20,6 +20,10 @@ const ActionBtn = styled(
     align-self: center;
     transition: 0.2s all;
 
+    &:hover {
+      transform: scale(1.2);
+    }
+
     ${align === 'top' &&
     css`
       top: 0;
