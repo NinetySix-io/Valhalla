@@ -1,10 +1,11 @@
 import type { XYCoord } from 'react-dnd';
 
-export type BaseElement<Type extends string = string> = {
+export type BaseElement<Type extends string = string, P = unknown> = {
   type: Type;
   canResize?: boolean;
   xSpan: number;
   ySpan: number;
+  props: P;
 };
 
 export type DroppedPosition = {
@@ -22,8 +23,15 @@ export type DroppedElement<E extends BaseElement = BaseElement> = E &
   DroppedPosition &
   WithId;
 
-export type MenuElement = BaseElement;
-export type BoardElement = MenuElement & WithId & DroppedPosition;
+export type MenuElement<
+  Type extends string = string,
+  P = unknown,
+> = BaseElement<Type, P>;
+
+export type BoardElement<
+  Type extends string = string,
+  P = unknown,
+> = MenuElement<Type, P> & WithId & DroppedPosition;
 
 export type SelectionBox = {
   start: XYCoord;

@@ -1,14 +1,17 @@
 import * as React from 'react';
 
-import type { DroppedElement } from '../../types';
+import type { DroppedElement, MenuElement } from '../../types';
+
+import { TextItem } from './text';
 
 type Props = {
-  element: DroppedElement;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  element: DroppedElement<MenuElement<string, any>>;
 };
 
 export const ElementFactory: React.FC<Props> = ({ element }) => {
   if (element.type === 'Text') {
-    return <div>Text[{element.id}]</div>;
+    return <TextItem element={element} />;
   } else if (element.type === 'Button') {
     return <div>button[{element.id}]</div>;
   }
