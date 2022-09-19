@@ -1,35 +1,42 @@
+import { css, styled } from '@mui/material';
+
 import { DndDecorator } from './decorators/dnd.decorator';
 import { EditorStore } from '@app/components/page.editor/store';
 import { ElementFactory } from '../../element.factory';
 import { ElementsBoard } from '../index';
-import { SectionDecorator } from './decorators/section.decorator';
+import React from 'react';
+import type { Section } from '@app/components/page.editor/store/types';
+import { SectionProvider } from '../../scope.provider';
+import { SectionsDecorator } from './decorators/sections.decorator';
 import { action } from '@storybook/addon-actions';
 import { compareById } from '@app/lib/compare.by.id';
 import { storiesOf } from '@storybook/react';
-import { useSectionId } from '../../scope.provider';
 
-storiesOf('NinetySix/Page Editor', module)
-  .addDecorator(DndDecorator)
-  .addDecorator(SectionDecorator)
-  .add('Board', () => {
-    const sectionId = useSectionId();
-    const elements = EditorStore.useSelect(
-      (state) => state.sections.find(compareById(sectionId))?.children,
-    );
+const Wrapper = styled('div')(
+  ({ theme }) => css`
+    outline: solid thin ${theme.palette.grey[500]};
+  `,
+);
 
-    return (
+const Board: React.FC<{ section: Section }> = ({ section }) => {
+  const elements = EditorStore.useSelect(
+    (state) => state.sections.find(compareById(section.id))?.children,
+  );
+
+  return (
+    <SectionProvider sectionId={section.id} config={section.config}>
       <ElementsBoard
         onConfigChange={(nextConfig) => {
-          EditorStore.actions.updateSectionConfig(sectionId, nextConfig);
-          action('onConfigChange')(nextConfig);
+          EditorStore.actions.updateSectionConfig(section.id, nextConfig);
+          action('onConfigChange')(section.id, nextConfig);
         }}
         onElementsUpdated={(elements) => {
-          EditorStore.actions.replaceElements(sectionId, elements);
-          action('onElementsUpdated')(elements);
+          EditorStore.actions.replaceElements(section.id, elements);
+          action('onElementsUpdated')(section.id, elements);
         }}
         onElementsDeleted={(elementIdList) => {
-          EditorStore.actions.removeElements(sectionId, elementIdList);
-          action('onElementsDeleted')(elementIdList);
+          EditorStore.actions.removeElements(section.id, elementIdList);
+          action('onElementsDeleted')(section.id, elementIdList);
         }}
       >
         {elements?.map((element) => (
@@ -38,5 +45,20 @@ storiesOf('NinetySix/Page Editor', module)
           </ElementsBoard.Item>
         ))}
       </ElementsBoard>
-    );
-  });
+    </SectionProvider>
+  );
+};
+
+storiesOf('NinetySix/Page Editor', module)
+  .addDecorator(DndDecorator)
+  .addDecorator(SectionsDecorator(2))
+  .add('Board', () => <Board section={EditorStore.getState().sections[0]} />)
+  .add('Board with multiple sections', () => (
+    <React.Fragment>
+      {EditorStore.getState().sections.map((section) => (
+        <Wrapper key={section.id}>
+          <Board section={section} />
+        </Wrapper>
+      ))}
+    </React.Fragment>
+  ));

@@ -7,13 +7,13 @@ import type {
 } from '../../../types';
 import { css, styled } from '@mui/material';
 import { useCellClampX, useCellClampY } from '../hooks/use.cell.clamp';
+import { useSectionId, useSectionStore } from '../../scope.provider';
 
-import { Emitter } from '../emitter';
 import { SelectionsOverlay } from './selections.overlay';
 import { getGridArea } from '../lib/get.grid.area';
 import { makeFilterProps } from '@valhalla/web.react';
 import { useDragMonitorOffset } from '../hooks/use.drag.monitor';
-import { useSectionStore } from '../../scope.provider';
+import { useSectionEmitter } from '../hooks/use.section.emitter';
 
 const Container = styled(
   'div',
@@ -42,14 +42,20 @@ const Container = styled(
 
 export const DragShadow: React.FC = () => {
   const store = useSectionStore();
+  const sectionId = useSectionId();
   const clampX = useCellClampX();
   const clampY = useCellClampY();
   const [isVisible, setIsVisible] = React.useState(false);
   const [element, setElement] = React.useState<DroppedElement>();
   const cellSize = store.useSelect((state) => state.cellSize);
   const cache = React.useRef<DroppedElement[]>([]);
+  const emitter = useSectionEmitter();
 
   useDragMonitorOffset((monitor) => {
+    if (monitor.getItemType() !== sectionId) {
+      return;
+    }
+
     const nextOffset = monitor.getSourceClientOffset();
     const draggingElement: DroppedElement = monitor.getItem();
     const isMultiDrag =
@@ -61,9 +67,12 @@ export const DragShadow: React.FC = () => {
 
       // There can only be one added at a time
       if (!isMultiDrag && element && !element.id) {
-        Emitter.emit('elementAdded', element as MenuElement & DroppedPosition);
+        emitter.client.emit(
+          'elementAdded',
+          element as MenuElement & DroppedPosition,
+        );
       } else if (cache.current.length > 0) {
-        Emitter.emit('elementsUpdated', cache.current);
+        emitter.client.emit('elementsUpdated', cache.current);
       }
 
       cache.current = [];

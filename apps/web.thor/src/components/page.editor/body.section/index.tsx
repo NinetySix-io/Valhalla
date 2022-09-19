@@ -18,6 +18,7 @@ import { SectionProvider } from './scope.provider';
 import { compareById } from '@app/lib/compare.by.id';
 import { makeFilterProps } from '@valhalla/web.react';
 import throttle from 'lodash.throttle';
+import uniqueId from 'lodash.uniqueid';
 
 const Container = styled(
   'section',
@@ -154,10 +155,10 @@ export const BodySection: React.FC<Props> = React.memo(({ sectionId }) => {
             EditorStore.actions.removeElements(sectionId, elementIdList)
           }
           onElementAdded={(element) =>
+            //TODO: server side
             EditorStore.actions.addElement(sectionId, {
               ...element,
-              //TODO: server side
-              id: new Date().valueOf().toString(),
+              id: uniqueId('element'),
             })
           }
         >

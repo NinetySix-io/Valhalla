@@ -5,7 +5,6 @@ import { css, styled } from '@mui/material';
 import { makeFilterProps, useTemporal } from '@valhalla/web.react';
 
 import type { DIRECTION } from '../lib/directions';
-import { Emitter } from '../emitter';
 import { Resizer } from './resizer';
 import { calculateResize } from '../lib/calculate.resize';
 import isNil from 'lodash.isnil';
@@ -14,6 +13,7 @@ import { useElementGridArea } from '../hooks/element/use.grid.area';
 import { useElementRegistry } from '../hooks/element/use.registry';
 import { useElementSelections } from '../hooks/element/use.selections';
 import { useSectionDrag } from '../hooks/use.dnd';
+import { useSectionEmitter } from '../hooks/use.section.emitter';
 import { useSectionStore } from '../../scope.provider';
 
 const Container = styled(
@@ -110,6 +110,7 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
     const registryRef = useElementRegistry(element);
     const gridArea = useElementGridArea(element);
     const selection = useElementSelections(element);
+    const emitter = useSectionEmitter();
     const isFocus = store.useSelect(
       (state) => state.focused?.id === element.id,
     );
@@ -182,7 +183,7 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
 
     function handleResizeEnd(direction: DIRECTION, nextSize: Size) {
       setIsResizing(false);
-      Emitter.emit('elementsUpdated', [
+      emitter.client.emit('elementsUpdated', [
         calculateResize({
           cellSize,
           direction,

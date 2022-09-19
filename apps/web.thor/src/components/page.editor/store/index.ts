@@ -9,11 +9,12 @@ import type { Section } from './types';
 import { compareById } from '@app/lib/compare.by.id';
 import { swapArrayIndex } from '@app/lib/array';
 import uniqBy from 'lodash.uniqby';
+import uniqueId from 'lodash.uniqueid';
 
 //TODO: server side
-function makeSection(): Section {
+export function makeSection(): Section {
   return {
-    id: new Date().valueOf().toString(),
+    id: uniqueId('section'),
     children: [],
     config: {
       // TODO: should be server side
@@ -93,15 +94,14 @@ const store = createStore(
       },
       addSection(
         state,
+        section: Section,
         options?: {
           anchorSection: Section['id'];
           isBefore: boolean;
         },
       ) {
-        const newSection = makeSection();
-
         if (!options) {
-          state.sections.push(newSection);
+          state.sections.push(section);
         } else {
           const anchorIndex = state.sections.findIndex(
             compareById(options.anchorSection),
@@ -111,7 +111,7 @@ const store = createStore(
             ? anchorIndex
             : anchorIndex + 1;
 
-          state.sections.splice(positionIndex, 0, newSection);
+          state.sections.splice(positionIndex, 0, section);
         }
       },
       moveSectionUp(state, sectionId: Section['id']) {

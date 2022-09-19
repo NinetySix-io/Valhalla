@@ -1,8 +1,7 @@
 import * as React from 'react';
 
 import { Button, Typography, css, styled } from '@mui/material';
-
-import { EditorStore } from './store';
+import { EditorStore, makeSection } from './store';
 
 const Container = styled('div')(
   () => css`
@@ -20,12 +19,13 @@ const AddSectionBtn = styled(Button)(
 );
 
 export const EmptyContent: React.FC = () => {
+  async function handleAddSection() {
+    EditorStore.actions.addSection(makeSection());
+  }
+
   return (
     <Container>
-      <AddSectionBtn
-        disableRipple
-        onClick={() => EditorStore.actions.addSection()}
-      >
+      <AddSectionBtn disableRipple onClick={handleAddSection}>
         <Typography variant="h6">Add Section</Typography>
       </AddSectionBtn>
     </Container>

@@ -9,13 +9,12 @@ import {
 import { DragProcessors } from './drag.processors';
 import { ElementsBoardGrid } from './grid';
 import { ElementsBoardItem } from './element';
-import { Emitter } from './emitter';
 import type { Section } from '../../store/types';
 import { mergeRefs } from 'react-merge-refs';
 import { useBoardSize } from './hooks/use.board.size';
 import { useDragOverflow } from './hooks/use.drag.overflow';
-import { useEmitter } from './hooks/use.emitter';
 import { useSectionDrop } from './hooks/use.dnd';
+import { useSectionEmitter } from './hooks/use.section.emitter';
 import { useSectionStore } from '../scope.provider';
 import { useSelectionBoxListener } from './hooks/use.selection.box';
 import { useTargetedClick } from '@valhalla/web.react';
@@ -42,7 +41,7 @@ export const ElementsBoard: TElementsBoard = ({
   const ref = React.useRef<HTMLDivElement>();
   const sizeRef = useBoardSize();
   const dndDropRef = useSectionDrop();
-  const emitter = useEmitter(Emitter);
+  const emitter = useSectionEmitter();
 
   useShiftKeyListener();
   useDeleteKeyListener();

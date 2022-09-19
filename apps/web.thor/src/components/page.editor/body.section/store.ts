@@ -3,6 +3,7 @@ import { createStore, createStoreHook, withImmer } from 'tiamut';
 
 import type { Section } from '../store/types';
 import type { XYCoord } from 'react-dnd';
+import { createSectionEmitter } from './emitter';
 
 type State = {
   minSelectionSize: number;
@@ -15,6 +16,7 @@ type State = {
   selectionBox?: SelectionBox;
   selections: BoardElement['id'][];
   isHoldingDownShiftKey: boolean;
+  emitter: ReturnType<typeof createSectionEmitter>;
   elements: Record<
     BoardElement['id'],
     {
@@ -36,13 +38,14 @@ const initialState = {
 
 export function createSectionStore(
   sectionId: string,
-  optionalState: Partial<Omit<State, 'sectionId'>> = {},
+  optionalState: Partial<Omit<State, 'sectionId' | 'emitter'>> = {},
 ) {
   const store = createStore(
     withImmer({
       initialState: {
         ...initialState,
         ...optionalState,
+        emitter: createSectionEmitter(),
         sectionId,
       },
       actions: {

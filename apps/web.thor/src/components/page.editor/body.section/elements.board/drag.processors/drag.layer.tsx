@@ -2,12 +2,12 @@ import * as React from 'react';
 
 import type { DroppedElement, MenuElement } from '../../../types';
 import { css, styled } from '@mui/material';
+import { useSectionId, useSectionStore } from '../../scope.provider';
 
 import { TEMP_ITEM } from '@app/components/page.editor/constants';
 import isNil from 'lodash.isnil';
 import { makeFilterProps } from '@valhalla/web.react';
 import { useDragLayer } from 'react-dnd';
-import { useSectionStore } from '../../scope.provider';
 
 const Positioner = styled(
   'div',
@@ -31,11 +31,16 @@ const Container = styled(Positioner)(
 
 export const DragLayer: React.FC = () => {
   const store = useSectionStore();
-  const { isDragging, currentOffset, item } = useDragLayer((monitor) => ({
-    item: monitor.getItem() as DroppedElement,
-    currentOffset: monitor.getSourceClientOffset(),
-    isDragging: monitor.isDragging(),
-  }));
+  const sectionId = useSectionId();
+  const { isDragging, currentOffset, item } = useDragLayer((monitor) => {
+    return sectionId === monitor.getItemType()
+      ? {
+          item: monitor.getItem() as DroppedElement,
+          currentOffset: monitor.getSourceClientOffset(),
+          isDragging: monitor.isDragging(),
+        }
+      : {};
+  });
 
   React.useEffect(() => {
     if (store.getState().dragging?.id !== item?.id) {

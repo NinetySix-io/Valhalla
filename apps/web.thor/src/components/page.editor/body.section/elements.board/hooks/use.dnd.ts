@@ -7,15 +7,28 @@ import { useDrag, useDrop } from 'react-dnd';
 
 import { useSectionId } from '../../scope.provider';
 
+/**
+ * It returns a drop ref that accepts elements with the same section id as the current section
+ */
 export function useSectionDrop<
   T extends BoardElement,
   E extends DroppedElement<T>,
 >() {
   const sectionId = useSectionId();
-  const [, dropRef] = useDrop<E>(() => ({ accept: sectionId }), [sectionId]);
+  const [, dropRef] = useDrop<E>(
+    () => ({
+      accept: sectionId,
+    }),
+    [sectionId],
+  );
+
   return dropRef;
 }
 
+/**
+ * `useSectionDrag` is a wrapper around `useDrag` that adds a `type` to the `DragSourceHookSpec` based
+ * on the current section id
+ */
 export function useSectionDrag<
   DragObject extends DroppedElement,
   DropResult = unknown,

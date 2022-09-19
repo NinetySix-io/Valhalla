@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import { Button, css, styled } from '@mui/material';
+import { EditorStore, makeSection } from '../store';
 
-import { EditorStore } from '../store';
 import { makeFilterProps } from '@valhalla/web.react';
 import { useSectionId } from './scope.provider';
 
@@ -51,7 +51,7 @@ export const AddSectionBtn: React.FC<Props> = ({ align, isVisible }) => {
   const sectionId = useSectionId();
 
   function handleClick() {
-    EditorStore.actions.addSection({
+    EditorStore.actions.addSection(makeSection(), {
       anchorSection: sectionId,
       isBefore: align === 'top',
     });

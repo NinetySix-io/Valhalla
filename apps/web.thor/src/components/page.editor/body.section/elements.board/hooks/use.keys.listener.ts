@@ -1,7 +1,7 @@
 import { KeyCode, useOneOfKeyPressed } from '@valhalla/web.react';
 
 import type { DroppedElement } from '@app/components/page.editor/types';
-import { Emitter } from '../emitter';
+import { useSectionEmitter } from './use.section.emitter';
 import { useSectionStore } from '../../scope.provider';
 
 /**
@@ -20,6 +20,7 @@ export function useShiftKeyListener() {
  */
 export function useDeleteKeyListener() {
   const store = useSectionStore();
+  const emitter = useSectionEmitter();
 
   useOneOfKeyPressed([KeyCode.Delete, KeyCode.Backspace], (status) => {
     if (status !== 'keydown') {
@@ -35,6 +36,6 @@ export function useDeleteKeyListener() {
       }
     }
 
-    Emitter.emit('elementsDeleted', deleted);
+    emitter.client.emit('elementsDeleted', deleted);
   });
 }

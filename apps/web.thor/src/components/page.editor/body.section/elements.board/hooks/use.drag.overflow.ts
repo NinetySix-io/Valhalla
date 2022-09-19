@@ -1,11 +1,12 @@
-import { Emitter } from '../emitter';
 import { useCellClamp } from './use.cell.clamp';
 import { useDragMonitorOffset } from './use.drag.monitor';
+import { useSectionEmitter } from './use.section.emitter';
 import { useSectionStore } from '../../scope.provider';
 
 export function useDragOverflow() {
   const cellClamp = useCellClamp(Infinity);
   const store = useSectionStore();
+  const emitter = useSectionEmitter();
   const rowsCount = store.useSelect((state) => state.config.rowsCount);
 
   useDragMonitorOffset((monitor) => {
@@ -16,7 +17,7 @@ export function useDragOverflow() {
 
     const nextRows = cellClamp(offset.y, 0);
     if (nextRows > rowsCount) {
-      Emitter.emit('updateRowsCount', nextRows);
+      emitter.client.emit('updateRowsCount', nextRows);
     }
   });
 }

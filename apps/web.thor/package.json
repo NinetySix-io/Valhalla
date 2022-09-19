@@ -15,7 +15,7 @@
     "test:dev": "npm run test -- --watch",
     "codegen": "graphql-codegen",
     "analyze": "ANALYZE=true next build",
-    "storybook": "IS_SB=1 start-storybook -p 6006"
+    "storybook": "IS_SB=1 start-storybook -p 6006 --no-dll"
   },
   "dependencies": {
     "@apollo/client": "^3.6.9",

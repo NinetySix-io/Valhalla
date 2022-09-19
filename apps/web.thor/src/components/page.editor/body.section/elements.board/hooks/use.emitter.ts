@@ -21,6 +21,7 @@ export function useEmitter<E extends BasicObject>(emitter: EventsEmitter<E>) {
   }
 
   return {
+    client: emitter,
     useEvent,
   };
 }
