@@ -1,6 +1,6 @@
 import type { DroppedElement, Size } from '../../../types';
 
-import type { XYCoord } from 'react-dnd';
+import type { XYCoord } from '@app/components/page.editor/types';
 
 export class Rectangle {
   readonly left: number;

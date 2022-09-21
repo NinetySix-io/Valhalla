@@ -4,10 +4,8 @@ import { BUTTON_ELEMENT, TEXT_ELEMENT } from '../../constants';
 import { Button, Popover, Stack, TextField, css, styled } from '@mui/material';
 
 import { EditorMenu } from '../../menu';
-import { EditorStore } from '../../store';
 import { ElementMenuGroup } from './group';
 import { ElementMenuGroupItem } from './item';
-import { useDragDropManager } from 'react-dnd';
 import { useIsDragging } from '../../context';
 
 const Container = styled(Stack)(
@@ -24,7 +22,6 @@ type Props = {
 export const ElementsMenu: React.FC<Props> = ({ isVisible, ...props }) => {
   const isDragging = useIsDragging();
   const [menuVisible, setMenuVisible] = React.useState(false);
-  const manager = useDragDropManager();
   const anchor = React.useRef<HTMLDivElement>(undefined);
 
   function openMenu() {
@@ -34,17 +31,6 @@ export const ElementsMenu: React.FC<Props> = ({ isVisible, ...props }) => {
   function closeMenu() {
     setMenuVisible(false);
   }
-
-  React.useEffect(() => {
-    const monitor = manager.getMonitor();
-    const unsubscribe = monitor.subscribeToStateChange(() => {
-      EditorStore.actions.setIsDragging(monitor.isDragging());
-    });
-
-    return () => {
-      unsubscribe?.();
-    };
-  }, [manager]);
 
   React.useEffect(() => {
     if (isDragging) {

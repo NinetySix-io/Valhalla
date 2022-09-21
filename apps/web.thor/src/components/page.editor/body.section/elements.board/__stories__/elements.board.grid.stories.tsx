@@ -21,17 +21,7 @@ storiesOf('NinetySix/Page Editor', module)
     const sizeRef = useBoardSize();
     const store = useSectionStore();
     const section = last(EditorStore.getState().sections);
-
-    React.useMemo(() => {
-      store.actions.setDragging({
-        id: 'element',
-        type: '',
-        x: 0,
-        y: 0,
-        xSpan: 0,
-        ySpan: 0,
-      });
-    }, [store]);
+    store.actions.setDragging('');
 
     return (
       <SectionProvider sectionId={section.id} config={section.config}>

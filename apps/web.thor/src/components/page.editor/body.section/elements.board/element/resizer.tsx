@@ -1,6 +1,14 @@
 import * as React from 'react';
 
-import { DIRECTION, isDown, isLeft, isRight, isUp } from '../lib/directions';
+import {
+  DIRECTION,
+  isDown,
+  isLeft,
+  isRight,
+  isStrictHorizontal,
+  isStrictVertical,
+  isUp,
+} from '../lib/directions';
 import { css, styled } from '@mui/material';
 import { makeFilterProps, useEvent } from '@valhalla/web.react';
 
@@ -16,6 +24,7 @@ const Container = styled('div')(
     --cw: calc(2 * var(--pt));
     height: 100%;
     width: 100%;
+
     &:hover,
     &:focus {
       > * {
@@ -264,9 +273,14 @@ export const Resizer = React.forwardRef<HTMLDivElement, Props>(
     }
 
     function getHandler(direction: DIRECTION) {
+      const isInactive = Number.isInteger(active) && active !== direction;
       const isDisabled =
         disableResize === true ||
         (Array.isArray(disableResize) && disableResize.includes(direction));
+
+      if (isDisabled || isInactive) {
+        return null;
+      }
 
       const commonProps: React.DetailedHTMLProps<
         React.HTMLAttributes<HTMLDivElement>,
@@ -276,17 +290,9 @@ export const Resizer = React.forwardRef<HTMLDivElement, Props>(
         onMouseDown: (event) => markActive(direction, event),
       };
 
-      if (isDisabled || (Number.isInteger(active) && active !== direction)) {
-        return null;
-      } else if (
-        direction === DIRECTION.TOP ||
-        direction === DIRECTION.BOTTOM
-      ) {
+      if (isStrictVertical(direction)) {
         return <HorizontalBar {...commonProps} direction={direction} />;
-      } else if (
-        direction === DIRECTION.LEFT ||
-        direction === DIRECTION.RIGHT
-      ) {
+      } else if (isStrictHorizontal(direction)) {
         return <VerticalBar {...commonProps} direction={direction} />;
       } else {
         return (

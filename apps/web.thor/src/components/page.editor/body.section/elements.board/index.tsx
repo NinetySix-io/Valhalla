@@ -6,17 +6,20 @@ import {
   useShiftKeyListener,
 } from './hooks/use.keys.listener';
 
-import { DragProcessors } from './drag.processors';
+import { DndContext } from './dnd.context';
+import { DropCollector } from './drag.processors/drop.collector';
 import { ElementsBoardGrid } from './grid';
 import { ElementsBoardItem } from './element';
 import type { Section } from '../../store/types';
+import { SelectionBox } from './drag.processors/selection.box';
+import { SelectionFollower } from './drag.processors/selection.follower';
+import { SelectionsOverlay } from './drag.processors/selections.overlay';
 import { mergeRefs } from 'react-merge-refs';
 import { useBoardSize } from './hooks/use.board.size';
-import { useDragOverflow } from './hooks/use.drag.overflow';
-import { useSectionDrop } from './hooks/use.dnd';
-import { useSectionEmitter } from './hooks/use.section.emitter';
+import { useEmitter } from './hooks/use.emitter';
 import { useSectionStore } from '../scope.provider';
 import { useSelectionBoxListener } from './hooks/use.selection.box';
+// import { useDragOverflow } from './hooks/use.drag.overflow';
 import { useTargetedClick } from '@valhalla/web.react';
 
 type Props = React.PropsWithChildren<{
@@ -31,7 +34,7 @@ type TElementsBoard = React.FC<Props> & {
 };
 
 export const ElementsBoard: TElementsBoard = ({
-  onConfigChange,
+  // onConfigChange,
   onElementAdded,
   onElementsUpdated,
   onElementsDeleted,
@@ -40,12 +43,11 @@ export const ElementsBoard: TElementsBoard = ({
   const store = useSectionStore();
   const ref = React.useRef<HTMLDivElement>();
   const sizeRef = useBoardSize();
-  const dndDropRef = useSectionDrop();
-  const emitter = useSectionEmitter();
+  const emitter = useEmitter(store.useSelect((state) => state.emitter));
 
   useShiftKeyListener();
   useDeleteKeyListener();
-  useDragOverflow();
+  // useDragOverflow();
   useSelectionBoxListener(ref.current);
   useTargetedClick(ref.current, () => {
     store.actions.removeFocus();
@@ -55,18 +57,23 @@ export const ElementsBoard: TElementsBoard = ({
   emitter.useEvent('elementAdded', onElementAdded);
   emitter.useEvent('elementsUpdated', onElementsUpdated);
   emitter.useEvent('elementsDeleted', onElementsDeleted);
-  emitter.useEvent('updateRowsCount', (rowsCount) => {
-    onConfigChange?.({
-      ...store.getState().config,
-      rowsCount,
-    });
-  });
+  // emitter.useEvent('updateRowsCount', (rowsCount) => {
+  //   onConfigChange?.({
+  //     ...store.getState().config,
+  //     rowsCount,
+  //   });
+  // });
 
   return (
-    <ElementsBoardGrid ref={mergeRefs([ref, sizeRef, dndDropRef])}>
-      <DragProcessors />
-      {children}
-    </ElementsBoardGrid>
+    <DndContext>
+      <ElementsBoardGrid ref={mergeRefs([ref, sizeRef])}>
+        {children}
+        <DropCollector />
+        <SelectionFollower />
+        <SelectionsOverlay />
+        <SelectionBox />
+      </ElementsBoardGrid>
+    </DndContext>
   );
 };
 

@@ -3,10 +3,8 @@ import * as React from 'react';
 import { css, styled } from '@mui/material';
 
 import { BodySection } from './body.section';
-import { DndProvider } from 'react-dnd';
 import { EditorStore } from './store';
 import { EmptyContent } from './empty';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ScreenSize } from './constants';
 import isEmpty from 'lodash.isempty';
 
@@ -61,11 +59,9 @@ export const PageEditor: React.FC = () => {
 
   return (
     <Container size={size}>
-      <DndProvider backend={HTML5Backend}>
-        {sections.map((section) => (
-          <BodySection key={section.id} sectionId={section.id} />
-        ))}
-      </DndProvider>
+      {sections.map((section) => (
+        <BodySection key={section.id} sectionId={section.id} />
+      ))}
     </Container>
   );
 };

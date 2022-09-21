@@ -1,6 +1,5 @@
 import { css, styled } from '@mui/material';
 
-import { DndDecorator } from './decorators/dnd.decorator';
 import { EditorStore } from '@app/components/page.editor/store';
 import { ElementFactory } from '../../element.factory';
 import { ElementsBoard } from '../index';
@@ -50,7 +49,6 @@ const Board: React.FC<{ section: Section }> = ({ section }) => {
 };
 
 storiesOf('NinetySix/Page Editor/Board', module)
-  .addDecorator(DndDecorator)
   .addDecorator(SectionsDecorator(2))
   .add('Default', () => {
     const section = EditorStore.useSelect((state) => state.sections[0]);

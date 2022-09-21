@@ -9,12 +9,11 @@ import type { Section } from './types';
 import { compareById } from '@app/lib/compare.by.id';
 import { swapArrayIndex } from '@app/lib/array';
 import uniqBy from 'lodash.uniqby';
-import uniqueId from 'lodash.uniqueid';
 
 //TODO: server side
-export function makeSection(): Section {
+export function makeSection(index: number): Section {
   return {
-    id: uniqueId('section'),
+    id: String(index),
     children: [],
     config: {
       // TODO: should be server side

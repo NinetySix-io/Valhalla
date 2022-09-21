@@ -14,9 +14,9 @@ export function useCellClamp(max: number) {
 
   return React.useCallback(
     (position: number, span: number) => {
-      const floor = 0;
       const ceil = max - span;
-      return clamp(getClampPosition(position, cellSize), [floor, ceil]);
+      const pos = getClampPosition(position, cellSize);
+      return clamp(pos, [pos, ceil]);
     },
     [max, cellSize],
   );

@@ -34,10 +34,14 @@ const Container = styled('div')(
 export const SelectionBox: React.FC = () => {
   const store = useSectionStore();
   const minSize = store.useSelect((state) => state.minSelectionSize);
-  const mouse = store.useSelect((state) => state.selectionBox);
-  const rect = mouse?.end
-    ? Rectangle.fromCoordinates(mouse.start, mouse.end)
-    : null;
+  const rect = store.useSelect((state) =>
+    state.selectionBox?.end
+      ? Rectangle.fromCoordinates(
+          state.selectionBox.start,
+          state.selectionBox.end,
+        )
+      : null,
+  );
 
   if (!rect || (rect.width < minSize && rect.height < minSize)) {
     return null;

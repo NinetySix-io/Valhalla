@@ -4,7 +4,6 @@ import { EditorStore, makeSection } from '@app/components/page.editor/store';
 
 import type { DecoratorFn } from '@storybook/react';
 import { faker } from '@faker-js/faker';
-import uniqueId from 'lodash.uniqueid';
 
 export const SectionsDecorator = (sectionsCount = 1): DecoratorFn => {
   return (Story) => {
@@ -19,15 +18,15 @@ export const SectionsDecorator = (sectionsCount = 1): DecoratorFn => {
       }
 
       for (let count = 0; count < sectionsCount; count++) {
-        const section = makeSection();
+        const section = makeSection(count);
         EditorStore.actions.addSection(section);
         Array.from({
           length: faker.datatype.number({
-            min: 1,
-            max: 5,
+            min: 2,
+            max: 10,
           }),
-        }).forEach(() => {
-          const id = uniqueId();
+        }).forEach((_, idx) => {
+          const id = section.id + 'e' + idx;
           EditorStore.actions.addElement(section.id, {
             id,
             type: 'Text',
@@ -36,7 +35,7 @@ export const SectionsDecorator = (sectionsCount = 1): DecoratorFn => {
             xSpan: faker.datatype.number({ min: 1, max: 5 }),
             ySpan: faker.datatype.number({ min: 1, max: 5 }),
             props: {
-              value: `<span>element-${id}</span>`,
+              value: `<span>${id}</span>`,
             },
           });
         });

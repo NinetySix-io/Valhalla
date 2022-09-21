@@ -43,6 +43,18 @@ export function isDown(
   );
 }
 
+export function isStrictHorizontal(
+  direction: DIRECTION,
+): direction is DIRECTION.LEFT | DIRECTION.RIGHT {
+  return direction === DIRECTION.LEFT || direction === DIRECTION.RIGHT;
+}
+
+export function isStrictVertical(
+  direction: DIRECTION,
+): direction is DIRECTION.TOP | DIRECTION.BOTTOM {
+  return direction === DIRECTION.TOP || direction === DIRECTION.BOTTOM;
+}
+
 export function isHorizontal(direction: DIRECTION) {
   return isLeft(direction) || isRight(direction);
 }

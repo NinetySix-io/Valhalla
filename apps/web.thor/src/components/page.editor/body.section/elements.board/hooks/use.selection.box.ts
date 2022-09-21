@@ -2,7 +2,7 @@ import { useEvent, useThrottleCallback } from '@valhalla/web.react';
 
 import { Rectangle } from '../lib/rectangle';
 import type { SectionState } from '../../store';
-import type { XYCoord } from 'react-dnd';
+import type { XYCoord } from '@app/components/page.editor/types';
 import { useSectionStore } from '../../scope.provider';
 
 /**
@@ -14,16 +14,14 @@ export function useSelectionBoxListener<T extends HTMLElement>(container: T) {
   const processHighlightedElements = useThrottleCallback(
     (start: XYCoord, end: XYCoord) => {
       const dragBox = Rectangle.fromCoordinates(start, end);
-      const elements = store.getState().elements;
+      const elements = Object.values(store.getState().elements);
       const next: SectionState['selections'] = [];
 
-      for (const { getElement, getRef } of Object.values(elements)) {
-        const element = getElement();
-        const elementRef = getRef();
-
-        if (!elementRef) {
-          continue;
-        } else if (dragBox.isTouching(Rectangle.fromHtmlElement(elementRef))) {
+      for (const element of elements) {
+        if (
+          element.ref &&
+          dragBox.isTouching(Rectangle.fromHtmlElement(element.ref))
+        ) {
           next.push(element.id);
         }
       }

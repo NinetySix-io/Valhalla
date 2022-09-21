@@ -1,8 +1,13 @@
-import type { BoardElement, DroppedElement, SelectionBox } from '../types';
+import type {
+  BoardElement,
+  DroppedElement,
+  SelectionBox,
+  XYCoord,
+} from '../types';
 import { createStore, createStoreHook, withImmer } from 'tiamut';
 
 import type { Section } from '../store/types';
-import type { XYCoord } from 'react-dnd';
+import type { UniqueIdentifier } from '@dnd-kit/core';
 import { createSectionEmitter } from './emitter';
 
 type State = {
@@ -11,19 +16,14 @@ type State = {
   config: Section['config'];
   cellSize: number;
   container: HTMLElement;
-  dragging?: DroppedElement;
-  focused?: DroppedElement;
+  dragging?: UniqueIdentifier;
   selectionBox?: SelectionBox;
+  focused?: BoardElement['id'];
   selections: BoardElement['id'][];
+  selectionDelta?: XYCoord;
   isHoldingDownShiftKey: boolean;
   emitter: ReturnType<typeof createSectionEmitter>;
-  elements: Record<
-    BoardElement['id'],
-    {
-      getElement: () => BoardElement;
-      getRef: () => HTMLElement;
-    }
-  >;
+  elements: Record<BoardElement['id'], BoardElement & { ref: HTMLElement }>;
 };
 
 export type SectionState = State;
@@ -58,15 +58,10 @@ export function createSectionStore(
         setDragging(state, value?: State['dragging']) {
           state.dragging = value;
         },
-        addElement(
-          state,
-          elementId: string,
-          getElement: () => BoardElement,
-          getRef: () => HTMLElement,
-        ) {
-          state.elements[elementId] = {
-            getElement,
-            getRef,
+        addElement(state, element: BoardElement, ref: HTMLElement) {
+          state.elements[element.id] = {
+            ...element,
+            ref,
           };
         },
         removeElement(state, elementId: BoardElement['id']) {
@@ -91,6 +86,9 @@ export function createSectionStore(
         },
         overwriteSelections(state, selections: State['selections']) {
           state.selections = selections;
+        },
+        setSelectionDelta(state, delta: State['selectionDelta']) {
+          state.selectionDelta = delta;
         },
         setSelection(
           state,

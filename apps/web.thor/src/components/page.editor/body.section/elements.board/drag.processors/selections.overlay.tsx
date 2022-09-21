@@ -1,61 +1,69 @@
 import * as React from 'react';
 
 import { css, styled } from '@mui/material';
+import { selectIsMultiSelected, selectSelectionBBox } from './selectors';
 
+import type { XYCoord } from '@app/components/page.editor/types';
 import { getGridArea } from '../lib/get.grid.area';
-import { getMaxBBox } from '../lib/get.max.bbox';
 import { makeFilterProps } from '@valhalla/web.react';
 import uniqueId from 'lodash.uniqueid';
-import { useSectionDrag } from '../hooks/use.dnd';
+import { useDraggable } from '@dnd-kit/core';
 import { useSectionStore } from '../../scope.provider';
 
 const DraggableBox = styled(
   'div',
-  makeFilterProps(['gridArea']),
-)<{ gridArea: string }>(
-  ({ theme, gridArea }) => css`
+  makeFilterProps(['gridArea', 'transform']),
+)<{ gridArea: string; transform?: XYCoord }>(
+  ({ theme, gridArea, transform }) => css`
     position: relative;
     grid-area: ${gridArea};
-    outline: solid 3px ${theme.palette.primary.main};
+
     &:hover {
       cursor: grab;
     }
     &:active {
       cursor: grabbing;
     }
+
+    ${transform
+      ? css`
+          transform: translate(${transform.x}px, ${transform.y}px);
+          box-shadow: ${theme.shadows[10]};
+
+          > * {
+            opacity: 0.5;
+          }
+        `
+      : css`
+          outline: solid 3px ${theme.palette.primary.main};
+        `}
   `,
 );
 
 const key = uniqueId('drag-overlay');
 export const SelectionsOverlay: React.FC & { key: string } = () => {
   const store = useSectionStore();
-  const isMultiDrag = store.useSelect((state) => state.selections.length > 1);
-  const bbox = store.useSelect((state) =>
-    getMaxBBox(
-      state.selections.map((selected) => state.elements[selected].getElement()),
-    ),
-  );
+  const isMultiDrag = store.useSelect(selectIsMultiSelected);
+  const bbox = store.useSelect(selectSelectionBBox);
+  const transform = store.useSelect((state) => state.selectionDelta);
+  const dragState = useDraggable({
+    id: key,
+    data: bbox,
+  });
 
-  const [drag, { isDragging }] = useSectionDrag(
-    {
-      ...bbox,
-      id: key,
-      type: 'Box',
-    },
-    {
-      collect(monitor) {
-        return {
-          isDragging: monitor.isDragging(),
-        };
-      },
-    },
-  );
-
-  if (!isMultiDrag || isDragging) {
+  if (!isMultiDrag || !bbox) {
     return null;
   }
 
-  return <DraggableBox ref={drag} gridArea={getGridArea(bbox)} />;
+  return (
+    <DraggableBox
+      ref={dragState.setNodeRef}
+      gridArea={getGridArea(bbox)}
+      transform={transform}
+      {...dragState.listeners}
+      {...dragState.attributes}
+    />
+  );
 };
 
 SelectionsOverlay.key = key;

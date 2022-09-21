@@ -1,4 +1,7 @@
-import type { XYCoord } from 'react-dnd';
+export type XYCoord = {
+  x: number;
+  y: number;
+};
 
 export type BaseElement<Type extends string = string, P = unknown> = {
   type: Type;

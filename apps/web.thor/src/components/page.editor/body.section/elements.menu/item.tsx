@@ -1,8 +1,6 @@
 import { Button, Grid, css, styled } from '@mui/material';
 
 import type { MenuElement } from '../../types';
-import { useDrag } from 'react-dnd';
-import { useSectionId } from '../scope.provider';
 
 const Item = styled(Button)(
   () => css`
@@ -17,17 +15,13 @@ type Props = {
 
 export const ElementMenuGroupItem: React.FC<Props> = ({
   children,
-  element,
+  // element,
 }) => {
-  const sectionId = useSectionId();
-  const [, drag] = useDrag({
-    type: sectionId,
-    item: element,
-  });
+  // const sectionId = useSectionId();
 
   return (
     <Grid item md={6}>
-      <Item disableRipple ref={drag} fullWidth>
+      <Item disableRipple fullWidth>
         {children}
       </Item>
     </Grid>
