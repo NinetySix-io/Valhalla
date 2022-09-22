@@ -11,6 +11,7 @@ export const OverflowManager: React.FC = () => {
   const store = useSectionStore();
   const emitter = useSectionEmitter();
   const delta = store.useSelect((state) => state.selectionDelta);
+  const elements = store.useSelect((state) => state.elements);
 
   React.useEffect(() => {
     if (!delta) {
@@ -27,6 +28,15 @@ export const OverflowManager: React.FC = () => {
       emitter.client.emit('updateRowsCount', nextRowsCount);
     }
   }, [delta, emitter, cellClamp, store]);
+
+  React.useEffect(() => {
+    const rowsCount = store.getState().config?.rowsCount;
+    const bbox = getMaxBBox(Object.values(elements));
+    const nextRowsCount = bbox.ySpan + bbox.y;
+    if (bbox.ySpan + bbox.y > rowsCount) {
+      emitter.client.emit('updateRowsCount', nextRowsCount);
+    }
+  }, [elements, emitter, store]);
 
   return null;
 };
