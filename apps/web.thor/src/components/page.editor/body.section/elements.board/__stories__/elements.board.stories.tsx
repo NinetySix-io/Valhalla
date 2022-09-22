@@ -52,7 +52,11 @@ storiesOf('NinetySix/Page Editor/Board', module)
   .addDecorator(SectionsDecorator(2))
   .add('Default', () => {
     const section = EditorStore.useSelect((state) => state.sections[0]);
-    return <Board section={section} />;
+    return (
+      <Wrapper>
+        <Board section={section} />
+      </Wrapper>
+    );
   })
   .add('With Sections', () => {
     const sections = EditorStore.useSelect((state) => state.sections);
