@@ -14,6 +14,7 @@ import { OverflowManager } from './drag.processors/overflow.manager';
 import type { Section } from '../../store/types';
 import { SelectionBox } from './drag.processors/selection.box';
 import { SelectionFollower } from './drag.processors/selection.follower';
+import { SelectionsCollector } from './drag.processors/selections.collector';
 import { SelectionsOverlay } from './drag.processors/selections.overlay';
 import { mergeRefs } from 'react-merge-refs';
 import { useBoardSize } from './hooks/use.board.size';
@@ -72,6 +73,7 @@ export const ElementsBoard: TElementsBoard = ({
         <SelectionFollower />
         <SelectionsOverlay />
         <SelectionBox />
+        <SelectionsCollector />
       </ElementsBoardGrid>
     </DndContext>
   );

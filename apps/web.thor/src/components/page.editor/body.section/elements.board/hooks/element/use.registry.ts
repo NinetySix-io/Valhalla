@@ -12,6 +12,9 @@ export function useElementRegistry(element: DroppedElement) {
 
   React.useEffect(() => {
     store.actions.addElement(element, ref.current);
+    return () => {
+      store.actions.removeElement(element.id);
+    };
   }, [element, store]);
 
   return ref;

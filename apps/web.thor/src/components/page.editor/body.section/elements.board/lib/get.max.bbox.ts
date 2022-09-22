@@ -1,12 +1,18 @@
 import type { DroppedPosition } from '../../../types';
 import isEmpty from 'lodash.isempty';
+import isNil from 'lodash.isnil';
 
 /**
  * It returns the largest rectangle that contains all the elements
  */
 export function getMaxBBox(elements: DroppedPosition[]): DroppedPosition {
-  if (isEmpty(elements)) {
-    return null;
+  if (isEmpty(elements) || elements.some((element) => isNil(element))) {
+    return {
+      x: 0,
+      y: 0,
+      xSpan: 0,
+      ySpan: 0,
+    };
   }
 
   let leftestElement = elements[0];
