@@ -28,7 +28,12 @@ storiesOf('NinetySix/Page Editor', module)
   .add('Grid', () => {
     const store = useSectionStore();
     const sizeRef = useBoardSize();
-    store.actions.setDragging('');
+    store.actions.setDragging({
+      id: '',
+      type: '',
+      xSpan: 0,
+      ySpan: 0,
+    });
 
     return <StyledBoard ref={sizeRef} />;
   });

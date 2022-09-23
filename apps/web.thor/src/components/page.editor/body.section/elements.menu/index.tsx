@@ -22,7 +22,7 @@ type Props = {
 export const ElementsMenu: React.FC<Props> = ({ isVisible, ...props }) => {
   const isDragging = useIsDragging();
   const [menuVisible, setMenuVisible] = React.useState(false);
-  const anchor = React.useRef<HTMLDivElement>(undefined);
+  const anchor = React.useRef<HTMLDivElement>();
 
   function openMenu() {
     setMenuVisible(true);

@@ -4,6 +4,7 @@ import { css, styled } from '@mui/material';
 
 import { getGridArea } from '../lib/get.grid.area';
 import { getMaxBBox } from '../lib/get.max.bbox';
+import { isMenuItem } from '@app/components/page.editor/lib/is.menu.item';
 import isNil from 'lodash.isnil';
 import { makeFilterProps } from '@valhalla/web.react';
 import { selectSelectedElements } from './selectors';
@@ -39,14 +40,15 @@ export const SelectionFollower: React.FC = () => {
   const store = useSectionStore();
   const [gridArea, setGridArea] = React.useState<string>();
   const isVisible = store.useSelect((state) => !isNil(state.dragging));
-  const selectionDelta = store.useSelect((state) => state.selectionDelta);
+  const dragDelta = store.useSelect((state) => state.dragDelta);
+  const dragging = store.useSelect((state) => state.dragging);
   const clampElement = useClampElement();
 
   /**
    * Setting the grid area of the selection sidekick.
    */
   React.useEffect(() => {
-    if (!selectionDelta) {
+    if (!dragDelta) {
       setGridArea(null);
       return;
     }
@@ -54,12 +56,14 @@ export const SelectionFollower: React.FC = () => {
     setGridArea(
       getGridArea(
         clampElement(
-          getMaxBBox(selectSelectedElements(store.getState())),
-          selectionDelta,
+          isMenuItem(dragging?.id)
+            ? dragging
+            : getMaxBBox(selectSelectedElements(store.getState())),
+          dragDelta,
         ),
       ),
     );
-  }, [clampElement, selectionDelta, store]);
+  }, [clampElement, dragging, dragDelta, store]);
 
   if (!gridArea || !isVisible) {
     return null;

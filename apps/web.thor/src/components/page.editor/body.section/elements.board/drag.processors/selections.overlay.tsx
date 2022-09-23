@@ -45,11 +45,8 @@ export const SelectionsOverlay: React.FC & { key: string } = () => {
   const store = useSectionStore();
   const isMultiDrag = store.useSelect(selectIsMultiSelected);
   const bbox = store.useSelect(selectSelectionBBox);
-  const transform = store.useSelect((state) => state.selectionDelta);
-  const dragState = useDraggable({
-    id: key,
-    data: bbox,
-  });
+  const transform = store.useSelect((state) => state.dragDelta);
+  const draggable = useDraggable({ id: key, data: bbox });
 
   if (!isMultiDrag || !bbox) {
     return null;
@@ -57,11 +54,11 @@ export const SelectionsOverlay: React.FC & { key: string } = () => {
 
   return (
     <DraggableBox
-      ref={dragState.setNodeRef}
+      ref={draggable.setNodeRef}
       gridArea={getGridArea(bbox)}
       transform={transform}
-      {...dragState.listeners}
-      {...dragState.attributes}
+      {...draggable.listeners}
+      {...draggable.attributes}
     />
   );
 };

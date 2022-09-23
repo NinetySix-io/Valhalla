@@ -148,7 +148,7 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
     const registryRef = useElementRegistry(element);
     const gridArea = useElementGridArea(element);
     const emitter = useSectionEmitter();
-    const dragState = useDraggable({
+    const draggable = useDraggable({
       id: element.id,
       data: element,
       disabled: isMultiSelected || isResizing || hasDragging,
@@ -177,18 +177,18 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
     return (
       <Container
         {...props}
-        transformShadow={dragState.isDragging}
+        transformShadow={draggable.isDragging}
         transform={transform}
         ref={mergeRefs([
           ref,
           registryRef,
           container,
           selectionHandle,
-          dragState.setNodeRef,
+          draggable.setNodeRef,
         ])}
         alwaysVisible={isFocus || isResizing}
-        isDragging={dragState.isDragging || hasDragging}
-        disableResize={dragState.isDragging || isMultiSelected || hasDragging}
+        isDragging={draggable.isDragging || hasDragging}
+        disableResize={draggable.isDragging || isMultiSelected || hasDragging}
         label={element.type?.toUpperCase()}
         gridArea={gridArea}
         isFocus={(isFocus || isResizing) && !hasDragging}
@@ -198,8 +198,8 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
         onResizeStart={handleResizeStart}
         onResizeFinish={handleResizeEnd}
         isMultiSelected={isMultiSelected}
-        {...dragState.listeners}
-        {...dragState.attributes}
+        {...draggable.listeners}
+        {...draggable.attributes}
       >
         {children}
       </Container>

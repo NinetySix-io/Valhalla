@@ -1,5 +1,4 @@
 import type { MenuElement } from './types';
-import uniqueId from 'lodash.uniqueid';
 
 export enum ScreenSize {
   DESKTOP = 1200,
@@ -7,7 +6,7 @@ export enum ScreenSize {
   TABLET = 820,
 }
 
-export const TEMP_ITEM = uniqueId('TEMP');
+export const MENU_ITEM = 'MENU_ITEM';
 
 //TODO: move this server side
 export const SCREEN_SIZE_CONFIG = {
@@ -22,10 +21,13 @@ export const SCREEN_SIZE_CONFIG = {
   },
 } as const;
 
-export const TEXT_ELEMENT: MenuElement = {
+export const TEXT_ELEMENT: MenuElement<'Text', { value: string }> = {
   type: 'Text',
   xSpan: 3,
   ySpan: 1,
+  props: {
+    value: '<span>Text</span>',
+  },
 };
 
 export const BUTTON_ELEMENT: MenuElement = {

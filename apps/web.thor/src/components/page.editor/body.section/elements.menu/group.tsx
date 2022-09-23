@@ -12,7 +12,9 @@ export const ElementMenuGroup: React.FC<Props> = ({ title, children }) => {
       <Typography fontSize="small" fontWeight={'bold'}>
         {title}
       </Typography>
-      <Grid container>{children}</Grid>
+      <Grid container spacing={0.5}>
+        {children}
+      </Grid>
     </Container>
   );
 };

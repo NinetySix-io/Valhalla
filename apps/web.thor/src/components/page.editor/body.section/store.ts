@@ -7,7 +7,6 @@ import type {
 import { createStore, createStoreHook, withImmer } from 'tiamut';
 
 import type { Section } from '../store/types';
-import type { UniqueIdentifier } from '@dnd-kit/core';
 import { createSectionEmitter } from './emitter';
 
 type State = {
@@ -16,11 +15,11 @@ type State = {
   config: Section['config'];
   cellSize: number;
   container: HTMLElement;
-  dragging?: UniqueIdentifier;
+  dragging?: BoardElement;
   selectionBox?: SelectionBox;
   focused?: BoardElement['id'];
   selections: BoardElement['id'][];
-  selectionDelta?: XYCoord;
+  dragDelta?: XYCoord;
   isHoldingDownShiftKey: boolean;
   emitter: ReturnType<typeof createSectionEmitter>;
   elements: Record<BoardElement['id'], BoardElement & { ref: HTMLElement }>;
@@ -87,8 +86,8 @@ export function createSectionStore(
         overwriteSelections(state, selections: State['selections']) {
           state.selections = selections;
         },
-        setSelectionDelta(state, delta: State['selectionDelta']) {
-          state.selectionDelta = delta;
+        setDragDelta(state, delta: State['dragDelta']) {
+          state.dragDelta = delta;
         },
         setSelection(
           state,
@@ -118,8 +117,6 @@ export function createSectionStore(
       },
     }),
   );
-
-  // store.subscribe((_a, _b, a) => console.log(a, _a, _b));
 
   return createStoreHook(store);
 }

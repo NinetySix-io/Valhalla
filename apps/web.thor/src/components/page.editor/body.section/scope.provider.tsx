@@ -25,8 +25,15 @@ export const SectionProvider: React.FC<Props> = ({
   children,
   config,
 }) => {
-  const store = React.useMemo(() => createSectionStore(sectionId), [sectionId]);
-  React.useMemo(() => store.actions.setConfig(config), [config, store]);
+  const store = React.useMemo(
+    () => createSectionStore(sectionId, { config }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [sectionId],
+  );
+
+  React.useEffect(() => {
+    store.actions.setConfig(config);
+  }, [config, store]);
 
   return <Context.Provider value={{ store }}>{children}</Context.Provider>;
 };

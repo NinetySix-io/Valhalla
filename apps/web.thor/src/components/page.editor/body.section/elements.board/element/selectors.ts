@@ -8,5 +8,5 @@ export function selectIsMultiSelected(element: BoardElement) {
 
 export function selectMoveTransform(element: BoardElement) {
   return (state: SectionState) =>
-    state.selections.includes(element.id) ? state.selectionDelta : undefined;
+    state.selections.includes(element.id) ? state.dragDelta : undefined;
 }

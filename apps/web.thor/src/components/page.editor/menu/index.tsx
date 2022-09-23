@@ -1,7 +1,8 @@
 import * as React from 'react';
 
-import type { PopperProps } from '@mui/material';
 import { Fade, Paper, Popper, css, styled } from '@mui/material';
+
+import type { PopperProps } from '@mui/material';
 
 const Marker = styled('div')(() => css``);
 
@@ -26,24 +27,34 @@ export const EditorMenu: React.FC<Props> = ({
   style,
 }) => {
   const marker = React.useRef<HTMLDivElement>();
+  const [mounted, setMounted] = React.useState(false);
+
+  /**
+   * Fixes dumb warning
+   */
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <React.Fragment>
       <Marker style={style} ref={marker} />
-      <Popper
-        transition
-        open={open}
-        anchorEl={marker.current}
-        placement={placement}
-      >
-        {({ TransitionProps }) => {
-          return (
-            <Fade {...TransitionProps} timeout={350}>
-              <Container ref={containerRef}>{children}</Container>
-            </Fade>
-          );
-        }}
-      </Popper>
+      {mounted && (
+        <Popper
+          transition
+          open={open}
+          anchorEl={marker.current}
+          placement={placement}
+        >
+          {({ TransitionProps }) => {
+            return (
+              <Fade {...TransitionProps} timeout={350}>
+                <Container ref={containerRef}>{children}</Container>
+              </Fade>
+            );
+          }}
+        </Popper>
+      )}
     </React.Fragment>
   );
 };

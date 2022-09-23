@@ -10,7 +10,7 @@ export const OverflowManager: React.FC = () => {
   const cellClamp = useCellClamp(Infinity);
   const store = useSectionStore();
   const emitter = useSectionEmitter();
-  const delta = store.useSelect((state) => state.selectionDelta);
+  const delta = store.useSelect((state) => state.dragDelta);
   const elements = store.useSelect((state) => state.elements);
 
   React.useEffect(() => {

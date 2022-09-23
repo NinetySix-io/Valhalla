@@ -37,13 +37,13 @@ const Line = styled(
 
 function selectIsCentered(clampFn: ReturnType<typeof useClampElement>) {
   return (state: SectionState) => {
-    if (!state.selectionDelta) {
+    if (!state.dragDelta) {
       return false;
     }
 
     const boardCenter = Math.floor(state.config.columnsCount / 2);
     const bbox = getMaxBBox(selectSelectedElements(state));
-    const clampedBox = clampFn(bbox, state.selectionDelta);
+    const clampedBox = clampFn(bbox, state.dragDelta);
     const boxCenterPos = clampedBox.x + clampedBox.xSpan / 2;
     return isInRange(boardCenter, [
       Math.floor(boxCenterPos),

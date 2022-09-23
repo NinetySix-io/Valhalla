@@ -9,12 +9,7 @@ import {
 
 import type { AbstractPointerSensorOptions } from '@dnd-kit/core/dist/sensors';
 
-const options: AbstractPointerSensorOptions = {
-  activationConstraint: {
-    delay: 250,
-    tolerance: 5,
-  },
-};
+const options: AbstractPointerSensorOptions = {};
 
 export function useDragSensors() {
   return useSensors(
