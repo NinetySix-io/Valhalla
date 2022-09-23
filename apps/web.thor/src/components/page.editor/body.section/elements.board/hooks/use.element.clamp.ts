@@ -23,10 +23,12 @@ export function useClampElement() {
       const offset = cellSize / 2;
       const deltaX = clampX(delta.x - offset, element.xSpan);
       const deltaY = clampY(delta.y - offset, element.ySpan);
+      const nextY = element.y + deltaY;
+      const nextX = element.x + deltaX;
       return {
         ...element,
-        x: element.x + deltaX,
-        y: element.y + deltaY,
+        x: Math.max(nextX, 0),
+        y: Math.max(nextY, 0),
       };
     },
     [cellSize, clampX, clampY],

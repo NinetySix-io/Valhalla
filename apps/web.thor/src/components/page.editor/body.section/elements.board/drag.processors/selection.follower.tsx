@@ -51,11 +51,14 @@ export const SelectionFollower: React.FC = () => {
       return;
     }
 
-    const selectedElements = selectSelectedElements(store.getState());
-    const bbox = getMaxBBox(selectedElements);
-    const modBbox = clampElement(bbox, selectionDelta);
-    const nextGridArea = getGridArea(modBbox);
-    setGridArea(nextGridArea);
+    setGridArea(
+      getGridArea(
+        clampElement(
+          getMaxBBox(selectSelectedElements(store.getState())),
+          selectionDelta,
+        ),
+      ),
+    );
   }, [clampElement, selectionDelta, store]);
 
   if (!gridArea || !isVisible) {
