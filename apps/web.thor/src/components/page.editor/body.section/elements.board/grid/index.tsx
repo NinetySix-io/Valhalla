@@ -21,7 +21,6 @@ const Container = styled(
     --pt-w: ${patternSize}px;
     --r-count: ${rowsCount};
     --c-count: ${columnsCount};
-
     position: relative;
     display: grid;
     height: calc(var(--cs) * var(--r-count));

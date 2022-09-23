@@ -16,16 +16,19 @@ const StyledBoard = styled(ElementsBoardGrid)(
 );
 
 storiesOf('NinetySix/Page Editor', module)
-  .addDecorator(SectionsDecorator(1))
-  .add('Grid', () => {
-    const sizeRef = useBoardSize();
-    const store = useSectionStore();
+  .addDecorator((Story) => {
     const section = last(EditorStore.getState().sections);
-    store.actions.setDragging('');
-
     return (
       <SectionProvider sectionId={section.id} config={section.config}>
-        <StyledBoard ref={sizeRef} />
+        <Story />
       </SectionProvider>
     );
+  })
+  .addDecorator(SectionsDecorator(1))
+  .add('Grid', () => {
+    const store = useSectionStore();
+    const sizeRef = useBoardSize();
+    store.actions.setDragging('');
+
+    return <StyledBoard ref={sizeRef} />;
   });

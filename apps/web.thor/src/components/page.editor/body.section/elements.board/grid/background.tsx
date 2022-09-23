@@ -15,7 +15,7 @@ const Container = styled(
     --bg-color: ${theme.palette.grey[400]};
 
     opacity: ${isVisible ? 0.5 : 0};
-    width: calc(100% - var(--cs) - var(--pt-w) / 2);
+    width: 100%;
     height: 100%;
     transition: all 0.2s;
     transition-timing-function: ease;
