@@ -76,7 +76,11 @@ storiesOf('NinetySix/Page Editor/Board', module)
     const section = EditorStore.useSelect((state) => state.sections[0]);
     return (
       <Wrapper>
-        <Board section={section} />
+        <Board section={section}>
+          <FixedTop className="fixed-top">
+            <ElementsMenu placement="left-start" isVisible />
+          </FixedTop>
+        </Board>
       </Wrapper>
     );
   })
@@ -86,22 +90,13 @@ storiesOf('NinetySix/Page Editor/Board', module)
       <React.Fragment>
         {sections.map((section) => (
           <Wrapper key={section.id}>
-            <Board section={section} />
+            <Board section={section}>
+              <FixedTop className="fixed-top">
+                <ElementsMenu placement="left-start" isVisible />
+              </FixedTop>
+            </Board>
           </Wrapper>
         ))}
       </React.Fragment>
-    );
-  })
-  .add('With Drop Menu', () => {
-    const section = EditorStore.useSelect((state) => state.sections[0]);
-
-    return (
-      <Wrapper>
-        <Board section={section}>
-          <FixedTop className="fixed-top">
-            <ElementsMenu placement="left-start" isVisible />
-          </FixedTop>
-        </Board>
-      </Wrapper>
     );
   });

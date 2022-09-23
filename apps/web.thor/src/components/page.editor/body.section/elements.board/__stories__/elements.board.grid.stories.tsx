@@ -33,6 +33,8 @@ storiesOf('NinetySix/Page Editor', module)
       type: '',
       xSpan: 0,
       ySpan: 0,
+      x: 0,
+      y: 0,
     });
 
     return <StyledBoard ref={sizeRef} />;
