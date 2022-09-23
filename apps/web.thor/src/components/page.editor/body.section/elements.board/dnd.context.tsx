@@ -5,6 +5,7 @@ import type { DragMoveEvent, DragStartEvent } from '@dnd-kit/core';
 
 import { DndContext as DndKitContext } from '@dnd-kit/core';
 import { EditorStore } from '../../store';
+import { isMenuItem } from '../../lib/is.menu.item';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { useDragSensors } from './hooks/use.drag.sensors';
 import { useSectionStore } from '../scope.provider';
@@ -17,12 +18,11 @@ export const DndContext: React.FC<React.PropsWithChildren> = ({ children }) => {
     const elementId = event.active.id as WithId['id'];
     const element = event.active.data.current as BoardElement;
     EditorStore.actions.setIsDragging(true);
-    store.actions.setDragging({
-      id: elementId,
-      x: 0,
-      y: 0,
-      ...element,
-    });
+    store.actions.setDragging({ id: elementId, ...element });
+
+    if (isMenuItem(elementId)) {
+      store.actions.clearSelections();
+    }
   }
 
   function handleDragMove(event: DragMoveEvent) {
