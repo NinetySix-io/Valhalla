@@ -34,30 +34,8 @@ const Container = styled(
   `,
 );
 
-const Divider = styled(
-  'div',
-  makeFilterProps(['isVisible']),
-)<{ isVisible: boolean }>(
-  ({ theme, isVisible }) => css`
-    opacity: ${isVisible ? 0.4 : 0};
-    position: absolute;
-    z-index: -1;
-    border: dashed 1px ${theme.palette.primary.main};
-    left: calc(50% + (var(--pt-w) / 3));
-    height: 100%;
-    top: 0px;
-    bottom: 0px;
-  `,
-);
-
 export const Background: React.FC = () => {
   const store = useSectionStore();
   const isVisible = store.useSelect((state) => !isNil(state.dragging));
-
-  return (
-    <React.Fragment>
-      <Container isVisible={isVisible} />
-      <Divider isVisible={isVisible} />
-    </React.Fragment>
-  );
+  return <Container isVisible={isVisible} />;
 };

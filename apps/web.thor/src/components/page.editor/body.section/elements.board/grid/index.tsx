@@ -3,6 +3,7 @@ import * as React from 'react';
 import { css, styled } from '@mui/material';
 
 import { Background } from './background';
+import { CenterLine } from './center.line';
 import type { cProps } from '@valhalla/web.react';
 import { makeFilterProps } from '@valhalla/web.react';
 import { useSectionStore } from '../../scope.provider';
@@ -47,6 +48,7 @@ export const ElementsBoardGrid = React.forwardRef<
       patternSize={1.5}
     >
       <Background />
+      <CenterLine />
       {children}
     </Container>
   );
