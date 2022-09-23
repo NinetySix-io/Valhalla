@@ -7,6 +7,9 @@ export const SelectionsCollector: React.FC = () => {
   const store = useSectionStore();
   const elements = store.useSelect((state) => state.elements);
 
+  /**
+   * Clean up abandoned selections
+   */
   React.useEffect(() => {
     const selections = store.getState().selections;
     const nextSelections = selections.filter(

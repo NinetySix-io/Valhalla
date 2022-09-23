@@ -7,11 +7,16 @@ import type {
 } from '@app/components/page.editor/types';
 import { css, styled } from '@mui/material';
 import { makeFilterProps, useTemporal } from '@valhalla/web.react';
-import { selectIsMultiSelected, selectMoveTransform } from './selectors';
+import {
+  selectIsMultiSelected,
+  selectMoveTransform,
+  selectShouldPeakWhenClose,
+} from './selectors';
 
 import type { DIRECTION } from '../lib/directions';
 import { Resizer } from './resizer';
 import { calculateResize } from '../lib/calculate.resize';
+import color from 'tinycolor2';
 import isNil from 'lodash.isnil';
 import { mergeRefs } from 'react-merge-refs';
 import { useDraggable } from '@dnd-kit/core';
@@ -31,6 +36,7 @@ const Container = styled(
     'isDragging',
     'isMultiSelected',
     'transformShadow',
+    'shouldPeak',
   ]),
 )<{
   transform?: XYCoord;
@@ -40,6 +46,7 @@ const Container = styled(
   isDragging: boolean;
   isMultiSelected: boolean;
   transformShadow: boolean;
+  shouldPeak: boolean;
 }>(
   ({
     theme,
@@ -50,6 +57,7 @@ const Container = styled(
     isMultiSelected,
     transform,
     transformShadow,
+    shouldPeak,
   }) => {
     const mainColor: string = theme.palette.primary.main;
     const textColor: string = theme.palette.getContrastText(mainColor);
@@ -85,9 +93,17 @@ const Container = styled(
         outline: none;
       `}
 
+      ${shouldPeak &&
+      !isMultiSelected &&
+      css`
+        outline-color: ${color(mainColor).lighten(30).toHexString()};
+      `}
+
       ${isFocus
-        ? css`
+        ? !isDragging &&
+          css`
             outline-color: ${mainColor};
+
             &:hover {
               cursor: auto;
             }
@@ -142,6 +158,7 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
     const hasDragging = store.useSelect((state) => !isNil(state.dragging));
     const transform = store.useSelect(selectMoveTransform(_element));
     const isMultiSelected = store.useSelect(selectIsMultiSelected(_element));
+    const shouldPeak = store.useSelect(selectShouldPeakWhenClose(_element));
     const selectionHandle = useSelectionHandle(_element);
     const [isResizing, setIsResizing] = React.useState(false);
     const [element, setElement] = useTemporal(_element);
@@ -186,6 +203,7 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
           selectionHandle,
           draggable.setNodeRef,
         ])}
+        shouldPeak={shouldPeak}
         alwaysVisible={isFocus || isResizing}
         isDragging={draggable.isDragging || hasDragging}
         disableResize={draggable.isDragging || isMultiSelected || hasDragging}

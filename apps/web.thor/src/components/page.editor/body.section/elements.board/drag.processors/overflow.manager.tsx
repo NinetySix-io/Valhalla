@@ -1,40 +1,39 @@
 import * as React from 'react';
 
 import { getMaxBBox } from '../lib/get.max.bbox';
-import { selectSelectedElements } from './selectors';
-import { useCellClamp } from '../hooks/use.cell.clamp';
 import { useSectionEmitter } from '../hooks/use.section.emitter';
 import { useSectionStore } from '../../scope.provider';
 
 export const OverflowManager: React.FC = () => {
-  const cellClamp = useCellClamp(Infinity);
   const store = useSectionStore();
   const emitter = useSectionEmitter();
-  const delta = store.useSelect((state) => state.dragDelta);
+  const dragging = store.useSelect((state) => state.dragging);
   const elements = store.useSelect((state) => state.elements);
 
+  /**
+   * Readjust board rows on active dragging
+   */
   React.useEffect(() => {
-    if (!delta) {
+    if (!dragging) {
       return;
     }
 
     const rowsCount = store.getState().config?.rowsCount;
-    const selectedElements = selectSelectedElements(store.getState());
-    const bbox = getMaxBBox(selectedElements);
-    const overflow = cellClamp(delta.y, bbox.ySpan);
-    const candidate = overflow + bbox.y + bbox.ySpan;
-    const nextRowsCount = Math.max(rowsCount, candidate);
-    if (nextRowsCount > rowsCount) {
-      emitter.client.emit('updateRowsCount', nextRowsCount);
+    const elementBottomY = dragging.y + dragging.ySpan;
+    if (elementBottomY > rowsCount) {
+      emitter.client.emit('updateRowsCount', elementBottomY);
     }
-  }, [delta, emitter, cellClamp, store]);
+  }, [store, dragging, emitter]);
 
+  /**
+   * Readjust board rows on board updates
+   */
   React.useEffect(() => {
     const rowsCount = store.getState().config?.rowsCount;
     const bbox = getMaxBBox(Object.values(elements));
-    const nextRowsCount = bbox.ySpan + bbox.y;
-    if (bbox.ySpan + bbox.y > rowsCount) {
-      emitter.client.emit('updateRowsCount', nextRowsCount);
+    const minRowsCount = bbox.ySpan + bbox.y;
+    if (minRowsCount > rowsCount) {
+      emitter.client.emit('updateRowsCount', minRowsCount);
     }
   }, [elements, emitter, store]);
 

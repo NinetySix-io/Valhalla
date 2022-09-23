@@ -5,16 +5,16 @@ import { selectIsMultiSelected, selectSelectionBBox } from './selectors';
 
 import type { XYCoord } from '@app/components/page.editor/types';
 import { getGridArea } from '../lib/get.grid.area';
+import isNil from 'lodash.isnil';
 import { makeFilterProps } from '@valhalla/web.react';
-import uniqueId from 'lodash.uniqueid';
 import { useDraggable } from '@dnd-kit/core';
 import { useSectionStore } from '../../scope.provider';
 
 const DraggableBox = styled(
   'div',
-  makeFilterProps(['gridArea', 'transform']),
-)<{ gridArea: string; transform?: XYCoord }>(
-  ({ theme, gridArea, transform }) => css`
+  makeFilterProps(['gridArea', 'transform', 'isDragging']),
+)<{ gridArea: string; transform?: XYCoord; isDragging: boolean }>(
+  ({ theme, gridArea, transform, isDragging }) => css`
     position: relative;
     grid-area: ${gridArea};
 
@@ -34,21 +34,25 @@ const DraggableBox = styled(
             opacity: 0.5;
           }
         `
-      : css`
+      : !isDragging &&
+        css`
           outline: solid 3px ${theme.palette.primary.main};
         `}
   `,
 );
 
-const key = uniqueId('drag-overlay');
-export const SelectionsOverlay: React.FC & { key: string } = () => {
+export const SelectionsOverlay: React.FC = () => {
   const store = useSectionStore();
   const isMultiDrag = store.useSelect(selectIsMultiSelected);
   const bbox = store.useSelect(selectSelectionBBox);
   const transform = store.useSelect((state) => state.dragDelta);
-  const draggable = useDraggable({ id: key, data: bbox });
+  const isDragging = store.useSelect((state) => !isNil(state.dragging));
+  const draggable = useDraggable({
+    id: 'multi-elements',
+    data: bbox,
+  });
 
-  if (!isMultiDrag || !bbox) {
+  if (!isMultiDrag && !bbox) {
     return null;
   }
 
@@ -57,10 +61,9 @@ export const SelectionsOverlay: React.FC & { key: string } = () => {
       ref={draggable.setNodeRef}
       gridArea={getGridArea(bbox)}
       transform={transform}
+      isDragging={isDragging}
       {...draggable.listeners}
       {...draggable.attributes}
     />
   );
 };
-
-SelectionsOverlay.key = key;

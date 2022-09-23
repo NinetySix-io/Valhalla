@@ -1,18 +1,36 @@
-import type { DroppedElement, Size } from '../../../types';
+import type { BoardElement, Size } from '../../../types';
 
 import type { XYCoord } from '@app/components/page.editor/types';
 
 export class Rectangle {
-  readonly left: number;
-  readonly right: number;
-  readonly top: number;
-  readonly bottom: number;
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
 
   constructor(param: Pick<Rectangle, 'left' | 'right' | 'top' | 'bottom'>) {
     this.left = param.left;
     this.right = param.right;
     this.top = param.top;
     this.bottom = param.bottom;
+  }
+
+  expand(amount: number) {
+    this.expandHorizontally(amount);
+    this.expandVertically(amount);
+    return this;
+  }
+
+  expandHorizontally(amount: number) {
+    this.left -= amount;
+    this.right += amount;
+    return this;
+  }
+
+  expandVertically(amount: number) {
+    this.bottom += amount;
+    this.top -= amount;
+    return this;
   }
 
   get width() {
@@ -49,11 +67,11 @@ export class Rectangle {
     return new Rectangle(element.getBoundingClientRect());
   }
 
-  static fromZoneElement(element: DroppedElement, cellSize: number) {
-    const left = element.x * cellSize;
-    const top = element.y * cellSize;
-    const right = element.xSpan * cellSize + left;
-    const bottom = element.ySpan * cellSize + top;
+  static fromBoardElement(element: BoardElement) {
+    const left = element.x;
+    const top = element.y;
+    const right = element.xSpan + left;
+    const bottom = element.ySpan + top;
     return new Rectangle({
       left,
       top,

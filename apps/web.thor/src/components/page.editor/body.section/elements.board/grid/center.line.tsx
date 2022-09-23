@@ -3,12 +3,9 @@ import * as React from 'react';
 import { css, styled } from '@mui/material';
 
 import type { SectionState } from '../../store';
-import { getMaxBBox } from '../lib/get.max.bbox';
 import { isInRange } from '@app/lib/is.in.range';
 import isNil from 'lodash.isnil';
 import { makeFilterProps } from '@valhalla/web.react';
-import { selectSelectedElements } from '../drag.processors/selectors';
-import { useClampElement } from '../hooks/use.element.clamp';
 import { useSectionStore } from '../../scope.provider';
 
 const Line = styled(
@@ -35,16 +32,14 @@ const Line = styled(
   `,
 );
 
-function selectIsCentered(clampFn: ReturnType<typeof useClampElement>) {
+function selectIsCentered() {
   return (state: SectionState) => {
-    if (!state.dragDelta) {
+    if (!state.dragging) {
       return false;
     }
 
     const boardCenter = Math.floor(state.config.columnsCount / 2);
-    const bbox = getMaxBBox(selectSelectedElements(state));
-    const clampedBox = clampFn(bbox, state.dragDelta);
-    const boxCenterPos = clampedBox.x + clampedBox.xSpan / 2;
+    const boxCenterPos = state.dragging.x + state.dragging.xSpan / 2;
     return isInRange(boardCenter, [
       Math.floor(boxCenterPos),
       Math.ceil(boxCenterPos),
@@ -54,9 +49,8 @@ function selectIsCentered(clampFn: ReturnType<typeof useClampElement>) {
 
 export const CenterLine: React.FC = () => {
   const store = useSectionStore();
-  const clampElement = useClampElement();
   const isVisible = store.useSelect((state) => !isNil(state.dragging));
-  const isCentered = store.useSelect(selectIsCentered(clampElement));
+  const isCentered = store.useSelect(selectIsCentered());
 
   return <Line isVisible={isVisible} shouldLightUp={isCentered} />;
 };
