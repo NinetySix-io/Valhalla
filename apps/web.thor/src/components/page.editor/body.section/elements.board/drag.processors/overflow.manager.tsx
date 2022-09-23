@@ -33,9 +33,12 @@ export const OverflowManager: React.FC = () => {
     const bbox = getMaxBBox(Object.values(elements));
     const minRowsCount = bbox.ySpan + bbox.y;
     if (minRowsCount > rowsCount) {
-      emitter.client.emit('updateRowsCount', minRowsCount);
+      // there is something strange here
+      setTimeout(() => {
+        emitter.client.emit('updateRowsCount', minRowsCount);
+      }, 100);
     }
-  }, [elements, emitter, store]);
+  }, [elements, emitter.client, store]);
 
   return null;
 };
