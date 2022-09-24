@@ -37,9 +37,8 @@ export const DropCollector: React.FC = () => {
   }, [clampElement, emitter.client, store]);
 
   const processAppend = React.useCallback(() => {
-    const { dragging, dragDelta } = cache.current;
-    emitter.client.emit('elementAdded', clampElement(dragging, dragDelta));
-  }, [clampElement, emitter.client]);
+    emitter.client.emit('elementAdded', cache.current.dragging);
+  }, [emitter.client]);
 
   React.useEffect(() => {
     if (!dragDelta && cache.current?.dragDelta && cache.current?.dragging) {

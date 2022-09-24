@@ -1,11 +1,6 @@
 import * as React from 'react';
 
 import { css, styled } from '@mui/material';
-import {
-  useActiveElement,
-  useActiveSectionId,
-  useIsDragging,
-} from '../context';
 
 import { AddSectionBtn } from './add.section.btn';
 import { EditorStore } from '../store';
@@ -78,43 +73,27 @@ type Props = {
 };
 
 export const BodySection: React.FC<Props> = React.memo(({ sectionId }) => {
-  const activeSection = useActiveSectionId();
-  const active = useActiveElement();
-  const isActive = !active && activeSection === sectionId;
-  const isDragging = useIsDragging();
-  const shouldDisplayHelpers = !isDragging && isActive;
+  const isDragging = EditorStore.useSelect((state) => state.isDragging);
+  const isActive = EditorStore.useSelect(
+    (state) => state.activeSection === sectionId,
+  );
   const isFirstSection = EditorStore.useSelect(
     (state) => state.sections.findIndex(compareById(sectionId)) === 0,
   );
-  const sectionElements = EditorStore.useSelect(
-    (state) => state.sections.find(compareById(sectionId)).children,
+  const section = EditorStore.useSelect((state) =>
+    state.sections.find(compareById(sectionId)),
   );
   const isMobile = EditorStore.useSelect(
     (state) => state.size < ScreenSize.DESKTOP,
   );
-  const config = EditorStore.useSelect(
-    (state) => state.sections.find(compareById(sectionId)).config,
-  );
-
   const markActive = throttle(() => {
     EditorStore.actions.setActiveSection(sectionId);
   }, 100);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    event.preventDefault();
-    const target = event.target as HTMLElement;
-    if (!target) {
-      return;
-    }
-
-    if (target.id === sectionId || target.parentElement.id === sectionId) {
-      EditorStore.actions.setActiveElement(null);
-      markActive();
-    }
-  };
+  const shouldDisplayHelpers = !isDragging && isActive;
 
   const handleHover = () => {
-    if (!active) {
+    if (!isActive) {
       markActive();
     }
   };
@@ -126,12 +105,11 @@ export const BodySection: React.FC<Props> = React.memo(({ sectionId }) => {
   }
 
   return (
-    <SectionProvider sectionId={sectionId} config={config}>
+    <SectionProvider sectionId={sectionId} config={section.config}>
       <Container
         id={sectionId}
         onMouseEnter={handleHover}
         onMouseLeave={handleLeave}
-        onClick={handleClick}
         isHover={isActive}
       >
         <MenuArea isMobile={isMobile}>
@@ -162,7 +140,7 @@ export const BodySection: React.FC<Props> = React.memo(({ sectionId }) => {
             })
           }
         >
-          {sectionElements?.map((element) => (
+          {section.children?.map((element) => (
             <ElementsBoard.Item key={element.id} element={element}>
               <ElementFactory element={element} />
             </ElementsBoard.Item>

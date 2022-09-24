@@ -4,9 +4,9 @@ import { BUTTON_ELEMENT, TEXT_ELEMENT } from '../../constants';
 import { Button, Popover, Stack, TextField, css, styled } from '@mui/material';
 
 import { EditorMenu } from '../../menu';
+import { EditorStore } from '../../store';
 import { ElementMenuGroup } from './group';
 import { ElementMenuGroupItem } from './item';
-import { useIsDragging } from '../../context';
 
 const Container = styled(Stack)(
   ({ theme }) => css`
@@ -20,7 +20,7 @@ type Props = {
 } & Pick<React.ComponentProps<typeof EditorMenu>, 'style' | 'placement'>;
 
 export const ElementsMenu: React.FC<Props> = ({ isVisible, ...props }) => {
-  const isDragging = useIsDragging();
+  const isDragging = EditorStore.useSelect((state) => state.isDragging);
   const [menuVisible, setMenuVisible] = React.useState(false);
   const anchor = React.useRef<HTMLDivElement>();
 

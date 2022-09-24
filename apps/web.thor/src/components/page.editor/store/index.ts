@@ -27,7 +27,6 @@ type State = {
   size: ScreenSize;
   cellSize?: number;
   activeSection?: string;
-  activeElement?: string;
   isDragging: boolean;
   sections: Section[];
 };
@@ -47,9 +46,6 @@ const store = createStore(
       },
       setActiveSection(state, active: State['activeSection']) {
         state.activeSection = active;
-      },
-      setActiveElement(state, element: State['activeElement']) {
-        state.activeElement = element;
       },
       setSize(state, size: State['size']) {
         state.size = size;

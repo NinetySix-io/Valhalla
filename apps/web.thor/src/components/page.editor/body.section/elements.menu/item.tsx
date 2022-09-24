@@ -19,7 +19,7 @@ type Props = {
   element: MenuElement;
 };
 
-const initialPosition: XYCoord = { x: 0, y: 0 };
+const initialPosition: XYCoord = { x: 1, y: 1 };
 export const ElementMenuGroupItem: React.FC<Props> = ({
   children,
   element,
@@ -40,8 +40,7 @@ export const ElementMenuGroupItem: React.FC<Props> = ({
         { x: ref.current.offsetLeft, y: ref.current.offsetTop },
       ),
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clampCell, element]);
+  }, [clampCell, element, elementId]);
 
   return (
     <Grid item md={6}>

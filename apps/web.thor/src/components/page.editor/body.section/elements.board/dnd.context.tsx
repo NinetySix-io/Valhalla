@@ -14,6 +14,7 @@ import { useSectionStore } from '../scope.provider';
 export const DndContext: React.FC<React.PropsWithChildren> = ({ children }) => {
   const store = useSectionStore();
   const sensors = useDragSensors();
+  const dragging = React.useRef<BoardElement>();
   const clampElement = useClampElement();
 
   function getElementFromEvent(event: Pick<DragStartEvent, 'active'>) {
@@ -24,6 +25,8 @@ export const DndContext: React.FC<React.PropsWithChildren> = ({ children }) => {
     const element = getElementFromEvent(event);
     EditorStore.actions.setIsDragging(true);
     store.actions.setDragging(element);
+    dragging.current = element;
+
     if (isMenuItem(element.id)) {
       store.actions.clearSelections();
     }
@@ -31,12 +34,11 @@ export const DndContext: React.FC<React.PropsWithChildren> = ({ children }) => {
 
   function handleDragMove(event: DragMoveEvent) {
     store.actions.setDragDelta(event.delta);
-    store.actions.setDragging(
-      clampElement(getElementFromEvent(event), event.delta),
-    );
+    store.actions.setDragging(clampElement(dragging.current, event.delta));
   }
 
   function handleDragEnd() {
+    dragging.current = null;
     store.actions.setDragging(null);
     store.actions.setDragDelta(null);
     EditorStore.actions.setIsDragging(false);
