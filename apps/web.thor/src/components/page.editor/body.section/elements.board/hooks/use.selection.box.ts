@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import { useEvent, useThrottleCallback } from '@valhalla/web.react';
 
 import { Rectangle } from '../lib/rectangle';
@@ -10,26 +12,20 @@ import { useSectionStore } from '../../scope.provider';
  */
 export function useSelectionBoxListener<T extends HTMLElement>(container: T) {
   const store = useSectionStore();
+  const startPos = React.useRef<XYCoord>();
 
-  const processHighlightedElements = useThrottleCallback(
-    (start: XYCoord, end: XYCoord) => {
-      const dragBox = Rectangle.fromCoordinates(start, end);
-      const elements = Object.values(store.getState().elements);
-      const next: SectionState['selections'] = [];
+  const processHighlightedElements = useThrottleCallback((rect: Rectangle) => {
+    const elements = Object.values(store.getState().elements);
+    const next: SectionState['selections'] = [];
 
-      for (const element of elements) {
-        if (
-          element.ref &&
-          dragBox.isTouching(Rectangle.fromHtmlElement(element.ref))
-        ) {
-          next.push(element.id);
-        }
+    for (const element of elements) {
+      if (rect.isTouching(Rectangle.fromHtmlElement(element.ref))) {
+        next.push(element.id);
       }
+    }
 
-      store.actions.overwriteSelections(next);
-    },
-    100,
-  );
+    store.actions.overwriteSelections(next);
+  }, 100);
 
   function isSameRef(target: EventTarget): target is HTMLElement {
     const element = target as HTMLElement;
@@ -45,20 +41,25 @@ export function useSelectionBoxListener<T extends HTMLElement>(container: T) {
 
   useEvent(window, 'mousedown', (event) => {
     if (isSameRef(event.target)) {
-      store.actions.startSelectionBox(getCoordinates(event));
+      startPos.current = getCoordinates(event);
+      store.getState().focused && store.actions.removeFocus();
     }
   });
 
   useEvent(window, 'mouseup', () => {
-    store.actions.clearSelectionBox();
+    store.actions.setSelectionBox(null);
+    startPos.current = null;
   });
 
   useEvent(window, 'mousemove', (event) => {
-    const start = store.getState().selectionBox?.start;
-    if (start) {
-      const end = getCoordinates(event);
-      store.actions.setSelectionBoxEnd(end);
-      processHighlightedElements(start, end);
+    const start = startPos.current;
+    if (!start) {
+      return;
     }
+
+    const end = getCoordinates(event);
+    const rectangle = Rectangle.fromCoordinates(start, end);
+    store.actions.setSelectionBox(rectangle);
+    processHighlightedElements(rectangle);
   });
 }

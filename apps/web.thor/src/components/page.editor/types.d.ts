@@ -36,11 +36,6 @@ export type BoardElement<
   P = unknown,
 > = MenuElement<Type, P> & WithId & DroppedPosition;
 
-export type SelectionBox = {
-  start: XYCoord;
-  end?: XYCoord;
-};
-
 export type Size = {
   width: number;
   height: number;

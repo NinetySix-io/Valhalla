@@ -1,11 +1,7 @@
-import type {
-  BoardElement,
-  DroppedElement,
-  SelectionBox,
-  XYCoord,
-} from '../types';
+import type { BoardElement, DroppedElement, XYCoord } from '../types';
 import { createStore, createStoreHook, withImmer } from 'tiamut';
 
+import type { Rectangle } from './elements.board/lib/rectangle';
 import type { Section } from '../store/types';
 import { createSectionEmitter } from './emitter';
 
@@ -16,7 +12,7 @@ type State = {
   cellSize: number;
   container: HTMLElement;
   dragging?: BoardElement;
-  selectionBox?: SelectionBox;
+  selectionBox?: Rectangle;
   focused?: BoardElement['id'];
   selections: BoardElement['id'][];
   dragDelta?: XYCoord;
@@ -72,16 +68,8 @@ export function createSectionStore(
         removeFocus(state) {
           state.focused = null;
         },
-        startSelectionBox(state, start: XYCoord) {
-          state.selectionBox = { start };
-        },
-        setSelectionBoxEnd(state, end: XYCoord) {
-          if (state.selectionBox?.start) {
-            state.selectionBox.end = end;
-          }
-        },
-        clearSelectionBox(state) {
-          state.selectionBox = null;
+        setSelectionBox(state, rectangle: State['selectionBox']) {
+          state.selectionBox = rectangle;
         },
         overwriteSelections(state, selections: State['selections']) {
           state.selections = selections;

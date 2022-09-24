@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { css, styled } from '@mui/material';
 
-import { Rectangle } from '../lib/rectangle';
+import type { Rectangle } from '../lib/rectangle';
 import { makeFilterProps } from '@valhalla/web.react';
 import { useSectionStore } from '../../scope.provider';
 
@@ -34,14 +34,7 @@ const Container = styled('div')(
 export const SelectionBox: React.FC = () => {
   const store = useSectionStore();
   const minSize = store.useSelect((state) => state.minSelectionSize);
-  const rect = store.useSelect((state) =>
-    state.selectionBox?.end
-      ? Rectangle.fromCoordinates(
-          state.selectionBox.start,
-          state.selectionBox.end,
-        )
-      : null,
-  );
+  const rect = store.useSelect((state) => state.selectionBox);
 
   if (!rect || (rect.width < minSize && rect.height < minSize)) {
     return null;
