@@ -16,6 +16,7 @@ import {
 } from './selectors';
 
 import type { DIRECTION } from '../lib/directions';
+import { PropsProvider } from '@app/components/props.provider';
 import { Resizer } from './resizer';
 import { calculateResize } from '../lib/calculate.resize';
 import color from 'tinycolor2';
@@ -217,7 +218,13 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
         onResizeFinish={handleResizeEnd}
         isMultiSelected={isMultiSelected}
       >
-        {children}
+        <PropsProvider
+          props={{
+            isFocus,
+          }}
+        >
+          {children}
+        </PropsProvider>
       </Container>
     );
   },

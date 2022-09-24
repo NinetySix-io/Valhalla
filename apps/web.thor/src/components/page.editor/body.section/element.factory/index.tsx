@@ -7,11 +7,12 @@ import { TextItem } from './text';
 type Props = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   element: DroppedElement<MenuElement<string, any>>;
+  isFocus?: boolean;
 };
 
-export const ElementFactory: React.FC<Props> = ({ element }) => {
+export const ElementFactory: React.FC<Props> = ({ element, isFocus }) => {
   if (element.type === 'Text') {
-    return <TextItem element={element} />;
+    return <TextItem element={element} isFocus={isFocus} />;
   } else if (element.type === 'Button') {
     return <div>button[{element.id}]</div>;
   }

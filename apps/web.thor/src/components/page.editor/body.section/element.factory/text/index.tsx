@@ -4,9 +4,14 @@ import type { BoardElement } from '@app/components/page.editor/types';
 
 export type Props = {
   element: BoardElement<string, { value: string }>;
+  isFocus?: boolean;
 };
 
-export const TextItem: React.FC<Props> = ({ element }) => {
+export const TextItem: React.FC<Props> = ({ element, isFocus }) => {
+  if (isFocus) {
+    return <div>Focus!</div>;
+  }
+
   return (
     <div
       dangerouslySetInnerHTML={{
