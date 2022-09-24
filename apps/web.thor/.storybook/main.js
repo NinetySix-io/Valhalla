@@ -14,6 +14,7 @@ module.exports = {
     'storybook-dark-mode',
     'storybook-mobile',
     'storybook-addon-performance/register',
+    'storybook-addon-material-ui',
     {
       name: 'storybook-addon-next',
       options: {

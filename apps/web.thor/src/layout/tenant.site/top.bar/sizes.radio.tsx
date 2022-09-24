@@ -9,8 +9,8 @@ import {
   styled,
 } from '@mui/material';
 
-import { EditorStore } from '@app/components/page.editor/store';
-import { ScreenSize } from '@app/components/page.editor/constants';
+import { EditorStore } from '@app/components/editors/page.editor/store';
+import { ScreenSize } from '@app/components/editors/page.editor/constants';
 import { useAnchor } from '@app/hooks/dom/use.anchor';
 
 const Container = styled('div')(

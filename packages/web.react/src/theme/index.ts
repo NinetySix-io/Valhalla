@@ -102,3 +102,5 @@ export function createEmotionCache() {
     prepend: true,
   });
 }
+
+export type Theme = typeof theme;

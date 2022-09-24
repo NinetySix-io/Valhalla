@@ -1,10 +1,10 @@
-import { PageEditor } from '@app/components/page.editor';
+import { PageEditor } from '@app/components/editors/page.editor';
 import { TenantSiteLayout } from '@app/layout/tenant.site';
+import type { View } from '@app/types/next';
 import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
+import { makeTenantStaticPaths } from '@app/next/tenant/make.static.paths';
 import { withApollo } from '@app/next/plugins/presets/with.apollo';
 import { withOrgContext } from '@app/next/plugins/presets/with.org.context';
-import { makeTenantStaticPaths } from '@app/next/tenant/make.static.paths';
-import type { View } from '@app/types/next';
 
 const PageEditorView: View = () => {
   return <PageEditor />;

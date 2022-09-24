@@ -1,7 +1,13 @@
 import '@storybook/addon-console';
 
+import * as React from 'react';
+
+import { DecoratorFn } from '@storybook/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
+import { provideTheme } from '../src/storybook/decorators/theme.provider.decorator';
+
+export const decorators: DecoratorFn[] = [provideTheme()];
 
 export const parameters = {
   actions: {

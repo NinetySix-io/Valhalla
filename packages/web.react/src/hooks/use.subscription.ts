@@ -13,8 +13,12 @@ export function useSubscription(
   deps: React.DependencyList = [],
 ) {
   React.useEffect(() => {
-    const unsubscribe = fn();
+    const unsubscribe = fn?.();
     return () => {
+      if (!unsubscribe) {
+        return;
+      }
+
       if ('remove' in unsubscribe) {
         unsubscribe.remove();
       } else {
