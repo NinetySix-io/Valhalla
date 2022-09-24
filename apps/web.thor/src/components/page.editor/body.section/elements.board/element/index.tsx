@@ -162,10 +162,11 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
     const registryRef = useElementRegistry(element);
     const gridArea = useElementGridArea(element);
     const emitter = useSectionEmitter();
+
     const draggable = useDraggable({
       id: _element.id,
       data: _element,
-      disabled: isMultiSelected || isResizing || hasDragging,
+      disabled: isMultiSelected || isResizing,
     });
 
     function handleResize(direction: DIRECTION, nextSize: Size) {

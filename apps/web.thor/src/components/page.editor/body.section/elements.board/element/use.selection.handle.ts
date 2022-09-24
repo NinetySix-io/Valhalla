@@ -13,14 +13,16 @@ export function useSelectionHandle(element: DroppedElement) {
   const container = React.useRef<HTMLElement>();
   const store = useSectionStore();
 
-  useEvent(container.current, 'mousedown', () => {
-    const { isHoldingDownShiftKey, focused, selections } = store.getState();
+  useEvent(container.current, 'mouseup', () => {
+    const { isHoldingDownShiftKey, focused } = store.getState();
     const hasFocus = !isNil(focused);
-
     if (!isHoldingDownShiftKey || !hasFocus) {
       store.actions.setFocus(element.id);
     }
+  });
 
+  useEvent(container.current, 'mousedown', () => {
+    const { isHoldingDownShiftKey, selections } = store.getState();
     if (!selections.includes(element.id)) {
       store.actions.setSelection(element.id, !isHoldingDownShiftKey);
     }
