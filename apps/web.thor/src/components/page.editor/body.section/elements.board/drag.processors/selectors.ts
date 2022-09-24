@@ -1,18 +1,16 @@
-import type { SectionState } from '../../store';
+import { createSectionSelector } from '../../store/selector';
 import { getMaxBBox } from '../lib/get.max.bbox';
 
-export function selectIsMultiSelected(state: SectionState) {
-  return state.selections.length > 0;
-}
+export const selectIsMultiSelected = createSectionSelector(
+  (state) => state.selections.length > 1,
+);
 
-export function selectSelectedElements(state: SectionState) {
-  return state.selections.map((selectedId) => {
-    return state.elements[selectedId];
-  });
-}
+export const selectSelectedElements = createSectionSelector((state) =>
+  state.selections.map((selected) => state.elements[selected]),
+);
 
-export function selectSelectionBBox(state: SectionState) {
-  return selectIsMultiSelected(state)
+export const selectSelectionBBox = createSectionSelector((state) =>
+  selectIsMultiSelected(state)
     ? getMaxBBox(selectSelectedElements(state))
-    : undefined;
-}
+    : undefined,
+);

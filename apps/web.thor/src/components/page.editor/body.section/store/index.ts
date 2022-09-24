@@ -1,9 +1,9 @@
-import type { BoardElement, DroppedElement, XYCoord } from '../types';
+import type { BoardElement, DroppedElement, XYCoord } from '../../types';
 import { createStore, createStoreHook, withImmer } from 'tiamut';
 
-import type { Rectangle } from './elements.board/lib/rectangle';
-import type { Section } from '../store/types';
-import { createSectionEmitter } from './emitter';
+import type { Rectangle } from './../elements.board/lib/rectangle';
+import type { Section } from '../../store/types';
+import { createSectionEmitter } from '../emitter';
 
 type State = {
   minSelectionSize: number;
@@ -13,6 +13,7 @@ type State = {
   container: HTMLElement;
   dragging?: BoardElement;
   selectionBox?: Rectangle;
+  resizing?: BoardElement['id'];
   focused?: BoardElement['id'];
   selections: BoardElement['id'][];
   dragDelta?: XYCoord;
@@ -76,6 +77,9 @@ export function createSectionStore(
         },
         setDragDelta(state, delta: State['dragDelta']) {
           state.dragDelta = delta;
+        },
+        setResizing(state, elementId: State['resizing']) {
+          state.resizing = elementId;
         },
         setSelection(
           state,

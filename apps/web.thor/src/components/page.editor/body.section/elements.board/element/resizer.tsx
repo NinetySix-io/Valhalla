@@ -245,20 +245,10 @@ export const Resizer = React.forwardRef<HTMLDivElement, Props>(
     ) {
       event.preventDefault();
       const { clientWidth, clientHeight } = container.current;
-
+      const { clientX, clientY } = event;
+      sizing.current = { width: clientWidth, height: clientHeight };
+      original.current = { x: clientX, y: clientY, ...sizing.current };
       setActive(direction);
-      sizing.current = {
-        width: clientWidth,
-        height: clientHeight,
-      };
-
-      original.current = {
-        x: event.clientX,
-        y: event.clientY,
-        width: clientWidth,
-        height: clientHeight,
-      };
-
       onResizeStart?.(direction);
     }
 

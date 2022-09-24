@@ -45,6 +45,7 @@
     "supergraph",
     "superstruct",
     "tiamut",
+    "tinycolor",
     "turborepo",
     "typegoose",
     "typeorm",
@@ -72,8 +73,9 @@
   "typescript.suggest.jsdoc.generateReturns": false,
   "editor.tabCompletion": "on",
   "diffEditor.codeLens": true,
-  "docwriter.hotkey.mac": "⌥ + .",
+  "docwriter.hotkey.mac": "⌘ + .",
   "typescript.suggest.enabled": true,
   "javascript.suggest.enabled": true,
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "docwriter.progress.trackTypes": false
 }

@@ -8,7 +8,9 @@ import type {
 import { css, styled } from '@mui/material';
 import { makeFilterProps, useTemporal } from '@valhalla/web.react';
 import {
+  selectIsDragging,
   selectIsMultiSelected,
+  selectIsResizing,
   selectMoveTransform,
   selectShouldPeakWhenClose,
 } from './selectors';
@@ -103,15 +105,9 @@ const Container = styled(
         ? !isDragging &&
           css`
             outline-color: ${mainColor};
-
-            &:hover {
-              cursor: auto;
-            }
           `
         : css`
             &:hover {
-              cursor: grab;
-
               /* LABEL */
               ${!isDragging &&
               css`
@@ -156,18 +152,19 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
     const isFocus = store.useSelect((state) => state.focused === _element.id);
     const cellSize = store.useSelect((state) => state.cellSize);
     const hasDragging = store.useSelect((state) => !isNil(state.dragging));
+    const isDragging = store.useSelect(selectIsDragging(_element));
     const transform = store.useSelect(selectMoveTransform(_element));
     const isMultiSelected = store.useSelect(selectIsMultiSelected(_element));
     const shouldPeak = store.useSelect(selectShouldPeakWhenClose(_element));
+    const isResizing = store.useSelect(selectIsResizing(_element));
     const selectionHandle = useSelectionHandle(_element);
-    const [isResizing, setIsResizing] = React.useState(false);
     const [element, setElement] = useTemporal(_element);
     const registryRef = useElementRegistry(element);
     const gridArea = useElementGridArea(element);
     const emitter = useSectionEmitter();
     const draggable = useDraggable({
-      id: element.id,
-      data: element,
+      id: _element.id,
+      data: _element,
       disabled: isMultiSelected || isResizing || hasDragging,
     });
 
@@ -183,18 +180,20 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
     }
 
     function handleResizeStart() {
-      setIsResizing(true);
+      store.actions.setResizing(element.id);
     }
 
     function handleResizeEnd() {
-      setIsResizing(false);
+      store.actions.setResizing(null);
       emitter.client.emit('elementsUpdated', [element]);
     }
 
     return (
       <Container
         {...props}
-        transformShadow={draggable.isDragging}
+        {...draggable.listeners}
+        {...draggable.attributes}
+        transformShadow={isDragging}
         transform={transform}
         ref={mergeRefs([
           ref,
@@ -205,8 +204,8 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
         ])}
         shouldPeak={shouldPeak}
         alwaysVisible={isFocus || isResizing}
-        isDragging={draggable.isDragging || hasDragging}
-        disableResize={draggable.isDragging || isMultiSelected || hasDragging}
+        isDragging={isDragging || hasDragging}
+        disableResize={isDragging || isMultiSelected || hasDragging}
         label={element.type?.toUpperCase()}
         gridArea={gridArea}
         isFocus={(isFocus || isResizing) && !hasDragging}
@@ -216,8 +215,6 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
         onResizeStart={handleResizeStart}
         onResizeFinish={handleResizeEnd}
         isMultiSelected={isMultiSelected}
-        {...draggable.listeners}
-        {...draggable.attributes}
       >
         {children}
       </Container>

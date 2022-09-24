@@ -14,7 +14,7 @@ const Container = styled(
 }>(
   ({ theme, gridArea }) => css`
     transition: all 0.2s;
-    border: solid 3px transparent;
+    outline: solid 3px transparent;
     margin-left: calc(var(--pt-w) * 0.5);
     margin-right: calc(var(--pt-w) / -1);
     margin-bottom: calc(var(--pt-w) * -2);
@@ -23,7 +23,7 @@ const Container = styled(
       ? css`
           z-index: 1;
           grid-area: ${gridArea};
-          border-color: ${theme.palette.primary.main};
+          outline-color: ${theme.palette.primary.main};
         `
       : css`
           display: none;

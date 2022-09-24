@@ -18,13 +18,6 @@ const DraggableBox = styled(
     position: relative;
     grid-area: ${gridArea};
 
-    &:hover {
-      cursor: grab;
-    }
-    &:active {
-      cursor: grabbing;
-    }
-
     ${transform
       ? css`
           transform: translate(${transform.x}px, ${transform.y}px);
