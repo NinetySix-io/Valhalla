@@ -1,10 +1,7 @@
 import { faker } from '@faker-js/faker';
 
-export function makeArray(max: number, min?: number) {
+export function makeArray(len: number | { max: number; min?: number }) {
   return Array.from({
-    length: faker.datatype.number({
-      max,
-      min,
-    }),
+    length: faker.datatype.number(len),
   });
 }

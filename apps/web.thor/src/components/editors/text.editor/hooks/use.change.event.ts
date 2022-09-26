@@ -13,7 +13,7 @@ export function useChangeEvent(
 ) {
   React.useEffect(() => {
     const handler = (context: EditorEvents['update']) => {
-      onChange(context.editor.getJSON(), context.editor.getHTML());
+      onChange && onChange(context.editor.getJSON(), context.editor.getHTML());
     };
 
     editor?.on('update', handler);

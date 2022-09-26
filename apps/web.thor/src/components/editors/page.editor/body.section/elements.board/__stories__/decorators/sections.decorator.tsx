@@ -6,7 +6,11 @@ import {
 } from '@app/components/editors/page.editor/store';
 
 import type { DecoratorFn } from '@storybook/react';
+import StarterKit from '@tiptap/starter-kit';
 import { faker } from '@faker-js/faker';
+import { generateHTML } from '@tiptap/react';
+import { makeArray } from '@app/storybook/lib/array';
+import { makeTextJson } from '@app/storybook/tools/editor/make.text.json';
 
 export const SectionsDecorator = (
   sectionsCount = 1,
@@ -27,8 +31,9 @@ export const SectionsDecorator = (
         const section = makeSection(count);
         EditorStore.actions.addSection(section);
 
-        for (const idx in Array.from({ length: elementsCount })) {
+        makeArray(elementsCount).forEach((_, idx) => {
           const id = section.id + 'e' + idx;
+          const json = makeTextJson();
           EditorStore.actions.addElement(section.id, {
             id,
             type: 'Text',
@@ -37,10 +42,11 @@ export const SectionsDecorator = (
             xSpan: faker.datatype.number({ min: 1, max: 5 }),
             ySpan: faker.datatype.number({ min: 1, max: 5 }),
             props: {
-              value: `<span>${id}</span>`,
+              json,
+              html: generateHTML(json, [StarterKit]),
             },
           });
-        }
+        });
       }
     }, []);
 

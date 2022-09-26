@@ -166,7 +166,7 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
     const draggable = useDraggable({
       id: _element.id,
       data: _element,
-      disabled: isMultiSelected || isResizing,
+      disabled: isMultiSelected || isResizing || isFocus,
     });
 
     function handleResize(direction: DIRECTION, nextSize: Size) {

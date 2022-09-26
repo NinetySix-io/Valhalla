@@ -11,6 +11,9 @@ import { useChangeEvent } from './hooks/use.change.event';
 
 const Container = styled('div')(
   () => css`
+    width: 100%;
+    height: 100%;
+
     .ProseMirror {
       outline: none;
     }
@@ -22,12 +25,22 @@ type Props = {
   value?: JSONContent;
 } & Partial<Pick<EditorOptions, 'editable' | 'autofocus'>>;
 
-export const TextEditor: React.FC<Props> = ({ onChange, value, ...props }) => {
+export const TextEditor: React.FC<Props> = ({
+  onChange,
+  value,
+  editable,
+  ...props
+}) => {
   const editor = useEditor({
     extensions: [StarterKit],
     content: value,
+    editable,
     ...props,
   });
+
+  React.useEffect(() => {
+    editor?.setEditable(editable);
+  }, [editable, editor]);
 
   useChangeEvent(editor, onChange);
 
