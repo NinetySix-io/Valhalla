@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import type { BoardElement, MenuElement, XYCoord } from '../../types';
+import type { BoardElement, XYCoord } from '../../types';
 import { Button, Grid, css, styled } from '@mui/material';
 
 import { MENU_ITEM } from '../../constants';
@@ -16,7 +16,7 @@ const Item = styled(Button)(
 
 type Props = {
   children: string;
-  element: MenuElement;
+  element: Omit<BoardElement, 'id' | 'x' | 'y'>;
 };
 
 const initialPosition: XYCoord = { x: 1, y: 1 };

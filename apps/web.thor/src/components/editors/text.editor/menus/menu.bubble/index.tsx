@@ -5,6 +5,7 @@ import { ActionButton, MenuContainer } from '../style';
 import { BubbleMenu as TTBubbleMenu } from '@tiptap/react';
 import { useEditor } from '../../context';
 
+//TODO: Icons
 export const BubbleMenu: React.FC = () => {
   const editor = useEditor();
 

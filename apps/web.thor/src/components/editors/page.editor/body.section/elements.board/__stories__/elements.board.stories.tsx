@@ -60,18 +60,26 @@ const Board: React.FC<React.PropsWithChildren<{ section: Section }>> = ({
         }}
       >
         {children}
-        {elements?.map((element) => (
-          <ElementsBoard.Item key={element.id} element={element}>
-            <ElementFactory element={element} />
-          </ElementsBoard.Item>
-        ))}
+        {elements.map((element) => {
+          return (
+            <ElementsBoard.Item key={element.id} element={element}>
+              <ElementFactory
+                element={element}
+                onChange={(nextElement) => {
+                  action('onChange')(nextElement);
+                  EditorStore.actions.updateElement(section.id, nextElement);
+                }}
+              />
+            </ElementsBoard.Item>
+          );
+        })}
       </ElementsBoard>
     </SectionProvider>
   );
 };
 
 storiesOf('NinetySix/Editors/Page Editor/Board', module)
-  .addDecorator(SectionsDecorator(2))
+  .addDecorator(SectionsDecorator(2, 1))
   .add('Default', () => {
     const section = EditorStore.useSelect((state) => state.sections[0]);
     return (

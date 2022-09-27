@@ -7,5 +7,10 @@ export function provideProps<P extends object>(
   node: React.ReactNode,
   props: P,
 ) {
-  return React.isValidElement(node) ? React.cloneElement(node, props) : node;
+  return React.isValidElement(node)
+    ? React.cloneElement(node, {
+        ...node.props,
+        ...props,
+      })
+    : node;
 }

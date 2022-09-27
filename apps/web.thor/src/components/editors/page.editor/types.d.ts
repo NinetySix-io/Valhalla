@@ -1,3 +1,5 @@
+import type { ElementType } from '@app/generated/valhalla.gql';
+
 export type XYCoord = {
   x: number;
   y: number;
@@ -26,15 +28,15 @@ export type DroppedElement<E extends BaseElement = BaseElement> = E &
   DroppedPosition &
   WithId;
 
-export type MenuElement<
-  Type extends string = string,
-  P = unknown,
-> = BaseElement<Type, P>;
-
 export type BoardElement<
   Type extends string = string,
   P = unknown,
-> = MenuElement<Type, P> & WithId & DroppedPosition;
+> = BaseElement<Type, P> & WithId & DroppedPosition;
+
+export type TextElement = BoardElement<
+  ElementType.TEXT,
+  { json: JSONContent; html: HTMLContent }
+>;
 
 export type Size = {
   width: number;

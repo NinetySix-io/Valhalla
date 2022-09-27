@@ -1,5 +1,6 @@
 import { Button, css, styled } from '@mui/material';
 
+import type { ButtonProps } from '@mui/material';
 import { makeFilterProps } from '@valhalla/web.react';
 
 export const MenuContainer = styled('div')(
@@ -7,12 +8,29 @@ export const MenuContainer = styled('div')(
     background-color: ${theme.palette.background.paper};
     border-radius: ${theme.shape.borderRadius};
     box-shadow: ${theme.shadows[2]};
+    width: max-content;
+    height: max-content;
     padding: 3px;
+    opacity: 0.9;
+    transition: ${theme.transitions.create('all')};
+
+    &:hover {
+      opacity: 1;
+    }
   `,
 );
 
 export const ActionButton = styled(
-  Button,
+  ({ onClick, ...props }: ButtonProps) => (
+    <Button
+      size="small"
+      onMouseDown={(event) => {
+        event.preventDefault();
+        onClick?.(event);
+      }}
+      {...props}
+    />
+  ),
   makeFilterProps(['isActive']),
 )<{ isActive: boolean }>(
   ({ theme, isActive }) => css`
@@ -20,7 +38,3 @@ export const ActionButton = styled(
     min-width: 40px;
   `,
 );
-
-ActionButton.defaultProps = {
-  size: 'small',
-};

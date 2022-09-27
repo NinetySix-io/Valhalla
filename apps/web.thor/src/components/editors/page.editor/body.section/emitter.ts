@@ -1,4 +1,4 @@
-import type { BoardElement, DroppedElement, MenuElement } from '../types';
+import type { BoardElement, DroppedElement } from '../types';
 
 import { EventsEmitter } from '@valhalla/utilities';
 
@@ -9,6 +9,6 @@ export function createSectionEmitter() {
     elementsUpdated: DroppedElement[];
     elementsDeleted: DroppedElement['id'][];
     elementFocus: BoardElement;
-    elementDragging: MenuElement;
+    elementDragging: DroppedElement;
   }>();
 }

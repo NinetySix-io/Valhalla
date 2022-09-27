@@ -10,42 +10,62 @@ import Highlight from '@tiptap/extension-highlight';
 import { NewLineMenu } from './menus/menu.new.line';
 import StarterKit from '@tiptap/starter-kit';
 import Typography from '@tiptap/extension-typography';
-import { useChangeEvent } from './hooks/use.change.event';
+import { useEditorSubscription } from './hooks/use.editor.subscription';
 
-const Container = styled('div')(
-  () => css`
-    width: 100%;
-    height: 100%;
-  `,
-);
+const Container = styled('div')(() => css``);
 
 type Props = {
-  onChange?: (data: JSONContent, html: HTMLContent) => void;
   value?: JSONContent;
+  onEditStart?: () => void;
+  onEditEnd?: () => void;
+  onChange?: (data: {
+    json: JSONContent;
+    html: HTMLContent;
+    height: number;
+  }) => void;
 } & Partial<Pick<EditorOptions, 'editable' | 'autofocus'>>;
 
 export const TextEditor: React.FC<Props> = ({
   onChange,
+  onEditEnd,
+  onEditStart,
   value,
   editable,
   ...props
 }) => {
+  const container = React.useRef<HTMLDivElement>();
   const editor = useEditor({
     extensions: [StarterKit, Typography, Highlight],
     content: value,
     editable,
+    onFocus: () => {
+      onEditStart?.();
+    },
+    onBlur: () => {
+      onEditEnd?.();
+    },
     ...props,
+  });
+
+  useEditorSubscription(editor, 'focus', onEditStart);
+  useEditorSubscription(editor, 'blur', onEditEnd);
+  useEditorSubscription(editor, 'update', (context) => {
+    if (context.transaction.steps.length > 0) {
+      onChange?.({
+        json: context.editor.getJSON(),
+        html: context.editor.getHTML(),
+        height: container.current.clientHeight,
+      });
+    }
   });
 
   React.useEffect(() => {
     editor?.setEditable(editable);
   }, [editable, editor]);
 
-  useChangeEvent(editor, onChange);
-
   return (
     <EditorContext.Provider value={{ editor }}>
-      <Container>
+      <Container ref={container}>
         <EditorContent editor={editor} />
         {editor && (
           <React.Fragment>

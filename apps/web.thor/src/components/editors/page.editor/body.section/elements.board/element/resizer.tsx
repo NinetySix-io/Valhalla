@@ -153,21 +153,26 @@ type Position = Size & {
   y: number;
 };
 
-type Props = React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
-> & {
-  alwaysVisible?: boolean;
-  disableResize?: boolean | Array<DIRECTION>;
-  children?: React.ReactNode;
-  minHeight?: number;
-  minWidth?: number;
-  maxHeight?: number;
-  maxWidth?: number;
-  onResizeStart?: (direction: DIRECTION) => void;
-  onResizeFinish?: (direction: DIRECTION, value: Size, original: Size) => void;
-  onResize?: (direction: DIRECTION, value: Size, original: Size) => void;
-};
+type Props = React.PropsWithChildren<
+  React.DetailedHTMLProps<
+    React.HTMLAttributes<HTMLDivElement>,
+    HTMLDivElement
+  > & {
+    alwaysVisible?: boolean;
+    disableResize?: boolean | Array<DIRECTION>;
+    minHeight?: number;
+    minWidth?: number;
+    maxHeight?: number;
+    maxWidth?: number;
+    onResizeStart?: (direction: DIRECTION) => void;
+    onResizeFinish?: (
+      direction: DIRECTION,
+      value: Size,
+      original: Size,
+    ) => void;
+    onResize?: (direction: DIRECTION, value: Size, original: Size) => void;
+  }
+>;
 
 export const Resizer = React.forwardRef<HTMLDivElement, Props>(
   (

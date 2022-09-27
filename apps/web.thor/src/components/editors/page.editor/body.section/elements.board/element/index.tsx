@@ -39,6 +39,7 @@ const Container = styled(
     'isMultiSelected',
     'transformShadow',
     'shouldPeak',
+    'isEditingText',
   ]),
 )<{
   transform?: XYCoord;
@@ -49,6 +50,7 @@ const Container = styled(
   isMultiSelected: boolean;
   transformShadow: boolean;
   shouldPeak: boolean;
+  isEditingText: boolean;
 }>(
   ({
     theme,
@@ -60,6 +62,7 @@ const Container = styled(
     transform,
     transformShadow,
     shouldPeak,
+    isEditingText,
   }) => {
     const mainColor: string = theme.palette.primary.main;
     const textColor: string = theme.palette.getContrastText(mainColor);
@@ -75,6 +78,9 @@ const Container = styled(
       outline: solid 3px transparent;
       grid-area: ${gridArea};
       z-index: auto;
+      transition: ${theme.transitions.create(['margin', 'padding'], {
+        duration: 200,
+      })};
 
       ${transform &&
       css`
@@ -105,6 +111,12 @@ const Container = styled(
         ? !isDragging &&
           css`
             outline-color: ${mainColor};
+
+            ${isEditingText &&
+            css`
+              padding: ${theme.spacing(1)};
+              margin: ${theme.spacing(-1)};
+            `}
           `
         : css`
             &:hover {
@@ -139,16 +151,18 @@ const Container = styled(
   },
 );
 
-type Props = React.PropsWithChildren<{
+type Props = {
   onFocus?: () => void;
   onFocusChange?: (isActive: boolean) => void;
   element: DroppedElement;
-}>;
+  children: JSX.Element;
+};
 
 export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
   ({ element: _element, children, ...props }, ref) => {
     const container = React.useRef<HTMLDivElement>();
     const store = useSectionStore();
+    const isEditingText = store.useSelect((state) => state.isEditingText);
     const isFocus = store.useSelect((state) => state.focused === _element.id);
     const cellSize = store.useSelect((state) => state.cellSize);
     const hasDragging = store.useSelect((state) => !isNil(state.dragging));
@@ -216,6 +230,7 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
         onResizeStart={handleResizeStart}
         onResizeFinish={handleResizeEnd}
         isMultiSelected={isMultiSelected}
+        isEditingText={isEditingText}
       >
         <PropsProvider
           props={{

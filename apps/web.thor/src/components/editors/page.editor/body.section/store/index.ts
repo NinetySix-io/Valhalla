@@ -8,6 +8,7 @@ import { createSectionEmitter } from '../emitter';
 type State = {
   minSelectionSize: number;
   sectionId: string;
+  isEditingText: boolean;
   config: Section['config'];
   cellSize: number;
   container: HTMLElement;
@@ -29,6 +30,7 @@ const initialState = {
   cellSize: 0,
   elements: {},
   selections: [],
+  isEditingText: false,
   isHoldingDownShiftKey: false,
 } as State;
 
@@ -45,6 +47,9 @@ export function createSectionStore(
         sectionId,
       },
       actions: {
+        setIsEditingText(state, value: State['isEditingText']) {
+          state.isEditingText = value;
+        },
         setCellSize(state, value: State['cellSize']) {
           state.cellSize = value;
         },

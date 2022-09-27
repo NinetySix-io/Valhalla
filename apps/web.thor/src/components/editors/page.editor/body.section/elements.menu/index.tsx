@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { BUTTON_ELEMENT, TEXT_ELEMENT } from '../../constants';
 import { Button, Popover, Stack, TextField, css, styled } from '@mui/material';
 
 import { EditorMenu } from '../../menu';
 import { EditorStore } from '../../store';
 import { ElementMenuGroup } from './group';
 import { ElementMenuGroupItem } from './item';
+import { ElementType } from '@app/generated/valhalla.gql';
 
 const Container = styled(Stack)(
   ({ theme }) => css`
@@ -61,10 +61,26 @@ export const ElementsMenu: React.FC<Props> = ({ isVisible, ...props }) => {
         <Container direction="column" spacing={2.5}>
           <TextField autoFocus size="small" placeholder="Search" />
           <ElementMenuGroup title="Primitives">
-            <ElementMenuGroupItem element={TEXT_ELEMENT}>
+            <ElementMenuGroupItem
+              element={{
+                type: ElementType.TEXT,
+                xSpan: 3,
+                ySpan: 1,
+                props: {
+                  json: {},
+                  html: '',
+                },
+              }}
+            >
               Text
             </ElementMenuGroupItem>
-            <ElementMenuGroupItem element={BUTTON_ELEMENT}>
+            <ElementMenuGroupItem
+              element={{
+                type: ElementType.BOX,
+                xSpan: 3,
+                ySpan: 1,
+              }}
+            >
               Button
             </ElementMenuGroupItem>
           </ElementMenuGroup>

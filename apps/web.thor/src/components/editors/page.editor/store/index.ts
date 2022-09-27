@@ -72,6 +72,14 @@ const store = createStore(
           );
         }
       },
+      updateElement(state, sectionId: Section['id'], element: DroppedElement) {
+        const section = state.sections.find(compareById(sectionId));
+        if (section) {
+          section.children = section.children.map((e) =>
+            e.id === element.id ? element : e,
+          );
+        }
+      },
       removeElements(
         state,
         sectionId: Section['id'],

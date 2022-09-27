@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import type { KeyCode } from './keys.enum';
-import { useWindowEvent } from '../use.window.event';
+import { useEvent } from '../react.hooks';
 
 export * from './keys.enum';
 
@@ -29,14 +29,15 @@ function handleEvent<K extends readonly KeyCode[]>(
  * the keys are pressed
  */
 export function useOneOfKeyPressed<K extends readonly KeyCode[]>(
+  target: HTMLElement | React.RefObject<HTMLElement>,
   keys: K,
   onKeyAction: (state: 'keydown' | 'keyup') => void,
 ) {
-  useWindowEvent('keydown', (event) => {
+  useEvent(target, 'keydown', (event) => {
     handleEvent(keys, event, () => onKeyAction('keydown'));
   });
 
-  useWindowEvent('keyup', (event) => {
+  useEvent(target, 'keyup', (event) => {
     handleEvent(keys, event, () => onKeyAction('keyup'));
   });
 }
@@ -45,12 +46,13 @@ export function useOneOfKeyPressed<K extends readonly KeyCode[]>(
  * It calls a callback when a set of keys are pressed
  */
 export function useKeysPressed<K extends readonly KeyCode[]>(
+  target: HTMLElement | React.RefObject<HTMLElement>,
   keys: K,
   callback: CallBack,
 ) {
   const cache = React.useRef<Set<string>>(new Set());
 
-  useWindowEvent('keydown', (event) => {
+  useEvent(target, 'keydown', (event) => {
     handleEvent(keys, event, () => {
       cache.current.add(event.code);
 
@@ -60,7 +62,7 @@ export function useKeysPressed<K extends readonly KeyCode[]>(
     });
   });
 
-  useWindowEvent('keyup', (event) => {
+  useEvent(target, 'keyup', (event) => {
     handleEvent(keys, event, () => {
       cache.current.delete(event.code);
     });

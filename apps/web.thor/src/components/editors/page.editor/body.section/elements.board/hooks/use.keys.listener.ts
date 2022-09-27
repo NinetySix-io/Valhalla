@@ -9,8 +9,9 @@ import { useSectionStore } from '../../scope.provider';
  */
 export function useShiftKeyListener() {
   const store = useSectionStore();
+  const container = store.useSelect((state) => state.container);
 
-  useOneOfKeyPressed([KeyCode.Shift, KeyCode.Command], (status) =>
+  useOneOfKeyPressed(container, [KeyCode.Shift, KeyCode.Command], (status) =>
     store.actions.setHoldingDownShiftKey(status === 'keydown'),
   );
 }
@@ -21,21 +22,26 @@ export function useShiftKeyListener() {
 export function useDeleteKeyListener() {
   const store = useSectionStore();
   const emitter = useSectionEmitter();
+  const container = store.useSelect((state) => state.container);
 
-  useOneOfKeyPressed([KeyCode.Delete, KeyCode.Backspace], (status) => {
-    if (status !== 'keydown') {
-      return;
-    }
-
-    const { selections, elements } = store.getState();
-    const deleted: DroppedElement['id'][] = [];
-
-    for (const elementId of Object.keys(elements)) {
-      if (selections.includes(elementId)) {
-        deleted.push(elementId);
+  useOneOfKeyPressed(
+    container,
+    [KeyCode.Delete, KeyCode.Backspace],
+    (status) => {
+      if (status !== 'keydown') {
+        return;
       }
-    }
 
-    emitter.client.emit('elementsDeleted', deleted);
-  });
+      const { selections, elements } = store.getState();
+      const deleted: DroppedElement['id'][] = [];
+
+      for (const elementId of Object.keys(elements)) {
+        if (selections.includes(elementId)) {
+          deleted.push(elementId);
+        }
+      }
+
+      emitter.client.emit('elementsDeleted', deleted);
+    },
+  );
 }

@@ -6,6 +6,7 @@ import {
 } from '@app/components/editors/page.editor/store';
 
 import type { DecoratorFn } from '@storybook/react';
+import { ElementType } from '@app/generated/valhalla.gql';
 import StarterKit from '@tiptap/starter-kit';
 import { faker } from '@faker-js/faker';
 import { generateHTML } from '@tiptap/react';
@@ -36,7 +37,7 @@ export const SectionsDecorator = (
           const json = makeTextJson();
           EditorStore.actions.addElement(section.id, {
             id,
-            type: 'Text',
+            type: ElementType.TEXT,
             x: faker.datatype.number({ min: 1, max: 10 }),
             y: faker.datatype.number({ min: 1, max: 10 }),
             xSpan: faker.datatype.number({ min: 1, max: 5 }),

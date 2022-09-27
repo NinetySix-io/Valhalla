@@ -142,7 +142,13 @@ export const BodySection: React.FC<Props> = React.memo(({ sectionId }) => {
         >
           {section.children?.map((element) => (
             <ElementsBoard.Item key={element.id} element={element}>
-              <ElementFactory element={element} />
+              <ElementFactory
+                element={element}
+                //Maybe abstract this inside board item?
+                onChange={(nextElement) =>
+                  EditorStore.actions.updateElement(sectionId, nextElement)
+                }
+              />
             </ElementsBoard.Item>
           ))}
         </ElementsBoard>

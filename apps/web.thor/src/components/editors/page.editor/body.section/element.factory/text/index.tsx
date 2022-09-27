@@ -1,12 +1,15 @@
 import * as React from 'react';
 
-import type { HTMLContent, JSONContent } from '@tiptap/react';
-
-import type { BoardElement } from '@app/components/editors/page.editor/types';
+import type { TextElement } from '@app/components/editors/page.editor/types';
+import { getClampPosition } from '../../elements.board/lib/get.clamp.position';
+import { useSectionStore } from '../../scope.provider';
 
 export type Props = {
-  element: BoardElement<string, { json: JSONContent; html: HTMLContent }>;
+  element: TextElement;
   isFocus?: boolean;
+  onChange?: (element: TextElement) => void;
+  onEditStart?: () => void;
+  onEditEnd?: () => void;
 };
 
 const Editor = React.lazy(() =>
@@ -15,7 +18,35 @@ const Editor = React.lazy(() =>
   })),
 );
 
-export const TextItem: React.FC<Props> = ({ element, isFocus }) => {
+export const TextItem: React.FC<Props> = ({
+  element,
+  isFocus,
+  onChange,
+  onEditStart,
+  onEditEnd,
+}) => {
+  const store = useSectionStore();
+  const handleChange = React.useCallback(
+    ({
+      json,
+      html,
+      height,
+    }: Parameters<React.ComponentProps<typeof Editor>['onChange']>[0]) => {
+      onChange?.({
+        ...element,
+        ySpan: Math.max(
+          element.ySpan,
+          getClampPosition(height, store.getState().cellSize),
+        ),
+        props: {
+          json,
+          html,
+        },
+      });
+    },
+    [element, onChange, store],
+  );
+
   return (
     <React.Suspense
       fallback={
@@ -27,7 +58,13 @@ export const TextItem: React.FC<Props> = ({ element, isFocus }) => {
         />
       }
     >
-      <Editor editable={isFocus} value={element.props.json} />
+      <Editor
+        editable={isFocus}
+        value={element.props.json}
+        onChange={handleChange}
+        onEditEnd={onEditEnd}
+        onEditStart={onEditStart}
+      />
     </React.Suspense>
   );
 };

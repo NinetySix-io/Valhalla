@@ -1,19 +1,35 @@
 import * as React from 'react';
 
-import type { DroppedElement, MenuElement } from '../../types';
+import type { BoardElement, TextElement } from '../../types';
 
+import { ElementType } from '@app/generated/valhalla.gql';
 import { TextItem } from './text';
+import { useSectionStore } from '../scope.provider';
 
 type Props = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  element: DroppedElement<MenuElement<string, any>>;
+  element: BoardElement;
   isFocus?: boolean;
+  onChange: (element: BoardElement) => void;
 };
 
-export const ElementFactory: React.FC<Props> = ({ element, isFocus }) => {
-  if (element.type === 'Text') {
-    return <TextItem element={element} isFocus={isFocus} />;
-  } else if (element.type === 'Button') {
+export const ElementFactory: React.FC<Props> = ({
+  element,
+  isFocus,
+  onChange,
+}) => {
+  const store = useSectionStore();
+
+  if (element.type === ElementType.TEXT) {
+    return (
+      <TextItem
+        element={element as TextElement}
+        isFocus={isFocus}
+        onChange={onChange}
+        onEditStart={() => store.actions.setIsEditingText(true)}
+        onEditEnd={() => store.actions.setIsEditingText(false)}
+      />
+    );
+  } else if (element.type === ElementType.BOX) {
     return <div>button[{element.id}]</div>;
   }
 
