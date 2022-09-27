@@ -4,9 +4,12 @@ import { EditorContent, useEditor } from '@tiptap/react';
 import type { EditorOptions, HTMLContent, JSONContent } from '@tiptap/react';
 import { css, styled } from '@mui/material';
 
-import { BubbleMenu } from './bubble.menu';
+import { BubbleMenu } from './menus/menu.bubble';
 import { EditorContext } from './context';
+import Highlight from '@tiptap/extension-highlight';
+import { NewLineMenu } from './menus/menu.new.line';
 import StarterKit from '@tiptap/starter-kit';
+import Typography from '@tiptap/extension-typography';
 import { useChangeEvent } from './hooks/use.change.event';
 
 const Container = styled('div')(
@@ -28,7 +31,7 @@ export const TextEditor: React.FC<Props> = ({
   ...props
 }) => {
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [StarterKit, Typography, Highlight],
     content: value,
     editable,
     ...props,
@@ -47,6 +50,7 @@ export const TextEditor: React.FC<Props> = ({
         {editor && (
           <React.Fragment>
             <BubbleMenu />
+            <NewLineMenu />
           </React.Fragment>
         )}
       </Container>

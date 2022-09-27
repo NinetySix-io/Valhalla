@@ -1,7 +1,3 @@
-declare module '@editorjs/*' {
-  export default unknown;
-}
-
-declare module 'editorjs-text-color-plugin' {
+declare module '@tiptap/*' {
   export default unknown;
 }

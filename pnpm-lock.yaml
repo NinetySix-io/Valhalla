@@ -384,6 +384,8 @@ importers:
       '@storybook/theming': ^6.5.12
       '@testing-library/jest-dom': ^5.16.5
       '@testing-library/react': ^13.4.0
+      '@tiptap/extension-highlight': 2.0.0-beta.197
+      '@tiptap/extension-typography': 2.0.0-beta.197
       '@tiptap/react': 2.0.0-beta.196
       '@tiptap/starter-kit': 2.0.0-beta.196
       '@types/cookie': ^0.5.1
@@ -465,6 +467,8 @@ importers:
       '@emotion/styled': 11.10.4_bo6g5kkyx5y4ealzoy4dxykgri
       '@mui/lab': 5.0.0-alpha.99_tirxtp2um5uo2dmuyw4cewlzpq
       '@mui/material': 5.10.5_af5ln35zuaotaffazii6n6bke4
+      '@tiptap/extension-highlight': 2.0.0-beta.197_wfvnwgzkyirymnacbqpm22v55m
+      '@tiptap/extension-typography': 2.0.0-beta.197_wfvnwgzkyirymnacbqpm22v55m
       '@tiptap/react': 2.0.0-beta.196_xqkxfl7r37t4ymeshutfvrmugy
       '@tiptap/starter-kit': 2.0.0-beta.196
       '@valhalla/utilities': link:../../packages/utilities
@@ -8570,6 +8574,14 @@ packages:
       '@tiptap/core': 2.0.0-beta.196
     dev: false
 
+  /@tiptap/extension-highlight/2.0.0-beta.197_wfvnwgzkyirymnacbqpm22v55m:
+    resolution: {integrity: sha512-usMwS1zakdLX5WxVkSZWi41niVfVgZdazCEhl567O+7iOazJiGnbW7hbhM31QaLVAa9fRCT+JRV7o44SJ0C7oQ==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.0-beta.193
+    dependencies:
+      '@tiptap/core': 2.0.0-beta.196
+    dev: false
+
   /@tiptap/extension-history/2.0.0-beta.196_wfvnwgzkyirymnacbqpm22v55m:
     resolution: {integrity: sha512-dfUxqMcjA13dnWx/Yzo1AXFHwQ3lPylEfbk/TAjVO7BaqJ2PNIvoJ4u3KIJGg91w9L3kK2/qDlfWrE4IKZHdYQ==}
     peerDependencies:
@@ -8630,6 +8642,14 @@ packages:
 
   /@tiptap/extension-text/2.0.0-beta.196_wfvnwgzkyirymnacbqpm22v55m:
     resolution: {integrity: sha512-5oD82kEP4qTwT2PPgPkoFogpOXAjJv1K+9/r8rpUQOToIA2ZJHm1vU3MCIE+7OG+zjdB7IceWHAI0QSdbbVaoA==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.0-beta.193
+    dependencies:
+      '@tiptap/core': 2.0.0-beta.196
+    dev: false
+
+  /@tiptap/extension-typography/2.0.0-beta.197_wfvnwgzkyirymnacbqpm22v55m:
+    resolution: {integrity: sha512-yMeHyfrel0SaN8S3QZRnXreWOeadiloGFIpNjt1hSOHWGsdTmk6nRFfMnjM5ihno0mq37w13I53j0WoaJ6Vd8A==}
     peerDependencies:
       '@tiptap/core': ^2.0.0-beta.193
     dependencies:
