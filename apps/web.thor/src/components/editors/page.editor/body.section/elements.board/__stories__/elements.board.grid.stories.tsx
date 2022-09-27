@@ -9,11 +9,7 @@ import { last } from '@valhalla/utilities';
 import { storiesOf } from '@storybook/react';
 import { useBoardSize } from '../hooks/use.board.size';
 
-const StyledBoard = styled(ElementsBoardGrid)(
-  () => css`
-    border: solid thin red;
-  `,
-);
+const StyledBoard = styled(ElementsBoardGrid)(() => css``);
 
 storiesOf('NinetySix/Editors/Page Editor', module)
   .addDecorator((Story) => {

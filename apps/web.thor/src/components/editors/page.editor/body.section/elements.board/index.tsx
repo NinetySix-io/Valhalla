@@ -20,7 +20,7 @@ import { SelectionsOverlay } from './drag.processors/selections.overlay';
 import { mergeRefs } from 'react-merge-refs';
 import { useBoardSize } from './hooks/use.board.size';
 import { useDroppable } from '@dnd-kit/core';
-import { useEmitter } from './hooks/use.emitter';
+import { useSectionEmitter } from './hooks/use.section.emitter';
 import { useSelectionBoxListener } from './hooks/use.selection.box';
 import { useTargetedClick } from '@valhalla/web.react';
 
@@ -46,7 +46,7 @@ export const ElementsBoard: TElementsBoard = ({
   const store = useSectionStore();
   const ref = React.useRef<HTMLDivElement>();
   const sizeRef = useBoardSize();
-  const emitter = useEmitter(store.useSelect((state) => state.emitter));
+  const emitter = useSectionEmitter();
   const droppable = useDroppable({ id: sectionId });
 
   useShiftKeyListener();

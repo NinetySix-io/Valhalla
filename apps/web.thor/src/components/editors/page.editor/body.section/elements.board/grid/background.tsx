@@ -36,6 +36,9 @@ const Container = styled(
 
 export const Background: React.FC = () => {
   const store = useSectionStore();
-  const isVisible = store.useSelect((state) => !isNil(state.dragging));
+  const isVisible = store.useSelect(
+    (state) => !isNil(state.dragging || state.resizing),
+  );
+
   return <Container isVisible={isVisible} />;
 };

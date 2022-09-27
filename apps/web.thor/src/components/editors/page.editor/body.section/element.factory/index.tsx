@@ -9,7 +9,7 @@ import { useSectionStore } from '../scope.provider';
 type Props = {
   element: BoardElement;
   isFocus?: boolean;
-  onChange: (element: BoardElement) => void;
+  onChange?: (element: BoardElement) => void;
 };
 
 export const ElementFactory: React.FC<Props> = ({
@@ -30,8 +30,8 @@ export const ElementFactory: React.FC<Props> = ({
       />
     );
   } else if (element.type === ElementType.BOX) {
-    return <div>button[{element.id}]</div>;
+    return <button title={element.id}>button</button>;
   }
 
-  return <div>other</div>;
+  return <div>{element.type}</div>;
 };

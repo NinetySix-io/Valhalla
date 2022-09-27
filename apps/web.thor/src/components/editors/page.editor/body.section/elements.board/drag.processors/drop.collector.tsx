@@ -18,6 +18,7 @@ export const DropCollector: React.FC = () => {
   const processUpdates = React.useCallback(() => {
     const state = store.getState();
     const selections = state.selections;
+
     if (!isEmpty(selections)) {
       const elements = Object.values(state.elements);
       const { dragDelta } = cache.current;

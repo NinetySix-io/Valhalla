@@ -11,21 +11,23 @@ import { SectionsDecorator } from './decorators/sections.decorator';
 import { action } from '@storybook/addon-actions';
 import { compareById } from '@app/lib/compare.by.id';
 import { storiesOf } from '@storybook/react';
+import uniqueId from 'lodash.uniqueid';
 
 const Wrapper = styled('div')(
-  ({ theme }) => css`
+  () => css`
     display: flex;
     flex-direction: column;
     position: relative;
-    outline: solid thin ${theme.palette.grey[200]};
   `,
 );
 
-const FixedTop = styled('div')`
-  position: absolute;
-  top: 0;
-  left: 0;
-`;
+const FixedTop = styled('div')(
+  ({ theme }) => css`
+    position: absolute;
+    top: ${theme.spacing(1)};
+    left: ${theme.spacing(1)};
+  `,
+);
 
 const Board: React.FC<React.PropsWithChildren<{ section: Section }>> = ({
   section,
@@ -45,7 +47,7 @@ const Board: React.FC<React.PropsWithChildren<{ section: Section }>> = ({
         onElementAdded={(element) => {
           EditorStore.actions.addElement(section.id, {
             ...element,
-            id: new Date().valueOf().toString(),
+            id: uniqueId(section.id),
           });
 
           action('onElementAdded')(section.id, element);
@@ -63,13 +65,7 @@ const Board: React.FC<React.PropsWithChildren<{ section: Section }>> = ({
         {elements.map((element) => {
           return (
             <ElementsBoard.Item key={element.id} element={element}>
-              <ElementFactory
-                element={element}
-                onChange={(nextElement) => {
-                  action('onChange')(nextElement);
-                  EditorStore.actions.updateElement(section.id, nextElement);
-                }}
-              />
+              <ElementFactory element={element} />
             </ElementsBoard.Item>
           );
         })}

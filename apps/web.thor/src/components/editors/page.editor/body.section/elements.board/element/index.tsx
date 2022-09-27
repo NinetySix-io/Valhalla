@@ -16,6 +16,7 @@ import {
 } from './selectors';
 
 import type { DIRECTION } from '../lib/directions';
+import { ElementsBoardItemMenu } from './menu';
 import { PropsProvider } from '@app/components/props.provider';
 import { Resizer } from './resizer';
 import { calculateResize } from '../lib/calculate.resize';
@@ -32,7 +33,6 @@ const Container = styled(
   Resizer,
   makeFilterProps([
     'transform',
-    'label',
     'gridArea',
     'isFocus',
     'isDragging',
@@ -43,7 +43,6 @@ const Container = styled(
   ]),
 )<{
   transform?: XYCoord;
-  label: string;
   gridArea: string;
   isFocus: boolean;
   isDragging: boolean;
@@ -54,7 +53,6 @@ const Container = styled(
 }>(
   ({
     theme,
-    label,
     gridArea,
     isFocus,
     isDragging,
@@ -64,9 +62,6 @@ const Container = styled(
     shouldPeak,
     isEditingText,
   }) => {
-    const mainColor: string = theme.palette.primary.main;
-    const textColor: string = theme.palette.getContrastText(mainColor);
-
     if (!gridArea) {
       return css`
         display: none;
@@ -110,7 +105,7 @@ const Container = styled(
       ${isFocus
         ? !isDragging &&
           css`
-            outline-color: ${mainColor};
+            outline-color: ${theme.palette.primary.main};
 
             ${isEditingText &&
             css`
@@ -118,33 +113,10 @@ const Container = styled(
               margin: ${theme.spacing(-1)};
             `}
           `
-        : css`
+        : !isDragging &&
+          css`
             &:hover {
-              /* LABEL */
-              ${!isDragging &&
-              css`
-                outline-color: ${mainColor};
-
-                &:before {
-                  content: '${label}';
-                  top: -20px;
-                  left: -3px;
-                  height: 18px;
-                  overflow: hidden;
-                  height: max-content;
-                  font-size: ${theme.typography.caption.fontSize};
-                  padding: 2px ${theme.spacing(1)};
-                  background-color: ${mainColor};
-                  border-top-left-radius: 3px;
-                  border-top-right-radius: 3px;
-                  font-family: ${theme.typography.fontFamily};
-                  position: absolute;
-                  color: ${textColor};
-                  display: flex;
-                  flex-direction: column;
-                  justify-content: center;
-                }
-              `}
+              outline-color: ${theme.palette.primary.main};
             }
           `}
     `;
@@ -203,6 +175,10 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
       emitter.client.emit('elementsUpdated', [element]);
     }
 
+    function handleChildrenUpdate(nextElement: DroppedElement) {
+      emitter.client.emit('elementsUpdated', [nextElement]);
+    }
+
     return (
       <Container
         {...props}
@@ -221,7 +197,6 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
         alwaysVisible={isFocus || isResizing}
         isDragging={isDragging || hasDragging}
         disableResize={isDragging || isMultiSelected || hasDragging}
-        label={element.type?.toUpperCase()}
         gridArea={gridArea}
         isFocus={(isFocus || isResizing) && !hasDragging}
         minWidth={cellSize}
@@ -232,9 +207,15 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
         isMultiSelected={isMultiSelected}
         isEditingText={isEditingText}
       >
+        <ElementsBoardItemMenu
+          label={element.type}
+          parent={container.current}
+          isVisible={!isFocus}
+        />
         <PropsProvider
           props={{
             isFocus,
+            onChange: handleChildrenUpdate,
           }}
         >
           {children}

@@ -33,6 +33,7 @@ export class EventsEmitter<T1 extends Record<string, any>> {
    */
   emit<T2 extends keyof T1>(eventType: T2, payload: T1[T2]) {
     const arr = this.listeners[eventType as string];
+
     if (arr && arr.length) {
       for (const listener of arr) {
         listener?.(payload);

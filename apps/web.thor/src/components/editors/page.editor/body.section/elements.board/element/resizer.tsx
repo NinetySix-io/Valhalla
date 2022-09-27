@@ -19,8 +19,8 @@ import { mergeRefs } from 'react-merge-refs';
 const Container = styled('div')(
   () => css`
     --pt: 4px;
-    --mg: calc(-1 * (var(--pt) / 2));
-    --cg: calc(3 * var(--mg));
+    --mg: calc(-1 * (var(--pt)));
+    --cg: calc(var(--mg) * (1 / 2));
     --cw: calc(2 * var(--pt));
 
     &:hover,
@@ -44,6 +44,7 @@ const Corner = styled(
     | DIRECTION.TOP_RIGHT;
 }>(
   ({ theme, direction, isVisible }) => css`
+    --br: 3px;
     height: var(--cw);
     width: var(--cw);
     z-index: 1;
@@ -53,10 +54,13 @@ const Corner = styled(
     transition: ${theme.transitions.create(['transform'], {
       duration: theme.transitions.duration.shortest,
     })};
+
     &:active,
     &:hover {
       transform: scale(3);
+      border-radius: 0;
     }
+
     ${direction === DIRECTION.BOTTOM_RIGHT &&
     css`
       cursor: se-resize;
@@ -64,7 +68,9 @@ const Corner = styled(
       right: var(--cg);
       border-left: none;
       border-top: none;
+      border-bottom-right-radius: var(--br);
     `}
+
     ${direction === DIRECTION.BOTTOM_LEFT &&
     css`
       cursor: sw-resize;
@@ -72,7 +78,9 @@ const Corner = styled(
       left: var(--cg);
       border-right: none;
       border-top: none;
+      border-bottom-left-radius: var(--br);
     `}
+
     ${direction === DIRECTION.TOP_RIGHT &&
     css`
       cursor: ne-resize;
@@ -80,7 +88,9 @@ const Corner = styled(
       top: var(--cg);
       border-left: none;
       border-bottom: none;
+      border-top-right-radius: var(--br);
     `}
+
     ${direction === DIRECTION.TOP_LEFT &&
     css`
       cursor: nw-resize;
@@ -88,6 +98,7 @@ const Corner = styled(
       top: var(--cg);
       border-right: none;
       border-bottom: none;
+      border-top-left-radius: var(--br);
     `}
   `,
 );
@@ -105,12 +116,13 @@ const HorizontalBar = styled(
     justify-content: center;
     user-select: none;
     height: var(--cw);
-    visibility: hidden;
+
     ${direction === DIRECTION.TOP &&
     css`
       top: var(--mg);
       cursor: n-resize;
     `}
+
     ${direction === DIRECTION.BOTTOM &&
     css`
       bottom: var(--mg);
@@ -134,7 +146,7 @@ const VerticalBar = styled(
     flex-direction: column;
     justify-content: center;
     width: var(--pt);
-    visibility: visible;
+
     ${direction === DIRECTION.LEFT &&
     css`
       left: var(--mg);
