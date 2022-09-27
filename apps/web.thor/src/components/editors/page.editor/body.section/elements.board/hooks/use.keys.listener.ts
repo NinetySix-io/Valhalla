@@ -32,8 +32,11 @@ export function useDeleteKeyListener() {
         return;
       }
 
-      const { selections, elements } = store.getState();
+      const { selections, elements, isEditingText } = store.getState();
       const deleted: DroppedElement['id'][] = [];
+      if (isEditingText) {
+        return;
+      }
 
       for (const elementId of Object.keys(elements)) {
         if (selections.includes(elementId)) {
