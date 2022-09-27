@@ -5,9 +5,16 @@ import { ActionButton, MenuContainer } from '../style';
 import { BubbleMenu as TTBubbleMenu } from '@tiptap/react';
 import { useEditor } from '../../context';
 
+type Props = {
+  isDisabled?: boolean;
+};
+
 //TODO: Icons
-export const BubbleMenu: React.FC = () => {
+export const BubbleMenu: React.FC<Props> = ({ isDisabled }) => {
   const editor = useEditor();
+  if (!editor || isDisabled) {
+    return null;
+  }
 
   return (
     <TTBubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>

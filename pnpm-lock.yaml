@@ -385,6 +385,7 @@ importers:
       '@testing-library/jest-dom': ^5.16.5
       '@testing-library/react': ^13.4.0
       '@tiptap/extension-highlight': 2.0.0-beta.197
+      '@tiptap/extension-placeholder': 2.0.0-beta.197
       '@tiptap/extension-typography': 2.0.0-beta.197
       '@tiptap/react': 2.0.0-beta.196
       '@tiptap/starter-kit': 2.0.0-beta.196
@@ -468,6 +469,7 @@ importers:
       '@mui/lab': 5.0.0-alpha.99_tirxtp2um5uo2dmuyw4cewlzpq
       '@mui/material': 5.10.5_af5ln35zuaotaffazii6n6bke4
       '@tiptap/extension-highlight': 2.0.0-beta.197_wfvnwgzkyirymnacbqpm22v55m
+      '@tiptap/extension-placeholder': 2.0.0-beta.197_wfvnwgzkyirymnacbqpm22v55m
       '@tiptap/extension-typography': 2.0.0-beta.197_wfvnwgzkyirymnacbqpm22v55m
       '@tiptap/react': 2.0.0-beta.196_xqkxfl7r37t4ymeshutfvrmugy
       '@tiptap/starter-kit': 2.0.0-beta.196
@@ -8630,6 +8632,17 @@ packages:
       '@tiptap/core': ^2.0.0-beta.193
     dependencies:
       '@tiptap/core': 2.0.0-beta.196
+    dev: false
+
+  /@tiptap/extension-placeholder/2.0.0-beta.197_wfvnwgzkyirymnacbqpm22v55m:
+    resolution: {integrity: sha512-kzY9ctX/0gFFxuOPJPOmDs8I9giDX38YHZFW2mLyO81TC2kyRNuGcmV/I/8Abe4+efhkZm8PBK3WwaK5/q3IWA==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.0-beta.193
+    dependencies:
+      '@tiptap/core': 2.0.0-beta.196
+      prosemirror-model: 1.18.1
+      prosemirror-state: 1.4.1
+      prosemirror-view: 1.28.2
     dev: false
 
   /@tiptap/extension-strike/2.0.0-beta.196_wfvnwgzkyirymnacbqpm22v55m:
@@ -19804,7 +19817,7 @@ packages:
     dependencies:
       prosemirror-state: 1.4.1
       prosemirror-transform: 1.7.0
-      prosemirror-view: 1.26.2
+      prosemirror-view: 1.28.2
     dev: false
 
   /prosemirror-gapcursor/1.3.0:
@@ -19813,7 +19826,7 @@ packages:
       prosemirror-keymap: 1.2.0
       prosemirror-model: 1.18.1
       prosemirror-state: 1.4.1
-      prosemirror-view: 1.26.2
+      prosemirror-view: 1.28.2
     dev: false
 
   /prosemirror-history/1.3.0:
@@ -19866,6 +19879,14 @@ packages:
 
   /prosemirror-view/1.26.2:
     resolution: {integrity: sha512-CGKw+GadkfSBEwRAJTHCEKJ4DlV6/3IhAdjpwGyZHUHtbP7jX4Ol4zmi7xa2c6GOabDlIJLYXJydoNYLX7lNeQ==}
+    dependencies:
+      prosemirror-model: 1.18.1
+      prosemirror-state: 1.4.1
+      prosemirror-transform: 1.7.0
+    dev: false
+
+  /prosemirror-view/1.28.2:
+    resolution: {integrity: sha512-uK28mJbu0GI8Oz7Aclt6BKL4g+C59EBShBXDB0Y9Y71H25p4bQgmLQLfDWjsT1J9XOw0bR8QQajZmdK8RvXI9g==}
     dependencies:
       prosemirror-model: 1.18.1
       prosemirror-state: 1.4.1

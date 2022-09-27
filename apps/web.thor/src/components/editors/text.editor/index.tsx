@@ -8,11 +8,22 @@ import { BubbleMenu } from './menus/menu.bubble';
 import { EditorContext } from './context';
 import Highlight from '@tiptap/extension-highlight';
 import { NewLineMenu } from './menus/menu.new.line';
+import Placeholder from '@tiptap/extension-placeholder';
 import StarterKit from '@tiptap/starter-kit';
 import Typography from '@tiptap/extension-typography';
 import { useEditorSubscription } from './hooks/use.editor.subscription';
 
-const Container = styled('div')(() => css``);
+const Container = styled('div')(
+  ({ theme }) => css`
+    .ProseMirror p.is-editor-empty:first-child::before {
+      color: ${theme.palette.grey[400]};
+      content: attr(data-placeholder);
+      float: left;
+      height: 0;
+      pointer-events: none;
+    }
+  `,
+);
 
 type Props = {
   value?: JSONContent;
@@ -35,7 +46,15 @@ export const TextEditor: React.FC<Props> = ({
 }) => {
   const container = React.useRef<HTMLDivElement>();
   const editor = useEditor({
-    extensions: [StarterKit, Typography, Highlight],
+    extensions: [
+      StarterKit,
+      Typography,
+      Highlight,
+      Placeholder.configure({
+        placeholder: 'Write here',
+        showOnlyWhenEditable: false,
+      }),
+    ],
     content: value,
     editable,
     onFocus: () => {
@@ -67,12 +86,8 @@ export const TextEditor: React.FC<Props> = ({
     <EditorContext.Provider value={{ editor }}>
       <Container ref={container}>
         <EditorContent editor={editor} />
-        {editor && (
-          <React.Fragment>
-            <BubbleMenu />
-            <NewLineMenu />
-          </React.Fragment>
-        )}
+        <BubbleMenu />
+        <NewLineMenu isDisabled />
       </Container>
     </EditorContext.Provider>
   );

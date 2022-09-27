@@ -66,10 +66,7 @@ export const ElementsMenu: React.FC<Props> = ({ isVisible, ...props }) => {
                 type: ElementType.TEXT,
                 xSpan: 3,
                 ySpan: 1,
-                props: {
-                  json: {},
-                  html: '',
-                },
+                props: {},
               }}
             >
               Text

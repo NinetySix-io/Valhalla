@@ -5,9 +5,17 @@ import { ActionButton, MenuContainer } from '../style';
 import { FloatingMenu } from '@tiptap/react';
 import { useEditor } from '../../context';
 
-export const NewLineMenu: React.FC = () => {
+type Props = {
+  isDisabled?: boolean;
+};
+
+export const NewLineMenu: React.FC<Props> = ({ isDisabled }) => {
   const editor = useEditor();
   const levels = [1, 2, 3, 4, 5, 6] as const;
+
+  if (!editor || isDisabled) {
+    return null;
+  }
 
   return (
     <FloatingMenu editor={editor} tippyOptions={{ duration: 100 }}>

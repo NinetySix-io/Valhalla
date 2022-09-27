@@ -18,11 +18,17 @@ const Template: Story<Props> = (props) => {
 };
 
 export const Default = Template.bind({});
-const args: Props = {
+export const Empty = Template.bind({});
+
+Default.args = {
   editable: true,
   value: makeParagraphJson(),
 };
 
-Default.args = args;
+Empty.args = {
+  autofocus: true,
+  editable: true,
+  value: undefined,
+};
 
 export default Meta;

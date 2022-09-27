@@ -23,8 +23,8 @@ export function makeTextJson() {
         type: 'text',
         text: faker.lorem.words(
           faker.datatype.number({
-            min: 5,
-            max: 20,
+            min: 1,
+            max: 3,
           }),
         ),
       })),

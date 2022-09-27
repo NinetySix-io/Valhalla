@@ -7,11 +7,8 @@ import {
 
 import type { DecoratorFn } from '@storybook/react';
 import { ElementType } from '@app/generated/valhalla.gql';
-import StarterKit from '@tiptap/starter-kit';
 import { faker } from '@faker-js/faker';
-import { generateHTML } from '@tiptap/react';
 import { makeArray } from '@app/storybook/lib/array';
-import { makeTextJson } from '@app/storybook/tools/editor/make.text.json';
 
 export const SectionsDecorator = (
   sectionsCount = 1,
@@ -34,18 +31,14 @@ export const SectionsDecorator = (
 
         makeArray(elementsCount).forEach((_, idx) => {
           const id = section.id + 'e' + idx;
-          const json = makeTextJson();
           EditorStore.actions.addElement(section.id, {
             id,
             type: ElementType.TEXT,
-            x: faker.datatype.number({ min: 1, max: 10 }),
+            x: faker.datatype.number({ min: 2, max: 10 }),
             y: faker.datatype.number({ min: 1, max: 10 }),
             xSpan: faker.datatype.number({ min: 1, max: 5 }),
             ySpan: faker.datatype.number({ min: 1, max: 5 }),
-            props: {
-              json,
-              html: generateHTML(json, [StarterKit]),
-            },
+            props: {},
           });
         });
       }
