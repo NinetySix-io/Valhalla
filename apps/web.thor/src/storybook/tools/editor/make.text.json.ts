@@ -21,7 +21,12 @@ export function makeTextJson() {
       type: 'paragraph',
       content: makeArray(1).map(() => ({
         type: 'text',
-        text: faker.lorem.text(),
+        text: faker.lorem.words(
+          faker.datatype.number({
+            min: 5,
+            max: 20,
+          }),
+        ),
       })),
     })),
   };

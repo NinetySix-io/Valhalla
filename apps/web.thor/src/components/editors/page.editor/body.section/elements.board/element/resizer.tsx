@@ -22,8 +22,6 @@ const Container = styled('div')(
     --mg: calc(-1 * (var(--pt) / 2));
     --cg: calc(3 * var(--mg));
     --cw: calc(2 * var(--pt));
-    height: 100%;
-    width: 100%;
 
     &:hover,
     &:focus {

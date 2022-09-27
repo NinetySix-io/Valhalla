@@ -37,8 +37,8 @@ export const SectionsDecorator = (
           EditorStore.actions.addElement(section.id, {
             id,
             type: 'Text',
-            x: faker.datatype.number({ min: 0, max: 10 }),
-            y: faker.datatype.number({ min: 0, max: 10 }),
+            x: faker.datatype.number({ min: 1, max: 10 }),
+            y: faker.datatype.number({ min: 1, max: 10 }),
             xSpan: faker.datatype.number({ min: 1, max: 5 }),
             ySpan: faker.datatype.number({ min: 1, max: 5 }),
             props: {

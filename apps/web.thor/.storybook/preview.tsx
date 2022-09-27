@@ -5,9 +5,13 @@ import * as React from 'react';
 import { DecoratorFn } from '@storybook/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
+import { UserAgentStyleDisabler } from '../src/storybook/decorators/user.agent.style';
 import { provideTheme } from '../src/storybook/decorators/theme.provider.decorator';
 
-export const decorators: DecoratorFn[] = [provideTheme()];
+export const decorators: DecoratorFn[] = [
+  provideTheme(),
+  UserAgentStyleDisabler,
+];
 
 export const parameters = {
   actions: {
