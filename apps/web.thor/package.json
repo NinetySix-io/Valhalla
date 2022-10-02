@@ -27,6 +27,7 @@
     "@emotion/styled": "^11.10.4",
     "@mui/lab": "5.0.0-alpha.99",
     "@mui/material": "^5.10.5",
+    "@react-hook/resize-observer": "^1.2.6",
     "@tiptap/extension-highlight": "2.0.0-beta.197",
     "@tiptap/extension-placeholder": "2.0.0-beta.197",
     "@tiptap/extension-typography": "2.0.0-beta.197",
@@ -61,8 +62,7 @@
     "react-merge-refs": "^2.0.1",
     "react-use": "^17.4.0",
     "tiamut": "^1.2.2",
-    "try-nice": "^4.0.4",
-    "use-resize-observer": "^9.0.2"
+    "try-nice": "^4.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.19.0",

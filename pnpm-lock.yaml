@@ -369,6 +369,7 @@ importers:
       '@mui/lab': 5.0.0-alpha.99
       '@mui/material': ^5.10.5
       '@next/bundle-analyzer': ^12.3.0
+      '@react-hook/resize-observer': ^1.2.6
       '@storybook/addon-a11y': ^6.5.12
       '@storybook/addon-actions': ^6.5.12
       '@storybook/addon-console': ^1.2.3
@@ -457,7 +458,6 @@ importers:
       typescript: ^4.8.3
       typescript-plugin-css-modules: ^3.4.0
       typescript-styled-plugin: ^0.18.2
-      use-resize-observer: ^9.0.2
     dependencies:
       '@apollo/client': 3.6.9_onqnqwb3ubg5opvemcqf7c2qhy
       '@dnd-kit/core': 6.0.5_biqbaboplfbrettd7655fr4n2y
@@ -468,6 +468,7 @@ importers:
       '@emotion/styled': 11.10.4_bo6g5kkyx5y4ealzoy4dxykgri
       '@mui/lab': 5.0.0-alpha.99_tirxtp2um5uo2dmuyw4cewlzpq
       '@mui/material': 5.10.5_af5ln35zuaotaffazii6n6bke4
+      '@react-hook/resize-observer': 1.2.6_react@18.2.0
       '@tiptap/extension-highlight': 2.0.0-beta.197_wfvnwgzkyirymnacbqpm22v55m
       '@tiptap/extension-placeholder': 2.0.0-beta.197_wfvnwgzkyirymnacbqpm22v55m
       '@tiptap/extension-typography': 2.0.0-beta.197_wfvnwgzkyirymnacbqpm22v55m
@@ -503,7 +504,6 @@ importers:
       react-use: 17.4.0_biqbaboplfbrettd7655fr4n2y
       tiamut: 1.2.2_immer@9.0.15+react@18.2.0
       try-nice: 4.0.4
-      use-resize-observer: 9.0.2_biqbaboplfbrettd7655fr4n2y
     devDependencies:
       '@babel/core': 7.19.0
       '@faker-js/faker': 7.5.0
@@ -6122,11 +6122,30 @@ packages:
       react: 18.2.0
     dev: false
 
+  /@react-hook/passive-layout-effect/1.2.1_react@18.2.0:
+    resolution: {integrity: sha512-IwEphTD75liO8g+6taS+4oqz+nnroocNfWVHWz7j+N+ZO2vYrc6PV1q7GQhuahL0IOR7JccFTsFKQ/mb6iZWAg==}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      react: 18.2.0
+    dev: false
+
   /@react-hook/previous/1.0.1_react@18.2.0:
     resolution: {integrity: sha512-O7VaRLDEHRy1hxh03CmtWRxDhCwIVQBBkf1kYdYqUP3KNrPnQMIVIYYYQpHIIiNcS1BO6zmBKM4bugFDNgP8Iw==}
     peerDependencies:
       react: '>=16.8'
     dependencies:
+      react: 18.2.0
+    dev: false
+
+  /@react-hook/resize-observer/1.2.6_react@18.2.0:
+    resolution: {integrity: sha512-DlBXtLSW0DqYYTW3Ft1/GQFZlTdKY5VAFIC4+km6IK5NiPPDFchGbEJm1j6pSgMqPRHbUQgHJX7RaR76ic1LWA==}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      '@juggle/resize-observer': 3.4.0
+      '@react-hook/latest': 1.0.3_react@18.2.0
+      '@react-hook/passive-layout-effect': 1.2.1_react@18.2.0
       react: 18.2.0
     dev: false
 
@@ -23326,17 +23345,6 @@ packages:
       '@types/react': 18.0.20
       react: 18.2.0
     dev: true
-
-  /use-resize-observer/9.0.2_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-JOzsmF3/IDmtjG7OE5qXOP69LEpBpwhpLSiT1XgSr+uFRX0ftJHQnDaP7Xq+uhbljLYkJt67sqsbnyXBjiY8ig==}
-    peerDependencies:
-      react: 16.8.0 - 18
-      react-dom: 16.8.0 - 18
-    dependencies:
-      '@juggle/resize-observer': 3.4.0
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-    dev: false
 
   /use-subscription/1.8.0_react@18.2.0:
     resolution: {integrity: sha512-LISuG0/TmmoDoCRmV5XAqYkd3UCBNM0ML3gGBndze65WITcsExCD3DTvXXTLyNcOC0heFQZzluW88bN/oC1DQQ==}

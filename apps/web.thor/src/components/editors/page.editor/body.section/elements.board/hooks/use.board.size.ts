@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { mergeRefs } from 'react-merge-refs';
-import useResizeObserver from 'use-resize-observer';
+import useResizeObserver from '@react-hook/resize-observer';
 import { useSectionStore } from '../../scope.provider';
 
 /**
@@ -31,11 +31,9 @@ export function useBoardSize() {
     }
   };
 
-  const { ref: observerRef } = useResizeObserver({
-    onResize: (size) => {
-      requestAnimationFrame(() => handleAdjustment(size.width));
-    },
-  });
+  useResizeObserver(container, (entry) =>
+    handleAdjustment(entry.target.clientWidth),
+  );
 
   React.useEffect(() => {
     if (container) {
@@ -43,5 +41,5 @@ export function useBoardSize() {
     }
   }, [container, handleAdjustment]);
 
-  return mergeRefs([_setContainer, observerRef]);
+  return mergeRefs([_setContainer]);
 }

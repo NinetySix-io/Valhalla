@@ -4,13 +4,13 @@ import { Button, styled } from '@mui/material';
 
 import { CreateSiteModal } from '@app/components/site.create.modal';
 import { SiteList } from '@app/components/site.list';
-import { useGetSitesQuery } from '@app/generated/valhalla.gql';
 import { TenantMainLayout } from '@app/layout/tenant.main';
+import type { View } from '@app/types/next';
 import { composeNextPlugins } from '@app/next/plugins/compose.plugins';
+import { makeTenantStaticPaths } from '@app/next/tenant/make.static.paths';
+import { useGetSitesQuery } from '@app/generated/valhalla.gql';
 import { withApollo } from '@app/next/plugins/presets/with.apollo';
 import { withOrgContext } from '@app/next/plugins/presets/with.org.context';
-import { makeTenantStaticPaths } from '@app/next/tenant/make.static.paths';
-import type { View } from '@app/types/next';
 
 const Container = styled('div')``;
 
@@ -22,7 +22,11 @@ const SiteListView: View = () => {
     <Container>
       <Button onClick={() => setAddingSite(true)}>Add Site</Button>
       <SiteList />
-      <CreateSiteModal isOpen={addingSite} onFinish={() => sites.refetch()} />
+      <CreateSiteModal
+        isOpen={addingSite}
+        onFinish={() => sites.refetch()}
+        onClose={() => setAddingSite(false)}
+      />
     </Container>
   );
 };

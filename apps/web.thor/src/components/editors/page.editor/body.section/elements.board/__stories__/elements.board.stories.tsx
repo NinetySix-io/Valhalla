@@ -81,7 +81,7 @@ storiesOf('NinetySix/Editors/Page Editor/Board', module)
     return (
       <Wrapper>
         <Board section={section}>
-          <FixedTop className="fixed-top">
+          <FixedTop>
             <ElementsMenu placement="left-start" isVisible />
           </FixedTop>
         </Board>
@@ -95,7 +95,7 @@ storiesOf('NinetySix/Editors/Page Editor/Board', module)
         {sections.map((section) => (
           <Wrapper key={section.id}>
             <Board section={section}>
-              <FixedTop className="fixed-top">
+              <FixedTop>
                 <ElementsMenu placement="left-start" isVisible />
               </FixedTop>
             </Board>
