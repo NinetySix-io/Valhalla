@@ -16,7 +16,7 @@ export function useEmitter<E extends BasicObject>(emitter: EventsEmitter<E>) {
   ) {
     return useSubscription(
       () => emitter.addListener(eventK, onEvent),
-      [onEvent, eventK, emitter],
+      [eventK, emitter],
     );
   }
 
