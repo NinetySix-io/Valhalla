@@ -5,6 +5,8 @@ export type XYCoord = {
   y: number;
 };
 
+export type Position = Size & XYCoord;
+
 export type BaseElement<Type extends string = string, P = unknown> = {
   type: Type;
   canResize?: boolean;

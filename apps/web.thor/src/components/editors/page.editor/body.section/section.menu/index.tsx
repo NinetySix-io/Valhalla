@@ -5,6 +5,7 @@ import { Button, Divider, Popover, Stack, css, styled } from '@mui/material';
 import { EditorMenu } from '../../menu';
 import { EditorStore } from '../../store';
 import { SectionMenuContent } from './content';
+import { useHelperDisplay } from '../hooks/use.helpers.display';
 import { useSectionId } from '../scope.provider';
 
 const ActionBtn = styled(Button)(
@@ -15,13 +16,15 @@ const ActionBtn = styled(Button)(
 );
 
 type Props = {
-  isVisible: boolean;
+  index: number;
 } & Pick<React.ComponentProps<typeof EditorMenu>, 'style' | 'placement'>;
 
-export const SectionMenu: React.FC<Props> = ({ isVisible, ...props }) => {
+export const SectionMenu: React.FC<Props> = ({ index, ...props }) => {
   const anchor = React.useRef<HTMLDivElement>();
   const sectionId = useSectionId();
   const [menuVisible, setMenuVisible] = React.useState(false);
+  const sectionsCount = EditorStore.useSelect((state) => state.sections.length);
+  const isVisible = useHelperDisplay();
 
   function handleDelete() {
     EditorStore.actions.deleteSection(sectionId);
@@ -33,6 +36,10 @@ export const SectionMenu: React.FC<Props> = ({ isVisible, ...props }) => {
 
   function moveDown() {
     EditorStore.actions.moveSectionDown(sectionId);
+  }
+
+  function handleCopy() {
+    alert('TODO');
   }
 
   function openMenu() {
@@ -51,9 +58,15 @@ export const SectionMenu: React.FC<Props> = ({ isVisible, ...props }) => {
         </Button>
         <Divider />
         <Stack direction="row" spacing={0.5}>
-          <ActionBtn onClick={moveDown}>Down</ActionBtn>
-          <ActionBtn onClick={moveUp}>Up</ActionBtn>
-          <ActionBtn>Copy</ActionBtn>
+          <ActionBtn disabled={index === sectionsCount - 1} onClick={moveDown}>
+            Down
+          </ActionBtn>
+          <ActionBtn disabled={index === 0} onClick={moveUp}>
+            Up
+          </ActionBtn>
+          <ActionBtn color="warning" onClick={handleCopy}>
+            Copy
+          </ActionBtn>
           <ActionBtn color="error" onClick={handleDelete}>
             Delete
           </ActionBtn>

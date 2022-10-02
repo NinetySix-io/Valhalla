@@ -8,12 +8,12 @@ import { EditorStore } from '../store';
 import { ElementFactory } from './element.factory';
 import { ElementsBoard } from './elements.board';
 import { ElementsMenu } from './elements.menu';
+import { Outline } from './outline';
 import { ScreenSize } from '../constants';
 import type { Section } from '../store/types';
 import { SectionMenu } from './section.menu';
 import { SectionProvider } from './scope.provider';
 import { compareById } from '@app/lib/compare.by.id';
-import throttle from 'lodash.throttle';
 import uniqueId from 'lodash.uniqueid';
 
 type Props = {
@@ -21,12 +21,8 @@ type Props = {
 };
 
 export const BodySection: React.FC<Props> = React.memo(({ sectionId }) => {
-  const isDragging = EditorStore.useSelect((state) => state.isDragging);
-  const isActive = EditorStore.useSelect(
-    (state) => state.activeSection === sectionId,
-  );
-  const isFirstSection = EditorStore.useSelect(
-    (state) => state.sections.findIndex(compareById(sectionId)) === 0,
+  const sectionIndex = EditorStore.useSelect((state) =>
+    state.sections.findIndex(compareById(sectionId)),
   );
   const section = EditorStore.useSelect((state) =>
     state.sections.find(compareById(sectionId)),
@@ -34,20 +30,15 @@ export const BodySection: React.FC<Props> = React.memo(({ sectionId }) => {
   const isMobile = EditorStore.useSelect(
     (state) => state.size < ScreenSize.DESKTOP,
   );
-  const markActive = throttle(() => {
-    EditorStore.actions.setActiveSection(sectionId);
-  }, 100);
-
-  const shouldDisplayHelpers = !isDragging && isActive;
 
   function handleHover() {
-    if (!isActive) {
-      markActive();
+    if (EditorStore.getState().activeSection !== sectionId) {
+      EditorStore.actions.setActiveSection(sectionId);
     }
   }
 
   function handleLeave() {
-    if (isActive) {
+    if (EditorStore.getState().activeSection) {
       EditorStore.actions.setActiveSection(null);
     }
   }
@@ -77,35 +68,28 @@ export const BodySection: React.FC<Props> = React.memo(({ sectionId }) => {
         id={sectionId}
         onMouseEnter={handleHover}
         onMouseLeave={handleLeave}
-        isHover={isActive}
       >
-        <ElementsBoard
-          onConfigChange={handleConfigChange}
-          onElementsUpdated={handleElementsUpdated}
-          onElementsDeleted={handleElementsDeleted}
-          onElementAdded={handleAddElement}
-        >
+        <ElementsBoard.DndContext>
           <MenuArea isMobile={isMobile}>
-            <ElementsMenu
-              placement="left-start"
-              isVisible={shouldDisplayHelpers}
-            />
-            <SectionMenu
-              placement="right-start"
-              isVisible={shouldDisplayHelpers}
-            />
+            <ElementsMenu placement="left-start" />
+            <SectionMenu placement="right-start" index={sectionIndex} />
           </MenuArea>
-          {section.children?.map((element) => (
-            <ElementsBoard.Item key={element.id} element={element}>
-              <ElementFactory element={element} />
-            </ElementsBoard.Item>
-          ))}
-        </ElementsBoard>
-        <AddSectionBtn
-          align="top"
-          isVisible={shouldDisplayHelpers && !isFirstSection}
-        />
-        <AddSectionBtn align="bottom" isVisible={shouldDisplayHelpers} />
+          <ElementsBoard
+            onConfigChange={handleConfigChange}
+            onElementsUpdated={handleElementsUpdated}
+            onElementsDeleted={handleElementsDeleted}
+            onElementAdded={handleAddElement}
+          >
+            {section.children.map((element) => (
+              <ElementsBoard.Item key={element.id} element={element}>
+                <ElementFactory element={element} />
+              </ElementsBoard.Item>
+            ))}
+          </ElementsBoard>
+          <Outline />
+          <AddSectionBtn align="top" />
+          <AddSectionBtn align="bottom" />
+        </ElementsBoard.DndContext>
       </Container>
     </SectionProvider>
   );

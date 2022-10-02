@@ -26,11 +26,11 @@ export function calculateResize({
   const nextYSpan = getClampPosition(nextSize.height, cellSize);
 
   if (isLeft(direction)) {
-    nextElement.x = Math.max(1, element.x - (nextXSpan - element.xSpan));
+    nextElement.x = Math.max(0, element.x - (nextXSpan - element.xSpan));
   }
 
   if (isUp(direction)) {
-    nextElement.y = Math.max(1, element.y - (nextYSpan - element.ySpan));
+    nextElement.y = Math.max(0, element.y - (nextYSpan - element.ySpan));
   }
 
   nextElement.xSpan = nextXSpan;

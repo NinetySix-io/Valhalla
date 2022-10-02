@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { maxScreenWidth } from '../../../constants';
 import { mergeRefs } from 'react-merge-refs';
 import useResizeObserver from '@react-hook/resize-observer';
 import { useSectionStore } from '../../scope.provider';
@@ -16,7 +17,7 @@ export function useBoardSize() {
 
   const handleAdjustment = React.useCallback(
     (width: number) => {
-      const nextCellSize = width / columnsCount;
+      const nextCellSize = Math.min(width, maxScreenWidth) / columnsCount;
       if (store.getState().cellSize !== nextCellSize) {
         store.actions.setCellSize(nextCellSize);
       }

@@ -2,11 +2,8 @@ import * as React from 'react';
 
 import type {
   DroppedElement,
-  Size,
-  XYCoord,
+  Position,
 } from '@app/components/editors/page.editor/types';
-import { css, styled } from '@mui/material';
-import { makeFilterProps, useTemporal } from '@valhalla/web.react';
 import {
   selectIsDragging,
   selectIsMultiSelected,
@@ -15,10 +12,10 @@ import {
   selectShouldPeakWhenClose,
 } from './selectors';
 
+import { Container } from './styles';
 import type { DIRECTION } from '../lib/directions';
 import { ElementsBoardItemMenu } from './menu';
 import { PropsProvider } from '@app/components/props.provider';
-import { Resizer } from './resizer';
 import { calculateResize } from '../lib/calculate.resize';
 import isNil from 'lodash.isnil';
 import { mergeRefs } from 'react-merge-refs';
@@ -28,100 +25,7 @@ import { useElementRegistry } from '../hooks/element/use.registry';
 import { useSectionEmitter } from '../hooks/use.section.emitter';
 import { useSectionStore } from '../../scope.provider';
 import { useSelectionHandle } from './use.selection.handle';
-
-const Container = styled(
-  Resizer,
-  makeFilterProps([
-    'transform',
-    'gridArea',
-    'isFocus',
-    'isDragging',
-    'isMultiSelected',
-    'transformShadow',
-    'shouldPeak',
-    'isEditingText',
-  ]),
-)<{
-  transform?: XYCoord;
-  gridArea: string;
-  isFocus: boolean;
-  isDragging: boolean;
-  isMultiSelected: boolean;
-  transformShadow: boolean;
-  shouldPeak: boolean;
-  isEditingText: boolean;
-}>(
-  ({
-    theme,
-    gridArea,
-    isFocus,
-    isDragging,
-    isMultiSelected,
-    transform,
-    transformShadow,
-    shouldPeak,
-    isEditingText,
-  }) => {
-    if (!gridArea) {
-      return css`
-        display: none;
-      `;
-    }
-
-    return css`
-      position: relative;
-      outline: solid 3px transparent;
-      grid-area: ${gridArea};
-      z-index: auto;
-      transition: ${theme.transitions.create(['margin', 'padding'], {
-        duration: 200,
-      })};
-
-      ${transform &&
-      css`
-        transform: translate(${transform.x}px, ${transform.y}px);
-
-        > * {
-          opacity: 0.5;
-        }
-
-        ${transformShadow &&
-        css`
-          box-shadow: ${theme.shadows[10]};
-        `}
-      `}
-
-      ${isMultiSelected &&
-      css`
-        outline: none;
-      `}
-
-      ${shouldPeak &&
-      !isMultiSelected &&
-      css`
-        outline-color: #ccc;
-      `}
-
-      ${isFocus
-        ? !isDragging &&
-          css`
-            outline-color: ${theme.palette.primary.main};
-
-            ${isEditingText &&
-            css`
-              padding: ${theme.spacing(1)};
-              margin: ${theme.spacing(-1)};
-            `}
-          `
-        : !isDragging &&
-          css`
-            &:hover {
-              outline-color: ${theme.palette.primary.main};
-            }
-          `}
-    `;
-  },
-);
+import { useTemporal } from '@valhalla/web.react';
 
 type Props = {
   onFocus?: () => void;
@@ -152,18 +56,18 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
     const draggable = useDraggable({
       id: _element.id,
       data: _element,
-      disabled: isMultiSelected || isResizing || isFocus,
+      disabled: isMultiSelected || isResizing || isEditingText,
     });
 
-    function handleResize(direction: DIRECTION, nextSize: Size) {
-      setElement(
-        calculateResize({
-          cellSize,
-          direction,
-          element,
-          nextSize,
-        }),
-      );
+    function handleResize(direction: DIRECTION, nextSize: Position) {
+      const nextElement = calculateResize({
+        cellSize,
+        direction,
+        element,
+        nextSize,
+      });
+
+      setElement(nextElement);
     }
 
     function handleResizeStart() {
@@ -172,6 +76,7 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
 
     function handleResizeEnd() {
       store.actions.setResizing(null);
+      store.actions.setFocus(element.id);
       emitter.client.emit('elementsUpdated', [element]);
     }
 

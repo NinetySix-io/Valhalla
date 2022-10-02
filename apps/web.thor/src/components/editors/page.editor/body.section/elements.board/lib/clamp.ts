@@ -3,7 +3,7 @@
  */
 export function clampCell(value: number, cellSize: number): number {
   const factor = value / cellSize;
-  return Math.ceil(factor) * cellSize;
+  return Math.floor(factor) * cellSize;
 }
 
 /**

@@ -26,7 +26,7 @@ export const SectionsDecorator = (
       }
 
       for (let count = 0; count < sectionsCount; count++) {
-        const section = makeSection(count);
+        const section = makeSection();
         EditorStore.actions.addSection(section);
 
         makeArray(elementsCount).forEach((_, idx) => {
@@ -34,7 +34,7 @@ export const SectionsDecorator = (
           EditorStore.actions.addElement(section.id, {
             id,
             type: ElementType.TEXT,
-            x: faker.datatype.number({ min: 2, max: 10 }),
+            x: faker.datatype.number({ min: 1, max: 10 }),
             y: faker.datatype.number({ min: 1, max: 10 }),
             xSpan: faker.datatype.number({ min: 1, max: 5 }),
             ySpan: faker.datatype.number({ min: 1, max: 5 }),

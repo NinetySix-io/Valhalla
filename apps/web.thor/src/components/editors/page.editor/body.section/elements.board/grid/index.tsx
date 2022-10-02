@@ -21,12 +21,14 @@ const Container = styled(
     --cs: ${cellSize}px;
     --pt-w: ${patternSize}px;
     --r-count: ${rowsCount};
-    --c-count: ${columnsCount};
+    --c-count: ${columnsCount - 2};
     position: relative;
     display: grid;
     height: calc(var(--cs) * var(--r-count));
     grid-template-rows: repeat(var(--r-count), var(--cs));
-    grid-template-columns: repeat(var(--c-count), var(--cs));
+    grid-template-columns: 1fr repeat(var(--c-count), var(--cs)) 1fr;
+    /* grid-column-gap: 10px;
+    grid-row-gap: 10px; */
   `,
 );
 

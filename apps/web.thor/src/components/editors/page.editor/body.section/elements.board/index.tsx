@@ -33,6 +33,7 @@ type Props = React.PropsWithChildren<{
 
 type TElementsBoard = React.FC<Props> & {
   Item: typeof ElementsBoardItem;
+  DndContext: typeof DndContext;
 };
 
 export const ElementsBoard: TElementsBoard = ({
@@ -68,18 +69,17 @@ export const ElementsBoard: TElementsBoard = ({
   });
 
   return (
-    <DndContext>
-      <ElementsBoardGrid ref={mergeRefs([ref, sizeRef, droppable.setNodeRef])}>
-        {children}
-        <DropCollector />
-        <OverflowManager />
-        <SelectionFollower />
-        <SelectionsOverlay />
-        <SelectionBox />
-        <SelectionsCollector />
-      </ElementsBoardGrid>
-    </DndContext>
+    <ElementsBoardGrid ref={mergeRefs([ref, sizeRef, droppable.setNodeRef])}>
+      {children}
+      <DropCollector />
+      <OverflowManager />
+      <SelectionFollower />
+      <SelectionsOverlay />
+      <SelectionBox />
+      <SelectionsCollector />
+    </ElementsBoardGrid>
   );
 };
 
 ElementsBoard.Item = ElementsBoardItem;
+ElementsBoard.DndContext = DndContext;

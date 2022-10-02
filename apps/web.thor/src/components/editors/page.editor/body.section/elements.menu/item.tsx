@@ -7,6 +7,7 @@ import { MENU_ITEM } from '../../constants';
 import { mergeRefs } from 'react-merge-refs';
 import { useClampElement } from '../elements.board/hooks/use.element.clamp';
 import { useDraggable } from '@dnd-kit/core';
+import { useSectionStore } from '../scope.provider';
 
 const Item = styled(Button)(
   () => css`
@@ -24,6 +25,8 @@ export const ElementMenuGroupItem: React.FC<Props> = ({
   children,
   element,
 }) => {
+  const store = useSectionStore();
+  const cellSize = store.useSelect((state) => state.cellSize);
   const ref = React.useRef<HTMLButtonElement>();
   const clampCell = useClampElement();
   const elementId = MENU_ITEM + element.type;
@@ -40,7 +43,7 @@ export const ElementMenuGroupItem: React.FC<Props> = ({
         { x: ref.current.offsetLeft, y: ref.current.offsetTop },
       ),
     );
-  }, [clampCell, element, elementId]);
+  }, [clampCell, element, elementId, cellSize]);
 
   return (
     <Grid item md={6}>

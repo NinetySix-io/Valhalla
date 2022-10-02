@@ -7,6 +7,7 @@ import { EditorStore } from '../../store';
 import { ElementMenuGroup } from './group';
 import { ElementMenuGroupItem } from './item';
 import { ElementType } from '@app/generated/valhalla.gql';
+import { useHelperDisplay } from '../hooks/use.helpers.display';
 
 const Container = styled(Stack)(
   ({ theme }) => css`
@@ -15,14 +16,16 @@ const Container = styled(Stack)(
   `,
 );
 
-type Props = {
-  isVisible: boolean;
-} & Pick<React.ComponentProps<typeof EditorMenu>, 'style' | 'placement'>;
+type Props = Pick<
+  React.ComponentProps<typeof EditorMenu>,
+  'style' | 'placement'
+>;
 
-export const ElementsMenu: React.FC<Props> = ({ isVisible, ...props }) => {
+export const ElementsMenu: React.FC<Props> = ({ ...props }) => {
   const isDragging = EditorStore.useSelect((state) => state.isDragging);
   const [menuVisible, setMenuVisible] = React.useState(false);
   const anchor = React.useRef<HTMLDivElement>();
+  const isVisible = useHelperDisplay();
 
   function openMenu() {
     setMenuVisible(true);
@@ -47,7 +50,7 @@ export const ElementsMenu: React.FC<Props> = ({ isVisible, ...props }) => {
         elevation={2}
         open={menuVisible}
         keepMounted={false}
-        anchorEl={anchor.current}
+        anchorEl={() => anchor.current}
         onClose={closeMenu}
         anchorOrigin={{
           vertical: 'top',

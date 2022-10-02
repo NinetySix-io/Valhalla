@@ -27,34 +27,24 @@ export const EditorMenu: React.FC<Props> = ({
   style,
 }) => {
   const marker = React.useRef<HTMLDivElement>();
-  const [mounted, setMounted] = React.useState(false);
-
-  /**
-   * Fixes dumb warning
-   */
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
 
   return (
     <React.Fragment>
       <Marker style={style} ref={marker} />
-      {mounted && (
-        <Popper
-          transition
-          open={open}
-          anchorEl={marker.current}
-          placement={placement}
-        >
-          {({ TransitionProps }) => {
-            return (
-              <Fade {...TransitionProps} timeout={350}>
-                <Container ref={containerRef}>{children}</Container>
-              </Fade>
-            );
-          }}
-        </Popper>
-      )}
+      <Popper
+        transition
+        open={open}
+        anchorEl={marker.current}
+        placement={placement}
+      >
+        {({ TransitionProps }) => {
+          return (
+            <Fade {...TransitionProps} timeout={350}>
+              <Container ref={containerRef}>{children}</Container>
+            </Fade>
+          );
+        }}
+      </Popper>
     </React.Fragment>
   );
 };

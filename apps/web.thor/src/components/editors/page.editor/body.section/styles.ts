@@ -2,25 +2,14 @@ import { css, styled } from '@mui/material';
 
 import { makeFilterProps } from '@valhalla/web.react';
 
-export const Container = styled(
-  'section',
-  makeFilterProps(['isHover']),
-)<{
-  isHover: boolean;
-}>(
-  ({ theme, isHover }) => css`
+export const Container = styled('section')(
+  () => css`
     width: 100%;
     position: relative;
     display: flex;
     flex-direction: column;
     transition: all 0.2s;
-    border: solid 2px transparent;
     margin-top: -2px;
-
-    ${isHover &&
-    css`
-      border-color: ${theme.palette.primary.main};
-    `}
   `,
 );
 

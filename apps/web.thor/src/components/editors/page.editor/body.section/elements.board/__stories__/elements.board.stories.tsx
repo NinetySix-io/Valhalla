@@ -4,6 +4,7 @@ import { EditorStore } from '@app/components/editors/page.editor/store';
 import { ElementFactory } from '../../element.factory';
 import { ElementsBoard } from '../index';
 import { ElementsMenu } from '../../elements.menu';
+import { Outline } from '../../outline';
 import React from 'react';
 import type { Section } from '@app/components/editors/page.editor/store/types';
 import { SectionProvider } from '../../scope.provider';
@@ -38,39 +39,47 @@ const Board: React.FC<React.PropsWithChildren<{ section: Section }>> = ({
   );
 
   return (
-    <SectionProvider sectionId={section.id} config={section.config}>
-      <ElementsBoard
-        onConfigChange={(nextConfig) => {
-          EditorStore.actions.updateSectionConfig(section.id, nextConfig);
-          action('onConfigChange')(section.id, nextConfig);
-        }}
-        onElementAdded={(element) => {
-          EditorStore.actions.addElement(section.id, {
-            ...element,
-            id: uniqueId(section.id),
-          });
+    <Wrapper
+      onMouseOver={() => EditorStore.actions.setActiveSection(section.id)}
+      onMouseLeave={() => EditorStore.actions.setActiveSection(null)}
+    >
+      <SectionProvider sectionId={section.id} config={section.config}>
+        <ElementsBoard.DndContext>
+          <ElementsBoard
+            onConfigChange={(nextConfig) => {
+              EditorStore.actions.updateSectionConfig(section.id, nextConfig);
+              action('onConfigChange')(section.id, nextConfig);
+            }}
+            onElementAdded={(element) => {
+              EditorStore.actions.addElement(section.id, {
+                ...element,
+                id: uniqueId(section.id),
+              });
 
-          action('onElementAdded')(section.id, element);
-        }}
-        onElementsUpdated={(elements) => {
-          EditorStore.actions.replaceElements(section.id, elements);
-          action('onElementsUpdated')(section.id, elements);
-        }}
-        onElementsDeleted={(elementIdList) => {
-          EditorStore.actions.removeElements(section.id, elementIdList);
-          action('onElementsDeleted')(section.id, elementIdList);
-        }}
-      >
-        {children}
-        {elements.map((element) => {
-          return (
-            <ElementsBoard.Item key={element.id} element={element}>
-              <ElementFactory element={element} />
-            </ElementsBoard.Item>
-          );
-        })}
-      </ElementsBoard>
-    </SectionProvider>
+              action('onElementAdded')(section.id, element);
+            }}
+            onElementsUpdated={(elements) => {
+              EditorStore.actions.replaceElements(section.id, elements);
+              action('onElementsUpdated')(section.id, elements);
+            }}
+            onElementsDeleted={(elementIdList) => {
+              EditorStore.actions.removeElements(section.id, elementIdList);
+              action('onElementsDeleted')(section.id, elementIdList);
+            }}
+          >
+            <Outline />
+            {children}
+            {elements.map((element) => {
+              return (
+                <ElementsBoard.Item key={element.id} element={element}>
+                  <ElementFactory element={element} />
+                </ElementsBoard.Item>
+              );
+            })}
+          </ElementsBoard>
+        </ElementsBoard.DndContext>
+      </SectionProvider>
+    </Wrapper>
   );
 };
 
@@ -79,13 +88,11 @@ storiesOf('NinetySix/Editors/Page Editor/Board', module)
   .add('Default', () => {
     const section = EditorStore.useSelect((state) => state.sections[0]);
     return (
-      <Wrapper>
-        <Board section={section}>
-          <FixedTop>
-            <ElementsMenu placement="left-start" isVisible />
-          </FixedTop>
-        </Board>
-      </Wrapper>
+      <Board section={section}>
+        <FixedTop>
+          <ElementsMenu placement="left-start" />
+        </FixedTop>
+      </Board>
     );
   })
   .add('With Sections', () => {
@@ -93,13 +100,11 @@ storiesOf('NinetySix/Editors/Page Editor/Board', module)
     return (
       <React.Fragment>
         {sections.map((section) => (
-          <Wrapper key={section.id}>
-            <Board section={section}>
-              <FixedTop>
-                <ElementsMenu placement="left-start" isVisible />
-              </FixedTop>
-            </Board>
-          </Wrapper>
+          <Board section={section} key={section.id}>
+            <FixedTop>
+              <ElementsMenu placement="left-start" />
+            </FixedTop>
+          </Board>
         ))}
       </React.Fragment>
     );

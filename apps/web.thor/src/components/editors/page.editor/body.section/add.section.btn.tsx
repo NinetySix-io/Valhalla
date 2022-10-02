@@ -3,17 +3,19 @@ import * as React from 'react';
 import { Button, css, styled } from '@mui/material';
 import { EditorStore, makeSection } from '../store';
 
+import { compareById } from '@app/lib/compare.by.id';
 import { makeFilterProps } from '@valhalla/web.react';
+import { useHelperDisplay } from './hooks/use.helpers.display';
 import { useSectionId } from './scope.provider';
 
 const ActionBtn = styled(
   Button,
-  makeFilterProps(['align', 'visible']),
+  makeFilterProps(['align', 'isVisible']),
 )<{
   align?: Props['align'];
-  visible?: boolean;
+  isVisible?: boolean;
 }>(
-  ({ align, visible }) => css`
+  ({ align, isVisible }) => css`
     position: absolute;
     margin: auto;
     align-self: center;
@@ -23,7 +25,7 @@ const ActionBtn = styled(
       transform: scale(1.2);
     }
 
-    ${!visible &&
+    ${!isVisible &&
     css`
       opacity: 0;
     `}
@@ -43,17 +45,21 @@ const ActionBtn = styled(
 );
 
 type Props = {
-  isVisible: boolean;
   align: 'top' | 'bottom';
 };
 
-export const AddSectionBtn: React.FC<Props> = ({ align, isVisible }) => {
+export const AddSectionBtn: React.FC<Props> = ({ align }) => {
   const sectionId = useSectionId();
+  const isVisible = useHelperDisplay();
+  const isTop = align === 'top';
+  const sectionIndex = EditorStore.useSelect((state) =>
+    state.sections.findIndex(compareById(sectionId)),
+  );
 
   function handleClick() {
     EditorStore.actions.addSection(makeSection(), {
       anchorSection: sectionId,
-      isBefore: align === 'top',
+      isBefore: isTop,
     });
   }
 
@@ -61,7 +67,7 @@ export const AddSectionBtn: React.FC<Props> = ({ align, isVisible }) => {
     <ActionBtn
       size="small"
       variant="contained"
-      visible={isVisible}
+      isVisible={isVisible && (!isTop || (isTop && sectionIndex !== 0))}
       align={align}
       onClick={handleClick}
     >
