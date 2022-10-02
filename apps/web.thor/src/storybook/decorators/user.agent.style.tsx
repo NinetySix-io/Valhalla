@@ -1,25 +1,12 @@
 import * as React from 'react';
 
 import type { DecoratorFn } from '@storybook/react';
-import { css } from '@mui/material';
+import { UserAgentStyleDisabler as Style } from '@app/components/user.agent.style';
 
 export const UserAgentStyleDisabler: DecoratorFn = (Story) => {
   return (
     <React.Fragment>
-      <style>
-        {
-          css`
-            p {
-              margin-block-start: 0;
-              margin-block-end: 0;
-            }
-
-            *:focus-visible {
-              outline: none;
-            }
-          `.styles
-        }
-      </style>
+      <Style />
       <Story />
     </React.Fragment>
   );
