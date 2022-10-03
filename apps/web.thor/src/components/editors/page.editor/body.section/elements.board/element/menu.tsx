@@ -3,6 +3,9 @@ import * as React from 'react';
 import { css, styled } from '@mui/material';
 import { makeFilterProps, useEvent } from '@valhalla/web.react';
 
+import isNil from 'lodash.isnil';
+import { useSectionStore } from '../../scope.provider';
+
 const Container = styled(
   'div',
   makeFilterProps(['height']),
@@ -46,10 +49,12 @@ export const ElementsBoardItemMenu: React.FC<Props> = ({
   parent,
   isVisible,
 }) => {
+  const store = useSectionStore();
+  const isDragging = store.useSelect((state) => !isNil(state.dragging));
   const container = React.useRef<HTMLDivElement>();
   const [height, setHeight] = React.useState(0);
   const [isHover, setIsHover] = React.useState(false);
-  const shouldShow = isHover && isVisible;
+  const shouldShow = isHover && isVisible && !isDragging;
 
   useEvent(parent, 'mouseover', () => setIsHover(() => true));
   useEvent(parent, 'mouseout', () => setIsHover(() => false));

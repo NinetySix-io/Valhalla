@@ -39,13 +39,16 @@ const Container = styled(
     --pt-w: ${patternSize}px;
     --r-count: ${rowsCount};
     --c-count: ${columnsCount - 2};
+    --r-gap: ${rowGap}px;
+    --c-gap: ${columnGap}px;
+
     position: relative;
     display: grid;
-    height: calc(var(--cs) * var(--r-count));
     grid-template-rows: repeat(var(--r-count), var(--cs));
     grid-template-columns: 1fr repeat(var(--c-count), var(--cs)) 1fr;
-    grid-column-gap: ${columnGap}px;
-    grid-row-gap: ${rowGap}px;
+    grid-column-gap: var(--c-gap);
+    grid-row-gap: var(--r-gap);
+    padding: 20px 0;
   `,
 );
 

@@ -25,7 +25,7 @@ export function cellClamp(params: {
  * It takes a maximum value and returns a function that takes a position and span and returns a clamped
  * position
  */
-export function useCellClamp(max: number) {
+export function useCellClamp(max: number, offset = 0) {
   const store = useSectionStore();
   const cellSize = store.useSelect((state) => state.cellSize);
 
@@ -34,21 +34,24 @@ export function useCellClamp(max: number) {
       return cellClamp({
         max,
         span,
-        cellSize,
         position,
+        cellSize: cellSize + offset,
       });
     },
-    [max, cellSize],
+    [max, cellSize, offset],
   );
 }
 
 export function useCellClampX() {
+  const store = useSectionStore();
   const columnsCount = useColumnsCount();
-  return useCellClamp(columnsCount);
+  const columnGap = store.useSelect((state) => state.config.columnGap);
+  return useCellClamp(columnsCount, columnGap);
 }
 
 export function useCellClampY() {
   const store = useSectionStore();
   const rowsCount = store.useSelect((state) => state.config.rowsCount);
-  return useCellClamp(rowsCount);
+  const rowGap = store.useSelect((state) => state.config.rowGap);
+  return useCellClamp(rowsCount, rowGap);
 }

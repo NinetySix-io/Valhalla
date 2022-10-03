@@ -28,5 +28,5 @@ export const Outline: React.FC = () => {
     (state) => state.activeSection === sectionId,
   );
 
-  return <Container className="outline" isVisible={isVisible} />;
+  return <Container isVisible={isVisible || true} />;
 };

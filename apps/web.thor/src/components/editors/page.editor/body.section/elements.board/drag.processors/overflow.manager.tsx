@@ -9,6 +9,15 @@ export const OverflowManager: React.FC = () => {
   const emitter = useSectionEmitter();
   const dragging = store.useSelect((state) => state.dragging);
   const elements = store.useSelect((state) => state.elements);
+  const original = React.useRef<number>();
+
+  React.useEffect(() => {
+    if (dragging && !original.current) {
+      original.current = store.getState().config.rowsCount;
+    } else if (!dragging) {
+      original.current = null;
+    }
+  }, [dragging, store]);
 
   /**
    * Readjust board rows on active dragging

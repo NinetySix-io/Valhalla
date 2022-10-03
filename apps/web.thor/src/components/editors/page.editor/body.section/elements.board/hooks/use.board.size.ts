@@ -18,6 +18,10 @@ export function useBoardSize() {
 
   const handleAdjustment = React.useCallback(
     (width: number) => {
+      if (width === 0) {
+        return;
+      }
+
       const root = store.getState();
       const cellSize = root.cellSize;
       const columnGap = root.config.columnGap;
