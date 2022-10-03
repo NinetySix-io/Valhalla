@@ -42,7 +42,7 @@ export const ElementsMenu: React.FC<Props> = ({ ...props }) => {
   }, [isDragging, setMenuVisible]);
 
   return (
-    <EditorMenu {...props} open={isVisible} containerRef={anchor}>
+    <EditorMenu {...props} isVisible={isVisible} ref={anchor}>
       <Button size="small" onClick={openMenu}>
         Add Element
       </Button>

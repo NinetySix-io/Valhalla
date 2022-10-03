@@ -9,6 +9,7 @@ import React from 'react';
 import type { Section } from '@app/components/editors/page.editor/store/types';
 import { SectionProvider } from '../../scope.provider';
 import { SectionsDecorator } from './decorators/sections.decorator';
+import { StyleVariables } from '../style.variables';
 import { action } from '@storybook/addon-actions';
 import { compareById } from '@app/lib/compare.by.id';
 import { storiesOf } from '@storybook/react';
@@ -44,6 +45,7 @@ const Board: React.FC<React.PropsWithChildren<{ section: Section }>> = ({
       onMouseLeave={() => EditorStore.actions.setActiveSection(null)}
     >
       <SectionProvider sectionId={section.id} config={section.config}>
+        <StyleVariables />
         <ElementsBoard.DndContext>
           <ElementsBoard
             onConfigChange={(nextConfig) => {

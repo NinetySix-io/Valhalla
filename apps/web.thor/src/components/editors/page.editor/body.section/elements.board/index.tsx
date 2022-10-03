@@ -17,6 +17,8 @@ import { SelectionBox } from './drag.processors/selection.box';
 import { SelectionFollower } from './drag.processors/selection.follower';
 import { SelectionsCollector } from './drag.processors/selections.collector';
 import { SelectionsOverlay } from './drag.processors/selections.overlay';
+import { StyleVariables } from './style.variables';
+import clsx from 'clsx';
 import { mergeRefs } from 'react-merge-refs';
 import { useBoardSize } from './hooks/use.board.size';
 import { useDroppable } from '@dnd-kit/core';
@@ -25,6 +27,7 @@ import { useSelectionBoxListener } from './hooks/use.selection.box';
 import { useTargetedClick } from '@valhalla/web.react';
 
 type Props = React.PropsWithChildren<{
+  className?: string;
   onConfigChange?: (config: Section['config']) => void;
   onElementAdded?: (element: DroppedElement) => void;
   onElementsUpdated?: (elements: DroppedElement[]) => void;
@@ -37,6 +40,7 @@ type TElementsBoard = React.FC<Props> & {
 };
 
 export const ElementsBoard: TElementsBoard = ({
+  className,
   onConfigChange,
   onElementAdded,
   onElementsUpdated,
@@ -69,7 +73,11 @@ export const ElementsBoard: TElementsBoard = ({
   });
 
   return (
-    <ElementsBoardGrid ref={mergeRefs([ref, sizeRef, droppable.setNodeRef])}>
+    <ElementsBoardGrid
+      ref={mergeRefs([ref, sizeRef, droppable.setNodeRef])}
+      className={clsx(className, `section-${sectionId}`)}
+    >
+      <StyleVariables />
       {children}
       <DropCollector />
       <OverflowManager />

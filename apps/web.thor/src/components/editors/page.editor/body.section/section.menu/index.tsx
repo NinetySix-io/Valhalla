@@ -51,7 +51,7 @@ export const SectionMenu: React.FC<Props> = ({ index, ...props }) => {
   }
 
   return (
-    <EditorMenu {...props} open={isVisible} containerRef={anchor}>
+    <EditorMenu {...props} isVisible={isVisible} ref={anchor}>
       <Stack spacing={1}>
         <Button size="small" onClick={openMenu}>
           Edit Section

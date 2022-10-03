@@ -71,8 +71,8 @@ export const BodySection: React.FC<Props> = React.memo(({ sectionId }) => {
       >
         <ElementsBoard.DndContext>
           <MenuArea isMobile={isMobile}>
-            <ElementsMenu placement="left-start" />
-            <SectionMenu placement="right-start" index={sectionIndex} />
+            <ElementsMenu placement="left" />
+            <SectionMenu placement="right" index={sectionIndex} />
           </MenuArea>
           <ElementsBoard
             onConfigChange={handleConfigChange}

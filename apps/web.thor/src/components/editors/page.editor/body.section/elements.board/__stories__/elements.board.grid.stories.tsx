@@ -1,10 +1,15 @@
-import { SectionProvider, useSectionStore } from '../../scope.provider';
+import {
+  SectionProvider,
+  useSectionId,
+  useSectionStore,
+} from '../../scope.provider';
 import { css, styled } from '@mui/material';
 
 import { EditorStore } from '@app/components/editors/page.editor/store';
 import { ElementsBoardGrid } from '../grid';
 import React from 'react';
 import { SectionsDecorator } from './decorators/sections.decorator';
+import { StyleVariables } from '../style.variables';
 import { last } from '@valhalla/utilities';
 import { storiesOf } from '@storybook/react';
 import { useBoardSize } from '../hooks/use.board.size';
@@ -22,6 +27,7 @@ storiesOf('NinetySix/Editors/Page Editor', module)
   })
   .addDecorator(SectionsDecorator(1))
   .add('Grid', () => {
+    const sectionId = useSectionId();
     const store = useSectionStore();
     const sizeRef = useBoardSize();
     store.actions.setDragging({
@@ -33,5 +39,11 @@ storiesOf('NinetySix/Editors/Page Editor', module)
       y: 0,
     });
 
-    return <StyledBoard ref={sizeRef} />;
+    return (
+      <div className={`section-${sectionId}`}>
+        <StyledBoard ref={sizeRef}>
+          <StyleVariables />
+        </StyledBoard>
+      </div>
+    );
   });

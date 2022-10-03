@@ -7,8 +7,12 @@ import { EditorStore } from './store';
 import { EmptyContent } from './empty';
 import { ScreenSize } from './constants';
 import isEmpty from 'lodash.isempty';
+import { makeFilterProps } from '@valhalla/web.react';
 
-const Container = styled('div')<{ size: ScreenSize }>(
+const Container = styled(
+  'div',
+  makeFilterProps(['size']),
+)<{ size: ScreenSize }>(
   ({ theme, size }) => css`
     display: flex;
     flex-direction: column;

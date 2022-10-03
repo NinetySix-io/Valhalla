@@ -15,9 +15,14 @@ export const OverflowManager: React.FC = () => {
     if (dragging && !original.current) {
       original.current = store.getState().config.rowsCount;
     } else if (!dragging) {
+      const root = store.getState();
+      if (original.current && original.current !== root.config.rowsCount) {
+        emitter.client.emit('updateRowsCount', root.config.rowsCount);
+      }
+
       original.current = null;
     }
-  }, [dragging, store]);
+  }, [dragging, store, emitter]);
 
   /**
    * Readjust board rows on active dragging
@@ -27,12 +32,14 @@ export const OverflowManager: React.FC = () => {
       return;
     }
 
-    const rowsCount = store.getState().config?.rowsCount;
     const elementBottomY = dragging.y + dragging.ySpan;
-    if (elementBottomY > rowsCount) {
-      emitter.client.emit('updateRowsCount', elementBottomY);
+    if (elementBottomY > original.current) {
+      store.actions.setConfig({
+        ...store.getState().config,
+        rowsCount: elementBottomY,
+      });
     }
-  }, [store, dragging, emitter]);
+  }, [dragging, emitter, store]);
 
   /**
    * Readjust board rows on board updates

@@ -6,8 +6,6 @@ import { Background } from './background';
 import { CenterLine } from './center.line';
 import type { cProps } from '@valhalla/web.react';
 import { makeFilterProps } from '@valhalla/web.react';
-import { useColumnsCount } from '../../../hooks/use.columns.count';
-import { useSectionStore } from '../../scope.provider';
 
 const Container = styled(
   'div',
@@ -19,29 +17,8 @@ const Container = styled(
     'rowGap',
     'columnGap',
   ]),
-)<{
-  cellSize: number;
-  rowsCount: number;
-  columnsCount: number;
-  patternSize: number;
-  rowGap: number;
-  columnGap: number;
-}>(
-  ({
-    cellSize,
-    rowsCount,
-    columnsCount,
-    patternSize,
-    rowGap,
-    columnGap,
-  }) => css`
-    --cs: ${cellSize}px;
-    --pt-w: ${patternSize}px;
-    --r-count: ${rowsCount};
-    --c-count: ${columnsCount - 2};
-    --r-gap: ${rowGap}px;
-    --c-gap: ${columnGap}px;
-
+)(
+  () => css`
     position: relative;
     display: grid;
     grid-template-rows: repeat(var(--r-count), var(--cs));
@@ -56,24 +33,8 @@ export const ElementsBoardGrid = React.forwardRef<
   HTMLDivElement,
   cProps<React.PropsWithChildren>
 >(({ children, ...props }, ref) => {
-  const store = useSectionStore();
-  const cellSize = store.useSelect((state) => state.cellSize);
-  const rowsCount = store.useSelect((state) => state.config.rowsCount);
-  const columnGap = store.useSelect((state) => state.config.columnGap);
-  const rowGap = store.useSelect((state) => state.config.rowGap);
-  const columnsCount = useColumnsCount();
-
   return (
-    <Container
-      {...props}
-      ref={ref}
-      rowGap={rowGap}
-      columnGap={columnGap}
-      cellSize={cellSize}
-      columnsCount={columnsCount}
-      rowsCount={rowsCount}
-      patternSize={1.5}
-    >
+    <Container {...props} ref={ref}>
       <Background />
       <CenterLine />
       {children}
