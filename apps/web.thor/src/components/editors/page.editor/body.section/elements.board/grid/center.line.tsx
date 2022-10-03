@@ -3,6 +3,7 @@ import * as React from 'react';
 import { css, styled } from '@mui/material';
 
 import type { SectionState } from '../../store';
+import { getColumnsCount } from '../../../hooks/use.columns.count';
 import { isInRange } from '@app/lib/is.in.range';
 import { makeFilterProps } from '@valhalla/web.react';
 import { useSectionStore } from '../../scope.provider';
@@ -36,7 +37,7 @@ function selectIsCentered() {
       return false;
     }
 
-    const boardCenter = Math.floor(state.config.columnsCount / 2);
+    const boardCenter = Math.floor(getColumnsCount() / 2);
     const boxCenterPos = state.dragging.x + state.dragging.xSpan / 2;
 
     return isInRange(boardCenter, [

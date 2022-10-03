@@ -5,6 +5,7 @@ import { useSectionId, useSectionStore } from '../../scope.provider';
 
 import { getGridArea } from '../lib/get.grid.area';
 import isNil from 'lodash.isnil';
+import { useColumnsCount } from '../../../hooks/use.columns.count';
 
 const StyledCell = styled('div')(
   ({ theme }) => css`
@@ -18,11 +19,12 @@ const StyledCell = styled('div')(
 const Cells = React.memo(() => {
   const sectionId = useSectionId();
   const store = useSectionStore();
+  const columnsCount = useColumnsCount();
   const config = store.useSelect((state) => state.config);
   const output: JSX.Element[] = [];
 
-  for (let x = 0; x < config.columnsCount; x++) {
-    if (x === 0 || x === config.columnsCount - 1) {
+  for (let x = 0; x < columnsCount; x++) {
+    if (x === 0 || x === columnsCount - 1) {
       continue;
     }
 
@@ -50,6 +52,7 @@ const Shield: React.FC = () => {
   const store = useSectionStore();
   const theme = useTheme();
   const config = store.useSelect((state) => state.config);
+  const columnsCount = useColumnsCount();
   const isVisible = store.useSelect(
     (state) => !isNil(state.dragging || state.resizing),
   );
@@ -66,7 +69,7 @@ const Shield: React.FC = () => {
         gridArea: getGridArea({
           x: 0,
           y: 0,
-          xSpan: config.columnsCount,
+          xSpan: columnsCount,
           ySpan: config.rowsCount,
         }),
       }}

@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { clamp } from '../lib/clamp';
 import { getClampPosition } from '../lib/get.clamp.position';
+import { useColumnsCount } from '../../../hooks/use.columns.count';
 import { useSectionStore } from '../../scope.provider';
 
 /**
@@ -42,8 +43,7 @@ export function useCellClamp(max: number) {
 }
 
 export function useCellClampX() {
-  const store = useSectionStore();
-  const columnsCount = store.useSelect((state) => state.config.columnsCount);
+  const columnsCount = useColumnsCount();
   return useCellClamp(columnsCount);
 }
 

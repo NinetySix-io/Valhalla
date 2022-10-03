@@ -17,9 +17,9 @@ export function makeSection(): Section {
     id: uniqueId(),
     children: [],
     config: {
-      // TODO: should be server side
-      columnsCount: 24,
       rowsCount: 10,
+      columnGap: 10,
+      rowGap: 10,
     },
   };
 }

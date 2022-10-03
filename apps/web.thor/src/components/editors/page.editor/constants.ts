@@ -4,7 +4,6 @@ export enum ScreenSize {
   TABLET = 820,
 }
 
-export const maxScreenWidth = 1200 as const;
 export const MENU_ITEM = 'MENU_ITEM';
 
 export const SCREEN_SIZE_CONFIG = {

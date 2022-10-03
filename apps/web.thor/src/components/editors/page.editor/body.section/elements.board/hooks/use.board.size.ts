@@ -1,7 +1,8 @@
 import * as React from 'react';
 
-import { maxScreenWidth } from '../../../constants';
+import { ScreenSize } from '../../../constants';
 import { mergeRefs } from 'react-merge-refs';
+import { useColumnsCount } from '../../../hooks/use.columns.count';
 import useResizeObserver from '@react-hook/resize-observer';
 import { useSectionStore } from '../../scope.provider';
 
@@ -13,12 +14,16 @@ export function useBoardSize() {
   const store = useSectionStore();
   const hasContainer = React.useRef(false);
   const container = store.useSelect((state) => state.container);
-  const columnsCount = store.useSelect((state) => state.config.columnsCount);
+  const columnsCount = useColumnsCount();
 
   const handleAdjustment = React.useCallback(
     (width: number) => {
-      const nextCellSize = Math.min(width, maxScreenWidth) / columnsCount;
-      if (store.getState().cellSize !== nextCellSize) {
+      const root = store.getState();
+      const cellSize = root.cellSize;
+      const columnGap = root.config.columnGap;
+      const gridWidth = Math.min(width, ScreenSize.DESKTOP);
+      const nextCellSize = gridWidth / columnsCount - columnGap;
+      if (cellSize !== nextCellSize) {
         store.actions.setCellSize(nextCellSize);
       }
     },
