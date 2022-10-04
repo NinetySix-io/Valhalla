@@ -21,20 +21,6 @@ export enum EditStatus {
   ARCHIVED = "ARCHIVED",
 }
 
-export enum HTMLType {
-  div = "div",
-  button = "button",
-}
-
-export enum ElementType {
-  Text = "Text",
-  Input = "Input",
-  Box = "Box",
-  Image = "Image",
-  Video = "Video",
-  Link = "Link",
-}
-
 export interface Page {
   id: string;
   title: string;
@@ -71,8 +57,9 @@ export interface SectionFormat {
 export interface Section {
   id: string;
   page: string;
-  index: number;
+  head: string;
   format?: SectionFormat;
+  updatedBy: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -204,7 +191,6 @@ export interface SuspendSiteResponse {
 }
 
 export interface GetPageSectionRequest {
-  pageId: string;
   sectionId: string;
 }
 
@@ -223,17 +209,17 @@ export interface GetPageSectionListResponse {
 export interface CreateSectionRequest {
   pageId: string;
   requestedUserId: string;
-  afterSectionId?: string | undefined;
+  head?: string | undefined;
 }
 
 export interface CreateSectionResponse {
   data?: Section;
 }
 
-export interface UpdateSectionIndexRequest {
+export interface UpdateSectionHeadRequest {
   sectionId: string;
   requestedUserId: string;
-  index: number;
+  head: string;
 }
 
 export interface UpdateSectionFormatRequest {
@@ -304,9 +290,9 @@ export interface SitesServiceClient {
 
   createSection(request: CreateSectionRequest): Observable<CreateSectionResponse>;
 
-  updateIndexSection(request: UpdateSectionIndexRequest): Observable<UpdateSectionResponse>;
+  updateSectionHead(request: UpdateSectionHeadRequest): Observable<UpdateSectionResponse>;
 
-  updateFormatSection(request: UpdateSectionFormatRequest): Observable<UpdateSectionResponse>;
+  updateSectionFormat(request: UpdateSectionFormatRequest): Observable<UpdateSectionResponse>;
 
   deleteSection(request: DeleteSectionRequest): Observable<DeleteSectionResponse>;
 }
@@ -382,11 +368,11 @@ export interface SitesServiceController {
     request: CreateSectionRequest,
   ): Promise<CreateSectionResponse> | Observable<CreateSectionResponse> | CreateSectionResponse;
 
-  updateIndexSection(
-    request: UpdateSectionIndexRequest,
+  updateSectionHead(
+    request: UpdateSectionHeadRequest,
   ): Promise<UpdateSectionResponse> | Observable<UpdateSectionResponse> | UpdateSectionResponse;
 
-  updateFormatSection(
+  updateSectionFormat(
     request: UpdateSectionFormatRequest,
   ): Promise<UpdateSectionResponse> | Observable<UpdateSectionResponse> | UpdateSectionResponse;
 
@@ -412,8 +398,8 @@ export function SitesServiceControllerMethods() {
       "getPageSection",
       "getPageSectionList",
       "createSection",
-      "updateIndexSection",
-      "updateFormatSection",
+      "updateSectionHead",
+      "updateSectionFormat",
       "deleteSection",
     ];
     for (const method of grpcMethods) {

@@ -30,8 +30,8 @@ service SitesService {
   rpc GetPageSection(GetPageSectionRequest) returns (GetPageSectionResponse) {}
   rpc GetPageSectionList(GetPageSectionListRequest) returns (GetPageSectionListResponse) {}
   rpc CreateSection(CreateSectionRequest) returns (CreateSectionResponse) {}
-  rpc UpdateIndexSection(UpdateSectionIndexRequest) returns (UpdateSectionResponse) {}
-  rpc UpdateFormatSection(UpdateSectionFormatRequest) returns (UpdateSectionResponse) {}
+  rpc UpdateSectionHead(UpdateSectionHeadRequest) returns (UpdateSectionResponse) {}
+  rpc UpdateSectionFormat(UpdateSectionFormatRequest) returns (UpdateSectionResponse) {}
   rpc DeleteSection(DeleteSectionRequest) returns (DeleteSectionResponse) {}
 }
 
@@ -48,20 +48,6 @@ enum EditStatus {
   ACTIVE = 0;
   DRAFT = 1;
   ARCHIVED = 2;
-}
-
-enum HTMLType {
-  div = 0;
-  button = 1;
-}
-
-enum ElementType {
-  Text = 0;
-  Input = 1;
-  Box = 2;
-  Image = 3;
-  Video = 4;
-  Link = 6;
 }
 
 // -----------------------------
@@ -104,8 +90,9 @@ message SectionFormat {
 message Section {
   string id = 1;
   string page = 2;
-  int32 index = 3;
+  string head = 3;
   SectionFormat format = 4;
+  string updatedBy = 5;
 
   google.protobuf.Timestamp createdAt = 10;
   google.protobuf.Timestamp updatedAt = 11;
@@ -245,8 +232,7 @@ message SuspendSiteResponse {
 // -----------------------------
 
 message GetPageSectionRequest {
-  string pageId = 1;
-  string sectionId = 2;
+  string sectionId = 1;
 }
 
 message GetPageSectionResponse {
@@ -264,17 +250,17 @@ message GetPageSectionListResponse {
 message CreateSectionRequest {
   string pageId = 3;
   string requestedUserId = 4;
-  optional string afterSectionId = 5;
+  optional string head = 5;
 }
 
 message CreateSectionResponse {
   Section data = 1;
 }
 
-message UpdateSectionIndexRequest {
+message UpdateSectionHeadRequest {
   string sectionId = 4;
   string requestedUserId = 5;
-  int32 index = 6;
+  string head = 6;
 }
 
 message UpdateSectionFormatRequest {
