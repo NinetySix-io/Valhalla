@@ -30,7 +30,11 @@ export const ElementFactory: React.FC<Props> = ({
       />
     );
   } else if (element.type === ElementType.BOX) {
-    return <button title={element.id}>button</button>;
+    return (
+      <button type="button" title={element.id}>
+        button
+      </button>
+    );
   }
 
   return <div>{element.type}</div>;

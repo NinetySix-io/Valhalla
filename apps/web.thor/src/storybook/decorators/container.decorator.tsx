@@ -1,6 +1,7 @@
 import type { Theme as AppTheme } from '@valhalla/web.react';
 import type { DecoratorFn } from '@storybook/react';
 import React from 'react';
+import isNil from 'lodash.isnil';
 import { merge } from 'merge-anything';
 import { useTheme } from '@mui/material';
 
@@ -21,7 +22,7 @@ export function withContainer(options?: Options): DecoratorFn {
         typeof options['style'] === 'function'
           ? options.style(theme)
           : options.style,
-      ].filter((value) => !!value);
+      ].filter((value) => !isNil(value));
 
       return merge({}, ...composition);
     }, [theme]);

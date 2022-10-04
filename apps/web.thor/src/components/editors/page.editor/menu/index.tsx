@@ -39,9 +39,14 @@ type Props = {
 };
 
 export const EditorMenu = React.forwardRef<HTMLDivElement, Props>(
-  ({ children, isVisible, placement }, ref) => {
+  ({ children, isVisible, placement, style }, ref) => {
     return (
-      <Container ref={ref} isVisible={isVisible} placement={placement}>
+      <Container
+        style={style}
+        ref={ref}
+        isVisible={isVisible}
+        placement={placement}
+      >
         {children}
       </Container>
     );

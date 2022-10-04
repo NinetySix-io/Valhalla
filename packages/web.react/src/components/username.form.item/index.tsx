@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import type { TextFieldProps } from '@mui/material';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { isEmail, isPhoneNumber } from '@valhalla/utilities';
 
 import { Form } from '../form';
 import type { Rule } from 'rc-field-form/es/interface';
+import type { TextFieldProps } from '@mui/material';
 import type { cProps } from '../../types';
 
 type Props = cProps<
@@ -43,11 +43,11 @@ export const UsernameFormItem: ComponentType = ({
     const valueIsPhone = isPhoneNumber(value);
 
     if (!value) {
-      return Promise.reject('Required!');
+      return Promise.reject(new Error('Required!'));
     } else if (isTel(value) && valueIsPhone) {
-      return Promise.reject('Invalid phone number!');
+      return Promise.reject(new Error('Invalid phone number!'));
     } else if (!valueIsEmail) {
-      return Promise.reject('Invalid email Address!');
+      return Promise.reject(new Error('Invalid email Address!'));
     }
 
     return Promise.resolve();
