@@ -22,44 +22,6 @@ directive @inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUM
 
 directive @override(from: String!) on FIELD_DEFINITION
 
-"""Use to group multiple elements together"""
-type ComponentSchema {
-  """Date entity was created"""
-  createdAt: DateTime!
-
-  """Date entity was updated"""
-  updatedAt: DateTime!
-
-  """Identifier of the entity"""
-  id: ID!
-
-  """Edit status"""
-  status: EditStatus!
-
-  """Account ID"""
-  createdBy: String!
-
-  """Account ID"""
-  updatedBy: String!
-
-  """Component's name"""
-  name: String!
-
-  """Thumbnail URI"""
-  thumbnailUrl: String
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-enum EditStatus {
-  ACTIVE
-  DRAFT
-  ARCHIVED
-}
-
 type PageSchema {
   """Date entity was created"""
   createdAt: DateTime!
@@ -92,29 +54,56 @@ type PageSchema {
   updatedBy: String!
 }
 
-type DirectionalSchema {
-  """Left side"""
-  left: String
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
-  """Right side"""
-  right: String
-
-  """Top side"""
-  top: String
-
-  """Bottom side"""
-  bottom: String
+enum EditStatus {
+  ACTIVE
+  DRAFT
+  ARCHIVED
 }
 
-type StyleSchema {
-  """Padding"""
-  padding: DirectionalSchema!
+type PageSectionFormatSchema {
+  """Date entity was created"""
+  createdAt: DateTime!
 
-  """Margin"""
-  margin: DirectionalSchema!
+  """Date entity was updated"""
+  updatedAt: DateTime!
 
-  """Border radius"""
-  borderRadius: DirectionalSchema!
+  """Identifier of the entity"""
+  id: ID!
+
+  """Row count"""
+  rowsCount: Float!
+
+  """Column gap"""
+  columnGap: Float!
+
+  """Row Gap"""
+  rowGap: Float!
+
+  """Account ID of updater"""
+  updatedBy: String!
+}
+
+type SectionSchema {
+  """Date entity was created"""
+  createdAt: DateTime!
+
+  """Date entity was updated"""
+  updatedAt: DateTime!
+
+  """Identifier of the entity"""
+  id: ID!
+
+  """Head node"""
+  head: String
+
+  """Section format configuration"""
+  format: PageSectionFormatSchema!
+  updatedBy: String!
 }
 
 type SiteSchema {
@@ -160,122 +149,65 @@ type PageUpdatedResponse {
   status: EditStatus!
 }
 
+type SectionElementPlatform {
+  """Date entity was created"""
+  createdAt: DateTime!
+
+  """Date entity was updated"""
+  updatedAt: DateTime!
+
+  """Identifier of the entity"""
+  id: ID!
+
+  """X position"""
+  x: Float!
+
+  """Y position"""
+  y: Float!
+
+  """Height"""
+  height: Float!
+
+  """Width"""
+  width: Float!
+
+  """Whether this element is visible"""
+  isVisible: Boolean!
+}
+
 type SiteUpdatedResponse {
   """Identifier of the entity"""
   id: ID!
 
+  """Site name"""
+  name: String!
+
   """Site status"""
   status: SiteStatus!
+
+  """Site url"""
+  url: String
 }
 
 type Query {
   siteList: [SiteSchema!]!
   site(id: String!): SiteSchema!
   pageList(siteId: String!): [PageSchema!]!
-  page(siteId: String!, id: String!): PageSchema!
-  component(id: String!): ComponentSchema!
-  componentList: [ComponentSchema!]!
-  flatElementList(filter: PageContextInput!): [ElementUnion!]!
-}
-
-union ElementUnion = BoxElementSchema | TextElementSchema
-
-type BoxElementSchema {
-  """Date entity was created"""
-  createdAt: DateTime!
-
-  """Date entity was updated"""
-  updatedAt: DateTime!
-
-  """Identifier of the entity"""
-  id: ID!
-
-  """When is root, parent is not an element"""
-  isRoot: Boolean
-
-  """Parent of element"""
-  parent: String!
-  updatedBy: String!
-
-  """Element type"""
-  type: ElementType!
-
-  """Element style"""
-  style: StyleSchema
-
-  """Positional"""
-  after: String
-  htmlType: HTMLType!
-}
-
-enum ElementType {
-  Text
-  Input
-  Box
-  Image
-  Video
-  Link
-}
-
-enum HTMLType {
-  div
-  button
-}
-
-type TextElementSchema {
-  """Date entity was created"""
-  createdAt: DateTime!
-
-  """Date entity was updated"""
-  updatedAt: DateTime!
-
-  """Identifier of the entity"""
-  id: ID!
-
-  """When is root, parent is not an element"""
-  isRoot: Boolean
-
-  """Parent of element"""
-  parent: String!
-  updatedBy: String!
-
-  """Element type"""
-  type: ElementType!
-
-  """Element style"""
-  style: StyleSchema
-
-  """Positional"""
-  after: String
-
-  """Text"""
-  text: String!
-}
-
-input PageContextInput {
-  """Site ID"""
-  siteId: String!
-
-  """Page ID"""
-  pageId: String!
+  page(id: String!): PageSchema!
+  sectionList(pageId: String!): [SectionSchema!]!
+  section(sectionId: String!): SectionSchema!
 }
 
 type Mutation {
   createSite(input: CreateSiteInput!): SiteUpdatedResponse!
   updateSite(input: UpdateSiteInput!, id: String!): SiteUpdatedResponse!
   createPage(siteId: String!, input: CreatePageInput!): PageUpdatedResponse!
-  deletePage(siteId: String!, id: String!): PageUpdatedResponse!
-  updatePage(siteId: String!, id: String!, input: UpdatePageInput!): PageUpdatedResponse!
-  getOrCreateFirstPage(siteId: String!): PageSchema!
-  createComponent(input: CreateComponentInput!): ComponentSchema!
-  updateComponent(id: String!, input: UpdateComponentInput!): Boolean!
-  deleteComponent(id: String!): Boolean!
-  archiveComponent(id: String!): Boolean!
-  deleteElement(input: DeleteElementInput!): Boolean!
-  createBox(input: CreateBoxInput!): String!
-  updateBox(input: UpdateBoxInput!): Boolean!
-  createText(input: CreateTextInput!): String!
-  updateText(input: UpdateTextInput!): Boolean!
+  deletePage(id: String!): PageUpdatedResponse!
+  updatePage(id: String!, input: UpdatePageInput!): PageUpdatedResponse!
+  createSection(pageId: String!, input: CreateSectionInput!): SectionSchema!
+  updateSectionFormat(sectionId: String!, input: UpdateSectionFormatInput!): SectionSchema!
+  updateSectionHead(sectionId: String!, headId: String!): SectionSchema!
+  deleteSection(sectionId: String!): SectionSchema!
 }
 
 input CreateSiteInput {
@@ -304,87 +236,20 @@ input UpdatePageInput {
   description: String
 }
 
-input CreateComponentInput {
-  """Component's name"""
-  name: String!
+input CreateSectionInput {
+  """Head node"""
+  head: String
 }
 
-input UpdateComponentInput {
-  """Component's name"""
-  name: String
-}
+input UpdateSectionFormatInput {
+  """Row count"""
+  rowsCount: Float
 
-input DeleteElementInput {
-  """Element context"""
-  ctx: PageContextInput!
-  style: StyleInput
-  parent: String!
+  """Column gap"""
+  columnGap: Float
 
-  """Element ID"""
-  elementId: String!
-}
-
-input StyleInput {
-  top: DirectionalInput
-  bottom: DirectionalInput
-  left: DirectionalInput
-  right: DirectionalInput
-}
-
-input DirectionalInput {
-  """Left side"""
-  left: String
-
-  """Right side"""
-  right: String
-
-  """Top side"""
-  top: String
-
-  """Bottom side"""
-  bottom: String
-}
-
-input CreateBoxInput {
-  """Element context"""
-  ctx: PageContextInput!
-  style: StyleInput
-  parent: String!
-  htmlType: HTMLType
-}
-
-input UpdateBoxInput {
-  """Element context"""
-  ctx: PageContextInput!
-  style: StyleInput
-  parent: String!
-
-  """Element ID"""
-  elementId: String!
-  htmlType: HTMLType
-}
-
-input CreateTextInput {
-  """Element context"""
-  ctx: PageContextInput!
-  style: StyleInput
-  parent: String!
-
-  """Text"""
-  text: String!
-}
-
-input UpdateTextInput {
-  """Element context"""
-  ctx: PageContextInput!
-  style: StyleInput
-  parent: String!
-
-  """Element ID"""
-  elementId: String!
-
-  """Text"""
-  text: String
+  """Row Gap"""
+  rowGap: Float
 }
 
 scalar link__Import

@@ -42,7 +42,6 @@ export abstract class MetadataProvider<T> implements OnApplicationBootstrap {
         );
       }
     }
-    // eslint-disable-next-line no-empty
 
     return metadata;
   }

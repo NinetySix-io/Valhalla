@@ -20,19 +20,10 @@ export class GetSiteHandler
 
   async execute(command: GetSiteQuery): Promise<GetSiteResponse> {
     const query: FilterQuery<SiteSchema> = {};
-    const { siteId, ownerId } = command.request;
+    const { siteId } = command.request;
     query._id = toObjectId(siteId);
-    if (ownerId) {
-      query.ownBy = toObjectId(ownerId);
-    }
-
-    const site = await this.sites.findOne(query);
-    const serialized = site
-      ? SiteTransformer.fromEntity(site).proto
-      : undefined;
-
-    return {
-      site: serialized,
-    };
+    const site = await this.sites.findOne(query).orFail();
+    const serialized = SiteTransformer.fromEntity(site).proto;
+    return { data: serialized };
   }
 }

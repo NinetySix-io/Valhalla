@@ -3,7 +3,6 @@ syntax = "proto3";
 package serv.sites;
 
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/struct.proto";
 
 service SitesService {
   // -----------------------------
@@ -21,29 +20,19 @@ service SitesService {
   rpc CreatePage(CreatePageRequest) returns (CreatePageResponse) {}
   rpc GetPageList(GetPageListRequest) returns (GetPageListResponse) {}
   rpc GetPage(GetPageRequest) returns (GetPageResponse) {}
-  rpc GetOrCreateFirstPage(GetOrCreateFirstPageRequest) returns (GetOrCreateFirstPageResponse) {}
   rpc UpdatePage(UpdatePageRequest) returns (UpdatePageResponse) {}
   rpc DeletePage(DeletePageRequest) returns (DeletePageResponse) {}
   rpc ArchivePage(ArchivePageRequest) returns (ArchivePageResponse) {}
 
   // -----------------------------
-  // COMPONENT
+  // SECTION
   // -----------------------------
-  rpc GetComponent(GetComponentRequest) returns (GetComponentResponse) {}
-  rpc GetComponentList(GetComponentListRequest) returns (GetComponentListResponse) {}
-  rpc CreateComponent(CreateComponentRequest) returns (CreateComponentResponse) {}
-  rpc UpdateComponent(UpdateComponentRequest) returns (UpdateComponentResponse) {}
-  rpc DeleteComponent(DeleteComponentRequest) returns (DeleteComponentResponse) {}
-  rpc ArchiveComponent(ArchiveComponentRequest) returns (ArchiveComponentResponse) {}
-
-  // -----------------------------
-  // Elements
-  // -----------------------------
-  rpc GetElementFlatList(GetElementFlatListRequest) returns (GetElementFlatListResponse) {}
-  rpc GetElementHierarchicalList(GetElementHierarchicalListRequest) returns (GetElementHierarchicalListResponse) {}
-  rpc CreateElement(CreateElementRequest) returns(CreateElementResponse) {}
-  rpc UpdateElement(UpdateElementRequest) returns(UpdateElementResponse) {}
-  rpc DeleteElement(DeleteElementRequest) returns(DeleteElementResponse) {}
+  rpc GetPageSection(GetPageSectionRequest) returns (GetPageSectionResponse) {}
+  rpc GetPageSectionList(GetPageSectionListRequest) returns (GetPageSectionListResponse) {}
+  rpc CreateSection(CreateSectionRequest) returns (CreateSectionResponse) {}
+  rpc UpdateIndexSection(UpdateSectionIndexRequest) returns (UpdateSectionResponse) {}
+  rpc UpdateFormatSection(UpdateSectionFormatRequest) returns (UpdateSectionResponse) {}
+  rpc DeleteSection(DeleteSectionRequest) returns (DeleteSectionResponse) {}
 }
 
 // -----------------------------
@@ -61,123 +50,23 @@ enum EditStatus {
   ARCHIVED = 2;
 }
 
+enum HTMLType {
+  div = 0;
+  button = 1;
+}
+
 enum ElementType {
-  meta = 0;
-  style = 1;
-  link = 2;
-  title = 3;
-  address = 4;
-  article = 5;
-  aside = 6;
-  footer = 7;
-  header = 8;
-  h1 = 9;
-  h2 = 10;
-  h3 = 11;
-  h4 = 12;
-  h5 = 13;
-  h6 = 14;
-  main = 15;
-  nav = 16;
-  section = 17;
-
-  blockquote = 18;
-  dd = 19;
-  div = 20;
-  dl = 21;
-  dt = 22;
-  figcaption = 23;
-  figure = 24;
-  hr = 25;
-  li = 26;
-  menu = 27;
-  ol = 28;
-  p = 29;
-  pre = 30;
-  ul = 31;
-
-  a = 32;
-  abbr = 33;
-  b = 34;
-  bdi = 35;
-  bdo = 36;
-  br = 37;
-  cite = 38;
-  code = 39;
-  data = 40;
-  dfn = 41;
-  em = 42;
-  i = 43;
-  kbd = 44;
-  mark = 45;
-  q = 46;
-  rp = 47;
-  rt = 48;
-  ruby = 49;
-  s = 50;
-  samp = 51;
-  small = 52;
-  span = 53;
-  strong = 54;
-  sub = 55;
-  sup = 56;
-  time = 57;
-  u = 58;
-  var = 59;
-  wbr = 60;
-  area = 61;
-  audio = 62;
-  img = 63;
-  map = 64;
-  track = 65;
-  video = 66;
-  embed = 67;
-  iframe = 68;
-  object = 69;
-  picture = 70;
-  portal = 71;
-  source = 72;
-  svg = 73;
-  math = 74;
-  canvas = 75;
-  noscript = 76;
-  script = 77;
+  Text = 0;
+  Input = 1;
+  Box = 2;
+  Image = 3;
+  Video = 4;
+  Link = 6;
 }
 
 // -----------------------------
 // Entity
 // -----------------------------
-
-message Component {
-  string id = 1;
-  string name = 2;
-  string ownBy = 3;
-  string updatedBy = 4;
-  string createdBy = 5;
-  string thumbnailUrl = 6;
-  EditStatus status = 7;
-  google.protobuf.Timestamp updatedAt = 8;
-  google.protobuf.Timestamp createdAt = 9;
-}
-
-message Element {
-  string id = 1;
-  repeated string owners = 2;
-  string parent = 3;
-  string updatedBy = 4;
-  ElementType type = 5;
-  optional bool isRoot = 6;
-  google.protobuf.Struct props = 7;
-  google.protobuf.Timestamp createdAt = 8;
-  google.protobuf.Timestamp updatedAt = 9;
-}
-
-message HierarchicalElement {
-  string id = 1;
-  ElementType type = 2;
-  google.protobuf.Struct props = 3;
-  repeated HierarchicalElement children = 4;
-}
 
 message Page {
   string id = 1;
@@ -206,121 +95,38 @@ message Site {
   google.protobuf.Timestamp updatedAt = 9;
 }
 
-// -----------------------------
-// COMPONENTS
-// -----------------------------
-
-message CreateElementRequest {
-  string parent = 1;
-  string requestedUserId = 2;
-  repeated string owners = 3;
-  ElementType type = 4;
-  optional bool isRoot = 5;
-  optional google.protobuf.Struct props = 6;
+message SectionFormat {
+  optional int32 rowsCount = 1;
+  optional int32 columnGap = 2;
+  optional int32 rowGap = 3;
 }
 
-message CreateElementResponse {
-  Element element = 1;
+message Section {
+  string id = 1;
+  string page = 2;
+  int32 index = 3;
+  SectionFormat format = 4;
+
+  google.protobuf.Timestamp createdAt = 10;
+  google.protobuf.Timestamp updatedAt = 11;
 }
 
-message UpdateElementRequest {
-  string elementId = 1;
-  string requestedUserId = 2;
-  repeated string owners = 3;
-  optional string type = 4;
-  optional string parent = 5;
-  optional google.protobuf.Struct props = 6;
+message SectionElementPlatform {
+  int32 x = 1;
+  int32 y = 2;
+  int32 height = 3;
+  int32 width = 4;
+  bool isVisible = 5;
 }
 
-message UpdateElementResponse {
-  Element element = 1;
-}
+message SectionElement {
+  string id = 1;
+  SectionElementPlatform desktop = 2;
+  optional SectionElementPlatform tablet = 3;
+  optional SectionElementPlatform mobile = 4;
 
-message DeleteElementRequest {
-  string elementId = 1;
-  string requestedUserId = 2;
-  repeated string owners = 3;
-}
-
-message DeleteElementResponse {
-  Element element = 1;
-}
-
-message GetElementFlatListRequest {
-  repeated string owners = 3;
-}
-
-message GetElementFlatListResponse {
-  repeated Element elements = 1;
-}
-
-message GetElementHierarchicalListRequest {
-  repeated string owners = 3;
-}
-
-message GetElementHierarchicalListResponse {
-  repeated HierarchicalElement elements = 1;
-}
-
-message CreateComponentRequest {
-  string requestedUserId = 1;
-  string ownerId = 2;
-  string name = 4;
-  optional EditStatus status = 3;
-}
-
-message CreateComponentResponse {
-  Component component = 1;
-}
-
-message UpdateComponentRequest {
-  string ownerId = 1;
-  string componentId = 2;
-  string requestedUserId = 3;
-
-  optional string name = 4;
-  optional EditStatus status = 5;
-}
-
-message UpdateComponentResponse {
-  Component component = 1;
-}
-
-message DeleteComponentRequest {
-  string ownerId = 1;
-  string componentId = 2;
-  string requestedUserId = 3;
-}
-
-message DeleteComponentResponse {
-  Component component = 1;
-}
-
-message ArchiveComponentRequest {
-  string ownerId = 1;
-  string componentId = 2;
-  string requestedUserId = 3;
-}
-
-message ArchiveComponentResponse {
-  Component component = 1;
-}
-
-message GetComponentRequest {
-  string ownerId = 1;
-  string componentId = 2;
-}
-
-message GetComponentResponse {
-  Component component = 1;
-}
-
-message GetComponentListRequest {
-  string ownerId = 1;
-}
-
-message GetComponentListResponse {
-  repeated Component componentList = 1;
+  google.protobuf.Timestamp createdAt = 10;
+  google.protobuf.Timestamp updatedAt = 11;
 }
 
 // -----------------------------
@@ -334,72 +140,53 @@ message CreatePageRequest {
 }
 
 message CreatePageResponse {
-  Page page = 1;
-}
-
-message GetOrCreateFirstPageRequest {
-  string requestedUserId = 1;
-  string ownerId = 2;
-  string siteId = 3;
-  optional string fallbackTitle = 4;
-}
-
-message GetOrCreateFirstPageResponse {
-  Page page = 1;
+  Page data = 1;
 }
 
 message GetPageRequest {
-  string ownerId = 1;
-  string siteId = 2;
-  string pageId = 3;
+  string pageId = 1;
 }
 
 message GetPageResponse {
-  optional Page page = 1;
+  optional Page data = 1;
 }
 
 message GetPageListRequest {
-  string ownerId = 1;
-  string siteId = 2;
+  string siteId = 1;
 }
 
 message GetPageListResponse {
-  repeated Page pageList = 1;
+  repeated Page data = 1;
 }
 
 message UpdatePageRequest {
-  string ownerId = 1;
-  string siteId = 2;
-  string pageId = 3;
-  string requestedUserId = 4;
-  optional string title = 5;
-  optional string description = 6;
-  optional bool isLoneTitle = 7;
+  string requestedUserId = 1;
+  string pageId = 2;
+  optional string title = 3;
+  optional string description = 4;
+  optional bool isLoneTitle = 5;
 }
 
 message UpdatePageResponse {
-  Page page = 1;
+  Page data = 1;
 }
 
 message DeletePageRequest {
-  string ownerId = 1;
-  string siteId = 2;
-  string requestedUserId = 3;
-  string pageId = 4;
+  string requestedUserId = 1;
+  string pageId = 2;
 }
 
 message DeletePageResponse {
-  Page page = 1;
+  Page data = 1;
 }
 
 message ArchivePageRequest {
-  string ownerId = 1;
-  string siteId = 2;
-  string requestedUserId = 3;
+  string pageId = 1;
+  string requestedUserId = 2;
 }
 
 message ArchivePageResponse {
-  Page page = 1;
+  Page data = 1;
 }
 
 // -----------------------------
@@ -415,46 +202,96 @@ message CreateSiteRequest {
 }
 
 message CreateSiteResponse {
-  string siteId = 1;
-  SiteStatus status = 2;
+  Site data = 1;
 }
 
 message UpdateSiteRequest {
   string requestedUserId = 1;
-  string ownerId = 2;
-  string siteId = 3;
-  optional string name = 4;
+  string siteId = 2;
+  optional string name = 3;
 }
 
 message UpdateSiteResponse {
-  Site site = 1;
+  Site data = 1;
 }
 
 message GetSiteRequest {
   string siteId = 1;
-  optional string ownerId = 2;
 }
 
 message GetSiteResponse {
-  Site site = 1;
+  Site data = 1;
 }
 
 message GetSiteListRequest {
-  oneof query {
-    string ownerId = 1;
-  }
+  string ownerId = 1;
 }
 
 message GetSiteListResponse {
-  repeated Site sites = 1;
+  repeated Site data = 1;
 }
 
 message SuspendSiteRequest {
   string requestedUserId = 1;
-  string ownerId = 2;
-  string siteId = 3;
+  string siteId = 2;
 }
 
 message SuspendSiteResponse {
-  Site site = 1;
+  Site data = 1;
+}
+
+// -----------------------------
+// SECTIONS
+// -----------------------------
+
+message GetPageSectionRequest {
+  string pageId = 1;
+  string sectionId = 2;
+}
+
+message GetPageSectionResponse {
+  Section data = 1;
+}
+
+message GetPageSectionListRequest {
+  string pageId = 1;
+}
+
+message GetPageSectionListResponse {
+  repeated Section data = 1;
+}
+
+message CreateSectionRequest {
+  string pageId = 3;
+  string requestedUserId = 4;
+  optional string afterSectionId = 5;
+}
+
+message CreateSectionResponse {
+  Section data = 1;
+}
+
+message UpdateSectionIndexRequest {
+  string sectionId = 4;
+  string requestedUserId = 5;
+  int32 index = 6;
+}
+
+message UpdateSectionFormatRequest {
+  string sectionId = 4;
+  string requestedUserId = 5;
+  SectionFormat format = 6;
+}
+
+message UpdateSectionResponse {
+  Section data = 1;
+}
+
+message DeleteSectionRequest {
+  string sectionId = 4;
+  string requestedUserId = 5;
+}
+
+message DeleteSectionResponse {
+  Section data = 1;
 }

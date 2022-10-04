@@ -24,20 +24,20 @@ const loader = {
 @Injectable()
 export class OrgsRpcClientService extends MetadataProvider<OrgsServiceClient> {
   @RpcClient({
+    url: undefined,
     package: service,
     service,
     protoPath,
     loader,
-    url: undefined,
   })
   public readonly client!: GrpcClient;
 
   @Service(ORGS_SERVICE_NAME, {
+    url: undefined,
     package: service,
     service,
     protoPath,
     loader,
-    url: undefined,
   })
   public _svc!: OrgsServiceClient;
 

@@ -21,21 +21,15 @@ export class GetSiteListHandler
 
   async execute(command: GetSiteListQuery): Promise<GetSiteListResponse> {
     const query: FilterQuery<SiteSchema> = {};
-
-    if (command.request.query) {
-      if (command.request.query.$case === 'ownerId') {
-        query.ownBy = toObjectId(command.request.query.ownerId);
-      }
-    }
+    query.ownBy = toObjectId(command.request.ownerId);
 
     if (isEmpty(query)) {
       throw new Error('Invalid Query');
     }
 
     const sites = await this.sites.find(query).lean();
-
     return {
-      sites: sites.map((site) => SiteTransformer.fromEntity(site).proto),
+      data: sites.map((site) => SiteTransformer.fromEntity(site).proto),
     };
   }
 }

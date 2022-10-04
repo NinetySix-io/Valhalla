@@ -1,11 +1,7 @@
 import { SiteSchema } from '@app/entities/sites/schema';
 import { gRpcController } from '@app/grpc/grpc.controller';
 import { Site } from '@app/protobuf';
-import {
-  NotFoundException,
-  UseGuards,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
   AccountActiveOrg,
@@ -40,17 +36,13 @@ export class GqlSitesResolver {
       }),
     );
 
-    return {
-      id: result.siteId,
-      status: result.status,
-    };
+    return result.data;
   }
 
   @Mutation(() => SiteUpdatedResponse)
   @UseGuards(GqlAuthGuard)
   async updateSite(
     @CurrentAccount() account: AuthAccount,
-    @AccountActiveOrg() orgId: string,
     @Args('input', new ParamValidationPipe([EmptyObjectValidation]))
     input: UpdateSiteInput,
     @Args('id', new ParamValidationPipe([ObjectIdParamValidation]))
@@ -61,18 +53,10 @@ export class GqlSitesResolver {
         name: input.name,
         requestedUserId: account.id,
         siteId: siteId,
-        ownerId: orgId,
       }),
     );
 
-    if (!result.site) {
-      throw new InternalServerErrorException();
-    }
-
-    return {
-      id: result.site.id,
-      status: result.site.status,
-    };
+    return result.data;
   }
 
   @Query(() => [SiteSchema])
@@ -80,34 +64,25 @@ export class GqlSitesResolver {
   async siteList(@AccountActiveOrg() orgId: string): Promise<Site[]> {
     const result = await resolveRpcRequest(
       this.rpcClient.getSiteList({
-        query: {
-          $case: 'ownerId',
-          ownerId: orgId,
-        },
+        ownerId: orgId,
       }),
     );
 
-    return result.sites;
+    return result.data;
   }
 
   @Query(() => SiteSchema)
   @UseGuards(GqlAuthGuard)
   async site(
-    @AccountActiveOrg() orgId: string,
     @Args('id', new ParamValidationPipe([ObjectIdParamValidation]))
     siteId: string,
   ): Promise<Site> {
     const result = await resolveRpcRequest(
       this.rpcClient.getSite({
-        ownerId: orgId,
         siteId,
       }),
     );
 
-    if (!result.site) {
-      throw new NotFoundException('Site not found!');
-    }
-
-    return result.site;
+    return result.data;
   }
 }

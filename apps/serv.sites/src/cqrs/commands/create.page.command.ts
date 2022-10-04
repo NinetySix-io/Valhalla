@@ -53,9 +53,6 @@ export class CreatePageHandler
 
     const serialized = new PageTransformer(page).proto;
     this.eventBus.publish(new PageCreatedEvent(serialized));
-
-    return {
-      page: serialized,
-    };
+    return { data: serialized };
   }
 }

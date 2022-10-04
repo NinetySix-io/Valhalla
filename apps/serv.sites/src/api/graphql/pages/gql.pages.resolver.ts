@@ -1,13 +1,9 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { PageSchema } from '@app/entities/pages/schema';
+import { PageSchema } from '@app/entities/pages/schemas';
 import { gRpcController } from '@app/grpc/grpc.controller';
 import { Page } from '@app/protobuf';
-import {
-  NotFoundException,
-  UseGuards,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import {
   AccountActiveOrg,
   AuthAccount,
@@ -19,8 +15,8 @@ import {
   resolveRpcRequest,
 } from '@valhalla/serv.core';
 import { CreatePageInput } from './inputs/create.page.input';
-import { PageUpdatedResponse } from './responses/page.updated.response';
 import { UpdatePageInput } from './inputs/update.page.input';
+import { PageUpdatedResponse } from './responses/page.updated.response';
 
 @Resolver()
 export class GqlPagesResolver {
@@ -37,20 +33,16 @@ export class GqlPagesResolver {
   ): Promise<PageUpdatedResponse> {
     const result = await resolveRpcRequest(
       this.rpcClient.createPage({
+        siteId,
         requestedUserId: account.id,
         ownerId: organizationId,
-        siteId,
         title: input.title,
       }),
     );
 
-    if (!result.page) {
-      throw new InternalServerErrorException();
-    }
-
     return {
-      id: result.page.id,
-      status: result.page.status,
+      id: result.data.id,
+      status: result.data.status,
     };
   }
 
@@ -58,28 +50,19 @@ export class GqlPagesResolver {
   @UseGuards(GqlAuthGuard)
   async deletePage(
     @CurrentAccount() account: AuthAccount,
-    @AccountActiveOrg() organizationId: string,
-    @Args('siteId', new ParamValidationPipe([ObjectIdParamValidation]))
-    siteId: string,
     @Args('id', new ParamValidationPipe([ObjectIdParamValidation]))
     pageId: string,
   ): Promise<PageUpdatedResponse> {
     const result = await resolveRpcRequest(
       this.rpcClient.deletePage({
         pageId,
-        siteId,
-        ownerId: organizationId,
         requestedUserId: account.id,
       }),
     );
 
-    if (!result.page) {
-      throw new NotFoundException();
-    }
-
     return {
-      id: result.page.id,
-      status: result.page.status,
+      id: result.data.id,
+      status: result.data.status,
     };
   }
 
@@ -87,9 +70,6 @@ export class GqlPagesResolver {
   @UseGuards(GqlAuthGuard)
   async updatePage(
     @CurrentAccount() account: AuthAccount,
-    @AccountActiveOrg() organizationId: string,
-    @Args('siteId', new ParamValidationPipe([ObjectIdParamValidation]))
-    siteId: string,
     @Args('id', new ParamValidationPipe([ObjectIdParamValidation]))
     pageId: string,
     @Args('input', new ParamValidationPipe([EmptyObjectValidation]))
@@ -98,8 +78,6 @@ export class GqlPagesResolver {
     const result = await resolveRpcRequest(
       this.rpcClient.updatePage({
         requestedUserId: account.id,
-        ownerId: organizationId,
-        siteId,
         pageId,
         isLoneTitle: input.isLoneTitle,
         title: input.title,
@@ -107,73 +85,39 @@ export class GqlPagesResolver {
       }),
     );
 
-    if (!result.page) {
-      throw new NotFoundException();
-    }
-
     return {
-      id: result.page.id,
-      status: result.page.status,
+      id: result.data.id,
+      status: result.data.status,
     };
   }
 
   @Query(() => [PageSchema])
   @UseGuards(GqlAuthGuard)
   async pageList(
-    @AccountActiveOrg() organizationId: string,
     @Args('siteId', new ParamValidationPipe([ObjectIdParamValidation]))
     siteId: string,
   ): Promise<Page[]> {
     const result = await resolveRpcRequest(
       this.rpcClient.getPageList({
-        ownerId: organizationId,
         siteId,
       }),
     );
 
-    return result.pageList;
+    return result.data;
   }
 
   @Query(() => PageSchema)
   @UseGuards(GqlAuthGuard)
   async page(
-    @AccountActiveOrg() organizationId: string,
-    @Args('siteId', new ParamValidationPipe([ObjectIdParamValidation]))
-    siteId: string,
     @Args('id', new ParamValidationPipe([ObjectIdParamValidation]))
     pageId: string,
   ): Promise<Page> {
     const result = await resolveRpcRequest(
       this.rpcClient.getPage({
         pageId,
-        siteId,
-        ownerId: organizationId,
       }),
     );
 
-    if (!result.page) {
-      throw new NotFoundException();
-    }
-
-    return result.page;
-  }
-
-  @Mutation(() => PageSchema)
-  @UseGuards(GqlAuthGuard)
-  async getOrCreateFirstPage(
-    @CurrentAccount() account: AuthAccount,
-    @AccountActiveOrg() organizationId: string,
-    @Args('siteId', new ParamValidationPipe([ObjectIdParamValidation]))
-    siteId: string,
-  ): Promise<Page> {
-    const result = await resolveRpcRequest(
-      this.rpcClient.getOrCreateFirstPage({
-        requestedUserId: account.id,
-        ownerId: organizationId,
-        siteId,
-      }),
-    );
-
-    return result.page;
+    return result.data;
   }
 }

@@ -1,9 +1,9 @@
-import { toDto, typegoose } from '@valhalla/serv.core';
-
-import { PageSchema } from './schema';
+import { LeanDocument } from 'mongoose';
+import { PageSchema } from './schemas';
 import { Page as Proto } from '@app/protobuf';
+import { toDto } from '@valhalla/serv.core';
 
-type Entity = typegoose.DocumentType<PageSchema> | PageSchema;
+type Entity = LeanDocument<PageSchema> | PageSchema;
 export class PageTransformer extends PageSchema {
   constructor(entity: Entity) {
     super();

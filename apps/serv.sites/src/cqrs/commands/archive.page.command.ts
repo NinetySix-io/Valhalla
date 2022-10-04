@@ -30,25 +30,17 @@ export class ArchivePageHandler
   ) {}
 
   async execute(command: ArchivePageCommand): Promise<ArchivePageResponse> {
-    const { ownerId, siteId, requestedUserId } = command.request;
-    const ownBy = toObjectId(ownerId);
-    const site = toObjectId(siteId);
+    const { pageId, requestedUserId } = command.request;
+    const _id = toObjectId(pageId);
     const updatedBy = toObjectId(requestedUserId);
     const status = EditStatus.ARCHIVED;
     const page = await this.pages
-      .findOneAndUpdate(
-        { ownBy, site },
-        { $set: { status, updatedBy } },
-        { new: true },
-      )
+      .findOneAndUpdate({ _id }, { $set: { status, updatedBy } }, { new: true })
       .lean()
       .orFail();
 
     const serialized = new PageTransformer(page).proto;
     this.eventBus.publish(new PageArchivedEvent(serialized));
-
-    return {
-      page: serialized,
-    };
+    return { data: serialized };
   }
 }

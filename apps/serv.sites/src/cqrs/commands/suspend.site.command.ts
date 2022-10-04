@@ -30,25 +30,17 @@ export class SuspendSiteHandler
   ) {}
 
   async execute(command: SuspendSiteCommand): Promise<SuspendSiteResponse> {
-    const { requestedUserId, ownerId, siteId } = command.request;
+    const { requestedUserId, siteId } = command.request;
     const _id = toObjectId(siteId);
     const updatedBy = toObjectId(requestedUserId);
-    const ownBy = toObjectId(ownerId);
     const status = SiteStatus.SUSPENDED;
     const site = await this.sites
-      .findOneAndUpdate(
-        { _id, ownBy },
-        { $set: { updatedBy, status } },
-        { new: true },
-      )
+      .findOneAndUpdate({ _id }, { $set: { updatedBy, status } }, { new: true })
       .lean()
       .orFail();
 
     const serialized = new SiteTransformer(site).proto;
     this.eventBus.publish(new SiteSuspendedEvent(serialized));
-
-    return {
-      site: serialized,
-    };
+    return { data: serialized };
   }
 }

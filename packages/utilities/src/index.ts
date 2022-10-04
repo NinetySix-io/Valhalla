@@ -6,3 +6,4 @@ export * from './validators';
 export * from './make.tag';
 export * from './event.emitter';
 export * from './array';
+export * from './flatten.object';

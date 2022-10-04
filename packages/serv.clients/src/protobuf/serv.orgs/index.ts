@@ -95,9 +95,7 @@ export interface RestoreOrgRequest {
 }
 
 export interface GetOrgRequest {
-  query?:
-    | { $case: "orgId"; orgId: string }
-    | { $case: "orgSlug"; orgSlug: string };
+  query?: { $case: "orgId"; orgId: string } | { $case: "orgSlug"; orgSlug: string };
 }
 
 export interface GetOrgResponse {
@@ -138,62 +136,35 @@ export interface OrgsServiceClient {
 
   updateOrgLogo(request: UpdateOrgLogoRequest): Observable<Organization>;
 
-  markDeleteMember(
-    request: MarkDeleteMemberRequest
-  ): Observable<MarkDeleteMemberResponse>;
+  markDeleteMember(request: MarkDeleteMemberRequest): Observable<MarkDeleteMemberResponse>;
 
   getMember(request: GetMemberRequest): Observable<GetMemberResponse>;
 
-  getUserMemberships(
-    request: GetUserMembershipsRequest
-  ): Observable<GetUserMembershipsResponse>;
+  getUserMemberships(request: GetUserMembershipsRequest): Observable<GetUserMembershipsResponse>;
 }
 
 export interface OrgsServiceController {
-  createOrg(
-    request: CreateOrgRequest
-  ): Promise<Organization> | Observable<Organization> | Organization;
+  createOrg(request: CreateOrgRequest): Promise<Organization> | Observable<Organization> | Organization;
 
-  getOrg(
-    request: GetOrgRequest
-  ): Promise<GetOrgResponse> | Observable<GetOrgResponse> | GetOrgResponse;
+  getOrg(request: GetOrgRequest): Promise<GetOrgResponse> | Observable<GetOrgResponse> | GetOrgResponse;
 
-  archiveOrg(
-    request: ArchiveOrgRequest
-  ): Promise<Organization> | Observable<Organization> | Organization;
+  archiveOrg(request: ArchiveOrgRequest): Promise<Organization> | Observable<Organization> | Organization;
 
-  restoreOrg(
-    request: RestoreOrgRequest
-  ): Promise<Organization> | Observable<Organization> | Organization;
+  restoreOrg(request: RestoreOrgRequest): Promise<Organization> | Observable<Organization> | Organization;
 
-  updateOrgPlan(
-    request: UpdateOrgPlanRequest
-  ): Promise<Organization> | Observable<Organization> | Organization;
+  updateOrgPlan(request: UpdateOrgPlanRequest): Promise<Organization> | Observable<Organization> | Organization;
 
-  updateOrgLogo(
-    request: UpdateOrgLogoRequest
-  ): Promise<Organization> | Observable<Organization> | Organization;
+  updateOrgLogo(request: UpdateOrgLogoRequest): Promise<Organization> | Observable<Organization> | Organization;
 
   markDeleteMember(
-    request: MarkDeleteMemberRequest
-  ):
-    | Promise<MarkDeleteMemberResponse>
-    | Observable<MarkDeleteMemberResponse>
-    | MarkDeleteMemberResponse;
+    request: MarkDeleteMemberRequest,
+  ): Promise<MarkDeleteMemberResponse> | Observable<MarkDeleteMemberResponse> | MarkDeleteMemberResponse;
 
-  getMember(
-    request: GetMemberRequest
-  ):
-    | Promise<GetMemberResponse>
-    | Observable<GetMemberResponse>
-    | GetMemberResponse;
+  getMember(request: GetMemberRequest): Promise<GetMemberResponse> | Observable<GetMemberResponse> | GetMemberResponse;
 
   getUserMemberships(
-    request: GetUserMembershipsRequest
-  ):
-    | Promise<GetUserMembershipsResponse>
-    | Observable<GetUserMembershipsResponse>
-    | GetUserMembershipsResponse;
+    request: GetUserMembershipsRequest,
+  ): Promise<GetUserMembershipsResponse> | Observable<GetUserMembershipsResponse> | GetUserMembershipsResponse;
 }
 
 export function OrgsServiceControllerMethods() {
@@ -210,27 +181,13 @@ export function OrgsServiceControllerMethods() {
       "getUserMemberships",
     ];
     for (const method of grpcMethods) {
-      const descriptor: any = Reflect.getOwnPropertyDescriptor(
-        constructor.prototype,
-        method
-      );
-      GrpcMethod("OrgsService", method)(
-        constructor.prototype[method],
-        method,
-        descriptor
-      );
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
+      GrpcMethod("OrgsService", method)(constructor.prototype[method], method, descriptor);
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
-      const descriptor: any = Reflect.getOwnPropertyDescriptor(
-        constructor.prototype,
-        method
-      );
-      GrpcStreamMethod("OrgsService", method)(
-        constructor.prototype[method],
-        method,
-        descriptor
-      );
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
+      GrpcStreamMethod("OrgsService", method)(constructor.prototype[method], method, descriptor);
     }
   };
 }

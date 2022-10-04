@@ -4,7 +4,7 @@
     "description": "Data model constructor",
     "body": [
       "import { Injectable } from '@nestjs/common';",
-      "import { InjectModel } from 'nestjs-typegoose';",
+      "import { InjectModel } from 'kindagoose';",
       "import { BaseFactory, ModelType } from '@valhalla/serv.core';",
       "import { $1Schema } from './schema';",
       "",

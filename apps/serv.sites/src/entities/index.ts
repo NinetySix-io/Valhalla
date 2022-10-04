@@ -1,26 +1,20 @@
 import { Global, Module, ModuleMetadata } from '@nestjs/common';
 
-import { BoxElementSchema } from './elements/boxes/schema';
-import { BoxElementsModel } from './elements/boxes';
-import { ComponentSchema } from './components/schema';
-import { ComponentsModel } from './components';
-import { ElementSchema } from './elements/schemas/element.schema';
-import { ElementsModel } from './elements';
 import { KindagooseModule } from 'kindagoose';
-import { PageSchema } from './pages/schema';
+import { PageSchema } from './pages/schemas';
 import { PagesModel } from './pages';
+import { SectionElementSchema } from './section.elements/schemas';
+import { SectionElementsModel } from './section.elements';
+import { SectionSchema } from './sections/schemas';
+import { SectionsModel } from './sections';
 import { SiteSchema } from './sites/schema';
 import { SitesModel } from './sites';
-import { TextElementSchema } from './elements/text/schema';
-import { TextElementsModel } from './elements/text';
 
 const ModelProviders: ModuleMetadata['providers'] = [
   SitesModel,
   PagesModel,
-  ComponentsModel,
-  ElementsModel,
-  BoxElementsModel,
-  TextElementsModel,
+  SectionsModel,
+  SectionElementsModel,
 ];
 
 @Global()
@@ -29,14 +23,11 @@ const ModelProviders: ModuleMetadata['providers'] = [
     KindagooseModule.forFeature([
       SiteSchema,
       PageSchema,
-      ComponentSchema,
-      {
-        schema: ElementSchema,
-        discriminators: [BoxElementSchema, TextElementSchema],
-      },
+      SectionSchema,
+      SectionElementSchema,
     ]),
   ],
-  providers: [...ModelProviders],
-  exports: [...ModelProviders],
+  providers: ModelProviders,
+  exports: ModelProviders,
 })
 export class DbEntitiesModule {}

@@ -26,23 +26,14 @@ export class UpdatePageHandler
   ) {}
 
   async execute(command: UpdatePageCommand): Promise<UpdatePageResponse> {
-    const {
-      ownerId,
-      description,
-      title,
-      isLoneTitle,
-      siteId,
-      pageId,
-      requestedUserId,
-    } = command.request;
+    const { description, title, isLoneTitle, pageId, requestedUserId } =
+      command.request;
 
     const _id = toObjectId(pageId);
-    const ownBy = toObjectId(ownerId);
-    const site = toObjectId(siteId);
     const updatedBy = toObjectId(requestedUserId);
     const page = await this.pages
       .findOneAndUpdate(
-        { _id, ownBy, site },
+        { _id },
         { $set: { title, description, isLoneTitle, updatedBy } },
         { withoutNil: true, new: true },
       )
@@ -51,9 +42,6 @@ export class UpdatePageHandler
 
     const serialized = new PageTransformer(page).proto;
     this.eventBus.publish(new PageUpdatedEvent(serialized));
-
-    return {
-      page: serialized,
-    };
+    return { data: serialized };
   }
 }

@@ -5,6 +5,6 @@ import { SiteSchema } from '@app/entities/sites/schema';
 @ObjectType()
 export class SiteUpdatedResponse extends PickType(
   SiteSchema,
-  ['id', 'status'],
+  ['id', 'status', 'name', 'url'],
   ObjectType,
 ) {}

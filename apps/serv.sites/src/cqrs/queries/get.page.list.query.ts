@@ -17,12 +17,9 @@ export class GetPageListHandler
   constructor(private readonly pagesEntity: PagesModel) {}
 
   async execute(command: GetPageListQuery): Promise<GetPageListResponse> {
-    const ownBy = toObjectId(command.request.ownerId);
     const site = toObjectId(command.request.siteId);
-    const pageList = await this.pagesEntity.find({ ownBy, site }).lean();
+    const pageList = await this.pagesEntity.find({ site }).lean();
     const serialized = pageList.map((page) => new PageTransformer(page).proto);
-    return {
-      pageList: serialized,
-    };
+    return { data: serialized };
   }
 }

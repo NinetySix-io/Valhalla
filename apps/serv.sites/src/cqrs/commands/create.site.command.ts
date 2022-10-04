@@ -46,10 +46,6 @@ export class CreateSiteHandler
     const serialized = SiteTransformer.fromEntity(site).proto;
     const event = new SiteCreatedEvent(serialized);
     this.eventBus.publish(event);
-
-    return {
-      siteId: site.id,
-      status: site.status,
-    };
+    return { data: serialized };
   }
 }

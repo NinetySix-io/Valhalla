@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'kindagoose';
 import { BaseFactory, ModelType } from '@valhalla/serv.core';
-import { PageSchema } from './schema';
+import { PageSchema } from './schemas';
 
 @Injectable()
 export class PagesModel extends BaseFactory<PageSchema> {

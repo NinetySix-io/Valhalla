@@ -21,115 +21,6 @@ export enum EditStatus {
   ARCHIVED = "ARCHIVED",
 }
 
-export enum HTMLType {
-  div = "div",
-  button = "button",
-}
-
-export enum ElementType {
-  Text = "Text",
-  Input = "Input",
-  Box = "Box",
-  Image = "Image",
-  Video = "Video",
-  Link = "Link",
-}
-
-export interface LinkAction {
-  href: string;
-  target: string;
-}
-
-export interface Style {}
-
-export interface Action {
-  action?: { $case: "link"; link: LinkAction };
-}
-
-export interface Component {
-  id: string;
-  name: string;
-  ownBy: string;
-  updatedBy: string;
-  createdBy: string;
-  thumbnailUrl: string;
-  status: EditStatus;
-  updatedAt?: Date;
-  createdAt?: Date;
-}
-
-export interface InputElement {
-  id: string;
-  parent: string;
-  owners: string[];
-  style?: Style;
-  after?: string | undefined;
-}
-
-export interface TextElement {
-  id: string;
-  parent: string;
-  owners: string[];
-  text: string;
-  style?: Style;
-  after?: string | undefined;
-}
-
-export interface BoxElement {
-  id: string;
-  parent: string;
-  owners: string[];
-  isRoot?: boolean | undefined;
-  style?: Style;
-  htmlType?: HTMLType | undefined;
-  after?: string | undefined;
-}
-
-export interface LinkElement {
-  id: string;
-  parent: string;
-  owners: string[];
-  url: string;
-  isNewTab: string;
-  style?: Style;
-  after?: string | undefined;
-}
-
-export interface ImageElement {
-  id: string;
-  parent: string;
-  resource: string;
-  owners: string[];
-  style?: Style;
-  after?: string | undefined;
-}
-
-export interface VideoElement {
-  id: string;
-  owners: string[];
-  parent: string;
-  resource: string;
-  style?: Style;
-  after?: string | undefined;
-}
-
-export interface Element {
-  element?:
-    | { $case: "Text"; Text: TextElement }
-    | { $case: "Input"; Input: InputElement }
-    | { $case: "Box"; Box: BoxElement }
-    | { $case: "Link"; Link: LinkElement }
-    | { $case: "Image"; Image: ImageElement }
-    | { $case: "Video"; Video: VideoElement };
-}
-
-export interface HierarchicalElement {
-  id: string;
-  type: ElementType;
-  props?: { [key: string]: any };
-  children: HierarchicalElement[];
-}
-
 export interface Page {
   id: string;
   title: string;
@@ -157,166 +48,37 @@ export interface Site {
   updatedAt?: Date;
 }
 
-export interface CreatedElementResponse {
-  elementId: string;
+export interface SectionFormat {
+  rowsCount?: number | undefined;
+  columnGap?: number | undefined;
+  rowGap?: number | undefined;
 }
 
-export interface UpdatedElementResponse {}
-
-export interface CreateTextRequest {
-  owners: string[];
-  requestedUserId: string;
-  parent: string;
-  style?: Style | undefined;
-  text: string;
-  after?: string | undefined;
+export interface Section {
+  id: string;
+  page: string;
+  head: string;
+  format?: SectionFormat;
+  updatedBy: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-export interface UpdateTextRequest {
-  owners: string[];
-  requestedUserId: string;
-  elementId: string;
-  style?: Style | undefined;
-  text?: string | undefined;
-  after?: string | undefined;
+export interface SectionElementPlatform {
+  x: number;
+  y: number;
+  height: number;
+  width: number;
+  isVisible: boolean;
 }
 
-export interface CreateBoxRequest {
-  owners: string[];
-  requestedUserId: string;
-  parent: string;
-  style?: Style | undefined;
-  htmlType?: HTMLType | undefined;
-  after?: string | undefined;
-}
-
-export interface UpdateBoxRequest {
-  owners: string[];
-  requestedUserId: string;
-  elementId: string;
-  style?: Style | undefined;
-  htmlType?: HTMLType | undefined;
-  after?: string | undefined;
-}
-
-export interface CreateImageRequest {}
-
-export interface UpdateImageRequest {}
-
-export interface CreateLinkRequest {}
-
-export interface UpdateLinkRequest {}
-
-export interface CreateVideoRequest {}
-
-export interface UpdateVideoRequest {}
-
-export interface CreateSelectRequest {}
-
-export interface UpdateSelectRequest {}
-
-export interface DeleteManyElementsRequest {
-  requestedUserId: string;
-  elementIdList: string[];
-  owners: string[];
-}
-
-export interface DeleteManyElementsResponse {}
-
-export interface DeleteElementRequest {
-  elementId: string;
-  requestedUserId: string;
-  owners: string[];
-}
-
-export interface DeleteElementResponse {}
-
-export interface GetElementFlatListRequest {
-  owners: string[];
-}
-
-export interface GetElementFlatListResponse {
-  elements: Element[];
-}
-
-export interface GetElementHierarchicalListRequest {
-  owners: string[];
-}
-
-export interface GetElementHierarchicalListResponse {
-  elements: HierarchicalElement[];
-}
-
-export interface CloneComponentRequest {
-  componentId: string;
-  requestedUserId: string;
-  ownerId: string;
-  name?: string | undefined;
-  status?: EditStatus | undefined;
-}
-
-export interface CloneComponentResponse {
-  componentId: string;
-}
-
-export interface CreateComponentRequest {
-  requestedUserId: string;
-  ownerId: string;
-  name: string;
-  status?: EditStatus | undefined;
-}
-
-export interface CreateComponentResponse {
-  component?: Component;
-}
-
-export interface UpdateComponentRequest {
-  ownerId: string;
-  componentId: string;
-  requestedUserId: string;
-  name?: string | undefined;
-  status?: EditStatus | undefined;
-}
-
-export interface UpdateComponentResponse {
-  component?: Component;
-}
-
-export interface DeleteComponentRequest {
-  ownerId: string;
-  componentId: string;
-  requestedUserId: string;
-}
-
-export interface DeleteComponentResponse {
-  component?: Component;
-}
-
-export interface ArchiveComponentRequest {
-  ownerId: string;
-  componentId: string;
-  requestedUserId: string;
-}
-
-export interface ArchiveComponentResponse {
-  component?: Component;
-}
-
-export interface GetComponentRequest {
-  ownerId: string;
-  componentId: string;
-}
-
-export interface GetComponentResponse {
-  component?: Component;
-}
-
-export interface GetComponentListRequest {
-  ownerId: string;
-}
-
-export interface GetComponentListResponse {
-  componentList: Component[];
+export interface SectionElement {
+  id: string;
+  desktop?: SectionElementPlatform;
+  tablet?: SectionElementPlatform | undefined;
+  mobile?: SectionElementPlatform | undefined;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 /**
@@ -332,72 +94,53 @@ export interface CreatePageRequest {
 }
 
 export interface CreatePageResponse {
-  page?: Page;
-}
-
-export interface GetOrCreateFirstPageRequest {
-  requestedUserId: string;
-  ownerId: string;
-  siteId: string;
-  fallbackTitle?: string | undefined;
-}
-
-export interface GetOrCreateFirstPageResponse {
-  page?: Page;
+  data?: Page;
 }
 
 export interface GetPageRequest {
-  ownerId: string;
-  siteId: string;
   pageId: string;
 }
 
 export interface GetPageResponse {
-  page?: Page | undefined;
+  data?: Page | undefined;
 }
 
 export interface GetPageListRequest {
-  ownerId: string;
   siteId: string;
 }
 
 export interface GetPageListResponse {
-  pageList: Page[];
+  data: Page[];
 }
 
 export interface UpdatePageRequest {
-  ownerId: string;
-  siteId: string;
-  pageId: string;
   requestedUserId: string;
+  pageId: string;
   title?: string | undefined;
   description?: string | undefined;
   isLoneTitle?: boolean | undefined;
 }
 
 export interface UpdatePageResponse {
-  page?: Page;
+  data?: Page;
 }
 
 export interface DeletePageRequest {
-  ownerId: string;
-  siteId: string;
   requestedUserId: string;
   pageId: string;
 }
 
 export interface DeletePageResponse {
-  page?: Page;
+  data?: Page;
 }
 
 export interface ArchivePageRequest {
-  ownerId: string;
-  siteId: string;
+  pageId: string;
   requestedUserId: string;
 }
 
 export interface ArchivePageResponse {
-  page?: Page;
+  data?: Page;
 }
 
 export interface CreateSiteRequest {
@@ -409,46 +152,93 @@ export interface CreateSiteRequest {
 }
 
 export interface CreateSiteResponse {
-  siteId: string;
-  status: SiteStatus;
+  data?: Site;
 }
 
 export interface UpdateSiteRequest {
   requestedUserId: string;
-  ownerId: string;
   siteId: string;
   name?: string | undefined;
 }
 
 export interface UpdateSiteResponse {
-  site?: Site;
+  data?: Site;
 }
 
 export interface GetSiteRequest {
   siteId: string;
-  ownerId?: string | undefined;
 }
 
 export interface GetSiteResponse {
-  site?: Site;
+  data?: Site;
 }
 
 export interface GetSiteListRequest {
-  query?: { $case: "ownerId"; ownerId: string };
+  ownerId: string;
 }
 
 export interface GetSiteListResponse {
-  sites: Site[];
+  data: Site[];
 }
 
 export interface SuspendSiteRequest {
   requestedUserId: string;
-  ownerId: string;
   siteId: string;
 }
 
 export interface SuspendSiteResponse {
-  site?: Site;
+  data?: Site;
+}
+
+export interface GetPageSectionRequest {
+  sectionId: string;
+}
+
+export interface GetPageSectionResponse {
+  data?: Section;
+}
+
+export interface GetPageSectionListRequest {
+  pageId: string;
+}
+
+export interface GetPageSectionListResponse {
+  data: Section[];
+}
+
+export interface CreateSectionRequest {
+  pageId: string;
+  requestedUserId: string;
+  head?: string | undefined;
+}
+
+export interface CreateSectionResponse {
+  data?: Section;
+}
+
+export interface UpdateSectionHeadRequest {
+  sectionId: string;
+  requestedUserId: string;
+  head: string;
+}
+
+export interface UpdateSectionFormatRequest {
+  sectionId: string;
+  requestedUserId: string;
+  format?: SectionFormat;
+}
+
+export interface UpdateSectionResponse {
+  data?: Section;
+}
+
+export interface DeleteSectionRequest {
+  sectionId: string;
+  requestedUserId: string;
+}
+
+export interface DeleteSectionResponse {
+  data?: Section;
 }
 
 export const SERV_SITES_PACKAGE_NAME = "serv.sites";
@@ -482,10 +272,6 @@ export interface SitesServiceClient {
 
   getPage(request: GetPageRequest): Observable<GetPageResponse>;
 
-  getOrCreateFirstPage(
-    request: GetOrCreateFirstPageRequest
-  ): Observable<GetOrCreateFirstPageResponse>;
-
   updatePage(request: UpdatePageRequest): Observable<UpdatePageResponse>;
 
   deletePage(request: DeletePageRequest): Observable<DeletePageResponse>;
@@ -494,85 +280,21 @@ export interface SitesServiceClient {
 
   /**
    * -----------------------------
-   * COMPONENT
+   * SECTION
    * -----------------------------
    */
 
-  getComponent(request: GetComponentRequest): Observable<GetComponentResponse>;
+  getPageSection(request: GetPageSectionRequest): Observable<GetPageSectionResponse>;
 
-  getComponentList(
-    request: GetComponentListRequest
-  ): Observable<GetComponentListResponse>;
+  getPageSectionList(request: GetPageSectionListRequest): Observable<GetPageSectionListResponse>;
 
-  createComponent(
-    request: CreateComponentRequest
-  ): Observable<CreateComponentResponse>;
+  createSection(request: CreateSectionRequest): Observable<CreateSectionResponse>;
 
-  cloneComponent(
-    request: CloneComponentRequest
-  ): Observable<CloneComponentResponse>;
+  updateSectionHead(request: UpdateSectionHeadRequest): Observable<UpdateSectionResponse>;
 
-  updateComponent(
-    request: UpdateComponentRequest
-  ): Observable<UpdateComponentResponse>;
+  updateSectionFormat(request: UpdateSectionFormatRequest): Observable<UpdateSectionResponse>;
 
-  deleteComponent(
-    request: DeleteComponentRequest
-  ): Observable<DeleteComponentResponse>;
-
-  archiveComponent(
-    request: ArchiveComponentRequest
-  ): Observable<ArchiveComponentResponse>;
-
-  /**
-   * -----------------------------
-   * Elements
-   * -----------------------------
-   */
-
-  getElementFlatList(
-    request: GetElementFlatListRequest
-  ): Observable<GetElementFlatListResponse>;
-
-  getElementHierarchicalList(
-    request: GetElementHierarchicalListRequest
-  ): Observable<GetElementHierarchicalListResponse>;
-
-  deleteElement(
-    request: DeleteElementRequest
-  ): Observable<DeleteElementResponse>;
-
-  deleteManyElements(
-    request: DeleteManyElementsRequest
-  ): Observable<DeleteManyElementsResponse>;
-
-  createText(request: CreateTextRequest): Observable<CreatedElementResponse>;
-
-  updateText(request: UpdateTextRequest): Observable<UpdatedElementResponse>;
-
-  createBox(request: CreateBoxRequest): Observable<CreatedElementResponse>;
-
-  updateBox(request: UpdateBoxRequest): Observable<UpdatedElementResponse>;
-
-  createImage(request: CreateImageRequest): Observable<CreatedElementResponse>;
-
-  updateImage(request: UpdateImageRequest): Observable<UpdatedElementResponse>;
-
-  createVideo(request: CreateVideoRequest): Observable<CreatedElementResponse>;
-
-  updateVideo(request: UpdateVideoRequest): Observable<UpdatedElementResponse>;
-
-  createSelect(
-    request: CreateSelectRequest
-  ): Observable<CreatedElementResponse>;
-
-  updateSelect(
-    request: UpdateSelectRequest
-  ): Observable<UpdatedElementResponse>;
-
-  createLink(request: CreateLinkRequest): Observable<CreatedElementResponse>;
-
-  updateLink(request: UpdateLinkRequest): Observable<UpdatedElementResponse>;
+  deleteSection(request: DeleteSectionRequest): Observable<DeleteSectionResponse>;
 }
 
 export interface SitesServiceController {
@@ -583,36 +305,22 @@ export interface SitesServiceController {
    */
 
   createSite(
-    request: CreateSiteRequest
-  ):
-    | Promise<CreateSiteResponse>
-    | Observable<CreateSiteResponse>
-    | CreateSiteResponse;
+    request: CreateSiteRequest,
+  ): Promise<CreateSiteResponse> | Observable<CreateSiteResponse> | CreateSiteResponse;
 
-  getSite(
-    request: GetSiteRequest
-  ): Promise<GetSiteResponse> | Observable<GetSiteResponse> | GetSiteResponse;
+  getSite(request: GetSiteRequest): Promise<GetSiteResponse> | Observable<GetSiteResponse> | GetSiteResponse;
 
   updateSite(
-    request: UpdateSiteRequest
-  ):
-    | Promise<UpdateSiteResponse>
-    | Observable<UpdateSiteResponse>
-    | UpdateSiteResponse;
+    request: UpdateSiteRequest,
+  ): Promise<UpdateSiteResponse> | Observable<UpdateSiteResponse> | UpdateSiteResponse;
 
   getSiteList(
-    request: GetSiteListRequest
-  ):
-    | Promise<GetSiteListResponse>
-    | Observable<GetSiteListResponse>
-    | GetSiteListResponse;
+    request: GetSiteListRequest,
+  ): Promise<GetSiteListResponse> | Observable<GetSiteListResponse> | GetSiteListResponse;
 
   suspendSite(
-    request: SuspendSiteRequest
-  ):
-    | Promise<SuspendSiteResponse>
-    | Observable<SuspendSiteResponse>
-    | SuspendSiteResponse;
+    request: SuspendSiteRequest,
+  ): Promise<SuspendSiteResponse> | Observable<SuspendSiteResponse> | SuspendSiteResponse;
 
   /**
    * -----------------------------
@@ -621,223 +329,56 @@ export interface SitesServiceController {
    */
 
   createPage(
-    request: CreatePageRequest
-  ):
-    | Promise<CreatePageResponse>
-    | Observable<CreatePageResponse>
-    | CreatePageResponse;
+    request: CreatePageRequest,
+  ): Promise<CreatePageResponse> | Observable<CreatePageResponse> | CreatePageResponse;
 
   getPageList(
-    request: GetPageListRequest
-  ):
-    | Promise<GetPageListResponse>
-    | Observable<GetPageListResponse>
-    | GetPageListResponse;
+    request: GetPageListRequest,
+  ): Promise<GetPageListResponse> | Observable<GetPageListResponse> | GetPageListResponse;
 
-  getPage(
-    request: GetPageRequest
-  ): Promise<GetPageResponse> | Observable<GetPageResponse> | GetPageResponse;
-
-  getOrCreateFirstPage(
-    request: GetOrCreateFirstPageRequest
-  ):
-    | Promise<GetOrCreateFirstPageResponse>
-    | Observable<GetOrCreateFirstPageResponse>
-    | GetOrCreateFirstPageResponse;
+  getPage(request: GetPageRequest): Promise<GetPageResponse> | Observable<GetPageResponse> | GetPageResponse;
 
   updatePage(
-    request: UpdatePageRequest
-  ):
-    | Promise<UpdatePageResponse>
-    | Observable<UpdatePageResponse>
-    | UpdatePageResponse;
+    request: UpdatePageRequest,
+  ): Promise<UpdatePageResponse> | Observable<UpdatePageResponse> | UpdatePageResponse;
 
   deletePage(
-    request: DeletePageRequest
-  ):
-    | Promise<DeletePageResponse>
-    | Observable<DeletePageResponse>
-    | DeletePageResponse;
+    request: DeletePageRequest,
+  ): Promise<DeletePageResponse> | Observable<DeletePageResponse> | DeletePageResponse;
 
   archivePage(
-    request: ArchivePageRequest
-  ):
-    | Promise<ArchivePageResponse>
-    | Observable<ArchivePageResponse>
-    | ArchivePageResponse;
+    request: ArchivePageRequest,
+  ): Promise<ArchivePageResponse> | Observable<ArchivePageResponse> | ArchivePageResponse;
 
   /**
    * -----------------------------
-   * COMPONENT
+   * SECTION
    * -----------------------------
    */
 
-  getComponent(
-    request: GetComponentRequest
-  ):
-    | Promise<GetComponentResponse>
-    | Observable<GetComponentResponse>
-    | GetComponentResponse;
+  getPageSection(
+    request: GetPageSectionRequest,
+  ): Promise<GetPageSectionResponse> | Observable<GetPageSectionResponse> | GetPageSectionResponse;
 
-  getComponentList(
-    request: GetComponentListRequest
-  ):
-    | Promise<GetComponentListResponse>
-    | Observable<GetComponentListResponse>
-    | GetComponentListResponse;
+  getPageSectionList(
+    request: GetPageSectionListRequest,
+  ): Promise<GetPageSectionListResponse> | Observable<GetPageSectionListResponse> | GetPageSectionListResponse;
 
-  createComponent(
-    request: CreateComponentRequest
-  ):
-    | Promise<CreateComponentResponse>
-    | Observable<CreateComponentResponse>
-    | CreateComponentResponse;
+  createSection(
+    request: CreateSectionRequest,
+  ): Promise<CreateSectionResponse> | Observable<CreateSectionResponse> | CreateSectionResponse;
 
-  cloneComponent(
-    request: CloneComponentRequest
-  ):
-    | Promise<CloneComponentResponse>
-    | Observable<CloneComponentResponse>
-    | CloneComponentResponse;
+  updateSectionHead(
+    request: UpdateSectionHeadRequest,
+  ): Promise<UpdateSectionResponse> | Observable<UpdateSectionResponse> | UpdateSectionResponse;
 
-  updateComponent(
-    request: UpdateComponentRequest
-  ):
-    | Promise<UpdateComponentResponse>
-    | Observable<UpdateComponentResponse>
-    | UpdateComponentResponse;
+  updateSectionFormat(
+    request: UpdateSectionFormatRequest,
+  ): Promise<UpdateSectionResponse> | Observable<UpdateSectionResponse> | UpdateSectionResponse;
 
-  deleteComponent(
-    request: DeleteComponentRequest
-  ):
-    | Promise<DeleteComponentResponse>
-    | Observable<DeleteComponentResponse>
-    | DeleteComponentResponse;
-
-  archiveComponent(
-    request: ArchiveComponentRequest
-  ):
-    | Promise<ArchiveComponentResponse>
-    | Observable<ArchiveComponentResponse>
-    | ArchiveComponentResponse;
-
-  /**
-   * -----------------------------
-   * Elements
-   * -----------------------------
-   */
-
-  getElementFlatList(
-    request: GetElementFlatListRequest
-  ):
-    | Promise<GetElementFlatListResponse>
-    | Observable<GetElementFlatListResponse>
-    | GetElementFlatListResponse;
-
-  getElementHierarchicalList(
-    request: GetElementHierarchicalListRequest
-  ):
-    | Promise<GetElementHierarchicalListResponse>
-    | Observable<GetElementHierarchicalListResponse>
-    | GetElementHierarchicalListResponse;
-
-  deleteElement(
-    request: DeleteElementRequest
-  ):
-    | Promise<DeleteElementResponse>
-    | Observable<DeleteElementResponse>
-    | DeleteElementResponse;
-
-  deleteManyElements(
-    request: DeleteManyElementsRequest
-  ):
-    | Promise<DeleteManyElementsResponse>
-    | Observable<DeleteManyElementsResponse>
-    | DeleteManyElementsResponse;
-
-  createText(
-    request: CreateTextRequest
-  ):
-    | Promise<CreatedElementResponse>
-    | Observable<CreatedElementResponse>
-    | CreatedElementResponse;
-
-  updateText(
-    request: UpdateTextRequest
-  ):
-    | Promise<UpdatedElementResponse>
-    | Observable<UpdatedElementResponse>
-    | UpdatedElementResponse;
-
-  createBox(
-    request: CreateBoxRequest
-  ):
-    | Promise<CreatedElementResponse>
-    | Observable<CreatedElementResponse>
-    | CreatedElementResponse;
-
-  updateBox(
-    request: UpdateBoxRequest
-  ):
-    | Promise<UpdatedElementResponse>
-    | Observable<UpdatedElementResponse>
-    | UpdatedElementResponse;
-
-  createImage(
-    request: CreateImageRequest
-  ):
-    | Promise<CreatedElementResponse>
-    | Observable<CreatedElementResponse>
-    | CreatedElementResponse;
-
-  updateImage(
-    request: UpdateImageRequest
-  ):
-    | Promise<UpdatedElementResponse>
-    | Observable<UpdatedElementResponse>
-    | UpdatedElementResponse;
-
-  createVideo(
-    request: CreateVideoRequest
-  ):
-    | Promise<CreatedElementResponse>
-    | Observable<CreatedElementResponse>
-    | CreatedElementResponse;
-
-  updateVideo(
-    request: UpdateVideoRequest
-  ):
-    | Promise<UpdatedElementResponse>
-    | Observable<UpdatedElementResponse>
-    | UpdatedElementResponse;
-
-  createSelect(
-    request: CreateSelectRequest
-  ):
-    | Promise<CreatedElementResponse>
-    | Observable<CreatedElementResponse>
-    | CreatedElementResponse;
-
-  updateSelect(
-    request: UpdateSelectRequest
-  ):
-    | Promise<UpdatedElementResponse>
-    | Observable<UpdatedElementResponse>
-    | UpdatedElementResponse;
-
-  createLink(
-    request: CreateLinkRequest
-  ):
-    | Promise<CreatedElementResponse>
-    | Observable<CreatedElementResponse>
-    | CreatedElementResponse;
-
-  updateLink(
-    request: UpdateLinkRequest
-  ):
-    | Promise<UpdatedElementResponse>
-    | Observable<UpdatedElementResponse>
-    | UpdatedElementResponse;
+  deleteSection(
+    request: DeleteSectionRequest,
+  ): Promise<DeleteSectionResponse> | Observable<DeleteSectionResponse> | DeleteSectionResponse;
 }
 
 export function SitesServiceControllerMethods() {
@@ -851,56 +392,24 @@ export function SitesServiceControllerMethods() {
       "createPage",
       "getPageList",
       "getPage",
-      "getOrCreateFirstPage",
       "updatePage",
       "deletePage",
       "archivePage",
-      "getComponent",
-      "getComponentList",
-      "createComponent",
-      "cloneComponent",
-      "updateComponent",
-      "deleteComponent",
-      "archiveComponent",
-      "getElementFlatList",
-      "getElementHierarchicalList",
-      "deleteElement",
-      "deleteManyElements",
-      "createText",
-      "updateText",
-      "createBox",
-      "updateBox",
-      "createImage",
-      "updateImage",
-      "createVideo",
-      "updateVideo",
-      "createSelect",
-      "updateSelect",
-      "createLink",
-      "updateLink",
+      "getPageSection",
+      "getPageSectionList",
+      "createSection",
+      "updateSectionHead",
+      "updateSectionFormat",
+      "deleteSection",
     ];
     for (const method of grpcMethods) {
-      const descriptor: any = Reflect.getOwnPropertyDescriptor(
-        constructor.prototype,
-        method
-      );
-      GrpcMethod("SitesService", method)(
-        constructor.prototype[method],
-        method,
-        descriptor
-      );
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
+      GrpcMethod("SitesService", method)(constructor.prototype[method], method, descriptor);
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
-      const descriptor: any = Reflect.getOwnPropertyDescriptor(
-        constructor.prototype,
-        method
-      );
-      GrpcStreamMethod("SitesService", method)(
-        constructor.prototype[method],
-        method,
-        descriptor
-      );
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
+      GrpcStreamMethod("SitesService", method)(constructor.prototype[method], method, descriptor);
     }
   };
 }
