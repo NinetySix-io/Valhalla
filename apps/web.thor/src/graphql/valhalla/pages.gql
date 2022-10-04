@@ -6,8 +6,8 @@ query getPageList($siteId: String!) {
   }
 }
 
-query getPage($siteId: String!, $pageId: String!) {
-  page(siteId: $siteId, id: $pageId) {
+query getPage($pageId: String!) {
+  page(id: $pageId) {
     id
     title
     status
@@ -27,24 +27,14 @@ mutation createPage($siteId: String!, $prop: CreatePageInput!) {
   }
 }
 
-mutation updatePage(
-  $siteId: String!
-  $pageId: String!
-  $input: UpdatePageInput!
-) {
-  updatePage(siteId: $siteId, id: $pageId, input: $input) {
+mutation updatePage($pageId: String!, $input: UpdatePageInput!) {
+  updatePage(id: $pageId, input: $input) {
     status
   }
 }
 
-mutation deletePage($siteId: String!, $pageId: String!) {
-  deletePage(siteId: $siteId, id: $pageId) {
+mutation deletePage($pageId: String!) {
+  deletePage(id: $pageId) {
     status
-  }
-}
-
-mutation getFirstPage($siteId: String!) {
-  getOrCreateFirstPage(siteId: $siteId) {
-    id
   }
 }

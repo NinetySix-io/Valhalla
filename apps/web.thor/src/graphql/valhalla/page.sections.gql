@@ -1,0 +1,50 @@
+query getPageSection($sectionId: String!) {
+  section(sectionId: $sectionId) {
+    id
+    head
+    format {
+      rowsCount
+      rowGap
+      columnGap
+    }
+  }
+}
+
+query getPageSectionList($pageId: String!) {
+  sectionList(pageId: $pageId) {
+    id
+    head
+    format {
+      rowsCount
+      rowGap
+      columnGap
+    }
+  }
+}
+
+mutation createPageSection($pageId: String!, $input: CreateSectionInput!) {
+  createSection(pageId: $pageId, input: $input) {
+    id
+  }
+}
+
+mutation deletePageSection($sectionId: String!) {
+  deleteSection(sectionId: $sectionId) {
+    id
+  }
+}
+
+mutation updatePageSectionHead($sectionId: String!, $headId: String!) {
+  updateSectionHead(sectionId: $sectionId, headId: $headId) {
+    id
+  }
+}
+
+mutation updatePageSectionFormat(
+  $sectionId: String!
+  $input: UpdateSectionFormatInput!
+) {
+  updateSectionFormat(sectionId: $sectionId, input: $input) {
+    id
+  }
+}

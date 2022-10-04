@@ -1,6 +1,5 @@
 {
   "$schema": "https://turborepo.org/schema.json",
-  "baseBranch": "origin/main",
   "pipeline": {
     "build": {
       "outputs": ["dist/**", ".next/**", "public/dist/**"],
@@ -9,6 +8,10 @@
     "thor#build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**"]
+    },
+    "codegen": {
+      "dependsOn": ["^codegen"],
+      "outputs": ["src/generated/**"]
     },
     "test": {
       "outputs": ["coverage/**"],
