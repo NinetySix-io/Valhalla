@@ -15,23 +15,26 @@ type FollowPath<T, P> = P extends `${infer U}.${infer R}`
   ? T[P]
   : never;
 
+function isPureObject<T>(input: T) {
+  return input?.constructor === Object;
+}
+
 /**
  * It takes an object and returns a new object with all the keys flattened
  */
 export function flattenObject<T extends Record<string, unknown>>(
   target: T,
-  parent?: string,
+  parent = '',
   filterFalsy?: boolean,
 ): { [K in Leaves<T>]: FollowPath<T, K> } {
   const flattened: Record<string, unknown> = {};
-
   for (const key of Object.keys(target)) {
-    if (typeof target[key] === 'object' && target[key] !== null) {
+    if (isPureObject(target[key])) {
       Object.assign(
         flattened,
         flattenObject(
           target[key] as Record<string, unknown>,
-          `${parent}.`,
+          parent ? `${parent}.` : `${key}.`,
           filterFalsy,
         ),
       );

@@ -1,6 +1,5 @@
 export * from './is.dev';
 export * from './is.prod';
-export * from './is.test';
 
 /**
  * It takes an object schema and returns a class that has a static `variables` property that is the

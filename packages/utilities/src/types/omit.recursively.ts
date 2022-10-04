@@ -1,4 +1,4 @@
-import { BasicObject } from './common';
+import type { BasicObject } from './common';
 
 // Cosmetic use only makes the tooltips ex-pad the type can be removed
 type Id<T> = {} & { [P in keyof T]: T[P] };
