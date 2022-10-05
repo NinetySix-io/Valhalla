@@ -1,6 +1,7 @@
 import {
   CloneSectionRequest,
   CloneSectionResponse,
+  CreateSectionResponse,
   PageElementPlatform,
 } from '@app/protobuf';
 import {
@@ -64,7 +65,7 @@ export class CloneSectionHandler
 
     const section = page.sections[sectionIndex];
     const [newSection, elements] = await Promise.all([
-      this.commandBus.execute(
+      this.commandBus.execute<CreateSectionCommand, CreateSectionResponse>(
         new CreateSectionCommand({
           pageId: command.request.pageId,
           requestedUserId: command.request.requestedUserId,
@@ -83,7 +84,7 @@ export class CloneSectionHandler
       elements.map(
         (element): CreatePayload<PageElementSchema> => ({
           updatedBy: toObjectId(command.request.requestedUserId),
-          section: toObjectId(newSection.id),
+          section: toObjectId(newSection.data.id),
           desktop: this.pickElementPlatform(element.desktop),
           mobile: this.pickElementPlatform(element.mobile),
           tablet: this.pickElementPlatform(element.tablet),
@@ -92,7 +93,7 @@ export class CloneSectionHandler
     );
 
     return {
-      data: newSection,
+      data: newSection.data,
     };
   }
 }
