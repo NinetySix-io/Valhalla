@@ -34,7 +34,7 @@ export class UpdatePageHandler
     const updatedBy = toObjectId(requestedUserId);
     const payload = flattenObject(
       { title, description, isLoneTitle, updatedBy },
-      null,
+      '',
       true,
     );
 
