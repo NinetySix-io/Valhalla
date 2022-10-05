@@ -5,7 +5,7 @@ import { toObjectId } from '../../lib';
 
 @Injectable()
 export class ContextMiddleware implements NestMiddleware {
-  static readonly traceIdKey = 'x-trace-id' as const;
+  static readonly traceIdKey = 'X-Trace-ID' as const;
 
   constructor(
     @Inject(AsyncContext) private readonly ac: AsyncContext<string, unknown>,

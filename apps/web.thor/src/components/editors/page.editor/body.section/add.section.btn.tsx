@@ -1,16 +1,11 @@
 import * as React from 'react';
 
 import { Button, css, styled } from '@mui/material';
-import {
-  GetPageSectionListDocument,
-  useCreatePageSectionMutation,
-} from '@app/generated/valhalla.gql';
 
 import { makeFilterProps } from '@valhalla/web.react';
-import { useApolloClient } from '@apollo/client';
+import { useAddSection } from '../hooks/use.section.mutations';
 import { useHelperDisplay } from './hooks/use.helpers.display';
 import { useSectionIndex } from './scope.provider';
-import { useSitePageId } from '@app/hooks/hydrate/use.site.page.hydrate';
 
 const ActionBtn = styled(
   Button,
@@ -55,30 +50,11 @@ type Props = {
 export const AddSectionBtn: React.FC<Props> = ({ align }) => {
   const isVisible = useHelperDisplay();
   const sectionIndex = useSectionIndex();
-  const apollo = useApolloClient();
   const isTop = align === 'top';
-  const pageId = useSitePageId();
-  const [createSection, { loading }] = useCreatePageSectionMutation({
-    variables: {
-      pageId,
-      input: {
-        index: isTop ? sectionIndex : sectionIndex + 1,
-      },
-    },
-    onCompleted() {
-      apollo.refetchQueries({
-        include: [GetPageSectionListDocument],
-      });
-    },
-  });
+  const [addSection, loading] = useAddSection(sectionIndex);
 
   function handleClick() {
-    createSection({
-      variables: {
-        pageId,
-        input: {},
-      },
-    });
+    addSection(isTop ? 'before' : 'after');
   }
 
   return (

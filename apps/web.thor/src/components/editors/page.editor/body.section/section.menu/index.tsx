@@ -1,12 +1,18 @@
 import * as React from 'react';
 
 import { Button, Divider, Popover, Stack, css, styled } from '@mui/material';
+import {
+  useCloneSection,
+  useDeleteSection,
+  useMoveSection,
+} from '../../hooks/use.section.mutations';
 import { useSectionId, useSectionIndex } from '../scope.provider';
 
 import { EditorMenu } from '../../menu';
-import { EditorStore } from '../../store';
 import { SectionMenuContent } from './content';
+import size from 'lodash.size';
 import { useHelperDisplay } from '../hooks/use.helpers.display';
+import { useSectionsList } from '../../hooks/use.sections.list';
 
 const ActionBtn = styled(Button)(
   ({ theme }) => css`
@@ -24,24 +30,29 @@ export const SectionMenu: React.FC<Props> = (props) => {
   const anchor = React.useRef<HTMLDivElement>();
   const sectionIndex = useSectionIndex();
   const sectionId = useSectionId();
+  const sectionList = useSectionsList();
   const [menuVisible, setMenuVisible] = React.useState(false);
-  const sectionsCount = EditorStore.useSelect((state) => state.sections.length);
+  const isLast = sectionIndex === size(sectionList.data) - 1;
+  const isFirst = sectionIndex === 0;
   const isVisible = useHelperDisplay();
+  const [deleteSection, deleting] = useDeleteSection(sectionId);
+  const [moveSection, moving] = useMoveSection(sectionId, sectionIndex);
+  const [cloneSection, cloning] = useCloneSection(sectionId);
 
   function handleDelete() {
-    EditorStore.actions.deleteSection(sectionId);
+    deleteSection();
   }
 
   function moveUp() {
-    EditorStore.actions.moveSectionUp(sectionId);
+    moveSection('up');
   }
 
   function moveDown() {
-    EditorStore.actions.moveSectionDown(sectionId);
+    moveSection('down');
   }
 
   function handleCopy() {
-    alert('TODO');
+    cloneSection();
   }
 
   function openMenu() {
@@ -60,19 +71,16 @@ export const SectionMenu: React.FC<Props> = (props) => {
         </Button>
         <Divider />
         <Stack direction="row" spacing={0.5}>
-          <ActionBtn
-            disabled={sectionIndex === sectionsCount - 1}
-            onClick={moveDown}
-          >
+          <ActionBtn disabled={isLast || moving} onClick={moveDown}>
             Down
           </ActionBtn>
-          <ActionBtn disabled={sectionIndex === 0} onClick={moveUp}>
+          <ActionBtn disabled={isFirst || moving} onClick={moveUp}>
             Up
           </ActionBtn>
-          <ActionBtn color="warning" onClick={handleCopy}>
+          <ActionBtn disabled={cloning} color="warning" onClick={handleCopy}>
             Copy
           </ActionBtn>
-          <ActionBtn color="error" onClick={handleDelete}>
+          <ActionBtn disabled={deleting} color="error" onClick={handleDelete}>
             Delete
           </ActionBtn>
         </Stack>

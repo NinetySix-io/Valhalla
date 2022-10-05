@@ -9,8 +9,7 @@ import { LoadingBlock } from '@app/components/loading.block';
 import { ScreenSize } from './constants';
 import isEmpty from 'lodash.isempty';
 import { makeFilterProps } from '@valhalla/web.react';
-import { useGetPageSectionListQuery } from '@app/generated/valhalla.gql';
-import { useSitePageId } from '@app/hooks/hydrate/use.site.page.hydrate';
+import { useSectionsList } from './hooks/use.sections.list';
 
 const Container = styled(
   'div',
@@ -54,8 +53,7 @@ const Container = styled(
 
 export const PageEditor: React.FC = () => {
   const size = EditorStore.useSelect((state) => state.size);
-  const pageId = useSitePageId();
-  const query = useGetPageSectionListQuery({ variables: { pageId } });
+  const query = useSectionsList();
   const sections = query.data?.sectionList;
 
   if (query.loading) {

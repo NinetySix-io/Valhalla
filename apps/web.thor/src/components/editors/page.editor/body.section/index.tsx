@@ -25,9 +25,9 @@ export const BodySection: React.FC<Props> = React.memo(({ section, index }) => {
   );
 
   function handleHover() {
-    // if (EditorStore.getState().activeSection !== sectionId) {
-    //   EditorStore.actions.setActiveSection(sectionId);
-    // }
+    if (EditorStore.getState().activeSection !== section.id) {
+      EditorStore.actions.setActiveSection(section.id);
+    }
   }
 
   function handleLeave() {
