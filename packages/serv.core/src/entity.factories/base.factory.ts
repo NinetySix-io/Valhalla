@@ -1,7 +1,12 @@
-import { ReturnModelType } from '@typegoose/typegoose';
+import {
+  OmitRecursively,
+  PartialBy,
+  PartialByRecursively,
+} from '@valhalla/utilities';
+
 import { AnyParamConstructor } from '@typegoose/typegoose/lib/types';
-import { OmitRecursively } from '@valhalla/utilities';
 import { BaseSchema } from './base.schema';
+import { ReturnModelType } from '@typegoose/typegoose';
 
 const allowedMethods = [
   // '$where',
@@ -62,9 +67,11 @@ const allowedMethods = [
 
 type AllowedMethods = typeof allowedMethods[number];
 
-export type CreatePayload<TModel extends BaseSchema> = OmitRecursively<
-  TModel,
-  '_id' | 'createdAt' | 'updatedAt' | 'id'
+export type CreatePayload<TModel extends BaseSchema> = PartialByRecursively<
+  OmitRecursively<TModel, 'createdAt' | 'updatedAt' | 'id'>,
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //@ts-ignore
+  '_id'
 >;
 
 export type ModelType<TModel extends BaseSchema> = ReturnModelType<
