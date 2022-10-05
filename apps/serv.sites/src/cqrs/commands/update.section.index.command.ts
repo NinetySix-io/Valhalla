@@ -49,7 +49,12 @@ export class UpdateSectionIndexHandler
 
     const section = page.sections[currentIndex];
     section.updatedBy = updatedBy;
-    page.sections = page.sections.splice(index, 0, section);
+
+    //remove
+    page.sections.splice(currentIndex, 1);
+    //reinsert
+    page.sections.splice(index, 0, section);
+
     await page.save();
     const serialized = new PageSectionTransformer(section).proto;
     return { data: serialized };
