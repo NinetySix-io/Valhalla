@@ -4,6 +4,7 @@ import { Button, Grid, TextField, Typography } from '@mui/material';
 
 import type { ComponentMeta } from '@storybook/react';
 import { Form } from './index';
+import { action } from '@storybook/addon-actions';
 
 type ComponentType = typeof Form;
 
@@ -16,8 +17,7 @@ export const SampleForm: React.FC = () => {
   const [form] = Form.useForm();
 
   const handleSubmit = (payload: unknown) => {
-    // eslint-disable-next-line no-console
-    console.log(payload);
+    action('Submit')(payload);
   };
 
   return (
