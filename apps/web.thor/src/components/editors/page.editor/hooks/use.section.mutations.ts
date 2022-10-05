@@ -1,4 +1,5 @@
 import type { PageSectionSchema } from '@app/generated/valhalla.gql';
+import { useClonePageSectionMutation } from '@app/generated/valhalla.gql';
 import { useCreatePageSectionMutation } from '@app/generated/valhalla.gql';
 import { useDeletePageSectionMutation } from '@app/generated/valhalla.gql';
 import { useSectionListInvalidate } from './use.sections.list';
@@ -74,9 +75,14 @@ export function useMoveSection(
 }
 
 export function useCloneSection(sectionId: PageSectionSchema['id']) {
-  function handleClone() {
-    alert(sectionId);
-  }
+  const pageId = useSitePageId();
+  const invalidateSections = useSectionListInvalidate();
+  const [clone, { loading }] = useClonePageSectionMutation({
+    variables: { sectionId, pageId },
+    onCompleted() {
+      invalidateSections();
+    },
+  });
 
-  return [handleClone, false] as const;
+  return [clone, loading] as const;
 }

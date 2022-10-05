@@ -774,6 +774,14 @@ export type UpdatePageSectionFormatMutationVariables = Exact<{
 
 export type UpdatePageSectionFormatMutation = { readonly __typename?: 'Mutation', readonly updateSectionFormat: { readonly __typename?: 'PageSectionSchema', readonly id: string } };
 
+export type ClonePageSectionMutationVariables = Exact<{
+  pageId: Scalars['String'];
+  sectionId: Scalars['String'];
+}>;
+
+
+export type ClonePageSectionMutation = { readonly __typename?: 'Mutation', readonly cloneSection: { readonly __typename?: 'PageSectionSchema', readonly id: string } };
+
 export type GetPageListQueryVariables = Exact<{
   siteId: Scalars['String'];
 }>;
@@ -1628,6 +1636,40 @@ export function useUpdatePageSectionFormatMutation(baseOptions?: Apollo.Mutation
 export type UpdatePageSectionFormatMutationHookResult = ReturnType<typeof useUpdatePageSectionFormatMutation>;
 export type UpdatePageSectionFormatMutationResult = Apollo.MutationResult<UpdatePageSectionFormatMutation>;
 export type UpdatePageSectionFormatMutationOptions = Apollo.BaseMutationOptions<UpdatePageSectionFormatMutation, UpdatePageSectionFormatMutationVariables>;
+export const ClonePageSectionDocument = gql`
+    mutation clonePageSection($pageId: String!, $sectionId: String!) {
+  cloneSection(pageId: $pageId, sectionId: $sectionId) {
+    id
+  }
+}
+    `;
+export type ClonePageSectionMutationFn = Apollo.MutationFunction<ClonePageSectionMutation, ClonePageSectionMutationVariables>;
+
+/**
+ * __useClonePageSectionMutation__
+ *
+ * To run a mutation, you first call `useClonePageSectionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useClonePageSectionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [clonePageSectionMutation, { data, loading, error }] = useClonePageSectionMutation({
+ *   variables: {
+ *      pageId: // value for 'pageId'
+ *      sectionId: // value for 'sectionId'
+ *   },
+ * });
+ */
+export function useClonePageSectionMutation(baseOptions?: Apollo.MutationHookOptions<ClonePageSectionMutation, ClonePageSectionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ClonePageSectionMutation, ClonePageSectionMutationVariables>(ClonePageSectionDocument, options);
+      }
+export type ClonePageSectionMutationHookResult = ReturnType<typeof useClonePageSectionMutation>;
+export type ClonePageSectionMutationResult = Apollo.MutationResult<ClonePageSectionMutation>;
+export type ClonePageSectionMutationOptions = Apollo.BaseMutationOptions<ClonePageSectionMutation, ClonePageSectionMutationVariables>;
 export const GetPageListDocument = gql`
     query getPageList($siteId: String!) {
   pageList(siteId: $siteId) {

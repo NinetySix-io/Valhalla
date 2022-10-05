@@ -55,3 +55,9 @@ mutation updatePageSectionFormat(
     id
   }
 }
+
+mutation clonePageSection($pageId: String!, $sectionId: String!) {
+  cloneSection(pageId: $pageId, sectionId: $sectionId) {
+    id
+  }
+}
