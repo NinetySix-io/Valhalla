@@ -4,7 +4,12 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { CreatePayload, RpcHandler, toObjectId } from '@valhalla/serv.core';
+import {
+  CreatePayload,
+  RpcHandler,
+  compareId,
+  toObjectId,
+} from '@valhalla/serv.core';
 import { CreateSectionRequest, CreateSectionResponse } from '@app/protobuf';
 
 import { PageSectionSchema } from '@app/entities/pages/schemas';
@@ -60,14 +65,9 @@ export class CreateSectionHandler
         },
         { new: true },
       )
-      .select({
-        sections: {
-          $slice: index,
-        },
-      })
       .orFail(() => new Error(`${pageId} does not exists!`));
 
-    const [section] = page.sections;
+    const section = page.sections.find(compareId(sectionId));
     const serialized = new PageSectionTransformer(section).proto;
     this.eventBus.publish(new SectionCreatedEvent(serialized));
     return { data: serialized };

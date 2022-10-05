@@ -194,7 +194,7 @@ type Mutation {
   updatePage(id: String!, input: UpdatePageInput!): PageUpdatedResponse!
   createSection(pageId: String!, input: CreateSectionInput!): PageSectionSchema!
   updateSectionFormat(pageId: String!, sectionId: String!, input: UpdateSectionFormatInput!): PageSectionSchema!
-  updateSectionHead(pageId: String!, sectionId: String!, index: Float!): PageSectionSchema!
+  updateSectionIndex(pageId: String!, sectionId: String!, index: Float!): PageSectionSchema!
   deleteSection(pageId: String!, sectionId: String!): PageSectionSchema!
   cloneSection(pageId: String!, sectionId: String!): PageSectionSchema!
 }

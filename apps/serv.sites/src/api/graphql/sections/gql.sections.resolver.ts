@@ -93,7 +93,7 @@ export class GqlSectionsResolver {
 
   @Mutation(() => PageSectionSchema)
   @UseGuards(GqlAuthGuard)
-  async updateSectionHead(
+  async updateSectionIndex(
     @CurrentAccount() account: AuthAccount,
     @Args('pageId', new ParamValidationPipe([ObjectIdParamValidation]))
     pageId: string,
