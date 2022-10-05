@@ -1,7 +1,13 @@
 import * as React from 'react';
 
 import { Button, Typography, css, styled } from '@mui/material';
-import { EditorStore, makeSection } from './store';
+import {
+  GetPageSectionListDocument,
+  useCreatePageSectionMutation,
+} from '@app/generated/valhalla.gql';
+
+import { useApolloClient } from '@apollo/client';
+import { useSitePageId } from '@app/hooks/hydrate/use.site.page.hydrate';
 
 const Container = styled('div')(
   () => css`
@@ -19,13 +25,29 @@ const AddSectionBtn = styled(Button)(
 );
 
 export const EmptyContent: React.FC = () => {
-  function handleAddSection() {
-    EditorStore.actions.addSection(makeSection());
-  }
+  const pageId = useSitePageId();
+  const client = useApolloClient();
+  const [createSection, { loading }] = useCreatePageSectionMutation({
+    variables: {
+      pageId,
+      input: {
+        index: -1,
+      },
+    },
+    onCompleted() {
+      client.refetchQueries({
+        include: [GetPageSectionListDocument],
+      });
+    },
+  });
 
   return (
     <Container>
-      <AddSectionBtn disableRipple onClick={handleAddSection}>
+      <AddSectionBtn
+        disableRipple
+        onClick={() => createSection()}
+        disabled={loading}
+      >
         <Typography variant="h6">Add Section</Typography>
       </AddSectionBtn>
     </Container>

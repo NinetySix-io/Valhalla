@@ -1,5 +1,3 @@
-import type { ElementType } from '@app/generated/valhalla.gql';
-
 export type XYCoord = {
   x: number;
   y: number;
@@ -36,7 +34,7 @@ export type BoardElement<
 > = BaseElement<Type, P> & WithId & DroppedPosition;
 
 export type TextElement = BoardElement<
-  ElementType.TEXT,
+  'text',
   { json: JSONContent; html: HTMLContent }
 >;
 

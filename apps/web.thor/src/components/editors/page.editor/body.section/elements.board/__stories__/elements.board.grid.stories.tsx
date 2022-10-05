@@ -20,7 +20,7 @@ storiesOf('NinetySix/Editors/Page Editor', module)
   .addDecorator((Story) => {
     const section = last(EditorStore.getState().sections);
     return (
-      <SectionProvider sectionId={section.id} config={section.config}>
+      <SectionProvider sectionId={section.id} config={section.config} index={0}>
         <Story />
       </SectionProvider>
     );

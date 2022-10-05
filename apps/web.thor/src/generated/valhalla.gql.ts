@@ -100,8 +100,8 @@ export type CreatePageInput = {
 };
 
 export type CreateSectionInput = {
-  /** Head node */
-  readonly head?: InputMaybe<Scalars['String']>;
+  /** Position */
+  readonly index?: InputMaybe<Scalars['Float']>;
 };
 
 export type CreateSiteInput = {
@@ -135,10 +135,10 @@ export type Mutation = {
   /** Create an organization */
   readonly createOrganization: OrganizationSchema;
   readonly createPage: PageUpdatedResponse;
-  readonly createSection: SectionSchema;
+  readonly createSection: PageSectionSchema;
   readonly createSite: SiteUpdatedResponse;
   readonly deletePage: PageUpdatedResponse;
-  readonly deleteSection: SectionSchema;
+  readonly deleteSection: PageSectionSchema;
   /** Login to account with verification code */
   readonly loginWithVerification: AuthResponse;
   /** Invalid current session */
@@ -156,8 +156,8 @@ export type Mutation = {
   /** Update account */
   readonly updateAccount: Scalars['Boolean'];
   readonly updatePage: PageUpdatedResponse;
-  readonly updateSectionFormat: SectionSchema;
-  readonly updateSectionHead: SectionSchema;
+  readonly updateSectionFormat: PageSectionSchema;
+  readonly updateSectionHead: PageSectionSchema;
   readonly updateSite: SiteUpdatedResponse;
 };
 
@@ -205,6 +205,7 @@ export type MutationDeletePageArgs = {
 
 
 export type MutationDeleteSectionArgs = {
+  pageId: Scalars['String'];
   sectionId: Scalars['String'];
 };
 
@@ -252,12 +253,14 @@ export type MutationUpdatePageArgs = {
 
 export type MutationUpdateSectionFormatArgs = {
   input: UpdateSectionFormatInput;
+  pageId: Scalars['String'];
   sectionId: Scalars['String'];
 };
 
 
 export type MutationUpdateSectionHeadArgs = {
-  headId: Scalars['String'];
+  index: Scalars['Float'];
+  pageId: Scalars['String'];
   sectionId: Scalars['String'];
 };
 
@@ -355,14 +358,14 @@ export type PageSchema = {
   readonly __typename?: 'PageSchema';
   /** Date entity was created */
   readonly createdAt: Scalars['DateTime'];
-  /** Account ID of creator */
-  readonly createdBy: Scalars['String'];
   /** Page description */
   readonly description?: Maybe<Scalars['String']>;
   /** Identifier of the entity */
   readonly id: Scalars['ID'];
   /** Whether the title should be independent or part of the title template */
   readonly isLoneTitle?: Maybe<Scalars['Boolean']>;
+  /** Sections */
+  readonly sections: ReadonlyArray<PageSectionSchema>;
   /** Page url */
   readonly slug?: Maybe<Scalars['String']>;
   /** Edit status */
@@ -379,17 +382,24 @@ export type PageSectionFormatSchema = {
   readonly __typename?: 'PageSectionFormatSchema';
   /** Column gap */
   readonly columnGap: Scalars['Float'];
-  /** Date entity was created */
-  readonly createdAt: Scalars['DateTime'];
-  /** Identifier of the entity */
-  readonly id: Scalars['ID'];
   /** Row Gap */
   readonly rowGap: Scalars['Float'];
   /** Row count */
   readonly rowsCount: Scalars['Float'];
+  /** Account ID of updater */
+  readonly updatedBy: Scalars['String'];
+};
+
+export type PageSectionSchema = {
+  readonly __typename?: 'PageSectionSchema';
+  /** Date entity was created */
+  readonly createdAt: Scalars['DateTime'];
+  /** Section format configuration */
+  readonly format: PageSectionFormatSchema;
+  /** Identifier of the entity */
+  readonly id: Scalars['ID'];
   /** Date entity was updated */
   readonly updatedAt: Scalars['DateTime'];
-  /** Account ID of updater */
   readonly updatedBy: Scalars['String'];
 };
 
@@ -417,8 +427,8 @@ export type Query = {
   readonly organizations: ReadonlyArray<OrganizationSchema>;
   readonly page: PageSchema;
   readonly pageList: ReadonlyArray<PageSchema>;
-  readonly section: SectionSchema;
-  readonly sectionList: ReadonlyArray<SectionSchema>;
+  readonly section: PageSectionSchema;
+  readonly sectionList: ReadonlyArray<PageSectionSchema>;
   /** Get current session user */
   readonly session: SessionResponse;
   readonly site: SiteSchema;
@@ -498,21 +508,6 @@ export type SectionElementPlatform = {
   readonly x: Scalars['Float'];
   /** Y position */
   readonly y: Scalars['Float'];
-};
-
-export type SectionSchema = {
-  readonly __typename?: 'SectionSchema';
-  /** Date entity was created */
-  readonly createdAt: Scalars['DateTime'];
-  /** Section format configuration */
-  readonly format: PageSectionFormatSchema;
-  /** Head node */
-  readonly head?: Maybe<Scalars['String']>;
-  /** Identifier of the entity */
-  readonly id: Scalars['ID'];
-  /** Date entity was updated */
-  readonly updatedAt: Scalars['DateTime'];
-  readonly updatedBy: Scalars['String'];
 };
 
 export type SendVerificationCodeInput = {
@@ -729,14 +724,14 @@ export type GetPageSectionQueryVariables = Exact<{
 }>;
 
 
-export type GetPageSectionQuery = { readonly __typename?: 'Query', readonly section: { readonly __typename?: 'SectionSchema', readonly id: string, readonly head?: string | null, readonly format: { readonly __typename?: 'PageSectionFormatSchema', readonly rowsCount: number, readonly rowGap: number, readonly columnGap: number } } };
+export type GetPageSectionQuery = { readonly __typename?: 'Query', readonly section: { readonly __typename?: 'PageSectionSchema', readonly id: string, readonly format: { readonly __typename?: 'PageSectionFormatSchema', readonly rowsCount: number, readonly rowGap: number, readonly columnGap: number } } };
 
 export type GetPageSectionListQueryVariables = Exact<{
   pageId: Scalars['String'];
 }>;
 
 
-export type GetPageSectionListQuery = { readonly __typename?: 'Query', readonly sectionList: ReadonlyArray<{ readonly __typename?: 'SectionSchema', readonly id: string, readonly head?: string | null, readonly format: { readonly __typename?: 'PageSectionFormatSchema', readonly rowsCount: number, readonly rowGap: number, readonly columnGap: number } }> };
+export type GetPageSectionListQuery = { readonly __typename?: 'Query', readonly sectionList: ReadonlyArray<{ readonly __typename?: 'PageSectionSchema', readonly id: string, readonly createdAt: Date, readonly updatedAt: Date, readonly updatedBy: string, readonly format: { readonly __typename?: 'PageSectionFormatSchema', readonly rowsCount: number, readonly rowGap: number, readonly columnGap: number, readonly updatedBy: string } }> };
 
 export type CreatePageSectionMutationVariables = Exact<{
   pageId: Scalars['String'];
@@ -744,30 +739,33 @@ export type CreatePageSectionMutationVariables = Exact<{
 }>;
 
 
-export type CreatePageSectionMutation = { readonly __typename?: 'Mutation', readonly createSection: { readonly __typename?: 'SectionSchema', readonly id: string } };
+export type CreatePageSectionMutation = { readonly __typename?: 'Mutation', readonly createSection: { readonly __typename?: 'PageSectionSchema', readonly id: string } };
 
 export type DeletePageSectionMutationVariables = Exact<{
+  pageId: Scalars['String'];
   sectionId: Scalars['String'];
 }>;
 
 
-export type DeletePageSectionMutation = { readonly __typename?: 'Mutation', readonly deleteSection: { readonly __typename?: 'SectionSchema', readonly id: string } };
+export type DeletePageSectionMutation = { readonly __typename?: 'Mutation', readonly deleteSection: { readonly __typename?: 'PageSectionSchema', readonly id: string } };
 
-export type UpdatePageSectionHeadMutationVariables = Exact<{
+export type UpdatePageSectionIndexMutationVariables = Exact<{
+  pageId: Scalars['String'];
   sectionId: Scalars['String'];
-  headId: Scalars['String'];
+  index: Scalars['Float'];
 }>;
 
 
-export type UpdatePageSectionHeadMutation = { readonly __typename?: 'Mutation', readonly updateSectionHead: { readonly __typename?: 'SectionSchema', readonly id: string } };
+export type UpdatePageSectionIndexMutation = { readonly __typename?: 'Mutation', readonly updateSectionHead: { readonly __typename?: 'PageSectionSchema', readonly id: string } };
 
 export type UpdatePageSectionFormatMutationVariables = Exact<{
+  pageId: Scalars['String'];
   sectionId: Scalars['String'];
   input: UpdateSectionFormatInput;
 }>;
 
 
-export type UpdatePageSectionFormatMutation = { readonly __typename?: 'Mutation', readonly updateSectionFormat: { readonly __typename?: 'SectionSchema', readonly id: string } };
+export type UpdatePageSectionFormatMutation = { readonly __typename?: 'Mutation', readonly updateSectionFormat: { readonly __typename?: 'PageSectionSchema', readonly id: string } };
 
 export type GetPageListQueryVariables = Exact<{
   siteId: Scalars['String'];
@@ -781,7 +779,7 @@ export type GetPageQueryVariables = Exact<{
 }>;
 
 
-export type GetPageQuery = { readonly __typename?: 'Query', readonly page: { readonly __typename?: 'PageSchema', readonly id: string, readonly title: string, readonly status: EditStatus, readonly isLoneTitle?: boolean | null, readonly description?: string | null, readonly createdAt: Date, readonly updatedAt: Date, readonly createdBy: string, readonly updatedBy: string } };
+export type GetPageQuery = { readonly __typename?: 'Query', readonly page: { readonly __typename?: 'PageSchema', readonly id: string, readonly title: string, readonly status: EditStatus, readonly isLoneTitle?: boolean | null, readonly description?: string | null, readonly createdAt: Date, readonly updatedAt: Date, readonly updatedBy: string } };
 
 export type CreatePageMutationVariables = Exact<{
   siteId: Scalars['String'];
@@ -1399,7 +1397,6 @@ export const GetPageSectionDocument = gql`
     query getPageSection($sectionId: String!) {
   section(sectionId: $sectionId) {
     id
-    head
     format {
       rowsCount
       rowGap
@@ -1443,11 +1440,14 @@ export const GetPageSectionListDocument = gql`
     query getPageSectionList($pageId: String!) {
   sectionList(pageId: $pageId) {
     id
-    head
+    createdAt
+    updatedAt
+    updatedBy
     format {
       rowsCount
       rowGap
       columnGap
+      updatedBy
     }
   }
 }
@@ -1518,8 +1518,8 @@ export type CreatePageSectionMutationHookResult = ReturnType<typeof useCreatePag
 export type CreatePageSectionMutationResult = Apollo.MutationResult<CreatePageSectionMutation>;
 export type CreatePageSectionMutationOptions = Apollo.BaseMutationOptions<CreatePageSectionMutation, CreatePageSectionMutationVariables>;
 export const DeletePageSectionDocument = gql`
-    mutation deletePageSection($sectionId: String!) {
-  deleteSection(sectionId: $sectionId) {
+    mutation deletePageSection($pageId: String!, $sectionId: String!) {
+  deleteSection(pageId: $pageId, sectionId: $sectionId) {
     id
   }
 }
@@ -1539,6 +1539,7 @@ export type DeletePageSectionMutationFn = Apollo.MutationFunction<DeletePageSect
  * @example
  * const [deletePageSectionMutation, { data, loading, error }] = useDeletePageSectionMutation({
  *   variables: {
+ *      pageId: // value for 'pageId'
  *      sectionId: // value for 'sectionId'
  *   },
  * });
@@ -1550,43 +1551,44 @@ export function useDeletePageSectionMutation(baseOptions?: Apollo.MutationHookOp
 export type DeletePageSectionMutationHookResult = ReturnType<typeof useDeletePageSectionMutation>;
 export type DeletePageSectionMutationResult = Apollo.MutationResult<DeletePageSectionMutation>;
 export type DeletePageSectionMutationOptions = Apollo.BaseMutationOptions<DeletePageSectionMutation, DeletePageSectionMutationVariables>;
-export const UpdatePageSectionHeadDocument = gql`
-    mutation updatePageSectionHead($sectionId: String!, $headId: String!) {
-  updateSectionHead(sectionId: $sectionId, headId: $headId) {
+export const UpdatePageSectionIndexDocument = gql`
+    mutation updatePageSectionIndex($pageId: String!, $sectionId: String!, $index: Float!) {
+  updateSectionHead(pageId: $pageId, sectionId: $sectionId, index: $index) {
     id
   }
 }
     `;
-export type UpdatePageSectionHeadMutationFn = Apollo.MutationFunction<UpdatePageSectionHeadMutation, UpdatePageSectionHeadMutationVariables>;
+export type UpdatePageSectionIndexMutationFn = Apollo.MutationFunction<UpdatePageSectionIndexMutation, UpdatePageSectionIndexMutationVariables>;
 
 /**
- * __useUpdatePageSectionHeadMutation__
+ * __useUpdatePageSectionIndexMutation__
  *
- * To run a mutation, you first call `useUpdatePageSectionHeadMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdatePageSectionHeadMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdatePageSectionIndexMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePageSectionIndexMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updatePageSectionHeadMutation, { data, loading, error }] = useUpdatePageSectionHeadMutation({
+ * const [updatePageSectionIndexMutation, { data, loading, error }] = useUpdatePageSectionIndexMutation({
  *   variables: {
+ *      pageId: // value for 'pageId'
  *      sectionId: // value for 'sectionId'
- *      headId: // value for 'headId'
+ *      index: // value for 'index'
  *   },
  * });
  */
-export function useUpdatePageSectionHeadMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePageSectionHeadMutation, UpdatePageSectionHeadMutationVariables>) {
+export function useUpdatePageSectionIndexMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePageSectionIndexMutation, UpdatePageSectionIndexMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdatePageSectionHeadMutation, UpdatePageSectionHeadMutationVariables>(UpdatePageSectionHeadDocument, options);
+        return Apollo.useMutation<UpdatePageSectionIndexMutation, UpdatePageSectionIndexMutationVariables>(UpdatePageSectionIndexDocument, options);
       }
-export type UpdatePageSectionHeadMutationHookResult = ReturnType<typeof useUpdatePageSectionHeadMutation>;
-export type UpdatePageSectionHeadMutationResult = Apollo.MutationResult<UpdatePageSectionHeadMutation>;
-export type UpdatePageSectionHeadMutationOptions = Apollo.BaseMutationOptions<UpdatePageSectionHeadMutation, UpdatePageSectionHeadMutationVariables>;
+export type UpdatePageSectionIndexMutationHookResult = ReturnType<typeof useUpdatePageSectionIndexMutation>;
+export type UpdatePageSectionIndexMutationResult = Apollo.MutationResult<UpdatePageSectionIndexMutation>;
+export type UpdatePageSectionIndexMutationOptions = Apollo.BaseMutationOptions<UpdatePageSectionIndexMutation, UpdatePageSectionIndexMutationVariables>;
 export const UpdatePageSectionFormatDocument = gql`
-    mutation updatePageSectionFormat($sectionId: String!, $input: UpdateSectionFormatInput!) {
-  updateSectionFormat(sectionId: $sectionId, input: $input) {
+    mutation updatePageSectionFormat($pageId: String!, $sectionId: String!, $input: UpdateSectionFormatInput!) {
+  updateSectionFormat(pageId: $pageId, sectionId: $sectionId, input: $input) {
     id
   }
 }
@@ -1606,6 +1608,7 @@ export type UpdatePageSectionFormatMutationFn = Apollo.MutationFunction<UpdatePa
  * @example
  * const [updatePageSectionFormatMutation, { data, loading, error }] = useUpdatePageSectionFormatMutation({
  *   variables: {
+ *      pageId: // value for 'pageId'
  *      sectionId: // value for 'sectionId'
  *      input: // value for 'input'
  *   },
@@ -1668,7 +1671,6 @@ export const GetPageDocument = gql`
     description
     createdAt
     updatedAt
-    createdBy
     updatedBy
   }
 }

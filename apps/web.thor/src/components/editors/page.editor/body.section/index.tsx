@@ -5,36 +5,29 @@ import { Container, MenuArea } from './styles';
 
 import { AddSectionBtn } from './add.section.btn';
 import { EditorStore } from '../store';
-import { ElementFactory } from './element.factory';
 import { ElementsBoard } from './elements.board';
 import { ElementsMenu } from './elements.menu';
 import { Outline } from './outline';
+import type { PageSectionSchema } from '@app/generated/valhalla.gql';
 import { ScreenSize } from '../constants';
 import type { Section } from '../store/types';
 import { SectionMenu } from './section.menu';
 import { SectionProvider } from './scope.provider';
-import { compareById } from '@app/lib/compare.by.id';
-import uniqueId from 'lodash.uniqueid';
 
 type Props = {
-  sectionId: string;
+  index: number;
+  section: Pick<PageSectionSchema, 'id' | 'format'>;
 };
 
-export const BodySection: React.FC<Props> = React.memo(({ sectionId }) => {
-  const sectionIndex = EditorStore.useSelect((state) =>
-    state.sections.findIndex(compareById(sectionId)),
-  );
-  const section = EditorStore.useSelect((state) =>
-    state.sections.find(compareById(sectionId)),
-  );
+export const BodySection: React.FC<Props> = React.memo(({ section, index }) => {
   const isMobile = EditorStore.useSelect(
     (state) => state.size < ScreenSize.DESKTOP,
   );
 
   function handleHover() {
-    if (EditorStore.getState().activeSection !== sectionId) {
-      EditorStore.actions.setActiveSection(sectionId);
-    }
+    // if (EditorStore.getState().activeSection !== sectionId) {
+    //   EditorStore.actions.setActiveSection(sectionId);
+    // }
   }
 
   function handleLeave() {
@@ -44,35 +37,35 @@ export const BodySection: React.FC<Props> = React.memo(({ sectionId }) => {
   }
 
   function handleConfigChange(nextConfig: Section['config']) {
-    EditorStore.actions.updateSectionConfig(sectionId, nextConfig);
+    // EditorStore.actions.updateSectionConfig(sectionId, nextConfig);
   }
 
   function handleElementsUpdated(elements: Section['children']) {
-    EditorStore.actions.replaceElements(sectionId, elements);
+    // EditorStore.actions.replaceElements(sectionId, elements);
   }
 
   function handleElementsDeleted(elementIds: BoardElement['id'][]) {
-    EditorStore.actions.removeElements(sectionId, elementIds);
+    // EditorStore.actions.removeElements(sectionId, elementIds);
   }
 
   function handleAddElement(element: DroppedElement) {
-    EditorStore.actions.addElement(sectionId, {
-      ...element,
-      id: uniqueId('element'),
-    });
+    // EditorStore.actions.addElement(sectionId, {
+    //   ...element,
+    //   id: uniqueId('element'),
+    // });
   }
 
   return (
-    <SectionProvider sectionId={sectionId} config={section.config}>
-      <Container
-        id={sectionId}
-        onMouseEnter={handleHover}
-        onMouseLeave={handleLeave}
-      >
+    <SectionProvider
+      sectionId={section.id}
+      config={section.format}
+      index={index}
+    >
+      <Container onMouseEnter={handleHover} onMouseLeave={handleLeave}>
         <ElementsBoard.DndContext>
           <MenuArea isMobile={isMobile}>
             <ElementsMenu placement="left" />
-            <SectionMenu placement="right" index={sectionIndex} />
+            <SectionMenu placement="right" />
           </MenuArea>
           <ElementsBoard
             onConfigChange={handleConfigChange}
@@ -80,11 +73,11 @@ export const BodySection: React.FC<Props> = React.memo(({ sectionId }) => {
             onElementsDeleted={handleElementsDeleted}
             onElementAdded={handleAddElement}
           >
-            {section.children.map((element) => (
-              <ElementsBoard.Item key={element.id} element={element}>
-                <ElementFactory element={element} />
-              </ElementsBoard.Item>
-            ))}
+            {/* {section.children.map((element) => (
+                <ElementsBoard.Item key={element.id} element={element}>
+                  <ElementFactory element={element} />
+                </ElementsBoard.Item>
+              ))} */}
           </ElementsBoard>
           <Outline />
           <AddSectionBtn align="top" />

@@ -4,32 +4,18 @@ import type {
 } from '@app/components/editors/page.editor/types';
 import { createStore, createStoreHook, withImmer } from 'tiamut';
 
+import type { PageSectionSchema } from '@app/generated/valhalla.gql';
 import { ScreenSize } from '../constants';
-import type { Section } from './types';
 import { compareById } from '@app/lib/compare.by.id';
 import { swapArrayIndex } from '@app/lib/array';
 import uniqBy from 'lodash.uniqby';
-import uniqueId from 'lodash.uniqueid';
-
-//TODO: server side
-export function makeSection(): Section {
-  return {
-    id: uniqueId(),
-    children: [],
-    config: {
-      rowsCount: 10,
-      columnGap: 10,
-      rowGap: 10,
-    },
-  };
-}
 
 type State = {
   size: ScreenSize;
   cellSize?: number;
   activeSection?: string;
   isDragging: boolean;
-  sections: Section[];
+  sections: Array<PageSectionSchema & { children: any[] }>;
 };
 
 const initialState: State = {
@@ -54,7 +40,11 @@ const store = createStore(
       setCellSize(state, size: State['cellSize']) {
         state.cellSize = size;
       },
-      addElement(state, sectionId: Section['id'], element: DroppedElement) {
+      addElement(
+        state,
+        sectionId: PageSectionSchema['id'],
+        element: DroppedElement,
+      ) {
         const target = state.sections.find(compareById(sectionId));
         if (target) {
           target.children.push(element);
@@ -62,7 +52,7 @@ const store = createStore(
       },
       replaceElements(
         state,
-        sectionId: Section['id'],
+        sectionId: PageSectionSchema['id'],
         elements: DroppedElement[],
       ) {
         const target = state.sections.find(compareById(sectionId));
@@ -73,7 +63,11 @@ const store = createStore(
           );
         }
       },
-      updateElement(state, sectionId: Section['id'], element: DroppedElement) {
+      updateElement(
+        state,
+        sectionId: PageSectionSchema['id'],
+        element: DroppedElement,
+      ) {
         const section = state.sections.find(compareById(sectionId));
         if (section) {
           section.children = section.children.map((e) =>
@@ -83,7 +77,7 @@ const store = createStore(
       },
       removeElements(
         state,
-        sectionId: Section['id'],
+        sectionId: PageSectionSchema['id'],
         elementIdList: BoardElement['id'][],
       ) {
         const target = state.sections.find(compareById(sectionId));
@@ -93,32 +87,13 @@ const store = createStore(
           );
         }
       },
-      deleteSection(state, sectionId: Section['id']) {
+      deleteSection(state, sectionId: PageSectionSchema['id']) {
         state.sections = state.sections.filter(compareById(sectionId, false));
       },
-      addSection(
-        state,
-        section: Section,
-        options?: {
-          anchorSection: Section['id'];
-          isBefore: boolean;
-        },
-      ) {
-        if (!options) {
-          state.sections.push(section);
-        } else {
-          const anchorIndex = state.sections.findIndex(
-            compareById(options.anchorSection),
-          );
-
-          const positionIndex = options.isBefore
-            ? anchorIndex
-            : anchorIndex + 1;
-
-          state.sections.splice(positionIndex, 0, section);
-        }
+      addSection(state, section: PageSectionSchema) {
+        state.sections.push({ ...section, children: [] });
       },
-      moveSectionUp(state, sectionId: Section['id']) {
+      moveSectionUp(state, sectionId: PageSectionSchema['id']) {
         const sectionIndex = state.sections.findIndex(compareById(sectionId));
 
         if (sectionIndex > 0) {
@@ -128,7 +103,7 @@ const store = createStore(
           });
         }
       },
-      moveSectionDown(state, sectionId: Section['id']) {
+      moveSectionDown(state, sectionId: PageSectionSchema['id']) {
         const sectionIndex = state.sections.findIndex(compareById(sectionId));
 
         if (sectionIndex < state.sections.length - 1) {
@@ -140,12 +115,13 @@ const store = createStore(
       },
       updateSectionConfig(
         state,
-        sectionId: Section['id'],
-        nextConfig: Section['config'],
+        sectionId: PageSectionSchema['id'],
+        nextConfig: PageSectionSchema['format'],
       ) {
         const section = state.sections.find(compareById(sectionId));
         if (section) {
-          section.config = nextConfig;
+          //TODO
+          section.format = nextConfig;
         }
       },
     },

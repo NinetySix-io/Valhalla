@@ -1,11 +1,17 @@
-import { BaseSchema, typegoose } from '@valhalla/serv.core';
 import { Exclude, Expose } from 'class-transformer';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { SimpleModel, typegoose } from '@valhalla/serv.core';
 
 import mongoose from 'mongoose';
 
 @ObjectType()
-export class PageSectionFormatSchema extends BaseSchema {
+@SimpleModel(null, {
+  schema: {
+    _id: false,
+    timestamps: false,
+  },
+})
+export class PageSectionFormatSchema {
   @typegoose.prop()
   @Expose()
   @Field({ description: 'Row count' })

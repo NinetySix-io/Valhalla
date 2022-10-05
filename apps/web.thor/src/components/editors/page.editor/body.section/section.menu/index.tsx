@@ -1,12 +1,12 @@
 import * as React from 'react';
 
 import { Button, Divider, Popover, Stack, css, styled } from '@mui/material';
+import { useSectionId, useSectionIndex } from '../scope.provider';
 
 import { EditorMenu } from '../../menu';
 import { EditorStore } from '../../store';
 import { SectionMenuContent } from './content';
 import { useHelperDisplay } from '../hooks/use.helpers.display';
-import { useSectionId } from '../scope.provider';
 
 const ActionBtn = styled(Button)(
   ({ theme }) => css`
@@ -15,12 +15,14 @@ const ActionBtn = styled(Button)(
   `,
 );
 
-type Props = {
-  index: number;
-} & Pick<React.ComponentProps<typeof EditorMenu>, 'style' | 'placement'>;
+type Props = Pick<
+  React.ComponentProps<typeof EditorMenu>,
+  'style' | 'placement'
+>;
 
-export const SectionMenu: React.FC<Props> = ({ index, ...props }) => {
+export const SectionMenu: React.FC<Props> = (props) => {
   const anchor = React.useRef<HTMLDivElement>();
+  const sectionIndex = useSectionIndex();
   const sectionId = useSectionId();
   const [menuVisible, setMenuVisible] = React.useState(false);
   const sectionsCount = EditorStore.useSelect((state) => state.sections.length);
@@ -58,10 +60,13 @@ export const SectionMenu: React.FC<Props> = ({ index, ...props }) => {
         </Button>
         <Divider />
         <Stack direction="row" spacing={0.5}>
-          <ActionBtn disabled={index === sectionsCount - 1} onClick={moveDown}>
+          <ActionBtn
+            disabled={sectionIndex === sectionsCount - 1}
+            onClick={moveDown}
+          >
             Down
           </ActionBtn>
-          <ActionBtn disabled={index === 0} onClick={moveUp}>
+          <ActionBtn disabled={sectionIndex === 0} onClick={moveUp}>
             Up
           </ActionBtn>
           <ActionBtn color="warning" onClick={handleCopy}>

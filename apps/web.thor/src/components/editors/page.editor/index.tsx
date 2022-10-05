@@ -5,9 +5,12 @@ import { css, styled } from '@mui/material';
 import { BodySection } from './body.section';
 import { EditorStore } from './store';
 import { EmptyContent } from './empty';
+import { LoadingBlock } from '@app/components/loading.block';
 import { ScreenSize } from './constants';
 import isEmpty from 'lodash.isempty';
 import { makeFilterProps } from '@valhalla/web.react';
+import { useGetPageSectionListQuery } from '@app/generated/valhalla.gql';
+import { useSitePageId } from '@app/hooks/hydrate/use.site.page.hydrate';
 
 const Container = styled(
   'div',
@@ -51,9 +54,17 @@ const Container = styled(
 
 export const PageEditor: React.FC = () => {
   const size = EditorStore.useSelect((state) => state.size);
-  const sections = EditorStore.useSelect((state) => state.sections);
+  const pageId = useSitePageId();
+  const query = useGetPageSectionListQuery({ variables: { pageId } });
+  const sections = query.data?.sectionList;
 
-  if (isEmpty(sections)) {
+  if (query.loading) {
+    return (
+      <Container size={size}>
+        <LoadingBlock />
+      </Container>
+    );
+  } else if (isEmpty(sections)) {
     return (
       <Container size={size}>
         <EmptyContent />
@@ -63,8 +74,8 @@ export const PageEditor: React.FC = () => {
 
   return (
     <Container size={size}>
-      {sections.map((section) => (
-        <BodySection key={section.id} sectionId={section.id} />
+      {sections.map((section, index) => (
+        <BodySection key={section.id} section={section} index={index} />
       ))}
     </Container>
   );

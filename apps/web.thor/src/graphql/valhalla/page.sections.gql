@@ -1,7 +1,6 @@
 query getPageSection($sectionId: String!) {
   section(sectionId: $sectionId) {
     id
-    head
     format {
       rowsCount
       rowGap
@@ -13,11 +12,14 @@ query getPageSection($sectionId: String!) {
 query getPageSectionList($pageId: String!) {
   sectionList(pageId: $pageId) {
     id
-    head
+    createdAt
+    updatedAt
+    updatedBy
     format {
       rowsCount
       rowGap
       columnGap
+      updatedBy
     }
   }
 }
@@ -28,23 +30,28 @@ mutation createPageSection($pageId: String!, $input: CreateSectionInput!) {
   }
 }
 
-mutation deletePageSection($sectionId: String!) {
-  deleteSection(sectionId: $sectionId) {
+mutation deletePageSection($pageId: String!, $sectionId: String!) {
+  deleteSection(pageId: $pageId, sectionId: $sectionId) {
     id
   }
 }
 
-mutation updatePageSectionHead($sectionId: String!, $headId: String!) {
-  updateSectionHead(sectionId: $sectionId, headId: $headId) {
+mutation updatePageSectionIndex(
+  $pageId: String!
+  $sectionId: String!
+  $index: Float!
+) {
+  updateSectionHead(pageId: $pageId, sectionId: $sectionId, index: $index) {
     id
   }
 }
 
 mutation updatePageSectionFormat(
+  $pageId: String!
   $sectionId: String!
   $input: UpdateSectionFormatInput!
 ) {
-  updateSectionFormat(sectionId: $sectionId, input: $input) {
+  updateSectionFormat(pageId: $pageId, sectionId: $sectionId, input: $input) {
     id
   }
 }

@@ -4,7 +4,7 @@ import { ICustomOptions } from '@typegoose/typegoose/lib/types';
 import { SchemaOptions } from 'mongoose';
 
 export function SimpleModel(
-  collection: string,
+  collection: string = null,
   {
     schema = {},
     ...options

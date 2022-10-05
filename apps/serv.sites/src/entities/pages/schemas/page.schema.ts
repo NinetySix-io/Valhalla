@@ -72,7 +72,7 @@ export class PageSchema extends BaseSchema {
   @Field(() => String, { description: 'Account ID of updater' })
   updatedBy: mongoose.Types.ObjectId;
 
-  @typegoose.prop()
+  @typegoose.prop({ type: PageSectionSchema })
   @Expose()
   @Field(() => [PageSectionSchema], { description: 'Sections' })
   sections: PageSectionSchema[];

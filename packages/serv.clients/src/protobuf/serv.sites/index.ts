@@ -1,8 +1,9 @@
 /* eslint-disable */
-import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
-import { Observable } from "rxjs";
+import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
 
-export const protobufPackage = "serv.sites";
+import { Observable } from 'rxjs';
+
+export const protobufPackage = 'serv.sites';
 
 /**
  * -----------------------------
@@ -10,15 +11,15 @@ export const protobufPackage = "serv.sites";
  * -----------------------------
  */
 export enum SiteStatus {
-  DEPLOYED = "DEPLOYED",
-  PENDING = "PENDING",
-  SUSPENDED = "SUSPENDED",
+  DEPLOYED = 'DEPLOYED',
+  PENDING = 'PENDING',
+  SUSPENDED = 'SUSPENDED',
 }
 
 export enum EditStatus {
-  ACTIVE = "ACTIVE",
-  DRAFT = "DRAFT",
-  ARCHIVED = "ARCHIVED",
+  ACTIVE = 'ACTIVE',
+  DRAFT = 'DRAFT',
+  ARCHIVED = 'ARCHIVED',
 }
 
 export interface Page {
@@ -216,7 +217,7 @@ export interface CreateSectionResponse {
   data?: Section;
 }
 
-export interface UpdateSectionHeadRequest {
+export interface UpdateSectionIndexRequest {
   sectionId: string;
   requestedUserId: string;
   head: string;
@@ -241,7 +242,7 @@ export interface DeleteSectionResponse {
   data?: Section;
 }
 
-export const SERV_SITES_PACKAGE_NAME = "serv.sites";
+export const SERV_SITES_PACKAGE_NAME = 'serv.sites';
 
 export interface SitesServiceClient {
   /**
@@ -284,17 +285,29 @@ export interface SitesServiceClient {
    * -----------------------------
    */
 
-  getPageSection(request: GetPageSectionRequest): Observable<GetPageSectionResponse>;
+  getPageSection(
+    request: GetPageSectionRequest,
+  ): Observable<GetPageSectionResponse>;
 
-  getPageSectionList(request: GetPageSectionListRequest): Observable<GetPageSectionListResponse>;
+  getPageSectionList(
+    request: GetPageSectionListRequest,
+  ): Observable<GetPageSectionListResponse>;
 
-  createSection(request: CreateSectionRequest): Observable<CreateSectionResponse>;
+  createSection(
+    request: CreateSectionRequest,
+  ): Observable<CreateSectionResponse>;
 
-  updateSectionHead(request: UpdateSectionHeadRequest): Observable<UpdateSectionResponse>;
+  updateSectionHead(
+    request: UpdateSectionIndexRequest,
+  ): Observable<UpdateSectionResponse>;
 
-  updateSectionFormat(request: UpdateSectionFormatRequest): Observable<UpdateSectionResponse>;
+  updateSectionFormat(
+    request: UpdateSectionFormatRequest,
+  ): Observable<UpdateSectionResponse>;
 
-  deleteSection(request: DeleteSectionRequest): Observable<DeleteSectionResponse>;
+  deleteSection(
+    request: DeleteSectionRequest,
+  ): Observable<DeleteSectionResponse>;
 }
 
 export interface SitesServiceController {
@@ -306,21 +319,35 @@ export interface SitesServiceController {
 
   createSite(
     request: CreateSiteRequest,
-  ): Promise<CreateSiteResponse> | Observable<CreateSiteResponse> | CreateSiteResponse;
+  ):
+    | Promise<CreateSiteResponse>
+    | Observable<CreateSiteResponse>
+    | CreateSiteResponse;
 
-  getSite(request: GetSiteRequest): Promise<GetSiteResponse> | Observable<GetSiteResponse> | GetSiteResponse;
+  getSite(
+    request: GetSiteRequest,
+  ): Promise<GetSiteResponse> | Observable<GetSiteResponse> | GetSiteResponse;
 
   updateSite(
     request: UpdateSiteRequest,
-  ): Promise<UpdateSiteResponse> | Observable<UpdateSiteResponse> | UpdateSiteResponse;
+  ):
+    | Promise<UpdateSiteResponse>
+    | Observable<UpdateSiteResponse>
+    | UpdateSiteResponse;
 
   getSiteList(
     request: GetSiteListRequest,
-  ): Promise<GetSiteListResponse> | Observable<GetSiteListResponse> | GetSiteListResponse;
+  ):
+    | Promise<GetSiteListResponse>
+    | Observable<GetSiteListResponse>
+    | GetSiteListResponse;
 
   suspendSite(
     request: SuspendSiteRequest,
-  ): Promise<SuspendSiteResponse> | Observable<SuspendSiteResponse> | SuspendSiteResponse;
+  ):
+    | Promise<SuspendSiteResponse>
+    | Observable<SuspendSiteResponse>
+    | SuspendSiteResponse;
 
   /**
    * -----------------------------
@@ -330,25 +357,42 @@ export interface SitesServiceController {
 
   createPage(
     request: CreatePageRequest,
-  ): Promise<CreatePageResponse> | Observable<CreatePageResponse> | CreatePageResponse;
+  ):
+    | Promise<CreatePageResponse>
+    | Observable<CreatePageResponse>
+    | CreatePageResponse;
 
   getPageList(
     request: GetPageListRequest,
-  ): Promise<GetPageListResponse> | Observable<GetPageListResponse> | GetPageListResponse;
+  ):
+    | Promise<GetPageListResponse>
+    | Observable<GetPageListResponse>
+    | GetPageListResponse;
 
-  getPage(request: GetPageRequest): Promise<GetPageResponse> | Observable<GetPageResponse> | GetPageResponse;
+  getPage(
+    request: GetPageRequest,
+  ): Promise<GetPageResponse> | Observable<GetPageResponse> | GetPageResponse;
 
   updatePage(
     request: UpdatePageRequest,
-  ): Promise<UpdatePageResponse> | Observable<UpdatePageResponse> | UpdatePageResponse;
+  ):
+    | Promise<UpdatePageResponse>
+    | Observable<UpdatePageResponse>
+    | UpdatePageResponse;
 
   deletePage(
     request: DeletePageRequest,
-  ): Promise<DeletePageResponse> | Observable<DeletePageResponse> | DeletePageResponse;
+  ):
+    | Promise<DeletePageResponse>
+    | Observable<DeletePageResponse>
+    | DeletePageResponse;
 
   archivePage(
     request: ArchivePageRequest,
-  ): Promise<ArchivePageResponse> | Observable<ArchivePageResponse> | ArchivePageResponse;
+  ):
+    | Promise<ArchivePageResponse>
+    | Observable<ArchivePageResponse>
+    | ArchivePageResponse;
 
   /**
    * -----------------------------
@@ -358,60 +402,92 @@ export interface SitesServiceController {
 
   getPageSection(
     request: GetPageSectionRequest,
-  ): Promise<GetPageSectionResponse> | Observable<GetPageSectionResponse> | GetPageSectionResponse;
+  ):
+    | Promise<GetPageSectionResponse>
+    | Observable<GetPageSectionResponse>
+    | GetPageSectionResponse;
 
   getPageSectionList(
     request: GetPageSectionListRequest,
-  ): Promise<GetPageSectionListResponse> | Observable<GetPageSectionListResponse> | GetPageSectionListResponse;
+  ):
+    | Promise<GetPageSectionListResponse>
+    | Observable<GetPageSectionListResponse>
+    | GetPageSectionListResponse;
 
   createSection(
     request: CreateSectionRequest,
-  ): Promise<CreateSectionResponse> | Observable<CreateSectionResponse> | CreateSectionResponse;
+  ):
+    | Promise<CreateSectionResponse>
+    | Observable<CreateSectionResponse>
+    | CreateSectionResponse;
 
   updateSectionHead(
-    request: UpdateSectionHeadRequest,
-  ): Promise<UpdateSectionResponse> | Observable<UpdateSectionResponse> | UpdateSectionResponse;
+    request: UpdateSectionIndexRequest,
+  ):
+    | Promise<UpdateSectionResponse>
+    | Observable<UpdateSectionResponse>
+    | UpdateSectionResponse;
 
   updateSectionFormat(
     request: UpdateSectionFormatRequest,
-  ): Promise<UpdateSectionResponse> | Observable<UpdateSectionResponse> | UpdateSectionResponse;
+  ):
+    | Promise<UpdateSectionResponse>
+    | Observable<UpdateSectionResponse>
+    | UpdateSectionResponse;
 
   deleteSection(
     request: DeleteSectionRequest,
-  ): Promise<DeleteSectionResponse> | Observable<DeleteSectionResponse> | DeleteSectionResponse;
+  ):
+    | Promise<DeleteSectionResponse>
+    | Observable<DeleteSectionResponse>
+    | DeleteSectionResponse;
 }
 
 export function SitesServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = [
-      "createSite",
-      "getSite",
-      "updateSite",
-      "getSiteList",
-      "suspendSite",
-      "createPage",
-      "getPageList",
-      "getPage",
-      "updatePage",
-      "deletePage",
-      "archivePage",
-      "getPageSection",
-      "getPageSectionList",
-      "createSection",
-      "updateSectionHead",
-      "updateSectionFormat",
-      "deleteSection",
+      'createSite',
+      'getSite',
+      'updateSite',
+      'getSiteList',
+      'suspendSite',
+      'createPage',
+      'getPageList',
+      'getPage',
+      'updatePage',
+      'deletePage',
+      'archivePage',
+      'getPageSection',
+      'getPageSectionList',
+      'createSection',
+      'updateSectionHead',
+      'updateSectionFormat',
+      'deleteSection',
     ];
     for (const method of grpcMethods) {
-      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcMethod("SitesService", method)(constructor.prototype[method], method, descriptor);
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(
+        constructor.prototype,
+        method,
+      );
+      GrpcMethod('SitesService', method)(
+        constructor.prototype[method],
+        method,
+        descriptor,
+      );
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
-      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcStreamMethod("SitesService", method)(constructor.prototype[method], method, descriptor);
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(
+        constructor.prototype,
+        method,
+      );
+      GrpcStreamMethod('SitesService', method)(
+        constructor.prototype[method],
+        method,
+        descriptor,
+      );
     }
   };
 }
 
-export const SITES_SERVICE_NAME = "SitesService";
+export const SITES_SERVICE_NAME = 'SitesService';

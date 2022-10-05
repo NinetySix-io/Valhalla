@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import type { BoardElement, TextElement } from '../../types';
 
-import { ElementType } from '@app/generated/valhalla.gql';
 import { TextItem } from './text';
 import { useSectionStore } from '../scope.provider';
 
@@ -19,7 +18,7 @@ export const ElementFactory: React.FC<Props> = ({
 }) => {
   const store = useSectionStore();
 
-  if (element.type === ElementType.TEXT) {
+  if (element.type === 'text') {
     return (
       <TextItem
         element={element as TextElement}
@@ -29,7 +28,7 @@ export const ElementFactory: React.FC<Props> = ({
         onEditEnd={() => store.actions.setIsEditingText(false)}
       />
     );
-  } else if (element.type === ElementType.BOX) {
+  } else if (element.type === 'box') {
     return (
       <button type="button" title={element.id}>
         button

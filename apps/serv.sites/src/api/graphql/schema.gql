@@ -23,15 +23,6 @@ directive @inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUM
 directive @override(from: String!) on FIELD_DEFINITION
 
 type PageSectionFormatSchema {
-  """Date entity was created"""
-  createdAt: DateTime!
-
-  """Date entity was updated"""
-  updatedAt: DateTime!
-
-  """Identifier of the entity"""
-  id: ID!
-
   """Row count"""
   rowsCount: Float!
 
@@ -44,11 +35,6 @@ type PageSectionFormatSchema {
   """Account ID of updater"""
   updatedBy: String!
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type PageSectionSchema {
   """Date entity was created"""
@@ -64,6 +50,11 @@ type PageSectionSchema {
   format: PageSectionFormatSchema!
   updatedBy: String!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type PageSchema {
   """Date entity was created"""

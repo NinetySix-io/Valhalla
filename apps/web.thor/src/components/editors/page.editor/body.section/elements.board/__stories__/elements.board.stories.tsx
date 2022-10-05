@@ -35,16 +35,21 @@ const Board: React.FC<React.PropsWithChildren<{ section: Section }>> = ({
   section,
   children,
 }) => {
-  const elements = EditorStore.useSelect(
-    (state) => state.sections.find(compareById(section.id))?.children,
+  const sectionIndex = EditorStore.useSelect((state) =>
+    state.sections.findIndex(compareById(section.id)),
   );
+  const elements = EditorStore.getState().sections[sectionIndex].children;
 
   return (
     <Wrapper
       onMouseOver={() => EditorStore.actions.setActiveSection(section.id)}
       onMouseLeave={() => EditorStore.actions.setActiveSection(null)}
     >
-      <SectionProvider sectionId={section.id} config={section.config}>
+      <SectionProvider
+        sectionId={section.id}
+        config={section.config}
+        index={sectionIndex}
+      >
         <StyleVariables />
         <ElementsBoard.DndContext>
           <ElementsBoard
@@ -71,7 +76,7 @@ const Board: React.FC<React.PropsWithChildren<{ section: Section }>> = ({
           >
             <Outline />
             {children}
-            {elements.map((element) => {
+            {elements.map((element: any) => {
               return (
                 <ElementsBoard.Item key={element.id} element={element}>
                   <ElementFactory element={element} />
@@ -92,7 +97,7 @@ storiesOf('NinetySix/Editors/Page Editor/Board', module)
     return (
       <Board section={section}>
         <FixedTop>
-          <ElementsMenu placement="left-start" />
+          <ElementsMenu placement="left" />
         </FixedTop>
       </Board>
     );
@@ -104,7 +109,7 @@ storiesOf('NinetySix/Editors/Page Editor/Board', module)
         {sections.map((section) => (
           <Board section={section} key={section.id}>
             <FixedTop>
-              <ElementsMenu placement="left-start" />
+              <ElementsMenu placement="left" />
             </FixedTop>
           </Board>
         ))}

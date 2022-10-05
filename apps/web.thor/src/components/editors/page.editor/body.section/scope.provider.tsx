@@ -6,9 +6,11 @@ import { createSectionStore } from './store';
 type Props = React.PropsWithChildren<{
   sectionId: Section['id'];
   config: Section['config'];
+  index: number;
 }>;
 
 const Context = React.createContext({
+  index: undefined as number,
   store: undefined as ReturnType<typeof createSectionStore>,
 });
 
@@ -20,9 +22,14 @@ export function useSectionId() {
   return useSectionStore().useSelect((state) => state.sectionId);
 }
 
+export function useSectionIndex() {
+  return React.useContext(Context).index;
+}
+
 export const SectionProvider: React.FC<Props> = ({
   sectionId,
   children,
+  index,
   config,
 }) => {
   const store = React.useMemo(
@@ -35,5 +42,7 @@ export const SectionProvider: React.FC<Props> = ({
     store.actions.setConfig(config);
   }, [config, store]);
 
-  return <Context.Provider value={{ store }}>{children}</Context.Provider>;
+  return (
+    <Context.Provider value={{ store, index }}>{children}</Context.Provider>
+  );
 };
