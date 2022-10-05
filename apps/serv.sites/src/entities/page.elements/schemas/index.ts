@@ -2,7 +2,7 @@ import { BaseSchema, SimpleModel } from '@valhalla/serv.core';
 import { Exclude, Expose } from 'class-transformer';
 import { Field, ObjectType } from '@nestjs/graphql';
 
-import { SectionElementPlatform } from './platform.schema';
+import { PageElementPlatformSchema } from './platform.schema';
 import mongoose from 'mongoose';
 import { typegoose } from '@valhalla/serv.core';
 
@@ -13,20 +13,20 @@ export class PageElementSchema extends BaseSchema {
   @Exclude()
   section: mongoose.Types.ObjectId;
 
-  @typegoose.prop()
+  @typegoose.prop({ type: PageElementPlatformSchema })
   @Expose()
   @Field({ description: 'Desktop configuration' })
-  desktop: SectionElementPlatform;
+  desktop: PageElementPlatformSchema;
 
-  @typegoose.prop()
+  @typegoose.prop({ type: PageElementPlatformSchema })
   @Expose()
   @Field({ description: 'Tablet configuration' })
-  tablet?: SectionElementPlatform;
+  tablet?: PageElementPlatformSchema;
 
-  @typegoose.prop()
+  @typegoose.prop({ type: PageElementPlatformSchema })
   @Expose()
   @Field({ description: 'Mobile configuration' })
-  mobile?: SectionElementPlatform;
+  mobile?: PageElementPlatformSchema;
 
   @typegoose.prop()
   @Expose()

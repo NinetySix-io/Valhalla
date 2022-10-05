@@ -1,6 +1,8 @@
 import {
   ArchivePageRequest,
   ArchivePageResponse,
+  CloneSectionRequest,
+  CloneSectionResponse,
   CreatePageRequest,
   CreatePageResponse,
   CreateSectionRequest,
@@ -42,6 +44,7 @@ import {
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { ArchivePageCommand } from '@app/cqrs/commands/archive.page.command';
+import { CloneSectionCommand } from '@app/cqrs/commands/clone.section.command';
 import { Controller } from '@nestjs/common';
 import { CreatePageCommand } from '@app/cqrs/commands/create.page.command';
 import { CreateSectionCommand } from '@app/cqrs/commands/create.section.command';
@@ -71,6 +74,14 @@ export class gRpcController implements SitesServiceController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
+  cloneSection(
+    request: CloneSectionRequest,
+  ):
+    | CloneSectionResponse
+    | Promise<CloneSectionResponse>
+    | Observable<CloneSectionResponse> {
+    return this.commandBus.execute(new CloneSectionCommand(request));
+  }
   deletePageElementList(
     request: DeletePageElementListRequest,
   ):

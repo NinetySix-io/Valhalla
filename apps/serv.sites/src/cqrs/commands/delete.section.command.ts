@@ -36,7 +36,7 @@ export class DeleteSectionHandler
         { $pull: { sections: { _id: sectionId } } },
       )
       .lean()
-      .orFail();
+      .orFail(() => new Error(`${pageId} not found!`));
 
     const section = page.sections.find(compareId(sectionId));
     section.updatedBy = updatedBy;

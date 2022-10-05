@@ -32,3 +32,5 @@ dist/
 .vercel
 /newrelic_agent.log
 *.tsbuildinfo
+
+.mongo

@@ -42,13 +42,25 @@ export class UpdateSectionIndexHandler
     const pageId = toObjectId(command.request.pageId);
     const sectionId = toObjectId(command.request.sectionId);
     const updatedBy = toObjectId(requestedUserId);
-    const payload = flattenObject({ format, updatedBy }, null, true);
+    const payload = flattenObject(
+      { format, updatedBy },
+      'sections.$[elem].',
+      true,
+    );
     const page = await this.pagesEntity
       .findOneAndUpdate(
-        { _id: pageId, sections: { $elemMatch: { _id: sectionId } } },
-        { $set: { 'sections.$': payload } },
-        { new: true },
+        { _id: pageId },
+        { $set: payload },
+        {
+          new: true,
+          arrayFilters: [
+            {
+              'elem._id': sectionId,
+            },
+          ],
+        },
       )
+      .orFail(() => new Error(`${pageId} not found!`))
       .lean();
 
     const section = page.sections.find(compareId(sectionId));

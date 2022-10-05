@@ -132,6 +132,7 @@ export type Mutation = {
   readonly addPhoneToAccount: Scalars['Boolean'];
   /** Archive an organization */
   readonly archiveOrganization: Scalars['String'];
+  readonly cloneSection: PageSectionSchema;
   /** Create an organization */
   readonly createOrganization: OrganizationSchema;
   readonly createPage: PageUpdatedResponse;
@@ -174,6 +175,12 @@ export type MutationAddPhoneToAccountArgs = {
 
 export type MutationArchiveOrganizationArgs = {
   orgId: Scalars['String'];
+};
+
+
+export type MutationCloneSectionArgs = {
+  pageId: Scalars['String'];
+  sectionId: Scalars['String'];
 };
 
 
@@ -354,6 +361,26 @@ export enum OrganizationStatus {
   SUSPENDED = 'SUSPENDED'
 }
 
+export type PageElementPlatformSchema = {
+  readonly __typename?: 'PageElementPlatformSchema';
+  /** Date entity was created */
+  readonly createdAt: Scalars['DateTime'];
+  /** Height */
+  readonly height: Scalars['Float'];
+  /** Identifier of the entity */
+  readonly id: Scalars['ID'];
+  /** Whether this element is visible */
+  readonly isVisible: Scalars['Boolean'];
+  /** Date entity was updated */
+  readonly updatedAt: Scalars['DateTime'];
+  /** Width */
+  readonly width: Scalars['Float'];
+  /** X position */
+  readonly x: Scalars['Float'];
+  /** Y position */
+  readonly y: Scalars['Float'];
+};
+
 export type PageSchema = {
   readonly __typename?: 'PageSchema';
   /** Date entity was created */
@@ -488,26 +515,6 @@ export type RegisterInput = {
   readonly lastName?: InputMaybe<Scalars['String']>;
   /** Phone Number */
   readonly phone?: InputMaybe<Scalars['String']>;
-};
-
-export type SectionElementPlatform = {
-  readonly __typename?: 'SectionElementPlatform';
-  /** Date entity was created */
-  readonly createdAt: Scalars['DateTime'];
-  /** Height */
-  readonly height: Scalars['Float'];
-  /** Identifier of the entity */
-  readonly id: Scalars['ID'];
-  /** Whether this element is visible */
-  readonly isVisible: Scalars['Boolean'];
-  /** Date entity was updated */
-  readonly updatedAt: Scalars['DateTime'];
-  /** Width */
-  readonly width: Scalars['Float'];
-  /** X position */
-  readonly x: Scalars['Float'];
-  /** Y position */
-  readonly y: Scalars['Float'];
 };
 
 export type SendVerificationCodeInput = {

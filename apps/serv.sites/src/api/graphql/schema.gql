@@ -94,6 +94,32 @@ enum EditStatus {
   ARCHIVED
 }
 
+type PageElementPlatformSchema {
+  """Date entity was created"""
+  createdAt: DateTime!
+
+  """Date entity was updated"""
+  updatedAt: DateTime!
+
+  """Identifier of the entity"""
+  id: ID!
+
+  """X position"""
+  x: Float!
+
+  """Y position"""
+  y: Float!
+
+  """Height"""
+  height: Float!
+
+  """Width"""
+  width: Float!
+
+  """Whether this element is visible"""
+  isVisible: Boolean!
+}
+
 type SiteSchema {
   """Date entity was created"""
   createdAt: DateTime!
@@ -127,32 +153,6 @@ enum SiteStatus {
   DEPLOYED
   PENDING
   SUSPENDED
-}
-
-type SectionElementPlatform {
-  """Date entity was created"""
-  createdAt: DateTime!
-
-  """Date entity was updated"""
-  updatedAt: DateTime!
-
-  """Identifier of the entity"""
-  id: ID!
-
-  """X position"""
-  x: Float!
-
-  """Y position"""
-  y: Float!
-
-  """Height"""
-  height: Float!
-
-  """Width"""
-  width: Float!
-
-  """Whether this element is visible"""
-  isVisible: Boolean!
 }
 
 type PageUpdatedResponse {
@@ -196,6 +196,7 @@ type Mutation {
   updateSectionFormat(pageId: String!, sectionId: String!, input: UpdateSectionFormatInput!): PageSectionSchema!
   updateSectionHead(pageId: String!, sectionId: String!, index: Float!): PageSectionSchema!
   deleteSection(pageId: String!, sectionId: String!): PageSectionSchema!
+  cloneSection(pageId: String!, sectionId: String!): PageSectionSchema!
 }
 
 input CreateSiteInput {

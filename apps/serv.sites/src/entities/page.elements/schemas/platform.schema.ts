@@ -1,10 +1,11 @@
-import { BaseSchema, typegoose } from '@valhalla/serv.core';
+import { BaseSchema, SimpleModel, typegoose } from '@valhalla/serv.core';
 import { Field, ObjectType } from '@nestjs/graphql';
 
 import { Expose } from 'class-transformer';
 
 @ObjectType()
-export class SectionElementPlatform extends BaseSchema {
+@SimpleModel()
+export class PageElementPlatformSchema extends BaseSchema {
   @typegoose.prop()
   @Expose()
   @Field({ description: 'X position' })

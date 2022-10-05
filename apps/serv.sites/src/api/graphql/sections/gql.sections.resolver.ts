@@ -133,4 +133,24 @@ export class GqlSectionsResolver {
 
     return result.data;
   }
+
+  @Mutation(() => PageSectionSchema)
+  @UseGuards(GqlAuthGuard)
+  async cloneSection(
+    @CurrentAccount() account: AuthAccount,
+    @Args('pageId', new ParamValidationPipe([ObjectIdParamValidation]))
+    pageId: string,
+    @Args('sectionId', new ParamValidationPipe([ObjectIdParamValidation]))
+    sectionId: string,
+  ) {
+    const result = await resolveRpcRequest(
+      this.rpcClient.cloneSection({
+        pageId,
+        sectionId,
+        requestedUserId: account.id,
+      }),
+    );
+
+    return result.data;
+  }
 }

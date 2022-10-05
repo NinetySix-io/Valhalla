@@ -33,6 +33,7 @@ service SitesService {
   rpc UpdateSectionIndex(UpdateSectionIndexRequest) returns (UpdateSectionResponse) {}
   rpc UpdateSectionFormat(UpdateSectionFormatRequest) returns (UpdateSectionResponse) {}
   rpc DeleteSection(DeleteSectionRequest) returns (DeleteSectionResponse) {}
+  rpc CloneSection(CloneSectionRequest) returns (CloneSectionResponse) {}
 
   // -----------------------------
   // ELEMENTS
@@ -254,6 +255,7 @@ message CreateSectionRequest {
   string pageId = 1;
   string requestedUserId = 4;
   optional int32 index = 5;
+  optional SectionFormat format = 6;
 }
 
 message CreateSectionResponse {
@@ -285,6 +287,16 @@ message DeleteSectionRequest {
 }
 
 message DeleteSectionResponse {
+  PageSection data = 1;
+}
+
+message CloneSectionRequest {
+  string pageId = 1;
+  string sectionId = 2;
+  string requestedUserId = 3;
+}
+
+message CloneSectionResponse {
   PageSection data = 1;
 }
 

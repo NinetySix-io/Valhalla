@@ -206,6 +206,7 @@ export interface CreateSectionRequest {
   pageId: string;
   requestedUserId: string;
   index?: number | undefined;
+  format?: SectionFormat | undefined;
 }
 
 export interface CreateSectionResponse {
@@ -237,6 +238,16 @@ export interface DeleteSectionRequest {
 }
 
 export interface DeleteSectionResponse {
+  data?: PageSection;
+}
+
+export interface CloneSectionRequest {
+  pageId: string;
+  sectionId: string;
+  requestedUserId: string;
+}
+
+export interface CloneSectionResponse {
   data?: PageSection;
 }
 
@@ -312,6 +323,8 @@ export interface SitesServiceClient {
   updateSectionFormat(request: UpdateSectionFormatRequest): Observable<UpdateSectionResponse>;
 
   deleteSection(request: DeleteSectionRequest): Observable<DeleteSectionResponse>;
+
+  cloneSection(request: CloneSectionRequest): Observable<CloneSectionResponse>;
 
   /**
    * -----------------------------
@@ -407,6 +420,10 @@ export interface SitesServiceController {
     request: DeleteSectionRequest,
   ): Promise<DeleteSectionResponse> | Observable<DeleteSectionResponse> | DeleteSectionResponse;
 
+  cloneSection(
+    request: CloneSectionRequest,
+  ): Promise<CloneSectionResponse> | Observable<CloneSectionResponse> | CloneSectionResponse;
+
   /**
    * -----------------------------
    * ELEMENTS
@@ -445,6 +462,7 @@ export function SitesServiceControllerMethods() {
       "updateSectionIndex",
       "updateSectionFormat",
       "deleteSection",
+      "cloneSection",
       "deletePageElementList",
       "deleteManyPageElements",
     ];

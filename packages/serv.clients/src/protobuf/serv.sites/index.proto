@@ -30,9 +30,16 @@ service SitesService {
   rpc GetPageSection(GetPageSectionRequest) returns (GetPageSectionResponse) {}
   rpc GetPageSectionList(GetPageSectionListRequest) returns (GetPageSectionListResponse) {}
   rpc CreateSection(CreateSectionRequest) returns (CreateSectionResponse) {}
-  rpc UpdateSectionHead(UpdateSectionHeadRequest) returns (UpdateSectionResponse) {}
+  rpc UpdateSectionIndex(UpdateSectionIndexRequest) returns (UpdateSectionResponse) {}
   rpc UpdateSectionFormat(UpdateSectionFormatRequest) returns (UpdateSectionResponse) {}
   rpc DeleteSection(DeleteSectionRequest) returns (DeleteSectionResponse) {}
+  rpc CloneSection(CloneSectionRequest) returns (CloneSectionResponse) {}
+
+  // -----------------------------
+  // ELEMENTS
+  // -----------------------------
+  rpc DeletePageElementList(DeletePageElementListRequest) returns (DeletePageElementListResponse) {}
+  rpc DeleteManyPageElements(DeleteManyPageElementsRequest) returns (DeleteManyPageElementsResponse) {}
 }
 
 // -----------------------------
@@ -50,6 +57,7 @@ enum EditStatus {
   ARCHIVED = 2;
 }
 
+
 // -----------------------------
 // Entity
 // -----------------------------
@@ -58,7 +66,6 @@ message Page {
   string id = 1;
   string title = 2;
   optional string description = 3;
-  string ownBy = 4;
   string site = 5;
   EditStatus status = 6;
   optional bool isLoneTitle = 7;
@@ -74,7 +81,6 @@ message Site {
   string name = 2;
   string createdBy = 3;
   string updatedBy = 4;
-  string ownBy = 5;
   SiteStatus status = 6;
   optional string url = 7;
   google.protobuf.Timestamp createdAt = 8;
@@ -87,18 +93,17 @@ message SectionFormat {
   optional int32 rowGap = 3;
 }
 
-message Section {
+message PageSection {
   string id = 1;
-  string page = 2;
-  string head = 3;
   SectionFormat format = 4;
   string updatedBy = 5;
+  string createdBy = 6;
 
   google.protobuf.Timestamp createdAt = 10;
   google.protobuf.Timestamp updatedAt = 11;
 }
 
-message SectionElementPlatform {
+message PageElementPlatform {
   int32 x = 1;
   int32 y = 2;
   int32 height = 3;
@@ -106,11 +111,11 @@ message SectionElementPlatform {
   bool isVisible = 5;
 }
 
-message SectionElement {
+message PageElement {
   string id = 1;
-  SectionElementPlatform desktop = 2;
-  optional SectionElementPlatform tablet = 3;
-  optional SectionElementPlatform mobile = 4;
+  PageElementPlatform desktop = 2;
+  optional PageElementPlatform tablet = 3;
+  optional PageElementPlatform mobile = 4;
 
   google.protobuf.Timestamp createdAt = 10;
   google.protobuf.Timestamp updatedAt = 11;
@@ -121,7 +126,6 @@ message SectionElement {
 // -----------------------------
 message CreatePageRequest {
   string requestedUserId = 1;
-  string ownerId = 2;
   string siteId = 3;
   optional string title = 4;
 }
@@ -236,7 +240,7 @@ message GetPageSectionRequest {
 }
 
 message GetPageSectionResponse {
-  Section data = 1;
+  PageSection data = 1;
 }
 
 message GetPageSectionListRequest {
@@ -244,40 +248,76 @@ message GetPageSectionListRequest {
 }
 
 message GetPageSectionListResponse {
-  repeated Section data = 1;
+  repeated PageSection data = 1;
 }
 
 message CreateSectionRequest {
-  string pageId = 3;
+  string pageId = 1;
   string requestedUserId = 4;
-  optional string head = 5;
+  optional int32 index = 5;
+  optional SectionFormat format = 6;
 }
 
 message CreateSectionResponse {
-  Section data = 1;
+  PageSection data = 1;
 }
 
-message UpdateSectionHeadRequest {
+message UpdateSectionIndexRequest {
+  string pageId = 1;
   string sectionId = 4;
   string requestedUserId = 5;
-  string head = 6;
+  int32 index = 6;
 }
 
 message UpdateSectionFormatRequest {
+  string pageId = 1;
   string sectionId = 4;
   string requestedUserId = 5;
   SectionFormat format = 6;
 }
 
 message UpdateSectionResponse {
-  Section data = 1;
+  PageSection data = 1;
 }
 
 message DeleteSectionRequest {
+  string pageId = 1;
   string sectionId = 4;
   string requestedUserId = 5;
 }
 
 message DeleteSectionResponse {
-  Section data = 1;
+  PageSection data = 1;
+}
+
+message CloneSectionRequest {
+  string pageId = 1;
+  string sectionId = 2;
+  string requestedUserId = 3;
+}
+
+message CloneSectionResponse {
+  PageSection data = 1;
+}
+
+// -----------------------------
+// ELEMENTS
+// -----------------------------
+
+message DeletePageElementListRequest {
+  string sectionId = 2;
+  string requestedUserId = 3;
+}
+
+message DeletePageElementListResponse {
+  repeated PageElement data = 1;
+}
+
+message DeleteManyPageElementsRequest {
+  repeated string elementIdList = 1;
+  string requestedUserId = 2;
+}
+
+message DeleteManyPageElementsResponse {
+  repeated PageElement data = 1;
 }
