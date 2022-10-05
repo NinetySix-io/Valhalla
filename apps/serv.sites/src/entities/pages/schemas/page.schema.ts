@@ -8,6 +8,7 @@ import { Exclude, Expose } from 'class-transformer';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 
 import { EditStatus } from '@app/protobuf';
+import { PageSectionSchema } from './section.schema';
 
 registerEnumType(EditStatus, {
   name: 'EditStatus',
@@ -16,21 +17,19 @@ registerEnumType(EditStatus, {
 @ObjectType()
 @SimpleModel('pages')
 @typegoose.index({ site: 1 })
-@typegoose.index({ ownBy: 1 })
+@typegoose.index({ 'sections._id': 1 })
 @typegoose.index(
-  { ownBy: 1, site: 1, slug: 1 },
+  { site: 1, slug: 1 },
   {
     unique: true,
     partialFilterExpression: {
-      slug: { $type: 'string' },
+      slug: {
+        $type: 'string',
+      },
     },
   },
 )
 export class PageSchema extends BaseSchema {
-  @typegoose.prop()
-  @Exclude()
-  ownBy: mongoose.Types.ObjectId;
-
   @typegoose.prop()
   @Exclude()
   site: mongoose.Types.ObjectId;
@@ -66,13 +65,15 @@ export class PageSchema extends BaseSchema {
 
   @typegoose.prop()
   @Exclude()
-  @Field(() => String, { description: 'Account ID of creator' })
   createdBy: mongoose.Types.ObjectId;
 
   @typegoose.prop()
-  @Exclude()
+  @Expose()
   @Field(() => String, { description: 'Account ID of updater' })
   updatedBy: mongoose.Types.ObjectId;
 
-  sections: [];
+  @typegoose.prop()
+  @Expose()
+  @Field(() => [PageSectionSchema], { description: 'Sections' })
+  sections: PageSectionSchema[];
 }

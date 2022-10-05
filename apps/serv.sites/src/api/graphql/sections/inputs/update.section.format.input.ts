@@ -1,6 +1,6 @@
 import { InputType, PartialType, PickType } from '@nestjs/graphql';
 
-import { PageSectionFormatSchema } from '@app/entities/sections/schemas/format.schema';
+import { PageSectionFormatSchema } from '@app/entities/pages/schemas';
 
 @InputType()
 export class UpdateSectionFormatInput extends PartialType(

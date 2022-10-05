@@ -9,10 +9,11 @@ import {
   CreatePageResponse,
   EditStatus,
 } from '@app/protobuf';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { CreatePayload, RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { PageCreatedEvent } from '../events/page.created.event';
-import { PageTransformer } from '@app/entities/pages/transformer';
+import { PageSchema } from '@app/entities/pages/schemas';
+import { PageTransformer } from '@app/entities/pages/transformers';
 import { PagesModel } from '@app/entities/pages';
 
 export class CreatePageCommand implements ICommand {
@@ -30,27 +31,21 @@ export class CreatePageHandler
   ) {}
 
   async execute(command: CreatePageCommand): Promise<CreatePageResponse> {
-    const {
-      requestedUserId,
-      ownerId,
-      siteId,
-      title = 'Untitled',
-    } = command.request;
-
+    const { requestedUserId, siteId, title = 'Untitled' } = command.request;
     const createdBy = toObjectId(requestedUserId);
     const updatedBy = createdBy;
-    const ownBy = toObjectId(ownerId);
     const site = toObjectId(siteId);
     const status = EditStatus.DRAFT;
-    const page = await this.pages.create({
+    const payload: CreatePayload<PageSchema> = {
       createdBy,
       updatedBy,
       site,
       title,
-      ownBy,
       status,
-    });
+      sections: [],
+    };
 
+    const page = await this.pages.create(payload);
     const serialized = new PageTransformer(page).proto;
     this.eventBus.publish(new PageCreatedEvent(serialized));
     return { data: serialized };

@@ -7,6 +7,10 @@ import {
   CreateSectionResponse,
   CreateSiteRequest,
   CreateSiteResponse,
+  DeleteManyPageElementsRequest,
+  DeleteManyPageElementsResponse,
+  DeletePageElementListRequest,
+  DeletePageElementListResponse,
   DeletePageRequest,
   DeletePageResponse,
   DeleteSectionRequest,
@@ -30,7 +34,7 @@ import {
   UpdatePageRequest,
   UpdatePageResponse,
   UpdateSectionFormatRequest,
-  UpdateSectionHeadRequest,
+  UpdateSectionIndexRequest,
   UpdateSectionResponse,
   UpdateSiteRequest,
   UpdateSiteResponse,
@@ -42,7 +46,9 @@ import { Controller } from '@nestjs/common';
 import { CreatePageCommand } from '@app/cqrs/commands/create.page.command';
 import { CreateSectionCommand } from '@app/cqrs/commands/create.section.command';
 import { CreateSiteCommand } from '@app/cqrs/commands/create.site.command';
+import { DeleteManyPageElementsCommand } from '@app/cqrs/commands/delete.many.page.elements.command';
 import { DeletePageCommand } from '@app/cqrs/commands/delete.page.command';
+import { DeletePageElementListCommand } from '@app/cqrs/commands/delete.page.element.list.command';
 import { DeleteSectionCommand } from '@app/cqrs/commands/delete.section.command';
 import { GetPageListQuery } from '@app/cqrs/queries/get.page.list.query';
 import { GetPageQuery } from '@app/cqrs/queries/get.page.query';
@@ -55,7 +61,7 @@ import { Observable } from 'rxjs';
 import { SuspendSiteCommand } from '@app/cqrs/commands/suspend.site.command';
 import { UpdatePageCommand } from '@app/cqrs/commands/update.page.command';
 import { UpdateSectionFormatCommand } from '@app/cqrs/commands/update.section.format.command';
-import { UpdateSectionHeadCommand } from '@app/cqrs/commands/update.section.head.command';
+import { UpdateSectionIndexCommand } from '@app/cqrs/commands/update.section.index.command';
 import { UpdateSiteCommand } from '@app/cqrs/commands/update.site.command';
 
 @Controller()
@@ -65,13 +71,30 @@ export class gRpcController implements SitesServiceController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
-  updateSectionHead(
-    request: UpdateSectionHeadRequest,
+  deletePageElementList(
+    request: DeletePageElementListRequest,
+  ):
+    | DeletePageElementListResponse
+    | Promise<DeletePageElementListResponse>
+    | Observable<DeletePageElementListResponse> {
+    return this.commandBus.execute(new DeletePageElementListCommand(request));
+  }
+  deleteManyPageElements(
+    request: DeleteManyPageElementsRequest,
+  ):
+    | DeleteManyPageElementsResponse
+    | Promise<DeleteManyPageElementsResponse>
+    | Observable<DeleteManyPageElementsResponse> {
+    return this.commandBus.execute(new DeleteManyPageElementsCommand(request));
+  }
+
+  updateSectionIndex(
+    request: UpdateSectionIndexRequest,
   ):
     | UpdateSectionResponse
     | Promise<UpdateSectionResponse>
     | Observable<UpdateSectionResponse> {
-    return this.commandBus.execute(new UpdateSectionHeadCommand(request));
+    return this.commandBus.execute(new UpdateSectionIndexCommand(request));
   }
   updateSectionFormat(
     request: UpdateSectionFormatRequest,

@@ -1,17 +1,16 @@
+import { PageSectionSchema } from '@app/entities/pages/schemas';
+import { gRpcController } from '@app/grpc/grpc.controller';
+import { UseGuards } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
   AuthAccount,
   CurrentAccount,
   EmptyObjectValidation,
-  EmptyStringValidation,
   GqlAuthGuard,
   ObjectIdParamValidation,
   ParamValidationPipe,
   resolveRpcRequest,
 } from '@valhalla/serv.core';
-import { Resolver, Args, Mutation, Query } from '@nestjs/graphql';
-import { UseGuards } from '@nestjs/common';
-import { gRpcController } from '@app/grpc/grpc.controller';
-import { SectionSchema } from '@app/entities/sections/schemas';
 import { CreateSectionInput } from './inputs/create.section.input';
 import { UpdateSectionFormatInput } from './inputs/update.section.format.input';
 
@@ -19,7 +18,7 @@ import { UpdateSectionFormatInput } from './inputs/update.section.format.input';
 export class GqlSectionsResolver {
   constructor(private readonly rpcClient: gRpcController) {}
 
-  @Query(() => [SectionSchema])
+  @Query(() => [PageSectionSchema])
   @UseGuards(GqlAuthGuard)
   async sectionList(
     @Args('pageId', new ParamValidationPipe([ObjectIdParamValidation]))
@@ -34,7 +33,7 @@ export class GqlSectionsResolver {
     return result.data;
   }
 
-  @Query(() => SectionSchema)
+  @Query(() => PageSectionSchema)
   @UseGuards(GqlAuthGuard)
   async section(
     @Args('sectionId', new ParamValidationPipe([ObjectIdParamValidation]))
@@ -49,7 +48,7 @@ export class GqlSectionsResolver {
     return result.data;
   }
 
-  @Mutation(() => SectionSchema)
+  @Mutation(() => PageSectionSchema)
   @UseGuards(GqlAuthGuard)
   async createSection(
     @CurrentAccount() account: AuthAccount,
@@ -61,7 +60,7 @@ export class GqlSectionsResolver {
     const result = await resolveRpcRequest(
       this.rpcClient.createSection({
         pageId,
-        head: input.head,
+        index: input.index,
         requestedUserId: account.id,
       }),
     );
@@ -69,10 +68,12 @@ export class GqlSectionsResolver {
     return result.data;
   }
 
-  @Mutation(() => SectionSchema)
+  @Mutation(() => PageSectionSchema)
   @UseGuards(GqlAuthGuard)
   async updateSectionFormat(
     @CurrentAccount() account: AuthAccount,
+    @Args('pageId', new ParamValidationPipe([ObjectIdParamValidation]))
+    pageId: string,
     @Args('sectionId', new ParamValidationPipe([ObjectIdParamValidation]))
     sectionId: string,
     @Args('input', new ParamValidationPipe([EmptyObjectValidation]))
@@ -80,6 +81,7 @@ export class GqlSectionsResolver {
   ) {
     const result = await resolveRpcRequest(
       this.rpcClient.updateSectionFormat({
+        pageId,
         sectionId,
         format: input,
         requestedUserId: account.id,
@@ -89,19 +91,22 @@ export class GqlSectionsResolver {
     return result.data;
   }
 
-  @Mutation(() => SectionSchema)
+  @Mutation(() => PageSectionSchema)
   @UseGuards(GqlAuthGuard)
   async updateSectionHead(
     @CurrentAccount() account: AuthAccount,
+    @Args('pageId', new ParamValidationPipe([ObjectIdParamValidation]))
+    pageId: string,
     @Args('sectionId', new ParamValidationPipe([ObjectIdParamValidation]))
     sectionId: string,
-    @Args('headId', new ParamValidationPipe([EmptyStringValidation]))
-    headId: string,
+    @Args('index')
+    index: number,
   ) {
     const result = await resolveRpcRequest(
-      this.rpcClient.updateSectionHead({
+      this.rpcClient.updateSectionIndex({
+        index,
+        pageId,
         sectionId,
-        head: headId,
         requestedUserId: account.id,
       }),
     );
@@ -109,15 +114,18 @@ export class GqlSectionsResolver {
     return result.data;
   }
 
-  @Mutation(() => SectionSchema)
+  @Mutation(() => PageSectionSchema)
   @UseGuards(GqlAuthGuard)
   async deleteSection(
     @CurrentAccount() account: AuthAccount,
+    @Args('pageId', new ParamValidationPipe([ObjectIdParamValidation]))
+    pageId: string,
     @Args('sectionId', new ParamValidationPipe([ObjectIdParamValidation]))
     sectionId: string,
   ) {
     const result = await resolveRpcRequest(
       this.rpcClient.deleteSection({
+        pageId,
         sectionId,
         requestedUserId: account.id,
       }),

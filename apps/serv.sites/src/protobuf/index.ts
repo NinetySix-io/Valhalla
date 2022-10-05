@@ -25,7 +25,6 @@ export interface Page {
   id: string;
   title: string;
   description?: string | undefined;
-  ownBy: string;
   site: string;
   status: EditStatus;
   isLoneTitle?: boolean | undefined;
@@ -41,7 +40,6 @@ export interface Site {
   name: string;
   createdBy: string;
   updatedBy: string;
-  ownBy: string;
   status: SiteStatus;
   url?: string | undefined;
   createdAt?: Date;
@@ -54,17 +52,16 @@ export interface SectionFormat {
   rowGap?: number | undefined;
 }
 
-export interface Section {
+export interface PageSection {
   id: string;
-  page: string;
-  head: string;
   format?: SectionFormat;
   updatedBy: string;
+  createdBy: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-export interface SectionElementPlatform {
+export interface PageElementPlatform {
   x: number;
   y: number;
   height: number;
@@ -72,11 +69,11 @@ export interface SectionElementPlatform {
   isVisible: boolean;
 }
 
-export interface SectionElement {
+export interface PageElement {
   id: string;
-  desktop?: SectionElementPlatform;
-  tablet?: SectionElementPlatform | undefined;
-  mobile?: SectionElementPlatform | undefined;
+  desktop?: PageElementPlatform;
+  tablet?: PageElementPlatform | undefined;
+  mobile?: PageElementPlatform | undefined;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -88,7 +85,6 @@ export interface SectionElement {
  */
 export interface CreatePageRequest {
   requestedUserId: string;
-  ownerId: string;
   siteId: string;
   title?: string | undefined;
 }
@@ -195,7 +191,7 @@ export interface GetPageSectionRequest {
 }
 
 export interface GetPageSectionResponse {
-  data?: Section;
+  data?: PageSection;
 }
 
 export interface GetPageSectionListRequest {
@@ -203,42 +199,63 @@ export interface GetPageSectionListRequest {
 }
 
 export interface GetPageSectionListResponse {
-  data: Section[];
+  data: PageSection[];
 }
 
 export interface CreateSectionRequest {
   pageId: string;
   requestedUserId: string;
-  head?: string | undefined;
+  index?: number | undefined;
 }
 
 export interface CreateSectionResponse {
-  data?: Section;
+  data?: PageSection;
 }
 
-export interface UpdateSectionHeadRequest {
+export interface UpdateSectionIndexRequest {
+  pageId: string;
   sectionId: string;
   requestedUserId: string;
-  head: string;
+  index: number;
 }
 
 export interface UpdateSectionFormatRequest {
+  pageId: string;
   sectionId: string;
   requestedUserId: string;
   format?: SectionFormat;
 }
 
 export interface UpdateSectionResponse {
-  data?: Section;
+  data?: PageSection;
 }
 
 export interface DeleteSectionRequest {
+  pageId: string;
   sectionId: string;
   requestedUserId: string;
 }
 
 export interface DeleteSectionResponse {
-  data?: Section;
+  data?: PageSection;
+}
+
+export interface DeletePageElementListRequest {
+  sectionId: string;
+  requestedUserId: string;
+}
+
+export interface DeletePageElementListResponse {
+  data: PageElement[];
+}
+
+export interface DeleteManyPageElementsRequest {
+  elementIdList: string[];
+  requestedUserId: string;
+}
+
+export interface DeleteManyPageElementsResponse {
+  data: PageElement[];
 }
 
 export const SERV_SITES_PACKAGE_NAME = "serv.sites";
@@ -290,11 +307,21 @@ export interface SitesServiceClient {
 
   createSection(request: CreateSectionRequest): Observable<CreateSectionResponse>;
 
-  updateSectionHead(request: UpdateSectionHeadRequest): Observable<UpdateSectionResponse>;
+  updateSectionIndex(request: UpdateSectionIndexRequest): Observable<UpdateSectionResponse>;
 
   updateSectionFormat(request: UpdateSectionFormatRequest): Observable<UpdateSectionResponse>;
 
   deleteSection(request: DeleteSectionRequest): Observable<DeleteSectionResponse>;
+
+  /**
+   * -----------------------------
+   * ELEMENTS
+   * -----------------------------
+   */
+
+  deletePageElementList(request: DeletePageElementListRequest): Observable<DeletePageElementListResponse>;
+
+  deleteManyPageElements(request: DeleteManyPageElementsRequest): Observable<DeleteManyPageElementsResponse>;
 }
 
 export interface SitesServiceController {
@@ -368,8 +395,8 @@ export interface SitesServiceController {
     request: CreateSectionRequest,
   ): Promise<CreateSectionResponse> | Observable<CreateSectionResponse> | CreateSectionResponse;
 
-  updateSectionHead(
-    request: UpdateSectionHeadRequest,
+  updateSectionIndex(
+    request: UpdateSectionIndexRequest,
   ): Promise<UpdateSectionResponse> | Observable<UpdateSectionResponse> | UpdateSectionResponse;
 
   updateSectionFormat(
@@ -379,6 +406,23 @@ export interface SitesServiceController {
   deleteSection(
     request: DeleteSectionRequest,
   ): Promise<DeleteSectionResponse> | Observable<DeleteSectionResponse> | DeleteSectionResponse;
+
+  /**
+   * -----------------------------
+   * ELEMENTS
+   * -----------------------------
+   */
+
+  deletePageElementList(
+    request: DeletePageElementListRequest,
+  ): Promise<DeletePageElementListResponse> | Observable<DeletePageElementListResponse> | DeletePageElementListResponse;
+
+  deleteManyPageElements(
+    request: DeleteManyPageElementsRequest,
+  ):
+    | Promise<DeleteManyPageElementsResponse>
+    | Observable<DeleteManyPageElementsResponse>
+    | DeleteManyPageElementsResponse;
 }
 
 export function SitesServiceControllerMethods() {
@@ -398,9 +442,11 @@ export function SitesServiceControllerMethods() {
       "getPageSection",
       "getPageSectionList",
       "createSection",
-      "updateSectionHead",
+      "updateSectionIndex",
       "updateSectionFormat",
       "deleteSection",
+      "deletePageElementList",
+      "deleteManyPageElements",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);

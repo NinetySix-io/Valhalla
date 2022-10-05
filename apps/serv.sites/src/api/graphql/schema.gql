@@ -22,6 +22,49 @@ directive @inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUM
 
 directive @override(from: String!) on FIELD_DEFINITION
 
+type PageSectionFormatSchema {
+  """Date entity was created"""
+  createdAt: DateTime!
+
+  """Date entity was updated"""
+  updatedAt: DateTime!
+
+  """Identifier of the entity"""
+  id: ID!
+
+  """Row count"""
+  rowsCount: Float!
+
+  """Column gap"""
+  columnGap: Float!
+
+  """Row Gap"""
+  rowGap: Float!
+
+  """Account ID of updater"""
+  updatedBy: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type PageSectionSchema {
+  """Date entity was created"""
+  createdAt: DateTime!
+
+  """Date entity was updated"""
+  updatedAt: DateTime!
+
+  """Identifier of the entity"""
+  id: ID!
+
+  """Section format configuration"""
+  format: PageSectionFormatSchema!
+  updatedBy: String!
+}
+
 type PageSchema {
   """Date entity was created"""
   createdAt: DateTime!
@@ -47,63 +90,17 @@ type PageSchema {
   """Page description"""
   description: String
 
-  """Account ID of creator"""
-  createdBy: String!
-
   """Account ID of updater"""
   updatedBy: String!
-}
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
+  """Sections"""
+  sections: [PageSectionSchema!]!
+}
 
 enum EditStatus {
   ACTIVE
   DRAFT
   ARCHIVED
-}
-
-type PageSectionFormatSchema {
-  """Date entity was created"""
-  createdAt: DateTime!
-
-  """Date entity was updated"""
-  updatedAt: DateTime!
-
-  """Identifier of the entity"""
-  id: ID!
-
-  """Row count"""
-  rowsCount: Float!
-
-  """Column gap"""
-  columnGap: Float!
-
-  """Row Gap"""
-  rowGap: Float!
-
-  """Account ID of updater"""
-  updatedBy: String!
-}
-
-type SectionSchema {
-  """Date entity was created"""
-  createdAt: DateTime!
-
-  """Date entity was updated"""
-  updatedAt: DateTime!
-
-  """Identifier of the entity"""
-  id: ID!
-
-  """Head node"""
-  head: String
-
-  """Section format configuration"""
-  format: PageSectionFormatSchema!
-  updatedBy: String!
 }
 
 type SiteSchema {
@@ -141,14 +138,6 @@ enum SiteStatus {
   SUSPENDED
 }
 
-type PageUpdatedResponse {
-  """Identifier of the entity"""
-  id: ID!
-
-  """Edit status"""
-  status: EditStatus!
-}
-
 type SectionElementPlatform {
   """Date entity was created"""
   createdAt: DateTime!
@@ -175,6 +164,14 @@ type SectionElementPlatform {
   isVisible: Boolean!
 }
 
+type PageUpdatedResponse {
+  """Identifier of the entity"""
+  id: ID!
+
+  """Edit status"""
+  status: EditStatus!
+}
+
 type SiteUpdatedResponse {
   """Identifier of the entity"""
   id: ID!
@@ -194,8 +191,8 @@ type Query {
   site(id: String!): SiteSchema!
   pageList(siteId: String!): [PageSchema!]!
   page(id: String!): PageSchema!
-  sectionList(pageId: String!): [SectionSchema!]!
-  section(sectionId: String!): SectionSchema!
+  sectionList(pageId: String!): [PageSectionSchema!]!
+  section(sectionId: String!): PageSectionSchema!
 }
 
 type Mutation {
@@ -204,10 +201,10 @@ type Mutation {
   createPage(siteId: String!, input: CreatePageInput!): PageUpdatedResponse!
   deletePage(id: String!): PageUpdatedResponse!
   updatePage(id: String!, input: UpdatePageInput!): PageUpdatedResponse!
-  createSection(pageId: String!, input: CreateSectionInput!): SectionSchema!
-  updateSectionFormat(sectionId: String!, input: UpdateSectionFormatInput!): SectionSchema!
-  updateSectionHead(sectionId: String!, headId: String!): SectionSchema!
-  deleteSection(sectionId: String!): SectionSchema!
+  createSection(pageId: String!, input: CreateSectionInput!): PageSectionSchema!
+  updateSectionFormat(pageId: String!, sectionId: String!, input: UpdateSectionFormatInput!): PageSectionSchema!
+  updateSectionHead(pageId: String!, sectionId: String!, index: Float!): PageSectionSchema!
+  deleteSection(pageId: String!, sectionId: String!): PageSectionSchema!
 }
 
 input CreateSiteInput {
@@ -237,8 +234,8 @@ input UpdatePageInput {
 }
 
 input CreateSectionInput {
-  """Head node"""
-  head: String
+  """Position"""
+  index: Float
 }
 
 input UpdateSectionFormatInput {

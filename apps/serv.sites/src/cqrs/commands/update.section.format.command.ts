@@ -4,15 +4,15 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, compareId, toObjectId } from '@valhalla/serv.core';
 import {
   UpdateSectionFormatRequest,
   UpdateSectionResponse,
 } from '@app/protobuf';
 
-import { SectionTransformer } from '@app/entities/sections/transformer';
+import { PageSectionTransformer } from '@app/entities/pages/transformers';
+import { PagesModel } from '@app/entities/pages';
 import { SectionUpdatedEvent } from '../events/section.updated.event';
-import { SectionsModel } from '@app/entities/sections';
 import { flattenObject } from '@valhalla/utilities';
 import isEmpty from 'lodash.isempty';
 
@@ -27,26 +27,32 @@ export class UpdateSectionIndexHandler
 {
   constructor(
     private readonly eventBus: EventBus,
-    private readonly sectionEntity: SectionsModel,
+    private readonly pagesEntity: PagesModel,
   ) {}
 
   async execute(
     command: UpdateSectionFormatCommand,
   ): Promise<UpdateSectionResponse> {
-    const { format, requestedUserId, sectionId } = command.request;
+    const { format, requestedUserId } = command.request;
+
     if (isEmpty(format)) {
       throw new Error('format cannot be empty!');
     }
 
+    const pageId = toObjectId(command.request.pageId);
+    const sectionId = toObjectId(command.request.sectionId);
     const updatedBy = toObjectId(requestedUserId);
     const payload = flattenObject({ format, updatedBy }, null, true);
-    const section = await this.sectionEntity.findOneAndUpdate(
-      { _id: toObjectId(sectionId) },
-      { $set: payload },
-      { new: true },
-    );
+    const page = await this.pagesEntity
+      .findOneAndUpdate(
+        { _id: pageId, sections: { $elemMatch: { _id: sectionId } } },
+        { $set: { 'sections.$': payload } },
+        { new: true },
+      )
+      .lean();
 
-    const serialized = new SectionTransformer(section).proto;
+    const section = page.sections.find(compareId(sectionId));
+    const serialized = new PageSectionTransformer(section).proto;
     this.eventBus.publish(new SectionUpdatedEvent(serialized));
     return { data: serialized };
   }

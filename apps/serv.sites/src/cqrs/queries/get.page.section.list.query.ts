@@ -5,8 +5,8 @@ import {
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
-import { SectionTransformer } from '@app/entities/sections/transformer';
-import { SectionsModel } from '@app/entities/sections';
+import { PageSectionTransformer } from '@app/entities/pages/transformers';
+import { PagesModel } from '@app/entities/pages';
 
 export class GetPageSectionListQuery implements IQuery {
   constructor(public readonly request: GetPageSectionListRequest) {}
@@ -17,16 +17,19 @@ export class GetPageSectionListQuery implements IQuery {
 export class GetPageSectionListHandler
   implements IQueryHandler<GetPageSectionListQuery, GetPageSectionListResponse>
 {
-  constructor(private readonly sectionsEntity: SectionsModel) {}
+  constructor(private readonly pagesEntity: PagesModel) {}
 
   async execute(
     command: GetPageSectionListQuery,
   ): Promise<GetPageSectionListResponse> {
-    const { pageId } = command.request;
-    const page = toObjectId(pageId);
-    const sections = await this.sectionsEntity.find({ page }).lean();
-    const serialized = sections.map(
-      (section) => new SectionTransformer(section).proto,
+    const pageId = toObjectId(command.request.pageId);
+    const page = await this.pagesEntity
+      .findById(pageId)
+      .select({ sections: 1 })
+      .orFail(() => new Error('Page not found!'));
+
+    const serialized = page.sections.map(
+      (section) => new PageSectionTransformer(section).proto,
     );
 
     return { data: serialized };

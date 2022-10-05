@@ -2,8 +2,8 @@ import { GetPageSectionRequest, GetPageSectionResponse } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
-import { SectionTransformer } from '@app/entities/sections/transformer';
-import { SectionsModel } from '@app/entities/sections';
+import { PageSectionTransformer } from '@app/entities/pages/transformers';
+import { PagesModel } from '@app/entities/pages';
 
 export class GetPageSectionQuery implements IQuery {
   constructor(public readonly request: GetPageSectionRequest) {}
@@ -14,13 +14,14 @@ export class GetPageSectionQuery implements IQuery {
 export class GetPageSectionHandler
   implements IQueryHandler<GetPageSectionQuery, GetPageSectionResponse>
 {
-  constructor(private readonly sectionsEntity: SectionsModel) {}
+  constructor(private readonly pagesEntity: PagesModel) {}
 
   async execute(command: GetPageSectionQuery): Promise<GetPageSectionResponse> {
     const { sectionId } = command.request;
     const _id = toObjectId(sectionId);
-    const section = await this.sectionsEntity.findById(_id).lean().orFail();
-    const serialized = new SectionTransformer(section).proto;
-    return { data: serialized };
+    throw new Error('');
+    // const section = await this.sectionsEntity.findById(_id).lean().orFail();
+    // const serialized = new SectionTransformer(section).proto;
+    // return { data: serialized };
   }
 }

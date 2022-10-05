@@ -1,6 +1,6 @@
 import { IEvent } from '@nestjs/cqrs';
-import { Section } from '@app/protobuf';
+import { PageSection } from '@app/protobuf';
 
 export class SectionCreatedEvent implements IEvent {
-  constructor(public readonly data: Section) {}
+  constructor(public readonly data: PageSection) {}
 }

@@ -1,7 +1,7 @@
 import { GetPageRequest, GetPageResponse } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
-import { PageTransformer } from '@app/entities/pages/transformer';
+import { PageTransformer } from '@app/entities/pages/transformers';
 import { PagesModel } from '@app/entities/pages';
 import { RpcHandler } from '@valhalla/serv.core';
 

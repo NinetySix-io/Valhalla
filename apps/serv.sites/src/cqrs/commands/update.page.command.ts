@@ -7,9 +7,10 @@ import {
 import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 import { UpdatePageRequest, UpdatePageResponse } from '@app/protobuf';
 
-import { PageTransformer } from '@app/entities/pages/transformer';
+import { PageTransformer } from '@app/entities/pages/transformers';
 import { PageUpdatedEvent } from '../events/page.updated.event';
 import { PagesModel } from '@app/entities/pages';
+import { flattenObject } from '@valhalla/utilities';
 
 export class UpdatePageCommand implements ICommand {
   constructor(public readonly request: UpdatePageRequest) {}
@@ -31,12 +32,14 @@ export class UpdatePageHandler
 
     const _id = toObjectId(pageId);
     const updatedBy = toObjectId(requestedUserId);
+    const payload = flattenObject(
+      { title, description, isLoneTitle, updatedBy },
+      null,
+      true,
+    );
+
     const page = await this.pages
-      .findOneAndUpdate(
-        { _id },
-        { $set: { title, description, isLoneTitle, updatedBy } },
-        { withoutNil: true, new: true },
-      )
+      .findOneAndUpdate({ _id }, { $set: payload }, { new: true })
       .lean()
       .orFail();
 

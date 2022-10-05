@@ -5,13 +5,11 @@ import {
   ICommandHandler,
 } from '@nestjs/cqrs';
 import { DeleteSectionRequest, DeleteSectionResponse } from '@app/protobuf';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, compareId, toObjectId } from '@valhalla/serv.core';
 
+import { PageSectionTransformer } from '@app/entities/pages/transformers';
+import { PagesModel } from '@app/entities/pages';
 import { SectionDeletedEvent } from '../events/section.deleted.event';
-import { SectionTransformer } from '@app/entities/sections/transformer';
-import { SectionUpdatedEvent } from '../events/section.updated.event';
-import { SectionsModel } from '@app/entities/sections';
-import compact from 'lodash.compact';
 
 export class DeleteSectionCommand implements ICommand {
   constructor(public readonly request: DeleteSectionRequest) {}
@@ -24,36 +22,27 @@ export class DeleteSectionHandler
 {
   constructor(
     private readonly eventBus: EventBus,
-    private readonly sectionEntity: SectionsModel,
+    private readonly pagesEntity: PagesModel,
   ) {}
 
   async execute(command: DeleteSectionCommand): Promise<DeleteSectionResponse> {
-    const { requestedUserId, sectionId } = command.request;
+    const { requestedUserId } = command.request;
     const updatedBy = toObjectId(requestedUserId);
-    const section = await this.sectionEntity
-      .findOneAndDelete({ _id: toObjectId(sectionId) })
+    const pageId = toObjectId(command.request.pageId);
+    const sectionId = toObjectId(command.request.sectionId);
+    const page = await this.pagesEntity
+      .findOneAndUpdate(
+        { _id: pageId },
+        { $pull: { sections: { _id: sectionId } } },
+      )
       .lean()
       .orFail();
 
-    const sibling = await this.sectionEntity
-      .findOneAndUpdate(
-        { head: section._id },
-        { $set: { head: section.head, updatedBy } },
-        { new: true },
-      )
-      .lean();
-
+    const section = page.sections.find(compareId(sectionId));
     section.updatedBy = updatedBy;
     section.updatedAt = new Date();
-    const serialized = new SectionTransformer(section).proto;
-    this.eventBus.publishAll(
-      compact([
-        new SectionDeletedEvent(serialized),
-        sibling &&
-          new SectionUpdatedEvent(new SectionTransformer(sibling).proto),
-      ]),
-    );
-
+    const serialized = new PageSectionTransformer(section).proto;
+    this.eventBus.publish(new SectionDeletedEvent(serialized));
     return { data: serialized };
   }
 }

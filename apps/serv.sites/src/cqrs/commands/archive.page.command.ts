@@ -12,7 +12,7 @@ import {
 import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
 import { PageArchivedEvent } from '../events/page.archived.event';
-import { PageTransformer } from '@app/entities/pages/transformer';
+import { PageTransformer } from '@app/entities/pages/transformers';
 import { PagesModel } from '@app/entities/pages';
 
 export class ArchivePageCommand implements ICommand {
@@ -30,12 +30,16 @@ export class ArchivePageHandler
   ) {}
 
   async execute(command: ArchivePageCommand): Promise<ArchivePageResponse> {
-    const { pageId, requestedUserId } = command.request;
-    const _id = toObjectId(pageId);
+    const { requestedUserId } = command.request;
+    const pageId = toObjectId(command.request.pageId);
     const updatedBy = toObjectId(requestedUserId);
     const status = EditStatus.ARCHIVED;
     const page = await this.pages
-      .findOneAndUpdate({ _id }, { $set: { status, updatedBy } }, { new: true })
+      .findOneAndUpdate(
+        { _id: pageId },
+        { $set: { status, updatedBy } },
+        { new: true },
+      )
       .lean()
       .orFail();
 

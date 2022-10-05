@@ -1,4 +1,5 @@
 import {
+  CommandBus,
   CommandHandler,
   EventBus,
   ICommand,
@@ -7,8 +8,9 @@ import {
 import { DeletePageRequest, DeletePageResponse } from '@app/protobuf';
 import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
+import { DeletePageElementListCommand } from './delete.page.element.list.command';
 import { PageDeletedEventEvent } from '../events/page.deleted.event';
-import { PageTransformer } from '@app/entities/pages/transformer';
+import { PageTransformer } from '@app/entities/pages/transformers';
 import { PagesModel } from '@app/entities/pages';
 
 export class DeletePageCommand implements ICommand {
@@ -22,6 +24,7 @@ export class DeletePageHandler
 {
   constructor(
     private readonly eventBus: EventBus,
+    private readonly commandBus: CommandBus,
     private readonly pages: PagesModel,
   ) {}
 
@@ -32,6 +35,15 @@ export class DeletePageHandler
       .findOneAndDelete({ _id })
       .lean()
       .orFail();
+
+    deletedPage.sections.forEach((section) =>
+      this.commandBus.execute(
+        new DeletePageElementListCommand({
+          sectionId: section.id,
+          requestedUserId,
+        }),
+      ),
+    );
 
     const serialized = new PageTransformer(deletedPage).proto;
     this.eventBus.publish(

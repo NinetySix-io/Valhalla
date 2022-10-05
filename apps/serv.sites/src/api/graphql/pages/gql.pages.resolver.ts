@@ -5,7 +5,6 @@ import { gRpcController } from '@app/grpc/grpc.controller';
 import { Page } from '@app/protobuf';
 import { UseGuards } from '@nestjs/common';
 import {
-  AccountActiveOrg,
   AuthAccount,
   CurrentAccount,
   EmptyObjectValidation,
@@ -26,7 +25,6 @@ export class GqlPagesResolver {
   @Mutation(() => PageUpdatedResponse)
   async createPage(
     @CurrentAccount() account: AuthAccount,
-    @AccountActiveOrg() organizationId: string,
     @Args('siteId', new ParamValidationPipe([ObjectIdParamValidation]))
     siteId: string,
     @Args('input') input: CreatePageInput,
@@ -35,7 +33,6 @@ export class GqlPagesResolver {
       this.rpcClient.createPage({
         siteId,
         requestedUserId: account.id,
-        ownerId: organizationId,
         title: input.title,
       }),
     );

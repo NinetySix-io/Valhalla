@@ -4,14 +4,19 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
+import {
+  CreatePayload,
+  RpcHandler,
+  compareId,
+  toObjectId,
+} from '@valhalla/serv.core';
 import { CreateSectionRequest, CreateSectionResponse } from '@app/protobuf';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
+import { PageSectionSchema } from '@app/entities/pages/schemas';
+import { PageSectionTransformer } from '@app/entities/pages/transformers';
+import { PagesModel } from '@app/entities/pages';
 import { SectionCreatedEvent } from '../events/section.created.event';
-import { SectionTransformer } from '@app/entities/sections/transformer';
-import { SectionUpdatedEvent } from '../events/section.updated.event';
-import { SectionsModel } from '@app/entities/sections';
-import compact from 'lodash.compact';
+import mongoose from 'mongoose';
 
 export class CreateSectionCommand implements ICommand {
   constructor(public readonly request: CreateSectionRequest) {}
@@ -24,46 +29,37 @@ export class CreateSectionHandler
 {
   constructor(
     private readonly eventBus: EventBus,
-    private readonly sectionsEntity: SectionsModel,
+    private readonly pagesEntity: PagesModel,
   ) {}
 
   async execute(command: CreateSectionCommand): Promise<CreateSectionResponse> {
-    const { pageId, requestedUserId, head } = command.request;
+    const { pageId, requestedUserId, index = -1 } = command.request;
     const page = toObjectId(pageId);
     const updatedBy = toObjectId(requestedUserId);
-    const headSection = await this.sectionsEntity
-      .findById(head)
-      .orFail(() => new Error(`${head} does not exists!`));
-
-    const section = await this.sectionsEntity.create({
-      page,
-      head: headSection.id,
+    const sectionId = new mongoose.Types.ObjectId();
+    const newSection: CreatePayload<PageSectionSchema> = {
+      _id: sectionId,
       updatedBy,
+      createdBy: updatedBy,
       format: {
         updatedBy,
         rowsCount: 20,
         columnGap: 10,
         rowGap: 10,
       },
-    });
+    };
 
-    const sibling = await this.sectionsEntity
+    const result = await this.pagesEntity
       .findOneAndUpdate(
-        { page, head: headSection.id, _id: { $ne: section._id } },
-        { $set: { head: section.id, updatedBy } },
+        { _id: page },
+        { $push: { sections: { $position: index, $each: [newSection] } } },
         { new: true },
       )
-      .lean();
+      .select({ sections: 1 });
 
-    const serialized = new SectionTransformer(section).proto;
-    this.eventBus.publishAll(
-      compact([
-        new SectionCreatedEvent(serialized),
-        sibling &&
-          new SectionUpdatedEvent(new SectionTransformer(sibling).proto),
-      ]),
-    );
-
+    const section = result.sections.find(compareId(sectionId));
+    const serialized = new PageSectionTransformer(section).proto;
+    this.eventBus.publish(new SectionCreatedEvent(serialized));
     return { data: serialized };
   }
 }

@@ -1,14 +1,18 @@
 import { BaseSchema, SimpleModel } from '@valhalla/serv.core';
+import { Exclude, Expose } from 'class-transformer';
 import { Field, ObjectType } from '@nestjs/graphql';
 
-import { Expose } from 'class-transformer';
 import { SectionElementPlatform } from './platform.schema';
 import mongoose from 'mongoose';
 import { typegoose } from '@valhalla/serv.core';
 
 @ObjectType()
-@SimpleModel('page-section-elements')
-export class SectionElementSchema extends BaseSchema {
+@SimpleModel('page-elements')
+export class PageElementSchema extends BaseSchema {
+  @typegoose.prop()
+  @Exclude()
+  section: mongoose.Types.ObjectId;
+
   @typegoose.prop()
   @Expose()
   @Field({ description: 'Desktop configuration' })

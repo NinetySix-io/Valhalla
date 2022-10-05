@@ -2,7 +2,7 @@ import { GetPageListRequest, GetPageListResponse } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { RpcHandler, toObjectId } from '@valhalla/serv.core';
 
-import { PageTransformer } from '@app/entities/pages/transformer';
+import { PageTransformer } from '@app/entities/pages/transformers';
 import { PagesModel } from '@app/entities/pages';
 
 export class GetPageListQuery implements IQuery {

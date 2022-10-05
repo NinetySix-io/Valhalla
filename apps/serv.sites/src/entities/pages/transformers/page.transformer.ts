@@ -1,5 +1,5 @@
 import { LeanDocument } from 'mongoose';
-import { PageSchema } from './schemas';
+import { PageSchema } from '../schemas';
 import { Page as Proto } from '@app/protobuf';
 import { toDto } from '@valhalla/serv.core';
 
@@ -25,7 +25,6 @@ export class PageTransformer extends PageSchema {
       isLoneTitle: this.isLoneTitle,
       title: this.title,
       description: this.description,
-      ownBy: this.ownBy.toString(),
       site: this.site.toString(),
       status: this.status,
     };

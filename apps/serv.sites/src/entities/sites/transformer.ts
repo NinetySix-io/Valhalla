@@ -20,7 +20,6 @@ export class SiteTransformer extends SiteSchema {
       name: this.name,
       url: this.url,
       status: this.status,
-      ownBy: this.ownBy.toString(),
       createdBy: this.createdBy.toString(),
       updatedBy: this.updatedBy.toString(),
       updatedAt: this.updatedAt,

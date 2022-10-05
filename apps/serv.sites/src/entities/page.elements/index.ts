@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'kindagoose';
 import { BaseFactory, ModelType } from '@valhalla/serv.core';
-import { SectionSchema } from './schemas';
+import { PageElementSchema } from './schemas';
 
 @Injectable()
-export class SectionsModel extends BaseFactory<SectionSchema> {
+export class PageElementsModel extends BaseFactory<PageElementSchema> {
   constructor(
-    @InjectModel(SectionSchema)
-    model: ModelType<SectionSchema>,
+    @InjectModel(PageElementSchema)
+    model: ModelType<PageElementSchema>,
   ) {
     super(model);
   }

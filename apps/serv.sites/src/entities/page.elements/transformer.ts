@@ -1,11 +1,11 @@
 import { toDto, typegoose } from '@valhalla/serv.core';
 
-import { SectionElement as Proto } from '@app/protobuf';
-import { SectionElementSchema } from './schemas';
+import { PageElementSchema } from './schemas';
+import { PageElement as Proto } from '@app/protobuf';
 
-export class SectionElementTransformer extends SectionElementSchema {
+export class PageElementTransformer extends PageElementSchema {
   constructor(
-    entity: typegoose.DocumentType<SectionElementSchema> | SectionElementSchema,
+    entity: typegoose.DocumentType<PageElementSchema> | PageElementSchema,
   ) {
     super();
     Object.assign(this, toDto(entity, { virtuals: false }));
