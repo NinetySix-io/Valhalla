@@ -41,7 +41,7 @@ mutation updatePageSectionIndex(
   $sectionId: String!
   $index: Float!
 ) {
-  updateSectionHead(pageId: $pageId, sectionId: $sectionId, index: $index) {
+  updateSectionIndex(pageId: $pageId, sectionId: $sectionId, index: $index) {
     id
   }
 }

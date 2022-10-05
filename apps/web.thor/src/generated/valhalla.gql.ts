@@ -158,7 +158,7 @@ export type Mutation = {
   readonly updateAccount: Scalars['Boolean'];
   readonly updatePage: PageUpdatedResponse;
   readonly updateSectionFormat: PageSectionSchema;
-  readonly updateSectionHead: PageSectionSchema;
+  readonly updateSectionIndex: PageSectionSchema;
   readonly updateSite: SiteUpdatedResponse;
 };
 
@@ -265,7 +265,7 @@ export type MutationUpdateSectionFormatArgs = {
 };
 
 
-export type MutationUpdateSectionHeadArgs = {
+export type MutationUpdateSectionIndexArgs = {
   index: Scalars['Float'];
   pageId: Scalars['String'];
   sectionId: Scalars['String'];
@@ -763,7 +763,7 @@ export type UpdatePageSectionIndexMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePageSectionIndexMutation = { readonly __typename?: 'Mutation', readonly updateSectionHead: { readonly __typename?: 'PageSectionSchema', readonly id: string } };
+export type UpdatePageSectionIndexMutation = { readonly __typename?: 'Mutation', readonly updateSectionIndex: { readonly __typename?: 'PageSectionSchema', readonly id: string } };
 
 export type UpdatePageSectionFormatMutationVariables = Exact<{
   pageId: Scalars['String'];
@@ -1568,7 +1568,7 @@ export type DeletePageSectionMutationResult = Apollo.MutationResult<DeletePageSe
 export type DeletePageSectionMutationOptions = Apollo.BaseMutationOptions<DeletePageSectionMutation, DeletePageSectionMutationVariables>;
 export const UpdatePageSectionIndexDocument = gql`
     mutation updatePageSectionIndex($pageId: String!, $sectionId: String!, $index: Float!) {
-  updateSectionHead(pageId: $pageId, sectionId: $sectionId, index: $index) {
+  updateSectionIndex(pageId: $pageId, sectionId: $sectionId, index: $index) {
     id
   }
 }
