@@ -49,14 +49,14 @@ export class PageSchema extends BaseSchema {
   @Field({ description: 'Page title' })
   title: string;
 
-  @typegoose.prop()
+  @typegoose.prop({ default: false })
   @Expose()
   @Field({
     nullable: true,
     description:
       'Whether the title should be independent or part of the title template',
   })
-  isLoneTitle?: boolean;
+  isLoneTitle: boolean;
 
   @typegoose.prop()
   @Expose()

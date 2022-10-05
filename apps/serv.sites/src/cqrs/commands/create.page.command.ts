@@ -42,6 +42,7 @@ export class CreatePageHandler
       site,
       title,
       status,
+      isLoneTitle: false,
       sections: [],
     };
 
