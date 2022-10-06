@@ -17,11 +17,16 @@ export class GetPageSectionHandler
   constructor(private readonly pagesEntity: PagesModel) {}
 
   async execute(command: GetPageSectionQuery): Promise<GetPageSectionResponse> {
-    const { sectionId } = command.request;
-    const _id = toObjectId(sectionId);
-    throw new Error('');
-    // const section = await this.sectionsEntity.findById(_id).lean().orFail();
-    // const serialized = new SectionTransformer(section).proto;
-    // return { data: serialized };
+    const sectionId = toObjectId(command.request.sectionId);
+    const page = await this.pagesEntity
+      .findOne()
+      .where('section._id', sectionId)
+      .select({ sections: { $elemMatch: { _id: sectionId } } })
+      .orFail(() => new Error(`${sectionId} not found!`))
+      .lean();
+
+    const [section] = page.sections;
+    const serialized = new PageSectionTransformer(section).proto;
+    return { data: serialized };
   }
 }

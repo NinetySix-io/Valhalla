@@ -126,7 +126,20 @@ function run() {
       const itemPath = path.resolve(protobufTarget, servApp, item);
 
       console.info("Created", servApp, item);
-      fs.writeFileSync(itemPath, content, { encoding: "utf-8" });
+      if (item === "index.ts") {
+        fs.writeFileSync(
+          itemPath,
+          content.replace(
+            /..\/..\/..\/..\/google\/protobuf/g,
+            "../../protobuf.presets/google"
+          ),
+          {
+            encoding: "utf-8",
+          }
+        );
+      } else {
+        fs.writeFileSync(itemPath, content, { encoding: "utf-8" });
+      }
     }
 
     writeClientFile(servApp);

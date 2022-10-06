@@ -294,7 +294,9 @@ importers:
       '@types/lodash': ^4.14.186
       '@types/lodash.compact': ^3.0.7
       '@types/lodash.isempty': ^4.4.7
+      '@types/lodash.isnil': ^4.0.7
       '@types/lodash.keyby': ^4.6.7
+      '@types/lodash.omitby': ^4.6.7
       '@types/lodash.pick': ^4.4.7
       '@valhalla/serv.clients': workspace:*
       '@valhalla/serv.core': workspace:*
@@ -304,13 +306,17 @@ importers:
       dayjs: ^1.11.5
       dotenv: ^16.0.2
       graphql: ^16.6.0
+      graphql-type-json: ^0.3.2
       jest: ^29.0.3
       kindagoose: ^1.2.4
       lodash.compact: ^3.0.1
       lodash.isempty: ^4.4.0
+      lodash.isnil: ^4.0.0
       lodash.keyby: ^4.6.0
+      lodash.omitby: ^4.6.0
       lodash.pick: ^4.4.0
       long: ^5.2.0
+      merge-anything: ^5.0.4
       protobufjs: ^6.11.2
       reflect-metadata: ^0.1.13
       rimraf: ^3.0.2
@@ -335,12 +341,16 @@ importers:
       dayjs: 1.11.5
       dotenv: 16.0.2
       graphql: 16.6.0
+      graphql-type-json: 0.3.2_graphql@16.6.0
       kindagoose: 1.2.4_4vff2j6rcwhjtisogqxccoa3e4
       lodash.compact: 3.0.1
       lodash.isempty: 4.4.0
+      lodash.isnil: 4.0.0
       lodash.keyby: 4.6.0
+      lodash.omitby: 4.6.0
       lodash.pick: 4.4.0
       long: 5.2.0
+      merge-anything: 5.0.4
       protobufjs: 6.11.3
       reflect-metadata: 0.1.13
       rxjs: 7.5.6
@@ -352,7 +362,9 @@ importers:
       '@types/lodash': 4.14.186
       '@types/lodash.compact': 3.0.7
       '@types/lodash.isempty': 4.4.7
+      '@types/lodash.isnil': 4.0.7
       '@types/lodash.keyby': 4.6.7
+      '@types/lodash.omitby': 4.6.7
       '@types/lodash.pick': 4.4.7
       jest: 29.0.3
       rimraf: 3.0.2
@@ -9046,7 +9058,7 @@ packages:
   /@types/lodash.isnil/4.0.7:
     resolution: {integrity: sha512-jMMa3G3nJCk+agAWJmrmpr4dYurU6F5SdhQuouhFxKE3mdmqI0lLAI6G72NBW+sxfLVnxZymjqj5nRwonqASZw==}
     dependencies:
-      '@types/lodash': 4.14.184
+      '@types/lodash': 4.14.186
     dev: true
 
   /@types/lodash.keyby/4.6.7:
@@ -9064,7 +9076,7 @@ packages:
   /@types/lodash.omitby/4.6.7:
     resolution: {integrity: sha512-gxxisaIRA49gLXRdORTVTb/3iq1sUGDG2LfLwldKEICC+xhJ4OELb/FNRYkKGTB0O+h6pQWhebvYSXXik8/vdg==}
     dependencies:
-      '@types/lodash': 4.14.184
+      '@types/lodash': 4.14.186
     dev: true
 
   /@types/lodash.pick/4.4.7:
@@ -17532,6 +17544,10 @@ packages:
 
   /lodash.omit/4.5.0:
     resolution: {integrity: sha512-XeqSp49hNGmlkj2EJlfrQFIzQ6lXdNro9sddtQzcJY8QaoC2GO0DT7xaIokHeyM+mIT0mPMlPvkYzg2xCuHdZg==}
+    dev: false
+
+  /lodash.omitby/4.6.0:
+    resolution: {integrity: sha512-5OrRcIVR75M288p4nbI2WLAf3ndw2GD9fyNv3Bc15+WCxJDdZ4lYndSxGd7hnG6PVjiJTeJE2dHEGhIuKGicIQ==}
     dev: false
 
   /lodash.once/4.1.1:

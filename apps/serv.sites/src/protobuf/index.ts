@@ -21,6 +21,10 @@ export enum EditStatus {
   ARCHIVED = "ARCHIVED",
 }
 
+export enum PrimitiveElementType {
+  TEXT = "TEXT",
+}
+
 export interface Page {
   id: string;
   title: string;
@@ -69,13 +73,21 @@ export interface PageElementPlatform {
   isVisible: boolean;
 }
 
+export interface TextElement {
+  html: string;
+  json?: { [key: string]: any };
+}
+
 export interface PageElement {
   id: string;
+  updatedBy: string;
+  createdBy: string;
   desktop?: PageElementPlatform;
   tablet?: PageElementPlatform | undefined;
   mobile?: PageElementPlatform | undefined;
   createdAt?: Date;
   updatedAt?: Date;
+  type?: { $case: "text"; text: TextElement };
 }
 
 /**
@@ -251,12 +263,20 @@ export interface CloneSectionResponse {
   data?: PageSection;
 }
 
-export interface DeletePageElementListRequest {
-  sectionId: string;
+export interface GetPageElementListByGroupRequest {
+  groupId: string;
+}
+
+export interface GetPageElementListByGroupResponse {
+  data: PageElement[];
+}
+
+export interface DeletePageElementListByGroupRequest {
+  groupId: string;
   requestedUserId: string;
 }
 
-export interface DeletePageElementListResponse {
+export interface DeletePageElementListByGroupResponse {
   data: PageElement[];
 }
 
@@ -267,6 +287,41 @@ export interface DeleteManyPageElementsRequest {
 
 export interface DeleteManyPageElementsResponse {
   data: PageElement[];
+}
+
+export interface AddPageElementRequest {
+  requestedUserId: string;
+  groupId: string;
+  desktop?: PageElementPlatform;
+  tablet?: PageElementPlatform | undefined;
+  mobile?: PageElementPlatform | undefined;
+  type?: { $case: "text"; text: TextElement };
+}
+
+export interface AddPageElementResponse {
+  data?: PageElement;
+}
+
+export interface DeletePageElementRequest {
+  requestedUserId: string;
+  elementId: string;
+}
+
+export interface DeletePageElementResponse {
+  data?: PageElement;
+}
+
+export interface UpdatePageElementRequest {
+  requestedUserId: string;
+  elementId: string;
+  desktop?: PageElementPlatform | undefined;
+  tablet?: PageElementPlatform | undefined;
+  mobile?: PageElementPlatform | undefined;
+  type?: { $case: "text"; text: TextElement };
+}
+
+export interface UpdatePageElementResponse {
+  data?: PageElement;
 }
 
 export const SERV_SITES_PACKAGE_NAME = "serv.sites";
@@ -332,9 +387,19 @@ export interface SitesServiceClient {
    * -----------------------------
    */
 
-  deletePageElementList(request: DeletePageElementListRequest): Observable<DeletePageElementListResponse>;
+  getPageElementListByGroup(request: GetPageElementListByGroupRequest): Observable<GetPageElementListByGroupResponse>;
+
+  deletePageElementListByGroup(
+    request: DeletePageElementListByGroupRequest,
+  ): Observable<DeletePageElementListByGroupResponse>;
 
   deleteManyPageElements(request: DeleteManyPageElementsRequest): Observable<DeleteManyPageElementsResponse>;
+
+  addPageElement(request: AddPageElementRequest): Observable<AddPageElementResponse>;
+
+  deletePageElement(request: DeletePageElementRequest): Observable<DeletePageElementResponse>;
+
+  updatePageElement(request: UpdatePageElementRequest): Observable<UpdatePageElementResponse>;
 }
 
 export interface SitesServiceController {
@@ -430,9 +495,19 @@ export interface SitesServiceController {
    * -----------------------------
    */
 
-  deletePageElementList(
-    request: DeletePageElementListRequest,
-  ): Promise<DeletePageElementListResponse> | Observable<DeletePageElementListResponse> | DeletePageElementListResponse;
+  getPageElementListByGroup(
+    request: GetPageElementListByGroupRequest,
+  ):
+    | Promise<GetPageElementListByGroupResponse>
+    | Observable<GetPageElementListByGroupResponse>
+    | GetPageElementListByGroupResponse;
+
+  deletePageElementListByGroup(
+    request: DeletePageElementListByGroupRequest,
+  ):
+    | Promise<DeletePageElementListByGroupResponse>
+    | Observable<DeletePageElementListByGroupResponse>
+    | DeletePageElementListByGroupResponse;
 
   deleteManyPageElements(
     request: DeleteManyPageElementsRequest,
@@ -440,6 +515,18 @@ export interface SitesServiceController {
     | Promise<DeleteManyPageElementsResponse>
     | Observable<DeleteManyPageElementsResponse>
     | DeleteManyPageElementsResponse;
+
+  addPageElement(
+    request: AddPageElementRequest,
+  ): Promise<AddPageElementResponse> | Observable<AddPageElementResponse> | AddPageElementResponse;
+
+  deletePageElement(
+    request: DeletePageElementRequest,
+  ): Promise<DeletePageElementResponse> | Observable<DeletePageElementResponse> | DeletePageElementResponse;
+
+  updatePageElement(
+    request: UpdatePageElementRequest,
+  ): Promise<UpdatePageElementResponse> | Observable<UpdatePageElementResponse> | UpdatePageElementResponse;
 }
 
 export function SitesServiceControllerMethods() {
@@ -463,8 +550,12 @@ export function SitesServiceControllerMethods() {
       "updateSectionFormat",
       "deleteSection",
       "cloneSection",
-      "deletePageElementList",
+      "getPageElementListByGroup",
+      "deletePageElementListByGroup",
       "deleteManyPageElements",
+      "addPageElement",
+      "deletePageElement",
+      "updatePageElement",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);

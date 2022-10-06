@@ -83,8 +83,10 @@ export class CloneSectionHandler
     await this.pageElements.create(
       elements.map(
         (element): CreatePayload<PageElementSchema> => ({
+          type: element.type,
+          group: toObjectId(newSection.data.id),
           updatedBy: toObjectId(command.request.requestedUserId),
-          section: toObjectId(newSection.data.id),
+          createdBy: toObjectId(command.request.requestedUserId),
           desktop: this.pickElementPlatform(element.desktop),
           mobile: this.pickElementPlatform(element.mobile),
           tablet: this.pickElementPlatform(element.tablet),

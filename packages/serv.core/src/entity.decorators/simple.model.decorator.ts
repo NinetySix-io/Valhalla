@@ -4,18 +4,20 @@ import { ICustomOptions } from '@typegoose/typegoose/lib/types';
 import { SchemaOptions } from 'mongoose';
 
 export function SimpleModel(
-  collection: string = null,
+  collection: string | undefined = undefined,
   {
     schema = {},
+    allowMixed,
     ...options
-  }: ICustomOptions & {
+  }: Omit<ICustomOptions, 'allowMixed'> & {
     schema?: SchemaOptions;
+    allowMixed?: boolean;
   } = {},
 ): ClassDecorator {
   return function (target) {
     return modelOptions({
       options: {
-        allowMixed: Severity.WARN,
+        allowMixed: allowMixed ? Severity.ALLOW : Severity.WARN,
         ...options,
       },
       schemaOptions: {

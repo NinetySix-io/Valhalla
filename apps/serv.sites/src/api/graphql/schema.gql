@@ -22,6 +22,37 @@ directive @inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUM
 
 directive @override(from: String!) on FIELD_DEFINITION
 
+type PageElementPlatformSchema {
+  """Date entity was created"""
+  createdAt: DateTime!
+
+  """Date entity was updated"""
+  updatedAt: DateTime!
+
+  """Identifier of the entity"""
+  id: ID!
+
+  """X position"""
+  x: Float!
+
+  """Y position"""
+  y: Float!
+
+  """Height"""
+  height: Float!
+
+  """Width"""
+  width: Float!
+
+  """Whether this element is visible"""
+  isVisible: Boolean!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type PageSectionFormatSchema {
   """Row count"""
   rowsCount: Float!
@@ -50,11 +81,6 @@ type PageSectionSchema {
   format: PageSectionFormatSchema!
   updatedBy: String!
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type PageSchema {
   """Date entity was created"""
@@ -94,32 +120,6 @@ enum EditStatus {
   ARCHIVED
 }
 
-type PageElementPlatformSchema {
-  """Date entity was created"""
-  createdAt: DateTime!
-
-  """Date entity was updated"""
-  updatedAt: DateTime!
-
-  """Identifier of the entity"""
-  id: ID!
-
-  """X position"""
-  x: Float!
-
-  """Y position"""
-  y: Float!
-
-  """Height"""
-  height: Float!
-
-  """Width"""
-  width: Float!
-
-  """Whether this element is visible"""
-  isVisible: Boolean!
-}
-
 type SiteSchema {
   """Date entity was created"""
   createdAt: DateTime!
@@ -155,6 +155,46 @@ enum SiteStatus {
   SUSPENDED
 }
 
+type PageElementTextSchema {
+  """Date entity was created"""
+  createdAt: DateTime!
+
+  """Date entity was updated"""
+  updatedAt: DateTime!
+
+  """Identifier of the entity"""
+  id: ID!
+
+  """Element type"""
+  type: PrimitiveElementType!
+
+  """Desktop configuration"""
+  desktop: PageElementPlatformSchema!
+
+  """Tablet configuration"""
+  tablet: PageElementPlatformSchema
+
+  """Mobile configuration"""
+  mobile: PageElementPlatformSchema
+
+  """User ID"""
+  updatedBy: String!
+
+  """User ID"""
+  createdBy: String!
+  json: JSON!
+  html: String!
+}
+
+enum PrimitiveElementType {
+  TEXT
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
 type PageUpdatedResponse {
   """Identifier of the entity"""
   id: ID!
@@ -184,7 +224,10 @@ type Query {
   page(id: String!): PageSchema!
   sectionList(pageId: String!): [PageSectionSchema!]!
   section(sectionId: String!): PageSectionSchema!
+  pageElementListByGroup(groupId: String!): [ElementUnion!]!
 }
+
+union ElementUnion = PageElementTextSchema
 
 type Mutation {
   createSite(input: CreateSiteInput!): SiteUpdatedResponse!
@@ -197,6 +240,13 @@ type Mutation {
   updateSectionIndex(pageId: String!, sectionId: String!, index: Float!): PageSectionSchema!
   deleteSection(pageId: String!, sectionId: String!): PageSectionSchema!
   cloneSection(pageId: String!, sectionId: String!): PageSectionSchema!
+
+  """Add text element"""
+  addTextElement(groupId: String!, input: AddTextElementInput!): PageElementTextSchema!
+
+  """Update text element"""
+  updateTextElement(elementId: String!, input: UpdateTextElementInput!): PageElementTextSchema!
+  deleteManyElements(elementIdList: [String!]!): [ElementUnion!]!
 }
 
 input CreateSiteInput {
@@ -239,6 +289,39 @@ input UpdateSectionFormatInput {
 
   """Row Gap"""
   rowGap: Float
+}
+
+input AddTextElementInput {
+  json: JSON!
+  html: String!
+  desktop: PlatformPositionInput!
+  tablet: PlatformPositionInput
+  mobile: PlatformPositionInput
+}
+
+input PlatformPositionInput {
+  """X position"""
+  x: Float!
+
+  """Y position"""
+  y: Float!
+
+  """Height"""
+  height: Float!
+
+  """Width"""
+  width: Float!
+
+  """Whether this element is visible"""
+  isVisible: Boolean!
+}
+
+input UpdateTextElementInput {
+  json: JSON
+  html: String
+  desktop: PlatformPositionInput
+  tablet: PlatformPositionInput
+  mobile: PlatformPositionInput
 }
 
 scalar link__Import

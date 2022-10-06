@@ -15,6 +15,8 @@ export type Scalars = {
   Float: number;
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: Date;
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSON: any;
   _FieldSet: any;
 };
 
@@ -79,6 +81,14 @@ export type AccountSchema = {
   readonly updatedAt: Scalars['DateTime'];
 };
 
+export type AddTextElementInput = {
+  readonly desktop: PlatformPositionInput;
+  readonly html: Scalars['String'];
+  readonly json: Scalars['JSON'];
+  readonly mobile: PlatformPositionInput;
+  readonly tablet: PlatformPositionInput;
+};
+
 export type AuthResponse = {
   readonly __typename?: 'AuthResponse';
   /** Access token */
@@ -115,6 +125,8 @@ export enum EditStatus {
   DRAFT = 'DRAFT'
 }
 
+export type ElementUnion = PageElementTextSchema;
+
 export type LoginWithVerificationInput = {
   /** Username */
   readonly username: Scalars['String'];
@@ -130,6 +142,8 @@ export type Mutation = {
   readonly addEmailToAccount: Scalars['Boolean'];
   /** Add phone number to account */
   readonly addPhoneToAccount: Scalars['Boolean'];
+  /** Add text element */
+  readonly addTextElement: PageElementTextSchema;
   /** Archive an organization */
   readonly archiveOrganization: Scalars['String'];
   readonly cloneSection: PageSectionSchema;
@@ -138,6 +152,7 @@ export type Mutation = {
   readonly createPage: PageUpdatedResponse;
   readonly createSection: PageSectionSchema;
   readonly createSite: SiteUpdatedResponse;
+  readonly deleteManyElements: ReadonlyArray<ElementUnion>;
   readonly deletePage: PageUpdatedResponse;
   readonly deleteSection: PageSectionSchema;
   /** Login to account with verification code */
@@ -160,6 +175,8 @@ export type Mutation = {
   readonly updateSectionFormat: PageSectionSchema;
   readonly updateSectionIndex: PageSectionSchema;
   readonly updateSite: SiteUpdatedResponse;
+  /** Update text element */
+  readonly updateTextElement: PageElementTextSchema;
 };
 
 
@@ -170,6 +187,12 @@ export type MutationAddEmailToAccountArgs = {
 
 export type MutationAddPhoneToAccountArgs = {
   phone: Scalars['String'];
+};
+
+
+export type MutationAddTextElementArgs = {
+  groupId: Scalars['String'];
+  input: AddTextElementInput;
 };
 
 
@@ -203,6 +226,11 @@ export type MutationCreateSectionArgs = {
 
 export type MutationCreateSiteArgs = {
   input: CreateSiteInput;
+};
+
+
+export type MutationDeleteManyElementsArgs = {
+  elementIdList: ReadonlyArray<Scalars['String']>;
 };
 
 
@@ -275,6 +303,12 @@ export type MutationUpdateSectionIndexArgs = {
 export type MutationUpdateSiteArgs = {
   id: Scalars['String'];
   input: UpdateSiteInput;
+};
+
+
+export type MutationUpdateTextElementArgs = {
+  elementId: Scalars['String'];
+  input: UpdateTextElementInput;
 };
 
 export enum OrgMemberRole {
@@ -381,6 +415,30 @@ export type PageElementPlatformSchema = {
   readonly y: Scalars['Float'];
 };
 
+export type PageElementTextSchema = {
+  readonly __typename?: 'PageElementTextSchema';
+  /** Date entity was created */
+  readonly createdAt: Scalars['DateTime'];
+  /** User ID */
+  readonly createdBy: Scalars['String'];
+  /** Desktop configuration */
+  readonly desktop: PageElementPlatformSchema;
+  readonly html: Scalars['String'];
+  /** Identifier of the entity */
+  readonly id: Scalars['ID'];
+  readonly json: Scalars['JSON'];
+  /** Mobile configuration */
+  readonly mobile?: Maybe<PageElementPlatformSchema>;
+  /** Tablet configuration */
+  readonly tablet?: Maybe<PageElementPlatformSchema>;
+  /** Element type */
+  readonly type: PrimitiveElementType;
+  /** Date entity was updated */
+  readonly updatedAt: Scalars['DateTime'];
+  /** User ID */
+  readonly updatedBy: Scalars['String'];
+};
+
 export type PageSchema = {
   readonly __typename?: 'PageSchema';
   /** Date entity was created */
@@ -438,6 +496,23 @@ export type PageUpdatedResponse = {
   readonly status: EditStatus;
 };
 
+export type PlatformPositionInput = {
+  /** Height */
+  readonly height: Scalars['Float'];
+  /** Whether this element is visible */
+  readonly isVisible: Scalars['Boolean'];
+  /** Width */
+  readonly width: Scalars['Float'];
+  /** X position */
+  readonly x: Scalars['Float'];
+  /** Y position */
+  readonly y: Scalars['Float'];
+};
+
+export enum PrimitiveElementType {
+  TEXT = 'TEXT'
+}
+
 export type Query = {
   readonly __typename?: 'Query';
   /** Generate an access token */
@@ -453,6 +528,7 @@ export type Query = {
   /** Get current user's organizations memberships */
   readonly organizations: ReadonlyArray<OrganizationSchema>;
   readonly page: PageSchema;
+  readonly pageElementListByGroup: ReadonlyArray<ElementUnion>;
   readonly pageList: ReadonlyArray<PageSchema>;
   readonly section: PageSectionSchema;
   readonly sectionList: ReadonlyArray<PageSectionSchema>;
@@ -477,6 +553,11 @@ export type QueryOrganizationBySlugArgs = {
 
 export type QueryPageArgs = {
   id: Scalars['String'];
+};
+
+
+export type QueryPageElementListByGroupArgs = {
+  groupId: Scalars['String'];
 };
 
 
@@ -610,6 +691,14 @@ export type UpdateSectionFormatInput = {
 export type UpdateSiteInput = {
   /** Site name */
   readonly name?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateTextElementInput = {
+  readonly desktop: PlatformPositionInput;
+  readonly html?: InputMaybe<Scalars['String']>;
+  readonly json?: InputMaybe<Scalars['JSON']>;
+  readonly mobile: PlatformPositionInput;
+  readonly tablet: PlatformPositionInput;
 };
 
 export type ValidateVerificationCodeInput = {

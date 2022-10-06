@@ -1,4 +1,6 @@
 import {
+  AddPageElementRequest,
+  AddPageElementResponse,
   ArchivePageRequest,
   ArchivePageResponse,
   CloneSectionRequest,
@@ -11,12 +13,16 @@ import {
   CreateSiteResponse,
   DeleteManyPageElementsRequest,
   DeleteManyPageElementsResponse,
-  DeletePageElementListRequest,
-  DeletePageElementListResponse,
+  DeletePageElementListByGroupRequest,
+  DeletePageElementListByGroupResponse,
+  DeletePageElementRequest,
+  DeletePageElementResponse,
   DeletePageRequest,
   DeletePageResponse,
   DeleteSectionRequest,
   DeleteSectionResponse,
+  GetPageElementListByGroupRequest,
+  GetPageElementListByGroupResponse,
   GetPageListRequest,
   GetPageListResponse,
   GetPageRequest,
@@ -33,6 +39,8 @@ import {
   SitesServiceController,
   SuspendSiteRequest,
   SuspendSiteResponse,
+  UpdatePageElementRequest,
+  UpdatePageElementResponse,
   UpdatePageRequest,
   UpdatePageResponse,
   UpdateSectionFormatRequest,
@@ -43,6 +51,7 @@ import {
 } from '@app/protobuf';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
+import { AddPageElementCommand } from '@app/cqrs/commands/add.page.element.command';
 import { ArchivePageCommand } from '@app/cqrs/commands/archive.page.command';
 import { CloneSectionCommand } from '@app/cqrs/commands/clone.section.command';
 import { Controller } from '@nestjs/common';
@@ -51,8 +60,10 @@ import { CreateSectionCommand } from '@app/cqrs/commands/create.section.command'
 import { CreateSiteCommand } from '@app/cqrs/commands/create.site.command';
 import { DeleteManyPageElementsCommand } from '@app/cqrs/commands/delete.many.page.elements.command';
 import { DeletePageCommand } from '@app/cqrs/commands/delete.page.command';
-import { DeletePageElementListCommand } from '@app/cqrs/commands/delete.page.element.list.command';
+import { DeletePageElementCommand } from '@app/cqrs/commands/delete.page.element.command';
+import { DeletePageElementListByGroupCommand } from '@app/cqrs/commands/delete.page.element.list.by.group.command';
 import { DeleteSectionCommand } from '@app/cqrs/commands/delete.section.command';
+import { GetPageElementListByGroupQuery } from '@app/cqrs/queries/get.page.element.list.by.group.query';
 import { GetPageListQuery } from '@app/cqrs/queries/get.page.list.query';
 import { GetPageQuery } from '@app/cqrs/queries/get.page.query';
 import { GetPageSectionListQuery } from '@app/cqrs/queries/get.page.section.list.query';
@@ -63,6 +74,7 @@ import { GrpcClass } from '@valhalla/serv.core';
 import { Observable } from 'rxjs';
 import { SuspendSiteCommand } from '@app/cqrs/commands/suspend.site.command';
 import { UpdatePageCommand } from '@app/cqrs/commands/update.page.command';
+import { UpdatePageElementCommand } from '@app/cqrs/commands/update.element.command';
 import { UpdateSectionFormatCommand } from '@app/cqrs/commands/update.section.format.command';
 import { UpdateSectionIndexCommand } from '@app/cqrs/commands/update.section.index.command';
 import { UpdateSiteCommand } from '@app/cqrs/commands/update.site.command';
@@ -74,6 +86,48 @@ export class gRpcController implements SitesServiceController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
+  getPageElementListByGroup(
+    request: GetPageElementListByGroupRequest,
+  ):
+    | GetPageElementListByGroupResponse
+    | Promise<GetPageElementListByGroupResponse>
+    | Observable<GetPageElementListByGroupResponse> {
+    return this.queryBus.execute(new GetPageElementListByGroupQuery(request));
+  }
+  deletePageElementListByGroup(
+    request: DeletePageElementListByGroupRequest,
+  ):
+    | DeletePageElementListByGroupResponse
+    | Promise<DeletePageElementListByGroupResponse>
+    | Observable<DeletePageElementListByGroupResponse> {
+    return this.commandBus.execute(
+      new DeletePageElementListByGroupCommand(request),
+    );
+  }
+  addPageElement(
+    request: AddPageElementRequest,
+  ):
+    | AddPageElementResponse
+    | Promise<AddPageElementResponse>
+    | Observable<AddPageElementResponse> {
+    return this.commandBus.execute(new AddPageElementCommand(request));
+  }
+  deletePageElement(
+    request: DeletePageElementRequest,
+  ):
+    | DeletePageElementResponse
+    | Promise<DeletePageElementResponse>
+    | Observable<DeletePageElementResponse> {
+    return this.commandBus.execute(new DeletePageElementCommand(request));
+  }
+  updatePageElement(
+    request: UpdatePageElementRequest,
+  ):
+    | UpdatePageElementResponse
+    | Promise<UpdatePageElementResponse>
+    | Observable<UpdatePageElementResponse> {
+    return this.commandBus.execute(new UpdatePageElementCommand(request));
+  }
   cloneSection(
     request: CloneSectionRequest,
   ):
@@ -82,14 +136,7 @@ export class gRpcController implements SitesServiceController {
     | Observable<CloneSectionResponse> {
     return this.commandBus.execute(new CloneSectionCommand(request));
   }
-  deletePageElementList(
-    request: DeletePageElementListRequest,
-  ):
-    | DeletePageElementListResponse
-    | Promise<DeletePageElementListResponse>
-    | Observable<DeletePageElementListResponse> {
-    return this.commandBus.execute(new DeletePageElementListCommand(request));
-  }
+
   deleteManyPageElements(
     request: DeleteManyPageElementsRequest,
   ):
