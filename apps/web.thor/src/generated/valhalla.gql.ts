@@ -85,8 +85,8 @@ export type AddTextElementInput = {
   readonly desktop: PlatformPositionInput;
   readonly html: Scalars['String'];
   readonly json: Scalars['JSON'];
-  readonly mobile: PlatformPositionInput;
-  readonly tablet: PlatformPositionInput;
+  readonly mobile?: InputMaybe<PlatformPositionInput>;
+  readonly tablet?: InputMaybe<PlatformPositionInput>;
 };
 
 export type AuthResponse = {
@@ -694,11 +694,11 @@ export type UpdateSiteInput = {
 };
 
 export type UpdateTextElementInput = {
-  readonly desktop: PlatformPositionInput;
+  readonly desktop?: InputMaybe<PlatformPositionInput>;
   readonly html?: InputMaybe<Scalars['String']>;
   readonly json?: InputMaybe<Scalars['JSON']>;
-  readonly mobile: PlatformPositionInput;
-  readonly tablet: PlatformPositionInput;
+  readonly mobile?: InputMaybe<PlatformPositionInput>;
+  readonly tablet?: InputMaybe<PlatformPositionInput>;
 };
 
 export type ValidateVerificationCodeInput = {
@@ -814,6 +814,38 @@ export type RestoreOrganizationMutationVariables = Exact<{
 
 
 export type RestoreOrganizationMutation = { readonly __typename?: 'Mutation', readonly restoreOrganization: string };
+
+export type PositionFragment = { readonly __typename?: 'PageElementPlatformSchema', readonly x: number, readonly y: number, readonly width: number, readonly height: number, readonly isVisible: boolean };
+
+export type GetElementsByGroupQueryVariables = Exact<{
+  groupId: Scalars['String'];
+}>;
+
+
+export type GetElementsByGroupQuery = { readonly __typename?: 'Query', readonly pageElementListByGroup: ReadonlyArray<{ readonly __typename: 'PageElementTextSchema', readonly id: string, readonly json: any, readonly html: string, readonly createdAt: Date, readonly updatedAt: Date, readonly desktop: { readonly __typename?: 'PageElementPlatformSchema', readonly x: number, readonly y: number, readonly width: number, readonly height: number, readonly isVisible: boolean }, readonly mobile?: { readonly __typename?: 'PageElementPlatformSchema', readonly x: number, readonly y: number, readonly width: number, readonly height: number, readonly isVisible: boolean } | null, readonly tablet?: { readonly __typename?: 'PageElementPlatformSchema', readonly x: number, readonly y: number, readonly width: number, readonly height: number, readonly isVisible: boolean } | null }> };
+
+export type AddTextElementMutationVariables = Exact<{
+  groupId: Scalars['String'];
+  input: AddTextElementInput;
+}>;
+
+
+export type AddTextElementMutation = { readonly __typename?: 'Mutation', readonly addTextElement: { readonly __typename?: 'PageElementTextSchema', readonly id: string } };
+
+export type UpdateTextElementMutationVariables = Exact<{
+  elementId: Scalars['String'];
+  input: UpdateTextElementInput;
+}>;
+
+
+export type UpdateTextElementMutation = { readonly __typename?: 'Mutation', readonly updateTextElement: { readonly __typename?: 'PageElementTextSchema', readonly id: string } };
+
+export type DeleteManyElementsMutationVariables = Exact<{
+  elementIdList: ReadonlyArray<Scalars['String']> | Scalars['String'];
+}>;
+
+
+export type DeleteManyElementsMutation = { readonly __typename?: 'Mutation', readonly deleteManyElements: ReadonlyArray<{ readonly __typename?: 'PageElementTextSchema', readonly id: string }> };
 
 export type GetPageSectionQueryVariables = Exact<{
   sectionId: Scalars['String'];
@@ -963,7 +995,15 @@ export type ValidateVerificationCodeQueryVariables = Exact<{
 
 export type ValidateVerificationCodeQuery = { readonly __typename?: 'Query', readonly validateVerificationCode: boolean };
 
-
+export const PositionFragmentDoc = gql`
+    fragment Position on PageElementPlatformSchema {
+  x
+  y
+  width
+  height
+  isVisible
+}
+    `;
 export const RegisterDocument = gql`
     mutation register($email: String!, $phone: String, $firstName: String, $lastName: String, $displayName: String) {
   registerAccount(
@@ -1497,6 +1537,163 @@ export function useRestoreOrganizationMutation(baseOptions?: Apollo.MutationHook
 export type RestoreOrganizationMutationHookResult = ReturnType<typeof useRestoreOrganizationMutation>;
 export type RestoreOrganizationMutationResult = Apollo.MutationResult<RestoreOrganizationMutation>;
 export type RestoreOrganizationMutationOptions = Apollo.BaseMutationOptions<RestoreOrganizationMutation, RestoreOrganizationMutationVariables>;
+export const GetElementsByGroupDocument = gql`
+    query getElementsByGroup($groupId: String!) {
+  pageElementListByGroup(groupId: $groupId) {
+    __typename
+    ... on PageElementTextSchema {
+      id
+      json
+      html
+      createdAt
+      updatedAt
+      desktop {
+        ...Position
+      }
+      mobile {
+        ...Position
+      }
+      tablet {
+        ...Position
+      }
+    }
+  }
+}
+    ${PositionFragmentDoc}`;
+
+/**
+ * __useGetElementsByGroupQuery__
+ *
+ * To run a query within a React component, call `useGetElementsByGroupQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetElementsByGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetElementsByGroupQuery({
+ *   variables: {
+ *      groupId: // value for 'groupId'
+ *   },
+ * });
+ */
+export function useGetElementsByGroupQuery(baseOptions: Apollo.QueryHookOptions<GetElementsByGroupQuery, GetElementsByGroupQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetElementsByGroupQuery, GetElementsByGroupQueryVariables>(GetElementsByGroupDocument, options);
+      }
+export function useGetElementsByGroupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetElementsByGroupQuery, GetElementsByGroupQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetElementsByGroupQuery, GetElementsByGroupQueryVariables>(GetElementsByGroupDocument, options);
+        }
+export type GetElementsByGroupQueryHookResult = ReturnType<typeof useGetElementsByGroupQuery>;
+export type GetElementsByGroupLazyQueryHookResult = ReturnType<typeof useGetElementsByGroupLazyQuery>;
+export type GetElementsByGroupQueryResult = Apollo.QueryResult<GetElementsByGroupQuery, GetElementsByGroupQueryVariables>;
+export function refetchGetElementsByGroupQuery(variables: GetElementsByGroupQueryVariables) {
+      return { query: GetElementsByGroupDocument, variables: variables }
+    }
+export const AddTextElementDocument = gql`
+    mutation addTextElement($groupId: String!, $input: AddTextElementInput!) {
+  addTextElement(groupId: $groupId, input: $input) {
+    id
+  }
+}
+    `;
+export type AddTextElementMutationFn = Apollo.MutationFunction<AddTextElementMutation, AddTextElementMutationVariables>;
+
+/**
+ * __useAddTextElementMutation__
+ *
+ * To run a mutation, you first call `useAddTextElementMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddTextElementMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addTextElementMutation, { data, loading, error }] = useAddTextElementMutation({
+ *   variables: {
+ *      groupId: // value for 'groupId'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddTextElementMutation(baseOptions?: Apollo.MutationHookOptions<AddTextElementMutation, AddTextElementMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddTextElementMutation, AddTextElementMutationVariables>(AddTextElementDocument, options);
+      }
+export type AddTextElementMutationHookResult = ReturnType<typeof useAddTextElementMutation>;
+export type AddTextElementMutationResult = Apollo.MutationResult<AddTextElementMutation>;
+export type AddTextElementMutationOptions = Apollo.BaseMutationOptions<AddTextElementMutation, AddTextElementMutationVariables>;
+export const UpdateTextElementDocument = gql`
+    mutation updateTextElement($elementId: String!, $input: UpdateTextElementInput!) {
+  updateTextElement(elementId: $elementId, input: $input) {
+    id
+  }
+}
+    `;
+export type UpdateTextElementMutationFn = Apollo.MutationFunction<UpdateTextElementMutation, UpdateTextElementMutationVariables>;
+
+/**
+ * __useUpdateTextElementMutation__
+ *
+ * To run a mutation, you first call `useUpdateTextElementMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTextElementMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTextElementMutation, { data, loading, error }] = useUpdateTextElementMutation({
+ *   variables: {
+ *      elementId: // value for 'elementId'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateTextElementMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTextElementMutation, UpdateTextElementMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateTextElementMutation, UpdateTextElementMutationVariables>(UpdateTextElementDocument, options);
+      }
+export type UpdateTextElementMutationHookResult = ReturnType<typeof useUpdateTextElementMutation>;
+export type UpdateTextElementMutationResult = Apollo.MutationResult<UpdateTextElementMutation>;
+export type UpdateTextElementMutationOptions = Apollo.BaseMutationOptions<UpdateTextElementMutation, UpdateTextElementMutationVariables>;
+export const DeleteManyElementsDocument = gql`
+    mutation deleteManyElements($elementIdList: [String!]!) {
+  deleteManyElements(elementIdList: $elementIdList) {
+    ... on PageElementTextSchema {
+      id
+    }
+  }
+}
+    `;
+export type DeleteManyElementsMutationFn = Apollo.MutationFunction<DeleteManyElementsMutation, DeleteManyElementsMutationVariables>;
+
+/**
+ * __useDeleteManyElementsMutation__
+ *
+ * To run a mutation, you first call `useDeleteManyElementsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteManyElementsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteManyElementsMutation, { data, loading, error }] = useDeleteManyElementsMutation({
+ *   variables: {
+ *      elementIdList: // value for 'elementIdList'
+ *   },
+ * });
+ */
+export function useDeleteManyElementsMutation(baseOptions?: Apollo.MutationHookOptions<DeleteManyElementsMutation, DeleteManyElementsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteManyElementsMutation, DeleteManyElementsMutationVariables>(DeleteManyElementsDocument, options);
+      }
+export type DeleteManyElementsMutationHookResult = ReturnType<typeof useDeleteManyElementsMutation>;
+export type DeleteManyElementsMutationResult = Apollo.MutationResult<DeleteManyElementsMutation>;
+export type DeleteManyElementsMutationOptions = Apollo.BaseMutationOptions<DeleteManyElementsMutation, DeleteManyElementsMutationVariables>;
 export const GetPageSectionDocument = gql`
     query getPageSection($sectionId: String!) {
   section(sectionId: $sectionId) {

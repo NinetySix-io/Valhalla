@@ -1,0 +1,55 @@
+fragment Position on PageElementPlatformSchema {
+  x
+  y
+  width
+  height
+  isVisible
+}
+
+query getElementsByGroup($groupId: String!) {
+  pageElementListByGroup(groupId: $groupId) {
+    __typename
+
+    ... on PageElementTextSchema {
+      id
+      json
+      html
+
+      createdAt
+      updatedAt
+
+      desktop {
+        ...Position
+      }
+      mobile {
+        ...Position
+      }
+      tablet {
+        ...Position
+      }
+    }
+  }
+}
+
+mutation addTextElement($groupId: String!, $input: AddTextElementInput!) {
+  addTextElement(groupId: $groupId, input: $input) {
+    id
+  }
+}
+
+mutation updateTextElement(
+  $elementId: String!
+  $input: UpdateTextElementInput!
+) {
+  updateTextElement(elementId: $elementId, input: $input) {
+    id
+  }
+}
+
+mutation deleteManyElements($elementIdList: [String!]!) {
+  deleteManyElements(elementIdList: $elementIdList) {
+    ... on PageElementTextSchema {
+      id
+    }
+  }
+}
