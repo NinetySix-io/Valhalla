@@ -8,11 +8,11 @@ import { useSectionId, useSectionStore } from '../scope.provider';
 
 import { DndContext } from './dnd.context';
 import { DropCollector } from './drag.processors/drop.collector';
-import type { DroppedElement } from '../../types';
 import { ElementsBoardGrid } from './grid';
 import { ElementsBoardItem } from './element';
 import { OverflowManager } from './drag.processors/overflow.manager';
-import type { Section } from '../../store/types';
+import type { PageElement } from '../../types';
+import type { PageSectionSchema } from '@app/generated/valhalla.gql';
 import { SelectionBox } from './drag.processors/selection.box';
 import { SelectionFollower } from './drag.processors/selection.follower';
 import { SelectionsCollector } from './drag.processors/selections.collector';
@@ -28,10 +28,10 @@ import { useTargetedClick } from '@valhalla/web.react';
 
 type Props = React.PropsWithChildren<{
   className?: string;
-  onConfigChange?: (config: Section['config']) => void;
-  onElementAdded?: (element: DroppedElement) => void;
-  onElementsUpdated?: (elements: DroppedElement[]) => void;
-  onElementsDeleted?: (elementIdList: DroppedElement['id'][]) => void;
+  onConfigChange?: (config: PageSectionSchema['format']) => void;
+  onElementAdded?: (element: PageElement) => void;
+  onElementsUpdated?: (elements: PageElement[]) => void;
+  onElementsDeleted?: (elementIdList: PageElement['id'][]) => void;
 }>;
 
 type TElementsBoard = React.FC<Props> & {

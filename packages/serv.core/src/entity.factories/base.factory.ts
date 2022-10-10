@@ -1,8 +1,4 @@
-import {
-  OmitRecursively,
-  PartialBy,
-  PartialByRecursively,
-} from '@valhalla/utilities';
+import { OmitRecursively, PartialByRecursively } from '@valhalla/utilities';
 
 import { AnyParamConstructor } from '@typegoose/typegoose/lib/types';
 import { BaseSchema } from './base.schema';

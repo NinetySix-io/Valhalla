@@ -1,13 +1,6 @@
 import * as React from 'react';
 
-import {
-  EditorStore,
-  makeSection,
-} from '@app/components/editors/page.editor/store';
-
 import type { DecoratorFn } from '@storybook/react';
-import { faker } from '@faker-js/faker';
-import { makeArray } from '@app/storybook/lib/array';
 
 export const SectionsDecorator = (
   sectionsCount = 1,
@@ -19,28 +12,27 @@ export const SectionsDecorator = (
      */
     // eslint-disable-next-line react-hooks/rules-of-hooks
     React.useMemo(() => {
+      //TODO: mock gql
       // Clean up all sections
-      for (const section of EditorStore.getState().sections) {
-        EditorStore.actions.deleteSection(section.id);
-      }
-
-      for (let count = 0; count < sectionsCount; count++) {
-        const section = makeSection();
-        EditorStore.actions.addSection(section);
-
-        makeArray(elementsCount).forEach((_, idx) => {
-          const id = section.id + 'e' + idx;
-          EditorStore.actions.addElement(section.id, {
-            id,
-            type: 'text',
-            x: faker.datatype.number({ min: 1, max: 10 }),
-            y: faker.datatype.number({ min: 1, max: 10 }),
-            xSpan: faker.datatype.number({ min: 1, max: 5 }),
-            ySpan: faker.datatype.number({ min: 1, max: 5 }),
-            props: {},
-          });
-        });
-      }
+      // for (const section of EditorStore.getState().sections) {
+      //   EditorStore.actions.deleteSection(section.id);
+      // }
+      // for (let count = 0; count < sectionsCount; count++) {
+      //   const section = makeSection();
+      //   EditorStore.actions.addSection(section);
+      //   makeArray(elementsCount).forEach((_, idx) => {
+      //     const id = section.id + 'e' + idx;
+      //     EditorStore.actions.addElement(section.id, {
+      //       id,
+      //       type: 'text',
+      //       x: faker.datatype.number({ min: 1, max: 10 }),
+      //       y: faker.datatype.number({ min: 1, max: 10 }),
+      //       width: faker.datatype.number({ min: 1, max: 5 }),
+      //       height: faker.datatype.number({ min: 1, max: 5 }),
+      //       props: {},
+      //     });
+      //   });
+      // }
     }, []);
 
     return <Story />;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import type { DroppedElement } from '@app/components/editors/page.editor/types';
+import type { PageElement } from '../../../types';
 import isNil from 'lodash.isnil';
 import { useEvent } from '@valhalla/web.react';
 import { useSectionStore } from '../../scope.provider';
@@ -9,7 +9,7 @@ import { useSectionStore } from '../../scope.provider';
  * It adds a mousedown event listener to the element that will either set the focus or add the element
  * to the selection
  */
-export function useSelectionHandle(element: DroppedElement) {
+export function useSelectionHandle(element: PageElement) {
   const container = React.useRef<HTMLElement>();
   const store = useSectionStore();
 

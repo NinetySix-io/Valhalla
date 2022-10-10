@@ -32,7 +32,7 @@ export const OverflowManager: React.FC = () => {
       return;
     }
 
-    const elementBottomY = dragging.y + dragging.ySpan;
+    const elementBottomY = dragging.desktop.y + dragging.desktop.height;
     if (elementBottomY > original.current) {
       store.actions.setConfig({
         ...store.getState().config,
@@ -46,8 +46,8 @@ export const OverflowManager: React.FC = () => {
    */
   React.useEffect(() => {
     const rowsCount = store.getState().config?.rowsCount;
-    const bbox = getMaxBBox(Object.values(elements));
-    const minRowsCount = bbox.ySpan + bbox.y;
+    const bbox = getMaxBBox(Object.values(elements).map((e) => e.desktop));
+    const minRowsCount = bbox.height + bbox.y;
     if (minRowsCount > rowsCount) {
       // there is something strange here
       setTimeout(() => {

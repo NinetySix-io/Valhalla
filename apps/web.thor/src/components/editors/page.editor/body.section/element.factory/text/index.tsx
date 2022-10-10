@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-import type { TextElement } from '@app/components/editors/page.editor/types';
+import type { PageElementTextSchema } from '@app/generated/valhalla.gql';
 import { getClampPosition } from '../../elements.board/lib/get.clamp.position';
 import { useSectionStore } from '../../scope.provider';
 
 export type Props = {
-  element: TextElement;
+  element: PageElementTextSchema;
   isFocus?: boolean;
-  onChange?: (element: TextElement) => void;
+  onChange?: (element: PageElementTextSchema) => void;
   onEditStart?: () => void;
   onEditEnd?: () => void;
 };
@@ -34,13 +34,14 @@ export const TextItem: React.FC<Props> = ({
     }: Parameters<React.ComponentProps<typeof Editor>['onChange']>[0]) => {
       onChange?.({
         ...element,
-        ySpan: Math.max(
-          element.ySpan,
-          getClampPosition(height, store.getState().cellSize),
-        ),
-        props: {
-          json,
-          html,
+        json,
+        html,
+        desktop: {
+          ...element.desktop,
+          height: Math.max(
+            element.desktop.height,
+            getClampPosition(height, store.getState().cellSize),
+          ),
         },
       });
     },
@@ -53,14 +54,14 @@ export const TextItem: React.FC<Props> = ({
         <div
           // skipcq: JS-0440
           dangerouslySetInnerHTML={{
-            __html: element.props.html,
+            __html: element.html,
           }}
         />
       }
     >
       <Editor
         editable={isFocus}
-        value={element.props.json}
+        value={element.json}
         onChange={handleChange}
         onEditEnd={onEditEnd}
         onEditStart={onEditStart}

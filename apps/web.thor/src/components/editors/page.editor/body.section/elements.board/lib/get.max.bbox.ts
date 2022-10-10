@@ -1,17 +1,17 @@
-import type { DroppedPosition } from '../../../types';
+import type { Position } from '../../../types';
 import isEmpty from 'lodash.isempty';
 import isNil from 'lodash.isnil';
 
 /**
  * It returns the largest rectangle that contains all the elements
  */
-export function getMaxBBox(elements: DroppedPosition[]): DroppedPosition {
+export function getMaxBBox(elements: Position[]): Position {
   if (isEmpty(elements) || elements.some((element) => isNil(element))) {
     return {
       x: 0,
       y: 0,
-      xSpan: 0,
-      ySpan: 0,
+      width: 0,
+      height: 0,
     };
   }
 
@@ -30,12 +30,12 @@ export function getMaxBBox(elements: DroppedPosition[]): DroppedPosition {
     }
 
     /* Checking if the element is the rightest element. */
-    if (element.x + element.xSpan > rightestElement.x + rightestElement.xSpan) {
+    if (element.x + element.width > rightestElement.x + rightestElement.width) {
       rightestElement = element;
     }
 
     /* Checking if the element is the lowest element. */
-    if (element.y + element.ySpan > lowestElement.y + lowestElement.ySpan) {
+    if (element.y + element.height > lowestElement.y + lowestElement.height) {
       lowestElement = element;
     }
   }
@@ -43,7 +43,7 @@ export function getMaxBBox(elements: DroppedPosition[]): DroppedPosition {
   return {
     x: leftestElement.x,
     y: highestElement.y,
-    xSpan: rightestElement.x + rightestElement.xSpan - leftestElement.x,
-    ySpan: lowestElement.y + lowestElement.ySpan - highestElement.y,
+    width: rightestElement.x + rightestElement.width - leftestElement.x,
+    height: lowestElement.y + lowestElement.height - highestElement.y,
   };
 }

@@ -1,18 +1,29 @@
 import * as React from 'react';
 
-import type { BoardElement, DroppedElement } from '../types';
 import { Container, MenuArea } from './styles';
+import {
+  PrimitiveElementType,
+  useAddTextElementMutation,
+  useDeleteManyElementsMutation,
+} from '@app/generated/valhalla.gql';
+import {
+  useGetElementsByGroupQuery,
+  useUpdatePageSectionFormatMutation,
+} from '@app/generated/valhalla.gql';
 
 import { AddSectionBtn } from './add.section.btn';
 import { EditorStore } from '../store';
+import { ElementFactory } from './element.factory';
 import { ElementsBoard } from './elements.board';
 import { ElementsMenu } from './elements.menu';
 import { Outline } from './outline';
+import type { PageElement } from '../types';
 import type { PageSectionSchema } from '@app/generated/valhalla.gql';
 import { ScreenSize } from '../constants';
-import type { Section } from '../store/types';
 import { SectionMenu } from './section.menu';
 import { SectionProvider } from './scope.provider';
+import { tryNice } from 'try-nice';
+import { useSitePageId } from '@app/hooks/hydrate/use.site.page.hydrate';
 
 type Props = {
   index: number;
@@ -20,9 +31,45 @@ type Props = {
 };
 
 export const BodySection: React.FC<Props> = React.memo(({ section, index }) => {
+  const pageId = useSitePageId();
+  const [updateFormat] = useUpdatePageSectionFormatMutation();
+  const [deleteElements] = useDeleteManyElementsMutation();
+  const [addTextElement] = useAddTextElementMutation();
+  const sectionElements = useGetElementsByGroupQuery({
+    variables: {
+      groupId: section.id,
+    },
+  });
+
   const isMobile = EditorStore.useSelect(
     (state) => state.size < ScreenSize.DESKTOP,
   );
+
+  async function handleAddElement(element: PageElement) {
+    await tryNice(() => {
+      if (element.type === PrimitiveElementType.TEXT) {
+        addTextElement({
+          variables: {
+            groupId: section.id,
+            input: {
+              desktop: element.desktop,
+              mobile: element.mobile,
+              tablet: element.tablet,
+              html: element.html,
+              json: element.json,
+            },
+          },
+        });
+      }
+    });
+
+    sectionElements.refetch();
+  }
+
+  async function handleDeleteElements(elementIdList: PageElement['id'][]) {
+    await deleteElements({ variables: { elementIdList } });
+    await sectionElements.refetch();
+  }
 
   function handleHover() {
     if (EditorStore.getState().activeSection !== section.id) {
@@ -34,25 +81,6 @@ export const BodySection: React.FC<Props> = React.memo(({ section, index }) => {
     if (EditorStore.getState().activeSection) {
       EditorStore.actions.setActiveSection(null);
     }
-  }
-
-  function handleConfigChange(nextConfig: Section['config']) {
-    // EditorStore.actions.updateSectionConfig(sectionId, nextConfig);
-  }
-
-  function handleElementsUpdated(elements: Section['children']) {
-    // EditorStore.actions.replaceElements(sectionId, elements);
-  }
-
-  function handleElementsDeleted(elementIds: BoardElement['id'][]) {
-    // EditorStore.actions.removeElements(sectionId, elementIds);
-  }
-
-  function handleAddElement(element: DroppedElement) {
-    // EditorStore.actions.addElement(sectionId, {
-    //   ...element,
-    //   id: uniqueId('element'),
-    // });
   }
 
   return (
@@ -68,16 +96,28 @@ export const BodySection: React.FC<Props> = React.memo(({ section, index }) => {
             <SectionMenu placement="right" />
           </MenuArea>
           <ElementsBoard
-            onConfigChange={handleConfigChange}
-            onElementsUpdated={handleElementsUpdated}
-            onElementsDeleted={handleElementsDeleted}
+            onConfigChange={(format) =>
+              updateFormat({
+                variables: {
+                  pageId,
+                  sectionId: section.id,
+                  input: {
+                    columnGap: format.columnGap,
+                    rowGap: format.rowGap,
+                    rowsCount: format.rowsCount,
+                  },
+                },
+              })
+            }
+            // onElementsUpdated={handleElementsUpdated}
+            onElementsDeleted={handleDeleteElements}
             onElementAdded={handleAddElement}
           >
-            {/* {section.children.map((element) => (
-                <ElementsBoard.Item key={element.id} element={element}>
-                  <ElementFactory element={element} />
-                </ElementsBoard.Item>
-              ))} */}
+            {sectionElements.data?.pageElementListByGroup.map((element) => (
+              <ElementsBoard.Item key={element.id} element={element}>
+                <ElementFactory element={element} />
+              </ElementsBoard.Item>
+            ))}
           </ElementsBoard>
           <Outline />
           <AddSectionBtn align="top" />

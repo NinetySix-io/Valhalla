@@ -1,26 +1,26 @@
-import type { BoardElement, DroppedElement, XYCoord } from '../../types';
+import type { PageElement, XYCoord } from '../../types';
 import { createStore, createStoreHook, withImmer } from 'tiamut';
 
+import type { PageSectionSchema } from '@app/generated/valhalla.gql';
 import type { Rectangle } from './../elements.board/lib/rectangle';
-import type { Section } from '../../store/types';
 import { createSectionEmitter } from '../emitter';
 
 type State = {
   minSelectionSize: number;
   sectionId: string;
   isEditingText: boolean;
-  config: Section['config'];
+  config: PageSectionSchema['format'];
   cellSize: number;
   container: HTMLElement;
-  dragging?: BoardElement;
+  dragging?: PageElement;
   selectionBox?: Rectangle;
-  resizing?: BoardElement['id'];
-  focused?: BoardElement['id'];
-  selections: BoardElement['id'][];
+  resizing?: PageElement['id'];
+  focused?: PageElement['id'];
+  selections: PageElement['id'][];
   dragDelta?: XYCoord;
   isHoldingDownShiftKey: boolean;
   emitter: ReturnType<typeof createSectionEmitter>;
-  elements: Record<BoardElement['id'], BoardElement & { ref: HTMLElement }>;
+  elements: Record<PageElement['id'], PageElement & { ref: HTMLElement }>;
 };
 
 export type SectionState = State;
@@ -59,13 +59,13 @@ export function createSectionStore(
         setDragging(state, value?: State['dragging']) {
           state.dragging = value;
         },
-        addElement(state, element: BoardElement, ref: HTMLElement) {
+        addElement(state, element: PageElement, ref: HTMLElement) {
           state.elements[element.id] = {
             ...element,
             ref,
           };
         },
-        removeElement(state, elementId: BoardElement['id']) {
+        removeElement(state, elementId: PageElement['id']) {
           delete state.elements[elementId];
         },
         setFocus(state, element: State['focused']) {
@@ -88,7 +88,7 @@ export function createSectionStore(
         },
         setSelection(
           state,
-          elementId: DroppedElement['id'],
+          elementId: PageElement['id'],
           standalone?: boolean,
         ) {
           if (standalone) {
@@ -97,7 +97,7 @@ export function createSectionStore(
             state.selections.push(elementId);
           }
         },
-        removeSelection(state, elementId: DroppedElement['id']) {
+        removeSelection(state, elementId: PageElement['id']) {
           state.selections = state.selections.filter(
             (selectionId) => selectionId !== elementId,
           );

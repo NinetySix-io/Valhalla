@@ -1,9 +1,12 @@
 fragment Position on PageElementPlatformSchema {
+  id
   x
   y
   width
   height
   isVisible
+  createdAt
+  updatedAt
 }
 
 query getElementsByGroup($groupId: String!) {
@@ -14,9 +17,12 @@ query getElementsByGroup($groupId: String!) {
       id
       json
       html
+      type
 
       createdAt
       updatedAt
+      createdBy
+      updatedBy
 
       desktop {
         ...Position

@@ -1,10 +1,12 @@
 import * as React from 'react';
 
 import type {
-  DroppedPosition,
+  PageElement,
   XYCoord,
 } from '@app/components/editors/page.editor/types';
 import { useCellClampX, useCellClampY } from './use.cell.clamp';
+
+import type { OmitRecursively } from '@valhalla/utilities';
 
 /**
  * A function that takes in an element and a delta
@@ -15,16 +17,29 @@ export function useClampElement() {
   const clampY = useCellClampY();
 
   return React.useCallback(
-    <T extends DroppedPosition>(element: T, delta: XYCoord): T => {
-      const deltaX = clampX(delta.x, element.xSpan);
-      const deltaY = clampY(delta.y, element.ySpan);
-      const nextY = element.y + deltaY;
-      const nextX = element.x + deltaX;
+    <
+      T extends OmitRecursively<
+        PageElement,
+        'id' | 'createdBy' | 'updatedBy' | 'updatedAt' | 'createdAt'
+      >,
+    >(
+      element: T,
+      delta: XYCoord,
+    ): T => {
+      //TODO: Adjust
+      const size = element.desktop;
+      const deltaX = clampX(delta.x, size.width);
+      const deltaY = clampY(delta.y, size.height);
+      const nextY = size.y + deltaY;
+      const nextX = size.x + deltaX;
 
       return {
         ...element,
-        x: Math.max(nextX, 0),
-        y: Math.max(nextY, 0),
+        desktop: {
+          ...element.desktop,
+          x: Math.max(nextX, 0),
+          y: Math.max(nextY, 0),
+        },
       };
     },
     [clampX, clampY],

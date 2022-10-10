@@ -10,3 +10,11 @@ export type BasicObject<T = any> = {
 };
 
 export type ValueOf<T> = T[keyof T];
+
+export type Immutable<T extends object> = {
+  readonly [P in keyof T]-?: T[P] extends object ? Immutable<T[P]> : T[P];
+};
+
+export type Mutable<T extends object> = {
+  -readonly [P in keyof T]-?: T[P] extends object ? Mutable<T[P]> : T[P];
+};

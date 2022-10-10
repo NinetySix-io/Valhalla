@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import type {
-  DroppedElement,
+  PageElement,
   Position,
 } from '@app/components/editors/page.editor/types';
 import {
@@ -30,7 +30,7 @@ import { useTemporal } from '@valhalla/web.react';
 type Props = {
   onFocus?: () => void;
   onFocusChange?: (isActive: boolean) => void;
-  element: DroppedElement;
+  element: PageElement;
   children: JSX.Element;
 };
 
@@ -80,7 +80,7 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
       emitter.client.emit('elementsUpdated', [element]);
     }
 
-    function handleChildrenUpdate(nextElement: DroppedElement) {
+    function handleChildrenUpdate(nextElement: PageElement) {
       emitter.client.emit('elementsUpdated', [nextElement]);
     }
 

@@ -11,6 +11,6 @@ export const selectSelectedElements = createSectionSelector((state) =>
 
 export const selectSelectionBBox = createSectionSelector((state) =>
   selectIsMultiSelected(state)
-    ? getMaxBBox(selectSelectedElements(state))
+    ? getMaxBBox(selectSelectedElements(state).map((e) => e.desktop))
     : undefined,
 );

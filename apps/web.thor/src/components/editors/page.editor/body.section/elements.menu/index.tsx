@@ -6,6 +6,7 @@ import { EditorMenu } from '../../menu';
 import { EditorStore } from '../../store';
 import { ElementMenuGroup } from './group';
 import { ElementMenuGroupItem } from './item';
+import { PrimitiveElementType } from '@app/generated/valhalla.gql';
 import { useHelperDisplay } from '../hooks/use.helpers.display';
 
 const Container = styled(Stack)(
@@ -65,10 +66,16 @@ export const ElementsMenu: React.FC<Props> = ({ ...props }) => {
           <ElementMenuGroup title="Primitives">
             <ElementMenuGroupItem
               element={{
-                type: 'text',
-                xSpan: 3,
-                ySpan: 1,
-                props: {},
+                type: PrimitiveElementType.TEXT,
+                json: {},
+                html: '',
+                desktop: {
+                  x: 1,
+                  y: 1,
+                  width: 2,
+                  height: 1,
+                  isVisible: true,
+                },
               }}
             >
               Text

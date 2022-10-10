@@ -38,7 +38,8 @@ function selectIsCentered() {
     }
 
     const boardCenter = Math.floor(getColumnsCount() / 2);
-    const boxCenterPos = state.dragging.x + state.dragging.xSpan / 2;
+    const boxCenterPos =
+      state.dragging.desktop.x + state.dragging.desktop.width / 2;
 
     return isInRange(boardCenter, [
       Math.floor(boxCenterPos),

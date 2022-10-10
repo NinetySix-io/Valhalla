@@ -34,7 +34,7 @@ const Container = styled(
 export const SelectionFollower: React.FC = () => {
   const store = useSectionStore();
   const gridArea = store.useSelect(
-    (state) => state.dragging && getGridArea(state.dragging),
+    (state) => state.dragging && getGridArea(state.dragging.desktop),
   );
 
   return <Container gridArea={gridArea} />;

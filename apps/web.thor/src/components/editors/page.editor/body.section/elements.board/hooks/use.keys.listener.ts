@@ -1,6 +1,6 @@
 import { KeyCode, useOneOfKeyPressed } from '@valhalla/web.react';
 
-import type { DroppedElement } from '@app/components/editors/page.editor/types';
+import type { PageElement } from '../../../types';
 import { useSectionEmitter } from './use.section.emitter';
 import { useSectionStore } from '../../scope.provider';
 
@@ -33,7 +33,7 @@ export function useDeleteKeyListener() {
       }
 
       const { selections, elements, isEditingText } = store.getState();
-      const deleted: DroppedElement['id'][] = [];
+      const deleted: PageElement['id'][] = [];
       if (isEditingText) {
         return;
       }

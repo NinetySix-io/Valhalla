@@ -1,12 +1,9 @@
 import * as React from 'react';
 
-import type { DroppedElement } from '@app/components/editors/page.editor/types';
+import type { PageElement } from '@app/components/editors/page.editor/types';
 import { useSectionStore } from '../../../scope.provider';
 
-/**
- * It takes a DroppedElement and returns a function that takes a ref and adds it to the store
- */
-export function useElementRegistry(element: DroppedElement) {
+export function useElementRegistry(element: PageElement) {
   const store = useSectionStore();
   const ref = React.useRef<HTMLElement>();
 

@@ -815,14 +815,14 @@ export type RestoreOrganizationMutationVariables = Exact<{
 
 export type RestoreOrganizationMutation = { readonly __typename?: 'Mutation', readonly restoreOrganization: string };
 
-export type PositionFragment = { readonly __typename?: 'PageElementPlatformSchema', readonly x: number, readonly y: number, readonly width: number, readonly height: number, readonly isVisible: boolean };
+export type PositionFragment = { readonly __typename?: 'PageElementPlatformSchema', readonly id: string, readonly x: number, readonly y: number, readonly width: number, readonly height: number, readonly isVisible: boolean, readonly createdAt: Date, readonly updatedAt: Date };
 
 export type GetElementsByGroupQueryVariables = Exact<{
   groupId: Scalars['String'];
 }>;
 
 
-export type GetElementsByGroupQuery = { readonly __typename?: 'Query', readonly pageElementListByGroup: ReadonlyArray<{ readonly __typename: 'PageElementTextSchema', readonly id: string, readonly json: any, readonly html: string, readonly createdAt: Date, readonly updatedAt: Date, readonly desktop: { readonly __typename?: 'PageElementPlatformSchema', readonly x: number, readonly y: number, readonly width: number, readonly height: number, readonly isVisible: boolean }, readonly mobile?: { readonly __typename?: 'PageElementPlatformSchema', readonly x: number, readonly y: number, readonly width: number, readonly height: number, readonly isVisible: boolean } | null, readonly tablet?: { readonly __typename?: 'PageElementPlatformSchema', readonly x: number, readonly y: number, readonly width: number, readonly height: number, readonly isVisible: boolean } | null }> };
+export type GetElementsByGroupQuery = { readonly __typename?: 'Query', readonly pageElementListByGroup: ReadonlyArray<{ readonly __typename: 'PageElementTextSchema', readonly id: string, readonly json: any, readonly html: string, readonly type: PrimitiveElementType, readonly createdAt: Date, readonly updatedAt: Date, readonly createdBy: string, readonly updatedBy: string, readonly desktop: { readonly __typename?: 'PageElementPlatformSchema', readonly id: string, readonly x: number, readonly y: number, readonly width: number, readonly height: number, readonly isVisible: boolean, readonly createdAt: Date, readonly updatedAt: Date }, readonly mobile?: { readonly __typename?: 'PageElementPlatformSchema', readonly id: string, readonly x: number, readonly y: number, readonly width: number, readonly height: number, readonly isVisible: boolean, readonly createdAt: Date, readonly updatedAt: Date } | null, readonly tablet?: { readonly __typename?: 'PageElementPlatformSchema', readonly id: string, readonly x: number, readonly y: number, readonly width: number, readonly height: number, readonly isVisible: boolean, readonly createdAt: Date, readonly updatedAt: Date } | null }> };
 
 export type AddTextElementMutationVariables = Exact<{
   groupId: Scalars['String'];
@@ -997,11 +997,14 @@ export type ValidateVerificationCodeQuery = { readonly __typename?: 'Query', rea
 
 export const PositionFragmentDoc = gql`
     fragment Position on PageElementPlatformSchema {
+  id
   x
   y
   width
   height
   isVisible
+  createdAt
+  updatedAt
 }
     `;
 export const RegisterDocument = gql`
@@ -1545,8 +1548,11 @@ export const GetElementsByGroupDocument = gql`
       id
       json
       html
+      type
       createdAt
       updatedAt
+      createdBy
+      updatedBy
       desktop {
         ...Position
       }

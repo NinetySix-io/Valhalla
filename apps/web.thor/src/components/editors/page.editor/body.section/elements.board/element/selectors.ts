@@ -1,9 +1,9 @@
-import type { BoardElement } from '@app/components/editors/page.editor/types';
+import type { PageElement } from '../../../types';
 import { Rectangle } from '../lib/rectangle';
 import type { SectionState } from '../../store';
 import { createSectionSelector } from '../../store/selector';
 
-function createElementSelector<T, E extends BoardElement>(
+function createElementSelector<T, E extends PageElement>(
   selector: (state: SectionState, element: E) => T,
 ) {
   return (element: E) =>
@@ -35,9 +35,9 @@ export const selectShouldPeakWhenClose = createElementSelector(
     state.dragging &&
     state.dragging.id !== element.id &&
     !state.selections.includes(element.id) &&
-    Rectangle.fromBoardElement(state.dragging)
+    Rectangle.fromPageElement(state.dragging)
       .expand(1)
-      .isTouching(Rectangle.fromBoardElement(element)),
+      .isTouching(Rectangle.fromPageElement(element)),
 );
 
 /**

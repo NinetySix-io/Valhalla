@@ -1,4 +1,4 @@
-import type { BoardElement, Size } from '../../../types';
+import type { PageElement, Size } from '../../../types';
 
 import type { XYCoord } from '@app/components/editors/page.editor/types';
 
@@ -67,11 +67,12 @@ export class Rectangle {
     return new Rectangle(element.getBoundingClientRect());
   }
 
-  static fromBoardElement(element: BoardElement) {
-    const left = element.x;
-    const top = element.y;
-    const right = element.xSpan + left;
-    const bottom = element.ySpan + top;
+  static fromPageElement(element: PageElement) {
+    const left = element.desktop.x;
+    const top = element.desktop.y;
+    const right = element.desktop.width + left;
+    const bottom = element.mobile.height + top;
+
     return new Rectangle({
       left,
       top,

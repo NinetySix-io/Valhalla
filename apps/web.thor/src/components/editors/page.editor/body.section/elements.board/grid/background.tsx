@@ -36,8 +36,8 @@ const Cells = React.memo(() => {
             gridArea: getGridArea({
               x,
               y,
-              xSpan: 1,
-              ySpan: 1,
+              width: 1,
+              height: 1,
             }),
           }}
         />,
@@ -69,8 +69,8 @@ const Shield: React.FC = () => {
         gridArea: getGridArea({
           x: 0,
           y: 0,
-          xSpan: columnsCount,
-          ySpan: config.rowsCount,
+          width: columnsCount,
+          height: config.rowsCount,
         }),
       }}
     />

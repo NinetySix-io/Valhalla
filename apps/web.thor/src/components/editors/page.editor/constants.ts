@@ -1,7 +1,13 @@
 export enum ScreenSize {
   DESKTOP = 1200,
-  MOBILE = 400,
   TABLET = 820,
+  MOBILE = 400,
+}
+
+export enum ScreenType {
+  DESKTOP = 'desktop',
+  TABLET = 'tablet',
+  MOBILE = 'mobile',
 }
 
 export const MENU_ITEM = 'MENU_ITEM';

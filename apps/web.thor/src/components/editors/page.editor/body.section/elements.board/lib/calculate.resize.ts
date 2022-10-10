@@ -1,13 +1,14 @@
-import type { DroppedElement, Size } from '../../../types';
+import type { PageElement, Size } from '../../../types';
 import { isLeft, isUp } from './directions';
 
 import type { DIRECTION } from './directions';
 import { getClampPosition } from './get.clamp.position';
+import produce from 'immer';
 
 type Param = {
   cellSize: number;
   direction: DIRECTION;
-  element: DroppedElement;
+  element: PageElement;
   nextSize: Size;
 };
 
@@ -20,21 +21,26 @@ export function calculateResize({
   cellSize,
   element,
   nextSize,
-}: Param): DroppedElement {
-  const nextElement = { ...element };
-  const nextXSpan = getClampPosition(nextSize.width, cellSize);
-  const nextYSpan = getClampPosition(nextSize.height, cellSize);
+}: Param): PageElement {
+  return produce(element, (draft) => {
+    const nWidth = getClampPosition(nextSize.width, cellSize);
+    const nHeight = getClampPosition(nextSize.height, cellSize);
 
-  if (isLeft(direction)) {
-    nextElement.x = Math.max(0, element.x - (nextXSpan - element.xSpan));
-  }
+    if (isLeft(direction)) {
+      draft.desktop.x = Math.max(
+        0,
+        element.desktop.x - (nWidth - element.desktop.width),
+      );
+    }
 
-  if (isUp(direction)) {
-    nextElement.y = Math.max(0, element.y - (nextYSpan - element.ySpan));
-  }
+    if (isUp(direction)) {
+      draft.desktop.y = Math.max(
+        0,
+        element.desktop.y - (nHeight - element.desktop.height),
+      );
+    }
 
-  nextElement.xSpan = nextXSpan;
-  nextElement.ySpan = nextYSpan;
-
-  return nextElement;
+    draft.desktop.width = nWidth;
+    draft.desktop.height = nHeight;
+  });
 }

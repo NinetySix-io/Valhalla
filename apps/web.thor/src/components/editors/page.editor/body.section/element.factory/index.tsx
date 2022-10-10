@@ -1,14 +1,14 @@
 import * as React from 'react';
 
-import type { BoardElement, TextElement } from '../../types';
-
+import type { PageElement } from '../../types';
+import { PrimitiveElementType } from '@app/generated/valhalla.gql';
 import { TextItem } from './text';
 import { useSectionStore } from '../scope.provider';
 
 type Props = {
-  element: BoardElement;
+  element: PageElement;
   isFocus?: boolean;
-  onChange?: (element: BoardElement) => void;
+  onChange?: (element: PageElement) => void;
 };
 
 export const ElementFactory: React.FC<Props> = ({
@@ -18,21 +18,15 @@ export const ElementFactory: React.FC<Props> = ({
 }) => {
   const store = useSectionStore();
 
-  if (element.type === 'text') {
+  if (element.type === PrimitiveElementType.TEXT) {
     return (
       <TextItem
-        element={element as TextElement}
+        element={element}
         isFocus={isFocus}
         onChange={onChange}
         onEditStart={() => store.actions.setIsEditingText(true)}
         onEditEnd={() => store.actions.setIsEditingText(false)}
       />
-    );
-  } else if (element.type === 'box') {
-    return (
-      <button type="button" title={element.id}>
-        button
-      </button>
     );
   }
 
