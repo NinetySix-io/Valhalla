@@ -36,6 +36,7 @@ export const BodySection: React.FC<Props> = React.memo(({ section, index }) => {
   const [deleteElements] = useDeleteManyElementsMutation();
   const [addTextElement] = useAddTextElementMutation();
   const sectionElements = useGetElementsByGroupQuery({
+    fetchPolicy: 'no-cache',
     variables: {
       groupId: section.id,
     },
@@ -113,11 +114,13 @@ export const BodySection: React.FC<Props> = React.memo(({ section, index }) => {
             onElementsDeleted={handleDeleteElements}
             onElementAdded={handleAddElement}
           >
-            {sectionElements.data?.pageElementListByGroup.map((element) => (
-              <ElementsBoard.Item key={element.id} element={element}>
-                <ElementFactory element={element} />
-              </ElementsBoard.Item>
-            ))}
+            {sectionElements.data?.pageElementListByGroup.map((element) => {
+              return (
+                <ElementsBoard.Item key={element.id} element={element}>
+                  <ElementFactory element={element} />
+                </ElementsBoard.Item>
+              );
+            })}
           </ElementsBoard>
           <Outline />
           <AddSectionBtn align="top" />

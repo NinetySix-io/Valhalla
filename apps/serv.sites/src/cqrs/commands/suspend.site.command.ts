@@ -4,15 +4,15 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 import {
   SiteStatus,
   SuspendSiteRequest,
   SuspendSiteResponse,
 } from '@app/protobuf';
 
+import { SiteProto } from '../transformers/site.proto';
 import { SiteSuspendedEvent } from '../events/site.suspended.event';
-import { SiteTransformer } from '@app/entities/sites/transformer';
 import { SitesModel } from '@app/entities/sites';
 
 export class SuspendSiteCommand implements ICommand {
@@ -39,7 +39,7 @@ export class SuspendSiteHandler
       .lean()
       .orFail();
 
-    const serialized = new SiteTransformer(site).proto;
+    const serialized = Serializer.from(SiteProto).serialize(site);
     this.eventBus.publish(new SiteSuspendedEvent(serialized));
     return { data: serialized };
   }

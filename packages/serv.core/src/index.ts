@@ -14,5 +14,6 @@ export * from './passport';
 export * from './gql.decorators';
 export * from './gql.scalars';
 export * from './validator.decorators';
+export * from './serializer';
 export * as typegoose from '@typegoose/typegoose';
 export { default as mongoose } from 'mongoose';

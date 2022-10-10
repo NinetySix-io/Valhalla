@@ -1,21 +1,20 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { PageSchema } from '@app/entities/pages/schemas';
 import { gRpcController } from '@app/grpc/grpc.controller';
-import { Page } from '@app/protobuf';
 import { UseGuards } from '@nestjs/common';
 import {
   AuthAccount,
   CurrentAccount,
-  EmptyObjectValidation,
   GqlAuthGuard,
-  ObjectIdParamValidation,
-  ParamValidationPipe,
   resolveRpcRequest,
 } from '@valhalla/serv.core';
-import { CreatePageInput } from './inputs/create.page.input';
-import { UpdatePageInput } from './inputs/update.page.input';
-import { PageUpdatedResponse } from './responses/page.updated.response';
+import { CreatePageArgs } from './gql.args/create.page.args';
+import { DeletePageArgs } from './gql.args/delete.page.args';
+import { GetPageArgs } from './gql.args/get.page.args';
+import { GetPagesBySiteArgs } from './gql.args/get.pages.by.site.args';
+import { UpdatePageArgs } from './gql.args/update.page.input';
+import { PageUpdatedResponse } from './gql.responses/page.updated.response';
+import { Page } from './gql.types/page';
 
 @Resolver()
 export class GqlPagesResolver {
@@ -25,93 +24,72 @@ export class GqlPagesResolver {
   @Mutation(() => PageUpdatedResponse)
   async createPage(
     @CurrentAccount() account: AuthAccount,
-    @Args('siteId', new ParamValidationPipe([ObjectIdParamValidation]))
-    siteId: string,
-    @Args('input') input: CreatePageInput,
+    @Args() args: CreatePageArgs,
   ): Promise<PageUpdatedResponse> {
     const result = await resolveRpcRequest(
       this.rpcClient.createPage({
-        siteId,
+        siteId: args.siteId,
+        title: args.title,
         requestedUserId: account.id,
-        title: input.title,
-      }),
-    );
-
-    return {
-      id: result.data.id,
-      status: result.data.status,
-    };
-  }
-
-  @Mutation(() => PageUpdatedResponse)
-  @UseGuards(GqlAuthGuard)
-  async deletePage(
-    @CurrentAccount() account: AuthAccount,
-    @Args('id', new ParamValidationPipe([ObjectIdParamValidation]))
-    pageId: string,
-  ): Promise<PageUpdatedResponse> {
-    const result = await resolveRpcRequest(
-      this.rpcClient.deletePage({
-        pageId,
-        requestedUserId: account.id,
-      }),
-    );
-
-    return {
-      id: result.data.id,
-      status: result.data.status,
-    };
-  }
-
-  @Mutation(() => PageUpdatedResponse)
-  @UseGuards(GqlAuthGuard)
-  async updatePage(
-    @CurrentAccount() account: AuthAccount,
-    @Args('id', new ParamValidationPipe([ObjectIdParamValidation]))
-    pageId: string,
-    @Args('input', new ParamValidationPipe([EmptyObjectValidation]))
-    input: UpdatePageInput,
-  ): Promise<PageUpdatedResponse> {
-    const result = await resolveRpcRequest(
-      this.rpcClient.updatePage({
-        requestedUserId: account.id,
-        pageId,
-        isLoneTitle: input.isLoneTitle,
-        title: input.title,
-        description: input.description,
-      }),
-    );
-
-    return {
-      id: result.data.id,
-      status: result.data.status,
-    };
-  }
-
-  @Query(() => [PageSchema])
-  @UseGuards(GqlAuthGuard)
-  async pageList(
-    @Args('siteId', new ParamValidationPipe([ObjectIdParamValidation]))
-    siteId: string,
-  ): Promise<Page[]> {
-    const result = await resolveRpcRequest(
-      this.rpcClient.getPageList({
-        siteId,
       }),
     );
 
     return result.data;
   }
 
-  @Query(() => PageSchema)
+  @Mutation(() => PageUpdatedResponse)
   @UseGuards(GqlAuthGuard)
-  async page(
-    @Args('id', new ParamValidationPipe([ObjectIdParamValidation]))
-    pageId: string,
-  ): Promise<Page> {
+  async deletePage(
+    @CurrentAccount() account: AuthAccount,
+    @Args() args: DeletePageArgs,
+  ): Promise<PageUpdatedResponse> {
+    const result = await resolveRpcRequest(
+      this.rpcClient.deletePage({
+        pageId: args.pageId,
+        requestedUserId: account.id,
+      }),
+    );
+
+    return result.data;
+  }
+
+  @Mutation(() => PageUpdatedResponse)
+  @UseGuards(GqlAuthGuard)
+  async updatePage(
+    @CurrentAccount() account: AuthAccount,
+    @Args() args: UpdatePageArgs,
+  ): Promise<PageUpdatedResponse> {
+    const result = await resolveRpcRequest(
+      this.rpcClient.updatePage({
+        requestedUserId: account.id,
+        title: args.title,
+        pageId: args.pageId,
+        isLoneTitle: args.isLoneTitle,
+        description: args.description,
+      }),
+    );
+
+    return result.data;
+  }
+
+  @Query(() => [Page])
+  @UseGuards(GqlAuthGuard)
+  async pagesBySite(@Args() args: GetPagesBySiteArgs): Promise<Page[]> {
+    const result = await resolveRpcRequest(
+      this.rpcClient.getPageList({
+        siteId: args.siteId,
+      }),
+    );
+
+    return result.data;
+  }
+
+  @Query(() => Page)
+  @UseGuards(GqlAuthGuard)
+  async page(@Args() args: GetPageArgs): Promise<Page> {
     const result = await resolveRpcRequest(
       this.rpcClient.getPage({
-        pageId,
+        pageId: args.pageId,
       }),
     );
 

@@ -1,10 +1,10 @@
 import { GetSiteRequest, GetSiteResponse } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
 import { FilterQuery } from 'mongoose';
+import { SiteProto } from '@app/cqrs/transformers/site.proto';
 import { SiteSchema } from '@app/entities/sites/schema';
-import { SiteTransformer } from '@app/entities/sites/transformer';
 import { SitesModel } from '@app/entities/sites';
 
 export class GetSiteQuery implements IQuery {
@@ -22,8 +22,8 @@ export class GetSiteHandler
     const query: FilterQuery<SiteSchema> = {};
     const { siteId } = command.request;
     query._id = toObjectId(siteId);
-    const site = await this.sites.findOne(query).orFail();
-    const serialized = SiteTransformer.fromEntity(site).proto;
+    const site = await this.sites.findOne(query).lean().orFail();
+    const serialized = Serializer.from(SiteProto).serialize(site);
     return { data: serialized };
   }
 }

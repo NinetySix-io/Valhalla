@@ -10,11 +10,16 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { CreatePayload, RpcHandler, toObjectId } from '@valhalla/serv.core';
+import {
+  CreatePayload,
+  RpcHandler,
+  Serializer,
+  toObjectId,
+} from '@valhalla/serv.core';
 
+import { PageElementProto } from '../transformers/page.element.proto';
 import { PageElementSchema } from '@app/entities/page.elements/schemas';
 import { PageElementTextSchema } from '@app/entities/page.elements/variants/text.variant';
-import { PageElementTransformer } from '@app/entities/page.elements/transformer';
 import { PageElementsCreatedEvent } from '../events/page.elements.created.event';
 import { PageElementsModel } from '@app/entities/page.elements';
 
@@ -70,7 +75,7 @@ export class AddPageElementHandler
   ): Promise<AddPageElementResponse> {
     const payload = this.getPayload(command.request);
     const element = await this.pageElements.create(payload);
-    const serialized = new PageElementTransformer(element).proto;
+    const serialized = Serializer.from(PageElementProto).serialize(element);
     this.eventBus.publish(new PageElementsCreatedEvent([serialized]));
     return { data: serialized };
   }

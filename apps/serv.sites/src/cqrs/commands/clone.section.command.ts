@@ -2,7 +2,6 @@ import {
   CloneSectionRequest,
   CloneSectionResponse,
   CreateSectionResponse,
-  PageElementPlatform,
 } from '@app/protobuf';
 import {
   CommandBus,
@@ -18,7 +17,6 @@ import {
 } from '@valhalla/serv.core';
 
 import { CreateSectionCommand } from './create.section.command';
-import { PageElementPlatformSchema } from '@app/entities/page.elements/schemas/platform.schema';
 import { PageElementSchema } from '@app/entities/page.elements/schemas';
 import { PageElementsModel } from '@app/entities/page.elements';
 import { PagesModel } from '@app/entities/pages';
@@ -37,22 +35,6 @@ export class CloneSectionHandler
     private readonly pages: PagesModel,
     private readonly pageElements: PageElementsModel,
   ) {}
-
-  private pickElementPlatform<T extends PageElementPlatform>(
-    value: T,
-  ): CreatePayload<PageElementPlatformSchema> {
-    if (!value) {
-      return value;
-    }
-
-    return {
-      x: value.x,
-      y: value.y,
-      height: value.height,
-      width: value.width,
-      isVisible: value.isVisible,
-    };
-  }
 
   async execute(command: CloneSectionCommand): Promise<CloneSectionResponse> {
     const pageId = toObjectId(command.request.pageId);
@@ -87,9 +69,9 @@ export class CloneSectionHandler
           group: toObjectId(newSection.data.id),
           updatedBy: toObjectId(command.request.requestedUserId),
           createdBy: toObjectId(command.request.requestedUserId),
-          desktop: this.pickElementPlatform(element.desktop),
-          mobile: this.pickElementPlatform(element.mobile),
-          tablet: this.pickElementPlatform(element.tablet),
+          desktop: element.desktop,
+          mobile: element.mobile,
+          tablet: element.tablet,
         }),
       ),
     );

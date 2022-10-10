@@ -1,66 +1,60 @@
-import { PageSectionSchema } from '@app/entities/pages/schemas';
 import { gRpcController } from '@app/grpc/grpc.controller';
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
   AuthAccount,
   CurrentAccount,
-  EmptyObjectValidation,
   GqlAuthGuard,
-  ObjectIdParamValidation,
-  ParamValidationPipe,
   resolveRpcRequest,
 } from '@valhalla/serv.core';
-import { CreateSectionInput } from './inputs/create.section.input';
-import { UpdateSectionFormatInput } from './inputs/update.section.format.input';
+import { CreateSectionArgs } from './gql.args/create.section.args';
+import { GetSectionArgs } from './gql.args/get.section.args';
+import { GetSectionsByPageArgs } from './gql.args/get.sections.by.page.args';
+import { SectionMetaArgs } from './gql.args/section.meta.args';
+import { UpdateSectionFormatArgs } from './gql.args/update.section.format.args';
+import { UpdateSectionIndexArgs } from './gql.args/update.section.index.args';
+import { PageSection } from './gql.types/page.section';
 
 @Resolver()
 export class GqlSectionsResolver {
   constructor(private readonly rpcClient: gRpcController) {}
 
-  @Query(() => [PageSectionSchema])
+  @Query(() => [PageSection])
   @UseGuards(GqlAuthGuard)
-  async sectionList(
-    @Args('pageId', new ParamValidationPipe([ObjectIdParamValidation]))
-    pageId: string,
-  ) {
+  async sectionsByPage(
+    @Args() args: GetSectionsByPageArgs,
+  ): Promise<PageSection[]> {
     const result = await resolveRpcRequest(
       this.rpcClient.getPageSectionList({
-        pageId,
+        pageId: args.pageId,
       }),
     );
 
     return result.data;
   }
 
-  @Query(() => PageSectionSchema)
+  @Query(() => PageSection)
   @UseGuards(GqlAuthGuard)
-  async section(
-    @Args('sectionId', new ParamValidationPipe([ObjectIdParamValidation]))
-    sectionId: string,
-  ) {
+  async section(@Args() args: GetSectionArgs): Promise<PageSection> {
     const result = await resolveRpcRequest(
       this.rpcClient.getPageSection({
-        sectionId,
+        sectionId: args.sectionId,
       }),
     );
 
     return result.data;
   }
 
-  @Mutation(() => PageSectionSchema)
+  @Mutation(() => PageSection)
   @UseGuards(GqlAuthGuard)
   async createSection(
     @CurrentAccount() account: AuthAccount,
-    @Args('pageId', new ParamValidationPipe([ObjectIdParamValidation]))
-    pageId: string,
-    @Args('input', new ParamValidationPipe([EmptyObjectValidation]))
-    input: CreateSectionInput,
-  ) {
+    @Args() args: CreateSectionArgs,
+  ): Promise<PageSection> {
     const result = await resolveRpcRequest(
       this.rpcClient.createSection({
-        pageId,
-        index: input.index,
+        index: args.index,
+        pageId: args.pageId,
         requestedUserId: account.id,
       }),
     );
@@ -68,45 +62,37 @@ export class GqlSectionsResolver {
     return result.data;
   }
 
-  @Mutation(() => PageSectionSchema)
+  @Mutation(() => PageSection)
   @UseGuards(GqlAuthGuard)
   async updateSectionFormat(
     @CurrentAccount() account: AuthAccount,
-    @Args('pageId', new ParamValidationPipe([ObjectIdParamValidation]))
-    pageId: string,
-    @Args('sectionId', new ParamValidationPipe([ObjectIdParamValidation]))
-    sectionId: string,
-    @Args('input', new ParamValidationPipe([EmptyObjectValidation]))
-    input: UpdateSectionFormatInput,
+    @Args() args: UpdateSectionFormatArgs,
   ) {
     const result = await resolveRpcRequest(
       this.rpcClient.updateSectionFormat({
-        pageId,
-        sectionId,
-        format: input,
+        pageId: args.pageId,
+        sectionId: args.sectionId,
         requestedUserId: account.id,
+        columnGap: args.columnGap,
+        rowGap: args.rowGap,
+        rowsCount: args.rowGap,
       }),
     );
 
     return result.data;
   }
 
-  @Mutation(() => PageSectionSchema)
+  @Mutation(() => PageSection)
   @UseGuards(GqlAuthGuard)
   async updateSectionIndex(
     @CurrentAccount() account: AuthAccount,
-    @Args('pageId', new ParamValidationPipe([ObjectIdParamValidation]))
-    pageId: string,
-    @Args('sectionId', new ParamValidationPipe([ObjectIdParamValidation]))
-    sectionId: string,
-    @Args('index')
-    index: number,
-  ) {
+    @Args() args: UpdateSectionIndexArgs,
+  ): Promise<PageSection> {
     const result = await resolveRpcRequest(
       this.rpcClient.updateSectionIndex({
-        index,
-        pageId,
-        sectionId,
+        index: args.index,
+        pageId: args.pageId,
+        sectionId: args.sectionId,
         requestedUserId: account.id,
       }),
     );
@@ -114,19 +100,16 @@ export class GqlSectionsResolver {
     return result.data;
   }
 
-  @Mutation(() => PageSectionSchema)
+  @Mutation(() => PageSection)
   @UseGuards(GqlAuthGuard)
   async deleteSection(
     @CurrentAccount() account: AuthAccount,
-    @Args('pageId', new ParamValidationPipe([ObjectIdParamValidation]))
-    pageId: string,
-    @Args('sectionId', new ParamValidationPipe([ObjectIdParamValidation]))
-    sectionId: string,
-  ) {
+    @Args() args: SectionMetaArgs,
+  ): Promise<PageSection> {
     const result = await resolveRpcRequest(
       this.rpcClient.deleteSection({
-        pageId,
-        sectionId,
+        pageId: args.pageId,
+        sectionId: args.sectionId,
         requestedUserId: account.id,
       }),
     );
@@ -134,19 +117,16 @@ export class GqlSectionsResolver {
     return result.data;
   }
 
-  @Mutation(() => PageSectionSchema)
+  @Mutation(() => PageSection)
   @UseGuards(GqlAuthGuard)
   async cloneSection(
     @CurrentAccount() account: AuthAccount,
-    @Args('pageId', new ParamValidationPipe([ObjectIdParamValidation]))
-    pageId: string,
-    @Args('sectionId', new ParamValidationPipe([ObjectIdParamValidation]))
-    sectionId: string,
+    @Args() args: SectionMetaArgs,
   ) {
     const result = await resolveRpcRequest(
       this.rpcClient.cloneSection({
-        pageId,
-        sectionId,
+        pageId: args.pageId,
+        sectionId: args.sectionId,
         requestedUserId: account.id,
       }),
     );

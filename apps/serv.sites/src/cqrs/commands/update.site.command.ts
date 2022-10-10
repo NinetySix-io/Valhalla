@@ -4,10 +4,10 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 import { UpdateSiteRequest, UpdateSiteResponse } from '@app/protobuf';
 
-import { SiteTransformer } from '@app/entities/sites/transformer';
+import { SiteProto } from '../transformers/site.proto';
 import { SiteUpdatedEvent } from '../events/site.updated.event';
 import { SitesModel } from '@app/entities/sites';
 
@@ -38,7 +38,7 @@ export class UpdateSiteHandler
       .lean()
       .orFail();
 
-    const serialized = new SiteTransformer(site).proto;
+    const serialized = Serializer.from(SiteProto).serialize(site);
     this.eventBus.publish(new SiteUpdatedEvent(serialized));
     return { data: serialized };
   }

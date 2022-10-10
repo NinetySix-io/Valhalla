@@ -9,11 +9,16 @@ import {
   CreatePageResponse,
   EditStatus,
 } from '@app/protobuf';
-import { CreatePayload, RpcHandler, toObjectId } from '@valhalla/serv.core';
+import {
+  CreatePayload,
+  RpcHandler,
+  Serializer,
+  toObjectId,
+} from '@valhalla/serv.core';
 
 import { PageCreatedEvent } from '../events/page.created.event';
+import { PageProto } from '../transformers/page.proto';
 import { PageSchema } from '@app/entities/pages/schemas';
-import { PageTransformer } from '@app/entities/pages/transformers';
 import { PagesModel } from '@app/entities/pages';
 
 export class CreatePageCommand implements ICommand {
@@ -47,7 +52,7 @@ export class CreatePageHandler
     };
 
     const page = await this.pages.create(payload);
-    const serialized = new PageTransformer(page).proto;
+    const serialized = Serializer.from(PageProto).serialize(page.toJSON());
     this.eventBus.publish(new PageCreatedEvent(serialized));
     return { data: serialized };
   }

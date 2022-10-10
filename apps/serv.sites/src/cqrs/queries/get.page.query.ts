@@ -1,9 +1,9 @@
 import { GetPageRequest, GetPageResponse } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { RpcHandler, Serializer } from '@valhalla/serv.core';
 
-import { PageTransformer } from '@app/entities/pages/transformers';
+import { PageProto } from '../transformers/page.proto';
 import { PagesModel } from '@app/entities/pages';
-import { RpcHandler } from '@valhalla/serv.core';
 
 export class GetPageQuery implements IQuery {
   constructor(public readonly request: GetPageRequest) {}
@@ -18,7 +18,7 @@ export class GetPageHandler
   async execute(command: GetPageQuery): Promise<GetPageResponse> {
     const pageId = command.request.pageId;
     const page = await this.pagesEntity.findById(pageId).lean().orFail();
-    const serialized = PageTransformer.fromEntity(page).proto;
+    const serialized = Serializer.from(PageProto).serialize(page);
     return { data: serialized };
   }
 }

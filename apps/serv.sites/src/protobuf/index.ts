@@ -51,9 +51,9 @@ export interface Site {
 }
 
 export interface SectionFormat {
-  rowsCount?: number | undefined;
-  columnGap?: number | undefined;
-  rowGap?: number | undefined;
+  rowsCount: number;
+  columnGap: number;
+  rowGap: number;
 }
 
 export interface PageSection {
@@ -65,7 +65,7 @@ export interface PageSection {
   updatedAt?: Date;
 }
 
-export interface PageElementPlatform {
+export interface PageElementArea {
   x: number;
   y: number;
   height: number;
@@ -83,9 +83,9 @@ export interface PageElement {
   updatedBy: string;
   createdBy: string;
   group: string;
-  desktop?: PageElementPlatform;
-  tablet?: PageElementPlatform | undefined;
-  mobile?: PageElementPlatform | undefined;
+  desktop?: PageElementArea;
+  tablet?: PageElementArea | undefined;
+  mobile?: PageElementArea | undefined;
   createdAt?: Date;
   updatedAt?: Date;
   type?: { $case: "text"; text: TextElement };
@@ -237,7 +237,9 @@ export interface UpdateSectionFormatRequest {
   pageId: string;
   sectionId: string;
   requestedUserId: string;
-  format?: SectionFormat;
+  rowsCount?: number | undefined;
+  columnGap?: number | undefined;
+  rowGap?: number | undefined;
 }
 
 export interface UpdateSectionResponse {
@@ -293,9 +295,9 @@ export interface DeleteManyPageElementsResponse {
 export interface AddPageElementRequest {
   requestedUserId: string;
   groupId: string;
-  desktop?: PageElementPlatform;
-  tablet?: PageElementPlatform | undefined;
-  mobile?: PageElementPlatform | undefined;
+  desktop?: PageElementArea;
+  tablet?: PageElementArea | undefined;
+  mobile?: PageElementArea | undefined;
   type?: { $case: "text"; text: TextElement };
 }
 
@@ -315,9 +317,9 @@ export interface DeletePageElementResponse {
 export interface UpdatePageElementRequest {
   requestedUserId: string;
   elementId: string;
-  desktop?: PageElementPlatform | undefined;
-  tablet?: PageElementPlatform | undefined;
-  mobile?: PageElementPlatform | undefined;
+  desktop?: PageElementArea | undefined;
+  tablet?: PageElementArea | undefined;
+  mobile?: PageElementArea | undefined;
   type?: { $case: "text"; text: TextElement };
 }
 

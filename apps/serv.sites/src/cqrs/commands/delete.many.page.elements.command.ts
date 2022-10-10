@@ -8,9 +8,11 @@ import {
   DeleteManyPageElementsRequest,
   DeleteManyPageElementsResponse,
 } from '@app/protobuf';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
-import { PageElementTransformer } from '@app/entities/page.elements/transformer';
+import { FilterQuery } from 'mongoose';
+import { PageElementProto } from '../transformers/page.element.proto';
+import { PageElementSchema } from '@app/entities/page.elements/schemas';
 import { PageElementsDeletedEvent } from '../events/page.elements.deleted.event';
 import { PageElementsModel } from '@app/entities/page.elements';
 
@@ -20,7 +22,7 @@ export class DeleteManyPageElementsCommand implements ICommand {
 
 @CommandHandler(DeleteManyPageElementsCommand)
 @RpcHandler()
-export class DeletePageElementHandler
+export class DeleteManyPageElementsHandler
   implements
     ICommandHandler<
       DeleteManyPageElementsCommand,
@@ -29,7 +31,7 @@ export class DeletePageElementHandler
 {
   constructor(
     private readonly eventBus: EventBus,
-    private readonly elementsEntity: PageElementsModel,
+    private readonly pageElements: PageElementsModel,
   ) {}
 
   async execute(
@@ -37,18 +39,15 @@ export class DeletePageElementHandler
   ): Promise<DeleteManyPageElementsResponse> {
     const { elementIdList } = command.request;
     const elementIds = elementIdList.map((id) => toObjectId(id));
-    const elements = await this.elementsEntity
-      .find()
-      .where('_id')
-      .in(elementIds)
-      .lean();
+    const filter: FilterQuery<PageElementSchema> = {
+      _id: {
+        $in: elementIds,
+      },
+    };
 
-    await this.elementsEntity.deleteMany().where('_id').in(elementIds);
-
-    const serialized = elements.map(
-      (element) => new PageElementTransformer(element).proto,
-    );
-
+    const elements = await this.pageElements.find(filter).lean();
+    await this.pageElements.deleteMany(filter);
+    const serialized = Serializer.from(PageElementProto).serialize(elements);
     this.eventBus.publish(new PageElementsDeletedEvent(serialized));
     return { data: serialized };
   }

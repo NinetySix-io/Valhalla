@@ -6,11 +6,11 @@ import {
   ICommandHandler,
 } from '@nestjs/cqrs';
 import { DeletePageRequest, DeletePageResponse } from '@app/protobuf';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
 import { DeletePageElementListByGroupCommand } from './delete.page.element.list.by.group.command';
 import { PageDeletedEventEvent } from '../events/page.deleted.event';
-import { PageTransformer } from '@app/entities/pages/transformers';
+import { PageProto } from '../transformers/page.proto';
 import { PagesModel } from '@app/entities/pages';
 
 export class DeletePageCommand implements ICommand {
@@ -45,7 +45,7 @@ export class DeletePageHandler
       ),
     );
 
-    const serialized = new PageTransformer(deletedPage).proto;
+    const serialized = Serializer.from(PageProto).serialize(deletedPage);
     this.eventBus.publish(
       new PageDeletedEventEvent({
         ...serialized,

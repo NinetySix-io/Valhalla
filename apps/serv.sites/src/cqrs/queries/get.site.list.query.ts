@@ -1,10 +1,10 @@
 import { GetSiteListRequest, GetSiteListResponse } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
 import { FilterQuery } from 'mongoose';
+import { SiteProto } from '../transformers/site.proto';
 import { SiteSchema } from '@app/entities/sites/schema';
-import { SiteTransformer } from '@app/entities/sites/transformer';
 import { SitesModel } from '@app/entities/sites';
 import isEmpty from 'lodash.isempty';
 
@@ -28,8 +28,7 @@ export class GetSiteListHandler
     }
 
     const sites = await this.sites.find(query).lean();
-    return {
-      data: sites.map((site) => SiteTransformer.fromEntity(site).proto),
-    };
+    const serialized = Serializer.from(SiteProto).serialize(sites);
+    return { data: serialized };
   }
 }

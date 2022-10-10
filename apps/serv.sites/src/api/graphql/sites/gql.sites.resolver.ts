@@ -1,21 +1,18 @@
-import { SiteSchema } from '@app/entities/sites/schema';
 import { gRpcController } from '@app/grpc/grpc.controller';
-import { Site } from '@app/protobuf';
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
   AccountActiveOrg,
   AuthAccount,
   CurrentAccount,
-  EmptyObjectValidation,
   GqlAuthGuard,
-  ObjectIdParamValidation,
-  ParamValidationPipe,
   resolveRpcRequest,
 } from '@valhalla/serv.core';
-import { CreateSiteInput } from './inputs/create.site.input';
-import { UpdateSiteInput } from './inputs/update.site.input';
-import { SiteUpdatedResponse } from './responses/site.updated.response';
+import { CreateSiteArgs } from './gql.args/create.site.args';
+import { GetSiteArgs } from './gql.args/get.site.args';
+import { UpdateSiteArgs } from './gql.args/update.site.input';
+import { SiteUpdatedResponse } from './gql.responses/site.updated.response';
+import { Site } from './gql.types/site';
 
 @Resolver()
 export class GqlSitesResolver {
@@ -26,11 +23,11 @@ export class GqlSitesResolver {
   async createSite(
     @CurrentAccount() account: AuthAccount,
     @AccountActiveOrg() orgId: string,
-    @Args('input') input: CreateSiteInput,
+    @Args() args: CreateSiteArgs,
   ): Promise<SiteUpdatedResponse> {
     const result = await resolveRpcRequest(
       this.rpcClient.createSite({
-        name: input.name,
+        name: args.name,
         ownerId: orgId,
         requestedUserId: account.id,
       }),
@@ -43,25 +40,22 @@ export class GqlSitesResolver {
   @UseGuards(GqlAuthGuard)
   async updateSite(
     @CurrentAccount() account: AuthAccount,
-    @Args('input', new ParamValidationPipe([EmptyObjectValidation]))
-    input: UpdateSiteInput,
-    @Args('id', new ParamValidationPipe([ObjectIdParamValidation]))
-    siteId: string,
+    @Args() args: UpdateSiteArgs,
   ): Promise<SiteUpdatedResponse> {
     const result = await resolveRpcRequest(
       this.rpcClient.updateSite({
-        name: input.name,
+        name: args.name,
+        siteId: args.siteId,
         requestedUserId: account.id,
-        siteId: siteId,
       }),
     );
 
     return result.data;
   }
 
-  @Query(() => [SiteSchema])
+  @Query(() => [Site])
   @UseGuards(GqlAuthGuard)
-  async siteList(@AccountActiveOrg() orgId: string): Promise<Site[]> {
+  async siteByOwner(@AccountActiveOrg() orgId: string): Promise<Site[]> {
     const result = await resolveRpcRequest(
       this.rpcClient.getSiteList({
         ownerId: orgId,
@@ -71,15 +65,12 @@ export class GqlSitesResolver {
     return result.data;
   }
 
-  @Query(() => SiteSchema)
+  @Query(() => Site)
   @UseGuards(GqlAuthGuard)
-  async site(
-    @Args('id', new ParamValidationPipe([ObjectIdParamValidation]))
-    siteId: string,
-  ): Promise<Site> {
+  async site(@Args() args: GetSiteArgs): Promise<Site> {
     const result = await resolveRpcRequest(
       this.rpcClient.getSite({
-        siteId,
+        siteId: args.siteId,
       }),
     );
 

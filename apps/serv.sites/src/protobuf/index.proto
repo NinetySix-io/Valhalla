@@ -96,9 +96,9 @@ message Site {
 }
 
 message SectionFormat {
-  optional int32 rowsCount = 1;
-  optional int32 columnGap = 2;
-  optional int32 rowGap = 3;
+  int32 rowsCount = 1;
+  int32 columnGap = 2;
+  int32 rowGap = 3;
 }
 
 message PageSection {
@@ -111,7 +111,7 @@ message PageSection {
   google.protobuf.Timestamp updatedAt = 11;
 }
 
-message PageElementPlatform {
+message PageElementArea {
   int32 x = 1;
   int32 y = 2;
   int32 height = 3;
@@ -132,9 +132,9 @@ message PageElement {
 
   string group = 4;
 
-  PageElementPlatform desktop = 5;
-  optional PageElementPlatform tablet = 6;
-  optional PageElementPlatform mobile = 7;
+  PageElementArea desktop = 5;
+  optional PageElementArea tablet = 6;
+  optional PageElementArea mobile = 7;
 
   google.protobuf.Timestamp createdAt = 8;
   google.protobuf.Timestamp updatedAt = 9;
@@ -296,7 +296,9 @@ message UpdateSectionFormatRequest {
   string pageId = 1;
   string sectionId = 4;
   string requestedUserId = 5;
-  SectionFormat format = 6;
+  optional int32 rowsCount = 6;
+  optional int32 columnGap = 7;
+  optional int32 rowGap = 8;
 }
 
 message UpdateSectionResponse {
@@ -357,9 +359,9 @@ message AddPageElementRequest {
   string requestedUserId = 1;
   string groupId = 2;
 
-  PageElementPlatform desktop = 4;
-  optional PageElementPlatform tablet = 5;
-  optional PageElementPlatform mobile = 6;
+  PageElementArea desktop = 4;
+  optional PageElementArea tablet = 5;
+  optional PageElementArea mobile = 6;
 
   oneof type {
     TextElement text = 10;
@@ -383,9 +385,9 @@ message UpdatePageElementRequest {
   string requestedUserId = 1;
   string elementId = 2;
 
-  optional PageElementPlatform desktop = 4;
-  optional PageElementPlatform tablet = 5;
-  optional PageElementPlatform mobile = 6;
+  optional PageElementArea desktop = 4;
+  optional PageElementArea tablet = 5;
+  optional PageElementArea mobile = 6;
 
   oneof type {
     TextElement text = 11;

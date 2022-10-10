@@ -8,9 +8,9 @@ import {
   DeletePageElementRequest,
   DeletePageElementResponse,
 } from '@app/protobuf';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
-import { PageElementTransformer } from '@app/entities/page.elements/transformer';
+import { PageElementProto } from '../transformers/page.element.proto';
 import { PageElementsDeletedEvent } from '../events/page.elements.deleted.event';
 import { PageElementsModel } from '@app/entities/page.elements';
 
@@ -42,9 +42,8 @@ export class DeletePageElementHandler
 
     element.updatedBy = deletedBy;
     element.updatedAt = new Date();
-    const serialized = new PageElementTransformer(element).proto;
+    const serialized = Serializer.from(PageElementProto).serialize(element);
     this.eventBus.publish(new PageElementsDeletedEvent([serialized]));
-
     return {
       data: serialized,
     };

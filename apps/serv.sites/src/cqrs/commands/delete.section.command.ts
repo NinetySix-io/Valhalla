@@ -1,13 +1,20 @@
 import {
+  CommandBus,
   CommandHandler,
   EventBus,
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
 import { DeleteSectionRequest, DeleteSectionResponse } from '@app/protobuf';
-import { RpcHandler, compareId, toObjectId } from '@valhalla/serv.core';
+import {
+  RpcHandler,
+  Serializer,
+  compareId,
+  toObjectId,
+} from '@valhalla/serv.core';
 
-import { PageSectionTransformer } from '@app/entities/pages/transformers';
+import { DeletePageElementListByGroupCommand } from './delete.page.element.list.by.group.command';
+import { PageSectionProto } from '../transformers/page.section.proto';
 import { PagesModel } from '@app/entities/pages';
 import { SectionDeletedEvent } from '../events/section.deleted.event';
 
@@ -22,6 +29,7 @@ export class DeleteSectionHandler
 {
   constructor(
     private readonly eventBus: EventBus,
+    private readonly commandBus: CommandBus,
     private readonly pagesEntity: PagesModel,
   ) {}
 
@@ -39,9 +47,20 @@ export class DeleteSectionHandler
       .orFail(() => new Error(`${pageId} not found!`));
 
     const section = page.sections.find(compareId(sectionId));
-    section.updatedBy = updatedBy;
-    section.updatedAt = new Date();
-    const serialized = new PageSectionTransformer(section).proto;
+    const serialized = Serializer.from(PageSectionProto).serialize({
+      ...section,
+      updatedBy,
+      updatedAt: new Date(),
+    });
+
+    //TODO: this should be trigger from event bus somewhere
+    this.commandBus.execute(
+      new DeletePageElementListByGroupCommand({
+        groupId: section.id,
+        requestedUserId,
+      }),
+    );
+
     this.eventBus.publish(new SectionDeletedEvent(serialized));
     return { data: serialized };
   }

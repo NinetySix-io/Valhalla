@@ -7,13 +7,14 @@ import {
 import {
   CreatePayload,
   RpcHandler,
+  Serializer,
   compareId,
   toObjectId,
 } from '@valhalla/serv.core';
 import { CreateSectionRequest, CreateSectionResponse } from '@app/protobuf';
 
+import { PageSectionProto } from '../transformers/page.section.proto';
 import { PageSectionSchema } from '@app/entities/pages/schemas';
-import { PageSectionTransformer } from '@app/entities/pages/transformers';
 import { PagesModel } from '@app/entities/pages';
 import { SectionCreatedEvent } from '../events/section.created.event';
 import mongoose from 'mongoose';
@@ -68,7 +69,7 @@ export class CreateSectionHandler
       .orFail(() => new Error(`${pageId} does not exists!`));
 
     const section = page.sections.find(compareId(sectionId));
-    const serialized = new PageSectionTransformer(section).proto;
+    const serialized = Serializer.from(PageSectionProto).serialize(section);
     this.eventBus.publish(new SectionCreatedEvent(serialized));
     return { data: serialized };
   }

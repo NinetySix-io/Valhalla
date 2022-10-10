@@ -4,13 +4,18 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { RpcHandler, compareId, toObjectId } from '@valhalla/serv.core';
+import {
+  RpcHandler,
+  Serializer,
+  compareId,
+  toObjectId,
+} from '@valhalla/serv.core';
 import {
   UpdateSectionIndexRequest,
   UpdateSectionResponse,
 } from '@app/protobuf';
 
-import { PageSectionTransformer } from '@app/entities/pages/transformers';
+import { PageSectionProto } from '../transformers/page.section.proto';
 import { PagesModel } from '@app/entities/pages';
 
 export class UpdateSectionIndexCommand implements ICommand {
@@ -38,13 +43,12 @@ export class UpdateSectionIndexHandler
       .findById(pageId)
       .orFail(() => new Error(`${pageId} not found!`));
 
+    const serializer = Serializer.from(PageSectionProto);
     const currentIndex = page.sections.findIndex(compareId(sectionId));
     if (index === -1) {
       throw new Error(`${sectionId} not found!`);
     } else if (index === currentIndex) {
-      return {
-        data: new PageSectionTransformer(page.sections[index]).proto,
-      };
+      return { data: serializer.serialize(page.sections[index]) };
     }
 
     const section = page.sections[currentIndex];
@@ -56,7 +60,7 @@ export class UpdateSectionIndexHandler
     page.sections.splice(index, 0, section);
 
     await page.save();
-    const serialized = new PageSectionTransformer(section).proto;
+    const serialized = serializer.serialize(section);
     return { data: serialized };
   }
 }

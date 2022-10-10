@@ -4,16 +4,16 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 import {
   TextElement,
   UpdatePageElementRequest,
   UpdatePageElementResponse,
 } from '@app/protobuf';
 
+import { PageElementProto } from '../transformers/page.element.proto';
 import { PageElementSchema } from '@app/entities/page.elements/schemas';
 import { PageElementTextSchema } from '@app/entities/page.elements/variants/text.variant';
-import { PageElementTransformer } from '@app/entities/page.elements/transformer';
 import { PageElementsModel } from '@app/entities/page.elements';
 import { PageElementsUpdatedEvent } from '../events/page.elements.updated.event';
 import { UpdateQuery } from 'mongoose';
@@ -84,13 +84,11 @@ export class UpdatePageElementHandler
     }
 
     const finalSignOff = merge(payload, { $set: { updatedBy } });
-    const element = await this.pageElements.findByIdAndUpdate(
-      elementId,
-      finalSignOff,
-      { new: true },
-    );
+    const element = await this.pageElements
+      .findByIdAndUpdate(elementId, finalSignOff, { new: true })
+      .lean();
 
-    const serialized = new PageElementTransformer(element).proto;
+    const serialized = Serializer.from(PageElementProto).serialize(element);
     this.eventBus.publish(new PageElementsUpdatedEvent([serialized]));
     return { data: serialized };
   }

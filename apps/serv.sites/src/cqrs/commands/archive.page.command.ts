@@ -9,10 +9,10 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
 import { PageArchivedEvent } from '../events/page.archived.event';
-import { PageTransformer } from '@app/entities/pages/transformers';
+import { PageProto } from '../transformers/page.proto';
 import { PagesModel } from '@app/entities/pages';
 
 export class ArchivePageCommand implements ICommand {
@@ -43,7 +43,7 @@ export class ArchivePageHandler
       .lean()
       .orFail();
 
-    const serialized = new PageTransformer(page).proto;
+    const serialized = Serializer.from(PageProto).serialize(page);
     this.eventBus.publish(new PageArchivedEvent(serialized));
     return { data: serialized };
   }

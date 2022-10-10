@@ -3,9 +3,9 @@ import {
   GetPageSectionListResponse,
 } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
-import { PageSectionTransformer } from '@app/entities/pages/transformers';
+import { PageSectionProto } from '../transformers/page.section.proto';
 import { PagesModel } from '@app/entities/pages';
 
 export class GetPageSectionListQuery implements IQuery {
@@ -26,10 +26,11 @@ export class GetPageSectionListHandler
     const page = await this.pagesEntity
       .findById(pageId)
       .select({ sections: 1 })
+      .lean()
       .orFail(() => new Error('Page not found!'));
 
-    const serialized = page.sections.map(
-      (section) => new PageSectionTransformer(section).proto,
+    const serialized = Serializer.from(PageSectionProto).serialize(
+      page.sections,
     );
 
     return { data: serialized };

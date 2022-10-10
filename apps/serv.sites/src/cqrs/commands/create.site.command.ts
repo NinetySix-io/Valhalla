@@ -4,7 +4,12 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { CreatePayload, RpcHandler, toObjectId } from '@valhalla/serv.core';
+import {
+  CreatePayload,
+  RpcHandler,
+  Serializer,
+  toObjectId,
+} from '@valhalla/serv.core';
 import {
   CreateSiteRequest,
   CreateSiteResponse,
@@ -12,8 +17,8 @@ import {
 } from '@app/protobuf';
 
 import { SiteCreatedEvent } from '../events/site.created.event';
+import { SiteProto } from '../transformers/site.proto';
 import { SiteSchema } from '@app/entities/sites/schema';
-import { SiteTransformer } from '@app/entities/sites/transformer';
 import { SitesModel } from '@app/entities/sites';
 
 export class CreateSiteCommand implements ICommand {
@@ -43,8 +48,9 @@ export class CreateSiteHandler
       updatedBy,
       status,
     };
+
     const site = await this.sites.create(payload);
-    const serialized = SiteTransformer.fromEntity(site).proto;
+    const serialized = Serializer.from(SiteProto).serialize(site.toJSON());
     const event = new SiteCreatedEvent(serialized);
     this.eventBus.publish(event);
     return { data: serialized };

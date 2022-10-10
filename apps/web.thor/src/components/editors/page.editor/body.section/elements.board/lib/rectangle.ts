@@ -71,7 +71,7 @@ export class Rectangle {
     const left = element.desktop.x;
     const top = element.desktop.y;
     const right = element.desktop.width + left;
-    const bottom = element.mobile.height + top;
+    const bottom = element.desktop.height + top;
 
     return new Rectangle({
       left,

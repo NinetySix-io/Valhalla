@@ -3,9 +3,9 @@ import {
   GetPageElementListByGroupResponse,
 } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
-import { PageElementTransformer } from '@app/entities/page.elements/transformer';
+import { PageElementProto } from '../transformers/page.element.proto';
 import { PageElementsModel } from '@app/entities/page.elements';
 
 export class GetPageElementListByGroupQuery implements IQuery {
@@ -28,12 +28,7 @@ export class GetPageElementListByGroupHandler
   ): Promise<GetPageElementListByGroupResponse> {
     const group = toObjectId(command.request.groupId);
     const elements = await this.pageElements.find({ group }).lean();
-    const serialized = elements.map(
-      (element) => new PageElementTransformer(element).proto,
-    );
-
-    return {
-      data: serialized,
-    };
+    const serialized = Serializer.from(PageElementProto).serialize(elements);
+    return { data: serialized };
   }
 }
