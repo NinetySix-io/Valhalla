@@ -82,6 +82,7 @@ export interface PageElement {
   id: string;
   updatedBy: string;
   createdBy: string;
+  group: string;
   desktop?: PageElementPlatform;
   tablet?: PageElementPlatform | undefined;
   mobile?: PageElementPlatform | undefined;

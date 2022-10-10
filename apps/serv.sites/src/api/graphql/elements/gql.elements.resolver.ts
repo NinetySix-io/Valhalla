@@ -16,6 +16,7 @@ import { AddTextElementInput } from './inputs/add.text.element.input';
 import { ElementUnion } from './inputs/element.union';
 import { UpdateTextElementInput } from './inputs/update.text.element.input';
 import { PageElementTextSchema } from '@app/entities/page.elements/variants/text.variant';
+import { PrimitiveElementType } from '@app/protobuf';
 
 @Resolver()
 export class GqlElementsResolver {
@@ -33,7 +34,25 @@ export class GqlElementsResolver {
       }),
     );
 
-    return result.data;
+    const transformedData: Array<typeof ElementUnion> = [];
+    for (const { type, ...element } of result.data) {
+      if (type.$case === 'text') {
+        transformedData.push({
+          ...element,
+          ...type.text,
+          id: element.id,
+          type: PrimitiveElementType.TEXT,
+          desktop: {
+            ...element.desktop,
+            id: '',
+          },
+          // TODO: find a better solution?
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any);
+      }
+    }
+
+    return transformedData;
   }
 
   @Mutation(() => PageElementTextSchema, { description: 'Add text element' })
@@ -61,6 +80,7 @@ export class GqlElementsResolver {
         },
       }),
     );
+
     return result.data;
   }
 

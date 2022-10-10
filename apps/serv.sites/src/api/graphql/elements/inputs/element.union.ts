@@ -5,7 +5,7 @@ import { createUnionType } from '@nestjs/graphql';
 export const ElementUnion = createUnionType({
   name: 'ElementUnion',
   types: () => [PageElementTextSchema] as const,
-  resolveType(value: PageElementTextSchema) {
+  resolveType: (value: PageElementTextSchema) => {
     if (value.type === PrimitiveElementType.TEXT) {
       return PageElementTextSchema;
     }

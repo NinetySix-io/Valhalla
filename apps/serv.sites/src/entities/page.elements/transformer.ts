@@ -45,6 +45,7 @@ export class PageElementTransformer extends PageElementSchema {
       updatedAt: this.updatedAt,
       updatedBy: String(this.updatedBy),
       createdBy: String(this.createdBy),
+      group: String(this.group),
     };
   }
 }

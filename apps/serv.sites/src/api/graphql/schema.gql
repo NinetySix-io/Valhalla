@@ -182,8 +182,8 @@ type PageElementTextSchema {
 
   """User ID"""
   createdBy: String!
-  json: JSON!
-  html: String!
+  json: JSON
+  html: String
 }
 
 enum PrimitiveElementType {
@@ -292,8 +292,8 @@ input UpdateSectionFormatInput {
 }
 
 input AddTextElementInput {
-  json: JSON!
-  html: String!
+  json: JSON
+  html: String
   desktop: PlatformPositionInput!
   tablet: PlatformPositionInput
   mobile: PlatformPositionInput

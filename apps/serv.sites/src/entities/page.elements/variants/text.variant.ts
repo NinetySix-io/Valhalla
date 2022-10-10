@@ -12,11 +12,11 @@ export class PageElementTextSchema extends PageElementSchema {
   //TODO: type this
   @typegoose.prop({ type: mongoose.Schema.Types.Mixed })
   @Expose()
-  @Field(() => JSON)
+  @Field(() => JSON, { nullable: true })
   json: unknown;
 
   @typegoose.prop()
   @Expose()
-  @Field()
+  @Field({ nullable: true })
   html: string;
 }
