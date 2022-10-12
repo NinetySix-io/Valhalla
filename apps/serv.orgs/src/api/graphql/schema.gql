@@ -46,14 +46,20 @@ type OrganizationBySlugResponse {
 }
 
 type OrganizationMember {
-  user: String!
+  id: ObjectID!
+  user: ObjectID!
   status: InvitationStatus!
   role: OrganizationRole!
   createdAt: DateTime
   updatedAt: DateTime
-  updatedBy: String!
-  profileImageUrl: String
+  updatedBy: ObjectID!
+  profileImageUrl: URL
 }
+
+"""
+A field whose value conforms with the standard mongodb object ID as described here: https://docs.mongodb.com/manual/reference/method/ObjectId/#ObjectId. Example: 5e5677d71bdc2ae76344968c
+"""
+scalar ObjectID
 
 enum InvitationStatus {
   PENDING
@@ -68,6 +74,11 @@ enum OrganizationRole {
   MEMBER
   GUESS
 }
+
+"""
+A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt.
+"""
+scalar URL
 
 type OrgCreatedResponse {
   id: String!
@@ -92,10 +103,10 @@ type Mutation {
   createOrganization(name: String!, plan: String!): OrgCreatedResponse!
 
   """Archive an organization"""
-  archiveOrganization(orgId: String!): Void!
+  archiveOrganization(orgId: ObjectID!): Void!
 
   """Restore an organization that was archived"""
-  restoreOrganization(orgId: String!): Void!
+  restoreOrganization(orgId: ObjectID!): Void!
 }
 
 """Represents NULL values"""

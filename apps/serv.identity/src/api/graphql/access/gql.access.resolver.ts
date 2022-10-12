@@ -10,12 +10,13 @@ import {
   RefreshToken,
   resolveRpcRequest,
 } from '@valhalla/serv.core';
+import { VoidResolver } from 'graphql-scalars';
 import { tryNice } from 'try-nice';
-import { AccessTokenQuery } from './inputs/get.access.token.input';
-import { LoginWithVerificationInput } from './inputs/login.with.verification.input';
-import { RegisterInput } from './inputs/register.input';
-import { AuthResponse } from './responses/auth.response';
-import { TokenResponse } from './responses/token.response';
+import { GetAccessTokenArgs } from './gql.args/get.access.token.args';
+import { LoginWithVerificationArgs } from './gql.args/login.with.verification.input';
+import { AccountRegisterArgs } from './gql.args/register.input';
+import { AuthResponse } from './gql.responses/auth.response';
+import { TokenResponse } from './gql.responses/token.response';
 
 @Resolver()
 export class GqlAuthResolver {
@@ -25,10 +26,10 @@ export class GqlAuthResolver {
     description: 'Register user account',
   })
   async registerAccount(
-    @Args('input') input: RegisterInput,
+    @Args() args: AccountRegisterArgs,
     @Auth() auth: AuthManager,
   ): Promise<AuthResponse> {
-    const result = await resolveRpcRequest(this.rpcClient.register(input));
+    const result = await resolveRpcRequest(this.rpcClient.register(args));
     const { accessToken, refreshToken, account } = result;
 
     if (!accessToken) {
@@ -54,10 +55,10 @@ export class GqlAuthResolver {
     description: 'Login to account with verification code',
   })
   async loginWithVerification(
-    @Args('input') input: LoginWithVerificationInput,
     @Auth() auth: AuthManager,
+    @Args() args: LoginWithVerificationArgs,
   ): Promise<AuthResponse> {
-    const command = this.rpcClient.loginWithVerification(input);
+    const command = this.rpcClient.loginWithVerification(args);
     const result = await resolveRpcRequest(command);
     const { accessToken, account, refreshToken } = result;
 
@@ -80,10 +81,10 @@ export class GqlAuthResolver {
     };
   }
 
-  @Mutation(() => Boolean, {
+  @Mutation(() => VoidResolver, {
     description: 'Invalid current session',
   })
-  async logout(@Auth() auth: AuthManager): Promise<boolean> {
+  async logout(@Auth() auth: AuthManager): Promise<void> {
     await resolveRpcRequest(
       this.rpcClient.logout({
         refreshToken: auth.getRefreshToken(),
@@ -91,8 +92,6 @@ export class GqlAuthResolver {
     );
 
     auth.removeRefreshToken();
-
-    return true;
   }
 
   @Query(() => TokenResponse, {
@@ -100,7 +99,7 @@ export class GqlAuthResolver {
   })
   async accessToken(
     @RefreshToken() refreshToken: string,
-    @Args('query') query: AccessTokenQuery,
+    @Args() args: GetAccessTokenArgs,
   ): Promise<TokenResponse> {
     if (!refreshToken) {
       throw new ForbiddenException('Refresh Token not found!');
@@ -110,7 +109,7 @@ export class GqlAuthResolver {
       resolveRpcRequest(
         this.rpcClient.provisionAccessToken({
           refreshToken,
-          organization: query.organization,
+          organization: args.organizationId,
         }),
       ),
     );

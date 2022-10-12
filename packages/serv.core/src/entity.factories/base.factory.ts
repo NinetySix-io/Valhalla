@@ -64,7 +64,7 @@ const allowedMethods = [
 type AllowedMethods = typeof allowedMethods[number];
 
 export type CreatePayload<TModel extends BaseSchema> = PartialByRecursively<
-  OmitRecursively<TModel, 'createdAt' | 'updatedAt' | 'id'>,
+  OmitRecursively<TModel, 'createdAt' | 'updatedAt'>,
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   //@ts-ignore
   '_id'

@@ -79,7 +79,11 @@ export class AccessProvisionService {
   ) {
     const token = await this.refreshTokens.findById(refreshToken).orFail();
     const account = await this.accounts.findById(token.account).orFail();
-    const accessToken = await this.createAccessToken(account, options);
+    const accessToken = await this.createAccessToken(
+      { id: String(account._id) },
+      options,
+    );
+
     this.logger.warn(
       `Refresh Token[${refreshToken}] generated an access token`,
     );
@@ -112,7 +116,6 @@ export class AccessProvisionService {
     const content: JwtContent = {
       account: {
         id: account.id,
-        displayName: account.displayName,
       },
     };
 

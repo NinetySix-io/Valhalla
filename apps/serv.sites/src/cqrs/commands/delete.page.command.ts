@@ -6,7 +6,12 @@ import {
   ICommandHandler,
 } from '@nestjs/cqrs';
 import { DeletePageRequest, DeletePageResponse } from '@app/protobuf';
-import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
+import {
+  RpcHandler,
+  Serializer,
+  getObjectIdString,
+  toObjectId,
+} from '@valhalla/serv.core';
 
 import { DeletePageElementListByGroupCommand } from './delete.page.element.list.by.group.command';
 import { PageDeletedEventEvent } from '../events/page.deleted.event';
@@ -39,7 +44,7 @@ export class DeletePageHandler
     deletedPage.sections.forEach((section) =>
       this.commandBus.execute(
         new DeletePageElementListByGroupCommand({
-          groupId: section.id,
+          groupId: getObjectIdString(section),
           requestedUserId,
         }),
       ),

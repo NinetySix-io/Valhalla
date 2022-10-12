@@ -4,12 +4,12 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
+import { RpcHandler, Serializer } from '@valhalla/serv.core';
 import { VerifyPhoneRequest, VerifyPhoneResponse } from '@app/protobuf';
 
-import { AccountTransformer } from '@app/entities/accounts/transformer';
+import { AccountProto } from '../protos/account.proto';
 import { AccountsModel } from '@app/entities/accounts';
 import { PhoneVerifiedEvent } from '../events/phone.verified.event';
-import { RpcHandler } from '@valhalla/serv.core';
 import { VerificationsModel } from '@app/entities/verifications';
 
 export class VerifyPhoneCommand implements ICommand {
@@ -39,6 +39,7 @@ export class VerifyPhoneHandler
 
     const verification = await this.verifications
       .findById(accountPhone.verification)
+      .lean()
       .orFail();
 
     const isValid = await this.verifications.validateCode(
@@ -56,7 +57,7 @@ export class VerifyPhoneHandler
 
     this.eventBus.publish(
       new PhoneVerifiedEvent({
-        ...new AccountTransformer(account).proto,
+        ...Serializer.from(AccountProto).serialize(account.toJSON()),
         phoneVerified: accountPhone.value,
       }),
     );

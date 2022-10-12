@@ -13,11 +13,16 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { CreatePayload, RpcHandler, toObjectId } from '@valhalla/serv.core';
+import {
+  CreatePayload,
+  RpcHandler,
+  Serializer,
+  toObjectId,
+} from '@valhalla/serv.core';
 
+import { AccountProto } from '../protos/account.proto';
 import { AccountRegisteredEvent } from '../events/account.registered.event';
 import { AccountSchema } from '@app/entities/accounts/schema';
-import { AccountTransformer } from '@app/entities/accounts/transformer';
 import { AccountsModel } from '@app/entities/accounts';
 import { CreateAccessCommand } from './create.access.command';
 import { SendVerificationCodeCommand } from './send.verification.code.command';
@@ -115,7 +120,7 @@ export class RegisterHandler
       phones,
     });
 
-    const accountProto = new AccountTransformer(account).proto;
+    const accountProto = Serializer.from(AccountProto).serialize(account);
     const event = new AccountRegisteredEvent(accountProto, 'local');
     const tokens = await this.makeToken(accountProto);
 

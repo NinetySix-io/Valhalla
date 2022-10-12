@@ -1,10 +1,12 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { ArgsType, Field, registerEnumType } from '@nestjs/graphql';
 
 import { IsEmailOrPhone } from '@valhalla/serv.core';
 import { VerificationChannel } from '@app/protobuf';
 
-@InputType()
-export class SendVerificationCodeInput {
+registerEnumType(VerificationChannel, { name: 'VerificationChannel' });
+
+@ArgsType()
+export class SendVerificationCodeArgs {
   @Field({ description: 'Sending verification code target' })
   @IsEmailOrPhone()
   readonly destination!: string;

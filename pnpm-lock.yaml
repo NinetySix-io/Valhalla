@@ -143,6 +143,7 @@ importers:
       dayjs: ^1.11.5
       dotenv: ^16.0.2
       graphql: ^16.6.0
+      graphql-scalars: ^1.19.0
       jsonwebtoken: ^8.5.1
       kindagoose: ^1.2.4
       lodash.isempty: ^4.4.0
@@ -186,6 +187,7 @@ importers:
       dayjs: 1.11.5
       dotenv: 16.0.2
       graphql: 16.6.0
+      graphql-scalars: 1.19.0_graphql@16.6.0
       jsonwebtoken: 8.5.1
       kindagoose: 1.2.4_4vff2j6rcwhjtisogqxccoa3e4
       lodash.isempty: 4.4.0
@@ -202,7 +204,7 @@ importers:
       try-nice: 4.0.4
     devDependencies:
       '@nestjs/cli': 8.2.8
-      '@nestjs/schematics': 8.0.11_typescript@4.8.3
+      '@nestjs/schematics': 8.0.11_qul7ung6gmj6jydd3dgpqap7gu
       '@nestjs/testing': 8.4.7_nqdqjzydlmtoifrhbibafyh3qe
       '@types/bcryptjs': 2.4.2
       '@types/cookie-signature': 1.0.4
@@ -308,6 +310,7 @@ importers:
       dayjs: ^1.11.5
       dotenv: ^16.0.2
       graphql: ^16.6.0
+      graphql-scalars: ^1.19.0
       graphql-type-json: ^0.3.2
       jest: ^29.0.3
       kindagoose: ^1.2.4
@@ -343,6 +346,7 @@ importers:
       dayjs: 1.11.5
       dotenv: 16.0.2
       graphql: 16.6.0
+      graphql-scalars: 1.19.0_graphql@16.6.0
       graphql-type-json: 0.3.2_graphql@16.6.0
       kindagoose: 1.2.4_4vff2j6rcwhjtisogqxccoa3e4
       lodash.compact: 3.0.1
@@ -5457,7 +5461,7 @@ packages:
     peerDependencies:
       '@nestjs/common': ^6.0.0 || ^7.0.0 || ^8.0.0
     dependencies:
-      '@nestjs/common': 8.4.7_sw3hi7xto3wciy2liawireange
+      '@nestjs/common': 8.4.7_allg6cauirbqzgqcmexy2wdnoq
       '@types/jsonwebtoken': 8.5.8
       jsonwebtoken: 8.5.1
     dev: false
@@ -5639,7 +5643,7 @@ packages:
       '@nestjs/common': ^6.0.0 || ^7.0.0 || ^8.0.0
       passport: ^0.4.0 || ^0.5.0 || ^0.6.0
     dependencies:
-      '@nestjs/common': 8.4.7_sw3hi7xto3wciy2liawireange
+      '@nestjs/common': 8.4.7_allg6cauirbqzgqcmexy2wdnoq
       passport: 0.6.0
     dev: false
 
@@ -5717,21 +5721,6 @@ packages:
       jsonc-parser: 3.0.0
       pluralize: 8.0.0
       typescript: 4.8.2
-    transitivePeerDependencies:
-      - chokidar
-    dev: true
-
-  /@nestjs/schematics/8.0.11_typescript@4.8.3:
-    resolution: {integrity: sha512-W/WzaxgH5aE01AiIErE9QrQJ73VR/M/8p8pq0LZmjmNcjZqU5kQyOWUxZg13WYfSpJdOa62t6TZRtFDmgZPoIg==}
-    peerDependencies:
-      typescript: ^3.4.5 || ^4.3.5
-    dependencies:
-      '@angular-devkit/core': 13.3.5
-      '@angular-devkit/schematics': 13.3.5
-      fs-extra: 10.1.0
-      jsonc-parser: 3.0.0
-      pluralize: 8.0.0
-      typescript: 4.8.3
     transitivePeerDependencies:
       - chokidar
     dev: true

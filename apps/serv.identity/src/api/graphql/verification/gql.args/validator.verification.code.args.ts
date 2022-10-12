@@ -1,9 +1,9 @@
+import { ArgsType } from '@nestjs/graphql';
 import { Field } from '@nestjs/graphql';
-import { InputType } from '@nestjs/graphql';
 import { IsNotEmpty } from 'class-validator';
 
-@InputType()
-export class ValidateVerificationCodeInput {
+@ArgsType()
+export class ValidateVerificationCodeArgs {
   @Field({ description: 'Verification ID' })
   @IsNotEmpty()
   readonly verificationId!: string;

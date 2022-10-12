@@ -1,20 +1,19 @@
-import { AccountSchema } from '@app/entities/accounts/schema';
-
 import { gRpcController } from '@app/grpc/grpc.controller';
-import { Account } from '@app/protobuf';
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
   AuthAccount,
   CurrentAccount,
-  EmailParamValidation,
   GqlAuthGuard,
-  ParamValidationPipe,
-  PhoneParamValidation,
   resolveRpcRequest,
 } from '@valhalla/serv.core';
-import { UpdateAccountInput } from './inputs/update.account.input';
-import { SessionResponse } from './responses/session.response';
+import { AddEmailArgs } from './gql.args/add.email.args';
+import { AddPhoneArgs } from './gql.args/add.phone.args';
+import { RemoveEmailArgs } from './gql.args/remove.email.args';
+import { RemovePhoneArgs } from './gql.args/remove.phone.args';
+import { UpdateAccountArgs } from './gql.args/update.account.args';
+import { SessionResponse } from './gql.responses/session.response';
+import { Account } from './gql.types/account';
 
 @Resolver()
 export class GqlAccountResolver {
@@ -29,7 +28,7 @@ export class GqlAccountResolver {
   }
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => AccountSchema, {
+  @Query(() => Account, {
     description: 'Get current logged in user information',
   })
   async account(@CurrentAccount() account: AuthAccount): Promise<Account> {
@@ -46,14 +45,14 @@ export class GqlAccountResolver {
   @Mutation(() => Boolean, { description: 'Update account' })
   async updateAccount(
     @CurrentAccount() account: AuthAccount,
-    @Args('input') input: UpdateAccountInput,
+    @Args() args: UpdateAccountArgs,
   ) {
     await resolveRpcRequest(
       this.rpcClient.updateAccount({
         accountId: account.id,
-        displayName: input.displayName,
-        firstName: input.firstName,
-        lastName: input.lastName,
+        displayName: args.displayName,
+        firstName: args.firstName,
+        lastName: args.lastName,
       }),
     );
 
@@ -66,13 +65,12 @@ export class GqlAccountResolver {
   })
   async addEmailToAccount(
     @CurrentAccount() account: AuthAccount,
-    @Args('email', new ParamValidationPipe([EmailParamValidation]))
-    email: string,
+    @Args() args: AddEmailArgs,
   ): Promise<boolean> {
     await resolveRpcRequest(
       this.rpcClient.addEmailToAccount({
         accountId: account.id,
-        email,
+        email: args.email,
       }),
     );
 
@@ -85,13 +83,12 @@ export class GqlAccountResolver {
   })
   async addPhoneToAccount(
     @CurrentAccount() account: AuthAccount,
-    @Args('phone', new ParamValidationPipe([PhoneParamValidation]))
-    phone: string,
+    @Args() args: AddPhoneArgs,
   ): Promise<boolean> {
     await resolveRpcRequest(
       this.rpcClient.addPhoneToAccount({
         accountId: account.id,
-        phone,
+        phone: args.phone,
       }),
     );
 
@@ -104,13 +101,12 @@ export class GqlAccountResolver {
   })
   async removeEmailFromAccount(
     @CurrentAccount() account: AuthAccount,
-    @Args('email', new ParamValidationPipe([EmailParamValidation]))
-    email: string,
+    @Args() args: RemoveEmailArgs,
   ): Promise<boolean> {
     await resolveRpcRequest(
       this.rpcClient.removeEmailFromAccount({
         accountId: account.id,
-        email,
+        emailId: args.emailId,
       }),
     );
 
@@ -123,13 +119,12 @@ export class GqlAccountResolver {
   })
   async removePhoneFromAccount(
     @CurrentAccount() account: AuthAccount,
-    @Args('phone', new ParamValidationPipe([PhoneParamValidation]))
-    phone: string,
+    @Args() args: RemovePhoneArgs,
   ): Promise<boolean> {
     await resolveRpcRequest(
       this.rpcClient.removePhoneFromAccount({
         accountId: account.id,
-        phone,
+        phoneId: args.phoneId,
       }),
     );
 

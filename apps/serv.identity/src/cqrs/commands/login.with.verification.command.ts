@@ -11,12 +11,12 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
+import { RpcHandler, Serializer } from '@valhalla/serv.core';
 
 import { AccountLoggedInEvent } from '../events/account.logged.in.event';
-import { AccountTransformer } from '@app/entities/accounts/transformer';
+import { AccountProto } from '../protos/account.proto';
 import { AccountsModel } from '@app/entities/accounts';
 import { CreateAccessCommand } from './create.access.command';
-import { RpcHandler } from '@valhalla/serv.core';
 import { VerificationsModel } from '@app/entities/verifications';
 
 export class LoginWithVerificationCommand implements ICommand {
@@ -61,7 +61,7 @@ export class LoginWithVerificationHandler
     }
 
     const account = await this.accounts.findByUsername(username).orFail();
-    const accountProto = new AccountTransformer(account).proto;
+    const accountProto = Serializer.from(AccountProto).serialize(account);
     const tokens = await this.makeToken(accountProto);
     this.eventBus.publish(new AccountLoggedInEvent(accountProto));
     verification.delete();

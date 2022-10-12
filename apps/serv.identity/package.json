@@ -20,7 +20,7 @@
     "test:cov": "jest --coverage",
     "test:e2e": "jest --config ./test/jest-e2e.json --runInBand",
     "test:ci": "jest --ci --runInBand",
-    "proto:generate": "node ../../scripts/generate.proto"
+    "codegen": "node ../../scripts/generate.proto"
   },
   "dependencies": {
     "@apollo/subgraph": "^2.1.1",
@@ -48,6 +48,7 @@
     "dayjs": "^1.11.5",
     "dotenv": "^16.0.2",
     "graphql": "^16.6.0",
+    "graphql-scalars": "^1.19.0",
     "jsonwebtoken": "^8.5.1",
     "kindagoose": "^1.2.4",
     "lodash.isempty": "^4.4.0",

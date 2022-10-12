@@ -1,4 +1,5 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { ObjectIDResolver, URLResolver } from 'graphql-scalars';
 
 import { SiteProto } from '@app/cqrs/transformers/site.proto';
 import { SiteStatus } from '@app/protobuf';
@@ -7,22 +8,22 @@ registerEnumType(SiteStatus, { name: 'SiteStatus' });
 
 @ObjectType()
 export class Site implements SiteProto {
-  @Field()
+  @Field(() => ObjectIDResolver)
   id: string;
 
   @Field()
   name: string;
 
-  @Field()
+  @Field(() => ObjectIDResolver)
   createdBy: string;
 
-  @Field()
+  @Field(() => ObjectIDResolver)
   updatedBy: string;
 
-  @Field()
+  @Field(() => SiteStatus)
   status: SiteStatus;
 
-  @Field()
+  @Field(() => URLResolver)
   url?: string;
 
   @Field()

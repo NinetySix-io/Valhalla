@@ -1,10 +1,10 @@
 import { ObjectType, PickType } from '@nestjs/graphql';
 
-import { AccountSchema } from '@app/entities/accounts/schema';
+import { Account } from '../gql.types/account';
 
 @ObjectType()
 export class SessionResponse extends PickType(
-  AccountSchema,
+  Account,
   ['id', 'displayName'],
   ObjectType,
 ) {}

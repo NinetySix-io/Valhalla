@@ -11,7 +11,6 @@ export enum VerificationChannel {
 
 export interface AccessTokenAccountContent {
   id: string;
-  displayName: string;
 }
 
 export interface AccessTokenOrContent {
@@ -45,12 +44,12 @@ export interface AddPhoneToAccountRequest {
 
 export interface RemoveEmailFromAccountRequest {
   accountId: string;
-  email: string;
+  emailId: string;
 }
 
 export interface RemovePhoneFromAccountRequest {
   accountId: string;
-  phone: string;
+  phoneId: string;
 }
 
 export interface VerifyPhoneRequest {

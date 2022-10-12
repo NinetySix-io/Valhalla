@@ -1,5 +1,6 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { InvitationStatus, OrgRole } from '@app/protobuf';
+import { ObjectIDResolver, URLResolver } from 'graphql-scalars';
 
 import { IsObjectId } from '@valhalla/serv.core';
 import { OrgMemberProto } from '@app/cqrs/protos/org.member.proto';
@@ -9,9 +10,11 @@ registerEnumType(OrgRole, { name: 'OrganizationRole' });
 
 @ObjectType()
 export class OrganizationMember implements OrgMemberProto {
+  @Field(() => ObjectIDResolver)
+  @IsObjectId()
   id: string;
 
-  @Field()
+  @Field(() => ObjectIDResolver)
   @IsObjectId()
   user: string;
 
@@ -27,11 +30,11 @@ export class OrganizationMember implements OrgMemberProto {
   @Field({ nullable: true })
   updatedAt?: Date;
 
-  @Field()
+  @Field(() => ObjectIDResolver)
   @IsObjectId()
   updatedBy: string;
 
-  @Field({ nullable: true })
+  @Field(() => URLResolver, { nullable: true })
   profileImageUrl?: string;
 
   organization: string;

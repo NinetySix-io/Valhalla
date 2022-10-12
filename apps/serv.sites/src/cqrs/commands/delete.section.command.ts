@@ -10,6 +10,7 @@ import {
   RpcHandler,
   Serializer,
   compareId,
+  getObjectIdString,
   toObjectId,
 } from '@valhalla/serv.core';
 
@@ -56,7 +57,7 @@ export class DeleteSectionHandler
     //TODO: this should be trigger from event bus somewhere
     this.commandBus.execute(
       new DeletePageElementListByGroupCommand({
-        groupId: section.id,
+        groupId: getObjectIdString(section),
         requestedUserId,
       }),
     );

@@ -1,27 +1,28 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 import { Min } from 'class-validator';
+import { NonNegativeIntResolver } from 'graphql-scalars';
 import { PageElementAreaProto } from '@app/cqrs/transformers/page.element.area.proto';
 
 @ObjectType()
 export class ElementArea implements PageElementAreaProto {
-  @Field()
+  @Field(() => NonNegativeIntResolver)
   @Min(0)
   x: number;
 
-  @Field()
+  @Field(() => NonNegativeIntResolver)
   @Min(0)
   y: number;
 
-  @Field()
+  @Field(() => NonNegativeIntResolver)
   @Min(1)
   height: number;
 
-  @Field()
+  @Field(() => NonNegativeIntResolver)
   @Min(1)
   width: number;
 
-  @Field()
+  @Field(() => NonNegativeIntResolver)
   @Min(0)
   isVisible: boolean;
 }

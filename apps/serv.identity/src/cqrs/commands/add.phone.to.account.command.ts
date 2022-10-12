@@ -11,12 +11,13 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
-import { AccountTransformer } from '@app/entities/accounts/transformer';
+import { AccountProto } from '../protos/account.proto';
 import { AccountsModel } from '@app/entities/accounts';
 import { PhoneAddedToAccountEvent } from '../events/phone.added.to.account.event';
 import { SendVerificationCodeCommand } from './send.verification.code.command';
+import mongoose from 'mongoose';
 
 export class AddPhoneToAccountCommand implements ICommand {
   constructor(public readonly request: AddPhoneToAccountRequest) {}
@@ -62,6 +63,7 @@ export class AddPhoneToAccountHandler
       );
 
       account.phones.push({
+        _id: new mongoose.Types.ObjectId(),
         value: command.request.phone,
         isVerified: false,
         isPrimary: false,
@@ -74,7 +76,7 @@ export class AddPhoneToAccountHandler
       isAdded = true;
     }
 
-    const serialized = new AccountTransformer(account).proto;
+    const serialized = Serializer.from(AccountProto).serialize(account);
 
     if (isAdded) {
       this.eventBus.publish(

@@ -4,6 +4,7 @@ import { Transform, Type } from 'class-transformer';
 
 import { ElementArea } from './element.area';
 import { IsObjectId } from '@valhalla/serv.core';
+import { ObjectIDResolver } from 'graphql-scalars';
 import { PageElementProto } from '@app/cqrs/transformers/page.element.proto';
 import { ValidateNested } from 'class-validator';
 
@@ -11,7 +12,7 @@ registerEnumType(PrimitiveElementType, { name: 'ElementType' });
 
 @ObjectType({ isAbstract: true })
 export class Element implements Omit<PageElementProto, 'type'> {
-  @Field()
+  @Field(() => ObjectIDResolver)
   @IsObjectId()
   id: string;
 
@@ -19,15 +20,15 @@ export class Element implements Omit<PageElementProto, 'type'> {
   @Transform((p: { obj: PageElement }) => p.obj.type.$case)
   type: PrimitiveElementType;
 
-  @Field()
+  @Field(() => ObjectIDResolver)
   @IsObjectId()
   updatedBy: string;
 
-  @Field()
+  @Field(() => ObjectIDResolver)
   @IsObjectId()
   createdBy: string;
 
-  @Field()
+  @Field(() => ObjectIDResolver)
   @IsObjectId()
   group: string;
 

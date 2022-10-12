@@ -3,13 +3,14 @@ import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { EditStatus } from '@app/protobuf';
 import { IsEnum } from 'class-validator';
 import { IsObjectId } from '@valhalla/serv.core';
+import { ObjectIDResolver } from 'graphql-scalars';
 import { PageProto } from '@app/cqrs/transformers/page.proto';
 
 registerEnumType(EditStatus, { name: 'EditStatus' });
 
 @ObjectType()
 export class Page implements PageProto {
-  @Field()
+  @Field(() => ObjectIDResolver)
   @IsObjectId()
   id: string;
 
@@ -19,7 +20,7 @@ export class Page implements PageProto {
   @Field({ nullable: true })
   description?: string;
 
-  @Field({ nullable: true })
+  @Field(() => ObjectIDResolver)
   site: string;
 
   @Field()
@@ -29,11 +30,11 @@ export class Page implements PageProto {
   @Field({ nullable: true })
   isLoneTitle?: boolean;
 
-  @Field()
+  @Field(() => ObjectIDResolver)
   @IsObjectId()
   createdBy: string;
 
-  @Field()
+  @Field(() => ObjectIDResolver)
   @IsObjectId()
   updatedBy: string;
 

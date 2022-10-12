@@ -4,12 +4,12 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
+import { RpcHandler, Serializer } from '@valhalla/serv.core';
 import { VerifyEmailRequest, VerifyEmailResponse } from '@app/protobuf';
 
-import { AccountTransformer } from '@app/entities/accounts/transformer';
+import { AccountProto } from '../protos/account.proto';
 import { AccountsModel } from '@app/entities/accounts';
 import { EmailVerifiedEvent } from '../events/email.verified.event';
-import { RpcHandler } from '@valhalla/serv.core';
 import { VerificationsModel } from '@app/entities/verifications';
 
 export class VerifyEmailCommand implements ICommand {
@@ -38,6 +38,7 @@ export class VerifyEmailHandler
 
     const verification = await this.verifications
       .findById(accountEmail.verification)
+      .lean()
       .orFail();
 
     const isValid = await this.verifications.validateCode(
@@ -55,7 +56,7 @@ export class VerifyEmailHandler
 
     this.eventBus.publish(
       new EmailVerifiedEvent({
-        ...new AccountTransformer(account).proto,
+        ...Serializer.from(AccountProto).serialize(account.toJSON()),
         emailVerified: accountEmail.value,
       }),
     );

@@ -1,12 +1,13 @@
+import * as Struct from 'superstruct';
+
 import { Account, FindAccountRequest } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
+import { AccountProto } from '../protos/account.proto';
 import { AccountSchema } from '@app/entities/accounts/schema';
-import { AccountTransformer } from '@app/entities/accounts/transformer';
 import { AccountsModel } from '@app/entities/accounts';
 import { FilterQuery } from 'mongoose';
-import * as Struct from 'superstruct';
 import isEmpty from 'lodash.isempty';
 
 export class FindAccountQuery implements IQuery {
@@ -56,8 +57,8 @@ export class FindAccountHandler
   async execute(command: FindAccountQuery): Promise<Account> {
     const payload = this.validateRequest(command.request);
     const filter = this.buildFilter(payload);
-    const user = await this.accounts.findOne(filter).orFail();
-    const userProto = new AccountTransformer(user).proto;
-    return userProto;
+    const user = await this.accounts.findOne(filter).lean().orFail();
+    const serialized = Serializer.from(AccountProto).serialize(user);
+    return serialized;
   }
 }

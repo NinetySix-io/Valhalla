@@ -6,13 +6,6 @@ import {
   typegoose,
 } from '@valhalla/serv.core';
 
-import { VerificationChannel } from '@app/protobuf';
-import { registerEnumType } from '@nestjs/graphql';
-
-registerEnumType(VerificationChannel, {
-  name: 'VerificationChannel',
-});
-
 @SimpleModel('verifications')
 @ExpiryIndex({ expiredAt: 1 })
 @typegoose.index({ owner: 1 })

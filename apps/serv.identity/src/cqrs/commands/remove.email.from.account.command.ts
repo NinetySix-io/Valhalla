@@ -5,11 +5,16 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
+import {
+  RpcHandler,
+  Serializer,
+  compareObjectId,
+  toObjectId,
+} from '@valhalla/serv.core';
 
-import { AccountTransformer } from '@app/entities/accounts/transformer';
+import { AccountProto } from '../protos/account.proto';
 import { AccountsModel } from '@app/entities/accounts';
 import { EmailRemovedFromAccountEvent } from '../events/email.removed.from.account.event';
-import { RpcHandler } from '@valhalla/serv.core';
 
 export class RemoveEmailFromAccountCommand implements ICommand {
   constructor(public readonly request: RemoveEmailFromAccountRequest) {}
@@ -26,24 +31,25 @@ export class RemoveEmailFromAccountHandler
   ) {}
 
   async execute(command: RemoveEmailFromAccountCommand): Promise<Account> {
+    const accountId = toObjectId(command.request.accountId);
+    const emailId = toObjectId(command.request.emailId);
     const account = await this.accounts
-      .findById(command.request.accountId)
+      .findOneAndUpdate(
+        { _id: accountId, 'emails._id': emailId },
+        { $pull: { emails: { _id: emailId } } },
+      )
+      .lean()
       .orFail();
 
-    const originalLen = account.emails.length;
-    account.emails = account.emails.filter(
-      (email) => !email.isPrimary && email.value !== command.request.email,
-    );
-
-    const hasRemoval = originalLen !== account.emails.length;
-    const serialized = new AccountTransformer(account).proto;
-
-    if (hasRemoval) {
-      await account.save();
-      this.eventBus.publish(
-        new EmailRemovedFromAccountEvent(command.request.email, serialized),
-      );
+    const email = account.emails.find(compareObjectId(emailId));
+    if (!email) {
+      throw new Error('Unexpected error!');
     }
+
+    const serialized = Serializer.from(AccountProto).serialize(account);
+    this.eventBus.publish(
+      new EmailRemovedFromAccountEvent(email.value, serialized),
+    );
 
     return serialized;
   }

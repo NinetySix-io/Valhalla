@@ -1,8 +1,8 @@
 import { gRpcController } from '@app/grpc/grpc.controller';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { resolveRpcRequest } from '@valhalla/serv.core';
-import { SendVerificationCodeInput } from './inputs/send.verification.code.input';
-import { ValidateVerificationCodeInput } from './inputs/validator.verification.code.input';
+import { SendVerificationCodeArgs } from './gql.args/send.verification.code.args';
+import { ValidateVerificationCodeArgs } from './gql.args/validator.verification.code.args';
 
 @Resolver()
 export class GqlVerificationResolver {
@@ -12,10 +12,10 @@ export class GqlVerificationResolver {
     description: 'Send verification code to email',
   })
   async sendVerificationCode(
-    @Args('input') input: SendVerificationCodeInput,
+    @Args() args: SendVerificationCodeArgs,
   ): Promise<string> {
     const result = await resolveRpcRequest(
-      this.rpcClient.sendVerificationCode(input),
+      this.rpcClient.sendVerificationCode(args),
     );
 
     return result.id;
@@ -25,10 +25,10 @@ export class GqlVerificationResolver {
     description: 'Validate verification code',
   })
   async validateVerificationCode(
-    @Args('input') input: ValidateVerificationCodeInput,
+    @Args() args: ValidateVerificationCodeArgs,
   ): Promise<boolean> {
     const result = await resolveRpcRequest(
-      this.rpcClient.validateVerification(input),
+      this.rpcClient.validateVerification(args),
     );
 
     return result.isValid;

@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 import { Element } from './element';
-import JSON from 'graphql-type-json';
+import { JSONObjectResolver } from 'graphql-scalars';
 import { PageElement } from '@app/protobuf';
 import { TextElementProto } from '@app/cqrs/transformers/page.element.text.proto';
 import { Transform } from 'class-transformer';
@@ -12,7 +12,7 @@ export class ElementText extends Element implements TextElementProto {
   @Transform((p: { obj: PageElement }) => p.obj.type.text.html)
   html: string;
 
-  @Field(() => JSON)
+  @Field(() => JSONObjectResolver)
   @Transform((p: { obj: PageElement }) => p.obj.type.text.json)
   json?: { [key: string]: unknown };
 }
