@@ -8,9 +8,9 @@ import {
   MarkDeleteMemberRequest,
   MarkDeleteMemberResponse,
 } from '@app/protobuf';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
-import { OrgMemberTransformer } from '@app/entities/org.members/transformer';
+import { OrgMemberProto } from '../protos/org.member.proto';
 import { OrgMembersModel } from '@app/entities/org.members';
 import { OrganizationMemberDeletingEvent } from '../events/org.member.deleting.event';
 import { OrganizationMemberUpdatedEvent } from '../events/org.member.updated.event';
@@ -38,20 +38,19 @@ export class MarkDeleteOrgMemberHandler
   async execute(
     command: MarkDeleteOrgMemberCommand,
   ): Promise<MarkDeleteMemberResponse> {
-    const { requestedUserId, orgId, memberId } = command.request;
-    const user = toObjectId(memberId);
-    const organization = toObjectId(orgId);
-    const member = await this.members.findOne({ user, organization }).orFail();
+    const updatedBy = toObjectId(command.request.requestedUserId);
+    const memberId = toObjectId(command.request.memberId);
+    const organization = toObjectId(command.request.orgId);
+    const member = await this.members
+      .findOneAndUpdate(
+        { _id: memberId, organization, deletingAt: { $exists: false } },
+        { $set: { deletingAt: this.deletingDate, updatedBy } },
+        { new: true },
+      )
+      .lean()
+      .orFail();
 
-    if (member.deletingAt) {
-      throw new Error('Member is already marked for deletion');
-    }
-
-    member.updatedBy = toObjectId(requestedUserId);
-    member.deletingAt = this.deletingDate;
-    await member.save();
-
-    const serialized = new OrgMemberTransformer(member).proto;
+    const serialized = Serializer.from(OrgMemberProto).serialize(member);
     this.eventBus.publishAll([
       new OrganizationMemberDeletingEvent(serialized),
       new OrganizationMemberUpdatedEvent(serialized),

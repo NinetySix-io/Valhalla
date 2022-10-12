@@ -1,33 +1,38 @@
-import { OrgMemberSchema } from '@app/entities/org.members/schema';
-import { OrganizationSchema } from '@app/entities/organizations/schema';
 import { gRpcController } from '@app/grpc/grpc.controller';
-import { Member, Organization, OrgPlan } from '@app/protobuf';
+import { OrgPlan } from '@app/protobuf';
 import { NotFoundException, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
   AccountActiveOrg,
   AuthAccount,
   CurrentAccount,
+  EmptyStringValidation,
   GqlAuthGuard,
+  ParamValidationPipe,
   resolveRpcRequest,
 } from '@valhalla/serv.core';
-import { CreateOrganizationInput } from './inputs/create.org.input';
-import { OrganizationBySlugResponse } from './responses/org.by.slug.response';
-
+import { ArchiveOrgArgs } from './gql.args/archive.org.args';
+import { CreateOrganizationArgs } from './gql.args/create.org.args';
+import { RestoreOrgArgs } from './gql.args/restore.org.args';
+import { OrganizationBySlugResponse } from './gql.responses/org.by.slug.response';
+import { Organization } from './gql.types/organization';
+import { OrganizationMember } from './gql.types/organization.member';
+import { VoidResolver } from 'graphql-scalars';
+import { OrgCreatedResponse } from './gql.responses/org.created.response';
 @Resolver()
 export class GqlOrganizationsResolver {
   constructor(private readonly rpcClient: gRpcController) {}
 
-  @Mutation(() => OrganizationSchema, { description: 'Create an organization' })
+  @Mutation(() => OrgCreatedResponse, { description: 'Create an organization' })
   @UseGuards(GqlAuthGuard)
   async createOrganization(
-    @Args('input') input: CreateOrganizationInput,
+    @Args() args: CreateOrganizationArgs,
     @CurrentAccount() account: AuthAccount,
-  ) {
+  ): Promise<OrgCreatedResponse> {
     const response = await resolveRpcRequest(
       this.rpcClient.createOrg({
         requestedUserId: account.id,
-        name: input.name,
+        name: args.name,
         plan: OrgPlan.FREE,
       }),
     );
@@ -35,45 +40,43 @@ export class GqlOrganizationsResolver {
     return response;
   }
 
-  @Mutation(() => String, { description: 'Archive an organization' })
+  @Mutation(() => VoidResolver, { description: 'Archive an organization' })
   @UseGuards(GqlAuthGuard)
   async archiveOrganization(
-    @Args('orgId') orgId: string,
     @CurrentAccount() account: AuthAccount,
-  ) {
-    const response = await resolveRpcRequest(
+    @Args() args: ArchiveOrgArgs,
+  ): Promise<void> {
+    await resolveRpcRequest(
       this.rpcClient.archiveOrg({
         requestedUserId: account.id,
-        orgId,
+        orgId: args.orgId,
       }),
     );
-
-    return response.id;
   }
 
-  @Mutation(() => String, {
+  @Mutation(() => VoidResolver, {
     description: 'Restore an organization that was archived',
   })
   @UseGuards(GqlAuthGuard)
   async restoreOrganization(
-    @Args('orgId') orgId: string,
     @CurrentAccount() account: AuthAccount,
-  ) {
-    const response = await resolveRpcRequest(
+    @Args() args: RestoreOrgArgs,
+  ): Promise<void> {
+    await resolveRpcRequest(
       this.rpcClient.restoreOrg({
         requestedUserId: account.id,
-        orgId,
+        orgId: args.orgId,
       }),
     );
-
-    return response.id;
   }
 
-  @Query(() => [OrganizationSchema], {
+  @Query(() => [Organization], {
     description: "Get current user's organizations memberships",
   })
   @UseGuards(GqlAuthGuard)
-  async organizations(@CurrentAccount() account: AuthAccount) {
+  async organizationsByMemberships(
+    @CurrentAccount() account: AuthAccount,
+  ): Promise<Organization[]> {
     const response = await resolveRpcRequest(
       this.rpcClient.getUserMemberships({
         userId: account.id,
@@ -83,11 +86,13 @@ export class GqlOrganizationsResolver {
     return response.organizations;
   }
 
-  @Query(() => [OrganizationSchema], {
+  @Query(() => [Organization], {
     description: 'Get current organization',
   })
   @UseGuards(GqlAuthGuard)
-  async organization(@AccountActiveOrg() orgId: string): Promise<Organization> {
+  async organizationByMembership(
+    @AccountActiveOrg() orgId: string,
+  ): Promise<Organization> {
     const { organization } = await resolveRpcRequest(
       this.rpcClient.getOrg({
         query: {
@@ -100,14 +105,14 @@ export class GqlOrganizationsResolver {
     return organization;
   }
 
-  @Query(() => OrgMemberSchema, {
+  @Query(() => OrganizationMember, {
     description: 'Get current organization membership',
   })
   @UseGuards(GqlAuthGuard)
-  async organizationMembership(
+  async organizationMembershipProfile(
     @CurrentAccount() account: AuthAccount,
     @AccountActiveOrg() orgId: string,
-  ): Promise<Member> {
+  ): Promise<OrganizationMember> {
     const { member } = await resolveRpcRequest(
       this.rpcClient.getMember({
         userId: account.id,
@@ -122,8 +127,9 @@ export class GqlOrganizationsResolver {
     description: 'Find organization by slug',
   })
   async organizationBySlug(
-    @Args('slug') slug: string,
-  ): Promise<Pick<Organization, 'id' | 'name'>> {
+    @Args('slug', new ParamValidationPipe([EmptyStringValidation]))
+    slug: string,
+  ): Promise<OrganizationBySlugResponse> {
     const { organization } = await resolveRpcRequest(
       this.rpcClient.getOrg({
         query: {

@@ -1,8 +1,8 @@
 import { GetMemberRequest, GetMemberResponse } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
-import { OrgMemberTransformer } from '@app/entities/org.members/transformer';
+import { OrgMemberProto } from '../protos/org.member.proto';
 import { OrgMembersModel } from '@app/entities/org.members';
 
 export class GetMemberQuery implements IQuery {
@@ -20,10 +20,12 @@ export class GetMemberHandler
     const { userId, orgId } = command.request;
     const user = toObjectId(userId);
     const organization = toObjectId(orgId);
-    const member = await this.members.findOne({ user, organization });
+    const member = await this.members
+      .findOne({ user, organization })
+      .lean()
+      .orFail();
 
-    return {
-      member: member ? new OrgMemberTransformer(member).proto : null,
-    };
+    const serialized = Serializer.from(OrgMemberProto).serialize(member);
+    return { member: serialized };
   }
 }

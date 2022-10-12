@@ -5,10 +5,10 @@ import {
   ICommandHandler,
 } from '@nestjs/cqrs';
 import { Organization, UpdateOrgLogoRequest } from '@app/protobuf';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
+import { OrgProto } from '../protos/org.proto';
 import { OrganizationLogoUpdatedEventEvent } from '../events/org.logo.url.updated.event';
-import { OrganizationTransformer } from '@app/entities/organizations/transformer';
 import { OrganizationUpdatedEvent } from '../events/org.updated.event';
 import { OrganizationsModel } from '@app/entities/organizations';
 
@@ -28,13 +28,17 @@ export class UpdateOrgLogoHandler
 
   async execute(command: UpdateOrgLogoCommand): Promise<Organization> {
     const { imageUrl, orgId, requestedUserId } = command.request;
-    const organization = await this.organizations.findById(orgId).orFail();
+    const updatedBy = toObjectId(requestedUserId);
+    const organization = await this.organizations
+      .findByIdAndUpdate(
+        orgId,
+        { $set: { logoUrl: imageUrl, updatedBy } },
+        { new: true },
+      )
+      .lean()
+      .orFail();
 
-    organization.logoUrl = imageUrl;
-    organization.updatedBy = toObjectId(requestedUserId);
-    organization.save();
-    const serialized = new OrganizationTransformer(organization).proto;
-
+    const serialized = Serializer.from(OrgProto).serialize(organization);
     this.eventBus.publishAll([
       new OrganizationUpdatedEvent(serialized),
       new OrganizationLogoUpdatedEventEvent(serialized),

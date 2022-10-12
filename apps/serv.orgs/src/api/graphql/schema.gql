@@ -22,39 +22,17 @@ directive @inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUM
 
 directive @override(from: String!) on FIELD_DEFINITION
 
-type OrgMemberSchema {
-  """Date entity was created"""
-  createdAt: DateTime!
-
-  """Date entity was updated"""
-  updatedAt: DateTime!
-
-  """Identifier of the entity"""
-  id: ID!
-
-  """ID of the account"""
-  user: String!
-
-  """ID of the organization"""
-  organization: String!
-
-  """ID of the account that sent out the invite"""
-  invitedBy: String
-
-  """URL of profile image"""
-  profileImageUrl: String
-
-  """ID of the account that last updated the member profile"""
-  updatedBy: String!
-
-  """Status of the organization member"""
-  status: OrgMemberStatus!
-
-  """Role of the organization member"""
-  role: OrgMemberRole!
-
-  """Timestamp in the profile should be deleted"""
-  deletingAt: DateTime
+type Organization {
+  id: String!
+  slug: String!
+  name: String!
+  createdBy: String!
+  createdAt: DateTime
+  updateBy: String!
+  updatedAt: DateTime
+  logoUrl: String
+  status: String!
+  plan: String!
 }
 
 """
@@ -62,13 +40,28 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-enum OrgMemberStatus {
+type OrganizationBySlugResponse {
+  id: String!
+  name: String!
+}
+
+type OrganizationMember {
+  user: String!
+  status: InvitationStatus!
+  role: OrganizationRole!
+  createdAt: DateTime
+  updatedAt: DateTime
+  updatedBy: String!
+  profileImageUrl: String
+}
+
+enum InvitationStatus {
   PENDING
   ACCEPTED
   REJECTED
 }
 
-enum OrgMemberRole {
+enum OrganizationRole {
   OWNER
   ADMIN
   DEVELOPER
@@ -76,67 +69,19 @@ enum OrgMemberRole {
   GUESS
 }
 
-type OrganizationSchema {
-  """Date entity was created"""
-  createdAt: DateTime!
-
-  """Date entity was updated"""
-  updatedAt: DateTime!
-
-  """Identifier of the entity"""
-  id: ID!
-
-  """Name of the organization"""
-  name: String!
-
-  """Organization status"""
-  status: OrganizationStatus!
-
-  """Unique slug identifier"""
-  slug: String!
-
-  """URL of the logo"""
-  logoUrl: String
-
-  """Subscription plan"""
-  plan: OrganizationPlan!
-
-  """ID of the account that created the organization"""
-  createdBy: String!
-
-  """ID of the account that last updated the organization"""
-  updatedBy: String!
-}
-
-"""Organization status"""
-enum OrganizationStatus {
-  ACTIVE
-  INACTIVE
-  SUSPENDED
-}
-
-"""Subscription plan"""
-enum OrganizationPlan {
-  FREE
-}
-
-type OrganizationBySlugResponse {
-  """Identifier of the entity"""
-  id: ID!
-
-  """Name of the organization"""
-  name: String!
+type OrgCreatedResponse {
+  id: String!
 }
 
 type Query {
   """Get current user's organizations memberships"""
-  organizations: [OrganizationSchema!]!
+  organizationsByMemberships: [Organization!]!
 
   """Get current organization"""
-  organization: [OrganizationSchema!]!
+  organizationByMembership: [Organization!]!
 
   """Get current organization membership"""
-  organizationMembership: OrgMemberSchema!
+  organizationMembershipProfile: OrganizationMember!
 
   """Find organization by slug"""
   organizationBySlug(slug: String!): OrganizationBySlugResponse!
@@ -144,21 +89,16 @@ type Query {
 
 type Mutation {
   """Create an organization"""
-  createOrganization(input: CreateOrganizationInput!): OrganizationSchema!
+  createOrganization(name: String!, plan: String!): OrgCreatedResponse!
 
   """Archive an organization"""
-  archiveOrganization(orgId: String!): String!
+  archiveOrganization(orgId: String!): Void!
 
   """Restore an organization that was archived"""
-  restoreOrganization(orgId: String!): String!
+  restoreOrganization(orgId: String!): Void!
 }
 
-input CreateOrganizationInput {
-  """Name of the organization"""
-  name: String!
-
-  """Subscription plan"""
-  plan: OrganizationPlan!
-}
+"""Represents NULL values"""
+scalar Void
 
 scalar link__Import

@@ -5,15 +5,15 @@ import {
   ICommandHandler,
 } from '@nestjs/cqrs';
 import { OrgStatus, Organization, RestoreOrgRequest } from '@app/protobuf';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
+import { OrgProto } from '../protos/org.proto';
 import { OrganizationRestoredEvent } from '../events/org.restored.event';
-import { OrganizationTransformer } from '@app/entities/organizations/transformer';
 import { OrganizationUpdatedEvent } from '../events/org.updated.event';
 import { OrganizationsModel } from '@app/entities/organizations';
 
 export class RestoreOrgCommand implements ICommand {
-  constructor(public readonly input: RestoreOrgRequest) {}
+  constructor(public readonly request: RestoreOrgRequest) {}
 }
 
 @CommandHandler(RestoreOrgCommand)
@@ -27,20 +27,18 @@ export class RestoreOrgHandler
   ) {}
 
   async execute(command: RestoreOrgCommand): Promise<Organization> {
-    const { orgId, requestedUserId } = command.input;
-    const organization = await this.organizations.findById(orgId).orFail();
+    const orgId = toObjectId(command.request.orgId);
+    const updatedBy = toObjectId(command.request.orgId);
+    const organization = await this.organizations
+      .findOneAndUpdate(
+        { _id: orgId, status: { $ne: OrgStatus.ACTIVE } },
+        { $set: { status: OrgStatus.ACTIVE, updatedBy } },
+        { new: true },
+      )
+      .lean()
+      .orFail();
 
-    if (organization.status === OrgStatus.ACTIVE) {
-      throw new Error('Organization is already active');
-    }
-
-    organization.status = OrgStatus.ACTIVE;
-    organization.updatedBy = toObjectId(requestedUserId);
-
-    await organization.save();
-
-    const serialized = new OrganizationTransformer(organization).proto;
-
+    const serialized = Serializer.from(OrgProto).serialize(organization);
     this.eventBus.publishAll([
       new OrganizationRestoredEvent(serialized),
       new OrganizationUpdatedEvent(serialized),

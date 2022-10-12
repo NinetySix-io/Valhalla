@@ -12,13 +12,13 @@ import {
   OrgStatus,
   Organization,
 } from '@app/protobuf';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
-import { OrgMemberTransformer } from '@app/entities/org.members/transformer';
+import { OrgMemberProto } from '../protos/org.member.proto';
 import { OrgMembersModel } from '@app/entities/org.members';
+import { OrgProto } from '../protos/org.proto';
 import { OrganizationCreatedEvent } from '../events/org.created.event';
 import { OrganizationMemberCreatedEvent } from '../events/org.member.created.event';
-import { OrganizationTransformer } from '@app/entities/organizations/transformer';
 import { OrganizationsModel } from '@app/entities/organizations';
 import { slugify } from '@valhalla/utilities';
 
@@ -70,8 +70,10 @@ export class CreateOrgHandler
       invitedBy: userId,
     });
 
-    const orgSerialized = new OrganizationTransformer(tenant).proto;
-    const memberSerialized = new OrgMemberTransformer(member).proto;
+    const orgSerialized = Serializer.from(OrgProto).serialize(tenant.toJSON());
+    const memberSerialized = Serializer.from(OrgMemberProto).serialize(
+      member.toJSON(),
+    );
 
     await this.eventBus.publishAll([
       new OrganizationCreatedEvent(orgSerialized),

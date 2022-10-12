@@ -5,10 +5,10 @@ import {
   ICommand,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
-import { OrganizationArchivedEvent } from '../events/org.arhived.event';
-import { OrganizationTransformer } from '@app/entities/organizations/transformer';
+import { OrgProto } from '../protos/org.proto';
+import { OrganizationArchivedEvent } from '../events/org.archived.event';
 import { OrganizationUpdatedEvent } from '../events/org.updated.event';
 import { OrganizationsModel } from '@app/entities/organizations';
 
@@ -27,20 +27,25 @@ export class ArchiveOrgHandler
   ) {}
 
   async execute(command: ArchiveOrgCommand): Promise<Organization> {
-    const { requestedUserId, orgId } = command.input;
-    const organization = await this.organizations.findById(orgId).orFail();
+    const orgId = toObjectId(command.input.orgId);
+    const updatedBy = toObjectId(command.input.requestedUserId);
+    const organization = await this.organizations
+      .findOneAndUpdate(
+        { _id: orgId, status: { $ne: OrgStatus.INACTIVE } },
+        {
+          $set: {
+            status: OrgStatus.INACTIVE,
+            updatedBy,
+          },
+        },
+        {
+          new: true,
+        },
+      )
+      .lean()
+      .orFail();
 
-    if (organization.status === OrgStatus.INACTIVE) {
-      throw new Error('Organization is already archived');
-    }
-
-    organization.status = OrgStatus.INACTIVE;
-    organization.updatedBy = toObjectId(requestedUserId);
-
-    await organization.save();
-
-    const serialized = new OrganizationTransformer(organization).proto;
-
+    const serialized = Serializer.from(OrgProto).serialize(organization);
     this.eventBus.publishAll([
       new OrganizationArchivedEvent(serialized),
       new OrganizationUpdatedEvent(serialized),

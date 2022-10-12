@@ -3,11 +3,11 @@ import {
   GetUserMembershipsResponse,
 } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { RpcHandler, Serializer } from '@valhalla/serv.core';
 
 import { OrgMembersModel } from '@app/entities/org.members';
-import { OrganizationTransformer } from '@app/entities/organizations/transformer';
+import { OrgProto } from '../protos/org.proto';
 import { OrganizationsModel } from '@app/entities/organizations';
-import { RpcHandler } from '@valhalla/serv.core';
 import isEmpty from 'lodash.isempty';
 
 export class GetUserMembershipsQuery implements IQuery {
@@ -38,14 +38,12 @@ export class GetUserMembershipsHandler
       };
     }
 
-    const organizations = await this.organizations.find({
-      _id: organizationIDs,
-    });
+    const organizations = await this.organizations
+      .find({ _id: organizationIDs })
+      .lean()
+      .orFail();
 
-    return {
-      organizations: organizations.map(
-        (org) => new OrganizationTransformer(org).proto,
-      ),
-    };
+    const serialized = Serializer.from(OrgProto).serialize(organizations);
+    return { organizations: serialized };
   }
 }

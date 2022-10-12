@@ -70,8 +70,8 @@ export interface Member {
   user: string;
   organization: string;
   invitedBy?: string | undefined;
-  status: string;
-  role: string;
+  status: InvitationStatus;
+  role: OrgRole;
   createdAt?: Date;
   updatedAt?: Date;
   updatedBy: string;

@@ -3,6 +3,7 @@
   "exclude": [
     "node_modules",
     "../../node_modules",
+    "google",
     "test",
     "dist",
     "**/*spec.ts"

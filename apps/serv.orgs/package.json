@@ -21,7 +21,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json --runInBand",
     "test:ci": "jest --ci --runInBand",
-    "proto:generate": "node ../../scripts/generate.proto"
+    "codegen": "node ../../scripts/generate.proto"
   },
   "dependencies": {
     "@nestcloud2/boot": "^0.8.5",
@@ -40,6 +40,7 @@
     "dayjs": "^1.11.5",
     "dotenv": "^16.0.2",
     "graphql": "^16.6.0",
+    "graphql-scalars": "^1.19.0",
     "kindagoose": "^1.2.4",
     "lodash.isempty": "^4.4.0",
     "long": "^5.2.0",

@@ -1,10 +1,10 @@
 import { GetOrgRequest, GetOrgResponse } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { RpcHandler, toObjectId } from '@valhalla/serv.core';
+import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
 import { FilterQuery } from 'mongoose';
+import { OrgProto } from '../protos/org.proto';
 import { OrganizationSchema } from '@app/entities/organizations/schema';
-import { OrganizationTransformer } from '@app/entities/organizations/transformer';
 import { OrganizationsModel } from '@app/entities/organizations';
 import isEmpty from 'lodash.isempty';
 
@@ -33,12 +33,15 @@ export class GetOrgHandler
       throw new Error('Invalid query');
     }
 
-    const organization = await this.organizations.findOne(filter);
+    const organization = await this.organizations
+      .findOne(filter)
+      .lean()
+      .orFail();
+
+    const serialized = Serializer.from(OrgProto).serialize(organization);
 
     return {
-      organization: organization
-        ? new OrganizationTransformer(organization).proto
-        : undefined,
+      organization: serialized,
     };
   }
 }
