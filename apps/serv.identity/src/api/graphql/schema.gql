@@ -115,35 +115,16 @@ type Query {
 
 type Mutation {
   """Register user account"""
-  registerAccount(
-    displayName: String
-    firstName: String
-    lastName: String
-
-    """Email Address"""
-    email: EmailAddress!
-
-    """Phone Number"""
-    phone: PhoneNumber
-  ): AuthResponse!
+  registerAccount(input: AccountRegisterInput!): AuthResponse!
 
   """Login to account with verification code"""
-  loginWithVerification(
-    """Username"""
-    username: String!
-
-    """Verification Code"""
-    verificationCode: String!
-
-    """Verification Sent"""
-    verificationId: String!
-  ): AuthResponse!
+  loginWithVerification(input: LoginWithVerificationInput!): AuthResponse!
 
   """Invalid current session"""
   logout: Void!
 
   """Update account"""
-  updateAccount(displayName: String, firstName: String, lastName: String): Boolean!
+  updateAccount(input: UpdateAccountInput!): Boolean!
 
   """Add email address to account"""
   addEmailToAccount(email: EmailAddress!): Boolean!
@@ -167,8 +148,37 @@ type Mutation {
   ): String!
 }
 
+input AccountRegisterInput {
+  displayName: String
+  firstName: String
+  lastName: String
+
+  """Email Address"""
+  email: EmailAddress!
+
+  """Phone Number"""
+  phone: PhoneNumber
+}
+
+input LoginWithVerificationInput {
+  """Username"""
+  username: String!
+
+  """Verification Code"""
+  verificationCode: String!
+
+  """Verification Sent"""
+  verificationId: String!
+}
+
 """Represents NULL values"""
 scalar Void
+
+input UpdateAccountInput {
+  displayName: String
+  firstName: String
+  lastName: String
+}
 
 enum VerificationChannel {
   EMAIL

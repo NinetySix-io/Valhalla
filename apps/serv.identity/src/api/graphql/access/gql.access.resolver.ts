@@ -13,8 +13,8 @@ import {
 import { VoidResolver } from 'graphql-scalars';
 import { tryNice } from 'try-nice';
 import { GetAccessTokenArgs } from './gql.args/get.access.token.args';
-import { LoginWithVerificationArgs } from './gql.args/login.with.verification.input';
-import { AccountRegisterArgs } from './gql.args/register.input';
+import { LoginWithVerificationArgs } from './gql.args/login.with.verification.args';
+import { AccountRegisterArgs } from './gql.args/register.args';
 import { AuthResponse } from './gql.responses/auth.response';
 import { TokenResponse } from './gql.responses/token.response';
 
@@ -29,7 +29,7 @@ export class GqlAuthResolver {
     @Args() args: AccountRegisterArgs,
     @Auth() auth: AuthManager,
   ): Promise<AuthResponse> {
-    const result = await resolveRpcRequest(this.rpcClient.register(args));
+    const result = await resolveRpcRequest(this.rpcClient.register(args.input));
     const { accessToken, refreshToken, account } = result;
 
     if (!accessToken) {
@@ -58,7 +58,7 @@ export class GqlAuthResolver {
     @Auth() auth: AuthManager,
     @Args() args: LoginWithVerificationArgs,
   ): Promise<AuthResponse> {
-    const command = this.rpcClient.loginWithVerification(args);
+    const command = this.rpcClient.loginWithVerification(args.input);
     const result = await resolveRpcRequest(command);
     const { accessToken, account, refreshToken } = result;
 

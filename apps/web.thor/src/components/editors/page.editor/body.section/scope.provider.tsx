@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import type { PageSectionSchema } from '@app/generated/valhalla.gql';
+import type { PageSection } from '@app/generated/valhalla.gql';
 import { createSectionStore } from './store';
 
 type Props = React.PropsWithChildren<{
-  sectionId: PageSectionSchema['id'];
-  config: PageSectionSchema['format'];
+  sectionId: PageSection['id'];
+  config: PageSection['format'];
   index: number;
 }>;
 

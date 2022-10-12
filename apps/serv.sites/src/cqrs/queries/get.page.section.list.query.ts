@@ -5,7 +5,7 @@ import {
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
-import { PageSectionProto } from '../transformers/page.section.proto';
+import { PageSectionProto } from '../protos/page.section.proto';
 import { PagesModel } from '@app/entities/pages';
 
 export class GetPageSectionListQuery implements IQuery {

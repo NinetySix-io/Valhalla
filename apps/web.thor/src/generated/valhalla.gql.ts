@@ -15,78 +15,69 @@ export type Scalars = {
   Float: number;
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: Date;
-  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
-  JSON: any;
+  /** A field whose value conforms to the standard internet email address format as specified in RFC822: https://www.w3.org/Protocols/rfc822/. */
+  EmailAddress: any;
+  /** The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSONObject: any;
+  /** Integers that will have a value of 0 or more. */
+  NonNegativeInt: any;
+  /** A field whose value conforms with the standard mongodb object ID as described here: https://docs.mongodb.com/manual/reference/method/ObjectId/#ObjectId. Example: 5e5677d71bdc2ae76344968c */
+  ObjectID: any;
+  /** A field whose value conforms to the standard E.164 format as specified in: https://en.wikipedia.org/wiki/E.164. Basically this is +17895551234. */
+  PhoneNumber: any;
+  /** A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt. */
+  URL: any;
+  /** Represents NULL values */
+  Void: any;
   _FieldSet: any;
 };
 
-export type AccessTokenQuery = {
-  /** Auth for organization */
-  readonly organization?: InputMaybe<Scalars['String']>;
-};
-
-export type AccountEmailSchema = {
-  readonly __typename?: 'AccountEmailSchema';
-  /** Date entity was created */
+export type Account = {
+  readonly __typename?: 'Account';
   readonly createdAt: Scalars['DateTime'];
-  /** Whether email address is primary */
-  readonly isPrimary: Scalars['Boolean'];
-  /** Whether email address is verified */
-  readonly isVerified: Scalars['Boolean'];
-  /** Date entity was updated */
-  readonly updatedAt: Scalars['DateTime'];
-  /** Email address value */
-  readonly value: Scalars['String'];
-  /** Verification ID */
-  readonly verification: Scalars['String'];
-  /** Verification date */
-  readonly verifiedDate: Scalars['DateTime'];
-};
-
-export type AccountPhoneSchema = {
-  readonly __typename?: 'AccountPhoneSchema';
-  /** Date entity was created */
-  readonly createdAt: Scalars['DateTime'];
-  /** Whether phone number is primary */
-  readonly isPrimary: Scalars['Boolean'];
-  /** Whether phone number is verified */
-  readonly isVerified: Scalars['Boolean'];
-  /** Date entity was updated */
-  readonly updatedAt: Scalars['DateTime'];
-  /** Phone number value */
-  readonly value: Scalars['String'];
-  /** Verification ID */
-  readonly verification: Scalars['String'];
-  /** Verification date */
-  readonly verifiedDate: Scalars['DateTime'];
-};
-
-export type AccountSchema = {
-  readonly __typename?: 'AccountSchema';
-  /** Date entity was created */
-  readonly createdAt: Scalars['DateTime'];
-  /** User Display Name */
   readonly displayName: Scalars['String'];
-  /** Associated email addresses */
-  readonly emails: ReadonlyArray<AccountEmailSchema>;
-  /** First Name */
+  readonly emails: ReadonlyArray<AccountEmail>;
   readonly firstName: Scalars['String'];
-  /** Identifier of the entity */
-  readonly id: Scalars['ID'];
-  /** Last Name */
+  readonly id: Scalars['ObjectID'];
   readonly lastName: Scalars['String'];
-  /** Associated phone numbers */
-  readonly phones: ReadonlyArray<AccountPhoneSchema>;
-  /** Date entity was updated */
+  readonly phones: ReadonlyArray<AccountPhone>;
   readonly updatedAt: Scalars['DateTime'];
+};
+
+export type AccountEmail = {
+  readonly __typename?: 'AccountEmail';
+  readonly createdAt: Scalars['DateTime'];
+  readonly isPrimary: Scalars['Boolean'];
+  readonly isVerified: Scalars['Boolean'];
+  readonly updatedAt: Scalars['DateTime'];
+  readonly value: Scalars['EmailAddress'];
+};
+
+export type AccountPhone = {
+  readonly __typename?: 'AccountPhone';
+  readonly createdAt: Scalars['DateTime'];
+  readonly isPrimary: Scalars['Boolean'];
+  readonly isVerified: Scalars['Boolean'];
+  readonly updatedAt: Scalars['DateTime'];
+  readonly value: Scalars['PhoneNumber'];
+};
+
+export type AccountRegisterInput = {
+  readonly displayName?: InputMaybe<Scalars['String']>;
+  /** Email Address */
+  readonly email: Scalars['EmailAddress'];
+  readonly firstName?: InputMaybe<Scalars['String']>;
+  readonly lastName?: InputMaybe<Scalars['String']>;
+  /** Phone Number */
+  readonly phone?: InputMaybe<Scalars['PhoneNumber']>;
 };
 
 export type AddTextElementInput = {
-  readonly desktop: PlatformPositionInput;
+  readonly desktop: ElementAreaInput;
   readonly html: Scalars['String'];
-  readonly json: Scalars['JSON'];
-  readonly mobile?: InputMaybe<PlatformPositionInput>;
-  readonly tablet?: InputMaybe<PlatformPositionInput>;
+  readonly json: Scalars['JSONObject'];
+  readonly mobile?: InputMaybe<ElementAreaInput>;
+  readonly tablet?: InputMaybe<ElementAreaInput>;
 };
 
 export type AuthResponse = {
@@ -98,34 +89,67 @@ export type AuthResponse = {
 };
 
 export type CreateOrganizationInput = {
-  /** Name of the organization */
   readonly name: Scalars['String'];
-  /** Subscription plan */
-  readonly plan: OrganizationPlan;
+  readonly plan?: InputMaybe<OrganizationPlan>;
 };
 
 export type CreatePageInput = {
-  /** Page title */
   readonly title: Scalars['String'];
 };
 
 export type CreateSectionInput = {
   /** Position */
-  readonly index?: InputMaybe<Scalars['Float']>;
+  readonly index?: InputMaybe<Scalars['NonNegativeInt']>;
 };
 
 export type CreateSiteInput = {
-  /** Site name */
   readonly name: Scalars['String'];
 };
 
-export enum EditStatus {
-  ACTIVE = 'ACTIVE',
-  ARCHIVED = 'ARCHIVED',
-  DRAFT = 'DRAFT'
+export type ElementArea = {
+  readonly __typename?: 'ElementArea';
+  readonly height: Scalars['NonNegativeInt'];
+  readonly isVisible: Scalars['NonNegativeInt'];
+  readonly width: Scalars['NonNegativeInt'];
+  readonly x: Scalars['NonNegativeInt'];
+  readonly y: Scalars['NonNegativeInt'];
+};
+
+export type ElementAreaInput = {
+  readonly height: Scalars['NonNegativeInt'];
+  readonly isVisible: Scalars['NonNegativeInt'];
+  readonly width: Scalars['NonNegativeInt'];
+  readonly x: Scalars['NonNegativeInt'];
+  readonly y: Scalars['NonNegativeInt'];
+};
+
+export type ElementText = {
+  readonly __typename?: 'ElementText';
+  readonly createdAt?: Maybe<Scalars['DateTime']>;
+  readonly createdBy: Scalars['ObjectID'];
+  readonly desktop: ElementArea;
+  readonly group: Scalars['ObjectID'];
+  readonly html: Scalars['String'];
+  readonly id: Scalars['ObjectID'];
+  readonly json: Scalars['JSONObject'];
+  readonly mobile?: Maybe<ElementArea>;
+  readonly tablet?: Maybe<ElementArea>;
+  readonly type: ElementType;
+  readonly updatedAt?: Maybe<Scalars['DateTime']>;
+  readonly updatedBy: Scalars['ObjectID'];
+};
+
+export enum ElementType {
+  TEXT = 'TEXT'
 }
 
-export type ElementUnion = PageElementTextSchema;
+export type ElementUnion = ElementText;
+
+export enum InvitationStatus {
+  ACCEPTED = 'ACCEPTED',
+  PENDING = 'PENDING',
+  REJECTED = 'REJECTED'
+}
 
 export type LoginWithVerificationInput = {
   /** Username */
@@ -143,22 +167,22 @@ export type Mutation = {
   /** Add phone number to account */
   readonly addPhoneToAccount: Scalars['Boolean'];
   /** Add text element */
-  readonly addTextElement: PageElementTextSchema;
+  readonly addTextElement: ElementText;
   /** Archive an organization */
-  readonly archiveOrganization: Scalars['String'];
-  readonly cloneSection: PageSectionSchema;
+  readonly archiveOrganization: Scalars['Void'];
+  readonly cloneSection: PageSection;
   /** Create an organization */
-  readonly createOrganization: OrganizationSchema;
+  readonly createOrganization: OrgCreatedResponse;
   readonly createPage: PageUpdatedResponse;
-  readonly createSection: PageSectionSchema;
+  readonly createSection: PageSection;
   readonly createSite: SiteUpdatedResponse;
   readonly deleteManyElements: ReadonlyArray<ElementUnion>;
   readonly deletePage: PageUpdatedResponse;
-  readonly deleteSection: PageSectionSchema;
+  readonly deleteSection: PageSection;
   /** Login to account with verification code */
   readonly loginWithVerification: AuthResponse;
   /** Invalid current session */
-  readonly logout: Scalars['Boolean'];
+  readonly logout: Scalars['Void'];
   /** Register user account */
   readonly registerAccount: AuthResponse;
   /** Remove associated email from account */
@@ -166,44 +190,44 @@ export type Mutation = {
   /** Remove associated phone from account */
   readonly removePhoneFromAccount: Scalars['Boolean'];
   /** Restore an organization that was archived */
-  readonly restoreOrganization: Scalars['String'];
+  readonly restoreOrganization: Scalars['Void'];
   /** Send verification code to email */
   readonly sendVerificationCode: Scalars['String'];
   /** Update account */
   readonly updateAccount: Scalars['Boolean'];
   readonly updatePage: PageUpdatedResponse;
-  readonly updateSectionFormat: PageSectionSchema;
-  readonly updateSectionIndex: PageSectionSchema;
+  readonly updateSectionFormat: PageSection;
+  readonly updateSectionIndex: PageSection;
   readonly updateSite: SiteUpdatedResponse;
   /** Update text element */
-  readonly updateTextElement: PageElementTextSchema;
+  readonly updateTextElement: ElementText;
 };
 
 
 export type MutationAddEmailToAccountArgs = {
-  email: Scalars['String'];
+  email: Scalars['EmailAddress'];
 };
 
 
 export type MutationAddPhoneToAccountArgs = {
-  phone: Scalars['String'];
+  phone: Scalars['PhoneNumber'];
 };
 
 
 export type MutationAddTextElementArgs = {
-  groupId: Scalars['String'];
+  groupId: Scalars['ObjectID'];
   input: AddTextElementInput;
 };
 
 
 export type MutationArchiveOrganizationArgs = {
-  orgId: Scalars['String'];
+  orgId: Scalars['ObjectID'];
 };
 
 
 export type MutationCloneSectionArgs = {
-  pageId: Scalars['String'];
-  sectionId: Scalars['String'];
+  pageId: Scalars['ObjectID'];
+  sectionId: Scalars['ObjectID'];
 };
 
 
@@ -214,13 +238,13 @@ export type MutationCreateOrganizationArgs = {
 
 export type MutationCreatePageArgs = {
   input: CreatePageInput;
-  siteId: Scalars['String'];
+  siteId: Scalars['ObjectID'];
 };
 
 
 export type MutationCreateSectionArgs = {
-  input: CreateSectionInput;
-  pageId: Scalars['String'];
+  input?: InputMaybe<CreateSectionInput>;
+  pageId: Scalars['ObjectID'];
 };
 
 
@@ -230,18 +254,18 @@ export type MutationCreateSiteArgs = {
 
 
 export type MutationDeleteManyElementsArgs = {
-  elementIdList: ReadonlyArray<Scalars['String']>;
+  elementIds: ReadonlyArray<Scalars['ObjectID']>;
 };
 
 
 export type MutationDeletePageArgs = {
-  id: Scalars['String'];
+  pageId: Scalars['ObjectID'];
 };
 
 
 export type MutationDeleteSectionArgs = {
-  pageId: Scalars['String'];
-  sectionId: Scalars['String'];
+  pageId: Scalars['ObjectID'];
+  sectionId: Scalars['ObjectID'];
 };
 
 
@@ -251,27 +275,28 @@ export type MutationLoginWithVerificationArgs = {
 
 
 export type MutationRegisterAccountArgs = {
-  input: RegisterInput;
+  input: AccountRegisterInput;
 };
 
 
 export type MutationRemoveEmailFromAccountArgs = {
-  email: Scalars['String'];
+  emailId: Scalars['ObjectID'];
 };
 
 
 export type MutationRemovePhoneFromAccountArgs = {
-  phone: Scalars['String'];
+  phoneId: Scalars['ObjectID'];
 };
 
 
 export type MutationRestoreOrganizationArgs = {
-  orgId: Scalars['String'];
+  orgId: Scalars['ObjectID'];
 };
 
 
 export type MutationSendVerificationCodeArgs = {
-  input: SendVerificationCodeInput;
+  channel: VerificationChannel;
+  destination: Scalars['String'];
 };
 
 
@@ -281,37 +306,78 @@ export type MutationUpdateAccountArgs = {
 
 
 export type MutationUpdatePageArgs = {
-  id: Scalars['String'];
   input: UpdatePageInput;
+  pageId: Scalars['ObjectID'];
 };
 
 
 export type MutationUpdateSectionFormatArgs = {
   input: UpdateSectionFormatInput;
-  pageId: Scalars['String'];
-  sectionId: Scalars['String'];
+  pageId: Scalars['ObjectID'];
+  sectionId: Scalars['ObjectID'];
 };
 
 
 export type MutationUpdateSectionIndexArgs = {
-  index: Scalars['Float'];
-  pageId: Scalars['String'];
-  sectionId: Scalars['String'];
+  index: Scalars['NonNegativeInt'];
+  pageId: Scalars['ObjectID'];
+  sectionId: Scalars['ObjectID'];
 };
 
 
 export type MutationUpdateSiteArgs = {
-  id: Scalars['String'];
   input: UpdateSiteInput;
+  siteId: Scalars['ObjectID'];
 };
 
 
 export type MutationUpdateTextElementArgs = {
-  elementId: Scalars['String'];
+  elementId: Scalars['ObjectID'];
   input: UpdateTextElementInput;
 };
 
-export enum OrgMemberRole {
+export type OrgCreatedResponse = {
+  readonly __typename?: 'OrgCreatedResponse';
+  readonly id: Scalars['String'];
+};
+
+export type Organization = {
+  readonly __typename?: 'Organization';
+  readonly createdAt?: Maybe<Scalars['DateTime']>;
+  readonly createdBy: Scalars['String'];
+  readonly id: Scalars['String'];
+  readonly logoUrl?: Maybe<Scalars['String']>;
+  readonly name: Scalars['String'];
+  readonly plan: OrganizationPlan;
+  readonly slug: Scalars['String'];
+  readonly status: Scalars['String'];
+  readonly updateBy: Scalars['String'];
+  readonly updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type OrganizationBySlugResponse = {
+  readonly __typename?: 'OrganizationBySlugResponse';
+  readonly id: Scalars['String'];
+  readonly name: Scalars['String'];
+};
+
+export type OrganizationMember = {
+  readonly __typename?: 'OrganizationMember';
+  readonly createdAt?: Maybe<Scalars['DateTime']>;
+  readonly id: Scalars['ObjectID'];
+  readonly profileImageUrl?: Maybe<Scalars['URL']>;
+  readonly role: OrganizationRole;
+  readonly status: InvitationStatus;
+  readonly updatedAt?: Maybe<Scalars['DateTime']>;
+  readonly updatedBy: Scalars['ObjectID'];
+  readonly user: Scalars['ObjectID'];
+};
+
+export enum OrganizationPlan {
+  FREE = 'FREE'
+}
+
+export enum OrganizationRole {
   ADMIN = 'ADMIN',
   DEVELOPER = 'DEVELOPER',
   GUESS = 'GUESS',
@@ -319,230 +385,79 @@ export enum OrgMemberRole {
   OWNER = 'OWNER'
 }
 
-export type OrgMemberSchema = {
-  readonly __typename?: 'OrgMemberSchema';
-  /** Date entity was created */
+export type Page = {
+  readonly __typename?: 'Page';
   readonly createdAt: Scalars['DateTime'];
-  /** Timestamp in the profile should be deleted */
-  readonly deletingAt?: Maybe<Scalars['DateTime']>;
-  /** Identifier of the entity */
-  readonly id: Scalars['ID'];
-  /** ID of the account that sent out the invite */
-  readonly invitedBy?: Maybe<Scalars['String']>;
-  /** ID of the organization */
-  readonly organization: Scalars['String'];
-  /** URL of profile image */
-  readonly profileImageUrl?: Maybe<Scalars['String']>;
-  /** Role of the organization member */
-  readonly role: OrgMemberRole;
-  /** Status of the organization member */
-  readonly status: OrgMemberStatus;
-  /** Date entity was updated */
-  readonly updatedAt: Scalars['DateTime'];
-  /** ID of the account that last updated the member profile */
-  readonly updatedBy: Scalars['String'];
-  /** ID of the account */
-  readonly user: Scalars['String'];
-};
-
-export enum OrgMemberStatus {
-  ACCEPTED = 'ACCEPTED',
-  PENDING = 'PENDING',
-  REJECTED = 'REJECTED'
-}
-
-export type OrganizationBySlugResponse = {
-  readonly __typename?: 'OrganizationBySlugResponse';
-  /** Identifier of the entity */
-  readonly id: Scalars['ID'];
-  /** Name of the organization */
-  readonly name: Scalars['String'];
-};
-
-/** Subscription plan */
-export enum OrganizationPlan {
-  FREE = 'FREE'
-}
-
-export type OrganizationSchema = {
-  readonly __typename?: 'OrganizationSchema';
-  /** Date entity was created */
-  readonly createdAt: Scalars['DateTime'];
-  /** ID of the account that created the organization */
-  readonly createdBy: Scalars['String'];
-  /** Identifier of the entity */
-  readonly id: Scalars['ID'];
-  /** URL of the logo */
-  readonly logoUrl?: Maybe<Scalars['String']>;
-  /** Name of the organization */
-  readonly name: Scalars['String'];
-  /** Subscription plan */
-  readonly plan: OrganizationPlan;
-  /** Unique slug identifier */
-  readonly slug: Scalars['String'];
-  /** Organization status */
-  readonly status: OrganizationStatus;
-  /** Date entity was updated */
-  readonly updatedAt: Scalars['DateTime'];
-  /** ID of the account that last updated the organization */
-  readonly updatedBy: Scalars['String'];
-};
-
-/** Organization status */
-export enum OrganizationStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
-  SUSPENDED = 'SUSPENDED'
-}
-
-export type PageElementPlatformSchema = {
-  readonly __typename?: 'PageElementPlatformSchema';
-  /** Date entity was created */
-  readonly createdAt: Scalars['DateTime'];
-  /** Height */
-  readonly height: Scalars['Float'];
-  /** Identifier of the entity */
-  readonly id: Scalars['ID'];
-  /** Whether this element is visible */
-  readonly isVisible: Scalars['Boolean'];
-  /** Date entity was updated */
-  readonly updatedAt: Scalars['DateTime'];
-  /** Width */
-  readonly width: Scalars['Float'];
-  /** X position */
-  readonly x: Scalars['Float'];
-  /** Y position */
-  readonly y: Scalars['Float'];
-};
-
-export type PageElementTextSchema = {
-  readonly __typename?: 'PageElementTextSchema';
-  /** Date entity was created */
-  readonly createdAt: Scalars['DateTime'];
-  /** User ID */
-  readonly createdBy: Scalars['String'];
-  /** Desktop configuration */
-  readonly desktop: PageElementPlatformSchema;
-  readonly html: Scalars['String'];
-  /** Identifier of the entity */
-  readonly id: Scalars['ID'];
-  readonly json: Scalars['JSON'];
-  /** Mobile configuration */
-  readonly mobile?: Maybe<PageElementPlatformSchema>;
-  /** Tablet configuration */
-  readonly tablet?: Maybe<PageElementPlatformSchema>;
-  /** Element type */
-  readonly type: PrimitiveElementType;
-  /** Date entity was updated */
-  readonly updatedAt: Scalars['DateTime'];
-  /** User ID */
-  readonly updatedBy: Scalars['String'];
-};
-
-export type PageSchema = {
-  readonly __typename?: 'PageSchema';
-  /** Date entity was created */
-  readonly createdAt: Scalars['DateTime'];
-  /** Page description */
+  readonly createdBy: Scalars['ObjectID'];
   readonly description?: Maybe<Scalars['String']>;
-  /** Identifier of the entity */
-  readonly id: Scalars['ID'];
-  /** Whether the title should be independent or part of the title template */
+  readonly id: Scalars['ObjectID'];
   readonly isLoneTitle?: Maybe<Scalars['Boolean']>;
-  /** Sections */
-  readonly sections: ReadonlyArray<PageSectionSchema>;
-  /** Page url */
-  readonly slug?: Maybe<Scalars['String']>;
-  /** Edit status */
-  readonly status: EditStatus;
-  /** Page title */
+  readonly site: Scalars['ObjectID'];
+  readonly slug: Scalars['String'];
+  readonly status: Scalars['String'];
   readonly title: Scalars['String'];
-  /** Date entity was updated */
   readonly updatedAt: Scalars['DateTime'];
-  /** Account ID of updater */
-  readonly updatedBy: Scalars['String'];
+  readonly updatedBy: Scalars['ObjectID'];
 };
 
-export type PageSectionFormatSchema = {
-  readonly __typename?: 'PageSectionFormatSchema';
-  /** Column gap */
-  readonly columnGap: Scalars['Float'];
-  /** Row Gap */
-  readonly rowGap: Scalars['Float'];
-  /** Row count */
-  readonly rowsCount: Scalars['Float'];
-  /** Account ID of updater */
-  readonly updatedBy: Scalars['String'];
-};
-
-export type PageSectionSchema = {
-  readonly __typename?: 'PageSectionSchema';
-  /** Date entity was created */
+export type PageSection = {
+  readonly __typename?: 'PageSection';
   readonly createdAt: Scalars['DateTime'];
-  /** Section format configuration */
-  readonly format: PageSectionFormatSchema;
-  /** Identifier of the entity */
-  readonly id: Scalars['ID'];
-  /** Date entity was updated */
+  readonly createdBy: Scalars['ObjectID'];
+  readonly format: PageSectionFormat;
+  readonly id: Scalars['ObjectID'];
   readonly updatedAt: Scalars['DateTime'];
-  readonly updatedBy: Scalars['String'];
+  readonly updatedBy: Scalars['ObjectID'];
+};
+
+export type PageSectionFormat = {
+  readonly __typename?: 'PageSectionFormat';
+  readonly columnGap: Scalars['NonNegativeInt'];
+  readonly rowGap: Scalars['NonNegativeInt'];
+  readonly rowsCount: Scalars['NonNegativeInt'];
 };
 
 export type PageUpdatedResponse = {
   readonly __typename?: 'PageUpdatedResponse';
-  /** Identifier of the entity */
-  readonly id: Scalars['ID'];
-  /** Edit status */
-  readonly status: EditStatus;
+  readonly id: Scalars['ObjectID'];
+  readonly status: Scalars['String'];
 };
-
-export type PlatformPositionInput = {
-  /** Height */
-  readonly height: Scalars['Float'];
-  /** Whether this element is visible */
-  readonly isVisible: Scalars['Boolean'];
-  /** Width */
-  readonly width: Scalars['Float'];
-  /** X position */
-  readonly x: Scalars['Float'];
-  /** Y position */
-  readonly y: Scalars['Float'];
-};
-
-export enum PrimitiveElementType {
-  TEXT = 'TEXT'
-}
 
 export type Query = {
   readonly __typename?: 'Query';
   /** Generate an access token */
   readonly accessToken: TokenResponse;
   /** Get current logged in user information */
-  readonly account: AccountSchema;
+  readonly account: Account;
+  readonly elementsByGroup: ReadonlyArray<ElementUnion>;
   /** Get current organization */
-  readonly organization: ReadonlyArray<OrganizationSchema>;
+  readonly organizationByMembership: ReadonlyArray<Organization>;
   /** Find organization by slug */
   readonly organizationBySlug: OrganizationBySlugResponse;
   /** Get current organization membership */
-  readonly organizationMembership: OrgMemberSchema;
+  readonly organizationMembershipProfile: OrganizationMember;
   /** Get current user's organizations memberships */
-  readonly organizations: ReadonlyArray<OrganizationSchema>;
-  readonly page: PageSchema;
-  readonly pageElementListByGroup: ReadonlyArray<ElementUnion>;
-  readonly pageList: ReadonlyArray<PageSchema>;
-  readonly section: PageSectionSchema;
-  readonly sectionList: ReadonlyArray<PageSectionSchema>;
+  readonly organizationsByMemberships: ReadonlyArray<Organization>;
+  readonly page: Page;
+  readonly pagesBySite: ReadonlyArray<Page>;
+  readonly section: PageSection;
+  readonly sectionsByPage: ReadonlyArray<PageSection>;
   /** Get current session user */
   readonly session: SessionResponse;
-  readonly site: SiteSchema;
-  readonly siteList: ReadonlyArray<SiteSchema>;
+  readonly site: Site;
+  readonly siteByOwner: ReadonlyArray<Site>;
   /** Validate verification code */
   readonly validateVerificationCode: Scalars['Boolean'];
 };
 
 
 export type QueryAccessTokenArgs = {
-  query: AccessTokenQuery;
+  organizationId?: InputMaybe<Scalars['ObjectID']>;
+};
+
+
+export type QueryElementsByGroupArgs = {
+  groupId: Scalars['ObjectID'];
 };
 
 
@@ -552,87 +467,51 @@ export type QueryOrganizationBySlugArgs = {
 
 
 export type QueryPageArgs = {
-  id: Scalars['String'];
+  pageId: Scalars['ObjectID'];
 };
 
 
-export type QueryPageElementListByGroupArgs = {
-  groupId: Scalars['String'];
-};
-
-
-export type QueryPageListArgs = {
-  siteId: Scalars['String'];
+export type QueryPagesBySiteArgs = {
+  siteId: Scalars['ObjectID'];
 };
 
 
 export type QuerySectionArgs = {
-  sectionId: Scalars['String'];
+  sectionId: Scalars['ObjectID'];
 };
 
 
-export type QuerySectionListArgs = {
-  pageId: Scalars['String'];
+export type QuerySectionsByPageArgs = {
+  pageId: Scalars['ObjectID'];
 };
 
 
 export type QuerySiteArgs = {
-  id: Scalars['String'];
+  siteId: Scalars['ObjectID'];
 };
 
 
 export type QueryValidateVerificationCodeArgs = {
-  input: ValidateVerificationCodeInput;
-};
-
-export type RegisterInput = {
-  /** User Display Name */
-  readonly displayName?: InputMaybe<Scalars['String']>;
-  /** Email Address */
-  readonly email: Scalars['String'];
-  /** First Name */
-  readonly firstName?: InputMaybe<Scalars['String']>;
-  /** Last Name */
-  readonly lastName?: InputMaybe<Scalars['String']>;
-  /** Phone Number */
-  readonly phone?: InputMaybe<Scalars['String']>;
-};
-
-export type SendVerificationCodeInput = {
-  /** Verification channel */
-  readonly channel: VerificationChannel;
-  /** Sending verification code target */
-  readonly destination: Scalars['String'];
+  verificationCode: Scalars['String'];
+  verificationId: Scalars['String'];
 };
 
 export type SessionResponse = {
   readonly __typename?: 'SessionResponse';
-  /** User Display Name */
   readonly displayName: Scalars['String'];
-  /** Identifier of the entity */
-  readonly id: Scalars['ID'];
+  readonly id: Scalars['ObjectID'];
 };
 
-export type SiteSchema = {
-  readonly __typename?: 'SiteSchema';
-  /** Date entity was created */
+export type Site = {
+  readonly __typename?: 'Site';
   readonly createdAt: Scalars['DateTime'];
-  /** Account ID of creator */
-  readonly createdBy: Scalars['String'];
-  /** Identifier of the entity */
-  readonly id: Scalars['ID'];
-  /** Site name */
+  readonly createdBy: Scalars['ObjectID'];
+  readonly id: Scalars['ObjectID'];
   readonly name: Scalars['String'];
-  /** Site owner */
-  readonly ownBy: Scalars['String'];
-  /** Site status */
   readonly status: SiteStatus;
-  /** Date entity was updated */
   readonly updatedAt: Scalars['DateTime'];
-  /** Account ID of last updater */
-  readonly updatedBy: Scalars['String'];
-  /** Site url */
-  readonly url?: Maybe<Scalars['String']>;
+  readonly updatedBy: Scalars['ObjectID'];
+  readonly url: Scalars['URL'];
 };
 
 export enum SiteStatus {
@@ -643,14 +522,10 @@ export enum SiteStatus {
 
 export type SiteUpdatedResponse = {
   readonly __typename?: 'SiteUpdatedResponse';
-  /** Identifier of the entity */
-  readonly id: Scalars['ID'];
-  /** Site name */
+  readonly id: Scalars['ObjectID'];
   readonly name: Scalars['String'];
-  /** Site status */
   readonly status: SiteStatus;
-  /** Site url */
-  readonly url?: Maybe<Scalars['String']>;
+  readonly url: Scalars['URL'];
 };
 
 export type TokenResponse = {
@@ -662,50 +537,33 @@ export type TokenResponse = {
 };
 
 export type UpdateAccountInput = {
-  /** User Display Name */
   readonly displayName?: InputMaybe<Scalars['String']>;
-  /** First Name */
   readonly firstName?: InputMaybe<Scalars['String']>;
-  /** Last Name */
   readonly lastName?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdatePageInput = {
-  /** Page description */
   readonly description?: InputMaybe<Scalars['String']>;
-  /** Whether the title should be independent or part of the title template */
   readonly isLoneTitle?: InputMaybe<Scalars['Boolean']>;
-  /** Page title */
   readonly title?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateSectionFormatInput = {
-  /** Column gap */
-  readonly columnGap?: InputMaybe<Scalars['Float']>;
-  /** Row Gap */
-  readonly rowGap?: InputMaybe<Scalars['Float']>;
-  /** Row count */
-  readonly rowsCount?: InputMaybe<Scalars['Float']>;
+  readonly columnGap?: InputMaybe<Scalars['NonNegativeInt']>;
+  readonly rowGap?: InputMaybe<Scalars['NonNegativeInt']>;
+  readonly rowsCount?: InputMaybe<Scalars['NonNegativeInt']>;
 };
 
 export type UpdateSiteInput = {
-  /** Site name */
   readonly name?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateTextElementInput = {
-  readonly desktop?: InputMaybe<PlatformPositionInput>;
-  readonly html?: InputMaybe<Scalars['String']>;
-  readonly json?: InputMaybe<Scalars['JSON']>;
-  readonly mobile?: InputMaybe<PlatformPositionInput>;
-  readonly tablet?: InputMaybe<PlatformPositionInput>;
-};
-
-export type ValidateVerificationCodeInput = {
-  /** Verification Code */
-  readonly verificationCode: Scalars['String'];
-  /** Verification ID */
-  readonly verificationId: Scalars['String'];
+  readonly desktop?: InputMaybe<ElementAreaInput>;
+  readonly html: Scalars['String'];
+  readonly json: Scalars['JSONObject'];
+  readonly mobile?: InputMaybe<ElementAreaInput>;
+  readonly tablet?: InputMaybe<ElementAreaInput>;
 };
 
 export enum VerificationChannel {
@@ -714,11 +572,7 @@ export enum VerificationChannel {
 }
 
 export type RegisterMutationVariables = Exact<{
-  email: Scalars['String'];
-  phone?: InputMaybe<Scalars['String']>;
-  firstName?: InputMaybe<Scalars['String']>;
-  lastName?: InputMaybe<Scalars['String']>;
-  displayName?: InputMaybe<Scalars['String']>;
+  input: AccountRegisterInput;
 }>;
 
 
@@ -727,40 +581,38 @@ export type RegisterMutation = { readonly __typename?: 'Mutation', readonly regi
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LogoutMutation = { readonly __typename?: 'Mutation', readonly logout: boolean };
+export type LogoutMutation = { readonly __typename?: 'Mutation', readonly logout: any };
 
 export type LoginWithVerificationMutationVariables = Exact<{
-  username: Scalars['String'];
-  verificationId: Scalars['String'];
-  verificationCode: Scalars['String'];
+  input: LoginWithVerificationInput;
 }>;
 
 
 export type LoginWithVerificationMutation = { readonly __typename?: 'Mutation', readonly loginWithVerification: { readonly __typename?: 'AuthResponse', readonly accessToken: { readonly __typename?: 'TokenResponse', readonly value: string, readonly expiresAt: Date } } };
 
 export type AddEmailMutationVariables = Exact<{
-  email: Scalars['String'];
+  email: Scalars['EmailAddress'];
 }>;
 
 
 export type AddEmailMutation = { readonly __typename?: 'Mutation', readonly addEmailToAccount: boolean };
 
 export type RemoveEmailMutationVariables = Exact<{
-  email: Scalars['String'];
+  emailId: Scalars['ObjectID'];
 }>;
 
 
 export type RemoveEmailMutation = { readonly __typename?: 'Mutation', readonly removeEmailFromAccount: boolean };
 
 export type AddPhoneMutationVariables = Exact<{
-  phone: Scalars['String'];
+  phone: Scalars['PhoneNumber'];
 }>;
 
 
 export type AddPhoneMutation = { readonly __typename?: 'Mutation', readonly addPhoneToAccount: boolean };
 
 export type RemovePhoneMutationVariables = Exact<{
-  phone: Scalars['String'];
+  phoneId: Scalars['ObjectID'];
 }>;
 
 
@@ -769,22 +621,22 @@ export type RemovePhoneMutation = { readonly __typename?: 'Mutation', readonly r
 export type GetAccountQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAccountQuery = { readonly __typename?: 'Query', readonly account: { readonly __typename?: 'AccountSchema', readonly firstName: string, readonly lastName: string, readonly displayName: string } };
+export type GetAccountQuery = { readonly __typename?: 'Query', readonly account: { readonly __typename?: 'Account', readonly firstName: string, readonly lastName: string, readonly displayName: string } };
 
 export type GetOrgMembershipQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOrgMembershipQuery = { readonly __typename?: 'Query', readonly organizationMembership: { readonly __typename?: 'OrgMemberSchema', readonly profileImageUrl?: string | null, readonly status: OrgMemberStatus, readonly role: OrgMemberRole } };
+export type GetOrgMembershipQuery = { readonly __typename?: 'Query', readonly organizationMembershipProfile: { readonly __typename?: 'OrganizationMember', readonly profileImageUrl?: any | null, readonly status: InvitationStatus, readonly role: OrganizationRole } };
 
 export type GetOrgsMembershipListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOrgsMembershipListQuery = { readonly __typename?: 'Query', readonly organizations: ReadonlyArray<{ readonly __typename?: 'OrganizationSchema', readonly id: string, readonly name: string, readonly slug: string, readonly logoUrl?: string | null }> };
+export type GetOrgsMembershipListQuery = { readonly __typename?: 'Query', readonly organizationsByMemberships: ReadonlyArray<{ readonly __typename?: 'Organization', readonly id: string, readonly name: string, readonly slug: string, readonly logoUrl?: string | null }> };
 
 export type GetCurrentOrganizationQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentOrganizationQuery = { readonly __typename?: 'Query', readonly organization: ReadonlyArray<{ readonly __typename?: 'OrganizationSchema', readonly name: string, readonly logoUrl?: string | null, readonly plan: OrganizationPlan, readonly slug: string }> };
+export type GetCurrentOrganizationQuery = { readonly __typename?: 'Query', readonly organizationByMembership: ReadonlyArray<{ readonly __typename?: 'Organization', readonly name: string, readonly logoUrl?: string | null, readonly plan: OrganizationPlan, readonly slug: string }> };
 
 export type FindOrganizationBySlugQueryVariables = Exact<{
   slug: Scalars['String'];
@@ -794,159 +646,158 @@ export type FindOrganizationBySlugQueryVariables = Exact<{
 export type FindOrganizationBySlugQuery = { readonly __typename?: 'Query', readonly organizationBySlug: { readonly __typename?: 'OrganizationBySlugResponse', readonly id: string, readonly name: string } };
 
 export type CreateOrganizationMutationVariables = Exact<{
-  name: Scalars['String'];
-  plan: OrganizationPlan;
+  input: CreateOrganizationInput;
 }>;
 
 
-export type CreateOrganizationMutation = { readonly __typename?: 'Mutation', readonly createOrganization: { readonly __typename?: 'OrganizationSchema', readonly id: string, readonly slug: string, readonly name: string, readonly plan: OrganizationPlan } };
+export type CreateOrganizationMutation = { readonly __typename?: 'Mutation', readonly createOrganization: { readonly __typename?: 'OrgCreatedResponse', readonly id: string } };
 
 export type ArchiveOrganizationMutationVariables = Exact<{
-  orgId: Scalars['String'];
+  orgId: Scalars['ObjectID'];
 }>;
 
 
-export type ArchiveOrganizationMutation = { readonly __typename?: 'Mutation', readonly archiveOrganization: string };
+export type ArchiveOrganizationMutation = { readonly __typename?: 'Mutation', readonly archiveOrganization: any };
 
 export type RestoreOrganizationMutationVariables = Exact<{
-  orgId: Scalars['String'];
+  orgId: Scalars['ObjectID'];
 }>;
 
 
-export type RestoreOrganizationMutation = { readonly __typename?: 'Mutation', readonly restoreOrganization: string };
+export type RestoreOrganizationMutation = { readonly __typename?: 'Mutation', readonly restoreOrganization: any };
 
-export type PositionFragment = { readonly __typename?: 'PageElementPlatformSchema', readonly id: string, readonly x: number, readonly y: number, readonly width: number, readonly height: number, readonly isVisible: boolean, readonly createdAt: Date, readonly updatedAt: Date };
+export type PositionFragment = { readonly __typename?: 'ElementArea', readonly x: any, readonly y: any, readonly width: any, readonly height: any, readonly isVisible: any };
 
 export type GetElementsByGroupQueryVariables = Exact<{
-  groupId: Scalars['String'];
+  groupId: Scalars['ObjectID'];
 }>;
 
 
-export type GetElementsByGroupQuery = { readonly __typename?: 'Query', readonly pageElementListByGroup: ReadonlyArray<{ readonly __typename: 'PageElementTextSchema', readonly id: string, readonly json: any, readonly html: string, readonly type: PrimitiveElementType, readonly createdAt: Date, readonly updatedAt: Date, readonly createdBy: string, readonly updatedBy: string, readonly desktop: { readonly __typename?: 'PageElementPlatformSchema', readonly id: string, readonly x: number, readonly y: number, readonly width: number, readonly height: number, readonly isVisible: boolean, readonly createdAt: Date, readonly updatedAt: Date }, readonly mobile?: { readonly __typename?: 'PageElementPlatformSchema', readonly id: string, readonly x: number, readonly y: number, readonly width: number, readonly height: number, readonly isVisible: boolean, readonly createdAt: Date, readonly updatedAt: Date } | null, readonly tablet?: { readonly __typename?: 'PageElementPlatformSchema', readonly id: string, readonly x: number, readonly y: number, readonly width: number, readonly height: number, readonly isVisible: boolean, readonly createdAt: Date, readonly updatedAt: Date } | null }> };
+export type GetElementsByGroupQuery = { readonly __typename?: 'Query', readonly elementsByGroup: ReadonlyArray<{ readonly __typename: 'ElementText', readonly id: any, readonly json: any, readonly html: string, readonly type: ElementType, readonly group: any, readonly createdAt?: Date | null, readonly updatedAt?: Date | null, readonly createdBy: any, readonly updatedBy: any, readonly desktop: { readonly __typename?: 'ElementArea', readonly x: any, readonly y: any, readonly width: any, readonly height: any, readonly isVisible: any }, readonly mobile?: { readonly __typename?: 'ElementArea', readonly x: any, readonly y: any, readonly width: any, readonly height: any, readonly isVisible: any } | null, readonly tablet?: { readonly __typename?: 'ElementArea', readonly x: any, readonly y: any, readonly width: any, readonly height: any, readonly isVisible: any } | null }> };
 
 export type AddTextElementMutationVariables = Exact<{
-  groupId: Scalars['String'];
+  groupId: Scalars['ObjectID'];
   input: AddTextElementInput;
 }>;
 
 
-export type AddTextElementMutation = { readonly __typename?: 'Mutation', readonly addTextElement: { readonly __typename?: 'PageElementTextSchema', readonly id: string } };
+export type AddTextElementMutation = { readonly __typename?: 'Mutation', readonly addTextElement: { readonly __typename?: 'ElementText', readonly id: any } };
 
 export type UpdateTextElementMutationVariables = Exact<{
-  elementId: Scalars['String'];
+  elementId: Scalars['ObjectID'];
   input: UpdateTextElementInput;
 }>;
 
 
-export type UpdateTextElementMutation = { readonly __typename?: 'Mutation', readonly updateTextElement: { readonly __typename?: 'PageElementTextSchema', readonly id: string } };
+export type UpdateTextElementMutation = { readonly __typename?: 'Mutation', readonly updateTextElement: { readonly __typename?: 'ElementText', readonly id: any } };
 
 export type DeleteManyElementsMutationVariables = Exact<{
-  elementIdList: ReadonlyArray<Scalars['String']> | Scalars['String'];
+  elementIds: ReadonlyArray<Scalars['ObjectID']> | Scalars['ObjectID'];
 }>;
 
 
-export type DeleteManyElementsMutation = { readonly __typename?: 'Mutation', readonly deleteManyElements: ReadonlyArray<{ readonly __typename?: 'PageElementTextSchema', readonly id: string }> };
+export type DeleteManyElementsMutation = { readonly __typename?: 'Mutation', readonly deleteManyElements: ReadonlyArray<{ readonly __typename?: 'ElementText', readonly id: any }> };
 
 export type GetPageSectionQueryVariables = Exact<{
-  sectionId: Scalars['String'];
+  sectionId: Scalars['ObjectID'];
 }>;
 
 
-export type GetPageSectionQuery = { readonly __typename?: 'Query', readonly section: { readonly __typename?: 'PageSectionSchema', readonly id: string, readonly format: { readonly __typename?: 'PageSectionFormatSchema', readonly rowsCount: number, readonly rowGap: number, readonly columnGap: number } } };
+export type GetPageSectionQuery = { readonly __typename?: 'Query', readonly section: { readonly __typename?: 'PageSection', readonly id: any, readonly format: { readonly __typename?: 'PageSectionFormat', readonly rowsCount: any, readonly rowGap: any, readonly columnGap: any } } };
 
 export type GetPageSectionListQueryVariables = Exact<{
-  pageId: Scalars['String'];
+  pageId: Scalars['ObjectID'];
 }>;
 
 
-export type GetPageSectionListQuery = { readonly __typename?: 'Query', readonly sectionList: ReadonlyArray<{ readonly __typename?: 'PageSectionSchema', readonly id: string, readonly createdAt: Date, readonly updatedAt: Date, readonly updatedBy: string, readonly format: { readonly __typename?: 'PageSectionFormatSchema', readonly rowsCount: number, readonly rowGap: number, readonly columnGap: number, readonly updatedBy: string } }> };
+export type GetPageSectionListQuery = { readonly __typename?: 'Query', readonly sectionsByPage: ReadonlyArray<{ readonly __typename?: 'PageSection', readonly id: any, readonly createdAt: Date, readonly updatedAt: Date, readonly updatedBy: any, readonly format: { readonly __typename?: 'PageSectionFormat', readonly rowsCount: any, readonly rowGap: any, readonly columnGap: any } }> };
 
 export type CreatePageSectionMutationVariables = Exact<{
-  pageId: Scalars['String'];
+  pageId: Scalars['ObjectID'];
   input: CreateSectionInput;
 }>;
 
 
-export type CreatePageSectionMutation = { readonly __typename?: 'Mutation', readonly createSection: { readonly __typename?: 'PageSectionSchema', readonly id: string } };
+export type CreatePageSectionMutation = { readonly __typename?: 'Mutation', readonly createSection: { readonly __typename?: 'PageSection', readonly id: any } };
 
 export type DeletePageSectionMutationVariables = Exact<{
-  pageId: Scalars['String'];
-  sectionId: Scalars['String'];
+  pageId: Scalars['ObjectID'];
+  sectionId: Scalars['ObjectID'];
 }>;
 
 
-export type DeletePageSectionMutation = { readonly __typename?: 'Mutation', readonly deleteSection: { readonly __typename?: 'PageSectionSchema', readonly id: string } };
+export type DeletePageSectionMutation = { readonly __typename?: 'Mutation', readonly deleteSection: { readonly __typename?: 'PageSection', readonly id: any } };
 
 export type UpdatePageSectionIndexMutationVariables = Exact<{
-  pageId: Scalars['String'];
-  sectionId: Scalars['String'];
-  index: Scalars['Float'];
+  pageId: Scalars['ObjectID'];
+  sectionId: Scalars['ObjectID'];
+  index: Scalars['NonNegativeInt'];
 }>;
 
 
-export type UpdatePageSectionIndexMutation = { readonly __typename?: 'Mutation', readonly updateSectionIndex: { readonly __typename?: 'PageSectionSchema', readonly id: string } };
+export type UpdatePageSectionIndexMutation = { readonly __typename?: 'Mutation', readonly updateSectionIndex: { readonly __typename?: 'PageSection', readonly id: any } };
 
 export type UpdatePageSectionFormatMutationVariables = Exact<{
-  pageId: Scalars['String'];
-  sectionId: Scalars['String'];
+  pageId: Scalars['ObjectID'];
+  sectionId: Scalars['ObjectID'];
   input: UpdateSectionFormatInput;
 }>;
 
 
-export type UpdatePageSectionFormatMutation = { readonly __typename?: 'Mutation', readonly updateSectionFormat: { readonly __typename?: 'PageSectionSchema', readonly id: string } };
+export type UpdatePageSectionFormatMutation = { readonly __typename?: 'Mutation', readonly updateSectionFormat: { readonly __typename?: 'PageSection', readonly id: any } };
 
 export type ClonePageSectionMutationVariables = Exact<{
-  pageId: Scalars['String'];
-  sectionId: Scalars['String'];
+  pageId: Scalars['ObjectID'];
+  sectionId: Scalars['ObjectID'];
 }>;
 
 
-export type ClonePageSectionMutation = { readonly __typename?: 'Mutation', readonly cloneSection: { readonly __typename?: 'PageSectionSchema', readonly id: string } };
+export type ClonePageSectionMutation = { readonly __typename?: 'Mutation', readonly cloneSection: { readonly __typename?: 'PageSection', readonly id: any } };
 
 export type GetPageListQueryVariables = Exact<{
-  siteId: Scalars['String'];
+  siteId: Scalars['ObjectID'];
 }>;
 
 
-export type GetPageListQuery = { readonly __typename?: 'Query', readonly pageList: ReadonlyArray<{ readonly __typename?: 'PageSchema', readonly id: string, readonly title: string, readonly status: EditStatus }> };
+export type GetPageListQuery = { readonly __typename?: 'Query', readonly pagesBySite: ReadonlyArray<{ readonly __typename?: 'Page', readonly id: any, readonly title: string, readonly status: string }> };
 
 export type GetPageQueryVariables = Exact<{
-  pageId: Scalars['String'];
+  pageId: Scalars['ObjectID'];
 }>;
 
 
-export type GetPageQuery = { readonly __typename?: 'Query', readonly page: { readonly __typename?: 'PageSchema', readonly id: string, readonly title: string, readonly status: EditStatus, readonly isLoneTitle?: boolean | null, readonly description?: string | null, readonly createdAt: Date, readonly updatedAt: Date, readonly updatedBy: string } };
+export type GetPageQuery = { readonly __typename?: 'Query', readonly page: { readonly __typename?: 'Page', readonly id: any, readonly title: string, readonly status: string, readonly isLoneTitle?: boolean | null, readonly description?: string | null, readonly createdAt: Date, readonly updatedAt: Date, readonly updatedBy: any } };
 
 export type CreatePageMutationVariables = Exact<{
-  siteId: Scalars['String'];
-  prop: CreatePageInput;
+  siteId: Scalars['ObjectID'];
+  input: CreatePageInput;
 }>;
 
 
-export type CreatePageMutation = { readonly __typename?: 'Mutation', readonly createPage: { readonly __typename?: 'PageUpdatedResponse', readonly id: string, readonly status: EditStatus } };
+export type CreatePageMutation = { readonly __typename?: 'Mutation', readonly createPage: { readonly __typename?: 'PageUpdatedResponse', readonly id: any, readonly status: string } };
 
 export type UpdatePageMutationVariables = Exact<{
-  pageId: Scalars['String'];
+  pageId: Scalars['ObjectID'];
   input: UpdatePageInput;
 }>;
 
 
-export type UpdatePageMutation = { readonly __typename?: 'Mutation', readonly updatePage: { readonly __typename?: 'PageUpdatedResponse', readonly status: EditStatus } };
+export type UpdatePageMutation = { readonly __typename?: 'Mutation', readonly updatePage: { readonly __typename?: 'PageUpdatedResponse', readonly status: string } };
 
 export type DeletePageMutationVariables = Exact<{
-  pageId: Scalars['String'];
+  pageId: Scalars['ObjectID'];
 }>;
 
 
-export type DeletePageMutation = { readonly __typename?: 'Mutation', readonly deletePage: { readonly __typename?: 'PageUpdatedResponse', readonly status: EditStatus } };
+export type DeletePageMutation = { readonly __typename?: 'Mutation', readonly deletePage: { readonly __typename?: 'PageUpdatedResponse', readonly status: string } };
 
 export type SessionQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SessionQuery = { readonly __typename?: 'Query', readonly session: { readonly __typename?: 'SessionResponse', readonly id: string } };
+export type SessionQuery = { readonly __typename?: 'Query', readonly session: { readonly __typename?: 'SessionResponse', readonly id: any } };
 
 export type GetAccessTokenQueryVariables = Exact<{
-  organization?: InputMaybe<Scalars['String']>;
+  organization?: InputMaybe<Scalars['ObjectID']>;
 }>;
 
 
@@ -955,29 +806,29 @@ export type GetAccessTokenQuery = { readonly __typename?: 'Query', readonly acce
 export type GetSitesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSitesQuery = { readonly __typename?: 'Query', readonly siteList: ReadonlyArray<{ readonly __typename?: 'SiteSchema', readonly id: string, readonly name: string, readonly status: SiteStatus }> };
+export type GetSitesQuery = { readonly __typename?: 'Query', readonly siteByOwner: ReadonlyArray<{ readonly __typename?: 'Site', readonly id: any, readonly name: string, readonly status: SiteStatus }> };
 
 export type GetSiteQueryVariables = Exact<{
-  siteId: Scalars['String'];
+  siteId: Scalars['ObjectID'];
 }>;
 
 
-export type GetSiteQuery = { readonly __typename?: 'Query', readonly site: { readonly __typename?: 'SiteSchema', readonly id: string, readonly name: string, readonly updatedAt: Date } };
+export type GetSiteQuery = { readonly __typename?: 'Query', readonly site: { readonly __typename?: 'Site', readonly id: any, readonly name: string, readonly updatedAt: Date } };
 
 export type CreateSiteMutationVariables = Exact<{
-  name: Scalars['String'];
+  input: CreateSiteInput;
 }>;
 
 
-export type CreateSiteMutation = { readonly __typename?: 'Mutation', readonly createSite: { readonly __typename?: 'SiteUpdatedResponse', readonly id: string } };
+export type CreateSiteMutation = { readonly __typename?: 'Mutation', readonly createSite: { readonly __typename?: 'SiteUpdatedResponse', readonly id: any } };
 
 export type UpdateSiteMutationVariables = Exact<{
-  siteId: Scalars['String'];
-  name: Scalars['String'];
+  siteId: Scalars['ObjectID'];
+  input: UpdateSiteInput;
 }>;
 
 
-export type UpdateSiteMutation = { readonly __typename?: 'Mutation', readonly updateSite: { readonly __typename?: 'SiteUpdatedResponse', readonly id: string, readonly status: SiteStatus } };
+export type UpdateSiteMutation = { readonly __typename?: 'Mutation', readonly updateSite: { readonly __typename?: 'SiteUpdatedResponse', readonly id: any, readonly status: SiteStatus } };
 
 export type SendVerificationMutationVariables = Exact<{
   channel: VerificationChannel;
@@ -996,22 +847,17 @@ export type ValidateVerificationCodeQueryVariables = Exact<{
 export type ValidateVerificationCodeQuery = { readonly __typename?: 'Query', readonly validateVerificationCode: boolean };
 
 export const PositionFragmentDoc = gql`
-    fragment Position on PageElementPlatformSchema {
-  id
+    fragment Position on ElementArea {
   x
   y
   width
   height
   isVisible
-  createdAt
-  updatedAt
 }
     `;
 export const RegisterDocument = gql`
-    mutation register($email: String!, $phone: String, $firstName: String, $lastName: String, $displayName: String) {
-  registerAccount(
-    input: {email: $email, phone: $phone, firstName: $firstName, lastName: $lastName, displayName: $displayName}
-  ) {
+    mutation register($input: AccountRegisterInput!) {
+  registerAccount(input: $input) {
     accessToken {
       value
       expiresAt
@@ -1034,11 +880,7 @@ export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, Regis
  * @example
  * const [registerMutation, { data, loading, error }] = useRegisterMutation({
  *   variables: {
- *      email: // value for 'email'
- *      phone: // value for 'phone'
- *      firstName: // value for 'firstName'
- *      lastName: // value for 'lastName'
- *      displayName: // value for 'displayName'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -1080,10 +922,8 @@ export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const LoginWithVerificationDocument = gql`
-    mutation loginWithVerification($username: String!, $verificationId: String!, $verificationCode: String!) {
-  loginWithVerification(
-    input: {username: $username, verificationId: $verificationId, verificationCode: $verificationCode}
-  ) {
+    mutation loginWithVerification($input: LoginWithVerificationInput!) {
+  loginWithVerification(input: $input) {
     accessToken {
       value
       expiresAt
@@ -1106,9 +946,7 @@ export type LoginWithVerificationMutationFn = Apollo.MutationFunction<LoginWithV
  * @example
  * const [loginWithVerificationMutation, { data, loading, error }] = useLoginWithVerificationMutation({
  *   variables: {
- *      username: // value for 'username'
- *      verificationId: // value for 'verificationId'
- *      verificationCode: // value for 'verificationCode'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -1120,7 +958,7 @@ export type LoginWithVerificationMutationHookResult = ReturnType<typeof useLogin
 export type LoginWithVerificationMutationResult = Apollo.MutationResult<LoginWithVerificationMutation>;
 export type LoginWithVerificationMutationOptions = Apollo.BaseMutationOptions<LoginWithVerificationMutation, LoginWithVerificationMutationVariables>;
 export const AddEmailDocument = gql`
-    mutation addEmail($email: String!) {
+    mutation addEmail($email: EmailAddress!) {
   addEmailToAccount(email: $email)
 }
     `;
@@ -1151,8 +989,8 @@ export type AddEmailMutationHookResult = ReturnType<typeof useAddEmailMutation>;
 export type AddEmailMutationResult = Apollo.MutationResult<AddEmailMutation>;
 export type AddEmailMutationOptions = Apollo.BaseMutationOptions<AddEmailMutation, AddEmailMutationVariables>;
 export const RemoveEmailDocument = gql`
-    mutation removeEmail($email: String!) {
-  removeEmailFromAccount(email: $email)
+    mutation removeEmail($emailId: ObjectID!) {
+  removeEmailFromAccount(emailId: $emailId)
 }
     `;
 export type RemoveEmailMutationFn = Apollo.MutationFunction<RemoveEmailMutation, RemoveEmailMutationVariables>;
@@ -1170,7 +1008,7 @@ export type RemoveEmailMutationFn = Apollo.MutationFunction<RemoveEmailMutation,
  * @example
  * const [removeEmailMutation, { data, loading, error }] = useRemoveEmailMutation({
  *   variables: {
- *      email: // value for 'email'
+ *      emailId: // value for 'emailId'
  *   },
  * });
  */
@@ -1182,7 +1020,7 @@ export type RemoveEmailMutationHookResult = ReturnType<typeof useRemoveEmailMuta
 export type RemoveEmailMutationResult = Apollo.MutationResult<RemoveEmailMutation>;
 export type RemoveEmailMutationOptions = Apollo.BaseMutationOptions<RemoveEmailMutation, RemoveEmailMutationVariables>;
 export const AddPhoneDocument = gql`
-    mutation addPhone($phone: String!) {
+    mutation addPhone($phone: PhoneNumber!) {
   addPhoneToAccount(phone: $phone)
 }
     `;
@@ -1213,8 +1051,8 @@ export type AddPhoneMutationHookResult = ReturnType<typeof useAddPhoneMutation>;
 export type AddPhoneMutationResult = Apollo.MutationResult<AddPhoneMutation>;
 export type AddPhoneMutationOptions = Apollo.BaseMutationOptions<AddPhoneMutation, AddPhoneMutationVariables>;
 export const RemovePhoneDocument = gql`
-    mutation removePhone($phone: String!) {
-  removePhoneFromAccount(phone: $phone)
+    mutation removePhone($phoneId: ObjectID!) {
+  removePhoneFromAccount(phoneId: $phoneId)
 }
     `;
 export type RemovePhoneMutationFn = Apollo.MutationFunction<RemovePhoneMutation, RemovePhoneMutationVariables>;
@@ -1232,7 +1070,7 @@ export type RemovePhoneMutationFn = Apollo.MutationFunction<RemovePhoneMutation,
  * @example
  * const [removePhoneMutation, { data, loading, error }] = useRemovePhoneMutation({
  *   variables: {
- *      phone: // value for 'phone'
+ *      phoneId: // value for 'phoneId'
  *   },
  * });
  */
@@ -1284,7 +1122,7 @@ export function refetchGetAccountQuery(variables?: GetAccountQueryVariables) {
     }
 export const GetOrgMembershipDocument = gql`
     query getOrgMembership {
-  organizationMembership {
+  organizationMembershipProfile {
     profileImageUrl
     status
     role
@@ -1323,7 +1161,7 @@ export function refetchGetOrgMembershipQuery(variables?: GetOrgMembershipQueryVa
     }
 export const GetOrgsMembershipListDocument = gql`
     query getOrgsMembershipList {
-  organizations {
+  organizationsByMemberships {
     id
     name
     slug
@@ -1364,7 +1202,7 @@ export function refetchGetOrgsMembershipListQuery(variables?: GetOrgsMembershipL
     }
 export const GetCurrentOrganizationDocument = gql`
     query getCurrentOrganization {
-  organization {
+  organizationByMembership {
     name
     logoUrl
     plan
@@ -1442,12 +1280,9 @@ export function refetchFindOrganizationBySlugQuery(variables: FindOrganizationBy
       return { query: FindOrganizationBySlugDocument, variables: variables }
     }
 export const CreateOrganizationDocument = gql`
-    mutation createOrganization($name: String!, $plan: OrganizationPlan!) {
-  createOrganization(input: {name: $name, plan: $plan}) {
+    mutation createOrganization($input: CreateOrganizationInput!) {
+  createOrganization(input: $input) {
     id
-    slug
-    name
-    plan
   }
 }
     `;
@@ -1466,8 +1301,7 @@ export type CreateOrganizationMutationFn = Apollo.MutationFunction<CreateOrganiz
  * @example
  * const [createOrganizationMutation, { data, loading, error }] = useCreateOrganizationMutation({
  *   variables: {
- *      name: // value for 'name'
- *      plan: // value for 'plan'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -1479,7 +1313,7 @@ export type CreateOrganizationMutationHookResult = ReturnType<typeof useCreateOr
 export type CreateOrganizationMutationResult = Apollo.MutationResult<CreateOrganizationMutation>;
 export type CreateOrganizationMutationOptions = Apollo.BaseMutationOptions<CreateOrganizationMutation, CreateOrganizationMutationVariables>;
 export const ArchiveOrganizationDocument = gql`
-    mutation archiveOrganization($orgId: String!) {
+    mutation archiveOrganization($orgId: ObjectID!) {
   archiveOrganization(orgId: $orgId)
 }
     `;
@@ -1510,7 +1344,7 @@ export type ArchiveOrganizationMutationHookResult = ReturnType<typeof useArchive
 export type ArchiveOrganizationMutationResult = Apollo.MutationResult<ArchiveOrganizationMutation>;
 export type ArchiveOrganizationMutationOptions = Apollo.BaseMutationOptions<ArchiveOrganizationMutation, ArchiveOrganizationMutationVariables>;
 export const RestoreOrganizationDocument = gql`
-    mutation restoreOrganization($orgId: String!) {
+    mutation restoreOrganization($orgId: ObjectID!) {
   restoreOrganization(orgId: $orgId)
 }
     `;
@@ -1541,14 +1375,15 @@ export type RestoreOrganizationMutationHookResult = ReturnType<typeof useRestore
 export type RestoreOrganizationMutationResult = Apollo.MutationResult<RestoreOrganizationMutation>;
 export type RestoreOrganizationMutationOptions = Apollo.BaseMutationOptions<RestoreOrganizationMutation, RestoreOrganizationMutationVariables>;
 export const GetElementsByGroupDocument = gql`
-    query getElementsByGroup($groupId: String!) {
-  pageElementListByGroup(groupId: $groupId) {
+    query getElementsByGroup($groupId: ObjectID!) {
+  elementsByGroup(groupId: $groupId) {
     __typename
-    ... on PageElementTextSchema {
+    ... on ElementText {
       id
       json
       html
       type
+      group
       createdAt
       updatedAt
       createdBy
@@ -1598,7 +1433,7 @@ export function refetchGetElementsByGroupQuery(variables: GetElementsByGroupQuer
       return { query: GetElementsByGroupDocument, variables: variables }
     }
 export const AddTextElementDocument = gql`
-    mutation addTextElement($groupId: String!, $input: AddTextElementInput!) {
+    mutation addTextElement($groupId: ObjectID!, $input: AddTextElementInput!) {
   addTextElement(groupId: $groupId, input: $input) {
     id
   }
@@ -1632,7 +1467,7 @@ export type AddTextElementMutationHookResult = ReturnType<typeof useAddTextEleme
 export type AddTextElementMutationResult = Apollo.MutationResult<AddTextElementMutation>;
 export type AddTextElementMutationOptions = Apollo.BaseMutationOptions<AddTextElementMutation, AddTextElementMutationVariables>;
 export const UpdateTextElementDocument = gql`
-    mutation updateTextElement($elementId: String!, $input: UpdateTextElementInput!) {
+    mutation updateTextElement($elementId: ObjectID!, $input: UpdateTextElementInput!) {
   updateTextElement(elementId: $elementId, input: $input) {
     id
   }
@@ -1666,9 +1501,9 @@ export type UpdateTextElementMutationHookResult = ReturnType<typeof useUpdateTex
 export type UpdateTextElementMutationResult = Apollo.MutationResult<UpdateTextElementMutation>;
 export type UpdateTextElementMutationOptions = Apollo.BaseMutationOptions<UpdateTextElementMutation, UpdateTextElementMutationVariables>;
 export const DeleteManyElementsDocument = gql`
-    mutation deleteManyElements($elementIdList: [String!]!) {
-  deleteManyElements(elementIdList: $elementIdList) {
-    ... on PageElementTextSchema {
+    mutation deleteManyElements($elementIds: [ObjectID!]!) {
+  deleteManyElements(elementIds: $elementIds) {
+    ... on ElementText {
       id
     }
   }
@@ -1689,7 +1524,7 @@ export type DeleteManyElementsMutationFn = Apollo.MutationFunction<DeleteManyEle
  * @example
  * const [deleteManyElementsMutation, { data, loading, error }] = useDeleteManyElementsMutation({
  *   variables: {
- *      elementIdList: // value for 'elementIdList'
+ *      elementIds: // value for 'elementIds'
  *   },
  * });
  */
@@ -1701,7 +1536,7 @@ export type DeleteManyElementsMutationHookResult = ReturnType<typeof useDeleteMa
 export type DeleteManyElementsMutationResult = Apollo.MutationResult<DeleteManyElementsMutation>;
 export type DeleteManyElementsMutationOptions = Apollo.BaseMutationOptions<DeleteManyElementsMutation, DeleteManyElementsMutationVariables>;
 export const GetPageSectionDocument = gql`
-    query getPageSection($sectionId: String!) {
+    query getPageSection($sectionId: ObjectID!) {
   section(sectionId: $sectionId) {
     id
     format {
@@ -1744,8 +1579,8 @@ export function refetchGetPageSectionQuery(variables: GetPageSectionQueryVariabl
       return { query: GetPageSectionDocument, variables: variables }
     }
 export const GetPageSectionListDocument = gql`
-    query getPageSectionList($pageId: String!) {
-  sectionList(pageId: $pageId) {
+    query getPageSectionList($pageId: ObjectID!) {
+  sectionsByPage(pageId: $pageId) {
     id
     createdAt
     updatedAt
@@ -1754,7 +1589,6 @@ export const GetPageSectionListDocument = gql`
       rowsCount
       rowGap
       columnGap
-      updatedBy
     }
   }
 }
@@ -1791,7 +1625,7 @@ export function refetchGetPageSectionListQuery(variables: GetPageSectionListQuer
       return { query: GetPageSectionListDocument, variables: variables }
     }
 export const CreatePageSectionDocument = gql`
-    mutation createPageSection($pageId: String!, $input: CreateSectionInput!) {
+    mutation createPageSection($pageId: ObjectID!, $input: CreateSectionInput!) {
   createSection(pageId: $pageId, input: $input) {
     id
   }
@@ -1825,7 +1659,7 @@ export type CreatePageSectionMutationHookResult = ReturnType<typeof useCreatePag
 export type CreatePageSectionMutationResult = Apollo.MutationResult<CreatePageSectionMutation>;
 export type CreatePageSectionMutationOptions = Apollo.BaseMutationOptions<CreatePageSectionMutation, CreatePageSectionMutationVariables>;
 export const DeletePageSectionDocument = gql`
-    mutation deletePageSection($pageId: String!, $sectionId: String!) {
+    mutation deletePageSection($pageId: ObjectID!, $sectionId: ObjectID!) {
   deleteSection(pageId: $pageId, sectionId: $sectionId) {
     id
   }
@@ -1859,7 +1693,7 @@ export type DeletePageSectionMutationHookResult = ReturnType<typeof useDeletePag
 export type DeletePageSectionMutationResult = Apollo.MutationResult<DeletePageSectionMutation>;
 export type DeletePageSectionMutationOptions = Apollo.BaseMutationOptions<DeletePageSectionMutation, DeletePageSectionMutationVariables>;
 export const UpdatePageSectionIndexDocument = gql`
-    mutation updatePageSectionIndex($pageId: String!, $sectionId: String!, $index: Float!) {
+    mutation updatePageSectionIndex($pageId: ObjectID!, $sectionId: ObjectID!, $index: NonNegativeInt!) {
   updateSectionIndex(pageId: $pageId, sectionId: $sectionId, index: $index) {
     id
   }
@@ -1894,7 +1728,7 @@ export type UpdatePageSectionIndexMutationHookResult = ReturnType<typeof useUpda
 export type UpdatePageSectionIndexMutationResult = Apollo.MutationResult<UpdatePageSectionIndexMutation>;
 export type UpdatePageSectionIndexMutationOptions = Apollo.BaseMutationOptions<UpdatePageSectionIndexMutation, UpdatePageSectionIndexMutationVariables>;
 export const UpdatePageSectionFormatDocument = gql`
-    mutation updatePageSectionFormat($pageId: String!, $sectionId: String!, $input: UpdateSectionFormatInput!) {
+    mutation updatePageSectionFormat($pageId: ObjectID!, $sectionId: ObjectID!, $input: UpdateSectionFormatInput!) {
   updateSectionFormat(pageId: $pageId, sectionId: $sectionId, input: $input) {
     id
   }
@@ -1929,7 +1763,7 @@ export type UpdatePageSectionFormatMutationHookResult = ReturnType<typeof useUpd
 export type UpdatePageSectionFormatMutationResult = Apollo.MutationResult<UpdatePageSectionFormatMutation>;
 export type UpdatePageSectionFormatMutationOptions = Apollo.BaseMutationOptions<UpdatePageSectionFormatMutation, UpdatePageSectionFormatMutationVariables>;
 export const ClonePageSectionDocument = gql`
-    mutation clonePageSection($pageId: String!, $sectionId: String!) {
+    mutation clonePageSection($pageId: ObjectID!, $sectionId: ObjectID!) {
   cloneSection(pageId: $pageId, sectionId: $sectionId) {
     id
   }
@@ -1963,8 +1797,8 @@ export type ClonePageSectionMutationHookResult = ReturnType<typeof useClonePageS
 export type ClonePageSectionMutationResult = Apollo.MutationResult<ClonePageSectionMutation>;
 export type ClonePageSectionMutationOptions = Apollo.BaseMutationOptions<ClonePageSectionMutation, ClonePageSectionMutationVariables>;
 export const GetPageListDocument = gql`
-    query getPageList($siteId: String!) {
-  pageList(siteId: $siteId) {
+    query getPageList($siteId: ObjectID!) {
+  pagesBySite(siteId: $siteId) {
     id
     title
     status
@@ -2003,8 +1837,8 @@ export function refetchGetPageListQuery(variables: GetPageListQueryVariables) {
       return { query: GetPageListDocument, variables: variables }
     }
 export const GetPageDocument = gql`
-    query getPage($pageId: String!) {
-  page(id: $pageId) {
+    query getPage($pageId: ObjectID!) {
+  page(pageId: $pageId) {
     id
     title
     status
@@ -2048,8 +1882,8 @@ export function refetchGetPageQuery(variables: GetPageQueryVariables) {
       return { query: GetPageDocument, variables: variables }
     }
 export const CreatePageDocument = gql`
-    mutation createPage($siteId: String!, $prop: CreatePageInput!) {
-  createPage(siteId: $siteId, input: $prop) {
+    mutation createPage($siteId: ObjectID!, $input: CreatePageInput!) {
+  createPage(siteId: $siteId, input: $input) {
     id
     status
   }
@@ -2071,7 +1905,7 @@ export type CreatePageMutationFn = Apollo.MutationFunction<CreatePageMutation, C
  * const [createPageMutation, { data, loading, error }] = useCreatePageMutation({
  *   variables: {
  *      siteId: // value for 'siteId'
- *      prop: // value for 'prop'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -2083,8 +1917,8 @@ export type CreatePageMutationHookResult = ReturnType<typeof useCreatePageMutati
 export type CreatePageMutationResult = Apollo.MutationResult<CreatePageMutation>;
 export type CreatePageMutationOptions = Apollo.BaseMutationOptions<CreatePageMutation, CreatePageMutationVariables>;
 export const UpdatePageDocument = gql`
-    mutation updatePage($pageId: String!, $input: UpdatePageInput!) {
-  updatePage(id: $pageId, input: $input) {
+    mutation updatePage($pageId: ObjectID!, $input: UpdatePageInput!) {
+  updatePage(pageId: $pageId, input: $input) {
     status
   }
 }
@@ -2117,8 +1951,8 @@ export type UpdatePageMutationHookResult = ReturnType<typeof useUpdatePageMutati
 export type UpdatePageMutationResult = Apollo.MutationResult<UpdatePageMutation>;
 export type UpdatePageMutationOptions = Apollo.BaseMutationOptions<UpdatePageMutation, UpdatePageMutationVariables>;
 export const DeletePageDocument = gql`
-    mutation deletePage($pageId: String!) {
-  deletePage(id: $pageId) {
+    mutation deletePage($pageId: ObjectID!) {
+  deletePage(pageId: $pageId) {
     status
   }
 }
@@ -2187,8 +2021,8 @@ export function refetchSessionQuery(variables?: SessionQueryVariables) {
       return { query: SessionDocument, variables: variables }
     }
 export const GetAccessTokenDocument = gql`
-    query getAccessToken($organization: String) {
-  accessToken(query: {organization: $organization}) {
+    query getAccessToken($organization: ObjectID) {
+  accessToken(organizationId: $organization) {
     value
     expiresAt
   }
@@ -2227,7 +2061,7 @@ export function refetchGetAccessTokenQuery(variables?: GetAccessTokenQueryVariab
     }
 export const GetSitesDocument = gql`
     query getSites {
-  siteList {
+  siteByOwner {
     id
     name
     status
@@ -2265,8 +2099,8 @@ export function refetchGetSitesQuery(variables?: GetSitesQueryVariables) {
       return { query: GetSitesDocument, variables: variables }
     }
 export const GetSiteDocument = gql`
-    query getSite($siteId: String!) {
-  site(id: $siteId) {
+    query getSite($siteId: ObjectID!) {
+  site(siteId: $siteId) {
     id
     name
     updatedAt
@@ -2305,8 +2139,8 @@ export function refetchGetSiteQuery(variables: GetSiteQueryVariables) {
       return { query: GetSiteDocument, variables: variables }
     }
 export const CreateSiteDocument = gql`
-    mutation createSite($name: String!) {
-  createSite(input: {name: $name}) {
+    mutation createSite($input: CreateSiteInput!) {
+  createSite(input: $input) {
     id
   }
 }
@@ -2326,7 +2160,7 @@ export type CreateSiteMutationFn = Apollo.MutationFunction<CreateSiteMutation, C
  * @example
  * const [createSiteMutation, { data, loading, error }] = useCreateSiteMutation({
  *   variables: {
- *      name: // value for 'name'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -2338,8 +2172,8 @@ export type CreateSiteMutationHookResult = ReturnType<typeof useCreateSiteMutati
 export type CreateSiteMutationResult = Apollo.MutationResult<CreateSiteMutation>;
 export type CreateSiteMutationOptions = Apollo.BaseMutationOptions<CreateSiteMutation, CreateSiteMutationVariables>;
 export const UpdateSiteDocument = gql`
-    mutation updateSite($siteId: String!, $name: String!) {
-  updateSite(input: {name: $name}, id: $siteId) {
+    mutation updateSite($siteId: ObjectID!, $input: UpdateSiteInput!) {
+  updateSite(siteId: $siteId, input: $input) {
     id
     status
   }
@@ -2361,7 +2195,7 @@ export type UpdateSiteMutationFn = Apollo.MutationFunction<UpdateSiteMutation, U
  * const [updateSiteMutation, { data, loading, error }] = useUpdateSiteMutation({
  *   variables: {
  *      siteId: // value for 'siteId'
- *      name: // value for 'name'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -2374,7 +2208,7 @@ export type UpdateSiteMutationResult = Apollo.MutationResult<UpdateSiteMutation>
 export type UpdateSiteMutationOptions = Apollo.BaseMutationOptions<UpdateSiteMutation, UpdateSiteMutationVariables>;
 export const SendVerificationDocument = gql`
     mutation sendVerification($channel: VerificationChannel!, $destination: String!) {
-  sendVerificationCode(input: {channel: $channel, destination: $destination})
+  sendVerificationCode(channel: $channel, destination: $destination)
 }
     `;
 export type SendVerificationMutationFn = Apollo.MutationFunction<SendVerificationMutation, SendVerificationMutationVariables>;
@@ -2407,7 +2241,8 @@ export type SendVerificationMutationOptions = Apollo.BaseMutationOptions<SendVer
 export const ValidateVerificationCodeDocument = gql`
     query validateVerificationCode($verificationId: String!, $verificationCode: String!) {
   validateVerificationCode(
-    input: {verificationId: $verificationId, verificationCode: $verificationCode}
+    verificationId: $verificationId
+    verificationCode: $verificationCode
   )
 }
     `;

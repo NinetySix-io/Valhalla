@@ -2,7 +2,7 @@ import { GetPageRequest, GetPageResponse } from '@app/protobuf';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { RpcHandler, Serializer } from '@valhalla/serv.core';
 
-import { PageProto } from '../transformers/page.proto';
+import { PageProto } from '../protos/page.proto';
 import { PagesModel } from '@app/entities/pages';
 
 export class GetPageQuery implements IQuery {

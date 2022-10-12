@@ -1,6 +1,9 @@
-import { ArgsType, PickType } from '@nestjs/graphql';
+import { ArgsType, Field } from '@nestjs/graphql';
 
-import { Site } from '../gql.types/site';
+import { CreateSiteInput } from '../gql.inputs/create.site.input';
 
 @ArgsType()
-export class CreateSiteArgs extends PickType(Site, ['name'], ArgsType) {}
+export class CreateSiteArgs {
+  @Field()
+  input: CreateSiteInput;
+}

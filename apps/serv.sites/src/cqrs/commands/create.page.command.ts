@@ -17,7 +17,7 @@ import {
 } from '@valhalla/serv.core';
 
 import { PageCreatedEvent } from '../events/page.created.event';
-import { PageProto } from '../transformers/page.proto';
+import { PageProto } from '../protos/page.proto';
 import { PageSchema } from '@app/entities/pages/schemas';
 import { PagesModel } from '@app/entities/pages';
 

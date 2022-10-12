@@ -11,7 +11,7 @@ import {
   SuspendSiteResponse,
 } from '@app/protobuf';
 
-import { SiteProto } from '../transformers/site.proto';
+import { SiteProto } from '../protos/site.proto';
 import { SiteSuspendedEvent } from '../events/site.suspended.event';
 import { SitesModel } from '@app/entities/sites';
 

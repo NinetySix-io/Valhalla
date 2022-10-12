@@ -53,7 +53,7 @@ export class GqlSectionsResolver {
   ): Promise<PageSection> {
     const result = await resolveRpcRequest(
       this.rpcClient.createSection({
-        index: args.index,
+        index: args.input.index,
         pageId: args.pageId,
         requestedUserId: account.id,
       }),
@@ -73,9 +73,9 @@ export class GqlSectionsResolver {
         pageId: args.pageId,
         sectionId: args.sectionId,
         requestedUserId: account.id,
-        columnGap: args.columnGap,
-        rowGap: args.rowGap,
-        rowsCount: args.rowGap,
+        columnGap: args.input.columnGap,
+        rowGap: args.input.rowGap,
+        rowsCount: args.input.rowGap,
       }),
     );
 

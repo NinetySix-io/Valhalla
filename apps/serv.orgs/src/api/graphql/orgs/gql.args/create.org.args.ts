@@ -1,10 +1,9 @@
-import { ArgsType, PickType } from '@nestjs/graphql';
+import { ArgsType, Field } from '@nestjs/graphql';
 
-import { Organization } from '../gql.types/organization';
+import { CreateOrganizationInput } from '../gql.inputs/create.org.input';
 
 @ArgsType()
-export class CreateOrganizationArgs extends PickType(
-  Organization,
-  ['name', 'plan'] as const,
-  ArgsType,
-) {}
+export class CreateOrganizationArgs {
+  @Field()
+  input: CreateOrganizationInput;
+}

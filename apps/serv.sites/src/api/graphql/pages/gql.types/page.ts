@@ -4,7 +4,7 @@ import { EditStatus } from '@app/protobuf';
 import { IsEnum } from 'class-validator';
 import { IsObjectId } from '@valhalla/serv.core';
 import { ObjectIDResolver } from 'graphql-scalars';
-import { PageProto } from '@app/cqrs/transformers/page.proto';
+import { PageProto } from '@app/cqrs/protos/page.proto';
 
 registerEnumType(EditStatus, { name: 'EditStatus' });
 

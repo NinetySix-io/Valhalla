@@ -11,7 +11,7 @@ import {
   UpdatePageElementResponse,
 } from '@app/protobuf';
 
-import { PageElementProto } from '../transformers/page.element.proto';
+import { PageElementProto } from '../protos/page.element.proto';
 import { PageElementSchema } from '@app/entities/page.elements/schemas';
 import { PageElementTextSchema } from '@app/entities/page.elements/variants/text.variant';
 import { PageElementsModel } from '@app/entities/page.elements';

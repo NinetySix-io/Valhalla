@@ -12,7 +12,7 @@ import { CreatePageArgs } from './gql.args/create.page.args';
 import { DeletePageArgs } from './gql.args/delete.page.args';
 import { GetPageArgs } from './gql.args/get.page.args';
 import { GetPagesBySiteArgs } from './gql.args/get.pages.by.site.args';
-import { UpdatePageArgs } from './gql.args/update.page.input';
+import { UpdatePageArgs } from './gql.args/update.page.args';
 import { PageUpdatedResponse } from './gql.responses/page.updated.response';
 import { Page } from './gql.types/page';
 
@@ -29,7 +29,7 @@ export class GqlPagesResolver {
     const result = await resolveRpcRequest(
       this.rpcClient.createPage({
         siteId: args.siteId,
-        title: args.title,
+        title: args.input.title,
         requestedUserId: account.id,
       }),
     );
@@ -62,10 +62,10 @@ export class GqlPagesResolver {
     const result = await resolveRpcRequest(
       this.rpcClient.updatePage({
         requestedUserId: account.id,
-        title: args.title,
         pageId: args.pageId,
-        isLoneTitle: args.isLoneTitle,
-        description: args.description,
+        title: args.input.title,
+        isLoneTitle: args.input.isLoneTitle,
+        description: args.input.description,
       }),
     );
 

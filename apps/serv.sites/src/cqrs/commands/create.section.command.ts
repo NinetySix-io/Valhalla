@@ -13,7 +13,7 @@ import {
 } from '@valhalla/serv.core';
 import { CreateSectionRequest, CreateSectionResponse } from '@app/protobuf';
 
-import { PageSectionProto } from '../transformers/page.section.proto';
+import { PageSectionProto } from '../protos/page.section.proto';
 import { PageSectionSchema } from '@app/entities/pages/schemas';
 import { PagesModel } from '@app/entities/pages';
 import { SectionCreatedEvent } from '../events/section.created.event';

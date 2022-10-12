@@ -35,7 +35,6 @@ enum VerificationChannel {
 
 message AccessTokenAccountContent {
     string id = 1;
-    string displayName = 2;
 }
 
 message AccessTokenOrContent {
@@ -69,12 +68,12 @@ message AddPhoneToAccountRequest {
 
 message RemoveEmailFromAccountRequest {
     string accountId = 1;
-    string email = 2;
+    string emailId = 2;
 }
 
 message RemovePhoneFromAccountRequest {
     string accountId = 1;
-    string phone = 2;
+    string phoneId = 2;
 }
 
 message VerifyPhoneRequest {

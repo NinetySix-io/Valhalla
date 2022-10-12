@@ -1,15 +1,14 @@
-import {
-  ArgsType,
-  IntersectionType,
-  PartialType,
-  PickType,
-} from '@nestjs/graphql';
+import { ArgsType, Field, PickType } from '@nestjs/graphql';
 
-import { Site } from '../gql.types/site';
 import { SiteMetaArgs } from './site.meta.args';
+import { UpdateSiteInput } from '../gql.inputs/update.site.input';
 
 @ArgsType()
-export class UpdateSiteArgs extends IntersectionType(
-  PickType(SiteMetaArgs, ['siteId'] as const, ArgsType),
-  PartialType(PickType(Site, ['name'] as const, ArgsType)),
-) {}
+export class UpdateSiteArgs extends PickType(
+  SiteMetaArgs,
+  ['siteId'] as const,
+  ArgsType,
+) {
+  @Field()
+  input: UpdateSiteInput;
+}

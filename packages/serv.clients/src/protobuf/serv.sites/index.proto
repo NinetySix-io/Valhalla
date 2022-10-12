@@ -39,8 +39,8 @@ service SitesService {
   // -----------------------------
   // ELEMENTS
   // -----------------------------
-  rpc GetPageElementListBySection(GetPageElementListBySectionRequest) returns (GetPageElementListBySectionResponse) {}
-  rpc DeletePageElementList(DeletePageElementListRequest) returns (DeletePageElementListResponse) {}
+  rpc GetPageElementListByGroup(GetPageElementListByGroupRequest) returns (GetPageElementListByGroupResponse) {}
+  rpc DeletePageElementListByGroup(DeletePageElementListByGroupRequest) returns (DeletePageElementListByGroupResponse) {}
   rpc DeleteManyPageElements(DeleteManyPageElementsRequest) returns (DeleteManyPageElementsResponse) {}
   rpc AddPageElement(AddPageElementRequest) returns (AddPageElementResponse) {}
   rpc DeletePageElement(DeletePageElementRequest) returns (DeletePageElementResponse) {}
@@ -96,9 +96,9 @@ message Site {
 }
 
 message SectionFormat {
-  optional int32 rowsCount = 1;
-  optional int32 columnGap = 2;
-  optional int32 rowGap = 3;
+  int32 rowsCount = 1;
+  int32 columnGap = 2;
+  int32 rowGap = 3;
 }
 
 message PageSection {
@@ -111,7 +111,7 @@ message PageSection {
   google.protobuf.Timestamp updatedAt = 11;
 }
 
-message PageElementPlatform {
+message PageElementArea {
   int32 x = 1;
   int32 y = 2;
   int32 height = 3;
@@ -130,12 +130,14 @@ message PageElement {
   string updatedBy = 2;
   string createdBy = 3;
 
-  PageElementPlatform desktop = 4;
-  optional PageElementPlatform tablet = 5;
-  optional PageElementPlatform mobile = 6;
+  string group = 4;
 
-  google.protobuf.Timestamp createdAt = 7;
-  google.protobuf.Timestamp updatedAt = 8;
+  PageElementArea desktop = 5;
+  optional PageElementArea tablet = 6;
+  optional PageElementArea mobile = 7;
+
+  google.protobuf.Timestamp createdAt = 8;
+  google.protobuf.Timestamp updatedAt = 9;
 
   oneof type {
     TextElement text = 10;
@@ -294,7 +296,9 @@ message UpdateSectionFormatRequest {
   string pageId = 1;
   string sectionId = 4;
   string requestedUserId = 5;
-  SectionFormat format = 6;
+  optional int32 rowsCount = 6;
+  optional int32 columnGap = 7;
+  optional int32 rowGap = 8;
 }
 
 message UpdateSectionResponse {
@@ -325,20 +329,20 @@ message CloneSectionResponse {
 // ELEMENTS
 // -----------------------------
 
-message GetPageElementListBySectionRequest {
-  string sectionId = 1;
+message GetPageElementListByGroupRequest {
+  string groupId = 1;
 }
 
-message GetPageElementListBySectionResponse {
+message GetPageElementListByGroupResponse {
   repeated PageElement data = 1;
 }
 
-message DeletePageElementListRequest {
-  string sectionId = 2;
+message DeletePageElementListByGroupRequest {
+  string groupId = 2;
   string requestedUserId = 3;
 }
 
-message DeletePageElementListResponse {
+message DeletePageElementListByGroupResponse {
   repeated PageElement data = 1;
 }
 
@@ -354,11 +358,10 @@ message DeleteManyPageElementsResponse {
 message AddPageElementRequest {
   string requestedUserId = 1;
   string groupId = 2;
-  string pageId = 3;
 
-  PageElementPlatform desktop = 4;
-  optional PageElementPlatform tablet = 5;
-  optional PageElementPlatform mobile = 6;
+  PageElementArea desktop = 4;
+  optional PageElementArea tablet = 5;
+  optional PageElementArea mobile = 6;
 
   oneof type {
     TextElement text = 10;
@@ -382,12 +385,11 @@ message UpdatePageElementRequest {
   string requestedUserId = 1;
   string elementId = 2;
 
-  optional PageElementPlatform desktop = 4;
-  optional PageElementPlatform tablet = 5;
-  optional PageElementPlatform mobile = 6;
+  optional PageElementArea desktop = 4;
+  optional PageElementArea tablet = 5;
+  optional PageElementArea mobile = 6;
 
   oneof type {
-    bool none = 10;
     TextElement text = 11;
   }
 }

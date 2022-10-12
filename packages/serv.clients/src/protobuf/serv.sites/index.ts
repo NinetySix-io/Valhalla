@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
+import { wrappers } from "protobufjs";
 import { Observable } from "rxjs";
 
 export const protobufPackage = "serv.sites";
@@ -51,9 +52,9 @@ export interface Site {
 }
 
 export interface SectionFormat {
-  rowsCount?: number | undefined;
-  columnGap?: number | undefined;
-  rowGap?: number | undefined;
+  rowsCount: number;
+  columnGap: number;
+  rowGap: number;
 }
 
 export interface PageSection {
@@ -65,7 +66,7 @@ export interface PageSection {
   updatedAt?: Date;
 }
 
-export interface PageElementPlatform {
+export interface PageElementArea {
   x: number;
   y: number;
   height: number;
@@ -82,9 +83,10 @@ export interface PageElement {
   id: string;
   updatedBy: string;
   createdBy: string;
-  desktop?: PageElementPlatform;
-  tablet?: PageElementPlatform | undefined;
-  mobile?: PageElementPlatform | undefined;
+  group: string;
+  desktop?: PageElementArea;
+  tablet?: PageElementArea | undefined;
+  mobile?: PageElementArea | undefined;
   createdAt?: Date;
   updatedAt?: Date;
   type?: { $case: "text"; text: TextElement };
@@ -236,7 +238,9 @@ export interface UpdateSectionFormatRequest {
   pageId: string;
   sectionId: string;
   requestedUserId: string;
-  format?: SectionFormat;
+  rowsCount?: number | undefined;
+  columnGap?: number | undefined;
+  rowGap?: number | undefined;
 }
 
 export interface UpdateSectionResponse {
@@ -263,20 +267,20 @@ export interface CloneSectionResponse {
   data?: PageSection;
 }
 
-export interface GetPageElementListBySectionRequest {
-  sectionId: string;
+export interface GetPageElementListByGroupRequest {
+  groupId: string;
 }
 
-export interface GetPageElementListBySectionResponse {
+export interface GetPageElementListByGroupResponse {
   data: PageElement[];
 }
 
-export interface DeletePageElementListRequest {
-  sectionId: string;
+export interface DeletePageElementListByGroupRequest {
+  groupId: string;
   requestedUserId: string;
 }
 
-export interface DeletePageElementListResponse {
+export interface DeletePageElementListByGroupResponse {
   data: PageElement[];
 }
 
@@ -292,10 +296,9 @@ export interface DeleteManyPageElementsResponse {
 export interface AddPageElementRequest {
   requestedUserId: string;
   groupId: string;
-  pageId: string;
-  desktop?: PageElementPlatform;
-  tablet?: PageElementPlatform | undefined;
-  mobile?: PageElementPlatform | undefined;
+  desktop?: PageElementArea;
+  tablet?: PageElementArea | undefined;
+  mobile?: PageElementArea | undefined;
   type?: { $case: "text"; text: TextElement };
 }
 
@@ -315,10 +318,10 @@ export interface DeletePageElementResponse {
 export interface UpdatePageElementRequest {
   requestedUserId: string;
   elementId: string;
-  desktop?: PageElementPlatform | undefined;
-  tablet?: PageElementPlatform | undefined;
-  mobile?: PageElementPlatform | undefined;
-  type?: { $case: "none"; none: boolean } | { $case: "text"; text: TextElement };
+  desktop?: PageElementArea | undefined;
+  tablet?: PageElementArea | undefined;
+  mobile?: PageElementArea | undefined;
+  type?: { $case: "text"; text: TextElement };
 }
 
 export interface UpdatePageElementResponse {
@@ -326,6 +329,15 @@ export interface UpdatePageElementResponse {
 }
 
 export const SERV_SITES_PACKAGE_NAME = "serv.sites";
+
+wrappers[".google.protobuf.Timestamp"] = {
+  fromObject(value: Date) {
+    return { seconds: value.getTime() / 1000, nanos: (value.getTime() % 1000) * 1e6 };
+  },
+  toObject(message: { seconds: number; nanos: number }) {
+    return new Date(message.seconds * 1000 + message.nanos / 1e6);
+  },
+} as any;
 
 export interface SitesServiceClient {
   /**
@@ -388,11 +400,11 @@ export interface SitesServiceClient {
    * -----------------------------
    */
 
-  getPageElementListBySection(
-    request: GetPageElementListBySectionRequest,
-  ): Observable<GetPageElementListBySectionResponse>;
+  getPageElementListByGroup(request: GetPageElementListByGroupRequest): Observable<GetPageElementListByGroupResponse>;
 
-  deletePageElementList(request: DeletePageElementListRequest): Observable<DeletePageElementListResponse>;
+  deletePageElementListByGroup(
+    request: DeletePageElementListByGroupRequest,
+  ): Observable<DeletePageElementListByGroupResponse>;
 
   deleteManyPageElements(request: DeleteManyPageElementsRequest): Observable<DeleteManyPageElementsResponse>;
 
@@ -496,16 +508,19 @@ export interface SitesServiceController {
    * -----------------------------
    */
 
-  getPageElementListBySection(
-    request: GetPageElementListBySectionRequest,
+  getPageElementListByGroup(
+    request: GetPageElementListByGroupRequest,
   ):
-    | Promise<GetPageElementListBySectionResponse>
-    | Observable<GetPageElementListBySectionResponse>
-    | GetPageElementListBySectionResponse;
+    | Promise<GetPageElementListByGroupResponse>
+    | Observable<GetPageElementListByGroupResponse>
+    | GetPageElementListByGroupResponse;
 
-  deletePageElementList(
-    request: DeletePageElementListRequest,
-  ): Promise<DeletePageElementListResponse> | Observable<DeletePageElementListResponse> | DeletePageElementListResponse;
+  deletePageElementListByGroup(
+    request: DeletePageElementListByGroupRequest,
+  ):
+    | Promise<DeletePageElementListByGroupResponse>
+    | Observable<DeletePageElementListByGroupResponse>
+    | DeletePageElementListByGroupResponse;
 
   deleteManyPageElements(
     request: DeleteManyPageElementsRequest,
@@ -548,8 +563,8 @@ export function SitesServiceControllerMethods() {
       "updateSectionFormat",
       "deleteSection",
       "cloneSection",
-      "getPageElementListBySection",
-      "deletePageElementList",
+      "getPageElementListByGroup",
+      "deletePageElementListByGroup",
       "deleteManyPageElements",
       "addPageElement",
       "deletePageElement",

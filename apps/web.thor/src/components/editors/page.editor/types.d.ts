@@ -1,5 +1,5 @@
-import type { PageElementTextSchema } from '@app/generated/valhalla.gql';
-import type { Mutable } from '@valhalla/utilities';
+import type { ElementText } from '@app/generated/valhalla.gql';
+import type { Mutable, OmitRecursively } from '@valhalla/utilities';
 
 export type XYCoord = {
   x: number;
@@ -13,4 +13,4 @@ export type Size = {
 
 export type Position = Size & XYCoord;
 
-export type PageElement = Mutable<PageElementTextSchema>;
+export type PageElement = Mutable<OmitRecursively<ElementText, '__typename'>>;

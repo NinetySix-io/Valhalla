@@ -1,8 +1,9 @@
-import { ArgsType, PartialType, PickType } from '@nestjs/graphql';
+import { ArgsType, Field } from '@nestjs/graphql';
 
-import { Account } from '../gql.types/account';
+import { UpdateAccountInput } from '../gql.inputs/update.account.input';
 
 @ArgsType()
-export class UpdateAccountArgs extends PartialType(
-  PickType(Account, ['displayName', 'firstName', 'lastName'], ArgsType),
-) {}
+export class UpdateAccountArgs {
+  @Field()
+  input: UpdateAccountInput;
+}

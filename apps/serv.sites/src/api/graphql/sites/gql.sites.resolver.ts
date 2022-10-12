@@ -27,7 +27,7 @@ export class GqlSitesResolver {
   ): Promise<SiteUpdatedResponse> {
     const result = await resolveRpcRequest(
       this.rpcClient.createSite({
-        name: args.name,
+        name: args.input.name,
         ownerId: orgId,
         requestedUserId: account.id,
       }),
@@ -44,7 +44,7 @@ export class GqlSitesResolver {
   ): Promise<SiteUpdatedResponse> {
     const result = await resolveRpcRequest(
       this.rpcClient.updateSite({
-        name: args.name,
+        name: args.input.name,
         siteId: args.siteId,
         requestedUserId: account.id,
       }),

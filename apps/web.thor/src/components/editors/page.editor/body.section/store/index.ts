@@ -1,7 +1,7 @@
 import type { PageElement, XYCoord } from '../../types';
 import { createStore, createStoreHook, withImmer } from 'tiamut';
 
-import type { PageSectionSchema } from '@app/generated/valhalla.gql';
+import type { PageSection } from '@app/generated/valhalla.gql';
 import type { Rectangle } from './../elements.board/lib/rectangle';
 import { createSectionEmitter } from '../emitter';
 
@@ -9,7 +9,7 @@ type State = {
   minSelectionSize: number;
   sectionId: string;
   isEditingText: boolean;
-  config: PageSectionSchema['format'];
+  config: PageSection['format'];
   cellSize: number;
   container: HTMLElement;
   dragging?: PageElement;

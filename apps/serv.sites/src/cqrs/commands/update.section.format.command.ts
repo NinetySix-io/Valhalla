@@ -15,7 +15,7 @@ import {
   UpdateSectionResponse,
 } from '@app/protobuf';
 
-import { PageSectionProto } from '../transformers/page.section.proto';
+import { PageSectionProto } from '../protos/page.section.proto';
 import { PagesModel } from '@app/entities/pages';
 import { SectionUpdatedEvent } from '../events/section.updated.event';
 import { flattenObject } from '@valhalla/utilities';

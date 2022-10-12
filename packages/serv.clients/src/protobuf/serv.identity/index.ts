@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
+import { wrappers } from "protobufjs";
 import { Observable } from "rxjs";
 
 export const protobufPackage = "serv.identity";
@@ -11,7 +12,6 @@ export enum VerificationChannel {
 
 export interface AccessTokenAccountContent {
   id: string;
-  displayName: string;
 }
 
 export interface AccessTokenOrContent {
@@ -45,12 +45,12 @@ export interface AddPhoneToAccountRequest {
 
 export interface RemoveEmailFromAccountRequest {
   accountId: string;
-  email: string;
+  emailId: string;
 }
 
 export interface RemovePhoneFromAccountRequest {
   accountId: string;
-  phone: string;
+  phoneId: string;
 }
 
 export interface VerifyPhoneRequest {
@@ -201,6 +201,15 @@ export interface ProvisionAccessTokenResponse {
 }
 
 export const SERV_IDENTITY_PACKAGE_NAME = "serv.identity";
+
+wrappers[".google.protobuf.Timestamp"] = {
+  fromObject(value: Date) {
+    return { seconds: value.getTime() / 1000, nanos: (value.getTime() % 1000) * 1e6 };
+  },
+  toObject(message: { seconds: number; nanos: number }) {
+    return new Date(message.seconds * 1000 + message.nanos / 1e6);
+  },
+} as any;
 
 export interface IdentityServiceClient {
   register(request: RegisterRequest): Observable<RegisterResponse>;

@@ -32,8 +32,8 @@ export class GqlOrganizationsResolver {
     const response = await resolveRpcRequest(
       this.rpcClient.createOrg({
         requestedUserId: account.id,
-        name: args.name,
-        plan: OrgPlan.FREE,
+        name: args.input.name,
+        plan: args.input.plan ?? OrgPlan.FREE,
       }),
     );
 
@@ -86,7 +86,7 @@ export class GqlOrganizationsResolver {
     return response.organizations;
   }
 
-  @Query(() => [Organization], {
+  @Query(() => Organization, {
     description: 'Get current organization',
   })
   @UseGuards(GqlAuthGuard)

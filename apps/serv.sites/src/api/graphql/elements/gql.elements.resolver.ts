@@ -55,14 +55,14 @@ export class GqlElementsResolver {
       this.rpcClient.addPageElement({
         groupId: args.groupId,
         requestedUserId: account.id,
-        desktop: args.desktop,
-        tablet: args.tablet,
-        mobile: args.mobile,
+        desktop: args.input.desktop,
+        tablet: args.input.tablet,
+        mobile: args.input.mobile,
         type: {
           $case: 'text',
           text: {
-            html: args.html,
-            json: args.json,
+            html: args.input.html,
+            json: args.input.json,
           },
         },
       }),
@@ -80,15 +80,15 @@ export class GqlElementsResolver {
     const result = await resolveRpcRequest(
       this.rpcClient.updatePageElement({
         elementId: args.elementId,
-        desktop: args.desktop,
-        mobile: args.mobile,
-        tablet: args.tablet,
+        desktop: args.input.desktop,
+        mobile: args.input.mobile,
+        tablet: args.input.tablet,
         requestedUserId: account.id,
         type: {
           $case: 'text',
           text: {
-            html: args.html,
-            json: args.json,
+            html: args.input.html,
+            json: args.input.json,
           },
         },
       }),

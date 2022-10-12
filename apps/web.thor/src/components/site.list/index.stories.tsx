@@ -15,7 +15,7 @@ storiesOf('NinetySix/Sites List', module)
     composeParameters([
       mockApollo([
         mockApolloQuery<GetSitesQueryResult>(GetSitesDocument, {
-          siteList: Array.from({
+          siteByOwner: Array.from({
             length: faker.datatype.number({
               min: 5,
               max: 10,

@@ -1,7 +1,7 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ObjectIDResolver, URLResolver } from 'graphql-scalars';
 
-import { SiteProto } from '@app/cqrs/transformers/site.proto';
+import { SiteProto } from '@app/cqrs/protos/site.proto';
 import { SiteStatus } from '@app/protobuf';
 
 registerEnumType(SiteStatus, { name: 'SiteStatus' });

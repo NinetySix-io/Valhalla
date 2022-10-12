@@ -10,7 +10,7 @@ import {
 } from '@app/protobuf';
 import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
-import { PageElementProto } from '../transformers/page.element.proto';
+import { PageElementProto } from '../protos/page.element.proto';
 import { PageElementsDeletedEvent } from '../events/page.elements.deleted.event';
 import { PageElementsModel } from '@app/entities/page.elements';
 

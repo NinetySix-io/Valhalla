@@ -3,7 +3,6 @@ import * as React from 'react';
 import { Button, Grid, css, styled } from '@mui/material';
 
 import { MENU_ITEM } from '../../constants';
-import type { OmitRecursively } from '@valhalla/utilities';
 import type { PageElement } from '../../types';
 import { mergeRefs } from 'react-merge-refs';
 import { useClampElement } from '../elements.board/hooks/use.element.clamp';
@@ -17,9 +16,16 @@ const Item = styled(Button)(
 
 type Props = {
   children: string;
-  element: OmitRecursively<
+  element: Omit<
     PageElement,
-    'id' | 'createdBy' | 'updatedBy' | 'updatedAt' | 'createdAt'
+    | 'id'
+    | 'mobile'
+    | 'tablet'
+    | 'group'
+    | 'createdAt'
+    | 'updatedAt'
+    | 'updatedBy'
+    | 'createdBy'
   >;
 };
 
@@ -35,6 +41,7 @@ export const ElementMenuGroupItem: React.FC<Props> = ({
       clampCell(
         {
           ...element,
+          desktop: element.desktop,
           id: elementId,
         },
         {

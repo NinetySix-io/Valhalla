@@ -32,13 +32,17 @@ type Organization {
   updatedAt: DateTime
   logoUrl: String
   status: String!
-  plan: String!
+  plan: OrganizationPlan!
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+enum OrganizationPlan {
+  FREE
+}
 
 type OrganizationBySlugResponse {
   id: String!
@@ -89,7 +93,7 @@ type Query {
   organizationsByMemberships: [Organization!]!
 
   """Get current organization"""
-  organizationByMembership: [Organization!]!
+  organizationByMembership: Organization!
 
   """Get current organization membership"""
   organizationMembershipProfile: OrganizationMember!
@@ -100,13 +104,18 @@ type Query {
 
 type Mutation {
   """Create an organization"""
-  createOrganization(name: String!, plan: String!): OrgCreatedResponse!
+  createOrganization(input: CreateOrganizationInput!): OrgCreatedResponse!
 
   """Archive an organization"""
   archiveOrganization(orgId: ObjectID!): Void!
 
   """Restore an organization that was archived"""
   restoreOrganization(orgId: ObjectID!): Void!
+}
+
+input CreateOrganizationInput {
+  name: String!
+  plan: OrganizationPlan
 }
 
 """Represents NULL values"""

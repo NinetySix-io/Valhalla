@@ -1,5 +1,5 @@
-import { useGetOrgMembershipQuery } from '@app/generated/valhalla.gql';
 import { TenantStore } from '@app/global.store/tenant';
+import { useGetOrgMembershipQuery } from '@app/generated/valhalla.gql';
 import { useSingleRouterQuery } from '../use.single.router.query';
 
 /**
@@ -18,7 +18,7 @@ export function useOrgMembershipHydrate() {
   return {
     loading,
     refetch,
-    data: data?.organizationMembership,
+    data: data?.organizationMembershipProfile,
   };
 }
 

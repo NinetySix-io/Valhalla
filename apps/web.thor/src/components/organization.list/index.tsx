@@ -83,7 +83,7 @@ export const OrganizationList: React.FC = () => {
           <CreateButton variant="outlined" onClick={() => setCreating(true)}>
             Create
           </CreateButton>
-          {organizations.data?.organizations.map((org) => (
+          {organizations.data?.organizationsByMemberships.map((org) => (
             <Link
               passHref
               key={org.id}

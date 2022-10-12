@@ -6,8 +6,6 @@ import type {
 } from '@app/components/editors/page.editor/types';
 import { useCellClampX, useCellClampY } from './use.cell.clamp';
 
-import type { OmitRecursively } from '@valhalla/utilities';
-
 /**
  * A function that takes in an element and a delta
  * and returns a new element with the new position
@@ -17,15 +15,7 @@ export function useClampElement() {
   const clampY = useCellClampY();
 
   return React.useCallback(
-    <
-      T extends OmitRecursively<
-        PageElement,
-        'id' | 'createdBy' | 'updatedBy' | 'updatedAt' | 'createdAt'
-      >,
-    >(
-      element: T,
-      delta: XYCoord,
-    ): T => {
+    <T extends Pick<PageElement, 'desktop'>>(element: T, delta: XYCoord): T => {
       //TODO: Adjust
       const size = element.desktop;
       const deltaX = clampX(delta.x, size.width);

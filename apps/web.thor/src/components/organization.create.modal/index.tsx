@@ -12,7 +12,7 @@ import { FormModal } from '../modal.form';
 import type { FormModalProps } from '../modal.form';
 import type { cProps } from '@valhalla/web.react';
 
-type Payload = CreateOrganizationMutationVariables;
+type Payload = CreateOrganizationMutationVariables['input'];
 type Props = cProps<
   {
     onFinish?: () => void;
@@ -38,8 +38,10 @@ export const OrganizationCreateModal: React.FC<Props> = ({
   async function handleSubmit(payload: Payload) {
     await createOrg({
       variables: {
-        name: payload.name,
-        plan: OrganizationPlan.FREE,
+        input: {
+          name: payload.name,
+          plan: OrganizationPlan.FREE,
+        },
       },
     });
   }

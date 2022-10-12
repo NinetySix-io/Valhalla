@@ -3,11 +3,11 @@ import * as React from 'react';
 import { Box, Typography } from '@mui/material';
 
 import Image from 'next/image';
-import type { OrganizationSchema } from '@app/generated/valhalla.gql';
+import type { Organization } from '@app/generated/valhalla.gql';
 import type { cProps } from '@valhalla/web.react';
 
 type Props = cProps<{
-  organization: Pick<OrganizationSchema, 'name' | 'logoUrl'>;
+  organization: Pick<Organization, 'name' | 'logoUrl'>;
 }>;
 
 export const OrganizationLogo: React.FC<Props> = ({

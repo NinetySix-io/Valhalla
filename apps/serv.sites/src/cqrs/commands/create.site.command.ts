@@ -17,7 +17,7 @@ import {
 } from '@app/protobuf';
 
 import { SiteCreatedEvent } from '../events/site.created.event';
-import { SiteProto } from '../transformers/site.proto';
+import { SiteProto } from '../protos/site.proto';
 import { SiteSchema } from '@app/entities/sites/schema';
 import { SitesModel } from '@app/entities/sites';
 

@@ -15,7 +15,7 @@ import {
 } from '@valhalla/serv.core';
 
 import { DeletePageElementListByGroupCommand } from './delete.page.element.list.by.group.command';
-import { PageSectionProto } from '../transformers/page.section.proto';
+import { PageSectionProto } from '../protos/page.section.proto';
 import { PagesModel } from '@app/entities/pages';
 import { SectionDeletedEvent } from '../events/section.deleted.event';
 

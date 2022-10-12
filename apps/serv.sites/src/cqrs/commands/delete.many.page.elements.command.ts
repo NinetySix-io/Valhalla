@@ -11,7 +11,7 @@ import {
 import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
 import { FilterQuery } from 'mongoose';
-import { PageElementProto } from '../transformers/page.element.proto';
+import { PageElementProto } from '../protos/page.element.proto';
 import { PageElementSchema } from '@app/entities/page.elements/schemas';
 import { PageElementsDeletedEvent } from '../events/page.elements.deleted.event';
 import { PageElementsModel } from '@app/entities/page.elements';

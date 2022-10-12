@@ -143,35 +143,76 @@ type Query {
 union ElementUnion = ElementText
 
 type Mutation {
-  createSite(name: String!): SiteUpdatedResponse!
-  updateSite(siteId: ObjectID!, name: String): SiteUpdatedResponse!
-  createPage(siteId: ObjectID!, title: String!): PageUpdatedResponse!
+  createSite(input: CreateSiteInput!): SiteUpdatedResponse!
+  updateSite(siteId: ObjectID!, input: UpdateSiteInput!): SiteUpdatedResponse!
+  createPage(siteId: ObjectID!, input: CreatePageInput!): PageUpdatedResponse!
   deletePage(pageId: ObjectID!): PageUpdatedResponse!
-  updatePage(pageId: ObjectID!, title: String, description: String, isLoneTitle: Boolean): PageUpdatedResponse!
-  createSection(
-    pageId: ObjectID!
-
-    """Position"""
-    index: NonNegativeInt
-  ): PageSection!
-  updateSectionFormat(sectionId: ObjectID!, pageId: ObjectID!, rowsCount: NonNegativeInt, rowGap: NonNegativeInt, columnGap: NonNegativeInt): PageSection!
+  updatePage(pageId: ObjectID!, input: UpdatePageInput!): PageUpdatedResponse!
+  createSection(pageId: ObjectID!, input: CreateSectionInput): PageSection!
+  updateSectionFormat(sectionId: ObjectID!, pageId: ObjectID!, input: UpdateSectionFormatInput!): PageSection!
   updateSectionIndex(sectionId: ObjectID!, pageId: ObjectID!, index: NonNegativeInt!): PageSection!
   deleteSection(sectionId: ObjectID!, pageId: ObjectID!): PageSection!
   cloneSection(sectionId: ObjectID!, pageId: ObjectID!): PageSection!
 
   """Add text element"""
-  addTextElement(groupId: ObjectID!, html: String!, json: JSONObject!, desktop: ElementAreaArgs!, tablet: ElementAreaArgs, mobile: ElementAreaArgs): ElementText!
+  addTextElement(groupId: ObjectID!, input: AddTextElementInput!): ElementText!
 
   """Update text element"""
-  updateTextElement(elementId: ObjectID!, html: String, json: JSONObject, desktop: ElementAreaArgs, tablet: ElementAreaArgs, mobile: ElementAreaArgs): ElementText!
+  updateTextElement(elementId: ObjectID!, input: UpdateTextElementInput!): ElementText!
   deleteManyElements(elementIds: [ObjectID!]!): [ElementUnion!]!
 }
 
-input ElementAreaArgs {
+input CreateSiteInput {
+  name: String!
+}
+
+input UpdateSiteInput {
+  name: String
+}
+
+input CreatePageInput {
+  title: String!
+}
+
+input UpdatePageInput {
+  title: String
+  description: String
+  isLoneTitle: Boolean
+}
+
+input CreateSectionInput {
+  """Position"""
+  index: NonNegativeInt
+}
+
+input UpdateSectionFormatInput {
+  rowsCount: NonNegativeInt
+  rowGap: NonNegativeInt
+  columnGap: NonNegativeInt
+}
+
+input AddTextElementInput {
+  desktop: ElementAreaInput!
+  tablet: ElementAreaInput
+  mobile: ElementAreaInput
+  html: String!
+  json: JSONObject!
+}
+
+input ElementAreaInput {
   x: NonNegativeInt!
   y: NonNegativeInt!
   height: NonNegativeInt!
   width: NonNegativeInt!
+  isVisible: NonNegativeInt!
+}
+
+input UpdateTextElementInput {
+  desktop: ElementAreaInput
+  tablet: ElementAreaInput
+  mobile: ElementAreaInput
+  html: String!
+  json: JSONObject!
 }
 
 scalar link__Import

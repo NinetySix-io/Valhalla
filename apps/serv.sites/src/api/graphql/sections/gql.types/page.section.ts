@@ -2,7 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 import { ObjectIDResolver } from 'graphql-scalars';
 import { PageSectionFormat } from './page.section.format';
-import { PageSectionProto } from '@app/cqrs/transformers/page.section.proto';
+import { PageSectionProto } from '@app/cqrs/protos/page.section.proto';
 
 @ObjectType()
 export class PageSection implements PageSectionProto {

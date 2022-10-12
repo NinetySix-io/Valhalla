@@ -17,14 +17,14 @@ storiesOf('NinetySix/Organizations List', module)
         mockApolloQuery<GetOrgsMembershipListQueryResult>(
           GetOrgsMembershipListDocument,
           {
-            organizations: Array.from({
+            organizationsByMemberships: Array.from({
               length: faker.datatype.number({
                 min: 5,
                 max: 10,
               }),
             }).map(() => ({
-              name: faker.company.name(),
               id: faker.datatype.uuid(),
+              name: faker.company.name(),
               slug: faker.internet.url(),
               logoUrl: faker.datatype.boolean()
                 ? faker.image.business(248, 148)

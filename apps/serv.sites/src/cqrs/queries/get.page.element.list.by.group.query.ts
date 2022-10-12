@@ -5,7 +5,7 @@ import {
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
-import { PageElementProto } from '../transformers/page.element.proto';
+import { PageElementProto } from '../protos/page.element.proto';
 import { PageElementsModel } from '@app/entities/page.elements';
 
 export class GetPageElementListByGroupQuery implements IQuery {

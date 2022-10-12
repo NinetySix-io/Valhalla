@@ -63,15 +63,15 @@ Default.parameters = composeParameters([
     >(
       CreateOrganizationDocument,
       {
-        name: faker.company.name(),
-        plan: OrganizationPlan.FREE,
+        input: {
+          name: faker.company.name(),
+          plan: OrganizationPlan.FREE,
+        },
       },
       {
         createOrganization: {
-          name: faker.company.name(),
+          __typename: 'OrgCreatedResponse',
           id: faker.datatype.uuid(),
-          slug: faker.internet.url(),
-          plan: OrganizationPlan.FREE,
         },
       },
     ),

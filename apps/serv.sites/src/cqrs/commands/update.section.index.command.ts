@@ -15,7 +15,7 @@ import {
   UpdateSectionResponse,
 } from '@app/protobuf';
 
-import { PageSectionProto } from '../transformers/page.section.proto';
+import { PageSectionProto } from '../protos/page.section.proto';
 import { PagesModel } from '@app/entities/pages';
 
 export class UpdateSectionIndexCommand implements ICommand {

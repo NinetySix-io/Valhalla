@@ -1,4 +1,4 @@
-import type { PageSectionSchema } from '@app/generated/valhalla.gql';
+import type { PageSection } from '@app/generated/valhalla.gql';
 import { useClonePageSectionMutation } from '@app/generated/valhalla.gql';
 import { useCreatePageSectionMutation } from '@app/generated/valhalla.gql';
 import { useDeletePageSectionMutation } from '@app/generated/valhalla.gql';
@@ -33,7 +33,7 @@ export function useAddSection(sectionIndex?: number) {
   return [handleAdd, loading] as const;
 }
 
-export function useDeleteSection(sectionId: PageSectionSchema['id']) {
+export function useDeleteSection(sectionId: PageSection['id']) {
   const pageId = useSitePageId();
   const invalidateSections = useSectionListInvalidate();
   const [deleteSection, { loading }] = useDeletePageSectionMutation({
@@ -50,7 +50,7 @@ export function useDeleteSection(sectionId: PageSectionSchema['id']) {
 }
 
 export function useMoveSection(
-  sectionId: PageSectionSchema['id'],
+  sectionId: PageSection['id'],
   sectionIndex: number,
 ) {
   const pageId = useSitePageId();
@@ -74,7 +74,7 @@ export function useMoveSection(
   return [moveSection, loading] as const;
 }
 
-export function useCloneSection(sectionId: PageSectionSchema['id']) {
+export function useCloneSection(sectionId: PageSection['id']) {
   const pageId = useSitePageId();
   const invalidateSections = useSectionListInvalidate();
   const [clone, { loading }] = useClonePageSectionMutation({

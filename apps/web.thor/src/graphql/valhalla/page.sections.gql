@@ -1,4 +1,4 @@
-query getPageSection($sectionId: String!) {
+query getPageSection($sectionId: ObjectID!) {
   section(sectionId: $sectionId) {
     id
     format {
@@ -9,8 +9,8 @@ query getPageSection($sectionId: String!) {
   }
 }
 
-query getPageSectionList($pageId: String!) {
-  sectionList(pageId: $pageId) {
+query getPageSectionList($pageId: ObjectID!) {
+  sectionsByPage(pageId: $pageId) {
     id
     createdAt
     updatedAt
@@ -19,27 +19,26 @@ query getPageSectionList($pageId: String!) {
       rowsCount
       rowGap
       columnGap
-      updatedBy
     }
   }
 }
 
-mutation createPageSection($pageId: String!, $input: CreateSectionInput!) {
+mutation createPageSection($pageId: ObjectID!, $input: CreateSectionInput!) {
   createSection(pageId: $pageId, input: $input) {
     id
   }
 }
 
-mutation deletePageSection($pageId: String!, $sectionId: String!) {
+mutation deletePageSection($pageId: ObjectID!, $sectionId: ObjectID!) {
   deleteSection(pageId: $pageId, sectionId: $sectionId) {
     id
   }
 }
 
 mutation updatePageSectionIndex(
-  $pageId: String!
-  $sectionId: String!
-  $index: Float!
+  $pageId: ObjectID!
+  $sectionId: ObjectID!
+  $index: NonNegativeInt!
 ) {
   updateSectionIndex(pageId: $pageId, sectionId: $sectionId, index: $index) {
     id
@@ -47,8 +46,8 @@ mutation updatePageSectionIndex(
 }
 
 mutation updatePageSectionFormat(
-  $pageId: String!
-  $sectionId: String!
+  $pageId: ObjectID!
+  $sectionId: ObjectID!
   $input: UpdateSectionFormatInput!
 ) {
   updateSectionFormat(pageId: $pageId, sectionId: $sectionId, input: $input) {
@@ -56,7 +55,7 @@ mutation updatePageSectionFormat(
   }
 }
 
-mutation clonePageSection($pageId: String!, $sectionId: String!) {
+mutation clonePageSection($pageId: ObjectID!, $sectionId: ObjectID!) {
   cloneSection(pageId: $pageId, sectionId: $sectionId) {
     id
   }

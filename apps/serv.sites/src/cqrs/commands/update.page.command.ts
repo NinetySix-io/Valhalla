@@ -7,7 +7,7 @@ import {
 import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 import { UpdatePageRequest, UpdatePageResponse } from '@app/protobuf';
 
-import { PageProto } from '../transformers/page.proto';
+import { PageProto } from '../protos/page.proto';
 import { PageUpdatedEvent } from '../events/page.updated.event';
 import { PagesModel } from '@app/entities/pages';
 import { flattenObject } from '@valhalla/utilities';

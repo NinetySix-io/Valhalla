@@ -1,17 +1,14 @@
-import {
-  ArgsType,
-  IntersectionType,
-  PartialType,
-  PickType,
-} from '@nestjs/graphql';
+import { ArgsType, Field, PickType } from '@nestjs/graphql';
 
-import { PageSectionFormat } from '../gql.types/page.section.format';
 import { SectionMetaArgs } from './section.meta.args';
+import { UpdateSectionFormatInput } from '../gql.inputs/update.section.input';
 
 @ArgsType()
-export class UpdateSectionFormatArgs extends IntersectionType(
+export class UpdateSectionFormatArgs extends PickType(
   SectionMetaArgs,
-  PartialType(
-    PickType(PageSectionFormat, ['columnGap', 'rowGap', 'rowsCount'], ArgsType),
-  ),
-) {}
+  ['sectionId', 'pageId'] as const,
+  ArgsType,
+) {
+  @Field()
+  input: UpdateSectionFormatInput;
+}

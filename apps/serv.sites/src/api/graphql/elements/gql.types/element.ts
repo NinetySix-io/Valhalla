@@ -5,7 +5,7 @@ import { Transform, Type } from 'class-transformer';
 import { ElementArea } from './element.area';
 import { IsObjectId } from '@valhalla/serv.core';
 import { ObjectIDResolver } from 'graphql-scalars';
-import { PageElementProto } from '@app/cqrs/transformers/page.element.proto';
+import { PageElementProto } from '@app/cqrs/protos/page.element.proto';
 import { ValidateNested } from 'class-validator';
 
 registerEnumType(PrimitiveElementType, { name: 'ElementType' });

@@ -1,13 +1,13 @@
-query getPageList($siteId: String!) {
-  pageList(siteId: $siteId) {
+query getPageList($siteId: ObjectID!) {
+  pagesBySite(siteId: $siteId) {
     id
     title
     status
   }
 }
 
-query getPage($pageId: String!) {
-  page(id: $pageId) {
+query getPage($pageId: ObjectID!) {
+  page(pageId: $pageId) {
     id
     title
     status
@@ -19,21 +19,21 @@ query getPage($pageId: String!) {
   }
 }
 
-mutation createPage($siteId: String!, $prop: CreatePageInput!) {
-  createPage(siteId: $siteId, input: $prop) {
+mutation createPage($siteId: ObjectID!, $input: CreatePageInput!) {
+  createPage(siteId: $siteId, input: $input) {
     id
     status
   }
 }
 
-mutation updatePage($pageId: String!, $input: UpdatePageInput!) {
-  updatePage(id: $pageId, input: $input) {
+mutation updatePage($pageId: ObjectID!, $input: UpdatePageInput!) {
+  updatePage(pageId: $pageId, input: $input) {
     status
   }
 }
 
-mutation deletePage($pageId: String!) {
-  deletePage(id: $pageId) {
+mutation deletePage($pageId: ObjectID!) {
+  deletePage(pageId: $pageId) {
     status
   }
 }

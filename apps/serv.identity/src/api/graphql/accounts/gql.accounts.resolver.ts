@@ -50,9 +50,9 @@ export class GqlAccountResolver {
     await resolveRpcRequest(
       this.rpcClient.updateAccount({
         accountId: account.id,
-        displayName: args.displayName,
-        firstName: args.firstName,
-        lastName: args.lastName,
+        displayName: args.input.displayName,
+        firstName: args.input.firstName,
+        lastName: args.input.lastName,
       }),
     );
 

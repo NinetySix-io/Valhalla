@@ -2,11 +2,9 @@ import * as React from 'react';
 
 import { Container, MenuArea } from './styles';
 import {
-  PrimitiveElementType,
+  ElementType,
   useAddTextElementMutation,
   useDeleteManyElementsMutation,
-} from '@app/generated/valhalla.gql';
-import {
   useGetElementsByGroupQuery,
   useUpdatePageSectionFormatMutation,
 } from '@app/generated/valhalla.gql';
@@ -18,7 +16,7 @@ import { ElementsBoard } from './elements.board';
 import { ElementsMenu } from './elements.menu';
 import { Outline } from './outline';
 import type { PageElement } from '../types';
-import type { PageSectionSchema } from '@app/generated/valhalla.gql';
+import type { PageSection } from '@app/generated/valhalla.gql';
 import { ScreenSize } from '../constants';
 import { SectionMenu } from './section.menu';
 import { SectionProvider } from './scope.provider';
@@ -27,7 +25,7 @@ import { useSitePageId } from '@app/hooks/hydrate/use.site.page.hydrate';
 
 type Props = {
   index: number;
-  section: Pick<PageSectionSchema, 'id' | 'format'>;
+  section: Pick<PageSection, 'id' | 'format'>;
 };
 
 export const BodySection: React.FC<Props> = React.memo(({ section, index }) => {
@@ -48,7 +46,7 @@ export const BodySection: React.FC<Props> = React.memo(({ section, index }) => {
 
   async function handleAddElement(element: PageElement) {
     await tryNice(() => {
-      if (element.type === PrimitiveElementType.TEXT) {
+      if (element.type === ElementType.TEXT) {
         addTextElement({
           variables: {
             groupId: section.id,
@@ -67,8 +65,8 @@ export const BodySection: React.FC<Props> = React.memo(({ section, index }) => {
     sectionElements.refetch();
   }
 
-  async function handleDeleteElements(elementIdList: PageElement['id'][]) {
-    await deleteElements({ variables: { elementIdList } });
+  async function handleDeleteElements(elementIds: PageElement['id'][]) {
+    await deleteElements({ variables: { elementIds } });
     await sectionElements.refetch();
   }
 
@@ -114,7 +112,7 @@ export const BodySection: React.FC<Props> = React.memo(({ section, index }) => {
             onElementsDeleted={handleDeleteElements}
             onElementAdded={handleAddElement}
           >
-            {sectionElements.data?.pageElementListByGroup.map((element) => {
+            {sectionElements.data?.elementsByGroup.map((element) => {
               return (
                 <ElementsBoard.Item key={element.id} element={element}>
                   <ElementFactory element={element} />

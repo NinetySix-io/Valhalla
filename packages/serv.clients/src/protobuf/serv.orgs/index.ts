@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
+import { wrappers } from "protobufjs";
 import { Observable } from "rxjs";
 
 export const protobufPackage = "serv.orgs";
@@ -70,8 +71,8 @@ export interface Member {
   user: string;
   organization: string;
   invitedBy?: string | undefined;
-  status: string;
-  role: string;
+  status: InvitationStatus;
+  role: OrgRole;
   createdAt?: Date;
   updatedAt?: Date;
   updatedBy: string;
@@ -122,6 +123,15 @@ export interface GetMemberResponse {
 }
 
 export const SERV_ORGS_PACKAGE_NAME = "serv.orgs";
+
+wrappers[".google.protobuf.Timestamp"] = {
+  fromObject(value: Date) {
+    return { seconds: value.getTime() / 1000, nanos: (value.getTime() % 1000) * 1e6 };
+  },
+  toObject(message: { seconds: number; nanos: number }) {
+    return new Date(message.seconds * 1000 + message.nanos / 1e6);
+  },
+} as any;
 
 export interface OrgsServiceClient {
   createOrg(request: CreateOrgRequest): Observable<Organization>;

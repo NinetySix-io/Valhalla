@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-import type { PageElementTextSchema } from '@app/generated/valhalla.gql';
+import type { ElementText } from '@app/generated/valhalla.gql';
 import { getClampPosition } from '../../elements.board/lib/get.clamp.position';
 import { useSectionStore } from '../../scope.provider';
 
 export type Props = {
-  element: PageElementTextSchema;
+  element: ElementText;
   isFocus?: boolean;
-  onChange?: (element: PageElementTextSchema) => void;
+  onChange?: (element: ElementText) => void;
   onEditStart?: () => void;
   onEditEnd?: () => void;
 };

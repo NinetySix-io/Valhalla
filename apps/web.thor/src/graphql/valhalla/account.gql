@@ -1,19 +1,5 @@
-mutation register(
-  $email: String!
-  $phone: String
-  $firstName: String
-  $lastName: String
-  $displayName: String
-) {
-  registerAccount(
-    input: {
-      email: $email
-      phone: $phone
-      firstName: $firstName
-      lastName: $lastName
-      displayName: $displayName
-    }
-  ) {
+mutation register($input: AccountRegisterInput!) {
+  registerAccount(input: $input) {
     accessToken {
       value
       expiresAt
@@ -25,18 +11,8 @@ mutation logout {
   logout
 }
 
-mutation loginWithVerification(
-  $username: String!
-  $verificationId: String!
-  $verificationCode: String!
-) {
-  loginWithVerification(
-    input: {
-      username: $username
-      verificationId: $verificationId
-      verificationCode: $verificationCode
-    }
-  ) {
+mutation loginWithVerification($input: LoginWithVerificationInput!) {
+  loginWithVerification(input: $input) {
     accessToken {
       value
       expiresAt
@@ -44,20 +20,20 @@ mutation loginWithVerification(
   }
 }
 
-mutation addEmail($email: String!) {
+mutation addEmail($email: EmailAddress!) {
   addEmailToAccount(email: $email)
 }
 
-mutation removeEmail($email: String!) {
-  removeEmailFromAccount(email: $email)
+mutation removeEmail($emailId: ObjectID!) {
+  removeEmailFromAccount(emailId: $emailId)
 }
 
-mutation addPhone($phone: String!) {
+mutation addPhone($phone: PhoneNumber!) {
   addPhoneToAccount(phone: $phone)
 }
 
-mutation removePhone($phone: String!) {
-  removePhoneFromAccount(phone: $phone)
+mutation removePhone($phoneId: ObjectID!) {
+  removePhoneFromAccount(phoneId: $phoneId)
 }
 
 query getAccount {

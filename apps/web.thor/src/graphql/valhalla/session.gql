@@ -4,8 +4,8 @@ query session {
   }
 }
 
-query getAccessToken($organization: String) {
-  accessToken(query: { organization: $organization }) {
+query getAccessToken($organization: ObjectID) {
+  accessToken(organizationId: $organization) {
     value
     expiresAt
   }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
+import { ElementType } from '@app/generated/valhalla.gql';
 import type { PageElement } from '../../types';
-import { PrimitiveElementType } from '@app/generated/valhalla.gql';
 import { TextItem } from './text';
 import { useSectionStore } from '../scope.provider';
 
@@ -18,7 +18,7 @@ export const ElementFactory: React.FC<Props> = ({
 }) => {
   const store = useSectionStore();
 
-  if (element.type === PrimitiveElementType.TEXT) {
+  if (element.type === ElementType.TEXT) {
     return (
       <TextItem
         element={element}

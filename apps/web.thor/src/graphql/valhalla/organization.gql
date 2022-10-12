@@ -1,5 +1,5 @@
 query getCurrentOrganization {
-  organization {
+  organizationByMembership {
     name
     logoUrl
     plan
@@ -14,19 +14,16 @@ query findOrganizationBySlug($slug: String!) {
   }
 }
 
-mutation createOrganization($name: String!, $plan: OrganizationPlan!) {
-  createOrganization(input: { name: $name, plan: $plan }) {
+mutation createOrganization($input: CreateOrganizationInput!) {
+  createOrganization(input: $input) {
     id
-    slug
-    name
-    plan
   }
 }
 
-mutation archiveOrganization($orgId: String!) {
+mutation archiveOrganization($orgId: ObjectID!) {
   archiveOrganization(orgId: $orgId)
 }
 
-mutation restoreOrganization($orgId: String!) {
+mutation restoreOrganization($orgId: ObjectID!) {
   restoreOrganization(orgId: $orgId)
 }

@@ -39,6 +39,6 @@ export class Organization implements OrgProto {
   @Field()
   status: OrgStatus;
 
-  @Field()
+  @Field(() => OrgPlan)
   plan: OrgPlan;
 }

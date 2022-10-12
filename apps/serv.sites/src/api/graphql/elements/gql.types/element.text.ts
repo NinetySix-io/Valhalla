@@ -3,7 +3,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { Element } from './element';
 import { JSONObjectResolver } from 'graphql-scalars';
 import { PageElement } from '@app/protobuf';
-import { TextElementProto } from '@app/cqrs/transformers/page.element.text.proto';
+import { TextElementProto } from '@app/cqrs/protos/page.element.text.proto';
 import { Transform } from 'class-transformer';
 
 @ObjectType()

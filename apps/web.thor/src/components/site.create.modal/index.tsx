@@ -36,7 +36,9 @@ export const CreateSiteModal: React.FC<Props> = ({
   async function handleSubmit(payload: FormPayload) {
     await createSite({
       variables: {
-        name: payload.name,
+        input: {
+          name: payload.name,
+        },
       },
     });
 

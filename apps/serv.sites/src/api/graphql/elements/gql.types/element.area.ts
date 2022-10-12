@@ -2,7 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 import { Min } from 'class-validator';
 import { NonNegativeIntResolver } from 'graphql-scalars';
-import { PageElementAreaProto } from '@app/cqrs/transformers/page.element.area.proto';
+import { PageElementAreaProto } from '@app/cqrs/protos/page.element.area.proto';
 
 @ObjectType()
 export class ElementArea implements PageElementAreaProto {

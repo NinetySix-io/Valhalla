@@ -1,23 +1,21 @@
-fragment Position on PageElementPlatformSchema {
-  id
+fragment Position on ElementArea {
   x
   y
   width
   height
   isVisible
-  createdAt
-  updatedAt
 }
 
-query getElementsByGroup($groupId: String!) {
-  pageElementListByGroup(groupId: $groupId) {
+query getElementsByGroup($groupId: ObjectID!) {
+  elementsByGroup(groupId: $groupId) {
     __typename
 
-    ... on PageElementTextSchema {
+    ... on ElementText {
       id
       json
       html
       type
+      group
 
       createdAt
       updatedAt
@@ -37,14 +35,14 @@ query getElementsByGroup($groupId: String!) {
   }
 }
 
-mutation addTextElement($groupId: String!, $input: AddTextElementInput!) {
+mutation addTextElement($groupId: ObjectID!, $input: AddTextElementInput!) {
   addTextElement(groupId: $groupId, input: $input) {
     id
   }
 }
 
 mutation updateTextElement(
-  $elementId: String!
+  $elementId: ObjectID!
   $input: UpdateTextElementInput!
 ) {
   updateTextElement(elementId: $elementId, input: $input) {
@@ -52,9 +50,9 @@ mutation updateTextElement(
   }
 }
 
-mutation deleteManyElements($elementIdList: [String!]!) {
-  deleteManyElements(elementIdList: $elementIdList) {
-    ... on PageElementTextSchema {
+mutation deleteManyElements($elementIds: [ObjectID!]!) {
+  deleteManyElements(elementIds: $elementIds) {
+    ... on ElementText {
       id
     }
   }

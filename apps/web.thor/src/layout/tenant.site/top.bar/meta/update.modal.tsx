@@ -1,22 +1,19 @@
 import * as React from 'react';
 
-import type { cProps } from '@valhalla/web.react';
 import { Form } from '@valhalla/web.react';
-import type { PageSchema } from '@app/generated/valhalla.gql';
-import { useUpdatePageMutation } from '@app/generated/valhalla.gql';
-
 import { FormModal } from '@app/components/modal.form';
+import type { Page } from '@app/generated/valhalla.gql';
 import { TextField } from '@mui/material';
-import { useSiteId } from '@app/hooks/hydrate/use.site.hydrate';
+import type { cProps } from '@valhalla/web.react';
 import { useSitePageHydrate } from '@app/hooks/hydrate/use.site.page.hydrate';
+import { useUpdatePageMutation } from '@app/generated/valhalla.gql';
 
 type Props = cProps<{ open: boolean; onClose: () => void }>;
 
-type FormPayload = Pick<PageSchema, 'title' | 'isLoneTitle' | 'description'>;
+type FormPayload = Pick<Page, 'title' | 'isLoneTitle' | 'description'>;
 
 export const MetaUpdateModal: React.FC<Props> = ({ open, onClose }) => {
   const page = useSitePageHydrate();
-  const siteId = useSiteId();
   const [updatePage] = useUpdatePageMutation();
   const [form] = Form.useForm<FormPayload>();
 
@@ -31,7 +28,6 @@ export const MetaUpdateModal: React.FC<Props> = ({ open, onClose }) => {
   async function handleSubmit(payload: FormPayload) {
     await updatePage({
       variables: {
-        siteId,
         pageId: page.data.id,
         input: {
           title: payload.title,

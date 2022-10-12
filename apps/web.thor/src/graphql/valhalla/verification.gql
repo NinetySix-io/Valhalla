@@ -2,7 +2,7 @@ mutation sendVerification(
   $channel: VerificationChannel!
   $destination: String!
 ) {
-  sendVerificationCode(input: { channel: $channel, destination: $destination })
+  sendVerificationCode(channel: $channel, destination: $destination)
 }
 
 query validateVerificationCode(
@@ -10,9 +10,7 @@ query validateVerificationCode(
   $verificationCode: String!
 ) {
   validateVerificationCode(
-    input: {
-      verificationId: $verificationId
-      verificationCode: $verificationCode
-    }
+    verificationId: $verificationId
+    verificationCode: $verificationCode
   )
 }

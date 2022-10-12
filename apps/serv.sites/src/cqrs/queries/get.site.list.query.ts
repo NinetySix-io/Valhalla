@@ -3,7 +3,7 @@ import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
 import { FilterQuery } from 'mongoose';
-import { SiteProto } from '../transformers/site.proto';
+import { SiteProto } from '../protos/site.proto';
 import { SiteSchema } from '@app/entities/sites/schema';
 import { SitesModel } from '@app/entities/sites';
 import isEmpty from 'lodash.isempty';

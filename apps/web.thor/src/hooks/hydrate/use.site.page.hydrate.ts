@@ -1,6 +1,5 @@
 import { useGetPageQuery } from '@app/generated/valhalla.gql';
 import { useSingleRouterQuery } from '../use.single.router.query';
-import { useSiteId } from './use.site.hydrate';
 
 /**
  * Get `pageId` query from router
@@ -14,11 +13,9 @@ export function useSitePageId() {
  */
 export function useSitePageHydrate() {
   const pageId = useSitePageId();
-  const siteId = useSiteId();
   const { loading, refetch, data, error } = useGetPageQuery({
     variables: {
       pageId,
-      siteId,
     },
   });
 

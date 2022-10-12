@@ -7,7 +7,7 @@ import {
 import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 import { UpdateSiteRequest, UpdateSiteResponse } from '@app/protobuf';
 
-import { SiteProto } from '../transformers/site.proto';
+import { SiteProto } from '../protos/site.proto';
 import { SiteUpdatedEvent } from '../events/site.updated.event';
 import { SitesModel } from '@app/entities/sites';
 

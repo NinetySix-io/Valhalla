@@ -19,9 +19,11 @@ export function useLogin() {
   const login = (verificationCode: string) => {
     _login({
       variables: {
-        verificationCode,
-        verificationId: verificationId.sendVerificationCode,
-        username: username.current,
+        input: {
+          verificationCode,
+          verificationId: verificationId.sendVerificationCode,
+          username: username.current,
+        },
       },
     });
   };

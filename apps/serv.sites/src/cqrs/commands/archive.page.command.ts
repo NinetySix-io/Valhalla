@@ -12,7 +12,7 @@ import {
 import { RpcHandler, Serializer, toObjectId } from '@valhalla/serv.core';
 
 import { PageArchivedEvent } from '../events/page.archived.event';
-import { PageProto } from '../transformers/page.proto';
+import { PageProto } from '../protos/page.proto';
 import { PagesModel } from '@app/entities/pages';
 
 export class ArchivePageCommand implements ICommand {
