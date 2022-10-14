@@ -8,8 +8,6 @@ fragment Position on ElementArea {
 
 query getElementsByGroup($groupId: ObjectID!) {
   elementsByGroup(groupId: $groupId) {
-    __typename
-
     ... on ElementText {
       id
       json

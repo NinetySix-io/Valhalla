@@ -4,7 +4,7 @@ import { ElementAreaInput } from './element.area.input';
 
 @InputType()
 export class ElementBaseInput {
-  @Field(() => ElementAreaInput)
+  @Field(() => ElementAreaInput, { nullable: true })
   desktop: ElementAreaInput;
 
   @Field(() => ElementAreaInput, { nullable: true })

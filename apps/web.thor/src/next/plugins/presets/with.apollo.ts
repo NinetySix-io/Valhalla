@@ -1,6 +1,6 @@
 import type { ApolloClient } from '@apollo/client';
-import { createApolloClient } from '@app/apollo/create.client';
 import type { BasicObject } from '@valhalla/utilities';
+import { createApolloClient } from '@app/apollo/create.client';
 import { createNextPlugin } from '../create.plugin';
 
 /**

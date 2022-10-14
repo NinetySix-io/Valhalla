@@ -1,3 +1,4 @@
+import compact from 'lodash.compact';
 import { createSectionSelector } from '../../store/selector';
 import { getMaxBBox } from '../lib/get.max.bbox';
 
@@ -6,7 +7,7 @@ export const selectIsMultiSelected = createSectionSelector(
 );
 
 export const selectSelectedElements = createSectionSelector((state) =>
-  state.selections.map((selected) => state.elements[selected]),
+  compact(state.selections.map((selected) => state.elements[selected])),
 );
 
 export const selectSelectionBBox = createSectionSelector((state) =>

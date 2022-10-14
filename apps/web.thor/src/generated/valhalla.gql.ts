@@ -73,9 +73,9 @@ export type AccountRegisterInput = {
 };
 
 export type AddTextElementInput = {
-  readonly desktop: ElementAreaInput;
-  readonly html: Scalars['String'];
-  readonly json: Scalars['JSONObject'];
+  readonly desktop?: InputMaybe<ElementAreaInput>;
+  readonly html?: InputMaybe<Scalars['String']>;
+  readonly json?: InputMaybe<Scalars['JSONObject']>;
   readonly mobile?: InputMaybe<ElementAreaInput>;
   readonly tablet?: InputMaybe<ElementAreaInput>;
 };
@@ -129,9 +129,9 @@ export type ElementText = {
   readonly createdBy: Scalars['ObjectID'];
   readonly desktop: ElementArea;
   readonly group: Scalars['ObjectID'];
-  readonly html: Scalars['String'];
+  readonly html?: Maybe<Scalars['String']>;
   readonly id: Scalars['ObjectID'];
-  readonly json: Scalars['JSONObject'];
+  readonly json?: Maybe<Scalars['JSONObject']>;
   readonly mobile?: Maybe<ElementArea>;
   readonly tablet?: Maybe<ElementArea>;
   readonly type: ElementType;
@@ -431,7 +431,7 @@ export type Query = {
   readonly account: Account;
   readonly elementsByGroup: ReadonlyArray<ElementUnion>;
   /** Get current organization */
-  readonly organizationByMembership: ReadonlyArray<Organization>;
+  readonly organizationByMembership: Organization;
   /** Find organization by slug */
   readonly organizationBySlug: OrganizationBySlugResponse;
   /** Get current organization membership */
@@ -560,8 +560,8 @@ export type UpdateSiteInput = {
 
 export type UpdateTextElementInput = {
   readonly desktop?: InputMaybe<ElementAreaInput>;
-  readonly html: Scalars['String'];
-  readonly json: Scalars['JSONObject'];
+  readonly html?: InputMaybe<Scalars['String']>;
+  readonly json?: InputMaybe<Scalars['JSONObject']>;
   readonly mobile?: InputMaybe<ElementAreaInput>;
   readonly tablet?: InputMaybe<ElementAreaInput>;
 };
@@ -636,7 +636,7 @@ export type GetOrgsMembershipListQuery = { readonly __typename?: 'Query', readon
 export type GetCurrentOrganizationQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentOrganizationQuery = { readonly __typename?: 'Query', readonly organizationByMembership: ReadonlyArray<{ readonly __typename?: 'Organization', readonly name: string, readonly logoUrl?: string | null, readonly plan: OrganizationPlan, readonly slug: string }> };
+export type GetCurrentOrganizationQuery = { readonly __typename?: 'Query', readonly organizationByMembership: { readonly __typename?: 'Organization', readonly name: string, readonly logoUrl?: string | null, readonly plan: OrganizationPlan, readonly slug: string } };
 
 export type FindOrganizationBySlugQueryVariables = Exact<{
   slug: Scalars['String'];
@@ -673,7 +673,7 @@ export type GetElementsByGroupQueryVariables = Exact<{
 }>;
 
 
-export type GetElementsByGroupQuery = { readonly __typename?: 'Query', readonly elementsByGroup: ReadonlyArray<{ readonly __typename: 'ElementText', readonly id: any, readonly json: any, readonly html: string, readonly type: ElementType, readonly group: any, readonly createdAt?: Date | null, readonly updatedAt?: Date | null, readonly createdBy: any, readonly updatedBy: any, readonly desktop: { readonly __typename?: 'ElementArea', readonly x: any, readonly y: any, readonly width: any, readonly height: any, readonly isVisible: any }, readonly mobile?: { readonly __typename?: 'ElementArea', readonly x: any, readonly y: any, readonly width: any, readonly height: any, readonly isVisible: any } | null, readonly tablet?: { readonly __typename?: 'ElementArea', readonly x: any, readonly y: any, readonly width: any, readonly height: any, readonly isVisible: any } | null }> };
+export type GetElementsByGroupQuery = { readonly __typename?: 'Query', readonly elementsByGroup: ReadonlyArray<{ readonly __typename?: 'ElementText', readonly id: any, readonly json?: any | null, readonly html?: string | null, readonly type: ElementType, readonly group: any, readonly createdAt?: Date | null, readonly updatedAt?: Date | null, readonly createdBy: any, readonly updatedBy: any, readonly desktop: { readonly __typename?: 'ElementArea', readonly x: any, readonly y: any, readonly width: any, readonly height: any, readonly isVisible: any }, readonly mobile?: { readonly __typename?: 'ElementArea', readonly x: any, readonly y: any, readonly width: any, readonly height: any, readonly isVisible: any } | null, readonly tablet?: { readonly __typename?: 'ElementArea', readonly x: any, readonly y: any, readonly width: any, readonly height: any, readonly isVisible: any } | null }> };
 
 export type AddTextElementMutationVariables = Exact<{
   groupId: Scalars['ObjectID'];
@@ -1377,7 +1377,6 @@ export type RestoreOrganizationMutationOptions = Apollo.BaseMutationOptions<Rest
 export const GetElementsByGroupDocument = gql`
     query getElementsByGroup($groupId: ObjectID!) {
   elementsByGroup(groupId: $groupId) {
-    __typename
     ... on ElementText {
       id
       json

@@ -25,7 +25,7 @@ export class TemporaryApolloClient extends ApolloClient<NormalizedCacheObject> {
         buildHttpLink(options.uri, options.headers as Record<string, string>),
       ]),
       uri: options.uri,
-      cache: new InMemoryCache(),
+      cache: new InMemoryCache({ addTypename: false }),
     });
   }
 

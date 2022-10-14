@@ -16,6 +16,10 @@ export function useClampElement() {
 
   return React.useCallback(
     <T extends Pick<PageElement, 'desktop'>>(element: T, delta: XYCoord): T => {
+      if (!element) {
+        return element;
+      }
+
       //TODO: Adjust
       const size = element.desktop;
       const deltaX = clampX(delta.x, size.width);

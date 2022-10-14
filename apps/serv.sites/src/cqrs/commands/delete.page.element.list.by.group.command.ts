@@ -20,7 +20,7 @@ export class DeletePageElementListByGroupCommand implements ICommand {
 
 @CommandHandler(DeletePageElementListByGroupCommand)
 @RpcHandler()
-export class DeletePageElementListHandler
+export class DeletePageElementListByGroupHandler
   implements
     ICommandHandler<
       DeletePageElementListByGroupCommand,

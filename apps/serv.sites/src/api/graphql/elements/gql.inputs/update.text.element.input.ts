@@ -11,5 +11,5 @@ import { ElementText } from '../gql.types/element.text';
 @InputType()
 export class UpdateTextElementInput extends IntersectionType(
   PartialType(ElementBaseInput),
-  PickType(ElementText, ['html', 'json'] as const, InputType),
+  PartialType(PickType(ElementText, ['html', 'json'] as const, InputType)),
 ) {}

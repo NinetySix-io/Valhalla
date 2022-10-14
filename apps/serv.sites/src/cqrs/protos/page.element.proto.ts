@@ -1,6 +1,6 @@
-import { Alias, AsString, stringify } from '@valhalla/serv.core';
-import { Expose, Transform, Type, plainToInstance } from 'class-transformer';
-import { PageElement, PrimitiveElementType, TextElement } from '@app/protobuf';
+import { Alias, AsString, Serializer, stringify } from '@valhalla/serv.core';
+import { Expose, Transform, Type } from 'class-transformer';
+import { PageElement, PrimitiveElementType } from '@app/protobuf';
 
 import { PageElementAreaProto } from './page.element.area.proto';
 import { PageElementSchema } from '@app/entities/page.elements/schemas';
@@ -41,21 +41,17 @@ export class PageElementProto implements PageElement {
   @Expose()
   updatedAt?: Date;
 
-  @Transform(
-    ({
-      value,
-      obj,
-    }: {
-      value: PrimitiveElementType;
-      obj: PageElementSchema;
-    }) => {
-      if (value === PrimitiveElementType.TEXT) {
-        return plainToInstance(TextElementProto, obj);
-      }
-    },
-  )
+  @Expose()
+  @Transform(({ obj }: { obj: PageElementSchema }) => {
+    if (obj.type === PrimitiveElementType.TEXT) {
+      return {
+        $case: 'text',
+        text: Serializer.from(TextElementProto).serialize(obj),
+      };
+    }
+  })
   type: {
     $case: 'text';
-    text: TextElement;
+    text: TextElementProto;
   };
 }

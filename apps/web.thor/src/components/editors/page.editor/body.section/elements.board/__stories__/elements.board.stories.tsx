@@ -4,10 +4,9 @@ import { EditorStore } from '@app/components/editors/page.editor/store';
 import { ElementsBoard } from '../index';
 import { ElementsMenu } from '../../elements.menu';
 import { Outline } from '../../outline';
+import type { PageSection } from '@app/generated/valhalla.gql';
 import React from 'react';
-import type { Section } from '@app/components/editors/page.editor/store/types';
 import { SectionProvider } from '../../scope.provider';
-import { SectionsDecorator } from './decorators/sections.decorator';
 import { StyleVariables } from '../style.variables';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
@@ -29,7 +28,7 @@ const FixedTop = styled('div')(
 );
 
 const Board: React.FC<
-  React.PropsWithChildren<{ section: Section; index: number }>
+  React.PropsWithChildren<{ section: PageSection; index: number }>
 > = ({ section, children, index }) => {
   return (
     <Wrapper
@@ -38,7 +37,7 @@ const Board: React.FC<
     >
       <SectionProvider
         sectionId={section.id}
-        config={section.config}
+        config={section.format}
         index={index}
       >
         <StyleVariables />
@@ -59,7 +58,7 @@ const Board: React.FC<
           >
             <Outline />
             {children}
-            {/* {elements.map((element: any) => {
+            {/* {elements.map((element) => {
               return (
                 <ElementsBoard.Item key={element.id} element={element}>
                   <ElementFactory element={element} />
@@ -74,15 +73,17 @@ const Board: React.FC<
 };
 
 storiesOf('NinetySix/Editors/Page Editor/Board', module)
-  .addDecorator(SectionsDecorator(2, 1))
   .add('Default', () => {
     return (
       <Board
         index={1}
         section={{
           id: '',
-          config: { columnGap: 10, rowGap: 10, rowsCount: 10 },
-          children: [],
+          format: {
+            columnGap: 10,
+            rowGap: 10,
+            rowsCount: 10,
+          },
         }}
       >
         <FixedTop>

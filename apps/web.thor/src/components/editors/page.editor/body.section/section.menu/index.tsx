@@ -32,7 +32,7 @@ export const SectionMenu: React.FC<Props> = (props) => {
   const sectionId = useSectionId();
   const sectionList = useSectionsList();
   const [menuVisible, setMenuVisible] = React.useState(false);
-  const isLast = sectionIndex === size(sectionList.data?.sectionList) - 1;
+  const isLast = sectionIndex === size(sectionList.data?.sectionsByPage) - 1;
   const isFirst = sectionIndex === 0;
   const isVisible = useHelperDisplay();
   const [deleteSection, deleting] = useDeleteSection(sectionId);

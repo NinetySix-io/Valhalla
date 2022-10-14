@@ -1,7 +1,7 @@
-import type { NormalizedCacheObject } from '@apollo/client';
 import { ApolloClient, ApolloLink, InMemoryCache } from '@apollo/client';
 
 import { Environment } from '@app/env';
+import type { NormalizedCacheObject } from '@apollo/client';
 import { authRedirectLink } from './auth.redirect.link';
 import { buildAuthLink } from './auth.link';
 import { buildErrorLink } from './error.link';
@@ -34,6 +34,8 @@ export function createApolloClient(
   return new ApolloClient({
     ssrMode: Environment.isServer,
     link: ApolloLink.from(links),
-    cache: new InMemoryCache().restore(options?.initialState),
+    cache: new InMemoryCache({ addTypename: false }).restore(
+      options?.initialState,
+    ),
   });
 }

@@ -1,9 +1,9 @@
+import type { BasicObject } from '@valhalla/utilities';
 import type { ModGraphQLErrorExtensions } from '@app/types/apollo';
 import { fromPromise } from '@apollo/client';
 import { getAccessToken } from '@app/lib/access.token';
 import isNil from 'lodash.isnil';
 import { onError } from '@apollo/client/link/error';
-import type { BasicObject } from '@valhalla/utilities';
 
 /**
  * It will intercept any errors from the GraphQL server, and if the error is a 401, it will attempt to

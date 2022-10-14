@@ -7,6 +7,7 @@ import {
   useDeleteManyElementsMutation,
   useGetElementsByGroupQuery,
   useUpdatePageSectionFormatMutation,
+  useUpdateTextElementMutation,
 } from '@app/generated/valhalla.gql';
 
 import { AddSectionBtn } from './add.section.btn';
@@ -33,6 +34,7 @@ export const BodySection: React.FC<Props> = React.memo(({ section, index }) => {
   const [updateFormat] = useUpdatePageSectionFormatMutation();
   const [deleteElements] = useDeleteManyElementsMutation();
   const [addTextElement] = useAddTextElementMutation();
+  const [updateTextElement] = useUpdateTextElementMutation();
   const sectionElements = useGetElementsByGroupQuery({
     fetchPolicy: 'no-cache',
     variables: {
@@ -67,6 +69,25 @@ export const BodySection: React.FC<Props> = React.memo(({ section, index }) => {
 
   async function handleDeleteElements(elementIds: PageElement['id'][]) {
     await deleteElements({ variables: { elementIds } });
+    await sectionElements.refetch();
+  }
+
+  async function handleElementsUpdated(elements: PageElement[]) {
+    for await (const element of elements) {
+      updateTextElement({
+        variables: {
+          elementId: element.id,
+          input: {
+            json: element.json,
+            html: element.html,
+            desktop: element.desktop,
+            mobile: element.mobile,
+            tablet: element.tablet,
+          },
+        },
+      });
+    }
+
     await sectionElements.refetch();
   }
 
@@ -108,7 +129,7 @@ export const BodySection: React.FC<Props> = React.memo(({ section, index }) => {
                 },
               })
             }
-            // onElementsUpdated={handleElementsUpdated}
+            onElementsUpdated={handleElementsUpdated}
             onElementsDeleted={handleDeleteElements}
             onElementAdded={handleAddElement}
           >

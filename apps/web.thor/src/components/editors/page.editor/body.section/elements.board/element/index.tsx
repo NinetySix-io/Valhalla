@@ -8,7 +8,6 @@ import {
   selectIsDragging,
   selectIsMultiSelected,
   selectIsResizing,
-  selectMoveTransform,
   selectShouldPeakWhenClose,
 } from './selectors';
 
@@ -19,6 +18,7 @@ import { PropsProvider } from '@app/components/props.provider';
 import { calculateResize } from '../lib/calculate.resize';
 import isNil from 'lodash.isnil';
 import { mergeRefs } from 'react-merge-refs';
+import { useDelayedPosition } from './use.delay.position';
 import { useDraggable } from '@dnd-kit/core';
 import { useElementGridArea } from '../hooks/element/use.grid.area';
 import { useElementRegistry } from '../hooks/element/use.registry';
@@ -43,7 +43,7 @@ export const ElementsBoardItem = React.forwardRef<HTMLDivElement, Props>(
     const cellSize = store.useSelect((state) => state.cellSize);
     const hasDragging = store.useSelect((state) => !isNil(state.dragging));
     const isDragging = store.useSelect(selectIsDragging(_element));
-    const transform = store.useSelect(selectMoveTransform(_element));
+    const transform = useDelayedPosition(_element);
     const isMultiSelected = store.useSelect(selectIsMultiSelected(_element));
     const shouldPeak = store.useSelect(selectShouldPeakWhenClose(_element));
     const isResizing = store.useSelect(selectIsResizing(_element));

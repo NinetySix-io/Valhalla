@@ -9,6 +9,7 @@ export class PageSectionProto implements PageSection {
   @Alias('_id', { transform: stringify })
   id: string;
 
+  @Expose()
   @Type(() => PageSectionFormatProto)
   format?: PageSectionFormatProto;
 

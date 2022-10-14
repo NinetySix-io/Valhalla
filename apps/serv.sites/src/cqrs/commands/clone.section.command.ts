@@ -20,6 +20,7 @@ import { CreateSectionCommand } from './create.section.command';
 import { PageElementSchema } from '@app/entities/page.elements/schemas';
 import { PageElementsModel } from '@app/entities/page.elements';
 import { PagesModel } from '@app/entities/pages';
+import { isEmpty } from 'lodash';
 
 export class CloneSectionCommand implements ICommand {
   constructor(public readonly request: CloneSectionRequest) {}
@@ -39,6 +40,7 @@ export class CloneSectionHandler
   async execute(command: CloneSectionCommand): Promise<CloneSectionResponse> {
     const pageId = toObjectId(command.request.pageId);
     const sectionId = toObjectId(command.request.sectionId);
+    const userId = toObjectId(command.request.requestedUserId);
     const page = await this.pages.findById(pageId);
     const sectionIndex = page.sections.findIndex(compareId(sectionId));
     if (sectionIndex === -1) {
@@ -46,7 +48,8 @@ export class CloneSectionHandler
     }
 
     const section = page.sections[sectionIndex];
-    const [newSection, elements] = await Promise.all([
+    const [elements, newSection] = await Promise.all([
+      this.pageElements.find({ group: sectionId }).select({ _id: 0 }).lean(),
       this.commandBus.execute<CreateSectionCommand, CreateSectionResponse>(
         new CreateSectionCommand({
           pageId: command.request.pageId,
@@ -59,22 +62,20 @@ export class CloneSectionHandler
           },
         }),
       ),
-      this.pageElements.find({ section: sectionId }).lean(),
     ]);
 
-    await this.pageElements.create(
-      elements.map(
-        (element): CreatePayload<PageElementSchema> => ({
-          type: element.type,
-          group: toObjectId(newSection.data.id),
-          updatedBy: toObjectId(command.request.requestedUserId),
-          createdBy: toObjectId(command.request.requestedUserId),
-          desktop: element.desktop,
-          mobile: element.mobile,
-          tablet: element.tablet,
-        }),
-      ),
-    );
+    if (!isEmpty(elements)) {
+      await this.pageElements.create(
+        elements.map(
+          (element): CreatePayload<PageElementSchema> => ({
+            ...element,
+            group: toObjectId(newSection.data.id),
+            updatedBy: userId,
+            createdBy: userId,
+          }),
+        ),
+      );
+    }
 
     return {
       data: newSection.data,

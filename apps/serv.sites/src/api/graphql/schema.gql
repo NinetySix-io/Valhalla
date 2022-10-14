@@ -44,8 +44,8 @@ type ElementText {
   mobile: ElementArea
   createdAt: DateTime
   updatedAt: DateTime
-  html: String!
-  json: JSONObject!
+  html: String
+  json: JSONObject
 }
 
 """
@@ -192,11 +192,11 @@ input UpdateSectionFormatInput {
 }
 
 input AddTextElementInput {
-  desktop: ElementAreaInput!
+  desktop: ElementAreaInput
   tablet: ElementAreaInput
   mobile: ElementAreaInput
-  html: String!
-  json: JSONObject!
+  html: String
+  json: JSONObject
 }
 
 input ElementAreaInput {
@@ -211,8 +211,8 @@ input UpdateTextElementInput {
   desktop: ElementAreaInput
   tablet: ElementAreaInput
   mobile: ElementAreaInput
-  html: String!
-  json: JSONObject!
+  html: String
+  json: JSONObject
 }
 
 scalar link__Import

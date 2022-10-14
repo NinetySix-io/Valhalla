@@ -15,7 +15,6 @@ export class CqrsProviderModule {
   private static async getCqrsModule(
     cqrsDir: string,
     type: 'commands' | 'queries',
-    getHandler: (module: Record<string, unknown>, fileName: string) => unknown,
   ) {
     const readDir = promisify(fs.readdir);
     const targetDir = path.resolve(cqrsDir, type);
@@ -35,7 +34,11 @@ export class CqrsProviderModule {
           const moduleDir = path.resolve(targetDir, file);
           // eslint-disable-next-line @typescript-eslint/no-var-requires
           const module = require(moduleDir);
-          const handler = getHandler(module, file);
+          const handlerKey = Object.keys(module).find((k) =>
+            k.toLowerCase().endsWith('handler'),
+          );
+
+          const handler = module[handlerKey];
           if (handler) {
             providers.push(handler as Provider);
           }
@@ -69,17 +72,11 @@ export class CqrsProviderModule {
   }
 
   private static getCommandHandlers(cqrsDir: string) {
-    return this.getCqrsModule(cqrsDir, 'commands', (module, fileName) => {
-      const property = this.fileNameToGrpcFn('command', fileName);
-      return module[property + 'Handler'];
-    });
+    return this.getCqrsModule(cqrsDir, 'commands');
   }
 
   private static getQueryHandlers(cqrsDir: string) {
-    return this.getCqrsModule(cqrsDir, 'queries', (module, fileName) => {
-      const property = this.fileNameToGrpcFn('query', fileName);
-      return module[property + 'Handler'];
-    });
+    return this.getCqrsModule(cqrsDir, 'queries');
   }
 
   static async forRootAsync(

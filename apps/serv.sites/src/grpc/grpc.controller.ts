@@ -74,7 +74,7 @@ import { GrpcClass } from '@valhalla/serv.core';
 import { Observable } from 'rxjs';
 import { SuspendSiteCommand } from '@app/cqrs/commands/suspend.site.command';
 import { UpdatePageCommand } from '@app/cqrs/commands/update.page.command';
-import { UpdatePageElementCommand } from '@app/cqrs/commands/update.element.command';
+import { UpdatePageElementCommand } from '@app/cqrs/commands/update.page.element.command';
 import { UpdateSectionFormatCommand } from '@app/cqrs/commands/update.section.format.command';
 import { UpdateSectionIndexCommand } from '@app/cqrs/commands/update.section.index.command';
 import { UpdateSiteCommand } from '@app/cqrs/commands/update.site.command';
@@ -86,6 +86,14 @@ export class gRpcController implements SitesServiceController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
+  updatePageElement(
+    request: UpdatePageElementRequest,
+  ):
+    | UpdatePageElementResponse
+    | Promise<UpdatePageElementResponse>
+    | Observable<UpdatePageElementResponse> {
+    return this.commandBus.execute(new UpdatePageElementCommand(request));
+  }
   getPageElementListByGroup(
     request: GetPageElementListByGroupRequest,
   ):
@@ -120,14 +128,7 @@ export class gRpcController implements SitesServiceController {
     | Observable<DeletePageElementResponse> {
     return this.commandBus.execute(new DeletePageElementCommand(request));
   }
-  updatePageElement(
-    request: UpdatePageElementRequest,
-  ):
-    | UpdatePageElementResponse
-    | Promise<UpdatePageElementResponse>
-    | Observable<UpdatePageElementResponse> {
-    return this.commandBus.execute(new UpdatePageElementCommand(request));
-  }
+
   cloneSection(
     request: CloneSectionRequest,
   ):

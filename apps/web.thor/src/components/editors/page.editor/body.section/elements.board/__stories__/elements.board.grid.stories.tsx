@@ -5,6 +5,7 @@ import {
 } from '../../scope.provider';
 import { css, styled } from '@mui/material';
 
+import { ElementType } from '@app/generated/valhalla.gql';
 import { ElementsBoardGrid } from '../grid';
 import { SectionsDecorator } from './decorators/sections.decorator';
 import { StyleVariables } from '../style.variables';
@@ -32,11 +33,17 @@ storiesOf('NinetySix/Editors/Page Editor', module)
     const sizeRef = useBoardSize();
     store.actions.setDragging({
       id: '',
-      type: '',
-      width: 0,
-      height: 0,
-      x: 0,
-      y: 0,
+      group: '',
+      createdBy: '',
+      updatedBy: '',
+      type: ElementType.TEXT,
+      desktop: {
+        isVisible: true,
+        width: 0,
+        height: 0,
+        x: 0,
+        y: 0,
+      },
     });
 
     return (
