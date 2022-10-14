@@ -20,7 +20,9 @@ const SiteListView: View = () => {
 
   return (
     <Container>
-      <Button onClick={() => setAddingSite(true)}>Add Site</Button>
+      <Button variant="outlined" onClick={() => setAddingSite(true)}>
+        Add Site
+      </Button>
       <SiteList />
       <CreateSiteModal
         isOpen={addingSite}

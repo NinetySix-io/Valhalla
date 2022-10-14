@@ -1,18 +1,12 @@
 import * as React from 'react';
 
-import { Button, Typography, styled } from '@mui/material';
+import { Container, SiteCard } from './styles';
 
 import Link from 'next/link';
+import { Typography } from '@mui/material';
 import type { cProps } from '@valhalla/web.react';
 import { makeSitePath } from '@app/lib/router.utils/path.builder';
 import { useGetSitesQuery } from '@app/generated/valhalla.gql';
-
-const Container = styled('div')`
-  display: flex;
-  flex-direction: row;
-`;
-
-const SiteCard = styled(Button)``;
 
 type Props = cProps;
 
